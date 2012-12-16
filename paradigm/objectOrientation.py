@@ -7,7 +7,10 @@
     This module implements features like getter and setter methods
     for implementing object orientated code.
 '''
-'''Conventions: see "../__init__.py"'''
+'''
+    For conventions see "boostNode/__init__.py" on
+    https://github.com/thaibault/boostNode
+'''
 '''
     The concept
 
@@ -85,9 +88,9 @@
 '''
 
 __author__ = 'Torben Sickert'
-__copyright__ = 'see ../__init__.py'
+__copyright__ = 'see boostNode/__init__.py'
 __credits__ = ('Torben Sickert',)
-__license__ = 'see ../__init__.py'
+__license__ = 'see boostNode/__init__.py'
 __maintainer__ = 'Torben Sickert'
 __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
@@ -105,7 +108,7 @@ builtins = sys.modules['__main__'].__builtins__
 sys.path.append(os.path.abspath(sys.path[0] + 3 * ('..' + os.sep)))
 sys.path.append(os.path.abspath(sys.path[0] + 4 * ('..' + os.sep)))
 
-import library.extension.dependent
+import boostNode.extension.dependent
 
 # endregion
 
@@ -348,7 +351,7 @@ class Class(builtins.object):
 
 # region footer
 
-library.extension.dependent.Resolve(
+boostNode.extension.dependent.Resolve(
     name=__name__, frame=inspect.currentframe(), default_caller=False)
 
 # endregion

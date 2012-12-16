@@ -10,11 +10,14 @@
 """
 Copyright
 
-    TODO
+    Torben Sickert 16.12.2012
 
 License
 
-    TODO
+    boostNode von Torben Sickert steht unter einer Creative Commons
+    Namensnennung 3.0 Unported Lizenz.
+    
+    see http://creativecommons.org/licenses/by/3.0/deed.de
 
 Conventions (LCx := library convention number x)
 

@@ -7,10 +7,13 @@
     Provides a web-browser-based technology to show web-pages as desktop
     window.
 '''
-'''Conventions: see "../__init__.py"'''
+'''
+    For conventions see "boostNode/__init__.py" on
+    https://github.com/thaibault/boostNode
+'''
 
 __author__ = 'Torben Sickert'
-__copyright__ = 'see ../__init__.py'
+__copyright__ = 'see boostNode/__init__.py'
 __credits__ = ('Torben Sickert',)
 __maintainer__ = 'Torben Sickert'
 __maintainer_email__ = 't.sickert@gmail.com'
@@ -49,11 +52,11 @@ else:
 sys.path.append(os.path.abspath(sys.path[0] + 3 * ('..' + os.sep)))
 sys.path.append(os.path.abspath(sys.path[0] + 4 * ('..' + os.sep)))
 
-import library.extension.native
-import library.extension.system
-import library.extension.type
-import library.paradigm.aspectOrientation
-import library.paradigm.objectOrientation
+import boostNode.extension.native
+import boostNode.extension.system
+import boostNode.extension.type
+import boostNode.paradigm.aspectOrientation
+import boostNode.paradigm.objectOrientation
 
 # endregion
 
@@ -61,8 +64,8 @@ import library.paradigm.objectOrientation
 # region classes
 
 class Browser(
-    library.paradigm.objectOrientation.Class,
-    library.extension.system.Runnable
+    boostNode.paradigm.objectOrientation.Class,
+    boostNode.extension.system.Runnable
 ):
     '''
         Provides a webkit browser without any browser typical visual
@@ -198,9 +201,9 @@ class Browser(
 
             # region special methods
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
-##     def __repr__(self: library.extension.type.Self) -> builtins.str:
+##     def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
     def __repr__(self):
 ##
         '''
@@ -224,9 +227,9 @@ class Browser(
 
             # region getter methods
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
-##     def get_gui_toolkit(self: library.extension.type.Self) -> builtins.str:
+##     def get_gui_toolkit(self: boostNode.extension.type.Self) -> builtins.str:
     def get_gui_toolkit(self):
 ##
         '''
@@ -248,10 +251,10 @@ class Browser(
 
             # region setter methods
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def set_url(
-##         self: library.extension.type.Self, url: builtins.str
+##         self: boostNode.extension.type.Self, url: builtins.str
 ##     ) -> builtins.str:
     def set_url(self, url):
 ##
@@ -264,10 +267,10 @@ class Browser(
             self._url = 'http://' + url
         return self._url
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def set_close_handler(
-##         self: library.extension.type.Self,
+##         self: boostNode.extension.type.Self,
 ##         handler: (collections.Iterable, types.FunctionType,
 ##                   types.MethodType)
 ##     ) -> builtins.list:
@@ -285,11 +288,11 @@ class Browser(
 
             # endregion
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def close(
-##         self: library.extension.type.Self
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
     def close(self):
 ##
         '''
@@ -307,11 +310,11 @@ class Browser(
 
             # region runnable implementation
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _run(
-##         self: library.extension.type.Self
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
     def _run(self):
 ##
         '''
@@ -326,19 +329,19 @@ class Browser(
             Object of "Browser" with url "http://www.google.com/" in 300 pi...
         '''
         return self._initialize(**self._command_line_arguments_to_dictionary(
-            namespace=library.extension.system.CommandLine.argument_parser(
+            namespace=boostNode.extension.system.CommandLine.argument_parser(
                 module_name=__name__, scope={'self': self},
                 arguments=self.COMMAND_LINE_ARGUMENTS)))
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _initialize(
-##         self: library.extension.type.Self, url: builtins.str,
+##         self: boostNode.extension.type.Self, url: builtins.str,
 ##         width_in_pixel=800, height_in_pixel=600, fullscreen=False,
 ##         no_window_decoration=False, default_gui_toolkit='qt',
 ##         no_progress_bar=False, default_title='No gui loaded.',
 ##         close_handler=None, **keywords: builtins.object
-##     ) -> library.extension.type.Self:
+##     ) -> boostNode.extension.type.Self:
     def _initialize(
             self, url, width_in_pixel=800, height_in_pixel=600,
             fullscreen=False, no_window_decoration=False,
@@ -369,11 +372,11 @@ class Browser(
 
             # region native webview components
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _initialize_default_browser(
-##         self: library.extension.type.Self
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
     def _initialize_default_browser(self):
 ##
         '''
@@ -383,11 +386,11 @@ class Browser(
         self.browser.open(self._url)
         return self
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _initialize_qt_browser(
-##         self: library.extension.type.Self
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
     def _initialize_qt_browser(self):
 ##
         '''
@@ -409,11 +412,11 @@ class Browser(
         self.window.exec_()
         return self
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _initialize_qt_progress_bar(
-##         self: library.extension.type.Self
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
     def _initialize_qt_progress_bar(self):
 ##
         '''
@@ -439,11 +442,11 @@ class Browser(
             self.browser.loadFinished.connect(self._on_qt_load_finished)
         return self
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _initialize_gtk_browser(
-##         self: library.extension.type.Self
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
     def _initialize_gtk_browser(self):
 ##
         '''
@@ -476,11 +479,11 @@ class Browser(
         gtk.main()
         return self
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _initialize_gtk_progress_bar(
-##         self: library.extension.type.Self
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
     def _initialize_gtk_progress_bar(self):
 ##
         '''
@@ -496,10 +499,10 @@ class Browser(
             self.vbox.pack_start(self.progress_bar, False)
         return self
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _check_for_gtk_closing_flag(
-##         self: library.extension.type.Self
+##         self: boostNode.extension.type.Self
 ##     ) -> builtins.bool:
     def _check_for_gtk_closing_flag(self):
 ##
@@ -514,11 +517,11 @@ class Browser(
 
                     # region window methods
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _on_qt_close(
-##         self: library.extension.type.Self
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
     def _on_qt_close(self):
 ##
         '''
@@ -529,12 +532,12 @@ class Browser(
                 close_handler(self)
         return self
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _on_gtk_close(
-##         self: library.extension.type.Self, window,  # : gtk.Window,
+##         self: boostNode.extension.type.Self, window,  # : gtk.Window,
 ##         event,  # : gtk.gdk.Event
-##     ) -> library.extension.type.Self:
+##     ) -> boostNode.extension.type.Self:
     def _on_gtk_close(self, window, event):
 ##
         '''
@@ -550,11 +553,11 @@ class Browser(
 
                     # region webkit event methods
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _on_qt_title_changed(
-##         self: library.extension.type.Self, title  # : builtins.str
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self, title  # : builtins.str
+##     ) -> boostNode.extension.type.Self:
     def _on_qt_title_changed(self, title):
 ##
         '''
@@ -564,13 +567,13 @@ class Browser(
         self.browser.setWindowTitle(title)
         return self
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _on_gtk_title_changed(
-##         self: library.extension.type.Self, webview,  # : webkit.WebView,
+##         self: boostNode.extension.type.Self, webview,  # : webkit.WebView,
 ##         frame,  # : webkit.WebFrame,
 ##         title: builtins.str
-##     ) -> library.extension.type.Self:
+##     ) -> boostNode.extension.type.Self:
     def _on_gtk_title_changed(self, webview, frame, title):
 ##
         '''
@@ -580,11 +583,11 @@ class Browser(
         self.window.set_title(title)
         return self
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _on_qt_load_started(
-##         self: library.extension.type.Self
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
     def _on_qt_load_started(self):
 ##
         '''
@@ -594,13 +597,13 @@ class Browser(
         self.progress_bar.setVisible(True)
         return self
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _on_gtk_load_started(
-##         self: library.extension.type.Self,
+##         self: boostNode.extension.type.Self,
 ##         webview,  # : webkit.WebView,
 ##         frame,  # : webkit.WebFrame
-##     ) -> library.extension.type.Self:
+##     ) -> boostNode.extension.type.Self:
     def _on_gtk_load_started(self, webview, frame):
 ##
         '''
@@ -610,11 +613,11 @@ class Browser(
         self.progress_bar.set_visible(True)
         return self
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _on_qt_load_progress_changed(
-##         self: library.extension.type.Self, status: builtins.int
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self, status: builtins.int
+##     ) -> boostNode.extension.type.Self:
     def _on_qt_load_progress_changed(self, status):
 ##
         '''
@@ -623,13 +626,13 @@ class Browser(
         self.progress_bar.setValue(status)
         return self
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _on_gtk_load_progress_changed(
-##         self: library.extension.type.Self,
+##         self: boostNode.extension.type.Self,
 ##         webview,  # : webkit.WebView,
 ##         amount,  # : builtins.int
-##     ) -> library.extension.type.Self:
+##     ) -> boostNode.extension.type.Self:
     def _on_gtk_load_progress_changed(self, webview, amount):
 ##
         '''
@@ -638,11 +641,11 @@ class Browser(
         self.progress_bar.set_fraction(amount / 100.0)
         return self
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _on_qt_load_finished(
-##         self: library.extension.type.Self, successful: builtins.bool
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self, successful: builtins.bool
+##     ) -> boostNode.extension.type.Self:
     def _on_qt_load_finished(self, successful):
 ##
         '''
@@ -651,13 +654,13 @@ class Browser(
         self.progress_bar.setVisible(False)
         return self
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _on_gtk_load_finished(
-##         self: library.extension.type.Self,
+##         self: boostNode.extension.type.Self,
 ##         webview,  # : webkit.WebView,
 ##         frame,  # : webkit.WebFrame
-##     ) -> library.extension.type.Self:
+##     ) -> boostNode.extension.type.Self:
     def _on_gtk_load_finished(self, webview, frame):
 ##
         '''
@@ -673,10 +676,10 @@ class Browser(
 
             # endregion
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _determine_gui_toolkits(
-##         self: library.extension.type.Self
+##         self: boostNode.extension.type.Self
 ##     ) -> builtins.list:
     def _determine_gui_toolkits(self):
 ##
@@ -704,7 +707,7 @@ class Browser(
 
 # region footer
 
-library.extension.native.Module.default(
+boostNode.extension.native.Module.default(
     name=__name__, frame=inspect.currentframe())
 
 # endregion

@@ -7,6 +7,19 @@
     This module provides features to handle problems with phantom problems.
     E.g. It handles cyclic import dependencies.
 '''
+'''
+    For conventions see "boostNode/__init__.py" on
+    https://github.com/thaibault/boostNode
+'''
+
+__author__ = 'Torben Sickert'
+__copyright__ = 'see boostNode/__init__.py'
+__credits__ = ('Torben Sickert',)
+__license__ = 'see boostNode/__init__.py'
+__maintainer__ = 'Torben Sickert'
+__maintainer_email__ = 't.sickert@gmail.com'
+__status__ = 'stable'
+__version__ = '1.0'
 
 ## python3.3 import builtins
 import copy
@@ -57,13 +70,13 @@ class Resolve(builtins.object):
 ##     def __init__(
 ##         self, name: builtins.str, frame: types.FrameType,
 ##         default_caller=None, function=False,
-##         dependencies=('library.extension.system.CommandLine',
-##                       'library.extension.native.Module')
+##         dependencies=('boostNode.extension.system.CommandLine',
+##                       'boostNode.extension.native.Module')
 ##     ) -> None:
     def __init__(
         self, name, frame, default_caller=None, function=False,
-        dependencies=('library.extension.system.CommandLine',
-                      'library.extension.native.Module')
+        dependencies=('boostNode.extension.system.CommandLine',
+                      'boostNode.extension.native.Module')
     ):
 ##
         '''
@@ -146,13 +159,13 @@ class Resolve(builtins.object):
             >>> Resolve.get_all() # doctest: +ELLIPSIS
             [...'dependent'...]
 
-            >>> import library.extension.file
-            >>> location = library.extension.file.Handler(
+            >>> import boostNode.extension.file
+            >>> location = boostNode.extension.file.Handler(
             ...     __test_folder__ + 'get_all', make_directory=True)
-            >>> a = library.extension.file.Handler(
+            >>> a = boostNode.extension.file.Handler(
             ...     location.path + 'a.py', must_exist=False)
             >>> a.content = ' '
-            >>> library.extension.file.Handler(
+            >>> boostNode.extension.file.Handler(
             ...     location.path + 'b.pyc', make_directory=True
             ... ) # doctest: +ELLIPSIS
             Object of "Handler" with path "...get_all...b.pyc..." (dire...
@@ -277,9 +290,9 @@ class Resolve(builtins.object):
             Returns "True" if default load could be proceed and "False"
             otherwise.
         '''
-        if 'library' in builtins.dir(sys.modules[name]):
-            displace_module = sys.modules[name].library.extension.native.Module
-            sys.modules[name].library.extension.system.CommandLine\
+        if 'boostNode' in builtins.dir(sys.modules[name]):
+            displace_module = sys.modules[name].boostNode.extension.native.Module
+            sys.modules[name].boostNode.extension.system.CommandLine\
                 .generic_module_interface(
                     module=displace_module.extend(name, frame),
                     default_caller=default_caller)
@@ -295,7 +308,7 @@ class Resolve(builtins.object):
 # region footer
 
 if __name__ == '__main__':
-    from library.extension.native import Module
+    from boostNode.extension.native import Module
     Module.default(
         name=__name__, frame=inspect.currentframe(), default_caller=False)
 

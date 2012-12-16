@@ -7,12 +7,15 @@
     This package hold all needed aspects for an aspect orientated way of
     programming.
 '''
-'''Conventions: see "../__init__.py"'''
+'''
+    For conventions see "boostNode/__init__.py" on
+    https://github.com/thaibault/boostNode
+'''
 
 __author__ = 'Torben Sickert'
-__copyright__ = 'see ../__init__.py'
+__copyright__ = 'see boostNode/__init__.py'
 __credits__ = ('Torben Sickert',)
-__license__ = 'see ../__init__.py'
+__license__ = 'see boostNode/__init__.py'
 __maintainer__ = 'Torben Sickert'
 __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
@@ -30,17 +33,17 @@ builtins = sys.modules['__main__'].__builtins__
 sys.path.append(os.path.abspath(sys.path[0] + 3 * ('..' + os.sep)))
 sys.path.append(os.path.abspath(sys.path[0] + 4 * ('..' + os.sep)))
 
-import library.extension.dependent
+import boostNode.extension.dependent
 
 # endregion
 
 '''Determine all modules in this folder via introspection.'''
-__all__ = library.extension.dependent.Resolve.get_all()
+__all__ = boostNode.extension.dependent.Resolve.get_all()
 
 # region footer
 
 if __name__ == '__main__':
-    from library.extension.system import CommandLine
+    from boostNode.extension.system import CommandLine
     CommandLine.generic_package_interface(
         name=__name__, frame=inspect.currentframe())
 

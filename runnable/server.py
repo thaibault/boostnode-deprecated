@@ -6,12 +6,15 @@
 '''
     Provides a number of servers.
 '''
-'''Conventions: see "../__init__.py"'''
+'''
+    For conventions see "boostNode/__init__.py" on
+    https://github.com/thaibault/boostNode
+'''
 
 __author__ = 'Torben Sickert'
-__copyright__ = 'see ../__init__.py'
+__copyright__ = 'see boostNode/__init__.py'
 __credits__ = ('Torben Sickert',)
-__license__ = 'see ../__init__.py'
+__license__ = 'see boostNode/__init__.py'
 __maintainer__ = 'Torben Sickert'
 __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
@@ -49,14 +52,14 @@ builtins = sys.modules['__main__'].__builtins__
 sys.path.append(os.path.abspath(sys.path[0] + 3 * ('..' + os.sep)))
 sys.path.append(os.path.abspath(sys.path[0] + 4 * ('..' + os.sep)))
 
-import library.extension.dependent
-import library.extension.file
-import library.extension.native
-import library.extension.type
-import library.paradigm.aspectOrientation
-import library.paradigm.objectOrientation
-import library.extension.output
-import library.extension.system
+import boostNode.extension.dependent
+import boostNode.extension.file
+import boostNode.extension.native
+import boostNode.extension.type
+import boostNode.paradigm.aspectOrientation
+import boostNode.paradigm.objectOrientation
+import boostNode.extension.output
+import boostNode.extension.system
 
 # endregion
 
@@ -64,8 +67,8 @@ import library.extension.system
 # region classes
 
 class Web(
-    library.paradigm.objectOrientation.Class,
-    library.extension.system.Runnable
+    boostNode.paradigm.objectOrientation.Class,
+    boostNode.extension.system.Runnable
 ):
     '''
         Provides a small platform independent webserver designed for easily
@@ -241,9 +244,9 @@ class Web(
 
             # region special methods
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
-##     def __repr__(self: library.extension.type.Self) -> builtins.str:
+##     def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
     def __repr__(self):
 ##
         '''
@@ -267,11 +270,11 @@ class Web(
 
             # region runnable implementation
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _run(
-##         self: library.extension.type.Self
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
     def _run(self):
 ##
         '''
@@ -283,17 +286,17 @@ class Web(
             >>> Web(root='.') # doctest: +ELLIPSIS
             Object of "Web" with root path "...", port "80" and close order ...
         '''
-        command_line_arguments = library.extension.system.CommandLine\
+        command_line_arguments = boostNode.extension.system.CommandLine\
             .argument_parser(
                 arguments=self.COMMAND_LINE_ARGUMENTS,
                 module_name=__name__, scope={'self': self})
         return self._initialize(**self._command_line_arguments_to_dictionary(
             namespace=command_line_arguments))
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _initialize(
-##         self: library.extension.type.Self, root='.', port=80,
+##         self: boostNode.extension.type.Self, root='.', port=80,
 ##         default='', close_order='close', request_whitelist=('/.*',),
 ##         request_blacklist=(),
 ##         # NOTE: Tuple for explicit webserver file reference validation.
@@ -307,7 +310,7 @@ class Web(
 ##         default_module_name_pattern=(
 ##             '__main__', 'main', 'index', 'initialize'),
 ##         **keywords: builtins.object
-##     ) -> library.extension.type.Self:
+##     ) -> boostNode.extension.type.Self:
     def _initialize(
         self, root='.', port=80, default='', close_order='close',
         request_whitelist=('/.*',), request_blacklist=(),
@@ -330,7 +333,7 @@ class Web(
         '''
         self.__class__.instances.append(self)
         self.close_order = close_order
-        self.root = library.extension.file.Handler(location=root)
+        self.root = boostNode.extension.file.Handler(location=root)
         self.port = port
         self.default = default
         self.request_whitelist = request_whitelist
@@ -339,17 +342,17 @@ class Web(
         self.dynamic_mimetype_pattern = dynamic_mimetype_pattern
         self.default_file_name_pattern = default_file_name_pattern
         self.default_module_name_pattern = default_module_name_pattern
-        self.thread_buffer = library.extension.output.Buffer(
+        self.thread_buffer = boostNode.extension.output.Buffer(
             queue=True)
         return self._start_server_thread()
 
             # endregion
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _start_server_thread(
-##         self: library.extension.type.Self
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
     def _start_server_thread(self):
 ##
         '''
@@ -382,11 +385,11 @@ class Web(
             self.service.socket.close()
         return self
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _log_server_status(
-##         self: library.extension.type.Self
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
     def _log_server_status(self):
 ##
         '''
@@ -397,11 +400,11 @@ class Web(
             self.port, self.root.path)
         return self
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _start_with_dynamic_port(
-##         self: library.extension.type.Self
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
     def _start_with_dynamic_port(self):
 ##
         '''
@@ -420,11 +423,11 @@ class Web(
                 self.port = port
                 return self
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _start_with_static_port(
-##         self: library.extension.type.Self
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
     def _start_with_static_port(self):
 ##
         '''
@@ -438,11 +441,11 @@ class Web(
                 'rights.', self.port)
         return self
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _initialize_server_thread(
-##         self: library.extension.type.Self, port: builtins.int
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self, port: builtins.int
+##     ) -> boostNode.extension.type.Self:
     def _initialize_server_thread(self, port):
 ##
         '''
@@ -508,9 +511,9 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
 
             # region special methods
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
-##     def __repr__(self: library.extension.type.Self) -> builtins.str:
+##     def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
     def __repr__(self):
 ##
         '''
@@ -536,10 +539,10 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
 
         # region public methods
 
-    @library.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
+    @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
 ##     def parse_url(
-##         cls: library.extension.type.SelfClass, url=None
+##         cls: boostNode.extension.type.SelfClass, url=None
 ##     ) -> builtins.tuple:
     def parse_url(cls, url=None):
 ##
@@ -587,11 +590,11 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
 
             # region event methods
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def do_GET(
-##         self: library.extension.type.Self
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
     def do_GET(self):
 ##
         '''
@@ -608,11 +611,11 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
                 return self
         return self._send_no_file_error()
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def do_POST(
-##         self: library.extension.type.Self
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
     def do_POST(self):
 ##
         '''
@@ -640,14 +643,14 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
 
             # endregion
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def log_message(
-##         self: library.extension.type.Self, format: builtins.str,
+##         self: boostNode.extension.type.Self, format: builtins.str,
 ##         message_or_error_code: (builtins.int, builtins.str),
 ##         response_code_or_message: (builtins.str, builtins.int),
 ##         message_end=None
-##     ) -> library.extension.type.Self:
+##     ) -> boostNode.extension.type.Self:
     def log_message(
         self, format, message_or_error_code, response_code_or_message,
         message_end=None
@@ -673,9 +676,9 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
 
             # region boolean methods
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
-##     def _is_dynamic(self: library.extension.type.Self) -> builtins.bool:
+##     def _is_dynamic(self: boostNode.extension.type.Self) -> builtins.bool:
     def _is_dynamic(self):
 ##
         '''
@@ -684,14 +687,14 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         '''
         return builtins.bool(self.load_module or self._check_pattern(
             self.server.web.dynamic_mimetype_pattern,
-            library.extension.file.Handler(
+            boostNode.extension.file.Handler(
                 location=self.server.web.root.path + self.request_file
             ).mimetype))
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _is_valid_reference(
-##         self: library.extension.type.Self
+##         self: boostNode.extension.type.Self
 ##     ) -> builtins.bool:
     def _is_valid_reference(self):
 ##
@@ -699,10 +702,10 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
             Checks wether the incoming is one of a python module-, static- or
             dynamic file request.
         '''
-        requested_file = library.extension.file.Handler(
+        requested_file = boostNode.extension.file.Handler(
             location=self.server.web.root.path + self.path, must_exist=False)
         if not requested_file:
-            if(library.extension.native.Module.get_file_path(
+            if(boostNode.extension.native.Module.get_file_path(
                context_path=self.path)):
                 self.load_module = True
                 return True
@@ -716,11 +719,11 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
 
             # endregion
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _send_positive_header(
-##         self: library.extension.type.Self, mimetype: builtins.str
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self, mimetype: builtins.str
+##     ) -> boostNode.extension.type.Self:
     def _send_positive_header(self, mimetype):
 ##
         '''
@@ -734,11 +737,11 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
             __logger__.info('Connection interrupted.')
         return self
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _send_no_file_error(
-##         self: library.extension.type.Self
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
     def _send_no_file_error(self):
 ##
         '''
@@ -759,10 +762,10 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         self.send_error(404, error_message)
         return self
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _check_pattern(
-##         self: library.extension.type.Self,
+##         self: boostNode.extension.type.Self,
 ##         patterns: collections.Iterable, subject: builtins.str
 ##     ) -> (builtins.str, builtins.bool):
     def _check_pattern(self, patterns, subject):
@@ -776,10 +779,10 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
                 return subject
         return False
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _is_valid_request(
-##         self: library.extension.type.Self
+##         self: boostNode.extension.type.Self
 ##     ) -> builtins.bool:
     def _is_valid_request(self):
 ##
@@ -791,10 +794,10 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
             not self._request_is_in_pattern_list(
                 self.server.web.request_blacklist)
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _request_is_in_pattern_list(
-##         self: library.extension.type.Self,
+##         self: boostNode.extension.type.Self,
 ##         pattern_list: collections.Iterable
 ##     ) -> builtins.bool:
     def _request_is_in_pattern_list(self, pattern_list):
@@ -807,10 +810,10 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
                 return True
         return False
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _create_environment_variables(
-##         self: library.extension.type.Self
+##         self: boostNode.extension.type.Self
 ##     ) -> builtins.bool:
     def _create_environment_variables(self):
 ##
@@ -824,11 +827,11 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
             self.parameter = match.group(2)
         return builtins.bool(self.path)
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _set_dynamic_or_static_get(
-##         self: library.extension.type.Self, file: builtins.str
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self, file: builtins.str
+##     ) -> boostNode.extension.type.Self:
     def _set_dynamic_or_static_get(self, file):
 ##
         '''
@@ -840,11 +843,11 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
             return self._dynamic_get()
         return self._static_get()
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _default_get(
-##         self: library.extension.type.Self
-##     ) -> (library.extension.type.Self, builtins.bool):
+##         self: boostNode.extension.type.Self
+##     ) -> (boostNode.extension.type.Self, builtins.bool):
     def _default_get(self):
 ##
         '''
@@ -862,11 +865,11 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
                     return self._set_dynamic_or_static_get(file=file.name)
         return False
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _handle_default_modules_get(
-##         self: library.extension.type.Self, module_name: builtins.str
-##     ) -> (library.extension.type.Self, builtins.bool):
+##         self: boostNode.extension.type.Self, module_name: builtins.str
+##     ) -> (boostNode.extension.type.Self, builtins.bool):
     def _handle_default_modules_get(self, module_name):
 ##
         '''
@@ -877,39 +880,39 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
             if __name__ != '__main__':
                 self.load_module = True
                 return self._set_dynamic_or_static_get(file=module_name)
-        elif(library.extension.native.Module.get_file_path(
+        elif(boostNode.extension.native.Module.get_file_path(
              context_path=module_name)):
             self.load_module = True
             return self._set_dynamic_or_static_get(file=module_name)
         return False
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _handle_given_default_get(
-##         self: library.extension.type.Self
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
     def _handle_given_default_get(self):
 ##
         '''
             Handles request with no explicit file or module to run.
         '''
         if(self.server.web.default == '__main__' or
-           library.extension.native.Module.get_file_path(
+           boostNode.extension.native.Module.get_file_path(
                context_path=self.server.web.default)):
             self.load_module = True
         return self._set_dynamic_or_static_get(file=self.server.web.default)
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _static_get(
-##         self: library.extension.type.Self
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
     def _static_get(self):
 ##
         '''
             Handles a static file-request.
         '''
-        requested_file = library.extension.file.Handler(
+        requested_file = boostNode.extension.file.Handler(
             location=self.server.web.root.path + self.request_file)
         self._send_positive_header(mimetype=requested_file.mimetype)
         with builtins.open(requested_file._path, mode='rb') as file:
@@ -919,11 +922,11 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
                 __logger__.info('Connection interrupted.')
         return self
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _dynamic_get(
-##         self: library.extension.type.Self
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
     def _dynamic_get(self):
 ##
         '''
@@ -946,11 +949,11 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         self.__class__.last_running_worker.start()
         return self
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _run_request(
-##         self: library.extension.type.Self
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
     def _run_request(self):
 ##
         '''
@@ -961,11 +964,11 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
             return self._run_requested_module()
         return self._run_requested_file()
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _run_requested_file(
-##         self: library.extension.type.Self
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
     def _run_requested_file(self):
 ##
         '''
@@ -990,11 +993,11 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
                 __logger__.info('Connection interrupted.')
         return self
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _run_requested_module(
-##         self: library.extension.type.Self
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
     def _run_requested_module(self):
 ##
         '''
@@ -1003,8 +1006,8 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         '''
         '''Redirect output buffer.'''
         print_default_buffer_save =\
-            library.extension.output.Print.default_buffer
-        library.extension.output.Print.default_buffer =\
+            boostNode.extension.output.Print.default_buffer
+        boostNode.extension.output.Print.default_buffer =\
             self.server.web.thread_buffer
 ## python3.3         sys_path_save = sys.path.copy()
         sys_path_save = copy.copy(sys.path)
@@ -1015,14 +1018,14 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         return self._handle_module_running(
             requested_module, print_default_buffer_save, sys_path_save)
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _handle_module_running(
-##         self: library.extension.type.Self,
+##         self: boostNode.extension.type.Self,
 ##         requested_module: types.ModuleType,
 ##         print_default_buffer_save: builtins.object,
 ##         sys_path_save: collections.Iterable
-##     ) -> library.extension.type.Self:
+##     ) -> boostNode.extension.type.Self:
     def _handle_module_running(
         self, requested_module, print_default_buffer_save,
         sys_path_save
@@ -1031,12 +1034,12 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         '''
             Handles exceptions raising in requested modules.
         '''
-        filter_none_callable_and_builtins = library.extension.native.Module\
+        filter_none_callable_and_builtins = boostNode.extension.native.Module\
             .filter_none_callable_and_builtins
         try:
             builtins.getattr(
                 requested_module,
-                library.extension.native.Module.determine_caller(
+                boostNode.extension.native.Module.determine_caller(
                     callable_objects=filter_none_callable_and_builtins(
                         scope=requested_module)))()
         except builtins.Exception as exception:
@@ -1048,7 +1051,7 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
             raise exception
         finally:
             sys.path = sys_path_save
-            library.extension.output.Print.default_buffer =\
+            boostNode.extension.output.Print.default_buffer =\
                 print_default_buffer_save
         if self.respond:
             try:
@@ -1067,7 +1070,7 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
 
 # region footer
 
-library.extension.native.Module.default(
+boostNode.extension.native.Module.default(
     name=__name__, frame=inspect.currentframe(), default_caller=Web.__name__)
 
 # endregion

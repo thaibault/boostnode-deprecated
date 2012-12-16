@@ -10,12 +10,15 @@
     location to another given version. This code transformation can always be
     made in both directions.
 '''
-'''Conventions: see "../__init__.py"'''
+'''
+    For conventions see "boostNode/__init__.py" on
+    https://github.com/thaibault/boostNode
+'''
 
 __author__ = 'Torben Sickert'
-__copyright__ = 'see ../__init__.py'
+__copyright__ = 'see boostNode/__init__.py'
 __credits__ = ('Torben Sickert',)
-__license__ = 'see ../__init__.py'
+__license__ = 'see boostNode/__init__.py'
 __maintainer__ = 'Torben Sickert'
 __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
@@ -37,10 +40,10 @@ builtins = sys.modules['__main__'].__builtins__
 sys.path.append(os.path.abspath(sys.path[0] + 3 * ('..' + os.sep)))
 sys.path.append(os.path.abspath(sys.path[0] + 4 * ('..' + os.sep)))
 
-import library.extension.file
-import library.extension.native
-import library.paradigm.aspectOrientation
-import library.paradigm.objectOrientation
+import boostNode.extension.file
+import boostNode.extension.native
+import boostNode.paradigm.aspectOrientation
+import boostNode.paradigm.objectOrientation
 
 # endregion
 
@@ -48,8 +51,8 @@ import library.paradigm.objectOrientation
 # region classes
 
 class Replace(
-    library.paradigm.objectOrientation.Class,
-    library.extension.system.Runnable
+    boostNode.paradigm.objectOrientation.Class,
+    boostNode.extension.system.Runnable
 ):
     '''
         Parse source code and replace version depended code snippets with the
@@ -177,9 +180,9 @@ class Replace(
 
             # region special methods
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
-##     def __repr__(self: library.extension.type.Self) -> builtins.str:
+##     def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
     def __repr__(self):
 ##
         '''
@@ -202,10 +205,10 @@ class Replace(
 
             # region setter methods
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def set_new_version(
-##         self: library.extension.type.Self, version: builtins.str
+##         self: boostNode.extension.type.Self, version: builtins.str
 ##     ) -> builtins.str:
     def set_new_version(self, version):
 ##
@@ -224,7 +227,7 @@ class Replace(
             >>> replace._new_version # doctest: +ELLIPSIS
             'python...'
 
-            >>> library.extension.file.Handler(
+            >>> boostNode.extension.file.Handler(
             ...     location=__test_folder__ + 'macro_file', must_exist=False
             ... ).content = ('#!/usr/bin/env version\\n\\n## '
             ...              'alternate_version hans\\npeter\\n')
@@ -243,10 +246,10 @@ class Replace(
                 __logger__.warning('No new version found to convert to.')
         return self._new_version
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def set_exclude_locations(
-##         self: library.extension.type.Self, paths: collections.Iterable
+##         self: boostNode.extension.type.Self, paths: collections.Iterable
 ##     ) -> builtins.list:
     def set_exclude_locations(self, paths):
 ##
@@ -266,11 +269,11 @@ class Replace(
             ...     'A', 'B'] # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
-            library.extension.native.FileError: Invalid path "...A" for an ...
+            boostNode.extension.native.FileError: Invalid path "...A" for an ...
         '''
         self._exclude_locations = []
         for path in paths:
-            self._exclude_locations.append(library.extension.file.Handler(
+            self._exclude_locations.append(boostNode.extension.file.Handler(
                 location=path))
         return self._exclude_locations
 
@@ -282,11 +285,11 @@ class Replace(
 
             # region runnable implementation
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _run(
-##         self: library.extension.type.Self
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
     def _run(self):
 ##
         '''
@@ -295,17 +298,17 @@ class Replace(
             the given inputs don't make sense.
         '''
         command_line_arguments =\
-            library.extension.system.CommandLine.argument_parser(
+            boostNode.extension.system.CommandLine.argument_parser(
                 arguments=self.COMMAND_LINE_ARGUMENTS,
                 module_name=__name__,
                 scope={'os': os, 'module_name': __module_name__, 'self': self})
         return self._initialize(**self._command_line_arguments_to_dictionary(
             namespace=command_line_arguments))
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _initialize(
-##         self: library.extension.type.Self, location=None,
+##         self: boostNode.extension.type.Self, location=None,
 ##         new_version='__determine_useful__', skip_self_file=False,
 ##         extension='', exclude_locations=(),
 ##         first_line_regex_pattern='(?P<constant_version_pattern>^#!.*?'
@@ -319,7 +322,7 @@ class Replace(
 ##                                 '(?P<alternate_text>((## .*?\n)|(##\n))+)'
 ##                                 '(?P<current_text>.*?\n)##\n',
 ##         **keywords: builtins.object
-##     ) -> library.extension.type.Self:
+##     ) -> boostNode.extension.type.Self:
     def _initialize(
         self, location=None, new_version='__determine_useful__',
         skip_self_file=False, extension='', exclude_locations=(),
@@ -346,9 +349,9 @@ class Replace(
             ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
-            library.extension.native.FileError: Invalid path "...non_existi...
+            boostNode.extension.native.FileError: Invalid path "...non_existi...
         '''
-        self._location = library.extension.file.Handler(location)
+        self._location = boostNode.extension.file.Handler(location)
         self._first_line_regex_pattern = first_line_regex_pattern
         self._one_line_regex_pattern = one_line_regex_pattern
         self._more_line_regex_pattern = more_line_regex_pattern
@@ -363,11 +366,11 @@ class Replace(
 
             # region boolean methods
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _in_exclude_locations(
-##         self: library.extension.type.Self,
-##         location: library.extension.file.Handler
+##         self: boostNode.extension.type.Self,
+##         location: boostNode.extension.file.Handler
 ##     ) -> builtins.bool:
     def _in_exclude_locations(self, location):
 ##
@@ -386,11 +389,11 @@ class Replace(
 
             # region core concern methods
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _determine_useful_version_in_location(
-##         self: library.extension.type.Self,
-##         location: library.extension.file.Handler
+##         self: boostNode.extension.type.Self,
+##         location: boostNode.extension.file.Handler
 ##     ) -> builtins.str:
     def _determine_useful_version_in_location(self, location):
 ##
@@ -400,19 +403,19 @@ class Replace(
 
             Examples:
 
-            >>> library.extension.file.Handler(
+            >>> boostNode.extension.file.Handler(
             ...     location=__test_folder__ + 'directory/sub',
             ...     must_exist=False
             ... ).make_directorys()
             True
-            >>> library.extension.file.Handler(
+            >>> boostNode.extension.file.Handler(
             ...     location=__test_folder__ + 'directory/sub/file',
             ...     must_exist=False
             ... ).content = 'hans\\n## new_version peter\\nklaus\\n'
             >>> Replace(
             ...     location=__file_path__
             ... )._determine_useful_version_in_location(
-            ...     location=library.extension.file.Handler(
+            ...     location=boostNode.extension.file.Handler(
             ...         location=__test_folder__ + 'directory'))
             'new_version'
         '''
@@ -425,11 +428,11 @@ class Replace(
             __logger__.info('No macros found.')
         return ''
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _determine_useful_version_in_file(
-##         self: library.extension.type.Self,
-##         file: library.extension.file.Handler
+##         self: boostNode.extension.type.Self,
+##         file: boostNode.extension.file.Handler
 ##     ) -> builtins.str:
     def _determine_useful_version_in_file(self, file):
 ##
@@ -439,13 +442,13 @@ class Replace(
 
             Examples:
 
-            >>> library.extension.file.Handler(
+            >>> boostNode.extension.file.Handler(
             ...     location=__test_folder__ + 'macro', must_exist=False
             ... ).content = 'hans\\n## new_version peter\\nklaus\\n'
             >>> Replace(
             ...     location=__file_path__
             ... )._determine_useful_version_in_file(
-            ...     file=library.extension.file.Handler(
+            ...     file=boostNode.extension.file.Handler(
             ...         location=__test_folder__ + 'macro'))
             'new_version'
         '''
@@ -467,11 +470,11 @@ class Replace(
             return match.group('alternate_version')
         return ''
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _convert_path(
-##         self: library.extension.type.Self
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
     def _convert_path(self):
 ##
         '''
@@ -490,12 +493,12 @@ class Replace(
                     'Given Path "%s" doesn\'t exists.\n', self._location)
         return self
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _convert_directory(
-##         self: library.extension.type.Self,
-##         directory: library.extension.file.Handler
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self,
+##         directory: boostNode.extension.file.Handler
+##     ) -> boostNode.extension.type.Self:
     def _convert_directory(self, directory):
 ##
         '''
@@ -516,12 +519,12 @@ class Replace(
                     self._convert_directory(directory=file)
         return self
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _convert_file(
-##         self: library.extension.type.Self,
-##         file: library.extension.file.Handler
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self,
+##         file: boostNode.extension.file.Handler
+##     ) -> boostNode.extension.type.Self:
     def _convert_file(self, file):
 ##
         '''
@@ -530,7 +533,7 @@ class Replace(
 
             "file" - the file to be converted.
 
-            >>> library.extension.file.Handler(
+            >>> boostNode.extension.file.Handler(
             ...     location=__test_folder__ + 'test', must_exist=False
             ... ).content = 'hans'
             >>> Replace(
@@ -539,9 +542,9 @@ class Replace(
             ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
-            library.extension.native.MacroError:...test"...interpreter...
+            boostNode.extension.native.MacroError:...test"...interpreter...
 
-            >>> file = library.extension.file.Handler(
+            >>> file = boostNode.extension.file.Handler(
             ...     location=__test_folder__ + 'test', must_exist=False)
             >>> file.content = ('#!/usr/bin/python3.3\\n'
             ...                 '\\n'
@@ -553,7 +556,7 @@ class Replace(
             >>> file.content
             '#!/usr/bin/python2.7\\n\\n## python3.3 AB\\nhans\\n'
 
-            >>> file = library.extension.file.Handler(
+            >>> file = boostNode.extension.file.Handler(
             ...     location=__test_folder__ + 'test', must_exist=False)
             >>> file.content = ('#!/bin/python3.3\\n'
             ...                 '\\n'
@@ -569,7 +572,7 @@ class Replace(
             >>> file.content
             '#!/bin/python2.7\\n\\n## python3.3\\n## C\\n## D\\nA\\nB\\n##\\n'
 
-            >>> file = library.extension.file.Handler(
+            >>> file = boostNode.extension.file.Handler(
             ...     location=__test_folder__ + 'test', must_exist=False)
             >>> file.content = ('#!/bin/python2.7\\n'
             ...                 '\\n'
@@ -584,7 +587,7 @@ class Replace(
             >>> file.content
             '#!/bin/python3.3\\n\\n## python2.7\\n## B\\n## #\\nA\\n##\\n'
 
-            >>> file = library.extension.file.Handler(
+            >>> file = boostNode.extension.file.Handler(
             ...     location=__test_folder__ + 'test', must_exist=False)
             >>> file.content = ('#!/bin/python3.3\\n'
             ...                 '\\n'
@@ -600,7 +603,7 @@ class Replace(
             >>> file.content
             '#!/bin/python3.3\\n\\n## python2.7\\n## A\\n##\\n## B\\nB\\n##\\n'
 
-            >>> file = library.extension.file.Handler(
+            >>> file = boostNode.extension.file.Handler(
             ...     location=__test_folder__ + 'test', must_exist=False)
             >>> file.content = ('#!/bin/python2.7\\n'
             ...                 '\\n'
@@ -616,7 +619,7 @@ class Replace(
             >>> file.content
             '#!/bin/python3.3\\n\\n## python2.7\\n## B\\n##\\n## C\\nA\\n##\\n'
 
-            >>> file = library.extension.file.Handler(
+            >>> file = boostNode.extension.file.Handler(
             ...     location=__test_folder__ + 'test', must_exist=False)
             >>> file.content = ('#!/bin/python2.7\\n'
             ...                 '\\n'
@@ -628,7 +631,7 @@ class Replace(
             >>> file.content
             '#!/bin/python3.3\\n\\n## python2.7 A\\n\\n'
         '''
-        self_file = library.extension.file.Handler(
+        self_file = boostNode.extension.file.Handler(
             location=inspect.currentframe().f_code.co_filename,
             respect_root_path=False)
         if self._skip_self_file and self_file == file:
@@ -637,12 +640,12 @@ class Replace(
             self._convert_file_code(file)
         return self
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _convert_file_code(
-##         self: library.extension.type.Self,
-##         file: library.extension.file.Handler
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self,
+##         file: boostNode.extension.file.Handler
+##     ) -> boostNode.extension.type.Self:
     def _convert_file_code(self, file):
 ##
         '''
@@ -678,10 +681,10 @@ class Replace(
             self._replace_alternate_line, file_content)
         return self
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _replace_alternate_lines(
-##         self: library.extension.type.Self,
+##         self: boostNode.extension.type.Self,
 ##         match: type(re.compile('').match(''))
 ##     ) -> builtins.str:
     def _replace_alternate_lines(self, match):
@@ -718,10 +721,10 @@ class Replace(
                            '\n%s' % match.group('prefix'), '\n'))
         return match.group()
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _replace_alternate_line(
-##         self: library.extension.type.Self,
+##         self: boostNode.extension.type.Self,
 ##         match: type(re.compile('').match(''))
 ##     ) -> builtins.str:
     def _replace_alternate_line(self, match):
@@ -747,11 +750,11 @@ class Replace(
                     alternate_text=match.group('alternate_text')))
         return match.group()
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _determine_useful_version_in_location_helper(
-##         self: library.extension.type.Self,
-##         location: library.extension.file.Handler
+##         self: boostNode.extension.type.Self,
+##         location: boostNode.extension.file.Handler
 ##     ) -> builtins.str:
     def _determine_useful_version_in_location_helper(self, location):
 ##
@@ -775,11 +778,11 @@ class Replace(
                 'Given Path "%s" doesn\'t exists.\n', location.path)
         return ''
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _convert(
-##         self: library.extension.type.Self
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
     def _convert(self):
 ##
         '''
@@ -799,7 +802,7 @@ class Replace(
 
 # region footer
 
-library.extension.dependent.Resolve(
+boostNode.extension.dependent.Resolve(
     name=__name__, frame=inspect.currentframe())
 
 # endregion

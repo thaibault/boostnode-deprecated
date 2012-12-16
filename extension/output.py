@@ -10,12 +10,15 @@ from __future__ import print_function
     This module provides classes for dealing with python's way to transport
     strings to any output stream.
 '''
-'''Conventions: see "../__init__.py"'''
+'''
+    For conventions see "boostNode/__init__.py" on
+    https://github.com/thaibault/boostNode
+'''
 
 __author__ = 'Torben Sickert'
-__copyright__ = 'see ../__init__.py'
+__copyright__ = 'see boostNode/__init__.py'
 __credits__ = ('Torben Sickert',)
-__license__ = 'see ../__init__.py'
+__license__ = 'see boostNode/__init__.py'
 __maintainer__ = 'Torben Sickert'
 __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
@@ -36,11 +39,11 @@ builtins = sys.modules['__main__'].__builtins__
 sys.path.append(os.path.abspath(sys.path[0] + 3 * ('..' + os.sep)))
 sys.path.append(os.path.abspath(sys.path[0] + 4 * ('..' + os.sep)))
 
-import library.extension.dependent
-import library.extension.file
-import library.extension.type
-import library.paradigm.aspectOrientation
-import library.paradigm.objectOrientation
+import boostNode.extension.dependent
+import boostNode.extension.file
+import boostNode.extension.type
+import boostNode.paradigm.aspectOrientation
+import boostNode.paradigm.objectOrientation
 
 # endregion
 
@@ -48,7 +51,7 @@ import library.paradigm.objectOrientation
 # region classes
 
 class Buffer(
-    library.paradigm.objectOrientation.Class, logging.StreamHandler
+    boostNode.paradigm.objectOrientation.Class, logging.StreamHandler
 ):
     '''
         This class represents a layer for writing and reading to an output
@@ -92,10 +95,10 @@ class Buffer(
 
             # region special methods
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def __init__(
-##         self: library.extension.type.Self, file=None, queue=None
+##         self: boostNode.extension.type.Self, file=None, queue=None
 ##     ) -> None:
     def __init__(self, file=None, queue=None):
 ##
@@ -117,12 +120,12 @@ class Buffer(
             if builtins.isinstance(queue, native_queue.Queue):
                 self.queue = queue
         elif file is not None:
-            self._file = library.extension.file.Handler(
+            self._file = boostNode.extension.file.Handler(
                 location=file, must_exist=False)
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
-##     def __repr__(self: library.extension.type.Self) -> builtins.str:
+##     def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
     def __repr__(self):
 ##
         '''
@@ -155,9 +158,9 @@ class Buffer(
                    class_name=self.__class__.__name__, type=buffer_type,
                    type_addition=type_addition, content=self.content)
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
-##     def __str__(self: library.extension.type.Self) -> builtins.str:
+##     def __str__(self: boostNode.extension.type.Self) -> builtins.str:
     def __str__(self):
 ##
         '''
@@ -176,9 +179,9 @@ class Buffer(
 
         # region getter methods
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
-##     def get_content(self: library.extension.type.Self) -> builtins.str:
+##     def get_content(self: boostNode.extension.type.Self) -> builtins.str:
     def get_content(self):
 ##
         '''
@@ -201,11 +204,11 @@ class Buffer(
                 self.queue.put(content)
         return self._content
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def get_file(
-##         self: library.extension.type.Self
-##     ) -> (library.extension.file.Handler, builtins.type(None)):
+##         self: boostNode.extension.type.Self
+##     ) -> (boostNode.extension.file.Handler, builtins.type(None)):
     def get_file(self):
 ##
         '''
@@ -229,11 +232,11 @@ class Buffer(
 
         # endregion
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def write(
-##         self: library.extension.type.Self, content: builtins.str
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self, content: builtins.str
+##     ) -> boostNode.extension.type.Self:
     def write(self, content):
 ##
         '''
@@ -266,11 +269,11 @@ class Buffer(
             self._content += self.last_written
         return self
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def flush(
-##         self: library.extension.type.Self
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
     def flush(self):
 ##
         '''
@@ -285,10 +288,10 @@ class Buffer(
         '''
         return self
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def clear(
-##         self: library.extension.type.Self, delete=True
+##         self: boostNode.extension.type.Self, delete=True
 ##     ) -> builtins.str:
     def clear(self, delete=True):
 ##
@@ -333,7 +336,7 @@ class Buffer(
     # endregion
 
 
-class Print(library.paradigm.objectOrientation.Class):
+class Print(boostNode.paradigm.objectOrientation.Class):
     '''
         Provids a high level printing class on top of pythons native print
         function.
@@ -374,10 +377,10 @@ class Print(library.paradigm.objectOrientation.Class):
 
             # region special methods
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def __init__(
-##         self: library.extension.type.Self, *output: builtins.object,
+##         self: boostNode.extension.type.Self, *output: builtins.object,
 ##         **codewords: builtins.object
 ##     ) -> None:
     def __init__(self, *output, **codewords):
@@ -445,9 +448,9 @@ class Print(library.paradigm.objectOrientation.Class):
             sys.stdout.flush()
 ##
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
-##     def __str__(self: library.extension.type.Self) -> builtins.str:
+##     def __str__(self: boostNode.extension.type.Self) -> builtins.str:
     def __str__(self):
 ##
         '''
@@ -462,9 +465,9 @@ class Print(library.paradigm.objectOrientation.Class):
             return builtins.str(self.buffer)
         return ''
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
-##     def __repr__(self: library.extension.type.Self) -> builtins.str:
+##     def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
     def __repr__(self):
 ##
         '''
@@ -488,7 +491,7 @@ class Print(library.paradigm.objectOrientation.Class):
     # endregion
 
 
-class Logger(library.paradigm.objectOrientation.Class):
+class Logger(boostNode.paradigm.objectOrientation.Class):
 
     # region dynamic properties
 
@@ -510,9 +513,9 @@ class Logger(library.paradigm.objectOrientation.Class):
 
             # region special methods
 
-    @library.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
+    @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
-##     def __str__(cls: library.extension.type.SelfClass) -> builtins.str:
+##     def __str__(cls: boostNode.extension.type.SelfClass) -> builtins.str:
     def __str__(cls):
 ##
         '''
@@ -527,9 +530,9 @@ class Logger(library.paradigm.objectOrientation.Class):
             return builtins.str(cls.buffer)
         return ''
 
-    @library.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
+    @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
-##     def __repr__(cls: library.extension.type.SelfClass) -> builtins.str:
+##     def __repr__(cls: boostNode.extension.type.SelfClass) -> builtins.str:
     def __repr__(cls):
 ##
         '''
@@ -563,10 +566,10 @@ class Logger(library.paradigm.objectOrientation.Class):
 
             # endregion
 
-    @library.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
+    @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
 ##     def get(
-##         cls: library.extension.type.SelfClass, name=__name__, level=None,
+##         cls: boostNode.extension.type.SelfClass, name=__name__, level=None,
 ##         buffer=None, terminator=None, format=None
 ##     ) -> logging.getLoggerClass():
     def get(
@@ -604,12 +607,12 @@ class Logger(library.paradigm.objectOrientation.Class):
             name, level, buffer, terminator, format))
         return cls.instances[-1][0]
 
-    @library.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
+    @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
 ##     def change_all(
-##         cls: library.extension.type.SelfClass, level=None, buffer=None,
+##         cls: boostNode.extension.type.SelfClass, level=None, buffer=None,
 ##         terminator=None, format=None
-##     ) -> library.extension.type.SelfClass:
+##     ) -> boostNode.extension.type.SelfClass:
     def change_all(
         cls, level=None, buffer=None, terminator=None, format=None
     ):
@@ -656,10 +659,10 @@ class Logger(library.paradigm.objectOrientation.Class):
 
         # region protected methods
 
-    @library.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
+    @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
 ##     def _generate_logger(
-##         cls: library.extension.type.SelfClass, name: builtins.str,
+##         cls: boostNode.extension.type.SelfClass, name: builtins.str,
 ##         level: (builtins.str, builtins.type(None)), buffer: builtins.object,
 ##         terminator: (builtins.str, builtins.type(None)),
 ##         format: (builtins.str, builtins.type(None))
@@ -704,7 +707,7 @@ class Logger(library.paradigm.objectOrientation.Class):
 
 # region footer
 
-library.extension.dependent.Resolve(
+boostNode.extension.dependent.Resolve(
     name=__name__, frame=inspect.currentframe(), default_caller=False)
 
 # endregion

@@ -7,12 +7,15 @@
     This module provides an easy way to compile, run and clean up a various
     number of scripts.
 '''
-'''Conventions: see "../__init__.py"'''
+'''
+    For conventions see "boostNode/__init__.py" on
+    https://github.com/thaibault/boostNode
+'''
 
 __author__ = 'Torben Sickert'
-__copyright__ = 'see ../__init__.py'
+__copyright__ = 'see boostNode/__init__.py'
 __credits__ = ('Torben Sickert',)
-__license__ = 'see ../__init__.py'
+__license__ = 'see boostNode/__init__.py'
 __maintainer__ = 'Torben Sickert'
 __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
@@ -34,13 +37,13 @@ builtins = sys.modules['__main__'].__builtins__
 sys.path.append(os.path.abspath(sys.path[0] + 3 * ('..' + os.sep)))
 sys.path.append(os.path.abspath(sys.path[0] + 4 * ('..' + os.sep)))
 
-import library.extension.file
-import library.extension.native
-import library.extension.output
-import library.extension.type
-import library.paradigm.aspectOrientation
-import library.paradigm.objectOrientation
-import library.runnable.template
+import boostNode.extension.file
+import boostNode.extension.native
+import boostNode.extension.output
+import boostNode.extension.type
+import boostNode.paradigm.aspectOrientation
+import boostNode.paradigm.objectOrientation
+import boostNode.runnable.template
 
 # endregion
 
@@ -48,8 +51,8 @@ import library.runnable.template
 # region classes
 
 class Run(
-    library.paradigm.objectOrientation.Class,
-    library.extension.system.Runnable
+    boostNode.paradigm.objectOrientation.Class,
+    boostNode.extension.system.Runnable
 ):
     '''
         This class provides a large number of supported programming languages
@@ -202,9 +205,9 @@ class Run(
 
             # region special methods
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
-##     def __repr__(self: library.extension.type.Self) -> builtins.str:
+##     def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
     def __repr__(self):
 ##
         '''
@@ -212,7 +215,7 @@ class Run(
 
             Examples:
 
-            >>> library.extension.file.Handler(
+            >>> boostNode.extension.file.Handler(
             ...     __test_folder__ + 'runnable.py', must_exist=False
             ... ).content = '#!/usr/bin/env python'
             >>> repr(Run(
@@ -236,11 +239,11 @@ class Run(
 
             # region runnable implementation
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _run(
-##         self: library.extension.type.Self
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
     def _run(self):
 ##
         '''
@@ -250,7 +253,7 @@ class Run(
 
             Examples:
 
-            >>> library.extension.file.Handler(
+            >>> boostNode.extension.file.Handler(
             ...     location=__test_folder__ + 'runner', make_directory=True
             ... ) # doctest: +ELLIPSIS
             Object of "Handler" with path "...runner..." (directory).
@@ -261,23 +264,23 @@ class Run(
             ...
             CodeFileError: No supported file path found for running.
         '''
-        command_line_arguments = library.extension.system.CommandLine\
+        command_line_arguments = boostNode.extension.system.CommandLine\
             .argument_parser(
                 meta=True, arguments=self.COMMAND_LINE_ARGUMENTS,
                 module_name=__name__, scope={'self': self})
         if command_line_arguments.meta_help:
-            library.extension.system.CommandLine\
+            boostNode.extension.system.CommandLine\
                 .current_argument_parser.print_help()
             return self
         return self._initialize(**self._command_line_arguments_to_dictionary(
             namespace=command_line_arguments))
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _initialize(
-##         self: library.extension.type.Self, code_file_path='',
+##         self: boostNode.extension.type.Self, code_file_path='',
 ##         default_command_sequence=('compile', 'run', 'clear'), **keywords
-##     ) -> library.extension.type.Self:
+##     ) -> boostNode.extension.type.Self:
     def _initialize(
         self, code_file_path='',
         default_command_sequence=('compile', 'run', 'clear'), **keywords
@@ -293,11 +296,11 @@ class Run(
 
             # endregion
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _tidy_up(
-##         self: library.extension.type.Self
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
     def _tidy_up(self):
 ##
         '''
@@ -306,9 +309,9 @@ class Run(
 
             Examples:
 
-            >>> garbage = library.extension.file.Handler(
+            >>> garbage = boostNode.extension.file.Handler(
             ...     __test_folder__ + 'temp_garbage', make_directory=True)
-            >>> library.extension.file.Handler(
+            >>> boostNode.extension.file.Handler(
             ...     __test_folder__ + 'temp_runnable.py', must_exist=False
             ... ).content = '#!/usr/bin/env python'
             >>> runner = Run(code_file_path=__test_folder__ + 'temp_runnable')
@@ -324,17 +327,17 @@ class Run(
                 'Delete files which matches one of "%s" pattern.',
                 '", "'.join(
                     self._current_code['properties']['delete_patterns']))
-            library.extension.file.Handler(
+            boostNode.extension.file.Handler(
                 location=self._code_file.directory_path
             ).delete_file_patterns(
                 *self._current_code['properties']['delete_patterns'])
         return self
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _run_commands(
-##         self: library.extension.type.Self
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
     def _run_commands(self):
 ##
         '''
@@ -344,7 +347,7 @@ class Run(
 
             >>> __test_buffer__.clear() # doctest: +ELLIPSIS
             '...'
-            >>> library.extension.file.Handler(
+            >>> boostNode.extension.file.Handler(
             ...     __test_folder__ + 'runnable.py', must_exist=False
             ... ).content = '#!/usr/bin/env python'
             >>> Run(
@@ -368,11 +371,11 @@ class Run(
                 __logger__.info('No "%s" necessary.', command_name)
         return self
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _check_code_manager(
-##         self: library.extension.type.Self
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
     def _check_code_manager(self):
 ##
         '''
@@ -382,10 +385,10 @@ class Run(
 
             Examples:
 
-            >>> library.extension.file.Handler(
+            >>> boostNode.extension.file.Handler(
             ...     __test_folder__ + 'temp_runnable.py', must_exist=False
             ... ).content = '#!/usr/bin/env python'
-            >>> library.extension.file.Handler(
+            >>> boostNode.extension.file.Handler(
             ...     __test_folder__ + '__init__.py', must_exist=False
             ... ).content = '#!/usr/bin/env python'
 
@@ -400,7 +403,7 @@ class Run(
         if 'code_manager' in self._current_code['properties']:
             file_path = self\
                 ._current_code['properties']['code_manager']['file_path']
-            self.code_manager_file = library.extension.file.Handler(
+            self.code_manager_file = boostNode.extension.file.Handler(
                 location=self._code_file.directory_path + os.sep + file_path,
                 must_exist=False)
             if self.code_manager_file:
@@ -411,11 +414,11 @@ class Run(
                     'Detected code manager "%s".', self.code_manager_file.path)
         return self
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _determine_code_file(
-##         self: library.extension.type.Self, path: builtins.str
-##     ) -> (library.extension.file.Handler, builtins.bool):
+##         self: boostNode.extension.type.Self, path: builtins.str
+##     ) -> (boostNode.extension.file.Handler, builtins.bool):
     def _determine_code_file(self, path):
 ##
         '''
@@ -432,7 +435,7 @@ class Run(
         if path:
             if not self._command_line_arguments:
                 self._command_line_arguments = sys.argv[2:]
-            code_file = library.extension.file.Handler(
+            code_file = boostNode.extension.file.Handler(
                 location=path, must_exist=False)
             if not (code_file.is_file() and
                     self._find_informations_by_extension(
@@ -444,11 +447,11 @@ class Run(
             self._command_line_arguments = sys.argv[1:]
         return self._search_supported_file_in_current_working_directory()
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _find_informations_by_extension(
-##         self: library.extension.type.Self, extension: builtins.str,
-##         code_file: library.extension.file.Handler
+##         self: boostNode.extension.type.Self, extension: builtins.str,
+##         code_file: boostNode.extension.file.Handler
 ##     ) -> (builtins.dict, builtins.bool):
     def _find_informations_by_extension(self, extension, code_file):
 ##
@@ -458,7 +461,7 @@ class Run(
 
             Examples:
 
-            >>> code_file = library.extension.file.Handler(
+            >>> code_file = boostNode.extension.file.Handler(
             ...     location=__test_folder__ + 'runner.py', must_exist=False)
             >>> Run()._find_informations_by_extension(
             ...     extension='py', code_file=code_file
@@ -475,11 +478,11 @@ class Run(
                     properties, code_file)}
         return False
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _search_supported_file_by_path(
-##         self: library.extension.type.Self, path: builtins.str
-##     ) -> (library.extension.file.Handler, builtins.bool):
+##         self: boostNode.extension.type.Self, path: builtins.str
+##     ) -> (boostNode.extension.file.Handler, builtins.bool):
     def _search_supported_file_by_path(self, path):
 ##
         '''
@@ -488,7 +491,7 @@ class Run(
 
             Examples:
 
-            >>> library.extension.file.Handler(
+            >>> boostNode.extension.file.Handler(
             ...     __test_folder__ + 'runnable.py', must_exist=False
             ... ).content = '#!/usr/bin/env python'
             >>> Run()._search_supported_file_by_path(
@@ -502,17 +505,17 @@ class Run(
             >>> Run()._search_supported_file_by_path('not_exists')
             False
         '''
-        self_file = library.extension.file.Handler(
+        self_file = boostNode.extension.file.Handler(
             location=inspect.currentframe().f_code.co_filename,
             respect_root_path=False)
-        location = library.extension.file.Handler(
+        location = boostNode.extension.file.Handler(
             location=path, must_exist=False)
         for name, properties in self.SUPPORTED_CODES.items():
             for extension in properties['extensions']:
-                for code_file in (library.extension.file.Handler(
+                for code_file in (boostNode.extension.file.Handler(
                         location=location.path + '.' + extension,
                         must_exist=False),
-                    library.extension.file.Handler(
+                    boostNode.extension.file.Handler(
                         location=location.path + extension, must_exist=False)):
 ## python3.3
 ##                     if code_file.is_file() and code_file != self_file:
@@ -525,12 +528,12 @@ class Run(
                     return file
         return False
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _search_supported_file_by_directory(
-##         self: library.extension.type.Self,
-##         location: library.extension.file.Handler, extension: builtins.str,
-##     ) -> (library.extension.file.Handler, builtins.bool):
+##         self: boostNode.extension.type.Self,
+##         location: boostNode.extension.file.Handler, extension: builtins.str,
+##     ) -> (boostNode.extension.file.Handler, builtins.bool):
     def _search_supported_file_by_directory(self, location, extension):
 ##
         '''
@@ -547,11 +550,11 @@ class Run(
                 return found_file
         return False
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _search_supported_file_in_current_working_directory(
-##         self: library.extension.type.Self
-##     ) -> (library.extension.file.Handler, builtins.bool):
+##         self: boostNode.extension.type.Self
+##     ) -> (boostNode.extension.file.Handler, builtins.bool):
     def _search_supported_file_in_current_working_directory(self):
 ##
         '''
@@ -567,18 +570,18 @@ class Run(
         for name, properties in self.SUPPORTED_CODES.items():
             for extension in properties['extensions']:
                 file = self._search_supported_file_by_directory(
-                    location=library.extension.file.Handler(),
+                    location=boostNode.extension.file.Handler(),
                     extension=extension)
                 if file:
                     return file
         return False
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _run_command(
-##         self: library.extension.type.Self, command_name: builtins.str,
+##         self: boostNode.extension.type.Self, command_name: builtins.str,
 ##         command: builtins.str
-##     ) -> library.extension.type.Self:
+##     ) -> boostNode.extension.type.Self:
     def _run_command(self, command_name, command):
 ##
         '''
@@ -596,55 +599,55 @@ class Run(
         '''
         return self._log_command_run(
             command_name, command,
-            result=library.extension.system.Platform.run(
+            result=boostNode.extension.system.Platform.run(
                 command=command.strip(), shell=True, error=False))
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _log_command_run(
-##         self: library.extension.type.Self, command_name: builtins.str,
+##         self: boostNode.extension.type.Self, command_name: builtins.str,
 ##         command: builtins.str, result: collections.Iterable
-##     ) -> library.extension.type.Self:
+##     ) -> boostNode.extension.type.Self:
     def _log_command_run(self, command_name, command, result):
 ##
         '''
             Generates logging output for wrapping around generated output by
             running code file.
         '''
-        terminator_save = library.extension.output.Logger.terminator
-        format_save = library.extension.output.Logger.format
-        library.extension.output.Logger.change_all(terminator='')
+        terminator_save = boostNode.extension.output.Logger.terminator
+        format_save = boostNode.extension.output.Logger.format
+        boostNode.extension.output.Logger.change_all(terminator='')
 ## python3.3
 ##         __logger__.info(
 ##             '%s with "%s".\nstandart output:\n[',
 ##             command_name.capitalize(), command.strip())
 ##         sys.stdout.flush()
         if __logger__.isEnabledFor(logging.INFO):
-            library.extension.output.Print(
+            boostNode.extension.output.Print(
                 '%s with "%s".\nstandart output:\n[' %
                 (command_name.capitalize(), command.strip()),
                 end='', flush=True)
 ##
-        library.extension.output.Print(result[0], end='', flush=True)
-        library.extension.output.Logger.change_all(format='')
+        boostNode.extension.output.Print(result[0], end='', flush=True)
+        boostNode.extension.output.Logger.change_all(format='')
 ## python3.3
 ##         __logger__.info(']\nerror output:\n[')
 ##         sys.stdout.flush()
         if __logger__.isEnabledFor(logging.INFO):
-            library.extension.output.Print(
+            boostNode.extension.output.Print(
                 ']\nerror output:\n[', end='', flush=True)
 ##
-        library.extension.output.Logger.change_all(terminator=terminator_save)
-        library.extension.output.Print(result[1], end='')
+        boostNode.extension.output.Logger.change_all(terminator=terminator_save)
+        boostNode.extension.output.Print(result[1], end='')
         __logger__.info(']')
-        library.extension.output.Logger.change_all(format=format_save)
+        boostNode.extension.output.Logger.change_all(format=format_save)
         return self
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _run_code_file(
-##         self: library.extension.type.Self
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
     def _run_code_file(self):
 ##
         '''
@@ -664,11 +667,11 @@ class Run(
                 self._tidy_up()
         return self
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _validate_code_file(
-##         self: library.extension.type.Self
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
     def _validate_code_file(self):
 ##
         '''
@@ -683,11 +686,11 @@ class Run(
                 self._code_file.path)
         return self
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _render_properties(
-##         self: library.extension.type.Self, properties: builtins.dict,
-##         code_file: library.extension.file.Handler
+##         self: boostNode.extension.type.Self, properties: builtins.dict,
+##         code_file: boostNode.extension.file.Handler
 ##     ) -> builtins.dict:
     def _render_properties(self, properties, code_file):
 ##
@@ -697,7 +700,7 @@ class Run(
 
             Examples:
 
-            >>> code_file = library.extension.file.Handler(
+            >>> code_file = boostNode.extension.file.Handler(
             ...     location=__test_folder__ + 'runner.cpp', must_exist=False)
 
             >>> Run()._render_properties({
@@ -721,7 +724,7 @@ class Run(
                 properties[key] = self._render_properties(
                     properties=value, code_file=code_file)
             elif builtins.isinstance(value, builtins.str):
-                properties[key] = library.runnable.template.Parser(
+                properties[key] = boostNode.runnable.template.Parser(
                     template=value, string=True
                 ).render(
                     code_file=code_file,
@@ -738,7 +741,7 @@ class Run(
 
 # region footer
 
-library.extension.native.Module.default(
+boostNode.extension.native.Module.default(
     name=__name__, frame=inspect.currentframe())
 
 # endregion

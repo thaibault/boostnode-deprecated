@@ -8,12 +8,15 @@
     things like underlying operating system, file objects, python modules,
     or I/O operations.
 '''
-'''Conventions: see "../__init__.py"'''
+'''
+    For conventions see "boostNode/__init__.py" on
+    https://github.com/thaibault/boostNode
+'''
 
 __author__ = 'Torben Sickert'
-__copyright__ = 'see ../__init__.py'
+__copyright__ = 'see boostNode/__init__.py'
 __credits__ = ('Torben Sickert',)
-__license__ = 'see ../__init__.py'
+__license__ = 'see boostNode/__init__.py'
 __maintainer__ = 'Torben Sickert'
 __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
@@ -47,7 +50,7 @@ __all__ = builtins.list(builtins.set(builtins.map(
 # region footer
 
 if __name__ == '__main__':
-    from library.extension.system import CommandLine
+    from boostNode.extension.system import CommandLine
     CommandLine.generic_package_interface(
         name=__name__, frame=inspect.currentframe())
 

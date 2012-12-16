@@ -10,12 +10,15 @@
     the file systems it offers all core file-system methods by the pythons
     native "shutil" and "os" module as wrapper methods.
 '''
-'''Conventions: see "../__init__.py"'''
+'''
+    For conventions see "boostNode/__init__.py" on
+    https://github.com/thaibault/boostNode
+'''
 
 __author__ = 'Torben Sickert'
-__copyright__ = 'see ../__init__.py'
+__copyright__ = 'see boostNode/__init__.py'
 __credits__ = ('Torben Sickert',)
-__license__ = 'see ../__init__.py'
+__license__ = 'see boostNode/__init__.py'
 __maintainer__ = 'Torben Sickert'
 __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
@@ -44,19 +47,19 @@ builtins = sys.modules['__main__'].__builtins__
 sys.path.append(os.path.abspath(sys.path[0] + 3 * ('..' + os.sep)))
 sys.path.append(os.path.abspath(sys.path[0] + 4 * ('..' + os.sep)))
 
-import library.extension.dependent
-import library.extension.native
-import library.extension.system
-import library.extension.type
-import library.paradigm.aspectOrientation
-import library.paradigm.objectOrientation
+import boostNode.extension.dependent
+import boostNode.extension.native
+import boostNode.extension.system
+import boostNode.extension.type
+import boostNode.paradigm.aspectOrientation
+import boostNode.paradigm.objectOrientation
 
 # endregion
 
 
 # region classes
 
-class Handler(library.paradigm.objectOrientation.Class):
+class Handler(boostNode.paradigm.objectOrientation.Class):
     '''
         The main class for initializing new file system objects to handle them
         in an object oriented way.
@@ -235,10 +238,10 @@ class Handler(library.paradigm.objectOrientation.Class):
 
             # region special methods
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def __init__(
-##         self: library.extension.type.Self, location=None,
+##         self: boostNode.extension.type.Self, location=None,
 ##         make_directory=False, right=770, must_exist=True,
 ##         encoding='UTF-8', respect_root_path=True, has_extension=True
 ##     ) -> None:
@@ -269,7 +272,7 @@ class Handler(library.paradigm.objectOrientation.Class):
             ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
-            library.extension.native.FileError: Invalid path...not_existing...
+            boostNode.extension.native.FileError: Invalid path...not_existing...
 
             >>> handler = Handler(
             ...     location=__test_folder__ + 'init_not_existing',
@@ -292,7 +295,7 @@ class Handler(library.paradigm.objectOrientation.Class):
             '...not...real'
 
             >>> Handler(location=Handler()).path # doctest: +ELLIPSIS
-            '...library...extension...'
+            '...boostNode...extension...'
 
             >>> root_location = Handler(
             ...     __test_folder__ + 'init_root_directory',
@@ -351,9 +354,9 @@ class Handler(library.paradigm.objectOrientation.Class):
             self._has_extension = has_extension
         self._initialize_platform_dependencies()
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
-##     def __iter__(self: library.extension.type.Self) -> types.GeneratorType:
+##     def __iter__(self: boostNode.extension.type.Self) -> types.GeneratorType:
     def __iter__(self):
 ##
         '''
@@ -367,9 +370,9 @@ class Handler(library.paradigm.objectOrientation.Class):
         '''
         return (element for element in self.list())
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
-##     def __bool__(self: library.extension.type.Self) -> builtins.bool:
+##     def __bool__(self: boostNode.extension.type.Self) -> builtins.bool:
     def __nonzero__(self):
 ##
         '''
@@ -393,10 +396,10 @@ class Handler(library.paradigm.objectOrientation.Class):
         '''
         return self.is_element()
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def __eq__(
-##         self: library.extension.type.Self, other: builtins.object
+##         self: boostNode.extension.type.Self, other: builtins.object
 ##     ) -> builtins.bool:
     def __eq__(self, other):
 ##
@@ -425,9 +428,9 @@ class Handler(library.paradigm.objectOrientation.Class):
             return self._path == other._path
         return False
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
-##     def __hash__(self: library.extension.type.Self) -> builtins.int:
+##     def __hash__(self: boostNode.extension.type.Self) -> builtins.int:
     def __hash__(self):
 ##
         '''
@@ -440,11 +443,11 @@ class Handler(library.paradigm.objectOrientation.Class):
         '''
         return builtins.hash(self._path)
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def __getitem__(
-##         self: library.extension.type.Self, key: builtins.int
-##     ) -> library.extension.type.SelfClassObject:
+##         self: boostNode.extension.type.Self, key: builtins.int
+##     ) -> boostNode.extension.type.SelfClassObject:
     def __getitem__(self, key):
 ##
         '''
@@ -457,10 +460,10 @@ class Handler(library.paradigm.objectOrientation.Class):
         '''
         return builtins.tuple(self.list())[key]
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def __delitem__(
-##         self: library.extension.type.Self, key: builtins.int
+##         self: boostNode.extension.type.Self, key: builtins.int
 ##     ) -> builtins.bool:
     def __delitem__(self, key):
 ##
@@ -480,11 +483,11 @@ class Handler(library.paradigm.objectOrientation.Class):
         '''
         return self[key].remove_deep()
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def __contains__(
-##         self: library.extension.type.Self,
-##         item: (library.extension.type.SelfClassObject,
+##         self: boostNode.extension.type.Self,
+##         item: (boostNode.extension.type.SelfClassObject,
 ##                builtins.str)
 ##     ) -> builtins.bool:
     def __contains__(self, item):
@@ -513,9 +516,9 @@ class Handler(library.paradigm.objectOrientation.Class):
                     return True
         return False
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
-##     def __len__(self: library.extension.type.Self) -> builtins.int:
+##     def __len__(self: boostNode.extension.type.Self) -> builtins.int:
     def __len__(self):
 ##
         '''
@@ -538,9 +541,9 @@ class Handler(library.paradigm.objectOrientation.Class):
             return 1
         return 0
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
-##     def __str__(self: library.extension.type.Self) -> builtins.str:
+##     def __str__(self: boostNode.extension.type.Self) -> builtins.str:
     def __str__(self):
 ##
         '''
@@ -553,9 +556,9 @@ class Handler(library.paradigm.objectOrientation.Class):
         '''
         return self.path
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
-##     def __repr__(self: library.extension.type.Self) -> builtins.str:
+##     def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
     def __repr__(self):
 ##
         '''
@@ -584,10 +587,10 @@ class Handler(library.paradigm.objectOrientation.Class):
 
         # region public methods
 
-    @library.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
+    @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
 ##     def convert_size_format(
-##         cls: library.extension.type.SelfClass,
+##         cls: boostNode.extension.type.SelfClass,
 ##         size: (builtins.int, builtins.float), format='byte',
 ##         decimal=None, formats=None
 ##     ) -> builtins.float:
@@ -630,10 +633,10 @@ class Handler(library.paradigm.objectOrientation.Class):
                     return size / properties[factor_type]
         return size
 
-    @library.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
+    @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
 ##     def determine_size_from_string(
-##         cls: library.extension.type.SelfClass,
+##         cls: boostNode.extension.type.SelfClass,
 ##         size_and_unit: builtins.str, format='byte', decimal=None
 ##     ) -> (builtins.float, builtins.bool):
     def determine_size_from_string(
@@ -672,10 +675,10 @@ class Handler(library.paradigm.objectOrientation.Class):
                 format=format, decimal=decimal, formats=cls.FORMATS)
         return False
 
-    @library.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
+    @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
 ##     def determine_byte_from_other(
-##         cls: library.extension.type.SelfClass, size: builtins.float,
+##         cls: boostNode.extension.type.SelfClass, size: builtins.float,
 ##         formats: builtins.dict, given_format='byte', decimal=False
 ##     ) -> builtins.float:
     def determine_byte_from_other(
@@ -700,10 +703,10 @@ class Handler(library.paradigm.objectOrientation.Class):
                     return size * properties[factor_type]
         return size
 
-    @library.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
+    @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
 ##     def determine_regex_units(
-##         cls: library.extension.type.SelfClass, formats=None
+##         cls: boostNode.extension.type.SelfClass, formats=None
 ##     ) -> builtins.str:
     def determine_regex_units(cls, formats=None):
 ##
@@ -731,10 +734,10 @@ class Handler(library.paradigm.objectOrientation.Class):
             units += '|'.join(properties['notations'])
         return units
 
-    @library.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
+    @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
 ##     def determine_special_path_values(
-##         cls: library.extension.type.SelfClass, operating_system=''
+##         cls: boostNode.extension.type.SelfClass, operating_system=''
 ##     ) -> builtins.tuple:
     def determine_special_path_values(cls, operating_system=''):
 ##
@@ -751,7 +754,7 @@ class Handler(library.paradigm.objectOrientation.Class):
             (...)
         '''
         if not operating_system:
-            operating_system = library.extension.system.Platform()\
+            operating_system = boostNode.extension.system.Platform()\
                 .operating_system
         if operating_system != 'windows':
             return ('~',)
@@ -767,9 +770,9 @@ class Handler(library.paradigm.objectOrientation.Class):
 
             # region getter methods
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
-##     def get_encoding(self: library.extension.type.Self) -> builtins.str:
+##     def get_encoding(self: boostNode.extension.type.Self) -> builtins.str:
     def get_encoding(self):
 ##
         '''
@@ -792,9 +795,9 @@ class Handler(library.paradigm.objectOrientation.Class):
         '''
         return self._encoding
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
-##     def get_extension(self: library.extension.type.Self) -> builtins.str:
+##     def get_extension(self: boostNode.extension.type.Self) -> builtins.str:
     def get_extension(self):
 ##
         '''
@@ -817,9 +820,9 @@ class Handler(library.paradigm.objectOrientation.Class):
             return self.name[builtins.len(self.basename) + 1:]
         return ''
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
-##     def get_timestamp(self: library.extension.type.Self) -> builtins.float:
+##     def get_timestamp(self: boostNode.extension.type.Self) -> builtins.float:
     def get_timestamp(self):
 ##
         '''
@@ -833,9 +836,9 @@ class Handler(library.paradigm.objectOrientation.Class):
         '''
         return os.stat(self._path).st_mtime
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
-##     def get_lines(self: library.extension.type.Self) -> builtins.int:
+##     def get_lines(self: boostNode.extension.type.Self) -> builtins.int:
     def get_lines(self):
 ##
         '''
@@ -871,10 +874,10 @@ class Handler(library.paradigm.objectOrientation.Class):
                 self._lines += 1
         return self._lines
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def get_size(
-##         self: library.extension.type.Self, limit=0, follow_link=True,
+##         self: boostNode.extension.type.Self, limit=0, follow_link=True,
 ##         *arguments: builtins.object, **keywords: builtins.object
 ##     ) -> builtins.float:
     def get_size(self, limit=0, follow_link=True, *arguments, **keywords):
@@ -955,10 +958,10 @@ class Handler(library.paradigm.objectOrientation.Class):
             size=self._size, *arguments, **keywords)
         return builtins.float(self._size)
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def get_dummy_size(
-##         self: library.extension.type.Self, label=''
+##         self: boostNode.extension.type.Self, label=''
 ##     ) -> builtins.int:
     def get_dummy_size(self, label=''):
 ##
@@ -987,10 +990,10 @@ class Handler(library.paradigm.objectOrientation.Class):
                 self.portable_link_content % label)
         return self._dummy_size
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def get_human_readable_size(
-##         self: library.extension.type.Self, size=None
+##         self: boostNode.extension.type.Self, size=None
 ##     ) -> builtins.str:
     def get_human_readable_size(self, size=None):
 ##
@@ -1053,9 +1056,9 @@ class Handler(library.paradigm.objectOrientation.Class):
                     ), 2)
                 ) + ' ' + properties['notations'][0]
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
-##     def get_type(self: library.extension.type.Self) -> builtins.str:
+##     def get_type(self: boostNode.extension.type.Self) -> builtins.str:
     def get_type(self):
 ##
         '''
@@ -1098,10 +1101,10 @@ class Handler(library.paradigm.objectOrientation.Class):
             self._type = 'file'
         return self._type
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def get_mimetype(
-##         self: library.extension.type.Self, default_type='text'
+##         self: boostNode.extension.type.Self, default_type='text'
 ##     ) -> builtins.str:
     def get_mimetype(self, default_type='text'):
 ##
@@ -1134,10 +1137,10 @@ class Handler(library.paradigm.objectOrientation.Class):
                 self._mimetype = ''
         return self._mimetype
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def get_path(
-##         self: library.extension.type.Self, location=None
+##         self: boostNode.extension.type.Self, location=None
 ##     ) -> builtins.str:
     def get_path(self, location=None):
 ##
@@ -1167,10 +1170,10 @@ class Handler(library.paradigm.objectOrientation.Class):
                 must_exist=False)
         return location.path
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def get_relative_path(
-##         self: library.extension.type.Self
+##         self: boostNode.extension.type.Self
 ##     ) -> builtins.str:
     def get_relative_path(self):
 ##
@@ -1200,10 +1203,10 @@ class Handler(library.paradigm.objectOrientation.Class):
         '''
         return os.path.relpath(self._path)
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def get_directory_path(
-##         self: library.extension.type.Self
+##         self: boostNode.extension.type.Self
 ##     ) -> builtins.str:
     def get_directory_path(self):
 ##
@@ -1215,12 +1218,12 @@ class Handler(library.paradigm.objectOrientation.Class):
             >>> Handler(
             ...     location=__file_path__
             ... ).directory_path # doctest: +ELLIPSIS
-            '...library...extension'
+            '...boostNode...extension'
 
             >>> Handler(
             ...     location=__file_path__
             ... ).get_directory_path() # doctest: +ELLIPSIS
-            '...library...extension'
+            '...boostNode...extension'
 
             >>> same = True
             >>> for handler in Handler():
@@ -1237,10 +1240,10 @@ class Handler(library.paradigm.objectOrientation.Class):
             self.name) - subtrahend]
         return self.path[:-builtins.len(self.name) - subtrahend]
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def get_name(
-##         self: library.extension.type.Self, *arguments: builtins.object,
+##         self: boostNode.extension.type.Self, *arguments: builtins.object,
 ##         **keywords: builtins.object
 ##     ) -> builtins.str:
     def get_name(self, *arguments, **keywords):
@@ -1262,15 +1265,15 @@ class Handler(library.paradigm.objectOrientation.Class):
             'extension'
         '''
         path = self._path[:-1] if self._path[-1] == os.sep else self._path
-        if(library.extension.system.Platform().operating_system ==
+        if(boostNode.extension.system.Platform().operating_system ==
            'windows' and re.compile('^[A-Z]:$').match(path)):
             return path
         return os.path.basename(path, *arguments, **keywords)
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def get_basename(
-##         self: library.extension.type.Self, *arguments: builtins.object,
+##         self: boostNode.extension.type.Self, *arguments: builtins.object,
 ##         **keywords: builtins.object
 ##     ) -> builtins.str:
     def get_basename(self, *arguments, **keywords):
@@ -1297,9 +1300,9 @@ class Handler(library.paradigm.objectOrientation.Class):
                 os.path.basename(path, *arguments, **keywords))[0]
         return self.name
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
-##     def get_free_space(self: library.extension.type.Self) -> builtins.int:
+##     def get_free_space(self: boostNode.extension.type.Self) -> builtins.int:
     def get_free_space(self):
 ##
         '''
@@ -1326,10 +1329,10 @@ class Handler(library.paradigm.objectOrientation.Class):
         '''
         return self._get_platform_dependendet_free_space()
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def get_content(
-##         self: library.extension.type.Self, mode='r',
+##         self: boostNode.extension.type.Self, mode='r',
 ##         *arguments: builtins.object, **keywords: builtins.object
 ##     ) -> (builtins.str, types.GeneratorType):
     def get_content(self, mode='r', *arguments, **keywords):
@@ -1408,10 +1411,10 @@ class Handler(library.paradigm.objectOrientation.Class):
                     'Could only get content of file or directory.')
         return ''
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def get_portable_link_pattern(
-##         self: library.extension.type.Self
+##         self: boostNode.extension.type.Self
 ##     ) -> builtins.str:
     def get_portable_link_pattern(self):
 ##
@@ -1444,10 +1447,10 @@ class Handler(library.paradigm.objectOrientation.Class):
             executable_path=os.path.abspath(sys.argv[0]))
         return self._portable_link_pattern
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def get_portable_regex_link_pattern(
-##         self: library.extension.type.Self
+##         self: boostNode.extension.type.Self
 ##     ) -> builtins.str:
     def get_portable_regex_link_pattern(self):
 ##
@@ -1470,7 +1473,7 @@ class Handler(library.paradigm.objectOrientation.Class):
             string.Template.delimiter + '{?' + string.Template.idpattern +
             '}?').sub(
                 '(.*?)', string.Template(
-                    library.extension.native.String(
+                    boostNode.extension.native.String(
                         self.portable_link_pattern
                     ).validate_regex(eception=['$', '\\']).content
                 ).safe_substitute(
@@ -1480,10 +1483,10 @@ class Handler(library.paradigm.objectOrientation.Class):
                     name='(?P<name>.*?)'))
         return self._portable_regex_link_pattern
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def get_portable_link_content(
-##         self: library.extension.type.Self, label='%s'
+##         self: boostNode.extension.type.Self, label='%s'
 ##     ) -> builtins.str:
     def get_portable_link_content(self, label='%s'):
 ##
@@ -1513,10 +1516,10 @@ class Handler(library.paradigm.objectOrientation.Class):
                 name=self.name.replace('%', '%%')))
         return self._portable_link_content
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def get_extension_suffix(
-##         self: library.extension.type.Self
+##         self: boostNode.extension.type.Self
 ##     ) -> builtins.str:
     def get_extension_suffix(self):
 ##
@@ -1555,10 +1558,10 @@ class Handler(library.paradigm.objectOrientation.Class):
 
             # region setter methods
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def set_encoding(
-##         self: library.extension.type.Self, encoding: builtins.str,
+##         self: boostNode.extension.type.Self, encoding: builtins.str,
 ##         *arguments: builtins.object, **keywords: builtins.object
 ##     ) -> builtins.str:
     def set_encoding(self, encoding, *arguments, **keywords):
@@ -1583,10 +1586,10 @@ class Handler(library.paradigm.objectOrientation.Class):
         return self.set_content(
             content=self.content, encoding=encoding, *arguments, **keywords)
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def set_content(
-##         self: library.extension.type.Self, content: builtins.str,
+##         self: boostNode.extension.type.Self, content: builtins.str,
 ##         mode='w', *arguments: builtins.object, **keywords: builtins.object
 ##     ) -> builtins.str:
     def set_content(self, content, mode='w', *arguments, **keywords):
@@ -1657,11 +1660,11 @@ class Handler(library.paradigm.objectOrientation.Class):
 ##
         return self.content
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def set_directory_path(
-##         self: library.extension.type.Self,
-##         location: (library.extension.type.SelfClassObject,
+##         self: boostNode.extension.type.Self,
+##         location: (boostNode.extension.type.SelfClassObject,
 ##                    builtins.str),
 ##         *arguments: builtins.object, **keywords: builtins.object
 ##     ) -> builtins.bool:
@@ -1714,10 +1717,10 @@ class Handler(library.paradigm.objectOrientation.Class):
             target=self.get_path(location) + os.sep + self.name, *arguments,
             **keywords)
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def set_name(
-##         self: library.extension.type.Self, name: builtins.str,
+##         self: boostNode.extension.type.Self, name: builtins.str,
 ##         *arguments: builtins.object, **keywords: builtins.object
 ##     ) -> builtins.bool:
     def set_name(self, name, *arguments, **keywords):
@@ -1756,10 +1759,10 @@ class Handler(library.paradigm.objectOrientation.Class):
         return self.move(
             target=self.directory_path + os.sep + name, *arguments, **keywords)
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def set_basename(
-##         self: library.extension.type.Self, basename: builtins.str,
+##         self: boostNode.extension.type.Self, basename: builtins.str,
 ##         *arguments: builtins.object, **keywords: builtins.object
 ##     ) -> builtins.bool:
     def set_basename(self, basename, *arguments, **keywords):
@@ -1797,7 +1800,7 @@ class Handler(library.paradigm.objectOrientation.Class):
 
 ## python3.3
 ##     def set_extension(
-##         self: library.extension.type.Self, extension: builtins.str,
+##         self: boostNode.extension.type.Self, extension: builtins.str,
 ##         *arguments: builtins.object, **keywords: builtins.object
 ##     ) -> builtins.bool:
     def set_extension(self, extension, *arguments, **keywords):
@@ -1832,10 +1835,10 @@ class Handler(library.paradigm.objectOrientation.Class):
                 name=self.basename + '.' + extension, *arguments, **keywords)
         return self.is_element()
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def set_path(
-##         self: library.extension.type.Self,
+##         self: boostNode.extension.type.Self,
 ##         *arguments: builtins.object, **keywords: builtins.object
 ##     ) -> builtins.bool:
     def set_path(self, *arguments, **keywords):
@@ -1868,10 +1871,10 @@ class Handler(library.paradigm.objectOrientation.Class):
 
             # region boolean methods
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def is_directory(
-##         self: library.extension.type.Self, allow_link=True,
+##         self: boostNode.extension.type.Self, allow_link=True,
 ##         *arguments: builtins.object, **keywords: builtins.object
 ##     ) -> builtins.bool:
     def is_directory(self, allow_link=True, *arguments, **keywords):
@@ -1898,10 +1901,10 @@ class Handler(library.paradigm.objectOrientation.Class):
         return not self.is_symbolic_link() and\
             self.is_directory(allow_link=True, *arguments, **keywords)
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def is_file(
-##         self: library.extension.type.Self, allow_link=True,
+##         self: boostNode.extension.type.Self, allow_link=True,
 ##         *arguments: builtins.object, **keywords: builtins.object
 ##     ) -> builtins.bool:
     def is_file(self, allow_link=True, *arguments, **keywords):
@@ -1928,10 +1931,10 @@ class Handler(library.paradigm.objectOrientation.Class):
         return(not self.is_symbolic_link() and
                self.is_file(allow_link=True, *arguments, **keywords))
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def is_symbolic_link(
-##         self: library.extension.type.Self, allow_portable_link=True,
+##         self: boostNode.extension.type.Self, allow_portable_link=True,
 ##         *arguments: builtins.object, **keywords: builtins.object
 ##     ) -> builtins.bool:
     def is_symbolic_link(
@@ -1988,10 +1991,10 @@ class Handler(library.paradigm.objectOrientation.Class):
                 self.is_portable_link()
         return os.path.islink(path, *arguments, **keywords)
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def is_referenced_via_absolute_path(
-##         self: library.extension.type.Self, location=None
+##         self: boostNode.extension.type.Self, location=None
 ##     ) -> builtins.bool:
     def is_referenced_via_absolute_path(self, location=None):
 ##
@@ -2026,9 +2029,9 @@ class Handler(library.paradigm.objectOrientation.Class):
             return location.is_referenced_via_absolute_path()
         return os.path.isabs(location)
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
-##     def is_media(self: library.extension.type.Self) -> builtins.bool:
+##     def is_media(self: boostNode.extension.type.Self) -> builtins.bool:
     def is_media(self):
 ##
         '''
@@ -2055,10 +2058,10 @@ class Handler(library.paradigm.objectOrientation.Class):
                 return True
         return False
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def is_portable_link(
-##         self: library.extension.type.Self
+##         self: boostNode.extension.type.Self
 ##     ) -> builtins.bool:
     def is_portable_link(self):
 ##
@@ -2117,9 +2120,9 @@ class Handler(library.paradigm.objectOrientation.Class):
                     pass
         return False
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
-##     def is_element(self: library.extension.type.Self) -> builtins.bool:
+##     def is_element(self: boostNode.extension.type.Self) -> builtins.bool:
     def is_element(self):
 ##
         '''
@@ -2157,9 +2160,9 @@ class Handler(library.paradigm.objectOrientation.Class):
         '''
         return os.path.exists(self._path) or self.is_symbolic_link()
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
-##     def is_device_file(self: library.extension.type.Self) -> builtins.bool:
+##     def is_device_file(self: boostNode.extension.type.Self) -> builtins.bool:
     def is_device_file(self):
 ##
         '''
@@ -2194,14 +2197,14 @@ class Handler(library.paradigm.objectOrientation.Class):
 
             # endregion
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def backup(
-##         self: library.extension.type.Self,
+##         self: boostNode.extension.type.Self,
 ##         name_wrapper=(
 ##             '<%file.basename%>_backup<%file.extension_suffix%>'),
 ##         backup_if_exists=True, compare_content=True
-##     ) -> library.extension.type.Self:
+##     ) -> boostNode.extension.type.Self:
     def backup(
         self,
         name_wrapper='<%file.basename%>_backup<%file.extension_suffix%>',
@@ -2216,7 +2219,7 @@ class Handler(library.paradigm.objectOrientation.Class):
                                there is already a file object with given backup
                                name and content (if "compare_content" is set).
         '''
-        from library.runnable.template import Parser as TemplateParser
+        from boostNode.runnable.template import Parser as TemplateParser
 
         backup = self
         while True:
@@ -2241,11 +2244,11 @@ class Handler(library.paradigm.objectOrientation.Class):
                 return self
         return self
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def is_equivalent(
-##         self: library.extension.type.Self,
-##         other: (library.extension.type.SelfClassObject, builtins.str)
+##         self: boostNode.extension.type.Self,
+##         other: (boostNode.extension.type.SelfClassObject, builtins.str)
 ##     ) -> builtins.bool:
     def is_equivalent(self, other):
 ##
@@ -2298,11 +2301,11 @@ class Handler(library.paradigm.objectOrientation.Class):
             return True
         return False
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def change_working_directory(
-##         self: library.extension.type.Self
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
     def change_working_directory(self):
 ##
         '''
@@ -2313,7 +2316,7 @@ class Handler(library.paradigm.objectOrientation.Class):
 
             >>> current_working_directory = os.getcwd()
             >>> current_working_directory # doctest: +ELLIPSIS
-            '...library...extension'
+            '...boostNode...extension'
 
             >>> test_folder = Handler(
             ...     __test_folder__ + 'change', make_directory=True)
@@ -2371,10 +2374,10 @@ class Handler(library.paradigm.objectOrientation.Class):
             os.chdir(self._directory_path)
         return self
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def touch(
-##         self: library.extension.type.Self, *arguments: builtins.object,
+##         self: boostNode.extension.type.Self, *arguments: builtins.object,
 ##         **keywords: builtins.object
 ##     ) -> builtins.bool:
     def touch(self, *arguments, **keywords):
@@ -2404,10 +2407,10 @@ class Handler(library.paradigm.objectOrientation.Class):
             return False
         return True
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def list(
-##         self: library.extension.type.Self, *arguments: builtins.object,
+##         self: boostNode.extension.type.Self, *arguments: builtins.object,
 ##         **keywords: builtins.object
 ##     ) -> types.GeneratorType:
     def list(self, *arguments, **keywords):
@@ -2441,7 +2444,7 @@ class Handler(library.paradigm.objectOrientation.Class):
         '''
         if self:
             if(self._path == '\\' and
-               library.extension.system.Platform().operating_system ==
+               boostNode.extension.system.Platform().operating_system ==
                'windows'):
                 for letter_number in builtins.range(
                         builtins.ord('A'), builtins.ord('Z') + 1):
@@ -2461,10 +2464,10 @@ class Handler(library.paradigm.objectOrientation.Class):
                 except builtins.OSError:
                     pass
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def remove_directory(
-##         self: library.extension.type.Self, *arguments: builtins.object,
+##         self: boostNode.extension.type.Self, *arguments: builtins.object,
 ##         **keywords: builtins.object
 ##     ) -> builtins.bool:
     def remove_directory(self, *arguments, **keywords):
@@ -2508,11 +2511,11 @@ class Handler(library.paradigm.objectOrientation.Class):
                 return False
         return True
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def move(
-##         self: library.extension.type.Self,
-##         target: (library.extension.type.SelfClassObject,
+##         self: boostNode.extension.type.Self,
+##         target: (boostNode.extension.type.SelfClassObject,
 ##                  builtins.str), *arguments: builtins.object,
 ##         **keywords: builtins.object
 ##     ) -> builtins.bool:
@@ -2565,10 +2568,10 @@ class Handler(library.paradigm.objectOrientation.Class):
             shutil.move(self._path, dst=target, *arguments, **keywords)
         return self._set_path(path=target)
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def remove_deep(
-##         self: library.extension.type.Self, *arguments: builtins.object,
+##         self: boostNode.extension.type.Self, *arguments: builtins.object,
 ##         **keywords: builtins.object
 ##     ) -> builtins.bool:
     def remove_deep(self, *arguments, **keywords):
@@ -2624,10 +2627,10 @@ class Handler(library.paradigm.objectOrientation.Class):
             self.remove_file()
         return not self.is_element()
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def remove_file(
-##         self: library.extension.type.Self, *arguments: builtins.object,
+##         self: boostNode.extension.type.Self, *arguments: builtins.object,
 ##         **keywords: builtins.object
 ##     ) -> builtins.bool:
     def remove_file(self, *arguments, **keywords):
@@ -2659,7 +2662,7 @@ class Handler(library.paradigm.objectOrientation.Class):
         '''
         if self:
             operating_system =\
-                library.extension.system.Platform().operating_system
+                boostNode.extension.system.Platform().operating_system
             if(self.is_symbolic_link(allow_portable_link=False) and
                self.is_directory() and operating_system == 'windows'):
                 return self.remove_directory()
@@ -2672,11 +2675,11 @@ class Handler(library.paradigm.objectOrientation.Class):
                 return False
         return not self.is_file()
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def change_right(
-##         self: library.extension.type.Self, right=770
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self, right=770
+##     ) -> boostNode.extension.type.Self:
     def change_right(self, right=770):
 ##
         '''
@@ -2735,11 +2738,11 @@ class Handler(library.paradigm.objectOrientation.Class):
                 function=self.change_right.__name__, right=right)
         return self
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def copy(
-##         self: library.extension.type.Self,
-##         target: (library.extension.type.SelfClassObject,
+##         self: boostNode.extension.type.Self,
+##         target: (boostNode.extension.type.SelfClassObject,
 ##                  builtins.str),
 ##         right=770, *arguments: builtins.object,
 ##         **keywords: builtins.object
@@ -2788,12 +2791,12 @@ class Handler(library.paradigm.objectOrientation.Class):
         target.change_right(right)
         return target.type == self.type
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def make_new_directory(
-##         self: library.extension.type.Self,
+##         self: boostNode.extension.type.Self,
 ##         wrapper_pattern='{file_name}_temp'
-##     ) -> library.extension.type.SelfClassObject:
+##     ) -> boostNode.extension.type.SelfClassObject:
     def make_new_directory(self, wrapper_pattern='{file_name}_temp'):
 ##
         '''
@@ -2810,10 +2813,10 @@ class Handler(library.paradigm.objectOrientation.Class):
         location.make_directory()
         return location
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def make_directory(
-##         self: library.extension.type.Self, right=770,
+##         self: boostNode.extension.type.Self, right=770,
 ##         *arguments: builtins.object, **keywords: builtins.object
 ##     ) -> builtins.bool:
     def make_directory(self, right=770, *arguments, **keywords):
@@ -2847,10 +2850,10 @@ class Handler(library.paradigm.objectOrientation.Class):
         self.change_right(right)
         return self.is_directory()
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def make_symbolic_link(
-##         self: library.extension.type.Self, *arguments: builtins.object,
+##         self: boostNode.extension.type.Self, *arguments: builtins.object,
 ##         **keywords: builtins.object
 ##     ) -> builtins.bool:
     def make_symbolic_link(self, *arguments, **keywords):
@@ -2913,10 +2916,10 @@ class Handler(library.paradigm.objectOrientation.Class):
         '''
         return self._make_link(True, *arguments, **keywords)
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def make_hardlink(
-##         self: library.extension.type.Self, *arguments: builtins.object,
+##         self: boostNode.extension.type.Self, *arguments: builtins.object,
 ##         **keywords: builtins.object
 ##     ) -> builtins.bool:
     def make_hardlink(self, *arguments, **keywords):
@@ -2942,12 +2945,12 @@ class Handler(library.paradigm.objectOrientation.Class):
         '''
         return self._make_link(False, *arguments, **keywords)
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def read_symbolic_link(
-##         self: library.extension.type.Self, as_object=False,
+##         self: boostNode.extension.type.Self, as_object=False,
 ##         *arguments: builtins.object, **keywords: builtins.object
-##     ) -> (builtins.str, library.extension.type.SelfClassObject):
+##     ) -> (builtins.str, boostNode.extension.type.SelfClassObject):
     def read_symbolic_link(self, as_object=False, *arguments, **keywords):
 ##
         '''
@@ -3001,15 +3004,15 @@ class Handler(library.paradigm.objectOrientation.Class):
             return self.__class__(location=link, must_exist=False)
         return link
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def deep_copy(
-##         self: library.extension.type.Self,
-##         target: (library.extension.type.SelfClassObject,
+##         self: boostNode.extension.type.Self,
+##         target: (boostNode.extension.type.SelfClassObject,
 ##                  builtins.str),
 ##         symbolic_links=True, *arguments: builtins.object,
 ##         **keywords: builtins.object
-##     ) -> library.extension.type.Self:
+##     ) -> boostNode.extension.type.Self:
     def deep_copy(
         self, target, symbolic_links=True, *arguments, **keywords
     ):
@@ -3091,10 +3094,10 @@ class Handler(library.paradigm.objectOrientation.Class):
             symlinks=symbolic_links, *arguments, **keywords)
         return self
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def make_directorys(
-##         self: library.extension.type.Self, *arguments: builtins.object,
+##         self: boostNode.extension.type.Self, *arguments: builtins.object,
 ##         **keywords: builtins.object
 ##     ) -> builtins.bool:
     def make_directorys(self, *arguments, **keywords):
@@ -3141,11 +3144,11 @@ class Handler(library.paradigm.objectOrientation.Class):
             os.makedirs(self._path, *arguments, **keywords)
         return self.is_directory()
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def make_portable_link(
-##         self: library.extension.type.Self,
-##         target: (library.extension.type.SelfClassObject,
+##         self: boostNode.extension.type.Self,
+##         target: (boostNode.extension.type.SelfClassObject,
 ##                  builtins.str),
 ##         force=False, label=''
 ##     ) -> builtins.bool:
@@ -3191,10 +3194,10 @@ class Handler(library.paradigm.objectOrientation.Class):
         target.content = self.portable_link_content % label
         return target.is_portable_link()
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def read_portable_link(
-##         self: library.extension.type.Self
+##         self: boostNode.extension.type.Self
 ##     ) -> builtins.str:
     def read_portable_link(self):
 ##
@@ -3224,9 +3227,9 @@ class Handler(library.paradigm.objectOrientation.Class):
             ).match(self.content.strip()).group('path')
         return ''
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
-##     def clear_directory(self: library.extension.type.Self) -> builtins.bool:
+##     def clear_directory(self: boostNode.extension.type.Self) -> builtins.bool:
     def clear_directory(self):
 ##
         '''
@@ -3249,10 +3252,10 @@ class Handler(library.paradigm.objectOrientation.Class):
         '''
         return self.iterate_directory(function=self.remove_deep.__name__)
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def iterate_directory(
-##         self: library.extension.type.Self,
+##         self: boostNode.extension.type.Self,
 ##         function: (builtins.str, types.FunctionType,
 ##                    types.MethodType),
 ##         recursive=False, recursive_in_link=True,
@@ -3293,7 +3296,7 @@ class Handler(library.paradigm.objectOrientation.Class):
             [...'file.py'...]
         '''
         for file in self:
-            if library.extension.system.Platform.check_thread():
+            if boostNode.extension.system.Platform.check_thread():
                 return False
             if builtins.isinstance(function, builtins.str):
                 result = builtins.getattr(file, function)(
@@ -3313,11 +3316,11 @@ class Handler(library.paradigm.objectOrientation.Class):
                     function, recursive, *arguments, **keywords)
         return True
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def delete_file_patterns(
-##         self: library.extension.type.Self, *patterns: builtins.str
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self, *patterns: builtins.str
+##     ) -> boostNode.extension.type.Self:
     def delete_file_patterns(self, *patterns):
 ##
         '''
@@ -3369,8 +3372,8 @@ class Handler(library.paradigm.objectOrientation.Class):
                 builtins.getattr(file, inspect.stack()[0][3])(*patterns)
         return self
 
-    @library.paradigm.aspectOrientation.JointPoint
-## python3.3     def open(self: library.extension.type.Self) -> builtins.tuple:
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3     def open(self: boostNode.extension.type.Self) -> builtins.tuple:
     def open(self):
         '''
             Opens the current file with its default user preference
@@ -3394,23 +3397,23 @@ class Handler(library.paradigm.objectOrientation.Class):
         '''
         if builtins.hasattr(os, 'startfile'):
             return os.startfile(self._path)
-        shell_file = library.extension.native.String(
+        shell_file = boostNode.extension.native.String(
             self._path).validate_shell()
         if builtins.hasattr(os, 'open'):
-            return library.extension.system.Platform.run(
+            return boostNode.extension.system.Platform.run(
                 command='open', command_arguments=(shell_file,))
-        return library.extension.system.Platform.run(
+        return boostNode.extension.system.Platform.run(
             command='xdg-open', command_arguments=(shell_file,))
 
         # endregion
 
         # region protected methods
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _make_link(
-##         self: library.extension.type.Self, symbolic: builtins.bool,
-##         target: (library.extension.type.SelfClassObject,
+##         self: boostNode.extension.type.Self, symbolic: builtins.bool,
+##         target: (boostNode.extension.type.SelfClassObject,
 ##                  builtins.str),
 ##         force=False, *arguments: builtins.object,
 ##         **keywords: builtins.object
@@ -3435,11 +3438,11 @@ class Handler(library.paradigm.objectOrientation.Class):
         return self._create_platform_dependent_link(
             symbolic, target, *arguments, **keywords)
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _is_equivalent_folder(
-##         self: library.extension.type.Self,
-##         other: library.extension.type.SelfClassObject
+##         self: boostNode.extension.type.Self,
+##         other: boostNode.extension.type.SelfClassObject
 ##     ) -> builtins.bool:
     def _is_equivalent_folder(self, other):
 ##
@@ -3461,10 +3464,10 @@ class Handler(library.paradigm.objectOrientation.Class):
                 return False
         return True
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _prepend_root_path(
-##         self: library.extension.type.Self
+##         self: boostNode.extension.type.Self
 ##     ) -> builtins.str:
     def _prepend_root_path(self):
 ##
@@ -3515,7 +3518,7 @@ class Handler(library.paradigm.objectOrientation.Class):
             Prepend root path to given path location, if it wasn't given as
             root path.
         '''
-        operating_system = library.extension.system.Platform().operating_system
+        operating_system = boostNode.extension.system.Platform().operating_system
         if(self._respect_root_path and (root_exists or
            not self._path.startswith(self.__class__.root_path)) and
            not ('windows' == operating_system and
@@ -3527,9 +3530,9 @@ class Handler(library.paradigm.objectOrientation.Class):
                 self._path = self.__class__.root_path + self._path
         return self._path
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
-##     def _initialize_path(self: library.extension.type.Self) -> builtins.str:
+##     def _initialize_path(self: boostNode.extension.type.Self) -> builtins.str:
     def _initialize_path(self):
 ##
         '''
@@ -3538,7 +3541,7 @@ class Handler(library.paradigm.objectOrientation.Class):
             Examples:
 
             >>> Handler()._initialize_path() # doctest: +ELLIPSIS
-            '...library...extension'
+            '...boostNode...extension'
 
             >>> Handler('~')._initialize_path() # doctest: +ELLIPSIS
             '...'
@@ -3561,11 +3564,11 @@ class Handler(library.paradigm.objectOrientation.Class):
             self._path = os.path.abspath(self._path)
         return self._path
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _initialize_location(
-##         self: library.extension.type.Self,
-##         location: (library.extension.type.SelfClassObject, builtins.str,
+##         self: boostNode.extension.type.Self,
+##         location: (boostNode.extension.type.SelfClassObject, builtins.str,
 ##                    builtins.type(None))
 ##     ) -> builtins.str:
     def _initialize_location(self, location):
@@ -3588,11 +3591,11 @@ class Handler(library.paradigm.objectOrientation.Class):
             location = location._path
         return location
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _initialize_root_path(
-##         self: library.extension.type.Self
-##     ) -> library.extension.type.Self:
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
     def _initialize_root_path(self):
 ##
         '''
@@ -3623,10 +3626,10 @@ class Handler(library.paradigm.objectOrientation.Class):
             self.__class__.root_path += os.sep
         return self
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _set_path(
-##         self: library.extension.type.Self, path: builtins.str
+##         self: boostNode.extension.type.Self, path: builtins.str
 ##     ) -> builtins.bool:
     def _set_path(self, path):
 ##
@@ -3650,7 +3653,7 @@ class Handler(library.paradigm.objectOrientation.Class):
             >>> handler._set_path(path='.')
             True
             >>> handler.path # doctest: +ELLIPSIS
-            '...library...'
+            '...boostNode...'
         '''
         self._path = os.path.normpath(path)
         if not self.is_referenced_via_absolute_path():
@@ -3658,12 +3661,12 @@ class Handler(library.paradigm.objectOrientation.Class):
         self.path
         return self.is_element()
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _make_forced_link(
-##         self: library.extension.type.Self,
+##         self: boostNode.extension.type.Self,
 ##         symbolic: builtins.bool,
-##         target: library.extension.type.SelfClassObject,
+##         target: boostNode.extension.type.SelfClassObject,
 ##         *arguments: builtins.object, **keywords: builtins.object
 ##     ) -> builtins.bool:
     def _make_forced_link(self, symbolic, target, *arguments, **keywords):
@@ -3698,11 +3701,11 @@ class Handler(library.paradigm.objectOrientation.Class):
 
             # region handle platform dependencies methods
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _create_platform_dependent_link(
-##         self: library.extension.type.Self, symbolic: builtins.bool,
-##         target: library.extension.type.SelfClassObject,
+##         self: boostNode.extension.type.Self, symbolic: builtins.bool,
+##         target: boostNode.extension.type.SelfClassObject,
 ##         *arguments: builtins.object, **keywords: builtins.object
 ##     ) -> builtins.bool:
     def _create_platform_dependent_link(
@@ -3729,7 +3732,7 @@ class Handler(library.paradigm.objectOrientation.Class):
         target_path = target._path
         if target._path[-1] == os.sep:
             target_path = target._path[:-1]
-        operating_system = library.extension.system.Platform().operating_system
+        operating_system = boostNode.extension.system.Platform().operating_system
         if symbolic:
             try:
                 if operating_system == 'windows':
@@ -3757,10 +3760,10 @@ class Handler(library.paradigm.objectOrientation.Class):
         os.link(source_path, target_path)
         return target.is_file()
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _get_platform_dependendet_free_space(
-##         self: library.extension.type.Self
+##         self: boostNode.extension.type.Self
 ##     ) -> (builtins.bool, builtins.int):
     def _get_platform_dependendet_free_space(self):
 ##
@@ -3797,12 +3800,12 @@ class Handler(library.paradigm.objectOrientation.Class):
             return self._free_space
         return False
 
-    @library.paradigm.aspectOrientation.JointPoint
+    @boostNode.paradigm.aspectOrientation.JointPoint
 # NOTE return type only available in unix like systems:
 # -> (posix.statvfs_result, builtins.type(None))
 ## python3.3
 ##     def _initialize_platform_dependencies(
-##         self: library.extension.type.Self
+##         self: boostNode.extension.type.Self
 ##     ):
     def _initialize_platform_dependencies(self):
 ##
@@ -3821,7 +3824,7 @@ class Handler(library.paradigm.objectOrientation.Class):
             os_statvfs = os.statvfs(self._path)
             self.__class__.BLOCK_SIZE_IN_BYTE = os_statvfs.f_bsize
             operating_system =\
-                library.extension.system.Platform().operating_system
+                boostNode.extension.system.Platform().operating_system
             if operating_system == 'macintosh':
                 self.DECIMAL = True
         return os_statvfs
@@ -3836,7 +3839,7 @@ class Handler(library.paradigm.objectOrientation.Class):
 
 # region footer
 
-library.extension.dependent.Resolve(
+boostNode.extension.dependent.Resolve(
     name=__name__, frame=inspect.currentframe(), default_caller=False)
 
 # endregion
