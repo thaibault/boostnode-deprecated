@@ -16,8 +16,8 @@ Usage
 
 Copyright
 
-    see __init__.py
+    see ./__init__.py
 
 License
 
-    see __init__.py
+    see ./__init__.py
