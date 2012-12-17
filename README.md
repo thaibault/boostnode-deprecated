@@ -11,7 +11,7 @@ Usage
 
     # some stuff using imported boostNode components...
     
-    For advanced usage see the recommended module paddern described in
+    For advanced usage see the recommended module pattern described in
     "path/to/boosNode/__init__.py".
 
 Copyright
