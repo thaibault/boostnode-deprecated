@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.3
 # -*- coding: utf-8 -*-
 
 # region header
@@ -16,7 +16,7 @@ License
 
     boostNode von Torben Sickert steht unter einer Creative Commons
     Namensnennung 3.0 Unported Lizenz.
-    
+
     see http://creativecommons.org/licenses/by/3.0/deed.de
 
 Conventions (bcX := boostNode convention number X)
@@ -54,6 +54,9 @@ Conventions (bcX := boostNode convention number X)
     - bc17 Use the area statement syntax to structure your code and make it
            possible to fold them in many IDE's
            (see Structure of meta documenting below).
+           If you are forced to indent an area nearer to left border as in
+           the logic of meta structuring use one "#" for each less of
+           indention.
     - bc18 If a module could offer a usable command line interface to provide
            their functionality directly for other programs
            (maybe not written in python) implement the "Runnable" interface
@@ -80,7 +83,7 @@ Conventions (bcX := boostNode convention number X)
                          parameter3,
                          parameter4)
 
-Structure of meta documenting classes. (see bc15)
+Structure of meta documenting classes. (see bc16 and bc17)
 
     # region header
 
@@ -117,6 +120,12 @@ Structure of meta documenting classes. (see bc15)
                     # endregion
 
                 # endregion
+
+            ## region compensate right indention
+
+        ...
+
+            # endregion
 
             # endregion
 
@@ -241,14 +250,14 @@ __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-## python3.3 import builtins
-pass
+## python2.7 pass
+import builtins
 import inspect
 import os
 import sys
 
-## python3.3 pass
-builtins = sys.modules['__main__'].__builtins__
+## python2.7 builtins = sys.modules['__main__'].__builtins__
+pass
 
 sys.path.append(os.path.abspath(sys.path[0] + 2 * ('..' + os.sep)))
 
