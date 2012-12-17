@@ -7,13 +7,14 @@
     This module provides classes to handle text-based files and string
     parsing.
 '''
+
+## python3.3 pass
+from __future__ import print_function
+
 '''
     For conventions see "boostNode/__init__.py" on
     https://github.com/thaibault/boostNode
 '''
-
-## python3.3 pass
-from __future__ import print_function
 
 __author__ = 'Torben Sickert'
 __copyright__ = 'see boostNode/__init__.py'
