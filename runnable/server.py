@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.3
 # -*- coding: utf-8 -*-
 
 # region header
@@ -20,34 +20,37 @@ __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-## python3.3
-## import builtins
-import BaseHTTPServer
-import CGIHTTPServer
+import base64
+## python2.7
+## import BaseHTTPServer
+## import CGIHTTPServer
+import builtins
 ##
 import cgi
-## python3.3
-## import collections
-## import http.server
-## import imp
+## python2.7
+## import copy
+import collections
 import copy
+import http.server
+import imp
 ##
 import inspect
 import logging
 import os
+import ssl
 import re
 import socket
 import subprocess
 import sys
 import threading
-## python3.3
-## import types
-## import urllib.parse
-import urlparse
+## python2.7
+## import urlparse
+import types
+import urllib.parse
 ##
 
-## python3.3 pass
-builtins = sys.modules['__main__'].__builtins__
+## python2.7 builtins = sys.modules['__main__'].__builtins__
+pass
 
 sys.path.append(os.path.abspath(sys.path[0] + 3 * ('..' + os.sep)))
 sys.path.append(os.path.abspath(sys.path[0] + 4 * ('..' + os.sep)))
@@ -113,6 +116,16 @@ class Web(
                      ' as welcome page.',
              'dest': 'default',
              'metavar': 'PATH'}},
+        {'arguments': ('-u', '--public-key-file-path'),
+         'keywords': {
+             'action': 'store',
+             'default': {'execute': '__initializer_default_value__'},
+             'type': {'execute': 'type(__initializer_default_value__)'},
+             'required': False,
+             'help': 'Defines a public key file (*.pem) to enable open ssl '
+                     'encryption.',
+             'dest': 'public_key_file_path',
+             'metavar': 'PATH'}},
         {'arguments': ('-o', '--close-order'),
          'keywords': {
              'action': 'store',
@@ -132,7 +145,7 @@ class Web(
              'help': 'Select request type regex patterns which are only '
                      'allowed for being interpreted.',
              'dest': 'request_whitelist',
-             'metavar': 'REQUEST_REGEX_PATTERN'}},
+             'metavar': 'REGEX_PATTERN'}},
         {'arguments': ('-b', '--request-blacklist'),
          'keywords': {
              'action': 'store',
@@ -143,7 +156,7 @@ class Web(
              'help': "Select request type regex patterns which aren't "
                      'allowed for being interpreted.',
              'dest': 'request_blacklist',
-             'metavar': 'REQUEST_REGEX_PATTERN'}},
+             'metavar': 'REGEX_PATTERN'}},
         {'arguments': ('-s', '--static-mimetype-pattern'),
          'keywords': {
              'action': 'store',
@@ -155,7 +168,7 @@ class Web(
                      'file. Those files will be directly sent to client '
                      'without any preprocessing.',
              'dest': 'static_mimetype_pattern',
-             'metavar': 'MIMETYPE_REGEX_PATTERN'}},
+             'metavar': 'REGEX_PATTERN'}},
         {'arguments': ('-y', '--dynamic-mimetype-pattern'),
          'keywords': {
              'action': 'store',
@@ -167,7 +180,7 @@ class Web(
                      'file. Those files will be interpreted so the result can '
                      'be send back to client.',
              'dest': 'dynamic_mimetype_pattern',
-             'metavar': 'MIMETYPE_REGEX_PATTERN'}},
+             'metavar': 'REGEX_PATTERN'}},
         {'arguments': ('-f', '--default-file-name-pattern'),
          'keywords': {
              'action': 'store',
@@ -179,8 +192,8 @@ class Web(
                      'one present and no other default filepattern/name is '
                      'given on initialisation.',
              'dest': 'default_file_name_pattern',
-             'metavar': 'FILE_NAME_REGEX_PATTERN'}},
-        {'arguments': ('-a', '--default-module-name-pattern'),
+             'metavar': 'REGEX_PATTERN'}},
+        {'arguments': ('-n', '--default-module-name-pattern'),
          'keywords': {
              'action': 'store',
              'nargs': '*',
@@ -191,13 +204,47 @@ class Web(
                      'Note that default files have a lower priority as '
                      'default python modules.',
              'dest': 'default_module_name_pattern',
-             'metavar': 'MODULE_NAME_REGEX_PATTERN'}})
+             'metavar': 'REGEX_PATTERN'}},
+        {'arguments': ('-a', '--authentication'),
+         'keywords': {
+             'action': 'store_true',
+             'default': {'execute': '__initializer_default_value__'},
+             'required': False,
+             'help': 'Enables basic http authentication. You can controle '
+                     'this behavior by providing an authentication file in '
+                     'directorys you want to save.',
+             'dest': 'authentication'}},
+        {'arguments': ('-g', '--authentication-file-pattern'),
+         'keywords': {
+             'action': 'store',
+             'default': {'execute': '__initializer_default_value__'},
+             'type': {'execute': 'type(__initializer_default_value__)'},
+             'required': False,
+             'help': 'Defines the regex pattern to define how to parse '
+                     'authentication files.',
+             'dest': 'authentication_file_pattern',
+             'metavar': 'REGEX_PATTERN'}},
+        {'arguments': ('-e', '--authentication-file-name-pattern'),
+         'keywords': {
+             'action': 'store',
+             'default': {'execute': '__initializer_default_value__'},
+             'type': {'execute': 'type(__initializer_default_value__)'},
+             'required': False,
+             'help': 'Defines the authentication file name.',
+             'dest': 'authentication_file_name',
+             'metavar': 'STRING'}})
 
         # endregion
 
     # endregion
 
     # region dynamic properties
+
+        # region protected properties
+
+    _public_key_file = None
+
+        # endregion
 
         # region public properties
 
@@ -207,6 +254,13 @@ class Web(
     default = ''
     '''Saves a cli-command for shutting down the server.'''
     close_order = ''
+    '''
+        Saves informations how to define authentications in protected
+        directories.
+    '''
+    authentication = False
+    authentication_file_name = ''
+    authentication_file_pattern = ''
     '''A list of regex pattern which every request have to match.'''
     request_whitelist = ()
     '''A list of regex pattern which no request should match.'''
@@ -245,9 +299,9 @@ class Web(
             # region special methods
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
-    def __repr__(self):
+## python2.7
+##     def __repr__(self):
+    def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
 ##
         '''
             Invokes if this object should describe itself by a string.
@@ -255,7 +309,7 @@ class Web(
             Examples:
 
             >>> repr(Web()) # doctest: +ELLIPSIS
-            'Object of "Web" with root path "...", port "80" and clo..."clo...'
+            'Object of "Web" with root path "...", port "0" and clo..."clo...'
         '''
         return 'Object of "{class_name}" with root path "{path}", port '\
                '"{port}" and close order "{close_order}".'.format(
@@ -271,11 +325,11 @@ class Web(
             # region runnable implementation
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _run(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
-    def _run(self):
+## python2.7
+##     def _run(self):
+    def _run(
+        self: boostNode.extension.type.Self
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Entry point for command line call of this progam.
@@ -284,7 +338,7 @@ class Web(
             Examples:
 
             >>> Web(root='.') # doctest: +ELLIPSIS
-            Object of "Web" with root path "...", port "80" and close order ...
+            Object of "Web" with root path "...", port "0" and close order ...
         '''
         command_line_arguments = boostNode.extension.system.CommandLine\
             .argument_parser(
@@ -294,10 +348,10 @@ class Web(
             namespace=command_line_arguments))
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
+## python2.7
 ##     def _initialize(
-##         self: boostNode.extension.type.Self, root='.', port=80,
-##         default='', close_order='close', request_whitelist=('/.*',),
+##         self, root='.', port=0, default='', public_key_file_path='',
+##         close_order='close', request_whitelist=('/.*',),
 ##         request_blacklist=(),
 ##         # NOTE: Tuple for explicit webserver file reference validation.
 ##         # ('^text/.+', '^image/.+', '^application/(x-)?javascript$')
@@ -309,10 +363,13 @@ class Web(
 ##             '^index.[a-zA-Z0-9]{2,4}$', '^initialize.[a-zA-Z0-9]{2,4}$'),
 ##         default_module_name_pattern=(
 ##             '__main__', 'main', 'index', 'initialize'),
-##         **keywords: builtins.object
-##     ) -> boostNode.extension.type.Self:
+##         authentication=False, authentication_file_name='.htpasswd',
+##         authentication_file_pattern='(?P<name>.+):(?P<password>.+)',
+##         **keywords
+##     ):
     def _initialize(
-        self, root='.', port=80, default='', close_order='close',
+        self: boostNode.extension.type.Self, root='.', port=0,
+        default='', public_key_file_path='', close_order='close',
         request_whitelist=('/.*',), request_blacklist=(),
         # NOTE: Tuple for explicit webserver file reference validation.
         # ('^text/.+', '^image/.+', '^application/(x-)?javascript$')
@@ -324,14 +381,24 @@ class Web(
             '^index.[a-zA-Z0-9]{2,4}$', '^initialize.[a-zA-Z0-9]{2,4}$'),
         default_module_name_pattern=(
             '__main__', 'main', 'index', 'initialize'),
-        **keywords
-    ):
+        authentication=False, authentication_file_name='.htpasswd',
+        authentication_file_pattern='(?P<name>.+):(?P<password>.+)',
+        **keywords: builtins.object
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Sets root path of webserver and all properties. Although the
             server thread will be started.
         '''
         self.__class__.instances.append(self)
+        public_key_file = boostNode.extension.file.Handler(
+            location=public_key_file_path)
+        if public_key_file.is_file():
+            self._public_key_file = public_key_file
+
+        self.authentication = authentication
+        self.authentication_file_name = authentication_file_name
+        self.authentication_file_pattern = authentication_file_pattern
         self.close_order = close_order
         self.root = boostNode.extension.file.Handler(location=root)
         self.port = port
@@ -349,11 +416,11 @@ class Web(
             # endregion
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _start_server_thread(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
-    def _start_server_thread(self):
+## python2.7
+##     def _start_server_thread(self):
+    def _start_server_thread(
+        self: boostNode.extension.type.Self
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Starts the server's request handler instance and listens for
@@ -374,8 +441,8 @@ class Web(
                 try:
                     wait_for_close = ''
                     while wait_for_close != self.close_order:
-## python3.3                         wait_for_close = builtins.input(
-                        wait_for_close = builtins.raw_input(
+## python2.7                         wait_for_close = builtins.raw_input(
+                        wait_for_close = builtins.input(
                             'Write "%s" for shutting down server:\n' %
                             self.close_order)
                 except builtins.KeyboardInterrupt:
@@ -386,32 +453,40 @@ class Web(
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _log_server_status(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
-    def _log_server_status(self):
+## python2.7
+##     def _log_server_status(self):
+    def _log_server_status(
+        self: boostNode.extension.type.Self
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Prints some information about the way the server was started.
         '''
         __logger__.info(
-            'Webserver is starting and listens at port "%d". Webroot is "%s".',
+            'Webserver is starting %sand listens at port "%d" and webroot '
+            '"%s".',
+            ('a secure connection with public key "%s"' %
+             self._public_key_file.path) if self._public_key_file else '',
             self.port, self.root.path)
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _start_with_dynamic_port(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
-    def _start_with_dynamic_port(self):
+## python2.7
+##     def _start_with_dynamic_port(self):
+    def _start_with_dynamic_port(
+        self: boostNode.extension.type.Self
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Searches for the highest free port for listing.
         '''
-        range = builtins.list(builtins.range(1, 2 ** 16 - 1))
-        for port in [8080, 80, 25, 139, 445, 631, 3306] + range + [0]:
+        ports = [80, 8080, 8000, 25, 139, 445, 631, 3306]
+        if self._public_key_file:
+            ports = [443] + ports
+        ports += builtins.list(builtins.set(
+            builtins.range(0, 2 ** 16 - 1)
+        ).difference(ports))
+        for port in ports:
             try:
                 self._initialize_server_thread(port)
             except socket.error:
@@ -424,11 +499,11 @@ class Web(
                 return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _start_with_static_port(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
-    def _start_with_static_port(self):
+## python2.7
+##     def _start_with_static_port(self):
+    def _start_with_static_port(
+        self: boostNode.extension.type.Self
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Starts the server listing on the given port, if it is free.
@@ -442,20 +517,33 @@ class Web(
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _initialize_server_thread(
-##         self: boostNode.extension.type.Self, port: builtins.int
-##     ) -> boostNode.extension.type.Self:
-    def _initialize_server_thread(self, port):
+## python2.7
+##     def _initialize_server_thread(self, port):
+    def _initialize_server_thread(
+        self: boostNode.extension.type.Self, port: builtins.int
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Initializes a new request-handler and starts its own thread.
         '''
-## python3.3
-##         self.service = http.server.HTTPServer(
-##             ('', port), CGIHTTPRequestHandler)
-        self.service = BaseHTTPServer.HTTPServer(
-            ('', port), CGIHTTPRequestHandler)
+        if self._public_key_file:
+## python2.7
+##             self.service = BaseHTTPServer.HTTPServer(
+##                 (self._public_key_file.basename, port),
+##                 CGIHTTPRequestHandler)
+            self.service = http.server.HTTPServer(
+                (self._public_key_file.basename, port),
+                CGIHTTPRequestHandler)
+##
+            self.service.socket = ssl.wrap_socket(
+                self.service.socket, certfile=self._public_key_file.path,
+                server_side=True)
+        else:
+## python2.7
+##             self.service = BaseHTTPServer.HTTPServer(
+##                 ('', port), CGIHTTPRequestHandler)
+            self.service = http.server.HTTPServer(
+                ('', port), CGIHTTPRequestHandler)
 ##
         self.service.web = self
         threading.Thread(target=self.service.serve_forever).start()
@@ -466,9 +554,9 @@ class Web(
     # endregion
 
 
-## python3.3
-## class CGIHTTPRequestHandler(http.server.CGIHTTPRequestHandler):
-class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
+## python2.7
+## class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
+class CGIHTTPRequestHandler(http.server.CGIHTTPRequestHandler):
 ##
     '''
         A small request-handler dealing with incoming file requests.
@@ -483,11 +571,16 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
     '''Properties defined by incoming request.'''
     request_uri = ''
     parameter = ''
-    post_dictonary = {}
+    post_dictionary = {}
     '''Saves the last started worker thread instance.'''
     last_running_worker = None
-    '''Consists the explicit requested file-handler coming from client.'''
-    request_file = None
+    '''
+        Consists the explicit requested file name (like python's native
+        "self.file") coming from client.
+    '''
+    requested_file_name = ''
+    '''References the corresponding file handler to requested file name.'''
+    requested_file = None
     '''
         Defines wether the handler has decided to run a python module or an
         external script.
@@ -503,6 +596,16 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
 
         # endregion
 
+        # region protected properties
+
+    '''
+        Points to location which is authoritative to be reachable from
+        requested destination.
+    '''
+    _authentication_location = None
+
+        # endregion
+
     # endregion
 
     # region dynamic methods
@@ -512,9 +615,9 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
             # region special methods
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
-    def __repr__(self):
+## python2.7
+##     def __repr__(self):
+    def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
 ##
         '''
             Invokes if this object should describe itself by a string.
@@ -540,11 +643,11 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         # region public methods
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python3.3
-##     def parse_url(
-##         cls: boostNode.extension.type.SelfClass, url=None
-##     ) -> builtins.tuple:
-    def parse_url(cls, url=None):
+## python2.7
+##     def parse_url(cls, url=None):
+    def parse_url(
+        cls: boostNode.extension.type.SelfClass, url=None
+    ) -> builtins.tuple:
 ##
         '''
             This static method provides an easy way to split a http
@@ -553,21 +656,21 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         if url is None and builtins.len(sys.argv) > 1:
             url = sys.argv[1]
         if url:
-## python3.3             get = urllib.parse.urlparse(url).query
-            get = urlparse.urlparse(url).query
+## python2.7             get = urlparse.urlparse(url).query
+            get = urllib.parse.urlparse(url).query
             if get:
                 try:
-## python3.3
-##                     get = urllib.parse.parse_qs(
-##                         qs=urllib.parse.urlparse(url).query,
+## python2.7
+##                     get = urlparse.parse_qs(
+##                         qs=urlparse.urlparse(url).query,
 ##                         keep_blank_values=True,
-##                         strict_parsing=True,
-##                         encoding='utf-8',
-##                         errors='replace')
-                    get = urlparse.parse_qs(
-                        qs=urlparse.urlparse(url).query,
+##                         strict_parsing=True)
+                    get = urllib.parse.parse_qs(
+                        qs=urllib.parse.urlparse(url).query,
                         keep_blank_values=True,
-                        strict_parsing=True)
+                        strict_parsing=True,
+                        encoding='utf-8',
+                        errors='replace')
 ##
                 except builtins.ValueError:
                     get = {}
@@ -576,9 +679,9 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
                 get = {}
             for key, value in get.items():
                 get[key] = value[0]
-## python3.3             return (urllib.parse.urlparse(url), get)
-            return (urlparse.urlparse(url), get)
-        return (None, {})
+## python2.7             return urlparse.urlparse(url), get
+            return urllib.parse.urlparse(url), get
+        return None, {}
 
         # endregion
 
@@ -591,11 +694,11 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
             # region event methods
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def do_GET(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
-    def do_GET(self):
+## python2.7
+##     def do_GET(self):
+    def do_GET(
+        self: boostNode.extension.type.Self
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Is triggered if an incoming get-request is detected.
@@ -603,58 +706,73 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
             It also through an exception and sends an http-error
             if request isn't valid.
         '''
-        if self._is_valid_request():
-            if self._create_environment_variables():
-                if self._is_valid_reference():
-                    return self._set_dynamic_or_static_get(file=self.path)
-            elif self._default_get():
-                return self
-        return self._send_no_file_error()
+        self.requested_file = boostNode.extension.file.Handler(
+            location=self.server.web.root.path + self.path, must_exist=False)
+        self._authentication_location = self.server.web.root
+        if self.requested_file:
+            self._authentication_location = self.requested_file
+            if self.requested_file.is_file():
+                self._authentication_location =\
+                    boostNode.extension.file.Handler(
+                        location=self.requested_file.directory_path)
+        if self._is_authenticated():
+            if self._is_valid_request():
+                if self._create_environment_variables():
+                    if self._is_valid_reference():
+                        return self._set_dynamic_or_static_get(
+                            file_name=self.path)
+                elif self._default_get():
+                    return self
+            return self._send_no_file_error()
+        return self._send_no_authentication_error()
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def do_POST(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
-    def do_POST(self):
+## python2.7
+##     def do_POST(self):
+    def do_POST(
+        self: boostNode.extension.type.Self
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Is triggered if a post-request is coming.
         '''
-## python3.3
-##         data_type, post_data = cgi.parse_header(
-##             self.headers.get_content_type())
-        data_type, post_data = cgi.parse_header(self.headers.getheader(
-            'content-type'))
+## python2.7
+##         data_type, post_data = cgi.parse_header(self.headers.getheader(
+##             'content-type'))
+        data_type, post_data = cgi.parse_header(
+            self.headers.get_content_type())
 ##
         if data_type == 'multipart/form-data':
-            self.post_dictonary = cgi.parse_multipart(self.rfile, post_data)
+## python2.7             self.end_headers()
+            self.flush_headers()
+            self.post_dictionary = self._determine_post_dictionary()
         elif data_type == 'application/x-www-form-urlencoded':
-## python3.3
-##             self.post_dictonary = urllib.parse.parse_qs(self.rfile.read(
-##                 builtins.int(self.headers['content-length'])
-##             ).decode('utf-8'))
-            self.post_dictonary = cgi.parse_qs(
-                self.rfile.read(builtins.int(self.headers.getheader(
-                    'content-length'))),
-                keep_blank_values=1)
+## python2.7
+##             self.post_dictionary = cgi.parse_qs(
+##                 self.rfile.read(builtins.int(self.headers.getheader(
+##                     'content-length'))),
+##                 keep_blank_values=True)
+            self.post_dictionary = urllib.parse.parse_qs(self.rfile.read(
+                builtins.int(self.headers['content-length'])
+            ).decode('utf-8'))
 ##
+            # TODO convert bytes to dict
         return self.do_GET()
 
             # endregion
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
+## python2.7
 ##     def log_message(
-##         self: boostNode.extension.type.Self, format: builtins.str,
-##         message_or_error_code: (builtins.int, builtins.str),
-##         response_code_or_message: (builtins.str, builtins.int),
+##         self, format, message_or_error_code, response_code_or_message,
 ##         message_end=None
-##     ) -> boostNode.extension.type.Self:
+##     ):
     def log_message(
-        self, format, message_or_error_code, response_code_or_message,
+        self: boostNode.extension.type.Self, format: builtins.str,
+        message_or_error_code: (builtins.int, builtins.str),
+        response_code_or_message: (builtins.str, builtins.int),
         message_end=None
-    ):
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Wrapper method for all logging output coming through the server
@@ -677,9 +795,71 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
             # region boolean methods
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _is_dynamic(self: boostNode.extension.type.Self) -> builtins.bool:
-    def _is_dynamic(self):
+## python2.7
+##     def _is_authenticated(self):
+    def _is_authenticated(
+        self: boostNode.extension.type.Self
+    ) -> builtins.bool:
+##
+        '''
+            TODO
+        '''
+        if self.server.web.authentication:
+            while True:
+                file_path = self._authentication_location.path +\
+                    self.server.web.authentication_file_name
+                authentication_file = boostNode.extension.file.Handler(
+                    location=file_path, must_exist=False)
+                if authentication_file:
+                    __logger__.info(
+                        'Use authentication file "%s".',
+                        authentication_file.path)
+## python2.7
+##                     return (self.headers.getheader('Authorization') ==
+##                             'Basic ' + base64.b64encode(
+##                                 authentication_file.content.strip()))
+                    return (self.headers['Authorization'] ==
+                            'Basic ' + base64.b64encode(
+                                authentication_file.get_content(mode='r+b')
+                            ).decode())
+##
+                if self._authentication_location != self.server.web.root:
+                    break
+                self._authentication_location =\
+                    boostNode.extension.file.Handler(
+                        location=self._authentication_location.directory_path)
+        return True
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python2.7
+##     def _is_valid_reference(self):
+    def _is_valid_reference(
+        self: boostNode.extension.type.Self
+    ) -> builtins.bool:
+##
+        '''
+            Checks wether the incoming is one of a python module-, static- or
+            dynamic file request.
+        '''
+        patterns = self.server.web.dynamic_mimetype_pattern +\
+            self.server.web.static_mimetype_pattern
+        if not self.requested_file:
+            if(boostNode.extension.native.Module.get_file_path(
+               context_path=self.path)):
+                self.load_module = True
+                return True
+        elif((not self.requested_file.is_file() or
+              self.requested_file.name !=
+              self.server.web.authentication_file_name) and
+             self._check_pattern(
+                 patterns=patterns, subject=self.requested_file.mimetype)):
+            return True
+        return False
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python2.7
+##     def _is_dynamic(self):
+    def _is_dynamic(self: boostNode.extension.type.Self) -> builtins.bool:
 ##
         '''
             Determines if the current request points to a dynamic executable
@@ -688,43 +868,109 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         return builtins.bool(self.load_module or self._check_pattern(
             self.server.web.dynamic_mimetype_pattern,
             boostNode.extension.file.Handler(
-                location=self.server.web.root.path + self.request_file
+                location=self.server.web.root.path + self.requested_file_name
             ).mimetype))
-
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _is_valid_reference(
-##         self: boostNode.extension.type.Self
-##     ) -> builtins.bool:
-    def _is_valid_reference(self):
-##
-        '''
-            Checks wether the incoming is one of a python module-, static- or
-            dynamic file request.
-        '''
-        requested_file = boostNode.extension.file.Handler(
-            location=self.server.web.root.path + self.path, must_exist=False)
-        if not requested_file:
-            if(boostNode.extension.native.Module.get_file_path(
-               context_path=self.path)):
-                self.load_module = True
-                return True
-        elif(self._check_pattern(
-             patterns=(
-                 self.server.web.dynamic_mimetype_pattern +
-                 self.server.web.static_mimetype_pattern),
-             subject=requested_file.mimetype)):
-            return True
-        return False
 
             # endregion
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _send_positive_header(
-##         self: boostNode.extension.type.Self, mimetype: builtins.str
-##     ) -> boostNode.extension.type.Self:
-    def _send_positive_header(self, mimetype):
+## python2.7
+##     def _determine_post_dictionary(self):
+    def _determine_post_dictionary(
+        self: boostNode.extension.type.Self
+    ) -> builtins.dict:
+##
+        '''
+            Determines the post values given by an html form.
+            File uploads are includes as bytes.
+        '''
+## python2.7
+##         form = cgi.FieldStorage(
+##             fp=self.rfile, headers=self.headers, keep_blank_values=True,
+##             strict_parsing=True,
+##             environ=self._determine_environement_variables())
+        form = cgi.FieldStorage(
+            fp=self.rfile, headers=self.headers, keep_blank_values=True,
+            strict_parsing=True,
+            environ=self._determine_environement_variables(),
+            encoding='utf-8')
+##
+        post_dictionary = {}
+        for name in form:
+            post_dictionary[name] = []
+            index = 0
+            for value in form.getlist(name):
+                if builtins.isinstance(value, builtins.bytes):
+## python2.7
+##                     post_dictionary[name].append({
+##                         'content': value,
+##                         'name': form[name][index].filename,
+##                         'disposition': form[name][index].disposition})
+                    post_dictionary[name].append({
+                        'content': value,
+                        'name': form[name][index].filename,
+                        'disposition': form[name][index].disposition,
+                        'encoding': form[name][index].encoding})
+##
+                else:
+                    post_dictionary[name].append(value)
+                index += 1
+        return post_dictionary
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python2.7
+##     def _determine_environement_variables(self):
+    def _determine_environement_variables(
+        self: boostNode.extension.type.Self
+    ) -> os._Environ:
+##
+        '''
+            Determines all needed envirnoment variables needed to determine
+            given post data with cgi module.
+        '''
+        accept = []
+        for line in self.headers.getallmatchingheaders('accept'):
+            if line[:1] in "\t\n\r ":
+                accept.append(line.strip())
+            else:
+                accept = accept + line[7:].split(',')
+        variables = copy.deepcopy(os.environ)
+## python2.7         content_type = self.headers.getheader('content-type')
+        content_type = self.headers.get_content_type()
+        variables.update({
+            'HTTP_ACCEPT': ','.join(accept),
+            'REQUEST_METHOD': self.command,
+            'CONTENT_TYPE': content_type,
+            'QUERY_STRING': '',
+            'REMOTE_HOST': '',
+            'CONTENT_LENGTH': '',
+            'HTTP_USER_AGENT': '',
+            'HTTP_COOKIE': '',
+            'HTTP_REFERER': ''})
+        if 'content-type' in self.headers:
+            variables['CONTENT_TYPE'] = self.headers['content-type']
+        if self.headers.get('content-length'):
+            variables['CONTENT_LENGTH'] = self.headers.get(
+                'content-length')
+        if self.headers.get('referer'):
+            variables['HTTP_REFERER'] = self.headers.get('referer')
+        if self.headers.get('user-agent'):
+            variables['HTTP_USER_AGENT'] = self.headers.get('user-agent')
+## python2.7
+##         pass  # TODO python2.7 version
+        cookie_content = ', '.join(builtins.filter(
+            None, self.headers.get_all('cookie', [])))
+        if cookie_content:
+            variables['HTTP_COOKIE'] = cookie_content
+##
+        return variables
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python2.7
+##     def _send_positive_header(self, mimetype):
+    def _send_positive_header(
+        self: boostNode.extension.type.Self, mimetype: builtins.str
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Is called for each successful answered http-request.
@@ -738,11 +984,33 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _send_no_file_error(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
-    def _send_no_file_error(self):
+## python2.7
+##     def _send_no_authentication_error(self):
+    def _send_no_authentication_error(
+        self: boostNode.extension.type.Self
+    ) -> boostNode.extension.type.Self:
+##
+        '''
+            TODO
+        '''
+        self.send_response(401)
+        message = 'The authentication failed'
+## python2.7
+##         if self.headers.getheader('Authorization') is None:
+        if self.headers['Authorization']:
+##
+            message = 'You request a potected location'
+        self.send_header('WWW-Authenticate', 'Basic realm=\"%s\"' % message)
+        self.send_header('Content-type', 'text/html')
+        self.end_headers()
+        return self
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python2.7
+##     def _send_no_file_error(self):
+    def _send_no_file_error(
+        self: boostNode.extension.type.Self
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Generates a http-404-error if no useful file was found for
@@ -756,19 +1024,22 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
             if self.path:
                 error_message = 'No file "%s" found.' %\
                                 self.server.web.root.path + self.path
-            if self.request_file:
+            if self.requested_file:
                 error_message += ' Detected mime-type "%s".' %\
-                                 self.request_file.mimetype
-        self.send_error(404, error_message)
+                                 self.requested_file.mimetype
+        try:
+            self.send_error(404, error_message)
+        except socket.error:
+            __logger__.info('Connection interrupted.')
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _check_pattern(
-##         self: boostNode.extension.type.Self,
-##         patterns: collections.Iterable, subject: builtins.str
-##     ) -> (builtins.str, builtins.bool):
-    def _check_pattern(self, patterns, subject):
+## python2.7
+##     def _check_pattern(self, patterns, subject):
+    def _check_pattern(
+        self: boostNode.extension.type.Self,
+        patterns: collections.Iterable, subject: builtins.str
+    ) -> (builtins.str, builtins.bool):
 ##
         '''
             Checks if one of a list of given regular expression
@@ -780,11 +1051,11 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         return False
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _is_valid_request(
-##         self: boostNode.extension.type.Self
-##     ) -> builtins.bool:
-    def _is_valid_request(self):
+## python2.7
+##     def _is_valid_request(self):
+    def _is_valid_request(
+        self: boostNode.extension.type.Self
+    ) -> builtins.bool:
 ##
         '''
             Checks if given request fulfill all restrictions.
@@ -795,12 +1066,12 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
                 self.server.web.request_blacklist)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _request_is_in_pattern_list(
-##         self: boostNode.extension.type.Self,
-##         pattern_list: collections.Iterable
-##     ) -> builtins.bool:
-    def _request_is_in_pattern_list(self, pattern_list):
+## python2.7
+##     def _request_is_in_pattern_list(self, pattern_list):
+    def _request_is_in_pattern_list(
+        self: boostNode.extension.type.Self,
+        pattern_list: collections.Iterable
+    ) -> builtins.bool:
 ##
         '''
             Checks if current request matches on of the given pattern.
@@ -811,11 +1082,11 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         return False
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _create_environment_variables(
-##         self: boostNode.extension.type.Self
-##     ) -> builtins.bool:
-    def _create_environment_variables(self):
+## python2.7
+##     def _create_environment_variables(self):
+    def _create_environment_variables(
+        self: boostNode.extension.type.Self
+    ) -> builtins.bool:
 ##
         '''
             Creates all request specified environment-variables.
@@ -828,27 +1099,27 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         return builtins.bool(self.path)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _set_dynamic_or_static_get(
-##         self: boostNode.extension.type.Self, file: builtins.str
-##     ) -> boostNode.extension.type.Self:
-    def _set_dynamic_or_static_get(self, file):
+## python2.7
+##     def _set_dynamic_or_static_get(self, file_name):
+    def _set_dynamic_or_static_get(
+        self: boostNode.extension.type.Self, file_name: builtins.str
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Makes a dynamic or static respond depending on incoming
             request.
         '''
-        self.request_file = file
+        self.requested_file_name = file_name
         if self._is_dynamic():
             return self._dynamic_get()
         return self._static_get()
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _default_get(
-##         self: boostNode.extension.type.Self
-##     ) -> (boostNode.extension.type.Self, builtins.bool):
-    def _default_get(self):
+## python2.7
+##     def _default_get(self):
+    def _default_get(
+        self: boostNode.extension.type.Self
+    ) -> (boostNode.extension.type.Self, builtins.bool):
 ##
         '''
             Handles every request which doesn't takes a file or python module
@@ -862,15 +1133,15 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         for file_name_pattern in self.server.web.default_file_name_pattern:
             for file in self.server.web.root:
                 if self._check_pattern((file_name_pattern,), file.name):
-                    return self._set_dynamic_or_static_get(file=file.name)
+                    return self._set_dynamic_or_static_get(file_name=file.name)
         return False
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _handle_default_modules_get(
-##         self: boostNode.extension.type.Self, module_name: builtins.str
-##     ) -> (boostNode.extension.type.Self, builtins.bool):
-    def _handle_default_modules_get(self, module_name):
+## python2.7
+##     def _handle_default_modules_get(self, module_name):
+    def _handle_default_modules_get(
+        self: boostNode.extension.type.Self, module_name: builtins.str
+    ) -> (boostNode.extension.type.Self, builtins.bool):
 ##
         '''
             Handles requests which wants the current defaults modules
@@ -879,19 +1150,19 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         if module_name == '__main__':
             if __name__ != '__main__':
                 self.load_module = True
-                return self._set_dynamic_or_static_get(file=module_name)
+                return self._set_dynamic_or_static_get(file_name=module_name)
         elif(boostNode.extension.native.Module.get_file_path(
              context_path=module_name)):
             self.load_module = True
-            return self._set_dynamic_or_static_get(file=module_name)
+            return self._set_dynamic_or_static_get(file_name=module_name)
         return False
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _handle_given_default_get(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
-    def _handle_given_default_get(self):
+## python2.7
+##     def _handle_given_default_get(self):
+    def _handle_given_default_get(
+        self: boostNode.extension.type.Self
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Handles request with no explicit file or module to run.
@@ -900,22 +1171,24 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
            boostNode.extension.native.Module.get_file_path(
                context_path=self.server.web.default)):
             self.load_module = True
-        return self._set_dynamic_or_static_get(file=self.server.web.default)
+        return self._set_dynamic_or_static_get(
+            file_name=self.server.web.default)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _static_get(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
-    def _static_get(self):
+## python2.7
+##     def _static_get(self):
+    def _static_get(
+        self: boostNode.extension.type.Self
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Handles a static file-request.
         '''
-        requested_file = boostNode.extension.file.Handler(
-            location=self.server.web.root.path + self.request_file)
-        self._send_positive_header(mimetype=requested_file.mimetype)
-        with builtins.open(requested_file._path, mode='rb') as file:
+        try:
+            self._send_positive_header(mimetype=self.requested_file.mimetype)
+        except socket.error:
+            __logger__.info('Connection interrupted.')
+        with builtins.open(self.requested_file._path, mode='rb') as file:
             try:
                 self.wfile.write(file.read())
             except socket.error:
@@ -923,11 +1196,11 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _dynamic_get(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
-    def _dynamic_get(self):
+## python2.7
+##     def _dynamic_get(self):
+    def _dynamic_get(
+        self: boostNode.extension.type.Self
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Handles a dynamic file or python module request.
@@ -938,10 +1211,10 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         '''
         self._send_positive_header(mimetype='text/html')
         self.request_arguments = [
-            self.request_file, self.request_uri,
+            self.requested_file_name, self.request_uri,
             self.__class__.parse_url(self.request_uri)[1],
-            self.post_dictonary, self.server]
-        if 'no_respond' not in self.post_dictonary:
+            self.post_dictionary, self.server]
+        if 'no_respond' not in self.post_dictionary:
             self.respond = True
             return self._run_request()
         self.__class__.last_running_worker = threading.Thread(
@@ -950,11 +1223,11 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _run_request(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
-    def _run_request(self):
+## python2.7
+##     def _run_request(self):
+    def _run_request(
+        self: boostNode.extension.type.Self
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Decides to run the given script as python-module or standalone
@@ -965,11 +1238,11 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         return self._run_requested_file()
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _run_requested_file(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
-    def _run_requested_file(self):
+## python2.7
+##     def _run_requested_file(self):
+    def _run_requested_file(
+        self: boostNode.extension.type.Self
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Runs a given external process in a subprocess. Output and errors
@@ -994,11 +1267,11 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _run_requested_module(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
-    def _run_requested_module(self):
+## python2.7
+##     def _run_requested_module(self):
+    def _run_requested_module(
+        self: boostNode.extension.type.Self
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Imports and runs a given python module. Errors and output are
@@ -1009,8 +1282,8 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
             boostNode.extension.output.Print.default_buffer
         boostNode.extension.output.Print.default_buffer =\
             self.server.web.thread_buffer
-## python3.3         sys_path_save = sys.path.copy()
-        sys_path_save = copy.copy(sys.path)
+## python2.7         sys_path_save = copy.copy(sys.path)
+        sys_path_save = sys.path.copy()
         sys.path = [self.server.web.root.path]
         requested_module = builtins.__import__(self.request_arguments[0])
         '''Extend requested scope with request dependent globals.'''
@@ -1019,17 +1292,17 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
             requested_module, print_default_buffer_save, sys_path_save)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
+## python2.7
 ##     def _handle_module_running(
-##         self: boostNode.extension.type.Self,
-##         requested_module: types.ModuleType,
-##         print_default_buffer_save: builtins.object,
-##         sys_path_save: collections.Iterable
-##     ) -> boostNode.extension.type.Self:
+##         self, requested_module, print_default_buffer_save,
+##         sys_path_save
+##     ):
     def _handle_module_running(
-        self, requested_module, print_default_buffer_save,
-        sys_path_save
-    ):
+        self: boostNode.extension.type.Self,
+        requested_module: types.ModuleType,
+        print_default_buffer_save: builtins.object,
+        sys_path_save: collections.Iterable
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Handles exceptions raising in requested modules.
@@ -1045,10 +1318,16 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         except builtins.Exception as exception:
             if self.respond:
                 if __logger__.isEnabledFor(logging.DEBUG) or sys.flags.debug:
-                    self.send_error(500, builtins.str(exception))
+                    try:
+                        self.send_error(500, builtins.str(exception))
+                    except socket.error:
+                        __logger__.info('Connection interrupted.')
                 else:
-                    self.send_error(500, 'Internal server error.')
-            raise exception
+                    try:
+                        self.send_error(500, 'Internal server error.')
+                    except socket.error:
+                        __logger__.info('Connection interrupted.')
+            raise
         finally:
             sys.path = sys_path_save
             boostNode.extension.output.Print.default_buffer =\

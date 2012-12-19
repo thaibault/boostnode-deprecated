@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.3
 # -*- coding: utf-8 -*-
 
 # region header
@@ -8,8 +8,8 @@
     parsing.
 '''
 
-## python3.3 pass
-from __future__ import print_function
+## python2.7 from __future__ import print_function
+pass
 
 '''
     For conventions see "boostNode/__init__.py" on
@@ -25,8 +25,8 @@ __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-## python3.3 import builtins
-pass
+## python2.7 pass
+import builtins
 import collections
 import copy
 import inspect
@@ -38,8 +38,8 @@ import string as native_string
 import sys
 import traceback
 
-## python3.3 pass
-builtins = sys.modules['__main__'].__builtins__
+## python2.7 builtins = sys.modules['__main__'].__builtins__
+pass
 
 sys.path.append(os.path.abspath(sys.path[0] + 3 * ('..' + os.sep)))
 sys.path.append(os.path.abspath(sys.path[0] + 4 * ('..' + os.sep)))
@@ -276,9 +276,9 @@ class Parser(
             # region special methods
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
-    def __repr__(self):
+## python2.7
+##     def __repr__(self):
+    def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
 ##
         '''
             Invokes if this object should describe itself by a string.
@@ -292,9 +292,9 @@ class Parser(
             class_name=self.__class__.__name__, template=self.content)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def __str__(self: boostNode.extension.type.Self) -> builtins.str:
-    def __str__(self):
+## python2.7
+##     def __str__(self):
+    def __str__(self: boostNode.extension.type.Self) -> builtins.str:
 ##
         '''
             Triggers if an instance is tried to be interpreted as a string.
@@ -307,9 +307,9 @@ class Parser(
         return self.content
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def __len__(self: boostNode.extension.type.Self) -> builtins.int:
-    def __len__(self):
+## python2.7
+##     def __len__(self):
+    def __len__(self: boostNode.extension.type.Self) -> builtins.int:
 ##
         '''
             Triggers if the pythons native "builtins.len()" function tries to
@@ -329,9 +329,9 @@ class Parser(
             # region getter methods
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def get_indent(self: boostNode.extension.type.Self) -> builtins.int:
-    def get_indent(self):
+## python2.7
+##     def get_indent(self):
+    def get_indent(self: boostNode.extension.type.Self) -> builtins.int:
 ##
         '''
             Returns a string of whitespaces representing current context.
@@ -346,9 +346,9 @@ class Parser(
         return self._indent
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def get_output(self: boostNode.extension.type.Self) -> builtins.str:
-    def get_output(self):
+## python2.7
+##     def get_output(self):
+    def get_output(self: boostNode.extension.type.Self) -> builtins.str:
 ##
         '''
             Gets the current output buffer. It consists everything printed out
@@ -367,9 +367,9 @@ class Parser(
         return self._output.content
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def get_builtins(self: boostNode.extension.type.Self) -> builtins.dict:
-    def get_builtins(self):
+## python2.7
+##     def get_builtins(self):
+    def get_builtins(self: boostNode.extension.type.Self) -> builtins.dict:
 ##
         '''
             Defines minimum needed native python features for each template
@@ -398,12 +398,12 @@ class Parser(
             # region wrapper methods
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def substitute(
-##         self: boostNode.extension.type.Self, *arguments: builtins.str,
-##         **keywords: builtins.object
-##     ) -> boostNode.extension.type.Self:
-    def substitute(self, *arguments, **keywords):
+## python2.7
+##     def substitute(self, *arguments, **keywords):
+    def substitute(
+        self: boostNode.extension.type.Self, *arguments: builtins.str,
+        **keywords: builtins.object
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Wrapper method for pythons native "string.Template.substitute()"
@@ -437,12 +437,12 @@ class Parser(
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def safe_substitute(
-##         self: boostNode.extension.type.Self, *arguments: builtins.str,
-##         **keywords: builtins.object
-##     ) -> boostNode.extension.type.Self:
-    def safe_substitute(self, *arguments, **keywords):
+## python2.7
+##     def safe_substitute(self, *arguments, **keywords):
+    def safe_substitute(
+        self: boostNode.extension.type.Self, *arguments: builtins.str,
+        **keywords: builtins.object
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Wrapper method for pythons native
@@ -467,22 +467,22 @@ class Parser(
             >>> template.safe_substitute()
             Object of "Parser" with template "hans <%not_hans%>".
         '''
-## python3.3
-##         self._output.write(self.native_template_object.safe_substitute(
-##             *arguments, **keywords))
-        def substitute(match):
-            '''
-                Substitution replacement for native pendant with no
-                exception raising.
-            '''
-            if match.group(1) in keywords:
-                return str(keywords[match.group(1)])
-            return match.group(0)
-        self._output.write(re.compile(self._placeholder_pattern.format(
-            left_delimiter=self._left_code_delimiter,
-            right_delimiter=self._right_code_delimiter,
-            placeholder=self._placeholder_name_pattern)
-        ).sub(substitute, self.content))
+## python2.7
+##         def substitute(match):
+##             '''
+##                 Substitution replacement for native pendant with no
+##                 exception raising.
+##             '''
+##             if match.group(1) in keywords:
+##                 return str(keywords[match.group(1)])
+##             return match.group(0)
+##         self._output.write(re.compile(self._placeholder_pattern.format(
+##             left_delimiter=self._left_code_delimiter,
+##             right_delimiter=self._right_code_delimiter,
+##             placeholder=self._placeholder_name_pattern)
+##         ).sub(substitute, self.content))
+        self._output.write(self.native_template_object.safe_substitute(
+            *arguments, **keywords))
 ##
         return self
 
@@ -491,11 +491,11 @@ class Parser(
             # region parsing methods
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def substitute_all(
-##         self: boostNode.extension.type.Self, replacement=''
-##     ) -> boostNode.extension.type.Self:
-    def substitute_all(self, replacement=''):
+## python2.7
+##     def substitute_all(self, replacement=''):
+    def substitute_all(
+        self: boostNode.extension.type.Self, replacement=''
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Substitutes every placeholder in template with a given replacement
@@ -521,12 +521,12 @@ class Parser(
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def render(
-##         self: boostNode.extension.type.Self, mapping={},
-##         **keywords: builtins.object
-##     ) -> boostNode.extension.type.Self:
-    def render(self, mapping={}, **keywords):
+## python2.7
+##     def render(self, mapping={}, **keywords):
+    def render(
+        self: boostNode.extension.type.Self, mapping={},
+        **keywords: builtins.object
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Renders the template. Searches for python code snippets and handles
@@ -565,11 +565,11 @@ class Parser(
             # region runnable implementation
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _run(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
-    def _run(self):
+## python2.7
+##     def _run(self):
+    def _run(
+        self: boostNode.extension.type.Self
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Entry point for command line call of this progam.
@@ -606,15 +606,14 @@ class Parser(
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
+## python2.7
 ##     def _initialize(
-##         self: boostNode.extension.type.Self, template='index.tpl',
-##         string=False,
+##         self, template='index.tpl', string=False,
 ##         placeholder_name_pattern='[a-zA-Z0-9_\[\]\'"\.()\\\\,\- ]+',
 ##         left_code_delimiter='<%', right_code_delimiter='%>',
 ##         right_escaped='%',  # For example: "<%%" evaluates to "<%"
-##         placeholder_pattern='{left_delimiter}[ \t]*({placeholder})'
-##                             '[ \t]*{right_delimiter}',
+##         placeholder_pattern='{left_delimiter}[ \t]*({placeholder})[ \t]'
+##                             '*{right_delimiter}',
 ##         template_context_default_indent=4,
 ##         template_pattern='(?P<E>(?P<before_escaped>'
 ##                          '(?P<indent_escaped>[ \t]*)'
@@ -630,9 +629,8 @@ class Parser(
 ##                          '(?P<C>^(?P<indent_code>[ \t]*){left_delimiter}'
 ##                          '(?P<code>.+)$)|'
 ##
-##                          '(?P<N>'
-##                          '(?P<none_code>(?P<indent_none_code>[ \t]*).+)'
-##                          '(?P<none_code_end>\n|$))|'
+##                          '(?P<N>(?P<none_code>(?P<indent_none_code>[ \t]*)'
+##                          '.+)(?P<none_code_end>\n|$))|'
 ##
 ##                          '(?P<L>^(?P<indent_line>[ \t]*)\n)',
 ##         command_line_placeholder_pattern='(?P<variable_name>{placeholder})'
@@ -643,15 +641,16 @@ class Parser(
 ##                                 '(?P<invalid>))',
 ##         builtins=(builtins.all, builtins.filter, builtins.map,
 ##                   builtins.enumerate, builtins.range, builtins.locals),
-##         **keywords: builtins.object
-##     ) -> boostNode.extension.type.Self:
+##         **keywords
+##     ):
     def _initialize(
-        self, template='index.tpl', string=False,
+        self: boostNode.extension.type.Self, template='index.tpl',
+        string=False,
         placeholder_name_pattern='[a-zA-Z0-9_\[\]\'"\.()\\\\,\- ]+',
         left_code_delimiter='<%', right_code_delimiter='%>',
         right_escaped='%',  # For example: "<%%" evaluates to "<%"
-        placeholder_pattern='{left_delimiter}[ \t]*({placeholder})[ \t]'
-                            '*{right_delimiter}',
+        placeholder_pattern='{left_delimiter}[ \t]*({placeholder})'
+                            '[ \t]*{right_delimiter}',
         template_context_default_indent=4,
         template_pattern='(?P<E>(?P<before_escaped>'
                          '(?P<indent_escaped>[ \t]*)'
@@ -667,8 +666,9 @@ class Parser(
                          '(?P<C>^(?P<indent_code>[ \t]*){left_delimiter}'
                          '(?P<code>.+)$)|'
 
-                         '(?P<N>(?P<none_code>(?P<indent_none_code>[ \t]*)'
-                         '.+)(?P<none_code_end>\n|$))|'
+                         '(?P<N>'
+                         '(?P<none_code>(?P<indent_none_code>[ \t]*).+)'
+                         '(?P<none_code_end>\n|$))|'
 
                          '(?P<L>^(?P<indent_line>[ \t]*)\n)',
         command_line_placeholder_pattern='(?P<variable_name>{placeholder})'
@@ -679,8 +679,8 @@ class Parser(
                                 '(?P<invalid>))',
         builtins=(builtins.all, builtins.filter, builtins.map,
                   builtins.enumerate, builtins.range, builtins.locals),
-        **keywords
-    ):
+        **keywords: builtins.object
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Initializes output buffer and template scope.
@@ -717,11 +717,11 @@ class Parser(
             # endregion
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _set_builtins(
-##         self: boostNode.extension.type.Self, builtins: collections.Iterable
-##     ) -> boostNode.extension.type.Self:
-    def _set_builtins(self, builtins):
+## python2.7
+##     def _set_builtins(self, builtins):
+    def _set_builtins(
+        self: boostNode.extension.type.Self, builtins: collections.Iterable
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Generates a dictionary representing the templates scope from given
@@ -737,11 +737,11 @@ class Parser(
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _generate_scope_variables(
-##         self: boostNode.extension.type.Self
-##     ) -> builtins.dict:
-    def _generate_scope_variables(self):
+## python2.7
+##     def _generate_scope_variables(self):
+    def _generate_scope_variables(
+        self: boostNode.extension.type.Self
+    ) -> builtins.dict:
 ##
         '''
             Generates scope variables given by the command line interface and
@@ -768,12 +768,12 @@ class Parser(
         return keywords
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _load_template(
-##         self: boostNode.extension.type.Self, template: builtins.str,
-##         string: builtins.bool
-##     ) -> boostNode.extension.type.Self:
-    def _load_template(self, template, string):
+## python2.7
+##     def _load_template(self, template, string):
+    def _load_template(
+        self: boostNode.extension.type.Self, template: builtins.str,
+        string: builtins.bool
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Load the given template into ram for rendering.
@@ -801,11 +801,11 @@ class Parser(
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _run_template(
-##         self: boostNode.extension.type.Self, template_scope: builtins.dict
-##     ) -> boostNode.extension.type.Self:
-    def _run_template(self, template_scope):
+## python2.7
+##     def _run_template(self, template_scope):
+    def _run_template(
+        self: boostNode.extension.type.Self, template_scope: builtins.dict
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Runs the compiled template in its given scope.
@@ -816,9 +816,9 @@ class Parser(
         template_scope.update({'__builtins__': self.builtins})
         exception_happens = False
         try:
-## python3.3
-##             builtins.exec(self.rendered_content, template_scope)
-            exec(self.rendered_content, template_scope)
+## python2.7
+##             exec(self.rendered_content, template_scope)
+            builtins.exec(self.rendered_content, template_scope)
 ##
         except builtins.Exception as exception:
             line_info, exception_message, native_error_object =\
@@ -833,11 +833,11 @@ class Parser(
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _handle_template_exception(
-##         self: boostNode.extension.type.Self, exception: builtins.Exception
-##     ) -> builtins.tuple:
-    def _handle_template_exception(self, exception):
+## python2.7
+##     def _handle_template_exception(self, exception):
+    def _handle_template_exception(
+        self: boostNode.extension.type.Self, exception: builtins.Exception
+    ) -> builtins.tuple:
 ##
         '''
             If an exception is raising during running generated template
@@ -864,16 +864,16 @@ class Parser(
         return line_info, exception_message, native_error_object
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
+## python2.7
 ##     def _raise_template_exception(
-##         self: boostNode.extension.type.Self,
-##         line_info: builtins.str, exception_message: builtins.str,
-##         native_error_object: builtins.str, rendered_content: builtins.str
-##     ) -> builtins.tuple:
+##         self, line_info, exception_message, native_error_object,
+##         rendered_content
+##     ):
     def _raise_template_exception(
-        self, line_info, exception_message, native_error_object,
-        rendered_content
-    ):
+        self: boostNode.extension.type.Self,
+        line_info: builtins.str, exception_message: builtins.str,
+        native_error_object: builtins.str, rendered_content: builtins.str
+    ) -> builtins.tuple:
 ##
         '''
             Performs a wrapper exception for exception raising in template
@@ -896,12 +896,12 @@ class Parser(
                 rendered_content=rendered_content))
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _get_exception_line(
-##         self: boostNode.extension.type.Self,
-##         exception: (builtins.Exception)
-##     ) -> builtins.tuple:
-    def _get_exception_line(self, exception):
+## python2.7
+##     def _get_exception_line(self, exception):
+    def _get_exception_line(
+        self: boostNode.extension.type.Self,
+        exception: (builtins.Exception)
+    ) -> builtins.tuple:
 ##
         '''
             Determines the line where the given exception was raised.
@@ -926,12 +926,12 @@ class Parser(
             # region wrapper methods for template context
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _print(
-##         self: boostNode.extension.type.Self, *arguments: builtins.object,
-##         indent=True, indent_space='', **keywords: builtins.object
-##     ) -> None:
-    def _print(self, *arguments, **keywords):
+## python2.7
+##     def _print(self, *arguments, **keywords):
+    def _print(
+        self: boostNode.extension.type.Self, *arguments: builtins.object,
+        indent=True, indent_space='', **keywords: builtins.object
+    ) -> None:
 ##
         '''
             Represents the print function which will be used for all plain text
@@ -946,16 +946,16 @@ class Parser(
             >>> tpl.output
             'hans\\n and klaus\\nfritz is also present.'
         '''
-## python3.3
-##         pass
-        indent = True
-        if 'indent' in keywords:
-            indent = keywords['indent']
-            del keywords['indent']
-        indent_space = ''
-        if 'indent_space' in keywords:
-            indent_space = keywords['indent_space']
-            del keywords['indent_space']
+## python2.7
+##         indent = True
+##         if 'indent' in keywords:
+##             indent = keywords['indent']
+##             del keywords['indent']
+##         indent_space = ''
+##         if 'indent_space' in keywords:
+##             indent_space = keywords['indent_space']
+##             del keywords['indent_space']
+        pass
 ##
         if indent and indent_space:
             print_buffer = boostNode.extension.output.Buffer()
@@ -973,16 +973,16 @@ class Parser(
         return builtins.print(*arguments, **keywords)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
+## python2.7
 ##     def _include(
-##         self: boostNode.extension.type.Self,
-##         template_file_path: builtins.str, scope={}, end='',
-##         indent=True, indent_space='', **keywords: builtins.object
-##     ) -> None:
+##         self, template_file_path, scope={}, end='', indent=True,
+##         indent_space='', **keywords
+##     ):
     def _include(
-        self, template_file_path, scope={}, end='', indent=True,
-        indent_space='', **keywords
-    ):
+        self: boostNode.extension.type.Self,
+        template_file_path: builtins.str, scope={}, end='',
+        indent=True, indent_space='', **keywords: builtins.object
+    ) -> None:
 ##
         '''
             Performs a template include. This method is implemented for using
@@ -1004,12 +1004,12 @@ class Parser(
             # region callback methods
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _render_code(
-##         self: boostNode.extension.type.Self,
-##         match: builtins.type(re.compile('').match(''))
-##     ) -> builtins.str:
-    def _render_code(self, match):
+## python2.7
+##     def _render_code(self, match):
+    def _render_code(
+        self: boostNode.extension.type.Self,
+        match: builtins.type(re.compile('').match(''))
+    ) -> builtins.str:
 ##
         '''
             Helper method for rendering the source template file.
@@ -1033,12 +1033,12 @@ class Parser(
                 # region helper methods
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _render_empty_line(
-##         self: boostNode.extension.type.Self,
-##         match: builtins.type(re.compile('').match(''))
-##     ) -> builtins.str:
-    def _render_empty_line(self, match):
+## python2.7
+##     def _render_empty_line(self, match):
+    def _render_empty_line(
+        self: boostNode.extension.type.Self,
+        match: builtins.type(re.compile('').match(''))
+    ) -> builtins.str:
 ##
         '''
             Handles empty lines.
@@ -1050,12 +1050,12 @@ class Parser(
         return ''
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _render_none_code_line(
-##         self: boostNode.extension.type.Self,
-##         match: builtins.type(re.compile('').match(''))
-##     ) -> builtins.str:
-    def _render_none_code_line(self, match):
+## python2.7
+##     def _render_none_code_line(self, match):
+    def _render_none_code_line(
+        self: boostNode.extension.type.Self,
+        match: builtins.type(re.compile('').match(''))
+    ) -> builtins.str:
 ##
         '''
             Handles none code.
@@ -1078,12 +1078,12 @@ class Parser(
             end=self._get_new_line())
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _render_code_line(
-##         self: boostNode.extension.type.Self,
-##         match: builtins.type(re.compile('').match(''))
-##     ) -> builtins.str:
-    def _render_code_line(self, match):
+## python2.7
+##     def _render_code_line(self, match):
+    def _render_code_line(
+        self: boostNode.extension.type.Self,
+        match: builtins.type(re.compile('').match(''))
+    ) -> builtins.str:
 ##
         '''
             Compiles template to python code.
@@ -1100,15 +1100,15 @@ class Parser(
         return self._flush_empty_lines(indent) + indent + code_line
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
+## python2.7
 ##     def _save_output_method_indent_level(
-##         self: boostNode.extension.type.Self, code_line: builtins.str,
-##         was_new_line: builtins.bool,
-##         match: builtins.type(re.compile('').match(''))
-##     ) -> builtins.str:
+##         self, code_line, was_new_line, match
+##     ):
     def _save_output_method_indent_level(
-        self, code_line, was_new_line, match
-    ):
+        self: boostNode.extension.type.Self, code_line: builtins.str,
+        was_new_line: builtins.bool,
+        match: builtins.type(re.compile('').match(''))
+    ) -> builtins.str:
 ##
         '''
             Gives all output methods found in template code their indent level.
@@ -1127,12 +1127,12 @@ class Parser(
         return code_line
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _handle_include_output_indent_level(
-##         self: boostNode.extension.type.Self, code_line: builtins.str,
-##         match: builtins.type(re.compile('').match('')), slice: builtins.int
-##     ) -> builtins.str:
-    def _handle_include_output_indent_level(self, code_line, match, slice):
+## python2.7
+##     def _handle_include_output_indent_level(self, code_line, match, slice):
+    def _handle_include_output_indent_level(
+        self: boostNode.extension.type.Self, code_line: builtins.str,
+        match: builtins.type(re.compile('').match('')), slice: builtins.int
+    ) -> builtins.str:
 ##
         '''
             Returns a string representing from include function call in
@@ -1157,12 +1157,12 @@ class Parser(
             length_of_include_call + 1:])
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _handle_print_output_indent_level(
-##         self: boostNode.extension.type.Self, code_line: builtins.str,
-##         match: builtins.type(re.compile('').match('')), slice: builtins.int
-##     ) -> builtins.str:
-    def _handle_print_output_indent_level(self, code_line, match, slice):
+## python2.7
+##     def _handle_print_output_indent_level(self, code_line, match, slice):
+    def _handle_print_output_indent_level(
+        self: boostNode.extension.type.Self, code_line: builtins.str,
+        match: builtins.type(re.compile('').match('')), slice: builtins.int
+    ) -> builtins.str:
 ##
         '''
             Returns a string representing from print function call in
@@ -1185,12 +1185,12 @@ class Parser(
             code_line[builtins.len('print(') + length_of_print_call + 1:])
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _render_escaped_none_code_line(
-##         self: boostNode.extension.type.Self,
-##         match: builtins.type(re.compile('').match(''))
-##     ) -> builtins.str:
-    def _render_escaped_none_code_line(self, match):
+## python2.7
+##     def _render_escaped_none_code_line(self, match):
+    def _render_escaped_none_code_line(
+        self: boostNode.extension.type.Self,
+        match: builtins.type(re.compile('').match(''))
+    ) -> builtins.str:
 ##
         '''
             Handles escaped none code.
@@ -1215,12 +1215,12 @@ class Parser(
             string=content_before + self._left_code_delimiter, end='')
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _render_placeholder(
-##         self: boostNode.extension.type.Self,
-##         match: builtins.type(re.compile('').match(''))
-##     ) -> builtins.str:
-    def _render_placeholder(self, match):
+## python2.7
+##     def _render_placeholder(self, match):
+    def _render_placeholder(
+        self: boostNode.extension.type.Self,
+        match: builtins.type(re.compile('').match(''))
+    ) -> builtins.str:
 ##
         '''
             Handles placeholder.
@@ -1257,11 +1257,11 @@ class Parser(
                 ('+"\\n"' if self._get_new_line() else ''))
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _flush_empty_lines(
-##         self: boostNode.extension.type.Self, indent: builtins.str
-##     ) -> builtins.str:
-    def _flush_empty_lines(self, indent):
+## python2.7
+##     def _flush_empty_lines(self, indent):
+    def _flush_empty_lines(
+        self: boostNode.extension.type.Self, indent: builtins.str
+    ) -> builtins.str:
 ##
         '''
             Flushes the empty line stack needed for right line mapping through
@@ -1274,9 +1274,9 @@ class Parser(
         return result
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _get_new_line(self: boostNode.extension.type.Self) -> builtins.str:
-    def _get_new_line(self):
+## python2.7
+##     def _get_new_line(self):
+    def _get_new_line(self: boostNode.extension.type.Self) -> builtins.str:
 ##
         '''
             Returns a new line string if necessary for the correct template
@@ -1288,12 +1288,12 @@ class Parser(
         return ''
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _get_code_indent(
-##         self: boostNode.extension.type.Self, current_indent: builtins.str,
-##         mode='normal'
-##     ) -> builtins.str:
-    def _get_code_indent(self, current_indent, mode='normal'):
+## python2.7
+##     def _get_code_indent(self, current_indent, mode='normal'):
+    def _get_code_indent(
+        self: boostNode.extension.type.Self, current_indent: builtins.str,
+        mode='normal'
+    ) -> builtins.str:
 ##
         '''
             Returns the right indent in code as string depending on the
@@ -1329,12 +1329,12 @@ class Parser(
         return indent
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _render_none_code(
-##         self: boostNode.extension.type.Self,
-##         string: builtins.str, end='\n'
-##     ) -> builtins.str:
-    def _render_none_code(self, string, end='\n'):
+## python2.7
+##     def _render_none_code(self, string, end='\n'):
+    def _render_none_code(
+        self: boostNode.extension.type.Self,
+        string: builtins.str, end='\n'
+    ) -> builtins.str:
 ##
         '''
             Wraps a print function around plain text for compiling
