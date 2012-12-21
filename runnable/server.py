@@ -242,6 +242,10 @@ class Web(
 
         # region protected properties
 
+    '''
+        Holds a file object referencing a "<DOMAIN_NAME>.pem" file needed
+        for open ssl connections.
+    '''
     _public_key_file = None
 
         # endregion
@@ -261,6 +265,7 @@ class Web(
     authentication = False
     authentication_file_name = ''
     authentication_file_pattern = ''
+    authentication_handler = None
     '''A list of regex pattern which every request have to match.'''
     request_whitelist = ()
     '''A list of regex pattern which no request should match.'''
@@ -363,9 +368,9 @@ class Web(
 ##             '^index.[a-zA-Z0-9]{2,4}$', '^initialize.[a-zA-Z0-9]{2,4}$'),
 ##         default_module_name_pattern=(
 ##             '__main__', 'main', 'index', 'initialize'),
-##         authentication=False, authentication_file_name='.htpasswd',
+##         authentication=True, authentication_file_name='.htpasswd',
 ##         authentication_file_pattern='(?P<name>.+):(?P<password>.+)',
-##         **keywords
+##         authentication_handler=None, **keywords
 ##     ):
     def _initialize(
         self: boostNode.extension.type.Self, root='.', port=0,
@@ -381,9 +386,9 @@ class Web(
             '^index.[a-zA-Z0-9]{2,4}$', '^initialize.[a-zA-Z0-9]{2,4}$'),
         default_module_name_pattern=(
             '__main__', 'main', 'index', 'initialize'),
-        authentication=False, authentication_file_name='.htpasswd',
+        authentication=True, authentication_file_name='.htpasswd',
         authentication_file_pattern='(?P<name>.+):(?P<password>.+)',
-        **keywords: builtins.object
+        authentication_handler=None, **keywords: builtins.object
     ) -> boostNode.extension.type.Self:
 ##
         '''
@@ -395,6 +400,7 @@ class Web(
             location=public_key_file_path)
         if public_key_file.is_file():
             self._public_key_file = public_key_file
+        self.authentication_handler = authentication_handler
 
         self.authentication = authentication
         self.authentication_file_name = authentication_file_name
@@ -756,7 +762,9 @@ class CGIHTTPRequestHandler(http.server.CGIHTTPRequestHandler):
                 builtins.int(self.headers['content-length'])
             ).decode('utf-8'))
 ##
-            # TODO convert bytes to dict
+            for name, value in self.post_dictionary.items():
+                if builtins.isinstance(value, builtins.bytes):
+                    self.post_dictionary[name] = {'content': value}
         return self.do_GET()
 
             # endregion
@@ -802,7 +810,7 @@ class CGIHTTPRequestHandler(http.server.CGIHTTPRequestHandler):
     ) -> builtins.bool:
 ##
         '''
-            TODO
+            Determines wheater current request is authenticated.
         '''
         if self.server.web.authentication:
             while True:
@@ -811,23 +819,22 @@ class CGIHTTPRequestHandler(http.server.CGIHTTPRequestHandler):
                 authentication_file = boostNode.extension.file.Handler(
                     location=file_path, must_exist=False)
                 if authentication_file:
-                    __logger__.info(
-                        'Use authentication file "%s".',
-                        authentication_file.path)
-## python2.7
 ##                     return (self.headers.getheader('Authorization') ==
-##                             'Basic ' + base64.b64encode(
-##                                 authentication_file.content.strip()))
+##                             'Basic %s' % self._get_login_data(
+##                                 authentication_file))
                     return (self.headers['Authorization'] ==
-                            'Basic ' + base64.b64encode(
-                                authentication_file.get_content(mode='r+b')
-                            ).decode())
+                            'Basic %s' % self._get_login_data(
+                                authentication_file))
 ##
                 if self._authentication_location != self.server.web.root:
                     break
                 self._authentication_location =\
                     boostNode.extension.file.Handler(
                         location=self._authentication_location.directory_path)
+            return builtins.bool(
+                self.server.web.authentication_handler is None or
+                self.server.web.authentication_handler(
+                    self.headers['Authorization'], self.path))
         return True
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -872,6 +879,27 @@ class CGIHTTPRequestHandler(http.server.CGIHTTPRequestHandler):
             ).mimetype))
 
             # endregion
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python2.7
+##     def _get_login_data(self, authentication_file):
+    def _get_login_data(
+        self: boostNode.extension.type.Self,
+        authentication_file: boostNode.extension.file.Handler
+    ) -> builtins.str:
+##
+        __logger__.info(
+            'Use authentication file "%s".', authentication_file.path)
+        match = re.compile(
+            self.server.web.authentication_file_pattern
+        ).match(authentication_file.content.strip())
+## python2.7
+##         return base64.b64encode(
+##             '%s:%s' % (match.group('name'), match.group('password')))
+        return base64.b64encode(('%s:%s' % (
+            match.group('name'), match.group('password')
+        )).encode('utf-8')).decode()
+##
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python2.7
@@ -957,7 +985,7 @@ class CGIHTTPRequestHandler(http.server.CGIHTTPRequestHandler):
         if self.headers.get('user-agent'):
             variables['HTTP_USER_AGENT'] = self.headers.get('user-agent')
 ## python2.7
-##         pass  # TODO python2.7 version
+##         pass
         cookie_content = ', '.join(builtins.filter(
             None, self.headers.get_all('cookie', [])))
         if cookie_content:
@@ -973,7 +1001,7 @@ class CGIHTTPRequestHandler(http.server.CGIHTTPRequestHandler):
     ) -> boostNode.extension.type.Self:
 ##
         '''
-            Is called for each successful answered http-request.
+            This method is called for each successful answered http-request.
         '''
         try:
             self.send_response(200)
@@ -991,7 +1019,7 @@ class CGIHTTPRequestHandler(http.server.CGIHTTPRequestHandler):
     ) -> boostNode.extension.type.Self:
 ##
         '''
-            TODO
+            This method is called if authentication has failt.
         '''
         self.send_response(401)
         message = 'The authentication failed'
@@ -1016,16 +1044,16 @@ class CGIHTTPRequestHandler(http.server.CGIHTTPRequestHandler):
             Generates a http-404-error if no useful file was found for
             responding.
         '''
-        error_message = 'Requested file not found.'
+        error_message = 'Requested file not found'
         if __logger__.isEnabledFor(logging.DEBUG) or sys.flags.debug:
             error_message = (
                 'None of the following default file-pattern "%s" was found' %
                 '", "'.join(self.server.web.default_module_name_pattern))
             if self.path:
-                error_message = 'No file "%s" found.' %\
+                error_message = 'No file "%s" found' %\
                                 self.server.web.root.path + self.path
             if self.requested_file:
-                error_message += ' Detected mime-type "%s".' %\
+                error_message += ' Detected mime-type "%s"' %\
                                  self.requested_file.mimetype
         try:
             self.send_error(404, error_message)
