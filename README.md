@@ -2,6 +2,14 @@ boostNode
 =========
 
 boostNode is a high level python library.
+Some features are:
+
+    - platform independent webbase gui toolkit
+    - smart, very secure webserver
+    - macro processor for text based files
+    - synchronisation
+    - many extended language feature like signature checking or jointpoints for aspect orientated programming
+    - and much more..
 
 Usage
 
