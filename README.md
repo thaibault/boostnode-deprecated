@@ -27,7 +27,7 @@ Usage
     To switch boosNode version between python3.X and python 2.X use this
     command:
     
-    /path/to/boostNode/runnable/macro.py -p /path/to/boosNode -e py
+    /path/to/boostNode/runnable/macro.py -p /path/to/boostNode -e py
 
 Copyright
 
