@@ -2,6 +2,8 @@ boostNode
 =========
 
 boostNode is a high level python library.
+This library supports python2.7+ and python3.3+ environements.
+
 Some features are:
 
     - platform independent webbase gui toolkit
@@ -21,6 +23,11 @@ Usage
     
     For advanced usage see the recommended module pattern described in
     "path/to/boosNode/__init__.py".
+    
+    To switch boosNode version between python3.X and python 2.X use this
+    command:
+    
+    /path/to/boostNode/runnable/macro.py -p /path/to/boosNode -e py
 
 Copyright
 
