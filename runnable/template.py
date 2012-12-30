@@ -614,7 +614,7 @@ class Parser(
 ## python2.7
 ##     def _initialize(
 ##         self, template='index.tpl', string=False,
-##         placeholder_name_pattern='[a-zA-Z0-9_\[\]\'"\.()\\\\,\- ]+',
+##         placeholder_name_pattern='[a-zA-Z0-9_\[\]\'"\.()\\\\,\-+ ]+',
 ##         left_code_delimiter='<%', right_code_delimiter='%>',
 ##         right_escaped='%',  # For example: "<%%" evaluates to "<%"
 ##         placeholder_pattern='{left_delimiter}[ \t]*({placeholder})[ \t]'
@@ -651,7 +651,7 @@ class Parser(
     def _initialize(
         self: boostNode.extension.type.Self, template='index.tpl',
         string=False,
-        placeholder_name_pattern='[a-zA-Z0-9_\[\]\'"\.()\\\\,\- ]+',
+        placeholder_name_pattern='[a-zA-Z0-9_\[\]\'"\.()\\\\,\-+ ]+',
         left_code_delimiter='<%', right_code_delimiter='%>',
         right_escaped='%',  # For example: "<%%" evaluates to "<%"
         placeholder_pattern='{left_delimiter}[ \t]*({placeholder})'

@@ -114,10 +114,10 @@ class Reflector(
              'type': builtins.str,
              'required': {'execute': '__initializer_default_value__ is None'},
              'help': 'Select locations which should be ignored. '
-                     "%s doesn't touch these files in source and its"
+                     "%s doesn't touch these files in source and its "
                      'corresponding locations in target.' %
-                     boostNode.extension.native.Module.get_package_name(
-                         frame=inspect.currentframe()),
+                     boostNode.extension.native.Module.get_name(
+                         frame=inspect.currentframe()).capitalize(),
              'dest': 'exclude_locations',
              'metavar': 'PATHS'}},
         {'arguments': ('-r', '--target-rights'),
