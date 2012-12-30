@@ -2916,6 +2916,8 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             "force" triggers if symbolic links with not existing referenced
                     files should be made. If target exists it will be
                     overwritten if set to "True".
+            "relative" triggers if target should be referenced via relative
+                       path.
 
             Examples:
 
@@ -2940,7 +2942,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> Handler(target).is_symbolic_link()
             True
         '''
-        return self._make_link(True, *arguments, **keywords)
+        return self._make_link(*arguments, symbolic=True, **keywords)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python2.7
@@ -2969,7 +2971,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> source.make_hardlink(target, force=True)
             True
         '''
-        return self._make_link(False, *arguments, **keywords)
+        return self._make_link(*arguments, symbolic=False, **keywords)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python2.7
@@ -3442,14 +3444,14 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python2.7
 ##     def _make_link(
-##         self, symbolic, target, force=False, *arguments, **keywords
+##         self, target, symbolic, *arguments, force=False, relative=false,
+##         **keywords
 ##     ):
     def _make_link(
-        self: boostNode.extension.type.Self, symbolic: builtins.bool,
-        target: (boostNode.extension.type.SelfClassObject,
-                 builtins.str),
-        force=False, *arguments: builtins.object,
-        **keywords: builtins.object
+        self: boostNode.extension.type.Self,
+        target: (boostNode.extension.type.SelfClassObject, builtins.str),
+        symbolic: builtins.bool, *arguments: builtins.object, force=False,
+        relative=False, **keywords: builtins.object
     ):
 ##
         '''
@@ -3458,15 +3460,15 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         target = self.__class__(location=target, must_exist=False)
         if force:
             return self._make_forced_link(
-                symbolic, target, *arguments, **keywords)
+                symbolic, target, relative, *arguments, **keywords)
         elif target:
             __logger__.warning(
                 'Link from "{path}" to "{target_path}" wasn\'t created '
                 'because "{target_path}" already exists.'.format(
                     path=self.path, target_path=target.path))
             return False
-        return self._create_platform_dependent_link(
-            symbolic, target, *arguments, **keywords)
+        return self._make_platform_dependent_link(
+            symbolic, target, relative, *arguments, **keywords)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python2.7
@@ -3701,7 +3703,8 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         self: boostNode.extension.type.Self,
         symbolic: builtins.bool,
         target: boostNode.extension.type.SelfClassObject,
-        *arguments: builtins.object, **keywords: builtins.object
+        relative: builtins.bool, *arguments: builtins.object,
+        **keywords: builtins.object
     ) -> builtins.bool:
 ##
         '''
@@ -3724,25 +3727,26 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
                 if not path_object:
                     break
             self.make_directorys()
-            successfull = self._create_platform_dependent_link(
-                symbolic, target, *arguments, **keywords)
+            successfull = self._make_platform_dependent_link(
+                symbolic, target, relative, *arguments, **keywords)
             '''Delete everything we temporary created before.'''
             path_object.remove_deep()
             return successfull
-        return self._create_platform_dependent_link(
-            symbolic, target, *arguments, **keywords)
+        return self._make_platform_dependent_link(
+            symbolic, target, relative, *arguments, **keywords)
 
             # region handle platform dependencies methods
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python2.7
-##     def _create_platform_dependent_link(
-##         self, symbolic, target, *arguments, **keywords
+##     def _make_platform_dependent_link(
+##         self, symbolic, target, relative, *arguments, **keywords
 ##     ):
-    def _create_platform_dependent_link(
+    def _make_platform_dependent_link(
         self: boostNode.extension.type.Self, symbolic: builtins.bool,
         target: boostNode.extension.type.SelfClassObject,
-        *arguments: builtins.object, **keywords: builtins.object
+        relative: builtins.bool, *arguments: builtins.object,
+        **keywords: builtins.object
     ) -> builtins.bool:
 ##
         '''
@@ -3750,16 +3754,16 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
             Examples:
 
-            >>> Handler()._create_platform_dependent_link(
+            >>> Handler()._make_platform_dependent_link(
             ...     symbolic=True,
             ...     target=Handler(
             ...         __test_folder__ +
-            ...         '_create_platform_dependent_link',
+            ...         '_make_platform_dependent_link',
             ...     must_exist=False)
             ... ) # doctest: +ELLIPSIS
             True
         '''
-        source_path = self._path
+        source_path = self.relative_path if relative else self._path
         if self._path.endswith(os.sep):
             source_path = self._path[:-1]
         target_path = target._path
