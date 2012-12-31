@@ -1178,9 +1178,10 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python2.7
-##     def get_relative_path(self):
+##     def get_relative_path(self, context=None, *arguments, **keywords):
     def get_relative_path(
-        self: boostNode.extension.type.Self
+        self: boostNode.extension.type.Self, *arguments: builtins.object,
+        context=None, **keywords: builtins.object
     ) -> builtins.str:
 ##
         '''
@@ -1207,7 +1208,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ...     location='../../').relative_path == '..' + os.sep + '..'
             True
         '''
-        return os.path.relpath(self._path)
+        if context is None:
+            return os.path.relpath(self._path, *arguments, **keywords)
+        return os.path.relpath(
+            self._path, *arguments, start=self.__class__(
+                location=context, must_exist=False)._path,
+            **keywords)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python2.7
@@ -1401,12 +1407,14 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
                     else:
                         self._encoding = keywords['encoding']
 ## python2.7
-##                     path = self._path
 ##                     with codecs.open(
-##                         path, mode, *arguments, **keywords
+##                         self._path, mode, *arguments, **keywords
 ##                     ) as file:
-##                         self._content = builtins.str(file.read().encode(
-##                             self.DEFAULT_ENCODING))
+##                         try:
+##                             self._content = builtins.str(file.read().encode(
+##                                 self.DEFAULT_ENCODING))
+##                         except:
+##                             raise IOError(self._path)
                     with builtins.open(
                         self._path, mode, *arguments, **keywords
                     ) as file:
@@ -1497,9 +1505,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python2.7
-##     def get_portable_link_content(self, label='%s'):
+##     def get_portable_link_content(
+##         self, label='%s', relative=None, target_path=''
+##     ):
     def get_portable_link_content(
-        self: boostNode.extension.type.Self, label='%s'
+        self: boostNode.extension.type.Self, label='%s', relative=None,
+        target_path=''
     ) -> builtins.str:
 ##
         '''
@@ -1508,6 +1519,16 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
             "label" Label for better distinction with other text-based
                     files.
+            "relative" triggers if target should be referenced via relative
+                       path. If "True" relative path will be determined from
+                       current working directory, if a path or Handler object
+                       is provided this location will be used as context to
+                       determine relative path, if
+                       "boostNode.extension.type.Self" is provided target
+                       location will be used as context and if "False"
+                       (default) path will be referenced absolute.
+            "target_path" this method is only needed if relative is setted to
+                          "boostNode.extension.type.Self".
 
             Examples:
 
@@ -1524,7 +1545,9 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ).safe_substitute(
                 label=label,
                 size=builtins.int(self.size),
-                path=self._path.replace('%', '%%'),
+                path=self._determine_relative_path(
+                    relative, target_path
+                ).replace('%', '%%'),
                 name=self.name.replace('%', '%%')))
         return self._portable_link_content
 
@@ -1564,7 +1587,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ... ).extension_suffix
             ''
         '''
-        return ('.' + self.extension) if self._has_extension else ''
+        return (os.extsep + self.extension) if self._has_extension else ''
 
             # endregion
 
@@ -1856,7 +1879,8 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         if extension:
             self._has_extension = True
             return self.set_name(
-                name=self.basename + '.' + extension, *arguments, **keywords)
+                name=self.basename + os.extsep + extension, *arguments,
+                **keywords)
         return self.is_element()
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -2917,7 +2941,13 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
                     files should be made. If target exists it will be
                     overwritten if set to "True".
             "relative" triggers if target should be referenced via relative
-                       path.
+                       path. If "True" relative path will be determined from
+                       current working directory, if a path or Handler object
+                       is provided this location will be used as context to
+                       determine relative path, if
+                       "boostNode.extension.type.Self" is provided target
+                       location will be used as context and if "False"
+                       (default) path will be referenced absolute.
 
             Examples:
 
@@ -3174,12 +3204,15 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python2.7
-##     def make_portable_link(self, target, force=False, label=''):
+##     def make_portable_link(
+##         self, target, force=False, label='', *arguments, **keywords
+##     ):
     def make_portable_link(
         self: boostNode.extension.type.Self,
         target: (boostNode.extension.type.SelfClassObject,
                  builtins.str),
-        force=False, label=''
+        force=False, label='', *arguments: (builtins.object, builtins.type),
+        **keywords: (builtins.object, builtins.type)
     ) -> builtins.bool:
 ##
         '''
@@ -3219,7 +3252,8 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             target.remove_deep()
         if not label:
             label = self.__class__.__name__
-        target.content = self.portable_link_content % label
+        target.content = self.get_portable_link_content(
+            label, target_path=target._path, *arguments, **keywords)
         return target.is_portable_link()
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -3444,19 +3478,29 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python2.7
 ##     def _make_link(
-##         self, target, symbolic, *arguments, force=False, relative=false,
-##         **keywords
+##         self, target, symbolic, *arguments, **keywords
 ##     ):
     def _make_link(
         self: boostNode.extension.type.Self,
         target: (boostNode.extension.type.SelfClassObject, builtins.str),
         symbolic: builtins.bool, *arguments: builtins.object, force=False,
-        relative=False, **keywords: builtins.object
+        relative=None, **keywords: builtins.object
     ):
 ##
         '''
             Makes hard or softlinks and handles the optional force option.
         '''
+## python2.7
+##         force = False
+##         if 'force' in keywords:
+##             force = keywords['force']
+##             del keywords['force']
+##         relative = None
+##         if 'relative' in keywords:
+##             relative = keywords['relative']
+##             del keywords['relative']
+        pass
+##
         target = self.__class__(location=target, must_exist=False)
         if force:
             return self._make_forced_link(
@@ -3621,7 +3665,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             True
         '''
         if location is None:
-            location = '.'
+            location = os.curdir
         elif builtins.isinstance(location, self.__class__):
             location = location._path
         return location
@@ -3698,13 +3742,15 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python2.7
-##     def _make_forced_link(self, symbolic, target, *arguments, **keywords):
+##     def _make_forced_link(
+##         self, symbolic, target, relative, *arguments, **keywords
+##     ):
     def _make_forced_link(
         self: boostNode.extension.type.Self,
         symbolic: builtins.bool,
         target: boostNode.extension.type.SelfClassObject,
-        relative: builtins.bool, *arguments: builtins.object,
-        **keywords: builtins.object
+        relative: (builtins.object, builtins.type),
+        *arguments: builtins.object, **keywords: builtins.object
     ) -> builtins.bool:
 ##
         '''
@@ -3745,8 +3791,8 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
     def _make_platform_dependent_link(
         self: boostNode.extension.type.Self, symbolic: builtins.bool,
         target: boostNode.extension.type.SelfClassObject,
-        relative: builtins.bool, *arguments: builtins.object,
-        **keywords: builtins.object
+        relative: (builtins.object, builtins.type),
+        *arguments: builtins.object, **keywords: builtins.object
     ) -> builtins.bool:
 ##
         '''
@@ -3759,16 +3805,17 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ...     target=Handler(
             ...         __test_folder__ +
             ...         '_make_platform_dependent_link',
-            ...     must_exist=False)
+            ...         must_exist=False),
+            ...     relative=False
             ... ) # doctest: +ELLIPSIS
             True
         '''
-        source_path = self.relative_path if relative else self._path
-        if self._path.endswith(os.sep):
-            source_path = self._path[:-1]
         target_path = target._path
         if target._path[-1] == os.sep:
             target_path = target._path[:-1]
+        source_path = self._determine_relative_path(relative, target_path)
+        if source_path.endswith(os.sep):
+            source_path = source_path[:-1]
         operating_system =\
             boostNode.extension.system.Platform().operating_system
         if symbolic:
@@ -3789,14 +3836,42 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
                         target_is_directory=self.is_directory())
 ##
                 else:
-                    os.symlink(
-                        source_path, target_path, *arguments, **keywords)
+                    os.symlink(source_path, target_path)
             except(builtins.AttributeError, builtins.NotImplementedError):
                 return self.make_portable_link(target, *arguments, **keywords)
             else:
                 return target.is_symbolic_link()
         os.link(source_path, target_path)
         return target.is_file()
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python2.7
+##     def _determine_relative_path(self, relative, target_path):
+    def _determine_relative_path(
+        self: boostNode.extension.type.Self,
+        relative: (builtins.object, builtins.type),
+        target_path: builtins.str
+    ) -> builtins.str:
+##
+        '''
+            Determines relative depending on given requirements defined by
+            "relative".
+        '''
+        if relative:
+            if relative is boostNode.extension.type.Self:
+                '''
+                    NOTE: "target_path" is one level to deep because references
+                    are save in parent directory.
+                '''
+                return self.get_relative_path(
+                    context=self.__class__(
+                        location=target_path, must_exist=False,
+                        respect_root_path=False
+                    ).directory_path)
+            if builtins.isinstance(relative, (builtins.str, self.__class__)):
+                return self.get_relative_path(context=relative)
+            return self.relative_path
+        return self._path
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python2.7

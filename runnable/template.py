@@ -215,6 +215,8 @@ class Parser(
     native_template_object = None
     '''Template file handler.'''
     file = None
+    '''Saves previous initially defined escape symbole.'''
+    right_escaped = ''
 
         # endregion
 
@@ -229,7 +231,6 @@ class Parser(
     _placeholder_name_pattern = ''
     _left_code_delimiter = ''
     _right_code_delimiter = ''
-    _right_escaped = ''
     _placeholder_pattern = ''
     _template_pattern = ''
     _native_template_pattern = ''
@@ -555,7 +556,7 @@ class Parser(
                     self._right_code_delimiter
                 ).validate_regex(),
                 placeholder=self._placeholder_name_pattern,
-                right_escaped=self._right_escaped),
+                right_escaped=self.right_escaped),
             re.MULTILINE
         ).sub(self._render_code, self.content)
         mapping.update(keywords)
@@ -698,19 +699,21 @@ class Parser(
                 Line 11-12: None code
                 Line 13: Empty Line
         '''
-        _new_line = True
-        _indent = 0
-        _count_lines = 0
-        _count_no_lines = 0
-        _current_rendered_content_line_number = 0
-        _code_dependend_indents = []
-        _line_shifts = []
-        _empty_lines = []
+        '''Make needed runtime properties to instance properties.'''
+        self._new_line = True
+        self._indent = 0
+        self._count_lines = 0
+        self._count_no_lines = 0
+        self._current_rendered_content_line_number = 0
+        self._code_dependend_indents = []
+        self._line_shifts = []
+        self._empty_lines = []
+
+        self.right_escaped = right_escaped
 
         self._placeholder_name_pattern = placeholder_name_pattern
         self._left_code_delimiter = left_code_delimiter
         self._right_code_delimiter = right_code_delimiter
-        self._right_escaped = right_escaped
         self._placeholder_pattern = placeholder_pattern
         self._template_context_default_indent = template_context_default_indent
         self._template_pattern = template_pattern
