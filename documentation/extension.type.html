@@ -1,14 +1,495 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html><head><title>Python: module type</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head><body bgcolor="#f0f0f8">
 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
 <tr bgcolor="#7799ee">
 <td valign=bottom>&nbsp;<br>
-<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>type</strong></big></big></font></td
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>type</strong></big></big> (version 1.0)</font></td
 ><td align=right valign=bottom
 ><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/data/repositories/boostNode/extension/type.py">/data/repositories/boostNode/extension/type.py</a></font></td></tr></table>
-    <p><tt>#&nbsp;-*-&nbsp;coding:&nbsp;utf-8&nbsp;-*-</tt></p>
+    <p><tt>This&nbsp;module&nbsp;provides&nbsp;mostly&nbsp;dynamic&nbsp;types/classes&nbsp;for&nbsp;checking&nbsp;function<br>
+call's&nbsp;against&nbsp;a&nbsp;given&nbsp;signature.&nbsp;Dynamic&nbsp;classes&nbsp;means&nbsp;they&nbsp;depend&nbsp;on<br>
+their&nbsp;context.</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="boostNode.html">boostNode</a><br>
+<a href="__builtin__.html">__builtin__</a><br>
+</td><td width="25%" valign=top><a href="inspect.html">inspect</a><br>
+<a href="os.html">os</a><br>
+</td><td width="25%" valign=top><a href="sys.html">sys</a><br>
+</td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="boostNode.paradigm.objectOrientation.html#Class">boostNode.paradigm.objectOrientation.Class</a>(<a href="__builtin__.html#object">__builtin__.object</a>)
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="type.html#Self">Self</a>
+</font></dt><dt><font face="helvetica, arial"><a href="type.html#SelfClass">SelfClass</a>
+</font></dt><dt><font face="helvetica, arial"><a href="type.html#SelfClassObject">SelfClassObject</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Self">class <strong>Self</strong></a>(<a href="boostNode.paradigm.objectOrientation.html#Class">boostNode.paradigm.objectOrientation.Class</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Type&nbsp;for&nbsp;defining&nbsp;the&nbsp;current&nbsp;object&nbsp;of&nbsp;its&nbsp;method.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="type.html#Self">Self</a></dd>
+<dd><a href="boostNode.paradigm.objectOrientation.html#Class">boostNode.paradigm.objectOrientation.Class</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods inherited from <a href="boostNode.paradigm.objectOrientation.html#Class">boostNode.paradigm.objectOrientation.Class</a>:<br>
+<dl><dt><a name="Self-__getattr__"><strong>__getattr__</strong></a>(self, name)</dt><dd><tt>Is&nbsp;triggered&nbsp;if&nbsp;a&nbsp;property&nbsp;was&nbsp;tried&nbsp;to&nbsp;be&nbsp;read&nbsp;but&nbsp;is<br>
+inaccessible.<br>
+&nbsp;<br>
+"name"&nbsp;is&nbsp;the&nbsp;inaccessible&nbsp;property&nbsp;name.<br>
+&nbsp;<br>
+Should&nbsp;return&nbsp;the&nbsp;current&nbsp;value&nbsp;of&nbsp;the&nbsp;given<br>
+property&nbsp;name&nbsp;depends&nbsp;on&nbsp;its&nbsp;getter&nbsp;method.<br>
+Returns&nbsp;"None"&nbsp;if&nbsp;no&nbsp;getter&nbsp;method&nbsp;is&nbsp;accessible.<br>
+&nbsp;<br>
+Examples:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;class&nbsp;TestA(<a href="boostNode.paradigm.objectOrientation.html#Class">Class</a>):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_a&nbsp;=&nbsp;'hans'<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;def&nbsp;get_a(self):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;self.<strong>_a</strong><br>
+&gt;&gt;&gt;&nbsp;TestA().a<br>
+'hans'<br>
+&gt;&gt;&gt;&nbsp;class&nbsp;TestB(<a href="boostNode.paradigm.objectOrientation.html#Class">Class</a>):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_a&nbsp;=&nbsp;''<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_b&nbsp;=&nbsp;''<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;def&nbsp;<a href="#Self-__init__">__init__</a>(self):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.<strong>_a</strong>&nbsp;=&nbsp;'hans'<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.<strong>_b</strong>&nbsp;=&nbsp;'also&nbsp;hans'<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;def&nbsp;get(self,&nbsp;name):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;name&nbsp;in&nbsp;('_a',&nbsp;'_b'):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;self.<strong>__dict__</strong>[name]<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;None<br>
+&gt;&gt;&gt;&nbsp;TestB().b<br>
+'also&nbsp;hans'</tt></dd></dl>
 
+<dl><dt><a name="Self-__setattr__"><strong>__setattr__</strong></a>(self, name, value)</dt><dd><tt>Is&nbsp;triggered&nbsp;if&nbsp;a&nbsp;property&nbsp;was&nbsp;tried&nbsp;to&nbsp;overwrite&nbsp;but&nbsp;is<br>
+inaccessible.<br>
+&nbsp;<br>
+"name"&nbsp;is&nbsp;the&nbsp;inaccessible&nbsp;property&nbsp;name.<br>
+"value"&nbsp;is&nbsp;the&nbsp;new&nbsp;value&nbsp;for&nbsp;the&nbsp;given&nbsp;property&nbsp;name.<br>
+&nbsp;<br>
+Returns&nbsp;the&nbsp;new&nbsp;value&nbsp;of&nbsp;the&nbsp;given&nbsp;property&nbsp;name<br>
+depending&nbsp;on&nbsp;the&nbsp;presence&nbsp;of&nbsp;setter&nbsp;method<br>
+otherwise&nbsp;"None"&nbsp;is&nbsp;returned.<br>
+&nbsp;<br>
+Examples:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;class&nbsp;TestA(<a href="boostNode.paradigm.objectOrientation.html#Class">Class</a>):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_a&nbsp;=&nbsp;'hans'<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;def&nbsp;set_a(self,&nbsp;value):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.<strong>_a</strong>&nbsp;=&nbsp;'Not&nbsp;only&nbsp;'&nbsp;+&nbsp;value&nbsp;+&nbsp;'.&nbsp;Also&nbsp;hans.'<br>
+&gt;&gt;&gt;&nbsp;test_a&nbsp;=&nbsp;TestA()<br>
+&gt;&gt;&gt;&nbsp;test_a.a&nbsp;=&nbsp;'peter'<br>
+&gt;&gt;&gt;&nbsp;test_a._a<br>
+'Not&nbsp;only&nbsp;peter.&nbsp;Also&nbsp;hans.'<br>
+&gt;&gt;&gt;&nbsp;class&nbsp;TestB(<a href="boostNode.paradigm.objectOrientation.html#Class">Class</a>):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_a&nbsp;=&nbsp;''<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_b&nbsp;=&nbsp;''<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;def&nbsp;<a href="#Self-__init__">__init__</a>(self):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.<strong>_a</strong>&nbsp;=&nbsp;'hans'<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.<strong>_b</strong>&nbsp;=&nbsp;'also&nbsp;hans'<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;def&nbsp;set(self,&nbsp;name,&nbsp;value):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;name&nbsp;in&nbsp;('_a',&nbsp;'_b'):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.<strong>__dict__</strong>[name]&nbsp;=&nbsp;'hans&nbsp;and&nbsp;'&nbsp;+&nbsp;value<br>
+&gt;&gt;&gt;&nbsp;test_b&nbsp;=&nbsp;TestB()<br>
+&gt;&gt;&gt;&nbsp;test_b.a&nbsp;=&nbsp;'peter'<br>
+&gt;&gt;&gt;&nbsp;test_b._a<br>
+'hans&nbsp;and&nbsp;peter'</tt></dd></dl>
+
+<dl><dt><a name="Self-is_method"><strong>is_method</strong></a>(self, name)</dt><dd><tt>Determines&nbsp;if&nbsp;the&nbsp;given&nbsp;class&nbsp;attribute&nbsp;is&nbsp;a&nbsp;callable&nbsp;method&nbsp;or<br>
+something&nbsp;else.<br>
+&nbsp;<br>
+Returns&nbsp;"True"&nbsp;if&nbsp;the&nbsp;given&nbsp;attribute&nbsp;is&nbsp;a&nbsp;method&nbsp;or&nbsp;"False"<br>
+otherwise.<br>
+&nbsp;<br>
+"<a href="#Self-is_property">is_property</a>()"<br>
+&nbsp;<br>
+Examples:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;<a href="boostNode.paradigm.objectOrientation.html#Class">Class</a>().<a href="#Self-is_method">is_method</a>('is_method')<br>
+True<br>
+&gt;&gt;&gt;&nbsp;<a href="boostNode.paradigm.objectOrientation.html#Class">Class</a>().<a href="#Self-is_method">is_method</a>('not&nbsp;existing')<br>
+False</tt></dd></dl>
+
+<dl><dt><a name="Self-is_property"><strong>is_property</strong></a>(self, name)</dt><dd><tt>Determines&nbsp;if&nbsp;the&nbsp;given&nbsp;class&nbsp;attribute&nbsp;is&nbsp;a&nbsp;property&nbsp;or<br>
+something&nbsp;else.<br>
+&nbsp;<br>
+Returns&nbsp;"True"&nbsp;if&nbsp;the&nbsp;given&nbsp;attribute&nbsp;is&nbsp;a&nbsp;property&nbsp;or&nbsp;"False"<br>
+otherwise.<br>
+&nbsp;<br>
+Examples:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;<a href="boostNode.paradigm.objectOrientation.html#Class">Class</a>().<a href="#Self-is_property">is_property</a>('is_property')<br>
+False<br>
+&gt;&gt;&gt;&nbsp;<a href="boostNode.paradigm.objectOrientation.html#Class">Class</a>.test&nbsp;=&nbsp;'A'<br>
+&gt;&gt;&gt;&nbsp;<a href="boostNode.paradigm.objectOrientation.html#Class">Class</a>().<a href="#Self-is_property">is_property</a>('test')<br>
+True</tt></dd></dl>
+
+<hr>
+Class methods inherited from <a href="boostNode.paradigm.objectOrientation.html#Class">boostNode.paradigm.objectOrientation.Class</a>:<br>
+<dl><dt><a name="Self-__repr__"><strong>__repr__</strong></a>(cls)<font color="#909090"><font face="helvetica, arial"> from <a href="__builtin__.html#type">__builtin__.type</a></font></font></dt><dd><tt>Invokes&nbsp;if&nbsp;this&nbsp;object&nbsp;should&nbsp;describe&nbsp;itself&nbsp;by&nbsp;a&nbsp;string.<br>
+&nbsp;<br>
+Examples:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;repr(<a href="boostNode.paradigm.objectOrientation.html#Class">Class</a>())<br>
+'Object&nbsp;of&nbsp;"<a href="boostNode.paradigm.objectOrientation.html#Class">Class</a>".'</tt></dd></dl>
+
+<dl><dt><a name="Self-__str__"><strong>__str__</strong></a>(cls)<font color="#909090"><font face="helvetica, arial"> from <a href="__builtin__.html#type">__builtin__.type</a></font></font></dt><dd><tt>Is&nbsp;triggered&nbsp;if&nbsp;the&nbsp;current&nbsp;object&nbsp;is&nbsp;tried&nbsp;to&nbsp;be&nbsp;converted&nbsp;into&nbsp;a<br>
+string&nbsp;object.<br>
+&nbsp;<br>
+It&nbsp;returns&nbsp;the&nbsp;output&nbsp;buffer&nbsp;as&nbsp;string.<br>
+&nbsp;<br>
+Examples:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;class&nbsp;Test(<a href="boostNode.paradigm.objectOrientation.html#Class">Class</a>):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;def&nbsp;<a href="#Self-__init__">__init__</a>(self):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pass<br>
+&gt;&gt;&gt;&nbsp;Test()<br>
+Object&nbsp;of&nbsp;"Test".</tt></dd></dl>
+
+<hr>
+Data descriptors inherited from <a href="boostNode.paradigm.objectOrientation.html#Class">boostNode.paradigm.objectOrientation.Class</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="SelfClass">class <strong>SelfClass</strong></a>(<a href="boostNode.paradigm.objectOrientation.html#Class">boostNode.paradigm.objectOrientation.Class</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Type&nbsp;for&nbsp;defining&nbsp;the&nbsp;current&nbsp;object&nbsp;of&nbsp;its&nbsp;method.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="type.html#SelfClass">SelfClass</a></dd>
+<dd><a href="boostNode.paradigm.objectOrientation.html#Class">boostNode.paradigm.objectOrientation.Class</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods inherited from <a href="boostNode.paradigm.objectOrientation.html#Class">boostNode.paradigm.objectOrientation.Class</a>:<br>
+<dl><dt><a name="SelfClass-__getattr__"><strong>__getattr__</strong></a>(self, name)</dt><dd><tt>Is&nbsp;triggered&nbsp;if&nbsp;a&nbsp;property&nbsp;was&nbsp;tried&nbsp;to&nbsp;be&nbsp;read&nbsp;but&nbsp;is<br>
+inaccessible.<br>
+&nbsp;<br>
+"name"&nbsp;is&nbsp;the&nbsp;inaccessible&nbsp;property&nbsp;name.<br>
+&nbsp;<br>
+Should&nbsp;return&nbsp;the&nbsp;current&nbsp;value&nbsp;of&nbsp;the&nbsp;given<br>
+property&nbsp;name&nbsp;depends&nbsp;on&nbsp;its&nbsp;getter&nbsp;method.<br>
+Returns&nbsp;"None"&nbsp;if&nbsp;no&nbsp;getter&nbsp;method&nbsp;is&nbsp;accessible.<br>
+&nbsp;<br>
+Examples:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;class&nbsp;TestA(<a href="boostNode.paradigm.objectOrientation.html#Class">Class</a>):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_a&nbsp;=&nbsp;'hans'<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;def&nbsp;get_a(self):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;self.<strong>_a</strong><br>
+&gt;&gt;&gt;&nbsp;TestA().a<br>
+'hans'<br>
+&gt;&gt;&gt;&nbsp;class&nbsp;TestB(<a href="boostNode.paradigm.objectOrientation.html#Class">Class</a>):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_a&nbsp;=&nbsp;''<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_b&nbsp;=&nbsp;''<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;def&nbsp;<a href="#SelfClass-__init__">__init__</a>(self):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.<strong>_a</strong>&nbsp;=&nbsp;'hans'<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.<strong>_b</strong>&nbsp;=&nbsp;'also&nbsp;hans'<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;def&nbsp;get(self,&nbsp;name):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;name&nbsp;in&nbsp;('_a',&nbsp;'_b'):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;self.<strong>__dict__</strong>[name]<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;None<br>
+&gt;&gt;&gt;&nbsp;TestB().b<br>
+'also&nbsp;hans'</tt></dd></dl>
+
+<dl><dt><a name="SelfClass-__setattr__"><strong>__setattr__</strong></a>(self, name, value)</dt><dd><tt>Is&nbsp;triggered&nbsp;if&nbsp;a&nbsp;property&nbsp;was&nbsp;tried&nbsp;to&nbsp;overwrite&nbsp;but&nbsp;is<br>
+inaccessible.<br>
+&nbsp;<br>
+"name"&nbsp;is&nbsp;the&nbsp;inaccessible&nbsp;property&nbsp;name.<br>
+"value"&nbsp;is&nbsp;the&nbsp;new&nbsp;value&nbsp;for&nbsp;the&nbsp;given&nbsp;property&nbsp;name.<br>
+&nbsp;<br>
+Returns&nbsp;the&nbsp;new&nbsp;value&nbsp;of&nbsp;the&nbsp;given&nbsp;property&nbsp;name<br>
+depending&nbsp;on&nbsp;the&nbsp;presence&nbsp;of&nbsp;setter&nbsp;method<br>
+otherwise&nbsp;"None"&nbsp;is&nbsp;returned.<br>
+&nbsp;<br>
+Examples:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;class&nbsp;TestA(<a href="boostNode.paradigm.objectOrientation.html#Class">Class</a>):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_a&nbsp;=&nbsp;'hans'<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;def&nbsp;set_a(self,&nbsp;value):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.<strong>_a</strong>&nbsp;=&nbsp;'Not&nbsp;only&nbsp;'&nbsp;+&nbsp;value&nbsp;+&nbsp;'.&nbsp;Also&nbsp;hans.'<br>
+&gt;&gt;&gt;&nbsp;test_a&nbsp;=&nbsp;TestA()<br>
+&gt;&gt;&gt;&nbsp;test_a.a&nbsp;=&nbsp;'peter'<br>
+&gt;&gt;&gt;&nbsp;test_a._a<br>
+'Not&nbsp;only&nbsp;peter.&nbsp;Also&nbsp;hans.'<br>
+&gt;&gt;&gt;&nbsp;class&nbsp;TestB(<a href="boostNode.paradigm.objectOrientation.html#Class">Class</a>):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_a&nbsp;=&nbsp;''<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_b&nbsp;=&nbsp;''<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;def&nbsp;<a href="#SelfClass-__init__">__init__</a>(self):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.<strong>_a</strong>&nbsp;=&nbsp;'hans'<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.<strong>_b</strong>&nbsp;=&nbsp;'also&nbsp;hans'<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;def&nbsp;set(self,&nbsp;name,&nbsp;value):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;name&nbsp;in&nbsp;('_a',&nbsp;'_b'):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.<strong>__dict__</strong>[name]&nbsp;=&nbsp;'hans&nbsp;and&nbsp;'&nbsp;+&nbsp;value<br>
+&gt;&gt;&gt;&nbsp;test_b&nbsp;=&nbsp;TestB()<br>
+&gt;&gt;&gt;&nbsp;test_b.a&nbsp;=&nbsp;'peter'<br>
+&gt;&gt;&gt;&nbsp;test_b._a<br>
+'hans&nbsp;and&nbsp;peter'</tt></dd></dl>
+
+<dl><dt><a name="SelfClass-is_method"><strong>is_method</strong></a>(self, name)</dt><dd><tt>Determines&nbsp;if&nbsp;the&nbsp;given&nbsp;class&nbsp;attribute&nbsp;is&nbsp;a&nbsp;callable&nbsp;method&nbsp;or<br>
+something&nbsp;else.<br>
+&nbsp;<br>
+Returns&nbsp;"True"&nbsp;if&nbsp;the&nbsp;given&nbsp;attribute&nbsp;is&nbsp;a&nbsp;method&nbsp;or&nbsp;"False"<br>
+otherwise.<br>
+&nbsp;<br>
+"<a href="#SelfClass-is_property">is_property</a>()"<br>
+&nbsp;<br>
+Examples:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;<a href="boostNode.paradigm.objectOrientation.html#Class">Class</a>().<a href="#SelfClass-is_method">is_method</a>('is_method')<br>
+True<br>
+&gt;&gt;&gt;&nbsp;<a href="boostNode.paradigm.objectOrientation.html#Class">Class</a>().<a href="#SelfClass-is_method">is_method</a>('not&nbsp;existing')<br>
+False</tt></dd></dl>
+
+<dl><dt><a name="SelfClass-is_property"><strong>is_property</strong></a>(self, name)</dt><dd><tt>Determines&nbsp;if&nbsp;the&nbsp;given&nbsp;class&nbsp;attribute&nbsp;is&nbsp;a&nbsp;property&nbsp;or<br>
+something&nbsp;else.<br>
+&nbsp;<br>
+Returns&nbsp;"True"&nbsp;if&nbsp;the&nbsp;given&nbsp;attribute&nbsp;is&nbsp;a&nbsp;property&nbsp;or&nbsp;"False"<br>
+otherwise.<br>
+&nbsp;<br>
+Examples:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;<a href="boostNode.paradigm.objectOrientation.html#Class">Class</a>().<a href="#SelfClass-is_property">is_property</a>('is_property')<br>
+False<br>
+&gt;&gt;&gt;&nbsp;<a href="boostNode.paradigm.objectOrientation.html#Class">Class</a>.test&nbsp;=&nbsp;'A'<br>
+&gt;&gt;&gt;&nbsp;<a href="boostNode.paradigm.objectOrientation.html#Class">Class</a>().<a href="#SelfClass-is_property">is_property</a>('test')<br>
+True</tt></dd></dl>
+
+<hr>
+Class methods inherited from <a href="boostNode.paradigm.objectOrientation.html#Class">boostNode.paradigm.objectOrientation.Class</a>:<br>
+<dl><dt><a name="SelfClass-__repr__"><strong>__repr__</strong></a>(cls)<font color="#909090"><font face="helvetica, arial"> from <a href="__builtin__.html#type">__builtin__.type</a></font></font></dt><dd><tt>Invokes&nbsp;if&nbsp;this&nbsp;object&nbsp;should&nbsp;describe&nbsp;itself&nbsp;by&nbsp;a&nbsp;string.<br>
+&nbsp;<br>
+Examples:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;repr(<a href="boostNode.paradigm.objectOrientation.html#Class">Class</a>())<br>
+'Object&nbsp;of&nbsp;"<a href="boostNode.paradigm.objectOrientation.html#Class">Class</a>".'</tt></dd></dl>
+
+<dl><dt><a name="SelfClass-__str__"><strong>__str__</strong></a>(cls)<font color="#909090"><font face="helvetica, arial"> from <a href="__builtin__.html#type">__builtin__.type</a></font></font></dt><dd><tt>Is&nbsp;triggered&nbsp;if&nbsp;the&nbsp;current&nbsp;object&nbsp;is&nbsp;tried&nbsp;to&nbsp;be&nbsp;converted&nbsp;into&nbsp;a<br>
+string&nbsp;object.<br>
+&nbsp;<br>
+It&nbsp;returns&nbsp;the&nbsp;output&nbsp;buffer&nbsp;as&nbsp;string.<br>
+&nbsp;<br>
+Examples:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;class&nbsp;Test(<a href="boostNode.paradigm.objectOrientation.html#Class">Class</a>):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;def&nbsp;<a href="#SelfClass-__init__">__init__</a>(self):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pass<br>
+&gt;&gt;&gt;&nbsp;Test()<br>
+Object&nbsp;of&nbsp;"Test".</tt></dd></dl>
+
+<hr>
+Data descriptors inherited from <a href="boostNode.paradigm.objectOrientation.html#Class">boostNode.paradigm.objectOrientation.Class</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="SelfClassObject">class <strong>SelfClassObject</strong></a>(<a href="boostNode.paradigm.objectOrientation.html#Class">boostNode.paradigm.objectOrientation.Class</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Type&nbsp;for&nbsp;defining&nbsp;the&nbsp;current&nbsp;object&nbsp;of&nbsp;its&nbsp;method.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="type.html#SelfClassObject">SelfClassObject</a></dd>
+<dd><a href="boostNode.paradigm.objectOrientation.html#Class">boostNode.paradigm.objectOrientation.Class</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods inherited from <a href="boostNode.paradigm.objectOrientation.html#Class">boostNode.paradigm.objectOrientation.Class</a>:<br>
+<dl><dt><a name="SelfClassObject-__getattr__"><strong>__getattr__</strong></a>(self, name)</dt><dd><tt>Is&nbsp;triggered&nbsp;if&nbsp;a&nbsp;property&nbsp;was&nbsp;tried&nbsp;to&nbsp;be&nbsp;read&nbsp;but&nbsp;is<br>
+inaccessible.<br>
+&nbsp;<br>
+"name"&nbsp;is&nbsp;the&nbsp;inaccessible&nbsp;property&nbsp;name.<br>
+&nbsp;<br>
+Should&nbsp;return&nbsp;the&nbsp;current&nbsp;value&nbsp;of&nbsp;the&nbsp;given<br>
+property&nbsp;name&nbsp;depends&nbsp;on&nbsp;its&nbsp;getter&nbsp;method.<br>
+Returns&nbsp;"None"&nbsp;if&nbsp;no&nbsp;getter&nbsp;method&nbsp;is&nbsp;accessible.<br>
+&nbsp;<br>
+Examples:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;class&nbsp;TestA(<a href="boostNode.paradigm.objectOrientation.html#Class">Class</a>):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_a&nbsp;=&nbsp;'hans'<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;def&nbsp;get_a(self):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;self.<strong>_a</strong><br>
+&gt;&gt;&gt;&nbsp;TestA().a<br>
+'hans'<br>
+&gt;&gt;&gt;&nbsp;class&nbsp;TestB(<a href="boostNode.paradigm.objectOrientation.html#Class">Class</a>):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_a&nbsp;=&nbsp;''<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_b&nbsp;=&nbsp;''<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;def&nbsp;<a href="#SelfClassObject-__init__">__init__</a>(self):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.<strong>_a</strong>&nbsp;=&nbsp;'hans'<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.<strong>_b</strong>&nbsp;=&nbsp;'also&nbsp;hans'<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;def&nbsp;get(self,&nbsp;name):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;name&nbsp;in&nbsp;('_a',&nbsp;'_b'):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;self.<strong>__dict__</strong>[name]<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;None<br>
+&gt;&gt;&gt;&nbsp;TestB().b<br>
+'also&nbsp;hans'</tt></dd></dl>
+
+<dl><dt><a name="SelfClassObject-__setattr__"><strong>__setattr__</strong></a>(self, name, value)</dt><dd><tt>Is&nbsp;triggered&nbsp;if&nbsp;a&nbsp;property&nbsp;was&nbsp;tried&nbsp;to&nbsp;overwrite&nbsp;but&nbsp;is<br>
+inaccessible.<br>
+&nbsp;<br>
+"name"&nbsp;is&nbsp;the&nbsp;inaccessible&nbsp;property&nbsp;name.<br>
+"value"&nbsp;is&nbsp;the&nbsp;new&nbsp;value&nbsp;for&nbsp;the&nbsp;given&nbsp;property&nbsp;name.<br>
+&nbsp;<br>
+Returns&nbsp;the&nbsp;new&nbsp;value&nbsp;of&nbsp;the&nbsp;given&nbsp;property&nbsp;name<br>
+depending&nbsp;on&nbsp;the&nbsp;presence&nbsp;of&nbsp;setter&nbsp;method<br>
+otherwise&nbsp;"None"&nbsp;is&nbsp;returned.<br>
+&nbsp;<br>
+Examples:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;class&nbsp;TestA(<a href="boostNode.paradigm.objectOrientation.html#Class">Class</a>):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_a&nbsp;=&nbsp;'hans'<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;def&nbsp;set_a(self,&nbsp;value):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.<strong>_a</strong>&nbsp;=&nbsp;'Not&nbsp;only&nbsp;'&nbsp;+&nbsp;value&nbsp;+&nbsp;'.&nbsp;Also&nbsp;hans.'<br>
+&gt;&gt;&gt;&nbsp;test_a&nbsp;=&nbsp;TestA()<br>
+&gt;&gt;&gt;&nbsp;test_a.a&nbsp;=&nbsp;'peter'<br>
+&gt;&gt;&gt;&nbsp;test_a._a<br>
+'Not&nbsp;only&nbsp;peter.&nbsp;Also&nbsp;hans.'<br>
+&gt;&gt;&gt;&nbsp;class&nbsp;TestB(<a href="boostNode.paradigm.objectOrientation.html#Class">Class</a>):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_a&nbsp;=&nbsp;''<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_b&nbsp;=&nbsp;''<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;def&nbsp;<a href="#SelfClassObject-__init__">__init__</a>(self):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.<strong>_a</strong>&nbsp;=&nbsp;'hans'<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.<strong>_b</strong>&nbsp;=&nbsp;'also&nbsp;hans'<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;def&nbsp;set(self,&nbsp;name,&nbsp;value):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;name&nbsp;in&nbsp;('_a',&nbsp;'_b'):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.<strong>__dict__</strong>[name]&nbsp;=&nbsp;'hans&nbsp;and&nbsp;'&nbsp;+&nbsp;value<br>
+&gt;&gt;&gt;&nbsp;test_b&nbsp;=&nbsp;TestB()<br>
+&gt;&gt;&gt;&nbsp;test_b.a&nbsp;=&nbsp;'peter'<br>
+&gt;&gt;&gt;&nbsp;test_b._a<br>
+'hans&nbsp;and&nbsp;peter'</tt></dd></dl>
+
+<dl><dt><a name="SelfClassObject-is_method"><strong>is_method</strong></a>(self, name)</dt><dd><tt>Determines&nbsp;if&nbsp;the&nbsp;given&nbsp;class&nbsp;attribute&nbsp;is&nbsp;a&nbsp;callable&nbsp;method&nbsp;or<br>
+something&nbsp;else.<br>
+&nbsp;<br>
+Returns&nbsp;"True"&nbsp;if&nbsp;the&nbsp;given&nbsp;attribute&nbsp;is&nbsp;a&nbsp;method&nbsp;or&nbsp;"False"<br>
+otherwise.<br>
+&nbsp;<br>
+"<a href="#SelfClassObject-is_property">is_property</a>()"<br>
+&nbsp;<br>
+Examples:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;<a href="boostNode.paradigm.objectOrientation.html#Class">Class</a>().<a href="#SelfClassObject-is_method">is_method</a>('is_method')<br>
+True<br>
+&gt;&gt;&gt;&nbsp;<a href="boostNode.paradigm.objectOrientation.html#Class">Class</a>().<a href="#SelfClassObject-is_method">is_method</a>('not&nbsp;existing')<br>
+False</tt></dd></dl>
+
+<dl><dt><a name="SelfClassObject-is_property"><strong>is_property</strong></a>(self, name)</dt><dd><tt>Determines&nbsp;if&nbsp;the&nbsp;given&nbsp;class&nbsp;attribute&nbsp;is&nbsp;a&nbsp;property&nbsp;or<br>
+something&nbsp;else.<br>
+&nbsp;<br>
+Returns&nbsp;"True"&nbsp;if&nbsp;the&nbsp;given&nbsp;attribute&nbsp;is&nbsp;a&nbsp;property&nbsp;or&nbsp;"False"<br>
+otherwise.<br>
+&nbsp;<br>
+Examples:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;<a href="boostNode.paradigm.objectOrientation.html#Class">Class</a>().<a href="#SelfClassObject-is_property">is_property</a>('is_property')<br>
+False<br>
+&gt;&gt;&gt;&nbsp;<a href="boostNode.paradigm.objectOrientation.html#Class">Class</a>.test&nbsp;=&nbsp;'A'<br>
+&gt;&gt;&gt;&nbsp;<a href="boostNode.paradigm.objectOrientation.html#Class">Class</a>().<a href="#SelfClassObject-is_property">is_property</a>('test')<br>
+True</tt></dd></dl>
+
+<hr>
+Class methods inherited from <a href="boostNode.paradigm.objectOrientation.html#Class">boostNode.paradigm.objectOrientation.Class</a>:<br>
+<dl><dt><a name="SelfClassObject-__repr__"><strong>__repr__</strong></a>(cls)<font color="#909090"><font face="helvetica, arial"> from <a href="__builtin__.html#type">__builtin__.type</a></font></font></dt><dd><tt>Invokes&nbsp;if&nbsp;this&nbsp;object&nbsp;should&nbsp;describe&nbsp;itself&nbsp;by&nbsp;a&nbsp;string.<br>
+&nbsp;<br>
+Examples:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;repr(<a href="boostNode.paradigm.objectOrientation.html#Class">Class</a>())<br>
+'Object&nbsp;of&nbsp;"<a href="boostNode.paradigm.objectOrientation.html#Class">Class</a>".'</tt></dd></dl>
+
+<dl><dt><a name="SelfClassObject-__str__"><strong>__str__</strong></a>(cls)<font color="#909090"><font face="helvetica, arial"> from <a href="__builtin__.html#type">__builtin__.type</a></font></font></dt><dd><tt>Is&nbsp;triggered&nbsp;if&nbsp;the&nbsp;current&nbsp;object&nbsp;is&nbsp;tried&nbsp;to&nbsp;be&nbsp;converted&nbsp;into&nbsp;a<br>
+string&nbsp;object.<br>
+&nbsp;<br>
+It&nbsp;returns&nbsp;the&nbsp;output&nbsp;buffer&nbsp;as&nbsp;string.<br>
+&nbsp;<br>
+Examples:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;class&nbsp;Test(<a href="boostNode.paradigm.objectOrientation.html#Class">Class</a>):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;def&nbsp;<a href="#SelfClassObject-__init__">__init__</a>(self):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pass<br>
+&gt;&gt;&gt;&nbsp;Test()<br>
+Object&nbsp;of&nbsp;"Test".</tt></dd></dl>
+
+<hr>
+Data descriptors inherited from <a href="boostNode.paradigm.objectOrientation.html#Class">boostNode.paradigm.objectOrientation.Class</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>__author__</strong> = 'Torben Sickert'<br>
+<strong>__copyright__</strong> = 'see boostNode/__init__.py'<br>
+<strong>__credits__</strong> = ('Torben Sickert',)<br>
+<strong>__file_path__</strong> = '/data/repositories/boostNode/extension/type.py'<br>
+<strong>__license__</strong> = 'see boostNode/__init__.py'<br>
+<strong>__loaded__</strong> = True<br>
+<strong>__logger__</strong> = &lt;logging.Logger object&gt;<br>
+<strong>__maintainer__</strong> = 'Torben Sickert'<br>
+<strong>__maintainer_email__</strong> = 't.sickert@gmail.com'<br>
+<strong>__module_name__</strong> = 'type'<br>
+<strong>__status__</strong> = 'stable'<br>
+<strong>__test_mode__</strong> = False<br>
+<strong>__version__</strong> = '1.0'</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#7799ee">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Author</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#7799ee"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%">Torben&nbsp;Sickert</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#7799ee">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Credits</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#7799ee"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%">('Torben&nbsp;Sickert',)</td></tr></table>
 </body></html>
