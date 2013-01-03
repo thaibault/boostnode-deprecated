@@ -87,8 +87,11 @@ class Runnable:
             arguments = arguments[:-1]
             run = True
         childrens_module = inspect.getmodule(self.__class__)
+        caller_module = inspect.getmodule(inspect.stack()[2][0])
+        this_module = inspect.getmodule(inspect.stack()[0][0])
         try:
-            if(childrens_module.__name__ == '__main__' and
+            if(caller_module is this_module and
+               childrens_module.__name__ == '__main__' and
                not childrens_module.__test_mode__) or run:
                 self._run(*arguments, **keywords)
             else:

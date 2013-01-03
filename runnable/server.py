@@ -712,25 +712,30 @@ class CGIHTTPRequestHandler(http.server.CGIHTTPRequestHandler):
             It also through an exception and sends an http-error
             if request isn't valid.
         '''
-        self.requested_file = boostNode.extension.file.Handler(
-            location=self.server.web.root.path + self.path, must_exist=False)
-        self._authentication_location = self.server.web.root
-        if self.requested_file:
-            self._authentication_location = self.requested_file
-            if self.requested_file.is_file():
-                self._authentication_location =\
-                    boostNode.extension.file.Handler(
-                        location=self.requested_file.directory_path)
-        if self._is_authenticated():
-            if self._is_valid_request():
-                if self._create_environment_variables():
-                    if self._is_valid_reference():
-                        return self._set_dynamic_or_static_get(
-                            file_name=self.path)
-                elif self._default_get():
-                    return self
-            return self._send_no_file_error()
-        return self._send_no_authentication_error()
+        try:
+            self.requested_file = boostNode.extension.file.Handler(
+                location=self.server.web.root.path + self.path,
+                must_exist=False)
+            self._authentication_location = self.server.web.root
+            if self.requested_file:
+                self._authentication_location = self.requested_file
+                if self.requested_file.is_file():
+                    self._authentication_location =\
+                        boostNode.extension.file.Handler(
+                            location=self.requested_file.directory_path)
+            if self._is_authenticated():
+                if self._is_valid_request():
+                    if self._create_environment_variables():
+                        if self._is_valid_reference():
+                            return self._set_dynamic_or_static_get(
+                                file_name=self.path)
+                    elif self._default_get():
+                        return self
+                return self._send_no_file_error()
+            return self._send_no_authentication_error()
+        except socket.error:
+            __logger__.info('Connection interrupted.')
+        return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python2.7
@@ -1007,12 +1012,9 @@ class CGIHTTPRequestHandler(http.server.CGIHTTPRequestHandler):
         '''
             This method is called for each successful answered http-request.
         '''
-        try:
-            self.send_response(200)
-            self.send_header('Content-type', mimetype)
-            self.end_headers()
-        except socket.error:
-            __logger__.info('Connection interrupted.')
+        self.send_response(200)
+        self.send_header('Content-type', mimetype)
+        self.end_headers()
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -1062,10 +1064,7 @@ class CGIHTTPRequestHandler(http.server.CGIHTTPRequestHandler):
             if self.requested_file:
                 error_message +=\
                     '. Detected mime-type "%s"' % self.requested_file.mimetype
-        try:
-            self.send_error(404, error_message)
-        except socket.error:
-            __logger__.info('Connection interrupted.')
+        self.send_error(404, error_message)
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -1219,15 +1218,9 @@ class CGIHTTPRequestHandler(http.server.CGIHTTPRequestHandler):
         '''
             Handles a static file-request.
         '''
-        try:
-            self._send_positive_header(mimetype=self.requested_file.mimetype)
-        except socket.error:
-            __logger__.info('Connection interrupted.')
+        self._send_positive_header(mimetype=self.requested_file.mimetype)
         with builtins.open(self.requested_file._path, mode='rb') as file:
-            try:
-                self.wfile.write(file.read())
-            except socket.error:
-                __logger__.info('Connection interrupted.')
+            self.wfile.write(file.read())
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -1295,10 +1288,7 @@ class CGIHTTPRequestHandler(http.server.CGIHTTPRequestHandler):
             if((__logger__.isEnabledFor(logging.DEBUG) or sys.flags.debug) and
                errors):
                 output = b'<pre>' + errors + b'</pre>' + output
-            try:
-                self.wfile.write(output)
-            except socket.error:
-                __logger__.info('Connection interrupted.')
+            self.wfile.write(output)
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -1345,35 +1335,39 @@ class CGIHTTPRequestHandler(http.server.CGIHTTPRequestHandler):
         filter_none_callable_and_builtins = boostNode.extension.native.Module\
             .filter_none_callable_and_builtins
         try:
-            builtins.getattr(
-                requested_module,
-                boostNode.extension.native.Module.determine_caller(
-                    callable_objects=filter_none_callable_and_builtins(
-                        scope=requested_module)))()
-        except builtins.Exception as exception:
-            if self.respond:
-                if __logger__.isEnabledFor(logging.DEBUG) or sys.flags.debug:
-                    try:
-                        self.send_error(500, builtins.str(exception))
-                    except socket.error:
-                        __logger__.info('Connection interrupted.')
-                else:
-                    try:
-                        self.send_error(500, 'Internal server error.')
-                    except socket.error:
-                        __logger__.info('Connection interrupted.')
-            raise
-        finally:
-            sys.path = sys_path_save
-            boostNode.extension.output.Print.default_buffer =\
-                print_default_buffer_save
-        if self.respond:
             try:
+                builtins.getattr(
+                    requested_module,
+                    boostNode.extension.native.Module.determine_caller(
+                        callable_objects=filter_none_callable_and_builtins(
+                            scope=requested_module)))()
+            except builtins.Exception as exception:
+                if self.respond:
+                    if(sys.flags.debug or
+                       __logger__.isEnabledFor(logging.DEBUG)):
+                        self.send_error(
+                            500, '%s: %s' %
+                            (exception.__class__.__name__,
+                            builtins.str(exception)))
+                    else:
+                        self.send_error(500, 'Internal server error.')
+                if sys.flags.debug or __logger__.isEnabledFor(logging.DEBUG):
+                    raise
+                else:
+                    __logger__.critical(
+                        'Error in module "%s" %s: %s',
+                        requested_module.__name__,
+                        exception.__class__.__name__, builtins.str(exception))
+            finally:
+                sys.path = sys_path_save
+                boostNode.extension.output.Print.default_buffer =\
+                    print_default_buffer_save
+            if self.respond:
                 self.wfile.write(
                     self.server.web.thread_buffer.content.encode())
-            except socket.error:
-                __logger__.info('Connection interrupted.')
-            self.server.web.thread_buffer.clear()
+        except socket.error:
+            __logger__.info('Connection interrupted.')
+        self.server.web.thread_buffer.clear()
         return self
 
         # endregion

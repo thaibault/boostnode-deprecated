@@ -137,6 +137,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
     '''Defines the size of an empty folder, a symbolic link or empty file.'''
     BLOCK_SIZE_IN_BYTE = 4096
     '''
+        Defines the maximum number of chars containing in a file
+        (or directory) name.
+    '''
+    MAX_FILE_NAME_LENGTH = 255
+    '''
         Defines the default format of current os for calculating with file
         sizes.
     '''
@@ -217,6 +222,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
     _dummy_size = 0
     _human_readable_size = 0
     _free_space = 0
+    _disk_used_space = 0
     _timestamp = 0
     _lines = 0
     _mimetype = _type = None
@@ -941,28 +947,29 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> isinstance(size, float)
             True
         '''
-        if self.is_directory(allow_link=follow_link):
+        if os.path.ismount(self._path):
+            size = self.disk_used_space
+        elif self.is_directory(allow_link=follow_link):
+            size = self.BLOCK_SIZE_IN_BYTE
             for file in self:
                 if not limit or self._size < limit:
                     recursive_keywords = copy.deepcopy(keywords)
                     recursive_keywords['format'] = 'byte'
-                    save_size = self._size
                     '''
                         Take this method type by another instance of
                         this class via introspection.
                     '''
-                    self._size = save_size + builtins.getattr(
+                    size += builtins.getattr(
                         file, inspect.stack()[0][3])(
                             limit, follow_link=False, *arguments,
                             **recursive_keywords
                         ) + self.BLOCK_SIZE_IN_BYTE
         elif self.is_file():
-            self._size = os.path.getsize(self._path)
+            size = os.path.getsize(self._path)
         elif self.is_link:
-            self._size = self.BLOCK_SIZE_IN_BYTE
-        self._size = self.convert_size_format(
-            size=self._size, *arguments, **keywords)
-        return builtins.float(self._size)
+            size = self.BLOCK_SIZE_IN_BYTE
+        return builtins.float(self.convert_size_format(
+            size, *arguments, **keywords))
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python2.7
@@ -972,11 +979,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
     ) -> builtins.int:
 ##
         '''
-            Calculates the potential dummy size for this object by the first
-            request of "self.dummy_size".
+            Calculates the potential dummy size for a portable link pointing
+            to this object.
 
             "label" is the actual used label for marking the text based
-            portable link files.
+                    portable link files.
 
             Examples:
 
@@ -1013,7 +1020,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ...     __test_folder__ + 'get_human_readable_size_A',
             ...     make_directory=True)
             >>> b = Handler(__test_folder__ + 'get_human_readable_size_A')
-            >>> a.human_readable_size == str(b.size) + ' byte'
+            >>> a.human_readable_size == str(b.get_size(format='kb')) + ' kb'
             True
 
             >>> Handler().get_human_readable_size(size=100)
@@ -1339,7 +1346,20 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ...     (long, int) if 'long' in dir(builtins) else int)
             True
         '''
-        return self._get_platform_dependendet_free_space()
+        return self._get_platform_dependent_free_and_total_space()[0]
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python2.7
+##     def get_disk_used_space(self):
+    def get_disk_used_space(
+        self: boostNode.extension.type.Self
+    ) -> builtins.int:
+##
+        '''
+            Determiens used space of current path containing disk.
+        '''
+        disk_status = self._get_platform_dependent_free_and_total_space()
+        return disk_status[1] - disk_status[0]
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python2.7
@@ -2151,7 +2171,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
                 builtins.len(self.portable_link_pattern) +
                 self.MAX_PATH_LENGTH + self.MAX_SIZE_NUMBER_LENGTH +
                 # Maximum label line length + Maximum name length.
-                120 + 260)
+                120 + self.MAX_FILE_NAME_LENGTH)
             try:
                 with builtins.open(self._path, 'r') as file:
                     file_content = file.read(maximum_length + 1).strip()
@@ -3875,42 +3895,58 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python2.7
-##     def _get_platform_dependendet_free_space(self):
-    def _get_platform_dependendet_free_space(
+##     def _determine_get_windows_disk_free_space_function(self):
+    def _determine_get_windows_disk_free_space_function(
         self: boostNode.extension.type.Self
     ) -> (builtins.bool, builtins.int):
 ##
         '''
-            Handles platform dependent stuff by determining free space on
-            given file system location.
+            Determines windows internal method to get disk free space.
+        '''
+        if(sys.version_info >= (3,) or
+           builtins.isinstance(path, builtins.unicode)):
+            return ctypes.windll.kernel32.GetDiskFreeSpaceExW
+        return ctypes.windll.kernel32.GetDiskFreeSpaceExA
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python2.7
+##     def _get_platform_dependent_free_and_total_space(self):
+    def _get_platform_dependent_free_and_total_space(
+        self: boostNode.extension.type.Self
+    ) -> (builtins.bool, builtins.tuple):
+##
+        '''
+            Handles platform dependent stuff by determining free and total
+            space on given file system location.
 
             Examples:
 
             >>> isinstance(
-            ...     Handler()._get_platform_dependendet_free_space(),
-            ...     (long, int) if 'long' in dir(builtins) else int)
+            ...     Handler()._get_platform_dependent_free_and_total_space(),
+            ...     builtins.tuple)
             True
 
             >>> Handler(
             ...     'temp_not_existsing', must_exist=False
-            ... )._get_platform_dependendet_free_space()
+            ... )._get_platform_dependent_free_and_total_space()
             False
         '''
         os_statvfs = self._initialize_platform_dependencies()
         if os.path.isfile(self._path) or os.path.isdir(self._path):
             if not os_statvfs is None:
-                self._free_space = os_statvfs.f_bavail *\
-                    self.BLOCK_SIZE_IN_BYTE
-            elif builtins.hasattr(ctypes, 'windll'):
+                return (
+                    os_statvfs.f_bavail * self.BLOCK_SIZE_IN_BYTE,
+                    os_statvfs.f_blocks * self.BLOCK_SIZE_IN_BYTE)
+            if builtins.hasattr(ctypes, 'windll'):
                 path = self._path
                 if self.is_file():
                     path = self.directory_path
                 free_bytes = ctypes.c_ulonglong(0)
-                ctypes.windll.kernel32.GetDiskFreeSpaceExW(
-                    ctypes.c_wchar_p(path), None, None,
+                total_bytes = ctypes.c_ulonglong(0)
+                self._determine_get_windows_disk_free_space_function()(
+                    ctypes.c_wchar_p(path), None, ctypes.pointer(total_bytes),
                     ctypes.pointer(free_bytes))
-                self._free_space = free_bytes.value
-            return self._free_space
+                return free_bytes.value, total_bytes.value
         return False
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -3936,6 +3972,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
            builtins.hasattr(os, 'statvfs')):
             os_statvfs = os.statvfs(self._path)
             self.__class__.BLOCK_SIZE_IN_BYTE = os_statvfs.f_bsize
+            self.__class__.MAX_FILE_NAME_LENGTH = os_statvfs.f_namemax
             operating_system =\
                 boostNode.extension.system.Platform().operating_system
             if operating_system == 'macintosh':

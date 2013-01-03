@@ -828,12 +828,31 @@ class Parser(
 ##             exec(self.rendered_content, template_scope)
             builtins.exec(self.rendered_content, template_scope)
 ##
+        except __exception__ as exception:
+            '''Propagate nested template exceptions.'''
+            line_number = self._get_exception_line(exception)
+## python2.7
+##             raise __exception__(
+##                 'Error with %s in included template in line %s '
+##                 '(line in compiled template: %s).\n%s: %s',
+##                 self._determine_template_description(),
+##                 line_number[0], line_number[1], __exception__.__name__,
+##                 builtins.str(exception))
+            raise __exception__(
+                'Error with %s in included template in line %s '
+                '(line in compiled template: %s).\n%s: %s',
+                self._determine_template_description(),
+                line_number[0], line_number[1], __exception__.__name__,
+                builtins.str(exception)
+            ) from None
+##
         except builtins.Exception as exception:
-            line_info, exception_message, native_error_object =\
+            line_info, exception_message, native_exception_description =\
                 self._handle_template_exception(exception)
             self._raise_template_exception(
-                line_info, exception_message, native_error_object,
-                rendered_content=self.rendered_content)
+                line_info, exception_message, native_exception_description,
+                rendered_content=self.rendered_content,
+                native_exception=exception)
         '''Make sure that all outputs during template execution are done.'''
         sys.stdout.flush()
         return self
@@ -860,52 +879,80 @@ class Parser(
         if line_number:
             line_info = ' in line %d (line in compiled template: %d)' %\
                 (line_number[0], line_number[1])
-        native_error_object = ''
-        if __logger__.isEnabledFor(logging.DEBUG) or sys.flags.debug:
+        native_exception_description = ''
+        if sys.flags.debug or __logger__.isEnabledFor(logging.DEBUG):
             for property in builtins.dir(exception):
                 if not (property.startswith('__') and
                         property.endswith('__')):
-                    native_error_object += property + ': "' + builtins.str(
-                        builtins.getattr(exception, property)) + '"\n'
-            native_error_object = '\n\nNative error object:\n\n%s' %\
-                native_error_object
-        return line_info, exception_message, native_error_object
+                    native_exception_description +=\
+                        property + ': "' + builtins.str(
+                            builtins.getattr(exception, property)
+                        ) + '"\n'
+            native_exception_description = (
+                '\n\nNative exception object:\n\n%s' %
+                native_exception_description)
+        return line_info, exception_message, native_exception_description
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python2.7
+##     def _determine_template_description(self):
+    def _determine_template_description(
+        self: boostNode.extension.type.Self
+    ) -> builtins.str:
+##
+        '''
+            Determines a useful description for current template.
+        '''
+        if self.file:
+            return '"%s"' % self.file.path
+        return 'given template string'
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python2.7
 ##     def _raise_template_exception(
-##         self, line_info, exception_message, native_error_object,
-##         rendered_content
+##         self, line_info, exception_message, native_exception_description,
+##         rendered_content, native_exception
 ##     ):
     def _raise_template_exception(
         self: boostNode.extension.type.Self,
         line_info: builtins.str, exception_message: builtins.str,
-        native_error_object: builtins.str, rendered_content: builtins.str
-    ) -> builtins.tuple:
+        native_exception_description: builtins.str,
+        rendered_content: builtins.str, native_exception: builtins.Exception
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Performs a wrapper exception for exception raising in template
             context.
         '''
-        file_or_description = 'given_string'
-        if self.file:
-            file_or_description = '"%s"' % self.file.path
         self._number_of_rendered_content_lines = builtins.len(
             boostNode.extension.native.String(rendered_content).readlines())
         rendered_content = '\nrendered content:\n\n%s\n' % re.compile(
             '^(?P<line>.*)$', re.MULTILINE
         ).sub(self._replace_rendered_content_line, rendered_content.strip())
-        if not __logger__.isEnabledFor(logging.DEBUG):
+        if not (sys.flags.debug or __logger__.isEnabledFor(logging.DEBUG)):
             rendered_content = ''
+## python2.7
+##         raise __exception__(
+##             'Error with {template_description}{line_info}.\n'
+##             '{exception_message}{native_exception_description}'
+##             '{rendered_content}'.format(
+##                 template_description=self._determine_template_description(),
+##                 line_info=line_info,
+##                 exception_message=exception_message,
+##                 native_exception_description=native_exception_description,
+##                 rendered_content=rendered_content))
         raise __exception__(
-            'Error with {file_or_description}{line_info}.\n'
-            '{exception_message}{native_error_object}'
+            'Error with {template_description}{line_info}.\n'
+            '{exception_message}{native_exception_description}'
             '{rendered_content}'.format(
-                file_or_description=file_or_description,
+                template_description=self._determine_template_description(),
                 line_info=line_info,
                 exception_message=exception_message,
-                native_error_object=native_error_object,
-                rendered_content=rendered_content))
+                native_exception_description=native_exception_description,
+                rendered_content=rendered_content)
+        ) from None
+##
+        return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python2.7
@@ -942,8 +989,16 @@ class Parser(
             with the resulting line in source template and compiled template
             will be given back.
         '''
-        line_number = traceback.extract_tb(exception.__traceback__)[-1][1]
-        if builtins.getattr(exception, 'lineno') is not None:
+        '''
+            Search traceback for a context ran from "builtins.exec()" and begin
+            from the nearest context.
+        '''
+        exception_traceback = traceback.extract_tb(exception.__traceback__)
+        exception_traceback.reverse()
+        for context in exception_traceback:
+            if context[0] == '<string>':
+                line_number = context[1]
+        if builtins.hasattr(exception, 'lineno'):
             line_number = exception.lineno
         for line_shift in self._line_shifts:
             line_number_in_python_code = line_shift[0] + line_shift[1]
@@ -1007,12 +1062,12 @@ class Parser(
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python2.7
 ##     def _include(
-##         self, template_file_path, scope={}, end='', indent=True,
+##         self, template_file_path, scope={}, end='\n', indent=True,
 ##         indent_space='', **keywords
 ##     ):
     def _include(
         self: boostNode.extension.type.Self,
-        template_file_path: builtins.str, scope={}, end='',
+        template_file_path: builtins.str, scope={}, end='\n',
         indent=True, indent_space='', **keywords: builtins.object
     ) -> None:
 ##
@@ -1026,9 +1081,8 @@ class Parser(
             root_path = self.file.directory_path + os.sep
         self._print(
             self.__class__(
-                template=root_path + template_file_path).render(
-                    mapping=scope
-                ).output,
+                template=root_path + template_file_path
+            ).render(mapping=scope).output,
             end=end, indent=indent, indent_space=indent_space)
 
             # endregion
