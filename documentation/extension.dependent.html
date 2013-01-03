@@ -1,0 +1,154 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module dependent</title>
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>dependent</strong></big></big> (version 1.0)</font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/data/repositories/boostNode/extension/dependent.py">/data/repositories/boostNode/extension/dependent.py</a></font></td></tr></table>
+    <p><tt>This&nbsp;module&nbsp;provides&nbsp;features&nbsp;to&nbsp;handle&nbsp;problems&nbsp;with&nbsp;phantom&nbsp;problems.<br>
+E.g.&nbsp;It&nbsp;handles&nbsp;cyclic&nbsp;import&nbsp;dependencies.</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="__builtin__.html">__builtin__</a><br>
+<a href="copy.html">copy</a><br>
+</td><td width="25%" valign=top><a href="inspect.html">inspect</a><br>
+<a href="os.html">os</a><br>
+</td><td width="25%" valign=top><a href="sys.html">sys</a><br>
+</td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="__builtin__.html#object">__builtin__.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="dependent.html#Resolve">Resolve</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Resolve">class <strong>Resolve</strong></a>(<a href="__builtin__.html#object">__builtin__.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Handles&nbsp;dependencies&nbsp;with&nbsp;modules.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Resolve-__init__"><strong>__init__</strong></a>(self, name, frame, default_caller<font color="#909090">=None</font>, function<font color="#909090">=False</font>, dependencies<font color="#909090">=('boostNode.extension.system.CommandLine', 'boostNode.extension.native.Module')</font>)</dt><dd><tt>Initializes&nbsp;a&nbsp;new&nbsp;instance&nbsp;of&nbsp;dependency&nbsp;definition&nbsp;for&nbsp;a&nbsp;given<br>
+module.&nbsp;It&nbsp;saves&nbsp;the&nbsp;given&nbsp;dependency&nbsp;with&nbsp;a&nbsp;function&nbsp;to&nbsp;call&nbsp;if<br>
+needed&nbsp;dependencies&nbsp;are&nbsp;ready.&nbsp;Dependencies&nbsp;are&nbsp;stored&nbsp;in&nbsp;a&nbsp;static<br>
+class&nbsp;list.<br>
+&nbsp;<br>
+Examples:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;def&nbsp;test():<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print('hans')<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;r&nbsp;=&nbsp;<a href="#Resolve">Resolve</a>(<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;__name__,&nbsp;inspect.currentframe(),&nbsp;function=test,<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dependencies=())<br>
+hans<br>
+&gt;&gt;&gt;&nbsp;<a href="#Resolve">Resolve</a>._load_stack<br>
+[]<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;<a href="#Resolve">Resolve</a>(<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;__name__,&nbsp;inspect.currentframe(),&nbsp;dependencies=())<br>
+Object&nbsp;of&nbsp;"<a href="#Resolve">Resolve</a>".<br>
+&gt;&gt;&gt;&nbsp;<a href="#Resolve">Resolve</a>._load_stack<br>
+[]<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;<a href="#Resolve">Resolve</a>(<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;__name__,&nbsp;inspect.currentframe(),&nbsp;function=test,<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dependencies=('A',))<br>
+Object&nbsp;of&nbsp;"<a href="#Resolve">Resolve</a>".<br>
+&gt;&gt;&gt;&nbsp;<a href="#Resolve">Resolve</a>._load_stack&nbsp;#&nbsp;doctest:&nbsp;+ELLIPSIS<br>
+[{...('A',)...}]</tt></dd></dl>
+
+<hr>
+Class methods defined here:<br>
+<dl><dt><a name="Resolve-__repr__"><strong>__repr__</strong></a>(cls)<font color="#909090"><font face="helvetica, arial"> from <a href="__builtin__.html#type">__builtin__.type</a></font></font></dt><dd><tt>Invokes&nbsp;if&nbsp;this&nbsp;<a href="__builtin__.html#object">object</a>&nbsp;should&nbsp;describe&nbsp;itself&nbsp;by&nbsp;a&nbsp;string.<br>
+&nbsp;<br>
+Examples:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;repr(<a href="#Resolve">Resolve</a>(name='types',&nbsp;frame=inspect.currentframe()))<br>
+'Object&nbsp;of&nbsp;"<a href="#Resolve">Resolve</a>".'</tt></dd></dl>
+
+<dl><dt><a name="Resolve-get_all"><strong>get_all</strong></a>(cls, path<font color="#909090">='.'</font>)<font color="#909090"><font face="helvetica, arial"> from <a href="__builtin__.html#type">__builtin__.type</a></font></font></dt><dd><tt>This&nbsp;method&nbsp;provides&nbsp;a&nbsp;generic&nbsp;way&nbsp;to&nbsp;determine&nbsp;all&nbsp;modules&nbsp;in<br>
+current&nbsp;package&nbsp;or&nbsp;folder.&nbsp;It&nbsp;is&nbsp;useful&nbsp;for&nbsp;"__init__.py"&nbsp;files.<br>
+&nbsp;<br>
+Examples:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;<a href="#Resolve">Resolve</a>.<a href="#Resolve-get_all">get_all</a>()&nbsp;#&nbsp;doctest:&nbsp;+ELLIPSIS<br>
+[...'dependent'...]<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;import&nbsp;boostNode.extension.file<br>
+&gt;&gt;&gt;&nbsp;location&nbsp;=&nbsp;boostNode.extension.file.Handler(<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;__test_folder__&nbsp;+&nbsp;'get_all',&nbsp;make_directory=True)<br>
+&gt;&gt;&gt;&nbsp;a&nbsp;=&nbsp;boostNode.extension.file.Handler(<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;location.path&nbsp;+&nbsp;'a.py',&nbsp;must_exist=False)<br>
+&gt;&gt;&gt;&nbsp;a.content&nbsp;=&nbsp;'&nbsp;'<br>
+&gt;&gt;&gt;&nbsp;boostNode.extension.file.Handler(<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;location.path&nbsp;+&nbsp;'b.pyc',&nbsp;make_directory=True<br>
+...&nbsp;)&nbsp;#&nbsp;doctest:&nbsp;+ELLIPSIS<br>
+Object&nbsp;of&nbsp;"Handler"&nbsp;with&nbsp;path&nbsp;"...get_all...b.pyc..."&nbsp;(dire...<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;<a href="#Resolve">Resolve</a>.<a href="#Resolve-get_all">get_all</a>(__test_folder__&nbsp;+&nbsp;'get_all')<br>
+['a']<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;a.remove_file()<br>
+True<br>
+&gt;&gt;&gt;&nbsp;<a href="#Resolve">Resolve</a>.<a href="#Resolve-get_all">get_all</a>(__test_folder__&nbsp;+&nbsp;'get_all')<br>
+[]</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>__author__</strong> = 'Torben Sickert'<br>
+<strong>__copyright__</strong> = 'see boostNode/__init__.py'<br>
+<strong>__credits__</strong> = ('Torben Sickert',)<br>
+<strong>__license__</strong> = 'see boostNode/__init__.py'<br>
+<strong>__maintainer__</strong> = 'Torben Sickert'<br>
+<strong>__maintainer_email__</strong> = 't.sickert@gmail.com'<br>
+<strong>__status__</strong> = 'stable'<br>
+<strong>__version__</strong> = '1.0'</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#7799ee">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Author</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#7799ee"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%">Torben&nbsp;Sickert</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#7799ee">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Credits</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#7799ee"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%">('Torben&nbsp;Sickert',)</td></tr></table>
+</body></html>
