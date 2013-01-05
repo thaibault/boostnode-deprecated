@@ -36,8 +36,8 @@ import types
 ## python3.3 pass
 builtins = sys.modules['__main__'].__builtins__
 
-sys.path.append(os.path.abspath(sys.path[0] + 3 * ('..' + os.sep)))
-sys.path.append(os.path.abspath(sys.path[0] + 4 * ('..' + os.sep)))
+for number in (3, 4):
+    sys.path.append(os.path.abspath(sys.path[0] + number * ('..' + os.sep)))
 
 import boostNode.extension.dependent
 import boostNode.extension.native

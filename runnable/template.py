@@ -25,15 +25,16 @@ __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-## python3.3 import builtins
+## python3.3
+## import builtins
+## import collections
 pass
-import collections
+##
 import copy
 import inspect
 import logging
 import os
 import re
-import stat
 import string as native_string
 import sys
 import traceback
@@ -41,8 +42,8 @@ import traceback
 ## python3.3 pass
 builtins = sys.modules['__main__'].__builtins__
 
-sys.path.append(os.path.abspath(sys.path[0] + 3 * ('..' + os.sep)))
-sys.path.append(os.path.abspath(sys.path[0] + 4 * ('..' + os.sep)))
+for number in (3, 4):
+    sys.path.append(os.path.abspath(sys.path[0] + number * ('..' + os.sep)))
 
 import boostNode.extension.dependent
 import boostNode.extension.file
@@ -993,14 +994,7 @@ class Parser(
             Search traceback for a context ran from "builtins.exec()" and begin
             from the nearest context.
         '''
-        exception_traceback = traceback.extract_tb(exception.__traceback__)
-        exception_traceback.reverse()
-        line_number = 0
-        for context in exception_traceback:
-            if context[0] == '<string>':
-                line_number = context[1]
-        if builtins.hasattr(exception, 'lineno'):
-            line_number = exception.lineno
+        line_number = self._determine_exec_string_exception_line()
         for line_shift in self._line_shifts:
             line_number_in_python_code = line_shift[0] + line_shift[1]
             if line_number == line_number_in_python_code:
@@ -1010,6 +1004,26 @@ class Parser(
         if line_number and self._line_shifts:
             return line_number - self._line_shifts[-1][1], line_number
         return line_number, line_number
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def _determine_exec_string_exception_line(
+##         self: boostNode.extension.type.Self, exception
+##     ) -> builtins.int:
+    def _determine_exec_string_exception_line(self, exception):
+##
+        '''
+            Determines the line number where the exception (in exec statement)
+            occurs from the given exception.
+        '''
+        exception_traceback = traceback.extract_tb(exception.__traceback__)
+        exception_traceback.reverse()
+        for context in exception_traceback:
+            if context[0] == '<string>':
+                return context[1]
+        if builtins.hasattr(exception, 'lineno'):
+            return exception.lineno
+        return 0
 
             # region wrapper methods for template context
 

@@ -1419,22 +1419,7 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
                     callable_objects=filter_none_callable_and_builtins(
                         scope=requested_module)))()
         except builtins.Exception as exception:
-            if self.respond:
-                if(sys.flags.debug or
-                   __logger__.isEnabledFor(logging.DEBUG)):
-                    self.send_error(
-                        500, '%s: %s' %
-                        (exception.__class__.__name__,
-                        re.compile('\n+').sub('\n', builtins.str(exception))))
-                else:
-                    self.send_error(500, 'Internal server error')
-            if sys.flags.debug or __logger__.isEnabledFor(logging.DEBUG):
-                raise
-            else:
-                __logger__.critical(
-                    'Error in module "%s" %s: %s',
-                    requested_module.__name__,
-                    exception.__class__.__name__, builtins.str(exception))
+            self._handle_module_exception()
         else:
             if self.respond:
                 self._send_positive_header(
@@ -1447,6 +1432,35 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
                 self.server.web.lock.release()
             boostNode.extension.output.Print.default_buffer =\
                 print_default_buffer_save
+        return self
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def _handle_module_exception(
+##         self: boostNode.extension.types.Self, exception: builtins.Exception
+##     ) -> boostNode.extension.type.Self:
+    def _handle_module_exception(self, exception):
+##
+        '''
+            This method handles each exception raised by running a module
+            which was requested by client.
+        '''
+        if self.respond:
+            if(sys.flags.debug or
+                __logger__.isEnabledFor(logging.DEBUG)):
+                self.send_error(
+                    500, '%s: %s' %
+                    (exception.__class__.__name__,
+                    re.compile('\n+').sub('\n', builtins.str(exception))))
+            else:
+                self.send_error(500, 'Internal server error')
+        if sys.flags.debug or __logger__.isEnabledFor(logging.DEBUG):
+            raise
+        else:
+            __logger__.critical(
+                'Error in module "%s" %s: %s',
+                requested_module.__name__,
+                exception.__class__.__name__, builtins.str(exception))
         return self
 
         # endregion

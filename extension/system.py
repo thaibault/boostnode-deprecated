@@ -42,8 +42,8 @@ pass
 ## python3.3 pass
 builtins = sys.modules['__main__'].__builtins__
 
-sys.path.append(os.path.abspath(sys.path[0] + 3 * ('..' + os.sep)))
-sys.path.append(os.path.abspath(sys.path[0] + 4 * ('..' + os.sep)))
+for number in (3, 4):
+    sys.path.append(os.path.abspath(sys.path[0] + number * ('..' + os.sep)))
 
 import boostNode.extension.file
 import boostNode.extension.native
@@ -89,28 +89,26 @@ class Runnable(builtins.object):
         childrens_module = inspect.getmodule(self.__class__)
         caller_module = inspect.getmodule(inspect.stack()[2][0])
         this_module = inspect.getmodule(inspect.stack()[0][0])
-        try:
-            if(caller_module is this_module and
-               childrens_module.__name__ == '__main__' and
-               not childrens_module.__test_mode__) or run:
+        if(caller_module is this_module and
+           childrens_module.__name__ == '__main__' and
+           not childrens_module.__test_mode__) or run:
+            try:
                 self._run(*arguments, **keywords)
-            else:
-                self._initialize(*arguments, **keywords)
-        except builtins.Exception as exception:
-            if(not (caller_module is this_module and
-                    childrens_module.__name__ == '__main__') or
-               childrens_module.__test_mode__ or
-               childrens_module.__logger__.isEnabledFor(logging.DEBUG) or
-               sys.flags.debug):
-                raise
-            else:
-                __logger__.critical(
-                    '{exception_name}: {exception_message}\nType "'
-                    '{program_file_path} --help" for additional '
-                    'informations.'.format(
-                        exception_name=exception.__class__.__name__,
-                        exception_message=builtins.str(exception),
-                        program_file_path=sys.argv[0]))
+            except builtins.Exception as exception:
+                if(childrens_module.__test_mode__ or
+                   childrens_module.__logger__.isEnabledFor(logging.DEBUG) or
+                   sys.flags.debug):
+                    raise
+                else:
+                    __logger__.critical(
+                        '{exception_name}: {exception_message}\nType "'
+                        '{program_file_path} --help" for additional '
+                        'informations.'.format(
+                            exception_name=exception.__class__.__name__,
+                            exception_message=builtins.str(exception),
+                            program_file_path=sys.argv[0]))
+        else:
+            self._initialize(*arguments, **keywords)
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
