@@ -262,7 +262,7 @@ class Run(
             ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
-            CodeFileError: No supported file path found for running.
+            CodeRunnerError: No supported file path found for running.
         '''
         command_line_arguments = boostNode.extension.system.CommandLine\
             .argument_parser(
@@ -595,7 +595,7 @@ class Run(
             >>> Run()._run_command('list', 'ls') # doctest: +SKIP
             Object of "Run" with detected path "...".
             >>> __test_buffer__.content # doctest: +SKIP
-            'List with "ls". output [...codeFile...]'
+            'List with "ls". output [...codeRunner...]'
         '''
         return self._log_command_run(
             command_name, command,

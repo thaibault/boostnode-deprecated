@@ -250,8 +250,8 @@ class Reflector(
             >>> repr(Reflector(
             ...     source_location=__test_folder__ + 's',
             ...     target_location=__test_folder__ + 't',
-            ...     priority_locations=[__test_folder__ + 's/A'],
-            ...     exclude_locations=[__test_folder__ + 's/A/B'])
+            ...     priority_locations=(__test_folder__ + 's/A',),
+            ...     exclude_locations=(__test_folder__ + 's/A/B',))
             ... ) # doctest: +ELLIPSIS
             '.../s/.../t/.../s/A.../s/A/B".'
 
@@ -266,7 +266,7 @@ class Reflector(
             >>> repr(Reflector(
             ...     source_location=__test_folder__ + 's',
             ...     target_location=__test_folder__ + 't',
-            ...     priority_locations=[__test_folder__ + 's'])
+            ...     priority_locations=(__test_folder__ + 's',))
             ... ) # doctest: +ELLIPSIS
             '.../s/".../t/".../s" and exclude locations "".'
 
@@ -522,7 +522,7 @@ class Reflector(
             ...     source_location=__test_folder__ + 'source',
             ...     target_location=__test_folder__ + 'target',
             ...     limit='1020 byte',
-            ...     priority_locations=[__test_folder__ + 'source/B/A/B/C/'])
+            ...     priority_locations=(__test_folder__ + 'source/B/A/B/C/',))
             >>> repr(reflector.create()) # doctest: +ELLIPSIS
             '...source...source..." and target path "...target...".'
             >>> boostNode.extension.file.Handler(
@@ -577,7 +577,7 @@ class Reflector(
             ...     source_location=__test_folder__ + 'source',
             ...     target_location=__test_folder__ + 'target',
             ...     limit='1020 byte',
-            ...     priority_locations=[__test_folder__ + 'source/B/A/B/C/'])
+            ...     priority_locations=(__test_folder__ + 'source/B/A/B/C/',))
             >>> repr(reflector.create()) # doctest: +ELLIPSIS
             'Object of "Reflector" with source path "...source..."...'
             >>> boostNode.extension.file.Handler(
@@ -677,7 +677,7 @@ class Reflector(
             >>> reflector = Reflector(
             ...     source_location=__test_folder__ + 'source3',
             ...     target_location=__test_folder__ + 'target3',
-            ...     exclude_locations=[__test_folder__ + 'source3/ignore'],
+            ...     exclude_locations=(__test_folder__ + 'source3/ignore',),
             ...     limit='1 byte',
             ...     use_native_symlinks=True)
             >>> repr(reflector.create()) # doctest: +ELLIPSIS
@@ -702,7 +702,7 @@ class Reflector(
             >>> reflector = Reflector(
             ...     source_location=__test_folder__ + 'source3',
             ...     target_location=__test_folder__ + 'target3',
-            ...     exclude_locations=[__test_folder__ + 'source3/ignore'],
+            ...     exclude_locations=(__test_folder__ + 'source3/ignore',),
             ...     limit='1 byte',
             ...     use_native_symlinks=True)
             >>> repr(reflector.synchronize_back()) # doctest: +ELLIPSIS
@@ -783,15 +783,15 @@ class Reflector(
 ##     def _initialize(
 ##         self: boostNode.extension.type.Self,
 ##         source_location: (boostNode.extension.file.Handler, builtins.str),
-##         target_location=None, limit='100 MB', priority_locations=[],
-##         exclude_locations=[], target_rights=777, synchronize_back=False,
+##         target_location=None, limit='100 MB', priority_locations=(),
+##         exclude_locations=(), target_rights=777, synchronize_back=False,
 ##         create=False, use_native_symlinks=False,
 ##         minimum_reflection_size_in_byte=100 * 10 ** 3,  # 100 Kilobyte
 ##         **keywords: builtins.object
 ##     ) -> boostNode.extension.type.Self:
     def _initialize(
         self, source_location, target_location=None, limit='100 MB',
-        priority_locations=[], exclude_locations=[],
+        priority_locations=(), exclude_locations=(),
         target_rights=777, synchronize_back=False, create=False,
         use_native_symlinks=False,
         minimum_reflection_size_in_byte=100 * 10 ** 3,  # 100 Kilobyte
@@ -854,7 +854,7 @@ class Reflector(
             >>> Reflector(
             ...     source_location=__test_folder__ + 's',
             ...     target_location=__test_folder__ + 't',
-            ...     priority_locations=[__test_folder__ + 't']
+            ...     priority_locations=(__test_folder__ + 't',)
             ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
@@ -863,7 +863,7 @@ class Reflector(
             >>> Reflector(
             ...     source_location=__test_folder__ + 's',
             ...     target_location=__test_folder__ + 't',
-            ...     priority_locations=['not existing']
+            ...     priority_locations=('not existing',)
             ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
@@ -872,7 +872,7 @@ class Reflector(
             >>> Reflector(
             ...     source_location=__test_folder__ + 's',
             ...     target_location=__test_folder__ + 't',
-            ...     priority_locations=[__test_folder__ + '../'],
+            ...     priority_locations=(__test_folder__ + '../',),
             ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
@@ -1073,7 +1073,7 @@ class Reflector(
         if self._use_native_symlinks:
             native_symbolic_link_option = 'enabled'
         __logger__.info(
-            '\n\nInitialize {class_name} with log level "{log_level}".\n\n'
+            '\n\nInitialize {class_name} with logging level "{log_level}".\n\n'
             'source path: "{source_path}"\n'
             'reflection path: "{target_path}"\n'
             'reflection rights: "0{rights}"\n'

@@ -947,6 +947,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> isinstance(size, float)
             True
         '''
+        size = 0
         if os.path.ismount(self._path):
             size = self.disk_used_space
         elif self.is_directory(allow_link=follow_link):

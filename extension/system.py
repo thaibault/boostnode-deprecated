@@ -556,6 +556,8 @@ class Platform(builtins.object):
 ##
         '''
             Checks if a lock file with given description exists.
+            NOTE: Calling this function doesn't give you savety during race
+            conditions.
 
             Examples:
 

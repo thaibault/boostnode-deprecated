@@ -253,7 +253,7 @@ class Web(
         # region public properties
 
     '''Saves server runtime properties.'''
-    root = port = thread_buffer = service = None
+    root = port = thread_buffer = lock = service = None
     '''Saves a default file if no explicit file was requested.'''
     default = ''
     '''Saves a cli-command for shutting down the server.'''
@@ -415,6 +415,7 @@ class Web(
         self.dynamic_mimetype_pattern = dynamic_mimetype_pattern
         self.default_file_name_pattern = default_file_name_pattern
         self.default_module_name_pattern = default_module_name_pattern
+        self.lock = threading.Lock()
         self.thread_buffer = boostNode.extension.output.Buffer(
             queue=True)
         return self._start_server_thread()
@@ -634,6 +635,32 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
+##     def __init__(
+##         self, *arguments: builtins.object, **keywords: builtins.object
+##     ) -> None:
+##         '''
+##             This method calls is parent. It's necessary to make some class
+##             properties instance properties.
+##         '''
+    def __init__(self, *arguments, **keywords):
+##
+        self.request_uri = ''
+        self.parameter = ''
+        self.post_dictionary = {}
+        self.requested_file_name = ''
+        self.requested_file = None
+        self.load_module = False
+        self.request_arguments = []
+        self.respond = False
+## python3.3
+##         builtins.super(http.server.CGIHTTPRequestHandler, self).__init__(
+##             *arguments, **keywords)
+        CGIHTTPServer.CGIHTTPRequestHandler.__init__(
+            self, *arguments, **keywords)
+##
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
 ##     def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
     def __repr__(self):
 ##
@@ -745,8 +772,18 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
                         return self
                 return self._send_no_file_error()
             return self._send_no_authentication_error()
-        except socket.error:
-            __logger__.info('Connection interrupted.')
+## python3.3
+##         except (
+##             builtins.BrokenPipeError, socket.gaierror, socket.herror,
+##             socket.timeout
+##         ) as exception:
+        except (
+            socket.herror, socket.gaierror, socket.timeout
+        ) as exception:
+##
+            __logger__.info(
+                'Connection interrupted. %s: %s', exception.__class__.__name__,
+                builtins.str(exception))
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -1073,15 +1110,16 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
                 'None of the following default file-pattern "%s" was found' %
                 '", "'.join(self.server.web.default_module_name_pattern))
             if self.path:
-                error_message =\
-                    'No file "%s" found' % boostNode.extension.file.Handler(
+                error_message = (
+                    'No accessible file "%s" found' %
+                    boostNode.extension.file.Handler(
                         location=self.server.web.root.path + self.path,
                         must_exist=False
-                    ).path
+                    ).path)
             if self.requested_file:
                 error_message +=\
                     '. Detected mime-type "%s"' % self.requested_file.mimetype
-        self.send_error(404, error_message)
+        self.send_error(404, re.compile('\n+').sub('\n', error_message))
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -1235,9 +1273,20 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         '''
             Handles a static file-request.
         '''
-        self._send_positive_header(mimetype=self.requested_file.mimetype)
-        with builtins.open(self.requested_file._path, mode='rb') as file:
-            self.wfile.write(file.read())
+        try:
+            with builtins.open(self.requested_file._path, mode='rb') as file:
+                file_content = file.read()
+        except socket.error as exception:
+            if sys.flags.debug or __logger__.isEnabledFor(logging.DEBUG):
+                self.send_error(500, '%s: %s' % (
+                    exception.__class__.__name__,
+                    re.compile('\n+').sub('\n', builtins.str(exception))))
+                raise
+            else:
+                self._send_no_file_error()
+        else:
+            self._send_positive_header(mimetype=self.requested_file.mimetype)
+            self.wfile.write(file_content)
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -1254,12 +1303,11 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
             If no respond is expected from client it could be run without its
             own thread environment.
         '''
-        self._send_positive_header(mimetype='text/html')
         self.request_arguments = [
             self.requested_file_name, self.request_uri,
             self.__class__.parse_url(self.request_uri)[1],
             self.post_dictionary, self.server]
-        if 'no_respond' not in self.post_dictionary:
+        if '__no_respond__' not in self.post_dictionary:
             self.respond = True
             return self._run_request()
         self.__class__.last_running_worker = threading.Thread(
@@ -1301,11 +1349,23 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
             self.request_arguments, stdout=subprocess.PIPE,
             stderr=subprocess.PIPE
         ).communicate()
+        errors = errors.decode()
         if self.respond:
-            if((__logger__.isEnabledFor(logging.DEBUG) or sys.flags.debug) and
-               errors):
-                output = b'<pre>' + errors + b'</pre>' + output
-            self.wfile.write(output)
+            if errors:
+                program_description = ''
+                if sys.flags.debug or __logger__.isEnabledFor(logging.DEBUG):
+                    program_description = ' "%s"' % self.request_arguments[0]
+                self.send_error(
+                    500, 'Internal server error with cgi program%s: "%s"' %
+                    (program_description, re.compile('\n+').sub('\n', errors)))
+            else:
+                self._send_positive_header(
+                    mimetype=self.requested_file.mimetype)
+                self.wfile.write(output)
+        if errors:
+            __logger__.critical(
+                'Error in cgi program "%s": %s', self.request_arguments[0],
+                errors)
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -1326,10 +1386,11 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
             self.server.web.thread_buffer
 ## python3.3         sys_path_save = sys.path.copy()
         sys_path_save = copy.copy(sys.path)
-        sys.path = [self.server.web.root.path]
+        sys.path = [self.server.web.root.path] + sys.path
         requested_module = builtins.__import__(self.request_arguments[0])
         '''Extend requested scope with request dependent globals.'''
         requested_module.__requested_arguments__ = self.request_arguments
+        sys.path = sys_path_save
         return self._handle_module_running(
             requested_module, print_default_buffer_save, sys_path_save)
 
@@ -1352,41 +1413,40 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         filter_none_callable_and_builtins = boostNode.extension.native.Module\
             .filter_none_callable_and_builtins
         try:
-            try:
-                builtins.getattr(
-                    requested_module,
-                    boostNode.extension.native.Module.determine_caller(
-                        callable_objects=filter_none_callable_and_builtins(
-                            scope=requested_module)))()
-            except builtins.Exception as exception:
-                if self.respond:
-                    if(sys.flags.debug or
-                       __logger__.isEnabledFor(logging.DEBUG)):
-                        # TODO this send error method seems buggy because
-                        # header is seen as plaintext in browser.
-                        self.send_error(
-                            500, '%s: %s' %
-                            (exception.__class__.__name__,
-                            builtins.str(exception)))
-                    else:
-                        self.send_error(500, 'Internal server error.')
-                if sys.flags.debug or __logger__.isEnabledFor(logging.DEBUG):
-                    raise
-                else:
-                    __logger__.critical(
-                        'Error in module "%s" %s: %s',
-                        requested_module.__name__,
-                        exception.__class__.__name__, builtins.str(exception))
-            finally:
-                sys.path = sys_path_save
-                boostNode.extension.output.Print.default_buffer =\
-                    print_default_buffer_save
+            builtins.getattr(
+                requested_module,
+                boostNode.extension.native.Module.determine_caller(
+                    callable_objects=filter_none_callable_and_builtins(
+                        scope=requested_module)))()
+        except builtins.Exception as exception:
             if self.respond:
-                self.wfile.write(
-                    self.server.web.thread_buffer.content.encode())
-        except socket.error:
-            __logger__.info('Connection interrupted.')
-        self.server.web.thread_buffer.clear()
+                if(sys.flags.debug or
+                   __logger__.isEnabledFor(logging.DEBUG)):
+                    self.send_error(
+                        500, '%s: %s' %
+                        (exception.__class__.__name__,
+                        re.compile('\n+').sub('\n', builtins.str(exception))))
+                else:
+                    self.send_error(500, 'Internal server error')
+            if sys.flags.debug or __logger__.isEnabledFor(logging.DEBUG):
+                raise
+            else:
+                __logger__.critical(
+                    'Error in module "%s" %s: %s',
+                    requested_module.__name__,
+                    exception.__class__.__name__, builtins.str(exception))
+        else:
+            if self.respond:
+                self._send_positive_header(
+                    mimetype=self.requested_file.mimetype)
+        finally:
+            if self.respond:
+                if self.server.web.lock.acquire():
+                    self.wfile.write(
+                        self.server.web.thread_buffer.clear().encode())
+                self.server.web.lock.release()
+            boostNode.extension.output.Print.default_buffer =\
+                print_default_buffer_save
         return self
 
         # endregion

@@ -82,6 +82,8 @@ scripts&nbsp;and&nbsp;give&nbsp;the&nbsp;output&nbsp;back&nbsp;to&nbsp;client.<b
 </dl>
 <hr>
 Methods defined here:<br>
+<dl><dt><a name="CGIHTTPRequestHandler-__init__"><strong>__init__</strong></a>(*arguments, **keywords)</dt></dl>
+
 <dl><dt><a name="CGIHTTPRequestHandler-__repr__"><strong>__repr__</strong></a>(*arguments, **keywords)</dt><dd><tt>Invokes&nbsp;if&nbsp;this&nbsp;object&nbsp;should&nbsp;describe&nbsp;itself&nbsp;by&nbsp;a&nbsp;string.<br>
 &nbsp;<br>
 Examples:<br>
@@ -299,10 +301,6 @@ Data and other attributes inherited from <a href="SocketServer.html#StreamReques
 
 <dl><dt><strong>wbufsize</strong> = 0</dl>
 
-<hr>
-Methods inherited from <a href="SocketServer.html#BaseRequestHandler">SocketServer.BaseRequestHandler</a>:<br>
-<dl><dt><a name="CGIHTTPRequestHandler-__init__"><strong>__init__</strong></a>(self, request, client_address, server)</dt></dl>
-
 </td></tr></table> <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
@@ -351,6 +349,8 @@ Data and other attributes defined here:<br>
 <dl><dt><strong>dynamic_mimetype_pattern</strong> = ()</dl>
 
 <dl><dt><strong>instances</strong> = []</dl>
+
+<dl><dt><strong>lock</strong> = None</dl>
 
 <dl><dt><strong>port</strong> = None</dl>
 

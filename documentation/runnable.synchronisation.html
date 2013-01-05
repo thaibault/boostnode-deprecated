@@ -74,8 +74,8 @@ True<br>
 &gt;&gt;&gt;&nbsp;repr(<a href="#Reflector">Reflector</a>(<br>
 ...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;source_location=__test_folder__&nbsp;+&nbsp;'s',<br>
 ...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;target_location=__test_folder__&nbsp;+&nbsp;'t',<br>
-...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;priority_locations=[__test_folder__&nbsp;+&nbsp;'s/A'],<br>
-...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exclude_locations=[__test_folder__&nbsp;+&nbsp;'s/A/B'])<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;priority_locations=(__test_folder__&nbsp;+&nbsp;'s/A',),<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exclude_locations=(__test_folder__&nbsp;+&nbsp;'s/A/B',))<br>
 ...&nbsp;)&nbsp;#&nbsp;doctest:&nbsp;+ELLIPSIS<br>
 '.../s/.../t/.../s/A.../s/A/B".'<br>
 &nbsp;<br>
@@ -90,7 +90,7 @@ True<br>
 &gt;&gt;&gt;&nbsp;repr(<a href="#Reflector">Reflector</a>(<br>
 ...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;source_location=__test_folder__&nbsp;+&nbsp;'s',<br>
 ...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;target_location=__test_folder__&nbsp;+&nbsp;'t',<br>
-...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;priority_locations=[__test_folder__&nbsp;+&nbsp;'s'])<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;priority_locations=(__test_folder__&nbsp;+&nbsp;'s',))<br>
 ...&nbsp;)&nbsp;#&nbsp;doctest:&nbsp;+ELLIPSIS<br>
 '.../s/".../t/".../s"&nbsp;and&nbsp;exclude&nbsp;locations&nbsp;"".'<br>
 &nbsp;<br>
@@ -198,7 +198,7 @@ True<br>
 ...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;source_location=__test_folder__&nbsp;+&nbsp;'source',<br>
 ...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;target_location=__test_folder__&nbsp;+&nbsp;'target',<br>
 ...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;limit='1020&nbsp;byte',<br>
-...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;priority_locations=[__test_folder__&nbsp;+&nbsp;'source/B/A/B/C/'])<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;priority_locations=(__test_folder__&nbsp;+&nbsp;'source/B/A/B/C/',))<br>
 &gt;&gt;&gt;&nbsp;repr(reflector.<a href="#Reflector-create">create</a>())&nbsp;#&nbsp;doctest:&nbsp;+ELLIPSIS<br>
 '...source...source..."&nbsp;and&nbsp;target&nbsp;path&nbsp;"...target...".'<br>
 &gt;&gt;&gt;&nbsp;boostNode.extension.file.Handler(<br>
@@ -253,7 +253,7 @@ True<br>
 ...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;source_location=__test_folder__&nbsp;+&nbsp;'source',<br>
 ...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;target_location=__test_folder__&nbsp;+&nbsp;'target',<br>
 ...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;limit='1020&nbsp;byte',<br>
-...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;priority_locations=[__test_folder__&nbsp;+&nbsp;'source/B/A/B/C/'])<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;priority_locations=(__test_folder__&nbsp;+&nbsp;'source/B/A/B/C/',))<br>
 &gt;&gt;&gt;&nbsp;repr(reflector.<a href="#Reflector-create">create</a>())&nbsp;#&nbsp;doctest:&nbsp;+ELLIPSIS<br>
 'Object&nbsp;of&nbsp;"<a href="#Reflector">Reflector</a>"&nbsp;with&nbsp;source&nbsp;path&nbsp;"...source..."...'<br>
 &gt;&gt;&gt;&nbsp;boostNode.extension.file.Handler(<br>
@@ -385,7 +385,7 @@ True<br>
 &gt;&gt;&gt;&nbsp;reflector&nbsp;=&nbsp;<a href="#Reflector">Reflector</a>(<br>
 ...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;source_location=__test_folder__&nbsp;+&nbsp;'source3',<br>
 ...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;target_location=__test_folder__&nbsp;+&nbsp;'target3',<br>
-...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exclude_locations=[__test_folder__&nbsp;+&nbsp;'source3/ignore'],<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exclude_locations=(__test_folder__&nbsp;+&nbsp;'source3/ignore',),<br>
 ...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;limit='1&nbsp;byte',<br>
 ...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;use_native_symlinks=True)<br>
 &gt;&gt;&gt;&nbsp;repr(reflector.<a href="#Reflector-create">create</a>())&nbsp;#&nbsp;doctest:&nbsp;+ELLIPSIS<br>
@@ -410,7 +410,7 @@ True<br>
 &gt;&gt;&gt;&nbsp;reflector&nbsp;=&nbsp;<a href="#Reflector">Reflector</a>(<br>
 ...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;source_location=__test_folder__&nbsp;+&nbsp;'source3',<br>
 ...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;target_location=__test_folder__&nbsp;+&nbsp;'target3',<br>
-...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exclude_locations=[__test_folder__&nbsp;+&nbsp;'source3/ignore'],<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exclude_locations=(__test_folder__&nbsp;+&nbsp;'source3/ignore',),<br>
 ...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;limit='1&nbsp;byte',<br>
 ...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;use_native_symlinks=True)<br>
 &gt;&gt;&gt;&nbsp;repr(reflector.<a href="#Reflector-synchronize_back">synchronize_back</a>())&nbsp;#&nbsp;doctest:&nbsp;+ELLIPSIS<br>
