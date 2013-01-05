@@ -1437,7 +1437,7 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _handle_module_exception(
-##         self: boostNode.extension.types.Self, exception: builtins.Exception
+##         self: boostNode.extension.type.Self, exception: builtins.Exception
 ##     ) -> boostNode.extension.type.Self:
     def _handle_module_exception(self, exception):
 ##
@@ -1446,8 +1446,7 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
             which was requested by client.
         '''
         if self.respond:
-            if(sys.flags.debug or
-                __logger__.isEnabledFor(logging.DEBUG)):
+            if(sys.flags.debug or __logger__.isEnabledFor(logging.DEBUG)):
                 self.send_error(
                     500, '%s: %s' %
                     (exception.__class__.__name__,
