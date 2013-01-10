@@ -1,0 +1,426 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module system</title>
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>system</strong></big></big> (version 1.0)</font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/data/repositories/boostNode/extension/system.py">/data/repositories/boostNode/extension/system.py</a></font></td></tr></table>
+    <p><tt>This&nbsp;module&nbsp;provides&nbsp;classes&nbsp;for&nbsp;handling&nbsp;issues&nbsp;with&nbsp;the&nbsp;operating<br>
+system&nbsp;or&nbsp;command&nbsp;line.</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="argparse.html">argparse</a><br>
+<a href="boostNode.html">boostNode</a><br>
+<a href="__builtin__.html">__builtin__</a><br>
+</td><td width="25%" valign=top><a href="doctest.html">doctest</a><br>
+<a href="inspect.html">inspect</a><br>
+<a href="logging.html">logging</a><br>
+</td><td width="25%" valign=top><a href="os.html">os</a><br>
+<a href="socket.html">socket</a><br>
+<a href="struct.html">struct</a><br>
+</td><td width="25%" valign=top><a href="subprocess.html">subprocess</a><br>
+<a href="sys.html">sys</a><br>
+<a href="time.html">time</a><br>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="__builtin__.html#object">__builtin__.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="system.html#CommandLine">CommandLine</a>
+</font></dt><dt><font face="helvetica, arial"><a href="system.html#Platform">Platform</a>
+</font></dt><dt><font face="helvetica, arial"><a href="system.html#Runnable">Runnable</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="CommandLine">class <strong>CommandLine</strong></a>(<a href="__builtin__.html#object">__builtin__.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Defines&nbsp;which&nbsp;possibilities&nbsp;are&nbsp;supported&nbsp;for&nbsp;boolean&nbsp;interactive<br>
+command&nbsp;line&nbsp;user&nbsp;inputs.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="CommandLine-__repr__"><strong>__repr__</strong></a>(*arguments, **keywords)</dt><dd><tt>Invokes&nbsp;if&nbsp;this&nbsp;<a href="__builtin__.html#object">object</a>&nbsp;should&nbsp;describe&nbsp;itself&nbsp;by&nbsp;a&nbsp;string.<br>
+&nbsp;<br>
+Examples:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;repr(<a href="#CommandLine">CommandLine</a>())&nbsp;#&nbsp;doctest:&nbsp;+ELLIPSIS<br>
+'Object&nbsp;of&nbsp;"<a href="#CommandLine">CommandLine</a>"&nbsp;with&nbsp;parser&nbsp;"None".'</tt></dd></dl>
+
+<dl><dt><a name="CommandLine-argument_parser"><strong>argument_parser</strong></a>(*arguments, **keywords)</dt><dd><tt>Represents&nbsp;a&nbsp;basic&nbsp;argument&nbsp;parsing&nbsp;for&nbsp;command&nbsp;line&nbsp;interface<br>
+inputs.&nbsp;It's&nbsp;used&nbsp;as&nbsp;default&nbsp;pattern&nbsp;for&nbsp;many&nbsp;interface&nbsp;concepts.<br>
+&nbsp;<br>
+Examples:<br>
+&nbsp;<br>
+Note&nbsp;that&nbsp;"sys.argv"&nbsp;has&nbsp;a&nbsp;"copy()"&nbsp;method&nbsp;since&nbsp;python3.3.&nbsp;You<br>
+can&nbsp;upgrade&nbsp;this&nbsp;code&nbsp;if&nbsp;no&nbsp;older&nbsp;version&nbsp;are&nbsp;needed&nbsp;to&nbsp;support.<br>
+&gt;&gt;&gt;&nbsp;import&nbsp;copy<br>
+&gt;&gt;&gt;&nbsp;log_level_sav&nbsp;=&nbsp;boostNode.extension.output.Logger.default_level<br>
+&gt;&gt;&gt;&nbsp;sys_argv_save&nbsp;=&nbsp;copy.copy(sys.argv)<br>
+&gt;&gt;&gt;&nbsp;del&nbsp;sys.argv[1:]<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;sys.argv&nbsp;+=&nbsp;'--long',&nbsp;'hans'<br>
+&gt;&gt;&gt;&nbsp;<a href="#CommandLine">CommandLine</a>.<a href="#CommandLine-argument_parser">argument_parser</a>((<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{'arguments':&nbsp;('-s',&nbsp;'--long'),<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'keywords':&nbsp;{'action':&nbsp;'store',&nbsp;'type':&nbsp;str}},))<br>
+Namespace(log_level='critical',&nbsp;long='hans')<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;sys.argv&nbsp;=&nbsp;sys_argv_save<br>
+&gt;&gt;&gt;&nbsp;boostNode.extension.output.Logger.change_all(<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;level=log_level_sav)&nbsp;#&nbsp;doctest:&nbsp;+ELLIPSIS<br>
+&lt;class&nbsp;...boostNode.extension.output.Logger...&gt;</tt></dd></dl>
+
+<dl><dt><a name="CommandLine-boolean_input"><strong>boolean_input</strong></a>(*arguments, **keywords)</dt><dd><tt>This&nbsp;methods&nbsp;implements&nbsp;a&nbsp;handy&nbsp;way&nbsp;to&nbsp;get&nbsp;"yes"&nbsp;or&nbsp;"no"&nbsp;answers<br>
+from&nbsp;the&nbsp;user&nbsp;via&nbsp;command&nbsp;line.<br>
+&nbsp;<br>
+Examples:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;<a href="#CommandLine">CommandLine</a>.<a href="#CommandLine-boolean_input">boolean_input</a>(<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;question='All&nbsp;right?&nbsp;{boolean_arguments}:&nbsp;'<br>
+...&nbsp;)&nbsp;#&nbsp;doctest:&nbsp;+SKIP<br>
+All&nbsp;right?&nbsp;(Choose&nbsp;one&nbsp;of:&nbsp;y,&nbsp;n...)</tt></dd></dl>
+
+<dl><dt><a name="CommandLine-determine_wrapped_objects"><strong>determine_wrapped_objects</strong></a>(*arguments, **keywords)</dt><dd><tt>Returns&nbsp;all&nbsp;aspect&nbsp;orientated&nbsp;wrapped&nbsp;methods&nbsp;in&nbsp;given&nbsp;module.<br>
+&nbsp;<br>
+Examples:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;<a href="#CommandLine">CommandLine</a>.<a href="#CommandLine-determine_wrapped_objects">determine_wrapped_objects</a>(<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;boostNode.extension.system<br>
+...&nbsp;)&nbsp;#&nbsp;doctest:&nbsp;+ELLIPSIS<br>
+{...'determine_wrapped_objects':&nbsp;&lt;function&nbsp;...&gt;...}</tt></dd></dl>
+
+<dl><dt><a name="CommandLine-generic_module_interface"><strong>generic_module_interface</strong></a>(*arguments, **keywords)</dt><dd><tt>Provides&nbsp;a&nbsp;generic&nbsp;command&nbsp;line&nbsp;interface&nbsp;for&nbsp;modules.<br>
+Things&nbsp;like&nbsp;unit&nbsp;testing&nbsp;or&nbsp;calling&nbsp;objects&nbsp;in&nbsp;module&nbsp;are&nbsp;provided.<br>
+&nbsp;<br>
+Examples:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;<a href="#CommandLine">CommandLine</a>.module(<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;module={'name':&nbsp;__name__,&nbsp;'scope':&nbsp;sys.modules[__name__]},<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default_caller='main',&nbsp;test=False)&nbsp;#&nbsp;doctest:&nbsp;+SKIP</tt></dd></dl>
+
+<dl><dt><a name="CommandLine-generic_package_interface"><strong>generic_package_interface</strong></a>(*arguments, **keywords)</dt><dd><tt>Provides&nbsp;a&nbsp;command-line&nbsp;interface&nbsp;like&nbsp;a&nbsp;makefile.<br>
+Supported&nbsp;features&nbsp;are&nbsp;linting,&nbsp;generate&nbsp;documentation,&nbsp;testing&nbsp;and<br>
+removing&nbsp;temporay&nbsp;files.<br>
+&nbsp;<br>
+Examples:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;<a href="#CommandLine">CommandLine</a>.<a href="#CommandLine-generic_package_interface">generic_package_interface</a>(<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name=__name__,&nbsp;frame=inspect.currentframe()<br>
+...&nbsp;)&nbsp;#&nbsp;doctest:&nbsp;+SKIP<br>
+Namespace(log_level='info'&nbsp;...)</tt></dd></dl>
+
+<dl><dt><a name="CommandLine-handle_log_level"><strong>handle_log_level</strong></a>(*arguments, **keywords)</dt><dd><tt>Handles&nbsp;log&nbsp;level&nbsp;in&nbsp;a&nbsp;generic&nbsp;way.&nbsp;If&nbsp;given&nbsp;command&nbsp;line&nbsp;arguments<br>
+contains&nbsp;a&nbsp;log&nbsp;level&nbsp;all&nbsp;logger&nbsp;levels&nbsp;will&nbsp;be&nbsp;setted&nbsp;to&nbsp;this<br>
+level.</tt></dd></dl>
+
+<dl><dt><a name="CommandLine-test_module"><strong>test_module</strong></a>(*arguments, **keywords)</dt><dd><tt>Test&nbsp;a&nbsp;given's&nbsp;module&nbsp;doctests.</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<hr>
+Data and other attributes defined here:<br>
+<dl><dt><strong>ARGUMENT_DEFAULT</strong> = None</dl>
+
+<dl><dt><strong>CONFLICT_HANDLER</strong> = 'resolve'</dl>
+
+<dl><dt><strong>DEFAULT_ARGUMENTS</strong> = ({'arguments': ('-x', '--version'), 'keywords': {'action': 'version', 'dest': 'version', 'help': 'Show current program version.', 'version': {'execute': '__version_string__'}}}, {'arguments': ('-l', '--log-level'), 'keywords': {'action': 'store', 'choices': ('debug', 'info', 'warning', 'error', 'critical'), 'default': 'critical', 'dest': 'log_level', 'help': {'execute': '"Defines log level of current program instance. ...(__default_arguments__[1]["keywords"]["choices"])'}, 'metavar': 'LOG_LEVEL', 'type': &lt;type 'str'&gt;}})</dl>
+
+<dl><dt><strong>DEFAULT_CALLER_ARGUMENTS</strong> = ({'arguments': ('-c', '--module-object'), 'keywords': {'action': 'store', 'choices': {'execute': 'objects'}, 'default': {'execute': 'default_caller'}, 'dest': 'module_object', 'help': {'execute': r'"Select a callable module object to run. (Objects: \"%s\")" % "\", \"".join(objects)'}, 'metavar': 'CALLABLE_MODULE_OBJECT', 'type': &lt;type 'str'&gt;}}, {'arguments': ('-t', '--test'), 'keywords': {'action': 'store_true', 'default': False, 'dest': 'test', 'help': 'Test current library.'}}, {'arguments': ('-v', '--verbose-test'), 'keywords': {'action': 'store_true', 'default': False, 'dest': 'verbose_test', 'help': 'Test current library verbosly.'}}, {'arguments': ('-m', '--meta-help'), 'keywords': {'action': 'store_true', 'default': False, 'dest': 'meta_help', 'help': 'Shows this help message.'}})</dl>
+
+<dl><dt><strong>EPILOG</strong> = 'powered by thaibault'</dl>
+
+<dl><dt><strong>FROMFILE_PREFIX_CHARS</strong> = '@'</dl>
+
+<dl><dt><strong>NEGATIVE_INPUTS</strong> = ('n', 'no', 'not', 'none', 'negative')</dl>
+
+<dl><dt><strong>PACKAGE_INTERFACE_ARGUMENTS</strong> = ({'arguments': ('commands',), 'keywords': {'action': 'store', 'choices': ('all', 'test', 'clear', 'document', 'lint'), 'default': '', 'help': {'execute': r'"Select commands for performing action with this...kage. (Command: \"%s\")" % "\", \"".join(choices)'}, 'metavar': 'COMMAND', 'type': &lt;type 'str'&gt;}},)</dl>
+
+<dl><dt><strong>POSITIVE_INPUTS</strong> = ('y', 'yes', 'positive')</dl>
+
+<dl><dt><strong>PREFIX_CHARS</strong> = '-'</dl>
+
+<dl><dt><strong>USAGE</strong> = '<font color="#c040c0">\n</font>  %(prog)s [arguments] [keywords (partially wit...<font color="#c040c0">\n\n</font>  Type "%(prog)s --help" for more informations.'</dl>
+
+<dl><dt><strong>current_argument_parser</strong> = None</dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Platform">class <strong>Platform</strong></a>(<a href="__builtin__.html#object">__builtin__.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Handles&nbsp;issues&nbsp;dealing&nbsp;with&nbsp;the&nbsp;underlying&nbsp;operating&nbsp;system.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Platform-__init__"><strong>__init__</strong></a>(*arguments, **keywords)</dt><dd><tt>Determines&nbsp;the&nbsp;operating&nbsp;system.<br>
+&nbsp;<br>
+Examples:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;os&nbsp;=&nbsp;<a href="#Platform">Platform</a>().operating_system<br>
+&gt;&gt;&gt;&nbsp;os&nbsp;==&nbsp;<a href="#Platform">Platform</a>.operating_system<br>
+True<br>
+&gt;&gt;&gt;&nbsp;os&nbsp;#&nbsp;doctest:&nbsp;+SKIP<br>
+'posix'</tt></dd></dl>
+
+<dl><dt><a name="Platform-__repr__"><strong>__repr__</strong></a>(*arguments, **keywords)</dt><dd><tt>Invokes&nbsp;if&nbsp;this&nbsp;<a href="__builtin__.html#object">object</a>&nbsp;should&nbsp;describe&nbsp;itself&nbsp;by&nbsp;a&nbsp;string.<br>
+&nbsp;<br>
+Examples:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;repr(<a href="#Platform">Platform</a>())&nbsp;#&nbsp;doctest:&nbsp;+ELLIPSIS<br>
+'Object&nbsp;of&nbsp;"<a href="#Platform">Platform</a>"&nbsp;on&nbsp;operating&nbsp;system&nbsp;"...".'</tt></dd></dl>
+
+<dl><dt><a name="Platform-change_computer_status"><strong>change_computer_status</strong></a>(*arguments, **keywords)</dt><dd><tt>Shuts&nbsp;down&nbsp;or&nbsp;boot&nbsp;a&nbsp;computer&nbsp;and&nbsp;ensure&nbsp;that&nbsp;is&nbsp;is&nbsp;available&nbsp;after<br>
+boot&nbsp;or&nbsp;not&nbsp;available&nbsp;if&nbsp;it&nbsp;should&nbsp;be&nbsp;shut&nbsp;down.<br>
+&nbsp;<br>
+Returns&nbsp;"True"&nbsp;if&nbsp;computer&nbsp;status&nbsp;was&nbsp;needed&nbsp;to&nbsp;be&nbsp;changed&nbsp;and<br>
+"False"&nbsp;otherwise.</tt></dd></dl>
+
+<dl><dt><a name="Platform-check_process_lock"><strong>check_process_lock</strong></a>(*arguments, **keywords)</dt><dd><tt>Checks&nbsp;if&nbsp;a&nbsp;lock&nbsp;file&nbsp;with&nbsp;given&nbsp;description&nbsp;exists.<br>
+NOTE:&nbsp;Calling&nbsp;this&nbsp;function&nbsp;doesn't&nbsp;give&nbsp;you&nbsp;savety&nbsp;during&nbsp;race<br>
+conditions.<br>
+&nbsp;<br>
+Examples:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;<a href="#Platform">Platform</a>.<a href="#Platform-set_process_lock">set_process_lock</a>('temp')&nbsp;#&nbsp;doctest:&nbsp;+ELLIPSIS<br>
+&lt;class&nbsp;...<a href="#Platform">Platform</a>...&gt;<br>
+&gt;&gt;&gt;&nbsp;<a href="#Platform">Platform</a>.<a href="#Platform-check_process_lock">check_process_lock</a>('temp')<br>
+True</tt></dd></dl>
+
+<dl><dt><a name="Platform-check_thread"><strong>check_thread</strong></a>(*arguments, **keywords)</dt><dd><tt>Checks&nbsp;weather&nbsp;the&nbsp;current&nbsp;thread&nbsp;should&nbsp;be&nbsp;paused&nbsp;or&nbsp;terminated.<br>
+If&nbsp;thread&nbsp;should&nbsp;be&nbsp;terminated&nbsp;"True"&nbsp;will&nbsp;be&nbsp;given&nbsp;back.<br>
+In&nbsp;case&nbsp;of&nbsp;pausing&nbsp;the&nbsp;current&nbsp;thread&nbsp;stay&nbsp;in&nbsp;the&nbsp;current&nbsp;function<br>
+call&nbsp;still&nbsp;a&nbsp;continue&nbsp;event&nbsp;is&nbsp;triggered.<br>
+&nbsp;<br>
+Examples:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;<a href="#Platform">Platform</a>.<a href="#Platform-check_thread">check_thread</a>()<br>
+False<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;<a href="#Platform">Platform</a>.terminate_thread&nbsp;=&nbsp;True<br>
+&gt;&gt;&gt;&nbsp;<a href="#Platform">Platform</a>.<a href="#Platform-check_thread">check_thread</a>()<br>
+True<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;<a href="#Platform">Platform</a>.terminate_thread&nbsp;=&nbsp;False<br>
+&gt;&gt;&gt;&nbsp;<a href="#Platform">Platform</a>.<a href="#Platform-check_thread">check_thread</a>()<br>
+False<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;<a href="#Platform">Platform</a>.pasue_thread&nbsp;=&nbsp;True<br>
+&gt;&gt;&gt;&nbsp;<a href="#Platform">Platform</a>.terminate_thread&nbsp;=&nbsp;True<br>
+&gt;&gt;&gt;&nbsp;<a href="#Platform">Platform</a>.<a href="#Platform-check_thread">check_thread</a>()<br>
+True<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;<a href="#Platform">Platform</a>.pause_thread&nbsp;=&nbsp;True<br>
+&gt;&gt;&gt;&nbsp;<a href="#Platform">Platform</a>.terminate_thread&nbsp;=&nbsp;False<br>
+&gt;&gt;&gt;&nbsp;<a href="#Platform">Platform</a>.<a href="#Platform-check_thread">check_thread</a>()&nbsp;#&nbsp;doctest:&nbsp;+SKIP<br>
+will&nbsp;wait&nbsp;until&nbsp;"pause_thread"&nbsp;is&nbsp;setted&nbsp;to&nbsp;"False"&nbsp;or<br>
+"terminate_thread"&nbsp;to&nbsp;"True".</tt></dd></dl>
+
+<dl><dt><a name="Platform-clear_process_lock"><strong>clear_process_lock</strong></a>(*arguments, **keywords)</dt><dd><tt>Removes&nbsp;a&nbsp;prior&nbsp;setted&nbsp;lock&nbsp;file.<br>
+&nbsp;<br>
+Examples:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;file&nbsp;=&nbsp;boostNode.extension.file.Handler(<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'temp_file_lock',&nbsp;must_exist=False)<br>
+&gt;&gt;&gt;&nbsp;file.content&nbsp;=&nbsp;'&nbsp;'<br>
+&gt;&gt;&gt;&nbsp;<a href="#Platform">Platform</a>.<a href="#Platform-clear_process_lock">clear_process_lock</a>('temp_file')&nbsp;#&nbsp;doctest:&nbsp;+ELLIPSIS<br>
+&lt;class&nbsp;...<a href="#Platform">Platform</a>...&gt;<br>
+&gt;&gt;&gt;&nbsp;bool(file)<br>
+False<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;<a href="#Platform">Platform</a>.<a href="#Platform-set_process_lock">set_process_lock</a>('temp_test')&nbsp;#&nbsp;doctest:&nbsp;+ELLIPSIS<br>
+&lt;class&nbsp;...<a href="#Platform">Platform</a>...&gt;<br>
+&gt;&gt;&gt;&nbsp;<a href="#Platform">Platform</a>.<a href="#Platform-clear_process_lock">clear_process_lock</a>('temp_test')&nbsp;#&nbsp;doctest:&nbsp;+ELLIPSIS<br>
+&lt;class&nbsp;...<a href="#Platform">Platform</a>...&gt;<br>
+&gt;&gt;&gt;&nbsp;<a href="#Platform">Platform</a>.<a href="#Platform-check_process_lock">check_process_lock</a>('temp_test')<br>
+False</tt></dd></dl>
+
+<dl><dt><a name="Platform-make_computer_ready"><strong>make_computer_ready</strong></a>(*arguments, **keywords)</dt><dd><tt>Wakes&nbsp;a&nbsp;remote&nbsp;computer&nbsp;and&nbsp;ensure&nbsp;that&nbsp;it&nbsp;is&nbsp;ready&nbsp;by&nbsp;pinging&nbsp;till<br>
+it&nbsp;answers.</tt></dd></dl>
+
+<dl><dt><a name="Platform-run"><strong>run</strong></a>(*arguments, **keywords)</dt><dd><tt>Runs&nbsp;a&nbsp;command&nbsp;natively&nbsp;on&nbsp;the&nbsp;current&nbsp;operating&nbsp;system&nbsp;using&nbsp;the<br>
+command&nbsp;line.&nbsp;Result&nbsp;will&nbsp;be&nbsp;given&nbsp;back&nbsp;as&nbsp;tuple.&nbsp;First&nbsp;element&nbsp;is<br>
+standard&nbsp;and&nbsp;second&nbsp;error&nbsp;output.<br>
+&nbsp;<br>
+"command"&nbsp;A&nbsp;command&nbsp;line&nbsp;interface&nbsp;command&nbsp;optionally&nbsp;with<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;arguments.<br>
+"command_arguments"&nbsp;A&nbsp;list&nbsp;of&nbsp;arguments&nbsp;passing&nbsp;through&nbsp;the&nbsp;command<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;line&nbsp;interface.<br>
+"secure"&nbsp;Disable&nbsp;output&nbsp;piping&nbsp;by&nbsp;python&nbsp;and&nbsp;run&nbsp;command&nbsp;in&nbsp;systems<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;native&nbsp;process.<br>
+"error"&nbsp;If&nbsp;"False"&nbsp;exceptions&nbsp;by&nbsp;running&nbsp;command&nbsp;are&nbsp;kept&nbsp;back.<br>
+"shell"&nbsp;Simulate&nbsp;a&nbsp;shell&nbsp;if&nbsp;"True".&nbsp;If&nbsp;explict&nbsp;command&nbsp;arguments<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;are&nbsp;given&nbsp;shell's&nbsp;default&nbsp;value&nbsp;is&nbsp;"True"&nbsp;and&nbsp;"False"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;otherwise.<br>
+"log"&nbsp;If&nbsp;"True"&nbsp;standart&nbsp;output&nbsp;will&nbsp;be&nbsp;logged&nbsp;with&nbsp;level&nbsp;"info"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;error&nbsp;output&nbsp;with&nbsp;level&nbsp;"warning".<br>
+&nbsp;<br>
+All&nbsp;following&nbsp;arguments&nbsp;are&nbsp;given&nbsp;through&nbsp;python's&nbsp;native<br>
+"subprocess.Popen()"&nbsp;class&nbsp;initialisation.<br>
+&nbsp;<br>
+Examples:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;<a href="#Platform">Platform</a>.<a href="#Platform-run">run</a>(command='ls')&nbsp;#&nbsp;doctest:&nbsp;+SKIP<br>
+('...',&nbsp;'...')<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;<a href="#Platform">Platform</a>.<a href="#Platform-run">run</a>(<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;command=('ls',&nbsp;'chmod&nbsp;+x&nbsp;test.py'),&nbsp;shell=True<br>
+...&nbsp;)&nbsp;#&nbsp;doctest:&nbsp;+SKIP<br>
+('...',&nbsp;'...')<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;<a href="#Platform">Platform</a>.<a href="#Platform-run">run</a>(<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;command='not',&nbsp;command_arguments=('existing',)<br>
+...&nbsp;)&nbsp;#&nbsp;doctest:&nbsp;+ELLIPSIS<br>
+('',&nbsp;'...')</tt></dd></dl>
+
+<dl><dt><a name="Platform-set_process_lock"><strong>set_process_lock</strong></a>(*arguments, **keywords)</dt><dd><tt>Sets&nbsp;a&nbsp;global&nbsp;lock.&nbsp;Creates&nbsp;a&nbsp;file&nbsp;with&nbsp;given&nbsp;name&nbsp;prefix&nbsp;of<br>
+"description".<br>
+&nbsp;<br>
+Examples:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;<a href="#Platform">Platform</a>.<a href="#Platform-set_process_lock">set_process_lock</a>('temp')&nbsp;#&nbsp;doctest:&nbsp;+ELLIPSIS<br>
+&lt;class&nbsp;...<a href="#Platform">Platform</a>...&gt;<br>
+&gt;&gt;&gt;&nbsp;bool(boostNode.extension.file.Handler('temp_lock'))<br>
+True<br>
+&gt;&gt;&gt;&nbsp;<a href="#Platform">Platform</a>.<a href="#Platform-set_process_lock">set_process_lock</a>()&nbsp;#&nbsp;doctest:&nbsp;+ELLIPSIS<br>
+&lt;class&nbsp;...<a href="#Platform">Platform</a>...&gt;<br>
+&gt;&gt;&gt;&nbsp;bool(boostNode.extension.file.Handler('_lock'))<br>
+True<br>
+&gt;&gt;&gt;&nbsp;<a href="#Platform">Platform</a>.<a href="#Platform-clear_process_lock">clear_process_lock</a>()&nbsp;#&nbsp;doctest:&nbsp;+ELLIPSIS<br>
+&lt;class&nbsp;...<a href="#Platform">Platform</a>...&gt;</tt></dd></dl>
+
+<dl><dt><a name="Platform-wake_computer"><strong>wake_computer</strong></a>(*arguments, **keywords)</dt><dd><tt>Wakes&nbsp;up&nbsp;a&nbsp;remote&nbsp;computer&nbsp;using&nbsp;a&nbsp;magic&nbsp;package<br>
+(wake-on-lan-package).</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<hr>
+Data and other attributes defined here:<br>
+<dl><dt><strong>operating_system</strong> = 'unknown'</dl>
+
+<dl><dt><strong>pause_thread</strong> = False</dl>
+
+<dl><dt><strong>terminate_thread</strong> = False</dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Runnable">class <strong>Runnable</strong></a>(<a href="__builtin__.html#object">__builtin__.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Abstract&nbsp;class&nbsp;(interface)&nbsp;for&nbsp;implementing&nbsp;reusable&nbsp;classes&nbsp;which&nbsp;acts<br>
+directly&nbsp;as&nbsp;an&nbsp;command&nbsp;line&nbsp;interface&nbsp;to&nbsp;provide&nbsp;their&nbsp;features<br>
+platform&nbsp;independent.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Runnable-__init__"><strong>__init__</strong></a>(*arguments, **keywords)</dt><dd><tt>A&nbsp;generic&nbsp;initializer&nbsp;for&nbsp;<a href="#Runnable">Runnable</a>&nbsp;class&nbsp;implementations.</tt></dd></dl>
+
+<dl><dt><a name="Runnable-__repr__"><strong>__repr__</strong></a>(*arguments, **keywords)</dt><dd><tt>Generic&nbsp;representation&nbsp;method.<br>
+&nbsp;<br>
+Examples:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;class&nbsp;A(<a href="#Runnable">Runnable</a>):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;def&nbsp;_initialize(self):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pass<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;repr(A())&nbsp;#&nbsp;doctest:&nbsp;+ELLIPSIS<br>
+'Object&nbsp;of&nbsp;"A"&nbsp;implementing&nbsp;a&nbsp;command&nbsp;line&nbsp;runnable&nbsp;interfaceto...'</tt></dd></dl>
+
+<dl><dt><a name="Runnable-run"><strong>run</strong></a>(*arguments, **keywords)</dt><dd><tt>Method&nbsp;for&nbsp;an&nbsp;explicit&nbsp;run&nbsp;of&nbsp;a&nbsp;class&nbsp;implementing&nbsp;this&nbsp;abstract<br>
+class&nbsp;(interface).<br>
+&nbsp;<br>
+Examples:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;__test_buffer__.clear()&nbsp;#&nbsp;doctest:&nbsp;+ELLIPSIS<br>
+'...'<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;class&nbsp;A(<a href="#Runnable">Runnable</a>):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@boostNode.paradigm.aspectOrientation.JointPoint<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;def&nbsp;_run(self,&nbsp;a):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;boostNode.extension.output.Print(a)<br>
+&gt;&gt;&gt;&nbsp;a&nbsp;=&nbsp;A.<a href="#Runnable-run">run</a>('A')<br>
+&gt;&gt;&gt;&nbsp;__test_buffer__.content<br>
+'A\n'<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;class&nbsp;B(<a href="#Runnable">Runnable</a>):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;def&nbsp;_run(self,&nbsp;a):<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;boostNode.extension.output.Print(a)<br>
+&gt;&gt;&gt;&nbsp;b&nbsp;=&nbsp;B.<a href="#Runnable-run">run</a>('B')<br>
+&gt;&gt;&gt;&nbsp;__test_buffer__.content<br>
+'A\nB\n'</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>__author__</strong> = 'Torben Sickert'<br>
+<strong>__copyright__</strong> = 'see boostNode/__init__.py'<br>
+<strong>__credits__</strong> = ('Torben Sickert',)<br>
+<strong>__file_path__</strong> = '/data/repositories/boostNode/extension/system.py'<br>
+<strong>__license__</strong> = 'see boostNode/__init__.py'<br>
+<strong>__loaded__</strong> = True<br>
+<strong>__logger__</strong> = &lt;logging.Logger object&gt;<br>
+<strong>__maintainer__</strong> = 'Torben Sickert'<br>
+<strong>__maintainer_email__</strong> = 't.sickert@gmail.com'<br>
+<strong>__module_name__</strong> = 'system'<br>
+<strong>__status__</strong> = 'stable'<br>
+<strong>__test_mode__</strong> = False<br>
+<strong>__version__</strong> = '1.0'<br>
+<strong>number</strong> = 4</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#7799ee">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Author</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#7799ee"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%">Torben&nbsp;Sickert</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#7799ee">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Credits</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#7799ee"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%">('Torben&nbsp;Sickert',)</td></tr></table>
+</body></html>
