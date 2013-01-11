@@ -197,8 +197,11 @@ Examples:<br>
 <dl><dt><a name="Platform-change_computer_status"><strong>change_computer_status</strong></a>(*arguments, **keywords)</dt><dd><tt>Shuts&nbsp;down&nbsp;or&nbsp;boot&nbsp;a&nbsp;computer&nbsp;and&nbsp;ensure&nbsp;that&nbsp;is&nbsp;is&nbsp;available&nbsp;after<br>
 boot&nbsp;or&nbsp;not&nbsp;available&nbsp;if&nbsp;it&nbsp;should&nbsp;be&nbsp;shut&nbsp;down.<br>
 &nbsp;<br>
-Returns&nbsp;"True"&nbsp;if&nbsp;computer&nbsp;status&nbsp;was&nbsp;needed&nbsp;to&nbsp;be&nbsp;changed&nbsp;and<br>
-"False"&nbsp;otherwise.</tt></dd></dl>
+Returns&nbsp;a&nbsp;tuple:&nbsp;first&nbsp;value&nbsp;indicats&nbsp;weather&nbsp;it&nbsp;was&nbsp;successfull<br>
+and&nbsp;second&nbsp;is&nbsp;"True"&nbsp;if&nbsp;computer&nbsp;status&nbsp;was&nbsp;needed<br>
+to&nbsp;be&nbsp;changed&nbsp;and&nbsp;"False"&nbsp;otherwise.</tt></dd></dl>
+
+<dl><dt><a name="Platform-check_computer_reachability"><strong>check_computer_reachability</strong></a>(*arguments, **keywords)</dt><dd><tt>Checks&nbsp;if&nbsp;a&nbsp;remote&nbsp;computer&nbsp;is&nbsp;available&nbsp;by&nbsp;pinging&nbsp;it.</tt></dd></dl>
 
 <dl><dt><a name="Platform-check_process_lock"><strong>check_process_lock</strong></a>(*arguments, **keywords)</dt><dd><tt>Checks&nbsp;if&nbsp;a&nbsp;lock&nbsp;file&nbsp;with&nbsp;given&nbsp;description&nbsp;exists.<br>
 NOTE:&nbsp;Calling&nbsp;this&nbsp;function&nbsp;doesn't&nbsp;give&nbsp;you&nbsp;savety&nbsp;during&nbsp;race<br>

@@ -374,24 +374,26 @@ class Platform(builtins.object):
 ##         number_of_tries=10
 ##     ) -> builtins.tuple:
     def change_computer_status(
-        cls, host, mac_address, broadcast, handler, down=False
+        cls, host, mac_address, broadcast, handler, down=False,
+        number_of_tries=10
     ):
 ##
         '''
             Shuts down or boot a computer and ensure that is is available after
             boot or not available if it should be shut down.
 
-            Returns "True" if computer status was needed to be changed and
-            "False" otherwise.
+            Returns a tuple: first value indicats weather it was successfull
+            and second is "True" if computer status was needed
+            to be changed and "False" otherwise.
         '''
         __logger__.info('Try to reach "%s". Please wait.', host)
-        counter = 0
+        counter = 1
         timeout_in_seconds = 3
         maximum_timeout_in_seconds = 60
-        while counter <= number_of_tries and (
-            not down and not cls._check_computer_reachability(
+        while counter <= number_of_tries and not (
+            down or cls.check_computer_reachability(
                 timeout_in_seconds, host)) or (
-                    down and cls._check_computer_reachability(
+                    down and cls.check_computer_reachability(
                         timeout_in_seconds, host)):
             counter += 1
             handler(mac_address, broadcast)
@@ -399,9 +401,9 @@ class Platform(builtins.object):
                 '%d. try to reach "%s" with timeout of %d seconds.',
                 counter, host, timeout_in_seconds)
             time.sleep(timeout_in_seconds)
-            timeout_in_seconds = bultins.min(
+            timeout_in_seconds = builtins.min(
                 timeout_in_seconds + 1, maximum_timeout_in_seconds)
-        return counter != number_of_tries, counter > 0
+        return counter <= number_of_tries, counter > 1
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
@@ -656,11 +658,11 @@ class Platform(builtins.object):
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
-##     def _check_computer_reachability(
+##     def check_computer_reachability(
 ##         cls: boostNode.extension.type.SelfClass,
 ##         timeout_in_seconds: builtins.int, host: builtins.str
 ##     ) -> builtins.bool:
-    def _check_computer_reachability(cl, timeout_in_seconds, host):
+    def check_computer_reachability(cls, timeout_in_seconds, host):
 ##
         '''
             Checks if a remote computer is available by pinging it.
