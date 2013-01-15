@@ -1471,11 +1471,11 @@ class Module(boostNode.paradigm.objectOrientation.Class):
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python2.7
 ##     def default_package(
-##         cls, name, frame, command_line_arguments=(), **keywords
+##         cls, name, frame, command_line_arguments=(), *arguments, **keywords
 ##     ):
     def default_package(
         cls: boostNode.extension.type.SelfClass, name: builtins.str,
-        frame: types.FrameType, command_line_arguments=(),
+        frame: types.FrameType, *arguments: builtins.object,
         **keywords: builtins.object
     ) -> (builtins.tuple, builtins.bool):
 ##
@@ -1497,7 +1497,7 @@ class Module(boostNode.paradigm.objectOrientation.Class):
         cls.extend(name, frame)
         return boostNode.extension.system.CommandLine\
             .generic_package_interface(
-                name, frame, command_line_arguments, **keywords)
+                name, frame, *arguments, **keywords)
 
         # endregion
 

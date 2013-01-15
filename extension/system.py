@@ -1051,7 +1051,9 @@ class CommandLine:
 ##         documenter='pydoc', documenter_arguments=('-w',),
 ##         documentation_path='documentation', clear_old_documentation=True,
 ##         documentation_file_extension='html', temp_file_patterns=(
-##             '^temp_.+$', '^__pycache__$', '^.+\.pyc$', '^.+~$')):
+##             '^temp_.+$', '^__pycache__$', '^.+\.pyc$', '^.+~$'),
+##         exclude_packages=()
+##     ):
     def generic_package_interface(
         cls: boostNode.extension.type.SelfClass, name=__name__,
         frame=inspect.currentframe(), command_line_arguments=(),
@@ -1059,7 +1061,8 @@ class CommandLine:
         documenter='pydoc3', documenter_arguments=('-w',),
         documentation_path='documentation', clear_old_documentation=True,
         documentation_file_extension='html', temp_file_patterns=(
-            '^temp_.+$', '^__pycache__$', '^.+\.pyc$', '^.+~$')
+            '^temp_.+$', '^__pycache__$', '^.+\.pyc$', '^.+~$'),
+        exclude_packages=()
     ) -> (builtins.tuple, builtins.bool):
 ##
         '''
@@ -1080,7 +1083,7 @@ class CommandLine:
             try:
                 module_names = cls._handle_packages_in_package(
                     current_working_directory_save, frame,
-                    command_line_arguments
+                    command_line_arguments, exclude_packages
                 )._get_modules(name)
                 cls._test_lint_document_modules(
                     all, arguments, module_names, temp_file_patterns, linter,
@@ -1691,12 +1694,15 @@ class CommandLine:
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python2.7
 ##     def _handle_packages_in_package(
-##         cls, current_working_directory_save, frame, command_line_arguments
+##         cls, current_working_directory_save, frame, command_line_arguments,
+##         exclude_packages
 ##     ):
     def _handle_packages_in_package(
         cls: boostNode.extension.type.SelfClass,
         current_working_directory_save: builtins.str,
-        frame: types.FrameType, command_line_arguments: collections.Iterable
+        frame: types.FrameType,
+        command_line_arguments: collections.Iterable,
+        exclude_packages: collections.Iterable
     ) -> boostNode.extension.type.SelfClass:
 ##
         '''
@@ -1710,15 +1716,18 @@ class CommandLine:
                         new_command_line_arguments.index(argument)]
         for package, initializer in cls._get_packages(
                 current_working_directory_save, frame):
-            __logger__.info(
-                'Run "{package}" with initializer "{code_manager}" and'
-                ' arguments "{arguments}".'.format(
-                    package=package.basename,
-                    code_manager=initializer.path,
-                    arguments='", "'.join(new_command_line_arguments)))
-            Platform.run(
-                command=initializer.path, secure=True,
-                command_arguments=new_command_line_arguments)
+            if not package.basename in builtins.map(
+                lambda package: package.__name__, exclude_packages
+            ):
+                __logger__.info(
+                    'Run "{package}" with initializer "{code_manager}" and'
+                    ' arguments "{arguments}".'.format(
+                        package=package.basename,
+                        code_manager=initializer.path,
+                        arguments='", "'.join(new_command_line_arguments)))
+                Platform.run(
+                    command=initializer.path, secure=True,
+                    command_arguments=new_command_line_arguments)
         return cls
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
