@@ -132,7 +132,9 @@ class Web(
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},
              'required': {'execute': '__initializer_default_value__ is None'},
-             'help': 'Saves a cli-command for shutting down the server.',
+             'help': {'execute': '"""Saves a cli-command for shutting down the '
+                                 'server (default: "%s").""" % '
+                                 '__initializer_default_value__'},
              'dest': 'close_order',
              'metavar': 'STRING'}},
         {'arguments': ('-w', '--request-whitelist'),
@@ -214,6 +216,16 @@ class Web(
                      'this behavior by providing an authentication file in '
                      'directorys you want to save.',
              'dest': 'authentication'}},
+        {'arguments': ('-e', '--enable-module-loading'),
+         'keywords': {
+             'action': 'store_true',
+             'default': {'execute': '__initializer_default_value__'},
+             'required': {'execute': '__initializer_default_value__ is None'},
+             'help': 'Enables module loading via get query. '
+                     'Enabling this feature can slow down your request '
+                     'performance extremly. Note that self module loading via '
+                     '"__main__" is independly possible.',
+             'dest': 'module_loading'}},
         {'arguments': ('-g', '--authentication-file-pattern'),
          'keywords': {
              'action': 'store',
@@ -224,7 +236,7 @@ class Web(
                      'authentication files.',
              'dest': 'authentication_file_pattern',
              'metavar': 'REGEX_PATTERN'}},
-        {'arguments': ('-e', '--authentication-file-name-pattern'),
+        {'arguments': ('-i', '--authentication-file-name-pattern'),
          'keywords': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
@@ -292,6 +304,8 @@ class Web(
         file or module was requested.
     '''
     default_module_name_pattern = ()
+    '''Indicates if module loading via get query is enabled.'''
+    module_loading = False
 
         # endregion
 
@@ -370,7 +384,8 @@ class Web(
 ##             '__main__', 'main', 'index', 'initialize'),
 ##         authentication=True, authentication_file_name='.htpasswd',
 ##         authentication_file_pattern='(?P<name>.+):(?P<password>.+)',
-##         authentication_handler=None, **keywords: builtins.object
+##         authentication_handler=None, module_loading=False,
+##         **keywords: builtins.object
 ##     ) -> boostNode.extension.type.Self:
     def _initialize(
         self, root='.', port=0, default='', public_key_file_path='',
@@ -388,7 +403,7 @@ class Web(
             '__main__', 'main', 'index', 'initialize'),
         authentication=True, authentication_file_name='.htpasswd',
         authentication_file_pattern='(?P<name>.+):(?P<password>.+)',
-        authentication_handler=None, **keywords
+        authentication_handler=None, module_loading=False, **keywords
     ):
 ##
         '''
@@ -418,6 +433,7 @@ class Web(
         self.lock = threading.Lock()
         self.thread_buffer = boostNode.extension.output.Buffer(
             queue=True)
+        self.module_loading = module_loading
         return self._start_server_thread()
 
             # endregion
@@ -904,13 +920,14 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
     def _is_valid_reference(self):
 ##
         '''
-            Checks wether the incoming is one of a python module-, static- or
-            dynamic file request.
+            Checks wether the requested is one of a python module-, static- or
+            dynamic file request. Returns "True" if so and "False" otherwise.
         '''
         patterns = self.server.web.dynamic_mimetype_pattern +\
             self.server.web.static_mimetype_pattern
         if not self.requested_file:
-            if(boostNode.extension.native.Module.get_file_path(
+            if(self.server.web.module_loading and
+               boostNode.extension.native.Module.get_file_path(
                context_path=self.path)):
                 self.load_module = True
                 return True
@@ -1240,7 +1257,8 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
             if __name__ != '__main__':
                 self.load_module = True
                 return self._set_dynamic_or_static_get(file_name=module_name)
-        elif(boostNode.extension.native.Module.get_file_path(
+        elif(self.server.web.module_loading and
+             boostNode.extension.native.Module.get_file_path(
              context_path=module_name)):
             self.load_module = True
             return self._set_dynamic_or_static_get(file_name=module_name)
@@ -1257,9 +1275,13 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
             Handles request with no explicit file or module to run.
         '''
         if(self.server.web.default == '__main__' or
+           self.server.web.dynamic_module_loading and
            boostNode.extension.native.Module.get_file_path(
                context_path=self.server.web.default)):
             self.load_module = True
+        self.requested_file = boostNode.extension.file.Handler(
+            location=self.server.web.root.path + self.server.web.default,
+            must_exist=False)
         return self._set_dynamic_or_static_get(
             file_name=self.server.web.default)
 
