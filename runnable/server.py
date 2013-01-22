@@ -132,8 +132,8 @@ class Web(
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},
              'required': {'execute': '__initializer_default_value__ is None'},
-             'help': {'execute': '"""Saves a cli-command for shutting down the '
-                                 'server (default: "%s").""" % '
+             'help': {'execute': '"""Saves a cli-command for shutting down '
+                                 'the server (default: "%s").""" % '
                                  '__initializer_default_value__'},
              'dest': 'close_order',
              'metavar': 'STRING'}},
