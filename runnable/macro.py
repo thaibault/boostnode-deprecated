@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.3
+#!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 
 # region header
@@ -24,18 +24,18 @@ __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-## python2.7
-## pass
-import builtins
-import collections
+## python3.3
+## import builtins
+## import collections
+import codecs
 ##
 import inspect
 import os
 import re
 import sys
 
-## python2.7 builtins = sys.modules['__main__'].__builtins__
-pass
+## python3.3 pass
+builtins = sys.modules['__main__'].__builtins__
 
 for number in (3, 4):
     sys.path.append(os.path.abspath(sys.path[0] + number * ('..' + os.sep)))
@@ -91,6 +91,12 @@ class Replace(
              'help': 'Determines if this file should be ignored for running '
                      'any macros.',
              'dest': 'skip_self_file'}},
+        {'arguments': ('-y', '--dry'),
+         'keywords': {
+             'action': 'store_true',
+             'default': {'execute': '__initializer_default_value__'},
+             'help': 'Define if there really should be done something.',
+             'dest': 'dry'}},
         {'arguments': ('-e', '--extension'),
          'keywords': {
              'action': 'store',
@@ -143,7 +149,16 @@ class Replace(
              'help': 'Defines line to determine current version of file to '
                      'parse.',
              'dest': 'more_line_regex_pattern',
-             'metavar': 'REGEX'}})
+             'metavar': 'REGEX'}},
+        {'arguments': ('-g', '--encoding'),
+         'keywords': {
+             'action': 'store',
+             'default': {'execute': '__initializer_default_value__'},
+             'type': {'execute': 'type(__initializer_default_value__)'},
+             'required': {'execute': '__initializer_default_value__ is None'},
+             'help': 'Define which encoding should be used.',
+             'dest': 'encoding',
+             'metavar': 'ENCODING'}})
 
         # endregion
 
@@ -169,6 +184,10 @@ class Replace(
     _first_line_regex_pattern = ''
     _one_line_regex_pattern = ''
     _more_line_regex_pattern = ''
+    '''Defines weather there should be really done something.'''
+    _dry = False
+    '''Defines which encoding will be used to parse files.'''
+    _encoding = ''
 
         # endregion
 
@@ -181,9 +200,9 @@ class Replace(
             # region special methods
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def __repr__(self):
-    def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
+## python3.3
+##     def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
+    def __repr__(self):
 ##
         '''
             Invokes if this object should describe itself by a string.
@@ -206,11 +225,11 @@ class Replace(
             # region setter methods
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def set_new_version(self, version):
-    def set_new_version(
-        self: boostNode.extension.type.Self, version: builtins.str
-    ) -> builtins.str:
+## python3.3
+##     def set_new_version(
+##         self: boostNode.extension.type.Self, version: builtins.str
+##     ) -> builtins.str:
+    def set_new_version(self, version):
 ##
         '''
             Checks if an explicit new version was given or a useful should be
@@ -247,11 +266,11 @@ class Replace(
         return self._new_version
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def set_exclude_locations(self, paths):
-    def set_exclude_locations(
-        self: boostNode.extension.type.Self, paths: collections.Iterable
-    ) -> builtins.list:
+## python3.3
+##     def set_exclude_locations(
+##         self: boostNode.extension.type.Self, paths: collections.Iterable
+##     ) -> builtins.list:
+    def set_exclude_locations(self, paths):
 ##
         '''
             Converts all paths setted to "_exclude_locations" via string to
@@ -286,11 +305,11 @@ class Replace(
             # region runnable implementation
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def _run(self):
-    def _run(
-        self: boostNode.extension.type.Self
-    ) -> boostNode.extension.type.Self:
+## python3.3
+##     def _run(
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
+    def _run(self):
 ##
         '''
             Entry point for command line call of this progam.
@@ -306,10 +325,11 @@ class Replace(
             namespace=command_line_arguments))
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
+## python3.3
 ##     def _initialize(
-##         self, location=None, new_version='__determine_useful__',
-##         skip_self_file=False, extension='', exclude_locations=(),
+##         self: boostNode.extension.type.Self, location=None,
+##         new_version='__determine_useful__', skip_self_file=False,
+##         extension='', exclude_locations=(),
 ##         first_line_regex_pattern='(?P<constant_version_pattern>^#!.*?'
 ##                                  '(?P<current_version>[a-zA-Z0-9\.]+))\n',
 ##         one_line_regex_pattern='\n(?P<prefix>##) '
@@ -320,12 +340,11 @@ class Replace(
 ##                                 '(?P<alternate_version>[^ ]+)\n'
 ##                                 '(?P<alternate_text>((## .*?\n)|(##\n))+)'
 ##                                 '(?P<current_text>.*?\n)##\n',
-##         **keywords
-##     ):
+##         encoding='utf-8', dry=False, **keywords: builtins.object
+##     ) -> boostNode.extension.type.Self:
     def _initialize(
-        self: boostNode.extension.type.Self, location=None,
-        new_version='__determine_useful__', skip_self_file=False,
-        extension='', exclude_locations=(),
+        self, location=None, new_version='__determine_useful__',
+        skip_self_file=False, extension='', exclude_locations=(),
         first_line_regex_pattern='(?P<constant_version_pattern>^#!.*?'
                                  '(?P<current_version>[a-zA-Z0-9\.]+))\n',
         one_line_regex_pattern='\n(?P<prefix>##) '
@@ -336,8 +355,8 @@ class Replace(
                                 '(?P<alternate_version>[^ ]+)\n'
                                 '(?P<alternate_text>((## .*?\n)|(##\n))+)'
                                 '(?P<current_text>.*?\n)##\n',
-        **keywords: builtins.object
-    ) -> boostNode.extension.type.Self:
+        encoding='utf-8', dry=False, **keywords
+    ):
 ##
         '''
             Triggers the conversion process with given arguments.
@@ -357,6 +376,8 @@ class Replace(
         self._more_line_regex_pattern = more_line_regex_pattern
         self._extension = extension
         self._skip_self_file = skip_self_file
+        self._encoding = encoding
+        self._dry = dry
 
         self.exclude_locations = exclude_locations
         self.new_version = new_version
@@ -367,12 +388,12 @@ class Replace(
             # region boolean methods
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def _in_exclude_locations(self, location):
-    def _in_exclude_locations(
-        self: boostNode.extension.type.Self,
-        location: boostNode.extension.file.Handler
-    ) -> builtins.bool:
+## python3.3
+##     def _in_exclude_locations(
+##         self: boostNode.extension.type.Self,
+##         location: boostNode.extension.file.Handler
+##     ) -> builtins.bool:
+    def _in_exclude_locations(self, location):
 ##
         '''
             Returns "True" if given location is in one of intially defined
@@ -390,12 +411,12 @@ class Replace(
             # region core concern methods
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def _determine_useful_version_in_location(self, location):
-    def _determine_useful_version_in_location(
-        self: boostNode.extension.type.Self,
-        location: boostNode.extension.file.Handler
-    ) -> builtins.str:
+## python3.3
+##     def _determine_useful_version_in_location(
+##         self: boostNode.extension.type.Self,
+##         location: boostNode.extension.file.Handler
+##     ) -> builtins.str:
+    def _determine_useful_version_in_location(self, location):
 ##
         '''
             Determines a useful version for replacing if nothing explicit was
@@ -429,12 +450,12 @@ class Replace(
         return ''
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def _determine_useful_version_in_file(self, file):
-    def _determine_useful_version_in_file(
-        self: boostNode.extension.type.Self,
-        file: boostNode.extension.file.Handler
-    ) -> builtins.str:
+## python3.3
+##     def _determine_useful_version_in_file(
+##         self: boostNode.extension.type.Self,
+##         file: boostNode.extension.file.Handler
+##     ) -> builtins.str:
+    def _determine_useful_version_in_file(self, file):
 ##
         '''
             Searches for first version replacement in macro language as good
@@ -471,11 +492,11 @@ class Replace(
         return ''
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def _convert_path(self):
-    def _convert_path(
-        self: boostNode.extension.type.Self
-    ) -> boostNode.extension.type.Self:
+## python3.3
+##     def _convert_path(
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
+    def _convert_path(self):
 ##
         '''
             Converts the given path to the specified format.
@@ -494,12 +515,12 @@ class Replace(
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def _convert_directory(self, directory):
-    def _convert_directory(
-        self: boostNode.extension.type.Self,
-        directory: boostNode.extension.file.Handler
-    ) -> boostNode.extension.type.Self:
+## python3.3
+##     def _convert_directory(
+##         self: boostNode.extension.type.Self,
+##         directory: boostNode.extension.file.Handler
+##     ) -> boostNode.extension.type.Self:
+    def _convert_directory(self, directory):
 ##
         '''
             Walks through a whole directory and its substructure to convert
@@ -520,12 +541,12 @@ class Replace(
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def _convert_file(self, file):
-    def _convert_file(
-        self: boostNode.extension.type.Self,
-        file: boostNode.extension.file.Handler
-    ) -> boostNode.extension.type.Self:
+## python3.3
+##     def _convert_file(
+##         self: boostNode.extension.type.Self,
+##         file: boostNode.extension.file.Handler
+##     ) -> boostNode.extension.type.Self:
+    def _convert_file(self, file):
 ##
         '''
             Opens a given file and parses its content and convert it through
@@ -641,17 +662,20 @@ class Replace(
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def _convert_file_code(self, file):
-    def _convert_file_code(
-        self: boostNode.extension.type.Self,
-        file: boostNode.extension.file.Handler
-    ) -> boostNode.extension.type.Self:
+## python3.3
+##     def _convert_file_code(
+##         self: boostNode.extension.type.Self,
+##         file: boostNode.extension.file.Handler
+##     ) -> boostNode.extension.type.Self:
+    def _convert_file_code(self, file):
 ##
         '''
             Converts source code of given file to new version.
         '''
-        with builtins.open(file.path, 'r') as file_handler:
+## python3.3         with builtins.open(
+        with codecs.open(
+            file.path, mode='r', encoding=self._encoding
+        ) as file_handler:
             try:
                 first_line = file_handler.readline()
             except builtins.UnicodeDecodeError:
@@ -668,7 +692,16 @@ class Replace(
                 self._current_version, self._new_version)
             first_line = match.group().replace(
                 match.group('constant_version_pattern'), new_interpreter)
-            file_content = file_handler.read()
+            try:
+                '''
+                    NOTE: Calling "read()" twice is necessary to work around a
+                    python bug. First call only reads a part of corresponding
+                    file.
+                '''
+                file_content = file_handler.read() + file_handler.read()
+            except builtins.UnicodeDecodeError:
+                __logger__.warning('Can\'t decode file "%s".', file.path)
+                return self
         __logger__.info(
             'Convert "{path}" from "{current_version}" to '
             '"{new_version}".'.format(
@@ -677,17 +710,18 @@ class Replace(
         file_content = first_line + re.compile(
             self._more_line_regex_pattern, re.DOTALL).sub(
                 self._replace_alternate_lines, file_content)
-        file.content = re.compile(self._one_line_regex_pattern).sub(
-            self._replace_alternate_line, file_content)
+        if not self._dry:
+            file.content = re.compile(self._one_line_regex_pattern).sub(
+                self._replace_alternate_line, file_content)
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def _replace_alternate_lines(self, match):
-    def _replace_alternate_lines(
-        self: boostNode.extension.type.Self,
-        match: type(re.compile('').match(''))
-    ) -> builtins.str:
+## python3.3
+##     def _replace_alternate_lines(
+##         self: boostNode.extension.type.Self,
+##         match: type(re.compile('').match(''))
+##     ) -> builtins.str:
+    def _replace_alternate_lines(self, match):
 ##
         '''
             Replaces various numbers of code lines with its corresponding code
@@ -722,12 +756,12 @@ class Replace(
         return match.group()
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def _replace_alternate_line(self, match):
-    def _replace_alternate_line(
-        self: boostNode.extension.type.Self,
-        match: type(re.compile('').match(''))
-    ) -> builtins.str:
+## python3.3
+##     def _replace_alternate_line(
+##         self: boostNode.extension.type.Self,
+##         match: type(re.compile('').match(''))
+##     ) -> builtins.str:
+    def _replace_alternate_line(self, match):
 ##
         '''
             Replaces one code line with its corresponding code line in another
@@ -751,12 +785,12 @@ class Replace(
         return match.group()
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def _determine_useful_version_in_location_helper(self, location):
-    def _determine_useful_version_in_location_helper(
-        self: boostNode.extension.type.Self,
-        location: boostNode.extension.file.Handler
-    ) -> builtins.str:
+## python3.3
+##     def _determine_useful_version_in_location_helper(
+##         self: boostNode.extension.type.Self,
+##         location: boostNode.extension.file.Handler
+##     ) -> builtins.str:
+    def _determine_useful_version_in_location_helper(self, location):
 ##
         '''
             Searches in files in given locations the first occurences of a
@@ -779,11 +813,11 @@ class Replace(
         return ''
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def _convert(self):
-    def _convert(
-        self: boostNode.extension.type.Self
-    ) -> boostNode.extension.type.Self:
+## python3.3
+##     def _convert(
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
+    def _convert(self):
 ##
         '''
             Triggers the conversion process.
