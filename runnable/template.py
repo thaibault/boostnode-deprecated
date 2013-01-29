@@ -1015,7 +1015,10 @@ class Parser(
             Determines the line number where the exception (in exec statement)
             occurs from the given exception.
         '''
-        exception_traceback = traceback.extract_tb(exception.__traceback__)
+## python3.3
+##         exception_traceback = traceback.extract_tb(exception.__traceback__)
+        exception_traceback = traceback.extract_tb(sys.exc_info()[2])
+##
         exception_traceback.reverse()
         for context in exception_traceback:
             if context[0] == '<string>':
