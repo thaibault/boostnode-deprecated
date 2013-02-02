@@ -107,6 +107,7 @@ class Runnable:
                             exception_name=exception.__class__.__name__,
                             exception_message=builtins.str(exception),
                             program_file_path=sys.argv[0]))
+                    sys.exit(1)
         else:
             self._initialize(*arguments, **keywords)
 
@@ -630,8 +631,7 @@ class Platform:
         '''
         if command_arguments is None:
             command_arguments = []
-            if shell is None:
-                shell = False
+            shell = False if shell is None else shell
         if shell is None:
             shell = True
         if builtins.isinstance(command, builtins.str):

@@ -2345,11 +2345,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             if not backup:
 ## python2.7
 ##                 if(not (other_backup == self) and not backup_if_exists and
-##                    (not compare_content or
-##                     self.is_equivalent(other=other_backup))):
+##                    (not compare_content or self.is_equivalent(
+##                        other=other_backup))):
                 if(other_backup != self and not backup_if_exists and
-                   (not compare_content or
-                    self.is_equivalent(other=other_backup))):
+                   (not compare_content or self.is_equivalent(
+                       other=other_backup))):
 ##
                     return self
                 self.copy(target=backup)
