@@ -6,7 +6,7 @@ This library supports python2.7+ and python3.3+ environements.
 
 Some features are:
 
-    - platform independent webbase gui toolkit
+    - platform independent webbased gui toolkit
     - smart, very secure webserver
     - macro processor for text based files
     - synchronisation
@@ -24,7 +24,8 @@ Usage
     For advanced usage see the recommended module pattern described in
     "path/to/boosNode/__init__.py".
     
-    To switch boosNode version between python3.X and python 2.X use this
+    BoostNode is able to witch itself between python2.X and python3.X.
+    To switch boostNode version between python3.X and python 2.X use this
     command:
     
     /path/to/boostNode/runnable/macro.py -p /path/to/boostNode -e py
