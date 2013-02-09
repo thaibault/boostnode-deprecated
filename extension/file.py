@@ -1730,25 +1730,18 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
                 keywords['encoding'] = self._encoding
             else:
                 self._encoding = keywords['encoding']
-## python3.3             with builtins.open(
+## python3.3
+##             with builtins.open(
+##                 self._path, mode, *arguments, **keywords
+##             ) as file_handler:
+##                 file_handler.write(content)
             with codecs.open(
                 self._path, mode, *arguments, **keywords
             ) as file_handler:
+                if not builtins.isinstance(content, builtins.unicode):
+                    content = builtins.unicode(content, 'utf-8')
                 file_handler.write(content)
-# TODO check if necessary for python2.7
-#            '''
-#                Python2.7 workaround for right charset by writing text-based
-#                files.
-#            '''
-#            with codecs.open(
-#                self._path, mode='r', encoding='utf-8', errors='strict'
-#            ) as file:
-#                content_utf_8 = file.read()
-#            with codecs.open(
-#                self._path, mode='w', encoding=self._encoding,
-#                errors='strict'
-#            ) as file:
-#                file.write(content_utf_8)
+##
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
