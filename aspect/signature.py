@@ -21,12 +21,11 @@ __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-## python3.3
-## import builtins
-## import collections
-## import functools
+## python3.3 import builtins
 pass
-##
+import collections
+## python3.3 import functools
+pass
 import inspect
 import os
 import sys
@@ -116,53 +115,6 @@ class CheckObject(builtins.object):
 
     # region static methods
 
-        # region protected methods
-
-            # region boolean functions
-
-    @builtins.classmethod
-## python3.3
-##     def _is_multiple_type(
-##         cls: boostNode.extension.type.SelfClass,
-##         type: (builtins.object, builtins.type)
-##     ) -> builtins.bool:
-    def _is_multiple_type(cls, type):
-##
-        '''
-            Check wether a given specification allows multiple types.
-        '''
-        return(
-            builtins.isinstance(type, (builtins.tuple, builtins.list)) and
-            builtins.len(type) > 1 and
-            builtins.isinstance(type[0], builtins.type))
-
-    @builtins.classmethod
-## python3.3
-##     def _is_right_type(
-##         cls: boostNode.extension.type.SelfClass, given_type: builtins.type,
-##         expected_type: builtins.type
-##     ) -> builtins.bool:
-    def _is_right_type(cls, given_type, expected_type):
-##
-        '''
-            Check wether a given type is expected type or given type is a
-            subclass of expected type.
-
-            Fixes bug that "bool" is a subtype of "int".
-        '''
-        return (given_type is expected_type or
-                builtins.issubclass(given_type, expected_type) and
-                not (given_type is builtins.bool and
-                     expected_type is builtins.int))
-
-            # endregion
-
-        # endregion
-
-    # endregion
-
-    # region dynamic methods
-
         # region public methods
 
             # region special methods
@@ -186,6 +138,99 @@ class CheckObject(builtins.object):
             .determine_abstract_method_exception(
                 abstract_class_name=CheckObject.__name__)
 
+            # endregion
+
+        # endregion
+
+        # region protected methods
+
+            # region boolean functions
+
+    @builtins.classmethod
+## python3.3
+##     def _is_multiple_type(
+##         cls: boostNode.extension.type.SelfClass,
+##         type: (builtins.object, builtins.type)
+##     ) -> builtins.bool:
+    def _is_multiple_type(cls, type):
+##
+        '''
+            Check wether a given specification allows multiple types.
+
+            Examples:
+
+            >>> CheckObject._is_multiple_type(())
+            False
+
+            >>> CheckObject._is_multiple_type(('hans'))
+            False
+
+            >>> CheckObject._is_multiple_type(('hans', 5))
+            False
+
+            >>> CheckObject._is_multiple_type((str, int))
+            True
+
+            >>> CheckObject._is_multiple_type([str, int, bool])
+            True
+
+            >>> CheckObject._is_multiple_type((str,))
+            False
+
+            >>> CheckObject._is_multiple_type([str])
+            False
+        '''
+        return(
+            builtins.isinstance(type, (builtins.tuple, builtins.list)) and
+            builtins.len(type) > 1 and
+            builtins.isinstance(type[0], builtins.type))
+
+    @builtins.classmethod
+## python3.3
+##     def _is_right_type(
+##         cls: boostNode.extension.type.SelfClass, given_type: builtins.type,
+##         expected_type: builtins.type
+##     ) -> builtins.bool:
+    def _is_right_type(cls, given_type, expected_type):
+##
+        '''
+            Check wether a given type is expected type or given type is a
+            subclass of expected type.
+
+            Fixes bug that "bool" is a subtype of "int".
+
+            Examples:
+
+            >>> CheckObject._is_right_type(bool, int)
+            False
+
+            >>> CheckObject._is_right_type(list, tuple)
+            False
+
+            >>> CheckObject._is_right_type(list, list)
+            True
+
+            >>> CheckObject._is_right_type(list, collections.Iterable)
+            True
+        '''
+        return (
+            given_type is expected_type or
+            builtins.issubclass(given_type, expected_type) and
+            not (given_type is builtins.bool and
+                 expected_type is builtins.int))
+
+            # endregion
+
+        # endregion
+
+    # endregion
+
+    # region dynamic methods
+
+        # region public methods
+
+            # region special methods
+
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
@@ -205,9 +250,9 @@ class CheckObject(builtins.object):
             >>> repr(A()) # doctest: +ELLIPSIS
             'Object of "A" with class object "None", object "None", called...'
         '''
-        class_name = 'None'
-        if self.__class__ is not None:
-            class_name = self.__class__.__name__
+        class_name = self.__class__.__name__
+        if self.__class__ is None:
+            class_name = 'None'
         class_object_name = 'None'
         if self.class_object is not None:
             class_object_name = self.class_object.__name__
@@ -222,9 +267,7 @@ class CheckObject(builtins.object):
 
             # endregion
 
-        # endregion
-
-    # region getter methods
+            # region getter methods
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -255,6 +298,8 @@ class CheckObject(builtins.object):
             return self.class_object.__name__ + '.' + self.function.__name__
         return self.function.__name__
 ##
+
+            # endregion
 
         # endregion
 
@@ -742,7 +787,7 @@ class Check(boostNode.paradigm.aspectOrientation.FunctionDecorator):
 
     # region dynamic methods
 
-        # region protected methods
+        # region public methods
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
