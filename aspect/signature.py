@@ -252,7 +252,7 @@ class CheckObject(builtins.object):
         '''
         class_name = self.__class__.__name__
         if self.__class__ is None:
-            class_name = 'None'
+            class_name = self.__name__
         class_object_name = 'None'
         if self.class_object is not None:
             class_object_name = self.class_object.__name__
@@ -317,6 +317,38 @@ class CheckObject(builtins.object):
 ##
         '''
             Check an argument which is specified with multiple types.
+
+            Examples:
+
+            >>> class A(CheckObject):
+            ...     def __init__(self):
+            ...         pass
+
+            >>> A()._handle_multiple_types(
+            ...     'hans', str, (str, int)
+            ... ) # doctest: +ELLIPSIS
+            Object of "A" with class object "None", object "None", called ...
+
+            >>> a = A()
+            >>> a.function = A._handle_multiple_types
+            >>> a._handle_multiple_types(
+            ...     'hans', str, (bool, int)
+            ... ) # doctest: +ELLIPSIS
+            Traceback (most recent call last):
+            ...
+            SignatureError: "_handle_multiple_types()" expects one instance ...
+
+            >>> a._handle_multiple_types(
+            ...     'hans', str, [True, 4, 'hans']
+            ... ) # doctest: +ELLIPSIS
+            Object of "A" with class object "None", object "None", called ...
+
+            >>> a._handle_multiple_types(
+            ...     'hans', str, [True, 4, 'peter']
+            ... ) # doctest: +ELLIPSIS
+            Traceback (most recent call last):
+            ...
+            SignatureError: "_handle_multiple_types()" expects one value of ...
         '''
         if(builtins.isinstance(expected_types, builtins.tuple) and
            not self._check_again_multiple_types(
@@ -331,9 +363,10 @@ class CheckObject(builtins.object):
              not value in expected_types):
             raise __exception__(
                 '"{function_path}()" expects one value of '
-                '{types} for "{name}" but received "{type_name}".'.format(
+                '{values} for "{name}" but received "{type_name}".'.format(
                     function_path=self.get_function_path(),
-                    types=self._join_types(types=expected_types),
+                    values=self._join_types(
+                        types=expected_types, meta_type=False),
                     name=name, type_name=given_type.__name__))
         return self
 
@@ -541,7 +574,7 @@ class CheckObject(builtins.object):
 ##     def _join_types(
 ##         self: boostNode.extension.type.Self, types: collections.Iterable
 ##     ) -> builtins.str:
-    def _join_types(self, types):
+    def _join_types(self, types, meta_type=True):
 ##
         '''
             Join given types for pretty error message presentation.
@@ -557,8 +590,10 @@ class CheckObject(builtins.object):
             elif type is boostNode.extension.type.SelfClassObject:
                 output += '"' + self.class_object.__name__ +\
                     ' (self class object)"'
-            else:
+            elif meta_type:
                 output += '"' + type.__name__ + '"'
+            else:
+                output += '"' + builtins.str(type) + '"'
             if type is types[-2]:
                 output += ' or '
             elif type is not types[-1]:
