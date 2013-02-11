@@ -250,16 +250,13 @@ class CheckObject(builtins.object):
             >>> repr(A()) # doctest: +ELLIPSIS
             'Object of "A" with class object "None", object "None", called...'
         '''
-        class_name = self.__class__.__name__
-        if self.__class__ is None:
-            class_name = self.__name__
         class_object_name = 'None'
         if self.class_object is not None:
             class_object_name = self.class_object.__name__
         return ('Object of "{class_name}" with class object "'
                 '{class_object_name}", object "{object}", called function '
                 '"{function}" and method type "{method_type}".'.format(
-                    class_name=class_name,
+                    class_name=self.__class__.__name__,
                     class_object_name=class_object_name,
                     object=builtins.repr(self.object),
                     function=builtins.str(self.function),
@@ -333,7 +330,7 @@ class CheckObject(builtins.object):
             >>> a.function = A._handle_multiple_types
             >>> a._handle_multiple_types(
             ...     'hans', str, (bool, int)
-            ... ) # doctest: +ELLIPSIS
+            ... ) # doctest: +ELLIPSIS +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
             SignatureError: "_handle_multiple_types()" expects one instance ...
@@ -345,7 +342,7 @@ class CheckObject(builtins.object):
 
             >>> a._handle_multiple_types(
             ...     'hans', str, [True, 4, 'peter']
-            ... ) # doctest: +ELLIPSIS
+            ... ) # doctest: +ELLIPSIS +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
             SignatureError: "_handle_multiple_types()" expects one value of ...
@@ -382,6 +379,86 @@ class CheckObject(builtins.object):
 ##
         '''
             Checks if the given value is of its specified type.
+
+            Examples:
+
+            >>> class A(CheckObject):
+            ...     def __init__(self):
+            ...         pass
+            >>> class B:
+            ...     def b(self):
+            ...         pass
+
+            >>> A()._check_type(
+            ...     builtins.type(None), int, 5
+            ... ) # doctest: +ELLIPSIS
+            Object of "A" with class object "None", object "None", called ...
+
+            >>> A()._check_type(
+            ...     int, int, 5
+            ... ) # doctest: +ELLIPSIS
+            Object of "A" with class object "None", object "None", called ...
+
+            >>> a = A()
+            >>> b = B()
+            >>> a.class_object = B
+            >>> a.object = b
+            >>> a.function = B.b
+            >>> a._check_type(
+            ...     boostNode.extension.type.Self, B, b
+            ... ) # doctest: +ELLIPSIS
+            Object of "A" with class object "B", object "...
+
+            >>> a = A()
+            >>> a.class_object = B
+            >>> a.object = B()
+            >>> a.function = B.b
+            >>> a._check_type(
+            ...     boostNode.extension.type.Self, B, B()
+            ... ) # doctest: +ELLIPSIS +IGNORE_EXCEPTION_DETAIL
+            Traceback (most recent call last):
+            ...
+            SignatureError: "B.b()" expects "... (self)" for "return va..."...
+
+            >>> a = A()
+            >>> a.class_object = B
+            >>> a.object = B()
+            >>> a.function = B.b
+            >>> a._check_type(
+            ...     boostNode.extension.type.SelfClass, B, B
+            ... ) # doctest: +ELLIPSIS
+            Object of "A" with class object "B", object "...
+
+            >>> a = A()
+            >>> a.class_object = B
+            >>> a.object = B()
+            >>> a.function = B.b
+            >>> a._check_type(
+            ...     boostNode.extension.type.SelfClassObject, B, B()
+            ... ) # doctest: +ELLIPSIS
+            Object of "A" with class object "B", object "...
+
+            >>> a = A()
+            >>> a.class_object = B
+            >>> a.object = B()
+            >>> a.function = B.b
+            >>> a._check_type(
+            ...     boostNode.extension.type.SelfClassObject, int, 5
+            ... ) # doctest: +ELLIPSIS +IGNORE_EXCEPTION_DETAIL
+            Traceback (most recent call last):
+            ...
+            SignatureError: "B.b()" expects instance of "__main__.B (self c...
+
+            >>> a = A()
+            >>> a.class_object = B
+            >>> a.object = B()
+            >>> a.function = B.b
+            >>> a._check_type(
+            ...     bool, int, 5
+            ... ) # doctest: +ELLIPSIS +IGNORE_EXCEPTION_DETAIL
+            Traceback (most recent call last):
+            ...
+            SignatureError: "B.b()" expects instance of "bool" for "return ...
         '''
         if not (expected_type is builtins.type(None) or
                 expected_type is given_type or
@@ -558,29 +635,99 @@ class CheckObject(builtins.object):
 ##
         '''
             Checks if given value is one of a set of types.
+
+            Examples:
+
+            >>> class A(CheckObject):
+            ...     def __init__(self):
+            ...         pass
+
+            >>> A()._check_again_multiple_types(5, int, (int, str))
+            True
+
+            >>> A()._check_again_multiple_types(5, int, (bool, str))
+            False
         '''
         for expected_type in expected_types:
             if self._is_right_type(given_type, expected_type):
                 return True
-        return(boostNode.extension.type.Self in expected_types and
-               value is self.object or
-               boostNode.extension.type.SelfClass in expected_types and
-               value is self.class_object or
-               boostNode.extension.type.SelfClassObject in expected_types and
-               given_type is self.class_object)
+        return(
+            boostNode.extension.type.Self in expected_types and
+            value is self.object or
+            boostNode.extension.type.SelfClass in expected_types and
+            value is self.class_object or
+            boostNode.extension.type.SelfClassObject in expected_types and
+            given_type is self.class_object)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _join_types(
-##         self: boostNode.extension.type.Self, types: collections.Iterable
+##         self: boostNode.extension.type.Self, types: collections.Sequence,
+##         meta_type=True
 ##     ) -> builtins.str:
     def _join_types(self, types, meta_type=True):
 ##
         '''
             Join given types for pretty error message presentation.
+
+            Examples:
+
+            >>> class A(CheckObject):
+            ...     def __init__(self):
+            ...         pass
+
+            >>> A()._join_types((int, str))
+            '"int" or "str"'
+
+            >>> A()._join_types((int,))
+            '"int"'
+
+            >>> A()._join_types([int, str, bool])
+            '"int", "str" or "bool"'
+
+            >>> A()._join_types([int, str, boostNode.extension.type.Self])
+            '"int", "str" or "None (self)"'
+
+            >>> a = A()
+            >>> a.class_object = A
+            >>> a.object = A()
+            >>> a._join_types(
+            ...     [int, str, boostNode.extension.type.Self]
+            ... ) # doctest: +ELLIPSIS
+            '"int", "str" or "Object of "A" with class object ...(self)"'
+
+            >>> a = A()
+            >>> a.class_object = A
+            >>> a.object = A()
+            >>> a._join_types(
+            ...     [int, str, boostNode.extension.type.SelfClass]
+            ... ) # doctest: +ELLIPSIS
+            '"int", "str" or "A (self class)"'
+
+            >>> a = A()
+            >>> a.class_object = A
+            >>> a.object = A()
+            >>> a._join_types(
+            ...     [int, str, boostNode.extension.type.SelfClassObject]
+            ... ) # doctest: +ELLIPSIS
+            '"int", "str" or "A (self class object)"'
+
+            >>> a = A()
+            >>> a.class_object = A
+            >>> a.object = A()
+            >>> a._join_types((5, 'hans', a), False) # doctest: +ELLIPSIS
+            '"5", "hans" or "Object of "A" with class object "A", ...'
+
+            >>> A()._join_types((5, 'hans', 3), False)
+            '"5", "hans" or "3"'
+
+            >>> A()._join_types([5], False)
+            '"5"'
         '''
         if builtins.len(types) < 2:
-            return types[0]
+            return '"' + (
+                types[0].__name__ if meta_type else builtins.str(types[0])
+            ) + '"'
         output = ''
         for type in types:
             if type is boostNode.extension.type.Self:
@@ -612,6 +759,24 @@ class CheckObject(builtins.object):
         '''
             Checks if the given argument value is equal the specified
             argument value.
+
+            Examples:
+
+            >>> class A(CheckObject):
+            ...     def __init__(self):
+            ...         pass
+
+            >>> A()._check_value(5, 5) # doctest: +ELLIPSIS
+            Object of "A" with class object "None", object "None", ...
+
+            >>> a = A()
+            >>> a.function = a._check_value
+            >>> a._check_value(
+            ...     5, 7
+            ... ) # doctest: +ELLIPSIS +IGNORE_EXCEPTION_DETAIL
+            Traceback (most recent call last):
+            ...
+            SignatureError: "_check_value()" expects value "5" for ... "7".
         '''
         if expected_value != value:
             raise __exception__(
@@ -907,8 +1072,20 @@ class CheckArguments(
     def aspect(self):
 ##
         '''
-            This functions could be used as decorator function or aspects to
+            This function could be used as decorator function or aspects to
             implement argument type check for each function call.
+
+            Examples:
+
+            >>> class A(CheckArguments):
+            ...     def __init__(self):
+            ...         self.class_object = int
+            ...         self.arguments = ()
+
+            >>> a = A()
+            >>> a.function = a.aspect
+            >>> a.aspect() # doctest: +ELLIPSIS
+            Object of "A" with class object "int", object "None", function ...
         '''
         if builtins.hasattr(self.function, '__annotations__'):
             '''
