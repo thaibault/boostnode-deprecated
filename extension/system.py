@@ -716,12 +716,12 @@ class Platform(builtins.object):
         '''
             Runs a command line command in its own process.
         '''
-        result = {'standart_output': '', 'error_output': '', 'returncode': 1}
+        result = {'standart_output': '', 'error_output': '', 'return_code': 1}
         command = ' '.join([command] + builtins.list(command_arguments))
         if secure:
-            result['returncode'] = os.system(command)
-            if error and result['returncode'] != 0:
-                sys.exit(result['returncode'])
+            result['return_code'] = os.system(command)
+            if error and result['return_code'] != 0:
+                sys.exit(result['return_code'])
         else:
             try:
 ## python3.3
@@ -758,7 +758,7 @@ class Platform(builtins.object):
                             'error_output': builtins.str(
                                 result[1].decode())}
 ##
-                    result['returncode'] = process_handler.returncode
+                    result['return_code'] = process_handler.returncode
             except:
                 if error:
                     raise
@@ -781,7 +781,7 @@ class Platform(builtins.object):
         '''
             Runs a list of command line commands as its own process.
         '''
-        result = {'standart_output': [], 'error_output': [], 'returncode': 0}
+        result = {'standart_output': [], 'error_output': [], 'return_code': 0}
         for sub_command in commands:
             sub_result = cls.run(
                 command=sub_command, command_arguments=command_arguments,
@@ -790,7 +790,7 @@ class Platform(builtins.object):
             if builtins.isinstance(sub_result, builtins.dict):
                 result['standart_output'].append(sub_result['standart_output'])
                 result['error_output'].append(sub_result['error_output'])
-                result['returncode'].append(sub_result['returncode'])
+                result['return_code'].append(sub_result['return_code'])
         return result
 
         # endregion

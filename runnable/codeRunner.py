@@ -642,7 +642,7 @@ class Run(
             terminator=terminator_save)
         boostNode.extension.output.Print(result['error_output'], end='')
         __logger__.info(']')
-        __logger__.info('Return code: "%d".', result['returncode'])
+        __logger__.info('Return code: "%d".', result['return_code'])
         boostNode.extension.output.Logger.change_all(format=format_save)
         return self
 
