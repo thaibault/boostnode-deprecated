@@ -1450,9 +1450,8 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
                         try:
                             '''
                                 NOTE: Double call of "read()" is a
-                                workaround
-                                for python bug when finishing reading file
-                                without end reached.
+                                workaround for python bug when finishing
+                                reading file without end reached.
                             '''
                             self._content = builtins.str(
                                 (file.read() + file.read()).encode(

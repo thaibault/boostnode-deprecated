@@ -723,45 +723,43 @@ class Platform(builtins.object):
             if error and result['return_code'] != 0:
                 sys.exit(result['return_code'])
         else:
-            try:
 ## python3.3
-##                 with subprocess.Popen(
-##                     command, *arguments, shell=shell,
-##                     stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-##                     stderr=subprocess.PIPE, **keywords
-##                 ) as process_handler:
-                process_handler = subprocess.Popen(
-                    command, *arguments, shell=shell,
-                    stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE, **keywords)
-                if True:
+##             with subprocess.Popen(
+##                 command, *arguments, shell=shell,
+##                 stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+##                 stderr=subprocess.PIPE, **keywords
+##             ) as process_handler:
+            process_handler = subprocess.Popen(
+                command, *arguments, shell=shell,
+                stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE, **keywords)
+            if True:
 ##
-                    if no_blocking:
-                        fcntl.fcntl(
-                            process_handler.stdout.fileno(), fcntl.F_SETFL,
-                            os.O_NONBLOCK)
-                        fcntl.fcntl(
-                            process_handler.stderr.fileno(), fcntl.F_SETFL,
-                            os.O_NONBLOCK)
-                        result = {
-                            'standart_output': process_handler.stdout,
-                            'error_output': process_handler.stderr}
-                    else:
-                        result = process_handler.communicate()
+                if no_blocking:
+                    fcntl.fcntl(
+                        process_handler.stdout.fileno(), fcntl.F_SETFL,
+                        os.O_NONBLOCK)
+                    fcntl.fcntl(
+                        process_handler.stderr.fileno(), fcntl.F_SETFL,
+                        os.O_NONBLOCK)
+                    result = {
+                        'standart_output': process_handler.stdout,
+                        'error_output': process_handler.stderr}
+                else:
+                    result = process_handler.communicate()
 ## python3.3
-##                         result = {
-##                             'standart_output': result[0].decode(),
-##                             'error_output': result[1].decode()}
-                        result = {
-                            'standart_output': builtins.str(
-                                result[0].decode()),
-                            'error_output': builtins.str(
-                                result[1].decode())}
+##                     result = {
+##                         'standart_output': result[0].decode(),
+##                         'error_output': result[1].decode()}
+                    result = {
+                        'standart_output': result[0],
+                        'error_output': result[1]}
 ##
-                    result['return_code'] = process_handler.returncode
-            except:
-                if error:
-                    raise
+                result['return_code'] = process_handler.returncode
+            if error and result['return_code'] != 0:
+                raise __exception__(
+                    'Command "%s" returns a none zero return code (%d).',
+                    command, result['return_code'])
         return result
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
