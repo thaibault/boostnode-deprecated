@@ -1347,8 +1347,8 @@ class Module(boostNode.paradigm.objectOrientation.Class):
             [('...', '...'), ...]
 
             >>> Module.execute_program_for_modules(
-            ...     'program', 'not_existing', boostNode.extension.__all__
-            ... ) # doctest: +ELLIPSIS
+            ...     'program', 'not_existing', boostNode.extension.__all__,
+            ...     error=False) # doctest: +ELLIPSIS
             ('', '...')
         '''
         results = []

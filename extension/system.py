@@ -630,9 +630,16 @@ class Platform(builtins.object):
             {...'standart_output': ...}
 
             >>> Platform.run(
-            ...     command='not', command_arguments=('existing',)
+            ...     command='not', command_arguments=('existing',), error=False
             ... ) # doctest: +ELLIPSIS
             {...'standart_output': ...}
+
+            >>> Platform.run(
+            ...     command='not', command_arguments=('existing',)
+            ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
+            Traceback (most recent call last):
+            ...
+            boostNode.extension.native.SystemError: Command "not existing" ...
         '''
         if command_arguments is None:
             command_arguments = []

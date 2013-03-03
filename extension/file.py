@@ -1438,9 +1438,9 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 ##                                 reading file without end reached.
 ##                             '''
 ##                             self._content = file.read() + file.read()
-##                         except builtins.UnicodeDecodeError:
+##                         except builtins.UnicodeDecodeError as exception:
 ##                             __logger__.warning(
-##                                 'File "%s" couldn\'t be ridden. %s: %s',
+##                                 'File "%s" couldn\'t be wridden. %s: %s',
 ##                                 self.path, exception.__class__.__name__,
 ##                                 builtins.str(exception))
 ##                             return ''
