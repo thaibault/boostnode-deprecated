@@ -1239,6 +1239,7 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         for file_name_pattern in self.server.web.default_file_name_pattern:
             for file in self.server.web.root:
                 if self._check_pattern((file_name_pattern,), file.name):
+                    self.requested_file = file
                     return self._set_dynamic_or_static_get(file_name=file.name)
         return False
 
@@ -1259,7 +1260,8 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
                 return self._set_dynamic_or_static_get(file_name=module_name)
         elif(self.server.web.module_loading and
              boostNode.extension.native.Module.get_file_path(
-             context_path=module_name)):
+                 context_path=module_name)
+        ):
             self.load_module = True
             return self._set_dynamic_or_static_get(file_name=module_name)
         return False
