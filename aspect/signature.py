@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.3
 # -*- coding: utf-8 -*-
 
 # region header
@@ -21,19 +21,19 @@ __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-## python3.3 import builtins
-pass
+## python2.7 pass
+import builtins
 import collections
-## python3.3 import functools
-pass
+## python2.7 pass
+import functools
 import inspect
 import os
 import sys
-## python3.3 import types
-pass
+## python2.7 pass
+import types
 
-## python3.3 pass
-builtins = sys.modules['__main__'].__builtins__
+## python2.7 builtins = sys.modules['__main__'].__builtins__
+pass
 
 for number in (3, 4):
     sys.path.append(os.path.abspath(sys.path[0] + number * ('..' + os.sep)))
@@ -50,9 +50,9 @@ import boostNode.paradigm.aspectOrientation
 # region functions
 
 @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-## def add_check(point_cut: builtins.str) -> builtins.list:
-def add_check(point_cut):
+## python2.7
+## def add_check(point_cut):
+def add_check(point_cut: builtins.str) -> builtins.list:
 ##
     '''
         Adds signature checking in functions and methods for given point cuts.
@@ -65,15 +65,15 @@ def add_check(point_cut):
         ... def test():
         ...     pass
     '''
-## python3.3
-##     boostNode.paradigm.aspectOrientation.ASPECTS.append(
-##         {'advice': (
-##             {'callback': CheckArguments,
-##              'event': 'call'},
-##             {'callback': CheckReturnValue,
-##              'event': 'return'}),
-##          'point_cut': point_cut})
-    pass
+## python2.7
+##     pass
+    boostNode.paradigm.aspectOrientation.ASPECTS.append(
+        {'advice': (
+            {'callback': CheckArguments,
+             'event': 'call'},
+            {'callback': CheckReturnValue,
+             'event': 'return'}),
+         'point_cut': point_cut})
 ##
     return boostNode.paradigm.aspectOrientation.ASPECTS
 
@@ -82,8 +82,8 @@ def add_check(point_cut):
 
 # region abstract classes
 
-## python3.3 class CheckObject:
-class CheckObject(builtins.object):
+## python2.7 class CheckObject(builtins.object):
+class CheckObject:
     '''
         Checks a function call against a given specification. This class serves
         as helper class.
@@ -120,9 +120,9 @@ class CheckObject(builtins.object):
             # region special methods
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python3.3
-##     def __init__(cls: boostNode.extension.type.SelfClass) -> None:
-    def __init__(cls):
+## python2.7
+##     def __init__(cls):
+    def __init__(cls: boostNode.extension.type.SelfClass) -> None:
 ##
         '''
             If this method wasn't be overwridden an exception is raised.
@@ -147,12 +147,12 @@ class CheckObject(builtins.object):
             # region boolean functions
 
     @builtins.classmethod
-## python3.3
-##     def _is_multiple_type(
-##         cls: boostNode.extension.type.SelfClass,
-##         type: (builtins.object, builtins.type)
-##     ) -> builtins.bool:
-    def _is_multiple_type(cls, type):
+## python2.7
+##     def _is_multiple_type(cls, type):
+    def _is_multiple_type(
+        cls: boostNode.extension.type.SelfClass,
+        type: (builtins.object, builtins.type)
+    ) -> builtins.bool:
 ##
         '''
             Check wether a given specification allows multiple types.
@@ -186,12 +186,12 @@ class CheckObject(builtins.object):
             builtins.isinstance(type[0], builtins.type))
 
     @builtins.classmethod
-## python3.3
-##     def _is_right_type(
-##         cls: boostNode.extension.type.SelfClass, given_type: builtins.type,
-##         expected_type: builtins.type
-##     ) -> builtins.bool:
-    def _is_right_type(cls, given_type, expected_type):
+## python2.7
+##     def _is_right_type(cls, given_type, expected_type):
+    def _is_right_type(
+        cls: boostNode.extension.type.SelfClass, given_type: builtins.type,
+        expected_type: builtins.type
+    ) -> builtins.bool:
 ##
         '''
             Check wether a given type is expected type or given type is a
@@ -232,9 +232,9 @@ class CheckObject(builtins.object):
             # region special methods
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
-    def __repr__(self):
+## python2.7
+##     def __repr__(self):
+    def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
 ##
         '''
             Describes current properties of analysing object.
@@ -267,11 +267,11 @@ class CheckObject(builtins.object):
             # region getter methods
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def get_function_path(
-##         self: boostNode.extension.type.Self
-##     ) -> builtins.str:
-    def get_function_path(self):
+## python2.7
+##     def get_function_path(self):
+    def get_function_path(
+        self: boostNode.extension.type.Self
+    ) -> builtins.str:
 ##
         '''
             Returns an object depended function description.
@@ -289,11 +289,11 @@ class CheckObject(builtins.object):
             >>> a.get_function_path()
             'test'
         '''
-## python3.3
-##         return self.function.__qualname__
-        if self.class_object is not None:
-            return self.class_object.__name__ + '.' + self.function.__name__
-        return self.function.__name__
+## python2.7
+##         if self.class_object is not None:
+##             return self.class_object.__name__ + '.' + self.function.__name__
+##         return self.function.__name__
+        return self.function.__qualname__
 ##
 
             # endregion
@@ -302,15 +302,15 @@ class CheckObject(builtins.object):
 
         # region protected methods
 
-## python3.3
+## python2.7
 ##     def _handle_multiple_types(
-##         self: boostNode.extension.type.Self, value: builtins.object,
-##         given_type: builtins.type,
-##         expected_types: (builtins.tuple, builtins.list), name='return value'
-##     ) -> boostNode.extension.type.Self:
+##         self, value, given_type, expected_types, name='return value'
+##     ):
     def _handle_multiple_types(
-        self, value, given_type, expected_types, name='return value'
-    ):
+        self: boostNode.extension.type.Self, value: builtins.object,
+        given_type: builtins.type,
+        expected_types: (builtins.tuple, builtins.list), name='return value'
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Check an argument which is specified with multiple types.
@@ -367,15 +367,15 @@ class CheckObject(builtins.object):
                     name=name, type_name=given_type.__name__))
         return self
 
-## python3.3
+## python2.7
 ##     def _check_type(
-##         self: boostNode.extension.type.Self, expected_type: builtins.type,
-##         given_type: builtins.type, value: builtins.object,
-##         name='return value'
-##     ) -> boostNode.extension.type.Self:
+##         self, expected_type, given_type, value, name='return value'
+##     ):
     def _check_type(
-        self, expected_type, given_type, value, name='return value'
-    ):
+        self: boostNode.extension.type.Self, expected_type: builtins.type,
+        given_type: builtins.type, value: builtins.object,
+        name='return value'
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Checks if the given value is of its specified type.
@@ -478,12 +478,12 @@ class CheckObject(builtins.object):
                         type=given_type.__name__, value=builtins.repr(value)))
         return self
 
-## python3.3
-##     def _handle_self(
-##         self: boostNode.extension.type.Self, name: builtins.str,
-##         value: builtins.object
-##     ) -> boostNode.extension.type.Self:
-    def _handle_self(self, name, value):
+## python2.7
+##     def _handle_self(self, name, value):
+    def _handle_self(
+        self: boostNode.extension.type.Self, name: builtins.str,
+        value: builtins.object
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Checks given argument value against the methods bounded object.
@@ -535,15 +535,15 @@ class CheckObject(builtins.object):
                     value=builtins.repr(value)))
         return self
 
-## python3.3
-##     def _handle_self_class(
-##         self: boostNode.extension.type.Self,
-##         expected_type: [boostNode.extension.type.SelfClass,
-##                         boostNode.extension.type.SelfClassObject],
-##         given_type: builtins.type, name: builtins.str,
-##         value: builtins.object
-##     ) -> boostNode.extension.type.Self:
-    def _handle_self_class(self, expected_type, given_type, name, value):
+## python2.7
+##     def _handle_self_class(self, expected_type, given_type, name, value):
+    def _handle_self_class(
+        self: boostNode.extension.type.Self,
+        expected_type: [boostNode.extension.type.SelfClass,
+                        boostNode.extension.type.SelfClassObject],
+        given_type: builtins.type, name: builtins.str,
+        value: builtins.object
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Checks given argument value against the methods bounded class.
@@ -624,14 +624,14 @@ class CheckObject(builtins.object):
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
+## python2.7
 ##     def _check_again_multiple_types(
-##         self: boostNode.extension.type.Self, value: builtins.object,
-##         given_type: builtins.type, expected_types: collections.Iterable
-##     ) -> builtins.bool:
+##         self, value, given_type, expected_types
+##     ):
     def _check_again_multiple_types(
-        self, value, given_type, expected_types
-    ):
+        self: boostNode.extension.type.Self, value: builtins.object,
+        given_type: builtins.type, expected_types: collections.Iterable
+    ) -> builtins.bool:
 ##
         '''
             Checks if given value is one of a set of types.
@@ -660,12 +660,12 @@ class CheckObject(builtins.object):
             given_type is self.class_object)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _join_types(
-##         self: boostNode.extension.type.Self, types: collections.Sequence,
-##         meta_type=True
-##     ) -> builtins.str:
-    def _join_types(self, types, meta_type=True):
+## python2.7
+##     def _join_types(self, types, meta_type=True):
+    def _join_types(
+        self: boostNode.extension.type.Self, types: collections.Sequence,
+        meta_type=True
+    ) -> builtins.str:
 ##
         '''
             Join given types for pretty error message presentation.
@@ -737,12 +737,12 @@ class CheckObject(builtins.object):
         return self._join_distinct_types(types, meta_type)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _join_distinct_types(
-##         self: boostNode.extension.type.Self, types: collections.Iterable,
-##         meta_type: builtins.bool
-##     ) -> builtins.str:
-    def _join_distinct_types(self, types, meta_type):
+## python2.7
+##     def _join_distinct_types(self, types, meta_type):
+    def _join_distinct_types(
+        self: boostNode.extension.type.Self, types: collections.Iterable,
+        meta_type: builtins.bool
+    ) -> builtins.str:
 ##
         '''
             Joins a given list of objects to a single human readable string.
@@ -767,13 +767,13 @@ class CheckObject(builtins.object):
         return result
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _check_value(
-##         self: boostNode.extension.type.Self,
-##         expected_value: builtins.object, value: builtins.object,
-##         name='return value'
-##     ) -> boostNode.extension.type.Self:
-    def _check_value(self, expected_value, value, name='return value'):
+## python2.7
+##     def _check_value(self, expected_value, value, name='return value'):
+    def _check_value(
+        self: boostNode.extension.type.Self,
+        expected_value: builtins.object, value: builtins.object,
+        name='return value'
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Checks if the given argument value is equal the specified
@@ -816,191 +816,191 @@ class CheckObject(builtins.object):
 # region classes
 
 class Check(boostNode.paradigm.aspectOrientation.FunctionDecorator):
-## python3.3
+## python2.7
 ##     '''
-##         This function provides function and method signature checking.
-##         An exception is raised on invalid signature implementation.
-##
-##         There are several possibilities to specify a given argument or
-##         the return value:
-##
-##         1. Specify a type.
-##         2. Specify a number of types via a tuple.
-##         3. Specify a number of types expected as values explicit via list.
-##         4. Specify an explicit value.
-##         5. Specify type implicit by setting a default value.
-##         6. Specify current instance via "boostNode.extension.type.Self".
-##         7. Specify any instance of the current class via
-##            "boostNode.extension.type.SelfClassObject".
-##         8. Specify the current Class type (interpret as value) for static
-##            methods via "boostNode.extension.type.SelfClass".
-##
-##         Examples:
-##
-##         >>> @Check
-##         ... def test(num: builtins.int, name: builtins.str) -> tuple:
-##         ...     return num, name
-##         >>> test(3, 'hans')
-##         (3, 'hans')
-##
-##         >>> test('hans', 'hans') # doctest: +ELLIPSIS
-##         Traceback (most recent call last):
-##         ...
-##         boostNode.extension.native.SignatureError: ..."int" for "num" b...
-##
-##         >>> @Check
-##         ... def test() -> builtins.int:
-##         ...     return 'hans'
-##         >>> test() # doctest: +ELLIPSIS
-##         Traceback (most recent call last):
-##         ...
-##         boostNode.extension.native.SignatureError: ...int" for "return ...
-##
-##         >>> @Check
-##         ... def test(param: 5) -> None:
-##         ...     variable = param * 2
-##         >>> test(4) # doctest: +ELLIPSIS
-##         Traceback (most recent call last):
-##         ...
-##         boostNode.extension.native.SignatureError: ...m" but received "4".
-##
-##         >>> @Check
-##         ... def test(param: (builtins.str, builtins.bool)) -> True:
-##         ...     return True
-##         >>> test(True)
-##         True
-##         >>> test('hans')
-##         True
-##         >>> test(5) # doctest: +ELLIPSIS
-##         Traceback (most recent call last):
-##         ...
-##         boostNode.extension.native.SignatureError: ...r" or "bool" for ...
-##
-##         >>> @Check
-##         ... def test(param='hans') -> builtins.str:
-##         ...     return param
-##         >>> test('peter')
-##         'peter'
-##         >>> test('hans')
-##         'hans'
-##         >>> test(param='klaus')
-##         'klaus'
-##         >>> test(4) # doctest: +ELLIPSIS
-##         Traceback (most recent call last):
-##         ...
-##         boostNode.extension.native.SignatureError: ...tr" for "param" b...
-##
-##         >>> @Check
-##         ... def test(a='hans', b='and peter') -> builtins.str:
-##         ...     return a + ' ' + b
-##         >>> test('klaus')
-##         'klaus and peter'
-##         >>> test('hans', 'and fritz')
-##         'hans and fritz'
-##         >>> test('peter', b='and hans')
-##         'peter and hans'
-##         >>> test(b='and hans')
-##         'hans and hans'
-##
-##         >>> @Check
-##         ... def test() -> None:
-##         ...     pass
-##         >>> test('klaus') # doctest: +ELLIPSIS
-##         Traceback (most recent call last):
-##         ...
-##         TypeError: too many positional arguments
-##         >>> test(b='and hans')
-##         Traceback (most recent call last):
-##         ...
-##         TypeError: too many keyword arguments
-##         >>> test()
-##
-##         >>> @Check
-##         ... def test(*args: builtins.str, **kw: builtins.str) -> None:
-##         ...     pass
-##         >>> test('klaus')
-##         >>> test()
-##         >>> test('hans', 5) # doctest: +ELLIPSIS
-##         Traceback (most recent call last):
-##         ...
-##         boostNode.extension.native.SignatureError: ... for "2. argument" ...
-##         >>> test('hans', a='peter')
-##         >>> test(a='peter', b=5) # doctest: +ELLIPSIS
-##         Traceback (most recent call last):
-##         ...
-##         boostNode.extension.native.SignatureError: ..."str" for "b" but...
-##
-##         >>> @Check
-##         ... def test(*args: (builtins.str, builtins.int)) -> None:
-##         ...     pass
-##         >>> test('klaus', 5)
-##         >>> test(True) # doctest: +ELLIPSIS
-##         Traceback (most recent call last):
-##         ...
-##         boostNode.extension.native.SignatureError: ...r" or "int" for "...
-##
-##         >>> @Check
-##         ... def test(**kw: (builtins.str, builtins.int)) -> None:
-##         ...     pass
-##         >>> test(a='klaus', b=5)
-##         >>> test(a=True) # doctest: +ELLIPSIS
-##         Traceback (most recent call last):
-##         ...
-##         boostNode.extension.native.SignatureError: ...r" or "int" for "...
-##
-##         >>> @Check
-##         ... def test(give) -> (builtins.str, builtins.int):
-##         ...     return give
-##         >>> test('klaus')
-##         'klaus'
-##         >>> test(5)
-##         5
-##         >>> test(True) # doctest: +ELLIPSIS
-##         Traceback (most recent call last):
-##         ...
-##         boostNode.extension.native.SignatureError: ...r" or "int" for "...
-##
-##         >>> class test:
-##         ...     @Check
-##         ...     def method(self) -> boostNode.extension.type.Self:
-##         ...         return 5
-##         >>> test().method() # doctest: +ELLIPSIS
-##         Traceback (most recent call last):
-##         ...
-##         boostNode.extension.native.SignatureError: ...self...turn value...
-##
-##         >>> class test:
-##         ...     @Check
-##         ...     def method(self) -> boostNode.extension.type.Self:
-##         ...         return self
-##         >>> test().method() # doctest: +ELLIPSIS
-##         <...test object at 0x...>
-##
-##         >>> class test:
-##         ...     @Check
-##         ...     def method(self) -> boostNode.extension.type.Self:
-##         ...         return test()
-##         >>> test().method() # doctest: +ELLIPSIS
-##         Traceback (most recent call last):
-##         ...
-##         boostNode.extension.native.SignatureError: ...method()" expects...
-##
-##         >>> class test:
-##         ...     @Check
-##         ...     def m(self) -> boostNode.extension.type.SelfClassObject:
-##         ...         return test()
-##         >>> test().m() # doctest: +ELLIPSIS
-##         <...test object at 0x...>
-##
-##         >>> class test:
-##         ...     @Check
-##         ...     def method(self) -> boostNode.extension.type.Self:
-##         ...         return self
-##         >>> test().method() # doctest: +ELLIPSIS
-##         <...test object at 0x...>
+##        This class is needed to be compatiable with future implementations.
 ##     '''
     '''
-       This class is needed to be compatiable with future implementations.
+        This function provides function and method signature checking.
+        An exception is raised on invalid signature implementation.
+
+        There are several possibilities to specify a given argument or
+        the return value:
+
+        1. Specify a type.
+        2. Specify a number of types via a tuple.
+        3. Specify a number of types expected as values explicit via list.
+        4. Specify an explicit value.
+        5. Specify type implicit by setting a default value.
+        6. Specify current instance via "boostNode.extension.type.Self".
+        7. Specify any instance of the current class via
+           "boostNode.extension.type.SelfClassObject".
+        8. Specify the current Class type (interpret as value) for static
+           methods via "boostNode.extension.type.SelfClass".
+
+        Examples:
+
+        >>> @Check
+        ... def test(num: builtins.int, name: builtins.str) -> tuple:
+        ...     return num, name
+        >>> test(3, 'hans')
+        (3, 'hans')
+
+        >>> test('hans', 'hans') # doctest: +ELLIPSIS
+        Traceback (most recent call last):
+        ...
+        boostNode.extension.native.SignatureError: ..."int" for "num" b...
+
+        >>> @Check
+        ... def test() -> builtins.int:
+        ...     return 'hans'
+        >>> test() # doctest: +ELLIPSIS
+        Traceback (most recent call last):
+        ...
+        boostNode.extension.native.SignatureError: ...int" for "return ...
+
+        >>> @Check
+        ... def test(param: 5) -> None:
+        ...     variable = param * 2
+        >>> test(4) # doctest: +ELLIPSIS
+        Traceback (most recent call last):
+        ...
+        boostNode.extension.native.SignatureError: ...m" but received "4".
+
+        >>> @Check
+        ... def test(param: (builtins.str, builtins.bool)) -> True:
+        ...     return True
+        >>> test(True)
+        True
+        >>> test('hans')
+        True
+        >>> test(5) # doctest: +ELLIPSIS
+        Traceback (most recent call last):
+        ...
+        boostNode.extension.native.SignatureError: ...r" or "bool" for ...
+
+        >>> @Check
+        ... def test(param='hans') -> builtins.str:
+        ...     return param
+        >>> test('peter')
+        'peter'
+        >>> test('hans')
+        'hans'
+        >>> test(param='klaus')
+        'klaus'
+        >>> test(4) # doctest: +ELLIPSIS
+        Traceback (most recent call last):
+        ...
+        boostNode.extension.native.SignatureError: ...tr" for "param" b...
+
+        >>> @Check
+        ... def test(a='hans', b='and peter') -> builtins.str:
+        ...     return a + ' ' + b
+        >>> test('klaus')
+        'klaus and peter'
+        >>> test('hans', 'and fritz')
+        'hans and fritz'
+        >>> test('peter', b='and hans')
+        'peter and hans'
+        >>> test(b='and hans')
+        'hans and hans'
+
+        >>> @Check
+        ... def test() -> None:
+        ...     pass
+        >>> test('klaus') # doctest: +ELLIPSIS
+        Traceback (most recent call last):
+        ...
+        TypeError: too many positional arguments
+        >>> test(b='and hans')
+        Traceback (most recent call last):
+        ...
+        TypeError: too many keyword arguments
+        >>> test()
+
+        >>> @Check
+        ... def test(*args: builtins.str, **kw: builtins.str) -> None:
+        ...     pass
+        >>> test('klaus')
+        >>> test()
+        >>> test('hans', 5) # doctest: +ELLIPSIS
+        Traceback (most recent call last):
+        ...
+        boostNode.extension.native.SignatureError: ... for "2. argument" ...
+        >>> test('hans', a='peter')
+        >>> test(a='peter', b=5) # doctest: +ELLIPSIS
+        Traceback (most recent call last):
+        ...
+        boostNode.extension.native.SignatureError: ..."str" for "b" but...
+
+        >>> @Check
+        ... def test(*args: (builtins.str, builtins.int)) -> None:
+        ...     pass
+        >>> test('klaus', 5)
+        >>> test(True) # doctest: +ELLIPSIS
+        Traceback (most recent call last):
+        ...
+        boostNode.extension.native.SignatureError: ...r" or "int" for "...
+
+        >>> @Check
+        ... def test(**kw: (builtins.str, builtins.int)) -> None:
+        ...     pass
+        >>> test(a='klaus', b=5)
+        >>> test(a=True) # doctest: +ELLIPSIS
+        Traceback (most recent call last):
+        ...
+        boostNode.extension.native.SignatureError: ...r" or "int" for "...
+
+        >>> @Check
+        ... def test(give) -> (builtins.str, builtins.int):
+        ...     return give
+        >>> test('klaus')
+        'klaus'
+        >>> test(5)
+        5
+        >>> test(True) # doctest: +ELLIPSIS
+        Traceback (most recent call last):
+        ...
+        boostNode.extension.native.SignatureError: ...r" or "int" for "...
+
+        >>> class test:
+        ...     @Check
+        ...     def method(self) -> boostNode.extension.type.Self:
+        ...         return 5
+        >>> test().method() # doctest: +ELLIPSIS
+        Traceback (most recent call last):
+        ...
+        boostNode.extension.native.SignatureError: ...self...turn value...
+
+        >>> class test:
+        ...     @Check
+        ...     def method(self) -> boostNode.extension.type.Self:
+        ...         return self
+        >>> test().method() # doctest: +ELLIPSIS
+        <...test object at 0x...>
+
+        >>> class test:
+        ...     @Check
+        ...     def method(self) -> boostNode.extension.type.Self:
+        ...         return test()
+        >>> test().method() # doctest: +ELLIPSIS
+        Traceback (most recent call last):
+        ...
+        boostNode.extension.native.SignatureError: ...method()" expects...
+
+        >>> class test:
+        ...     @Check
+        ...     def m(self) -> boostNode.extension.type.SelfClassObject:
+        ...         return test()
+        >>> test().m() # doctest: +ELLIPSIS
+        <...test object at 0x...>
+
+        >>> class test:
+        ...     @Check
+        ...     def method(self) -> boostNode.extension.type.Self:
+        ...         return self
+        >>> test().method() # doctest: +ELLIPSIS
+        <...test object at 0x...>
     '''
 ##
 
@@ -1009,73 +1009,73 @@ class Check(boostNode.paradigm.aspectOrientation.FunctionDecorator):
         # region public methods
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def get_wrapper_function(
-##         self: boostNode.extension.type.Self
-##     ) -> (types.FunctionType, types.MethodType):
+## python2.7
+##     def get_wrapper_function(self):
 ##         '''
-##             Returns a wrapper function for the function to be checked.
+##            Dummy method to be compatible to newer features.
 ##
-##             Examples:
+##            Examples:
 ##
-##             >>> def a(a: int):
-##             ...     return a
-##             >>> Check(a).get_wrapper_function() # doctest: +ELLIPSIS
-##             <function a at ...>
+##            >>> def a(a):
+##            ...     return a
+##            >>> Check(a).get_wrapper_function() # doctest: +ELLIPSIS
+##            <function a at ...>
 ##
-##             >>> Check(a).get_wrapper_function()(5)
-##             5
-##
-##             >>> Check(a).get_wrapper_function()(
-##             ...     'hans') # doctest: +ELLIPSIS +IGNORE_EXCEPTION_DETAIL
-##             Traceback (most recent call last):
-##             ...
-##             boostNode.extension.native.SignatureError: "a()" expects inst...
+##            >>> Check(a).get_wrapper_function()(5)
+##            5
 ##         '''
-##         @functools.wraps(self.function)
-##         def wrapper_function(
-##             *arguments: builtins.object, **keywords: builtins.object
-##         ) -> builtins.object:
-##             '''
-##                 Wrapper function for function to be checked.
-##                 Does the argument and return value checks.
-##                 Runs the function to be checked and returns their return
-##                 value.
-##             '''
-##             arguments = self._determine_arguments(arguments)
-##             CheckArguments(
-##                 self.class_object, self.object, self.function, arguments,
-##                 keywords
-##             ).aspect()
-##             return_value = self.function(*arguments, **keywords)
-##             return CheckReturnValue(
-##                 self.class_object, self.object, self.function, arguments,
-##                 keywords, return_value
-##             ).aspect()
-##         return wrapper_function
-    def get_wrapper_function(self):
+##         return self.function
+    def get_wrapper_function(
+        self: boostNode.extension.type.Self
+    ) -> (types.FunctionType, types.MethodType):
         '''
-           Dummy method to be compatible to newer features.
+            Returns a wrapper function for the function to be checked.
 
-           Examples:
+            Examples:
 
-           >>> def a(a):
-           ...     return a
-           >>> Check(a).get_wrapper_function() # doctest: +ELLIPSIS
-           <function a at ...>
+            >>> def a(a: int):
+            ...     return a
+            >>> Check(a).get_wrapper_function() # doctest: +ELLIPSIS
+            <function a at ...>
 
-           >>> Check(a).get_wrapper_function()(5)
-           5
+            >>> Check(a).get_wrapper_function()(5)
+            5
+
+            >>> Check(a).get_wrapper_function()(
+            ...     'hans') # doctest: +ELLIPSIS +IGNORE_EXCEPTION_DETAIL
+            Traceback (most recent call last):
+            ...
+            boostNode.extension.native.SignatureError: "a()" expects inst...
         '''
-        return self.function
+        @functools.wraps(self.function)
+        def wrapper_function(
+            *arguments: builtins.object, **keywords: builtins.object
+        ) -> builtins.object:
+            '''
+                Wrapper function for function to be checked.
+                Does the argument and return value checks.
+                Runs the function to be checked and returns their return
+                value.
+            '''
+            arguments = self._determine_arguments(arguments)
+            CheckArguments(
+                self.class_object, self.object, self.function, arguments,
+                keywords
+            ).aspect()
+            return_value = self.function(*arguments, **keywords)
+            return CheckReturnValue(
+                self.class_object, self.object, self.function, arguments,
+                keywords, return_value
+            ).aspect()
+        return wrapper_function
 ##
 
         # endregion
 
     # endregion
 
-## python3.3 pass
-"""
+## python2.7 """
+pass
 
 
 class CheckArguments(
@@ -1087,11 +1087,11 @@ class CheckArguments(
 
         # region public methods
 
-## python3.3
-##     def aspect(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
-    def aspect(self):
+## python2.7
+##     def aspect(self):
+    def aspect(
+        self: boostNode.extension.type.Self
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             This function could be used as decorator function or aspects to
@@ -1122,12 +1122,12 @@ class CheckArguments(
 
         # region protected methods
 
-## python3.3
-##     def _check_argument_cases(
-##         self: boostNode.extension.type.Self,
-##         argument: boostNode.paradigm.aspectOrientation.Argument,
-##     ) -> boostNode.extension.type.Self:
-    def _check_argument_cases(self, argument):
+## python2.7
+##     def _check_argument_cases(self, argument):
+    def _check_argument_cases(
+        self: boostNode.extension.type.Self,
+        argument: boostNode.paradigm.aspectOrientation.Argument,
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Handles the different possibilities an argument could be
@@ -1148,12 +1148,12 @@ class CheckArguments(
             expected_value=argument.annotation, value=argument.value,
             name=argument.name)
 
-## python3.3
-##     def _check_argument(
-##         self: boostNode.extension.type.Self,
-##         argument: boostNode.paradigm.aspectOrientation.Argument
-##     ) -> boostNode.extension.type.Self:
-    def _check_argument(self, argument):
+## python2.7
+##     def _check_argument(self, argument):
+    def _check_argument(
+        self: boostNode.extension.type.Self,
+        argument: boostNode.paradigm.aspectOrientation.Argument
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Checks an argument. No matter if argument was given by
@@ -1173,8 +1173,8 @@ class CheckArguments(
 
     # endregion
 
-## python3.3 pass
-"""
+## python2.7 """
+pass
 
 
 class CheckReturnValue(
@@ -1186,9 +1186,9 @@ class CheckReturnValue(
 
         # region public methods
 
-## python3.3
-##     def aspect(self: boostNode.extension.type.Self) -> builtins.object:
-    def aspect(self):
+## python2.7
+##     def aspect(self):
+    def aspect(self: boostNode.extension.type.Self) -> builtins.object:
 ##
         '''
             Checks the given return value.
@@ -1207,22 +1207,22 @@ class CheckReturnValue(
             ... ).aspect()
             'hans'
         '''
-## python3.3
-##         if 'return' in self.function.__annotations__:
-##             expected_return = self.function.__annotations__['return']
-##             given_return_type = builtins.type(self.return_value)
-##             if builtins.isinstance(expected_return, builtins.type):
-##                 self._check_type(
-##                     given_type=given_return_type,
-##                     expected_type=expected_return, value=self.return_value)
-##             elif self._is_multiple_type(type=expected_return):
-##                 self._handle_multiple_types(
-##                     value=self.return_value, given_type=given_return_type,
-##                     expected_types=expected_return)
-##             else:
-##                 self._check_value(
-##                     expected_value=expected_return, value=self.return_value)
-        pass
+## python2.7
+##         pass
+        if 'return' in self.function.__annotations__:
+            expected_return = self.function.__annotations__['return']
+            given_return_type = builtins.type(self.return_value)
+            if builtins.isinstance(expected_return, builtins.type):
+                self._check_type(
+                    given_type=given_return_type,
+                    expected_type=expected_return, value=self.return_value)
+            elif self._is_multiple_type(type=expected_return):
+                self._handle_multiple_types(
+                    value=self.return_value, given_type=given_return_type,
+                    expected_types=expected_return)
+            else:
+                self._check_value(
+                    expected_value=expected_return, value=self.return_value)
 ##
         return self.return_value
 
