@@ -615,7 +615,7 @@ class Parser(
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python2.7
 ##     def _initialize(
-##         self, template='index.tpl', string=False,
+##         self, template='index', string=False,
 ##         placeholder_name_pattern='[a-zA-Z0-9_\[\]\'"\.()\\\\,\-+ ]+',
 ##         left_code_delimiter='<%', right_code_delimiter='%>',
 ##         right_escaped='%',  # For example: "<%%" evaluates to "<%"
@@ -651,7 +651,7 @@ class Parser(
 ##         **keywords
 ##     ):
     def _initialize(
-        self: boostNode.extension.type.Self, template='index.tpl',
+        self: boostNode.extension.type.Self, template='index',
         string=False,
         placeholder_name_pattern='[a-zA-Z0-9_\[\]\'"\.()\\\\,\-+ ]+',
         left_code_delimiter='<%', right_code_delimiter='%>',
@@ -802,7 +802,15 @@ class Parser(
         if string:
             self.content = template
         else:
-            self.file = boostNode.extension.file.Handler(location=template)
+            self.file = boostNode.extension.file.Handler(
+                location=template, must_exist=False)
+            if not self.file:
+                self.file = boostNode.extension.file.Handler(
+                    location=template + '.tpl', must_exist=False)
+            if not self.file:
+                raise __exception__(
+                    'No suitable template found with given name "%s" in "%s".',
+                    template, self.file.directory_path)
             self.content = self.file.content
         self.native_template_object = native_string.Template(self.content)
         self.native_template_object.pattern = re.compile(
