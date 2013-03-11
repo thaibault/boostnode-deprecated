@@ -2620,9 +2620,9 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 ##     def move(self, target, *arguments, **keywords):
     def move(
         self: boostNode.extension.type.Self,
-        target: (boostNode.extension.type.SelfClassObject,
-                 builtins.str), *arguments: builtins.object,
-        **keywords: builtins.object
+        target: (
+            boostNode.extension.type.SelfClassObject, builtins.str),
+        *arguments: builtins.object, **keywords: builtins.object
     ) -> builtins.bool:
 ##
         '''
