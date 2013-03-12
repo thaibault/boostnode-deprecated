@@ -394,6 +394,7 @@ class Parser(
             'print': self._print,
             'include': self._include,
             'str': builtins.str,
+            'len': builtins.len,
             'False': False,
             'True': True,
             '__indent__': self.indent,
