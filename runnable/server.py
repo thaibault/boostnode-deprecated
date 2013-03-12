@@ -1457,8 +1457,12 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         finally:
             if self.respond:
                 if self.server.web.lock.acquire():
+## python3.3
+##                     self.wfile.write(
+##                         self.server.web.thread_buffer.clear().encode())
                     self.wfile.write(
-                        self.server.web.thread_buffer.clear().encode())
+                        self.server.web.thread_buffer.clear())
+##
                 self.server.web.lock.release()
             boostNode.extension.output.Print.default_buffer =\
                 print_default_buffer_save
