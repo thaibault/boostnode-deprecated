@@ -1365,10 +1365,10 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def get_content(
-##         self: boostNode.extension.type.Self, mode='r',
+##         self: boostNode.extension.type.Self, mode='r', strict=False,
 ##         *arguments: builtins.object, **keywords: builtins.object
 ##     ) -> (builtins.str, builtins.bytes, types.GeneratorType):
-    def get_content(self, mode='r', *arguments, **keywords):
+    def get_content(self, mode='r', strict=False, *arguments, **keywords):
 ##
         '''
             Returns the file content of a text-file. Accepts all arguments
@@ -1457,6 +1457,8 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
                                 (file.read() + file.read()).encode(
                                     self.DEFAULT_ENCODING))
                         except builtins.UnicodeDecodeError as exception:
+                            if strict:
+                                raise
                             __logger__.warning(
                                 'File "%s" couldn\'t be ridden. %s: %s',
                                 self.path, exception.__class__.__name__,

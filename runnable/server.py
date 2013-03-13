@@ -1011,11 +1011,11 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
             post_dictionary[name] = []
             index = 0
             for value in form.getlist(name):
-                if boostNode.extension.native.Object.is_binary(object=value):
-                    # NOTE: This definition handles a cgi module bug.
-                    value_reference = form[name]
-                    if builtins.isinstance(form[name], builtins.list):
-                        value_reference = form[name][index]
+                # NOTE: This definition handles a cgi module bug.
+                value_reference = form[name]
+                if builtins.isinstance(form[name], builtins.list):
+                    value_reference = form[name][index]
+                if builtins.isinstance(value_reference.file, builtins.file):
 ## python3.3
 ##                     post_dictionary[name].append({
 ##                         'content': value,
