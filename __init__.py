@@ -243,7 +243,7 @@ Module pattern (see bc16)
 
 __author__ = 'Torben Sickert'
 __copyright__ = 'see docstring'
-__credits__ = ('Torben Sickert',)
+__credits__ = 'Torben Sickert',
 __license__ = 'see docstring'
 __maintainer__ = 'Torben Sickert'
 __maintainer_email__ = 't.sickert@gmail.com'

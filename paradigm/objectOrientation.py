@@ -89,7 +89,7 @@
 
 __author__ = 'Torben Sickert'
 __copyright__ = 'see boostNode/__init__.py'
-__credits__ = ('Torben Sickert',)
+__credits__ = 'Torben Sickert',
 __license__ = 'see boostNode/__init__.py'
 __maintainer__ = 'Torben Sickert'
 __maintainer_email__ = 't.sickert@gmail.com'

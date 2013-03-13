@@ -18,7 +18,7 @@ from __future__ import print_function
 
 __author__ = 'Torben Sickert'
 __copyright__ = 'see boostNode/__init__.py'
-__credits__ = ('Torben Sickert',)
+__credits__ = 'Torben Sickert',
 __license__ = 'see boostNode/__init__.py'
 __maintainer__ = 'Torben Sickert'
 __maintainer_email__ = 't.sickert@gmail.com'
@@ -32,6 +32,7 @@ pass
 ##
 import copy
 import inspect
+import json
 import logging
 import os
 import re
@@ -395,6 +396,7 @@ class Parser(
             'include': self._include,
             'str': builtins.str,
             'len': builtins.len,
+            'json': json,
             'False': False,
             'True': True,
             '__indent__': self.indent,
@@ -618,7 +620,7 @@ class Parser(
 ##     def _initialize(
 ##         self: boostNode.extension.type.Self, template='index',
 ##         string=False,
-##         placeholder_name_pattern='[a-zA-Z0-9_\[\]\'"\.()\\\\,\-+ :]+',
+##         placeholder_name_pattern='[a-zA-Z0-9_\[\]\'"\.()\\\\,\-+ :/]+',
 ##         left_code_delimiter='<%', right_code_delimiter='%>',
 ##         right_escaped='%',  # For example: "<%%" evaluates to "<%"
 ##         placeholder_pattern='{left_delimiter}[ \t]*({placeholder})'
@@ -655,7 +657,7 @@ class Parser(
 ##     ) -> boostNode.extension.type.Self:
     def _initialize(
         self, template='index', string=False,
-        placeholder_name_pattern='[a-zA-Z0-9_\[\]\'"\.()\\\\,\-+ :]+',
+        placeholder_name_pattern='[a-zA-Z0-9_\[\]\'"\.()\\\\,\-+ :/]+',
         left_code_delimiter='<%', right_code_delimiter='%>',
         right_escaped='%',  # For example: "<%%" evaluates to "<%"
         placeholder_pattern='{left_delimiter}[ \t]*({placeholder})[ \t]'
