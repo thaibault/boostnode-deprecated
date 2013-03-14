@@ -1015,7 +1015,8 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
                 value_reference = form[name]
                 if builtins.isinstance(form[name], builtins.list):
                     value_reference = form[name][index]
-                if builtins.isinstance(value_reference.file, builtins.file):
+                if(builtins.isinstance(value_reference.file, builtins.file) or
+                   value_reference.filename):
 ## python3.3
 ##                     post_dictionary[name].append({
 ##                         'content': value,
