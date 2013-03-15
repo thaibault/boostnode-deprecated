@@ -78,7 +78,7 @@ class String(boostNode.paradigm.objectOrientation.Class, builtins.str):
         Note that the escape sequence must not be defined.
     '''
     SPECIAL_REGEX_SEQUENCES = (
-        '[', ']', '(', ')', '^', '$', '*', '+', '.', '{', '}')
+        '-', '[', ']', '(', ')', '^', '$', '*', '+', '.', '{', '}')
     '''ALl chars wich should be observed by handling with url sequences.'''
     SPECIAL_URL_SEQUENCES = {
         '+': ' ', '%20': ' ', '%22': '"', '%2F': '/', '%7E': '~',
@@ -413,15 +413,14 @@ class String(boostNode.paradigm.objectOrientation.Class, builtins.str):
             >>> String().validate_regex(eception=[]).content
             ''
 
-            >>> String("""-\[]()^$*+.{}-""").validate_regex(['}']).content
-            '-\\\\\\\\\\\\[\\\\]\\\\(\\\\)\\\\^\\\\$\\\\*\\\\+\\\\.\\\\{}-'
+            >>> String('-\[]()^$*+.}-').validate_regex(['}']).content
+            '\\\\-\\\\\\\\\\\\[\\\\]\\\\(\\\\)\\\\^\\\\$\\\\*\\\\+\\\\.}\\\\-'
 
-            >>> String("""-\[]()^$*+.{}-""").validate_regex(
+            >>> String('-\[]()^$*+.{}-').validate_regex(
             ...     ['[', ']', '(', ')', '^', '$', '*', '+', '.', '{']
             ... ).content
-            '-\\\\\\\\[]()^$*+.{\\\\}-'
+            '\\\\-\\\\\\\\[]()^$*+.{\\\\}\\\\-'
         '''
-        # TODO check if "re.escape()" does the job.
         '''The escape sequence must also be escaped; but at first.'''
         if not '\\' in eception:
             self.replace('\\', '\\\\')
