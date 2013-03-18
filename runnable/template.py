@@ -896,6 +896,7 @@ class Parser(
             for property in builtins.dir(exception):
                 if not (property.startswith('__') and
                         property.endswith('__')):
+                    print(builtins.getattr(exception, property))
                     native_exception_description +=\
                         property + ': "' + builtins.str(
                             builtins.getattr(exception, property)
