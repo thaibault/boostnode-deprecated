@@ -1074,7 +1074,7 @@ class Object(boostNode.paradigm.objectOrientation.Class):
 ##         return builtins.isinstance(object, builtins.bytes)
         try:
             object.encode('utf-8')
-        except builtins.UnicodeEncodeError:
+        except (builtins.UnicodeEncodeError, builtins.UnicodeDecodeError):
             return True
         return False
 ##

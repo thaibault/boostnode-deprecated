@@ -489,8 +489,8 @@ class Web(
             'Webserver is starting %sand listens at port "%d" and webroot '
             '"%s".',
             ('a secure connection with public key "%s" ' %
-             self._public_key_file.path) if self._public_key_file else '',
-            self.port, self.root.path)
+             self._public_key_file._path) if self._public_key_file else '',
+            self.port, self.root._path)
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -571,7 +571,7 @@ class Web(
                 CGIHTTPRequestHandler)
 ##
             self.service.socket = ssl.wrap_socket(
-                self.service.socket, certfile=self._public_key_file.path,
+                self.service.socket, certfile=self._public_key_file._path,
                 server_side=True)
         else:
 ## python3.3
@@ -972,7 +972,7 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
     def _get_login_data(self, authentication_file):
 ##
         __logger__.info(
-            'Use authentication file "%s".', authentication_file.path)
+            'Use authentication file "%s".', authentication_file._path)
         match = re.compile(
             self.server.web.authentication_file_pattern
         ).match(authentication_file.content.strip())
@@ -1140,7 +1140,7 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
                     boostNode.extension.file.Handler(
                         location=self.server.web.root.path + self.path,
                         must_exist=False
-                    ).path)
+                    )._path)
             if self.requested_file:
                 error_message +=\
                     '. Detected mime-type "%s"' % self.requested_file.mimetype

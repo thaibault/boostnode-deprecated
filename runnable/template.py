@@ -765,7 +765,7 @@ class Parser(
             >>> import argparse
             >>> tpl = Parser(template='hans', string=True)
             >>> tpl._command_line_arguments = argparse.Namespace(
-            ...     scope_variables=('hans=peter', 'peter=hans'))
+            ...     scope_variables=('hans{peter', 'peter{hans'))
             >>> tpl._generate_scope_variables() # doctest: +ELLIPSIS
             {...'hans': 'peter'...}
         '''

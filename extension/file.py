@@ -315,12 +315,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             '...init_root_directory...init_A...'
 
             >>> location = Handler(
-            ...     __test_folder__ + 'init_A', must_exist=False,
-            ...     respect_root_path=False)
+            ...     __test_folder__  + 'init_root_directory/' + 'init_A',
+            ...     must_exist=False, respect_root_path=False)
             >>> location.path # doctest: +ELLIPSIS
             '...init_A...'
             >>> location._path # doctest: +ELLIPSIS
-            '...init_A...'
+            '...init_root_directory...init_A...'
 
             >>> Handler(
             ...     __test_folder__ + 'init_A', respect_root_path=False
@@ -1154,9 +1154,13 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def get_path(
-##         self: boostNode.extension.type.Self, location=None
+##         self: boostNode.extension.type.Self, location=None,
+##         respect_root_path=None, output_with_root_prefix=False
 ##     ) -> builtins.str:
-    def get_path(self, location=None):
+    def get_path(
+        self, location=None, respect_root_path=None,
+        output_with_root_prefix=False
+    ):
 ##
         '''
             Determines path of current "Handler" object
@@ -1172,17 +1176,22 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ... ) # doctest: +ELLIPSIS
             '...get_path...path...'
         '''
+        taken_respect_root_path = respect_root_path
+        if respect_root_path is None:
+            taken_respect_root_path = self._respect_root_path
         if location is None:
             if self._path[-1] != os.sep and self.is_directory():
                 self._path += os.sep
-            if self._respect_root_path:
-                return self._path[builtins.len(self.__class__.root_path) - 1:]
-            return self._path
+            if output_with_root_prefix:
+                return self._path
+            return self._path[builtins.len(self.__class__.root_path) - 1:]
         if not builtins.isinstance(location, self.__class__):
             location = self.__class__(
-                location, respect_root_path=self._respect_root_path,
+                location, respect_root_path=taken_respect_root_path,
                 must_exist=False)
-        return location.path
+        return location.get_path(
+            respect_root_path=taken_respect_root_path,
+            output_with_root_prefix=output_with_root_prefix)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -1226,9 +1235,9 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def get_directory_path(
-##         self: boostNode.extension.type.Self
+##         self: boostNode.extension.type.Self, respect_root_path=None
 ##     ) -> builtins.str:
-    def get_directory_path(self):
+    def get_directory_path(self, respect_root_path=None):
 ##
         '''
             Determines the current path of the Directory object without file.
@@ -1258,7 +1267,13 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             subtrahend = 2
         self._directory_path = self._path[:-builtins.len(
             self.name) - subtrahend]
-        return self.path[:-builtins.len(self.name) - subtrahend]
+        taken_respect_root_path = respect_root_path
+        if respect_root_path is None:
+            taken_respect_root_path = self._respect_root_path
+        if taken_respect_root_path:
+            return self._directory_path[builtins.len(
+                self.__class__.root_path) - 1:]
+        return self._directory_path
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -1746,7 +1761,8 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 ##         self: boostNode.extension.type.Self,
 ##         location: (boostNode.extension.type.SelfClassObject,
 ##                    builtins.str),
-##         *arguments: builtins.object, **keywords: builtins.object
+##         *arguments: builtins.object, respect_root_path=None,
+##         **keywords: builtins.object
 ##     ) -> builtins.bool:
     def set_directory_path(self, location, *arguments, **keywords):
 ##
@@ -1793,9 +1809,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> new_location.is_directory()
             True
         '''
+## python3.3         pass
+        respect_root_path = keywords.get('respect_root_path')
         return self.move(
-            target=self.get_path(location) + os.sep + self.name, *arguments,
-            **keywords)
+            target=self.get_path(
+                location, respect_root_path, output_with_root_prefix=True
+            ) + os.sep + self.name, *arguments, **keywords)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -2618,7 +2637,8 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 ##         self: boostNode.extension.type.Self,
 ##         target: (
 ##             boostNode.extension.type.SelfClassObject, builtins.str),
-##         *arguments: builtins.object, **keywords: builtins.object
+##         *arguments: builtins.object, respect_root_path=None,
+##         **keywords: builtins.object
 ##     ) -> builtins.bool:
     def move(self, target, *arguments, **keywords):
 ##
@@ -2664,7 +2684,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ... ).move(__test_folder__ + 'move_target_not_existing2')
             False
         '''
-        target = self.get_path(location=target)
+## python3.3         pass
+        respect_root_path = keywords.get('respect_root_path')
+        target = self.get_path(
+            location=target, respect_root_path=respect_root_path,
+            output_with_root_prefix=True)
         if self:
             shutil.move(self._path, dst=target, *arguments, **keywords)
         return self._set_path(path=target)
@@ -3120,7 +3144,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 ##         target: (boostNode.extension.type.SelfClassObject,
 ##                  builtins.str),
 ##         symbolic_links=True, *arguments: builtins.object,
-##         **keywords: builtins.object
+##         respect_root_path=None, **keywords: builtins.object
 ##     ) -> boostNode.extension.type.Self:
     def deep_copy(
         self, target, symbolic_links=True, *arguments, **keywords
@@ -3198,8 +3222,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ... ).is_directory()
             True
         '''
+## python3.3         pass
+        respect_root_path = keywords.get('respect_root_path')
         shutil.copytree(
-            src=self._path, dst=self.get_path(location=target),
+            src=self._path, dst=self.get_path(
+                location=target, respect_root_path=respect_root_path,
+                output_with_root_prefix=True),
             symlinks=symbolic_links, *arguments, **keywords)
         return self
 
@@ -3651,10 +3679,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         '''
         operating_system =\
             boostNode.extension.system.Platform().operating_system
-        if(self._respect_root_path and (root_exists or
-           not self._path.startswith(self.__class__.root_path)) and
+        if(self._respect_root_path and (
+            root_exists or
+            not self._path.startswith(self.__class__.root_path[:-1])) and
            not ('windows' == operating_system and
-                re.compile('[a-zA-Z]:\\.*').match(self._path) and
+                re.compile('^[a-zA-Z]:\\.*').match(self._path) and
                 self.__class__.root_path == os.sep)):
             if self._path.startswith(os.sep):
                 self._path = self.__class__.root_path[:-1] + self._path
