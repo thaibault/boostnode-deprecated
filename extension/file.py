@@ -1262,13 +1262,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> same
             True
         '''
-        subtrahend = builtins.len(self.name)
-        if(self.is_directory() and
-           (builtins.len(self.path) - builtins.len(os.sep)) > 0):
-            subtrahend += 1
-        self._directory_path = self._path
-        if subtrahend:
-            self._directory_path = self._path[:-subtrahend]
+        subtrahend = 1
+        if self.is_directory():
+            subtrahend = 2
+        self._directory_path = self._path[:-builtins.len(
+            self.name) - subtrahend]
         taken_respect_root_path = respect_root_path
         if respect_root_path is None:
             taken_respect_root_path = self._respect_root_path
@@ -1301,7 +1299,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> Handler().get_name()
             'extension'
         '''
-        path = self.path[:-1] if self.path[-1] == os.sep else self.path
+        path = self._path[:-1] if self._path[-1] == os.sep else self._path
         if(boostNode.extension.system.Platform().operating_system ==
            'windows' and re.compile('^[A-Z]:$').match(path)):
             return path
@@ -1331,8 +1329,8 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> Handler().get_basename()
             'extension'
         '''
+        path = self._path[:-1] if self._path[-1] == os.sep else self._path
         if self._has_extension:
-            path = self.path[:-1] if self.path[-1] == os.sep else self.path
             return os.path.splitext(
                 os.path.basename(path, *arguments, **keywords))[0]
         return self.name
@@ -3672,14 +3670,17 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
             >>> Handler.root_path = root_path_save
         '''
-        operating_system =\
-            boostNode.extension.system.Platform().operating_system
+        '''Determine if given location has root path inside.'''
+        root_exists = self._initialized_path.startswith(
+            self.__class__.root_path[:-1])
         '''
             Prepend root path to given path location, if it wasn't given as
-            location in root path.
+            root path.
         '''
+        operating_system =\
+            boostNode.extension.system.Platform().operating_system
         if(self._respect_root_path and (
-            self._initialized_path.startswith(self.__class__.root_path[:-1]) or
+            root_exists or
             not self._path.startswith(self.__class__.root_path[:-1])) and
            not ('windows' == operating_system and
                 re.compile('^[a-zA-Z]:\\.*').match(self._path) and
