@@ -1262,11 +1262,13 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> same
             True
         '''
-        subtrahend = 1
-        if self.is_directory():
-            subtrahend = 2
-        self._directory_path = self._path[:-builtins.len(
-            self.name) - subtrahend]
+        subtrahend = builtins.len(self.name)
+        if(self.is_directory() and
+           (builtins.len(self.path) - builtins.len(os.sep)) > 0):
+            subtrahend += 1
+        self._directory_path = self._path
+        if subtrahend:
+            self._directory_path = self._path[:-subtrahend]
         taken_respect_root_path = respect_root_path
         if respect_root_path is None:
             taken_respect_root_path = self._respect_root_path
@@ -1299,7 +1301,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> Handler().get_name()
             'extension'
         '''
-        path = self._path[:-1] if self._path[-1] == os.sep else self._path
+        path = self.path[:-1] if self.path[-1] == os.sep else self.path
         if(boostNode.extension.system.Platform().operating_system ==
            'windows' and re.compile('^[A-Z]:$').match(path)):
             return path
@@ -1329,10 +1331,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> Handler().get_basename()
             'extension'
         '''
-        path = self._path[:-1] if self._path[-1] == os.sep else self._path
         if self._has_extension:
+            path = self.path[:-1] if self.path[-1] == os.sep else self.path
             return os.path.splitext(
-                os.path.basename(path, *arguments, **keywords))[0]
+                os.path.basename(path, *arguments, **keywords)
+            )[0]
         return self.name
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -1813,7 +1816,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         respect_root_path = keywords.get('respect_root_path')
         return self.move(
             target=self.get_path(
-                location, respect_root_path, output_with_root_prefix=True
+                location, respect_root_path
             ) + os.sep + self.name, *arguments, **keywords)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -3670,21 +3673,18 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
             >>> Handler.root_path = root_path_save
         '''
-        '''Determine if given location has root path inside.'''
-        root_exists = self._initialized_path.startswith(
-            self.__class__.root_path[:-1])
-        '''
-            Prepend root path to given path location, if it wasn't given as
-            root path.
-        '''
         operating_system =\
             boostNode.extension.system.Platform().operating_system
+        '''
+            Prepend root path to given path location, if it wasn't given as
+            location in root path.
+        '''
         if(self._respect_root_path and (
-            root_exists or
-            not self._path.startswith(self.__class__.root_path[:-1])) and
-           not ('windows' == operating_system and
-                re.compile('^[a-zA-Z]:\\.*').match(self._path) and
-                self.__class__.root_path == os.sep)):
+            self._initialized_path.startswith(self.__class__.root_path[:-1]) or
+           not self._path.startswith(self.__class__.root_path[:-1])) and not (
+               'windows' == operating_system and
+               re.compile('^[a-zA-Z]:\\.*').match(self._path) and
+           self.__class__.root_path == os.sep)):
             if self._path.startswith(os.sep):
                 self._path = self.__class__.root_path[:-1] + self._path
             else:
