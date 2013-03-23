@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.3
+#!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 
 # region header
@@ -22,13 +22,16 @@ __status__ = 'stable'
 __version__ = '1.0'
 
 import argparse
-## python2.7
-## pass
-import builtins
-import collections
+## python3.3
+## import builtins
+## import collections
+pass
 ##
 import doctest
-import fcntl
+try:
+    import fcntl
+except ImportError:
+    fcntl = None
 import inspect
 import logging
 import os
@@ -37,11 +40,11 @@ import struct
 import subprocess
 import sys
 import time
-## python2.7 pass
-import types
-
-## python2.7 builtins = sys.modules['__main__'].__builtins__
+## python3.3 import types
 pass
+
+## python3.3 pass
+builtins = sys.modules['__main__'].__builtins__
 
 for number in (3, 4):
     sys.path.append(os.path.abspath(sys.path[0] + number * ('..' + os.sep)))
@@ -57,8 +60,8 @@ import boostNode.paradigm.aspectOrientation
 
 # region abstract classes
 
-## python2.7 class Runnable(builtins.object):
-class Runnable:
+## python3.3 class Runnable:
+class Runnable(builtins.object):
     '''
         Abstract class (interface) for implementing reusable classes which acts
         directly as an command line interface to provide their features
@@ -72,12 +75,12 @@ class Runnable:
             # region special methods
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def __init__(self, *arguments, **keywords):
-    def __init__(
-        self: boostNode.extension.type.Self, *arguments: builtins.object,
-        **keywords: builtins.object
-    ) -> None:
+## python3.3
+##     def __init__(
+##         self: boostNode.extension.type.Self, *arguments: builtins.object,
+##         **keywords: builtins.object
+##     ) -> None:
+    def __init__(self, *arguments, **keywords):
 ##
         '''
             A generic initializer for Runnable class implementations.
@@ -113,9 +116,9 @@ class Runnable:
             self._initialize(*arguments, **keywords)
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
-##     def __repr__(cls):
-    def __repr__(cls: boostNode.extension.type.SelfClass) -> builtins.str:
+## python3.3
+##     def __repr__(cls: boostNode.extension.type.SelfClass) -> builtins.str:
+    def __repr__(cls):
 ##
         '''
             Generic representation method.
@@ -143,12 +146,12 @@ class Runnable:
         # region public methods
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
-##     def run(cls, *arguments, **keywords):
-    def run(
-        cls: boostNode.extension.type.SelfClass,
-        *arguments: builtins.object, **keywords: builtins.object
-    ) -> boostNode.extension.type.SelfClassObject:
+## python3.3
+##     def run(
+##         cls: boostNode.extension.type.SelfClass,
+##         *arguments: builtins.object, **keywords: builtins.object
+##     ) -> boostNode.extension.type.SelfClassObject:
+    def run(cls, *arguments, **keywords):
 ##
         '''
             Method for an explicit run of a class implementing this abstract
@@ -184,11 +187,11 @@ class Runnable:
             # region has to be implemented
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
-##     def _run(cls):
-    def _run(
-        cls: boostNode.extension.type.SelfClass
-    ) -> boostNode.extension.type.SelfClass:
+## python3.3
+##     def _run(
+##         cls: boostNode.extension.type.SelfClass
+##     ) -> boostNode.extension.type.SelfClass:
+    def _run(cls):
 ##
         '''
             Abstract method to force runnable classes to implement their entry
@@ -200,11 +203,11 @@ class Runnable:
         return cls
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
-##     def _initialize(cls):
-    def _initialize(
-        cls: boostNode.extension.type.SelfClass
-    ) -> boostNode.extension.type.SelfClass:
+## python3.3
+##     def _initialize(
+##         cls: boostNode.extension.type.SelfClass
+##     ) -> boostNode.extension.type.SelfClass:
+    def _initialize(cls):
 ##
         '''
             Abstract methods to force runnable classes to implement their entry
@@ -218,11 +221,11 @@ class Runnable:
             # endregion
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
-##     def _get_potential_wrapped_method(cls, method_name):
-    def _get_potential_wrapped_method(
-        cls: boostNode.extension.type.SelfClass, method_name: builtins.str
-    ) -> (types.MethodType, types.FunctionType):
+## python3.3
+##     def _get_potential_wrapped_method(
+##         cls: boostNode.extension.type.SelfClass, method_name: builtins.str
+##     ) -> (types.MethodType, types.FunctionType):
+    def _get_potential_wrapped_method(cls, method_name):
 ##
         '''
             Unpacks a wrapped method if necessary.
@@ -244,12 +247,12 @@ class Runnable:
         return method
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
-##     def _command_line_arguments_to_dictionary(self, namespace):
-    def _command_line_arguments_to_dictionary(
-        cls: boostNode.extension.type.SelfClass,
-        namespace: argparse.Namespace
-    ) -> builtins.dict:
+## python3.3
+##     def _command_line_arguments_to_dictionary(
+##         cls: boostNode.extension.type.SelfClass,
+##         namespace: argparse.Namespace
+##     ) -> builtins.dict:
+    def _command_line_arguments_to_dictionary(self, namespace):
 ##
         '''
             This method converts command line arguments generated by python's
@@ -273,8 +276,8 @@ class Runnable:
 
 # region classes
 
-## python2.7 class Platform(builtins.object):
-class Platform:
+## python3.3 class Platform:
+class Platform(builtins.object):
     '''
         Handles issues dealing with the underlying operating system.
     '''
@@ -308,8 +311,8 @@ class Platform:
             # region special methods
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7     def __init__(cls):
-    def __init__(cls: boostNode.extension.type.SelfClass) -> None:
+## python3.3     def __init__(cls: boostNode.extension.type.SelfClass) -> None:
+    def __init__(cls):
         '''
             Determines the operating system.
 
@@ -331,9 +334,9 @@ class Platform:
             cls.operating_system = 'posix'
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
-##     def __repr__(cls):
-    def __repr__(cls: boostNode.extension.type.SelfClass) -> builtins.str:
+## python3.3
+##     def __repr__(cls: boostNode.extension.type.SelfClass) -> builtins.str:
+    def __repr__(cls):
 ##
         '''
             Invokes if this object should describe itself by a string.
@@ -353,12 +356,12 @@ class Platform:
             # region change computer status
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
-##     def make_computer_ready(cls, *arguments, **keywords):
-    def make_computer_ready(
-        cls: boostNode.extension.type.SelfClass,
-        *arguments: builtins.object, **keywords: builtins.object
-    ) -> builtins.tuple:
+## python3.3
+##     def make_computer_ready(
+##         cls: boostNode.extension.type.SelfClass,
+##         *arguments: builtins.object, **keywords: builtins.object
+##     ) -> builtins.tuple:
+    def make_computer_ready(cls, *arguments, **keywords):
 ##
         '''
             Wakes a remote computer and ensure that it is ready by pinging till
@@ -368,17 +371,17 @@ class Platform:
             *arguments, handler=cls.wake_computer, **keywords)
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
+## python3.3
 ##     def change_computer_status(
-##         cls, host, mac_address, broadcast, handler, down=False,
+##         cls: boostNode.extension.type.SelfClass, host: builtins.str,
+##         mac_address: builtins.str, broadcast: builtins.str,
+##         handler: (types.MethodType, types.FunctionType), down=False,
 ##         number_of_tries=10
-##     ):
+##     ) -> builtins.tuple:
     def change_computer_status(
-        cls: boostNode.extension.type.SelfClass, host: builtins.str,
-        mac_address: builtins.str, broadcast: builtins.str,
-        handler: (types.MethodType, types.FunctionType), down=False,
+        cls, host, mac_address, broadcast, handler, down=False,
         number_of_tries=10
-    ) -> builtins.tuple:
+    ):
 ##
         '''
             Shuts down or boot a computer and ensure that is is available after
@@ -408,12 +411,12 @@ class Platform:
         return counter <= number_of_tries, counter > 1
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
-##     def wake_computer(cls, mac_address, broadcast):
-    def wake_computer(
-        cls: boostNode.extension.type.SelfClass, mac_address: builtins.str,
-        broadcast: builtins.str
-    ) -> builtins.bool:
+## python3.3
+##     def wake_computer(
+##         cls: boostNode.extension.type.SelfClass, mac_address: builtins.str,
+##         broadcast: builtins.str
+##     ) -> builtins.bool:
+    def wake_computer(cls, mac_address, broadcast):
 ##
         '''
             Wakes up a remote computer using a magic package
@@ -444,9 +447,9 @@ class Platform:
             # endregion
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
-##     def check_thread(cls, waiting_delay_in_seconds=2):
-    def check_thread(cls, waiting_delay_in_seconds=2) -> builtins.bool:
+## python3.3
+##     def check_thread(cls, waiting_delay_in_seconds=2) -> builtins.bool:
+    def check_thread(cls, waiting_delay_in_seconds=2):
 ##
         '''
             Checks weather the current thread should be paused or terminated.
@@ -485,11 +488,11 @@ class Platform:
         return False
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
-##     def set_process_lock(cls, description=''):
-    def set_process_lock(
-        cls: boostNode.extension.type.SelfClass, description=''
-    ) -> boostNode.extension.type.SelfClass:
+## python3.3
+##     def set_process_lock(
+##         cls: boostNode.extension.type.SelfClass, description=''
+##     ) -> boostNode.extension.type.SelfClass:
+    def set_process_lock(cls, description=''):
 ##
         '''
             Sets a global lock. Creates a file with given name prefix of
@@ -518,11 +521,11 @@ class Platform:
         return cls
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
-##     def clear_process_lock(cls, description=''):
-    def clear_process_lock(
-        cls: boostNode.extension.type.SelfClass, description=''
-    ) -> boostNode.extension.type.SelfClass:
+## python3.3
+##     def clear_process_lock(
+##         cls: boostNode.extension.type.SelfClass, description=''
+##     ) -> boostNode.extension.type.SelfClass:
+    def clear_process_lock(cls, description=''):
 ##
         '''
             Removes a prior setted lock file.
@@ -554,11 +557,11 @@ class Platform:
         return cls
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
-##     def check_process_lock(cls, description=''):
-    def check_process_lock(
-        cls: boostNode.extension.type.SelfClass, description=''
-    ) -> builtins.bool:
+## python3.3
+##     def check_process_lock(
+##         cls: boostNode.extension.type.SelfClass, description=''
+##     ) -> builtins.bool:
+    def check_process_lock(cls, description=''):
 ##
         '''
             Checks if a lock file with given description exists.
@@ -581,18 +584,18 @@ class Platform:
                 must_exist=False))
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
+## python3.3
 ##     def run(
-##         cls, command, command_arguments=None, secure=False, error=True,
-##         shell=None, log=False, no_blocking=False, *arguments, **keywords
-##     ):
+##         cls: boostNode.extension.type.SelfClass,
+##         command: collections.Iterable,
+##         command_arguments=None, secure=False, error=True, shell=None,
+##         log=False, no_blocking=False, *arguments: builtins.object,
+##         **keywords: builtins.object
+##     ) -> builtins.dict:
     def run(
-        cls: boostNode.extension.type.SelfClass,
-        command: collections.Iterable,
-        command_arguments=None, secure=False, error=True, shell=None,
-        log=False, no_blocking=False, *arguments: builtins.object,
-        **keywords: builtins.object
-    ) -> builtins.dict:
+        cls, command, command_arguments=None, secure=False, error=True,
+        shell=None, log=False, no_blocking=False, *arguments, **keywords
+    ):
 ##
         '''
             Runs a command natively on the current operating system using the
@@ -664,12 +667,12 @@ class Platform:
             # region change computer status
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
-##     def check_computer_reachability(cls, timeout_in_seconds, host):
-    def check_computer_reachability(
-        cls: boostNode.extension.type.SelfClass,
-        timeout_in_seconds: builtins.int, host: builtins.str
-    ) -> builtins.bool:
+## python3.3
+##     def check_computer_reachability(
+##         cls: boostNode.extension.type.SelfClass,
+##         timeout_in_seconds: builtins.int, host: builtins.str
+##     ) -> builtins.bool:
+    def check_computer_reachability(cls, timeout_in_seconds, host):
 ##
         '''
             Checks if a remote computer is available by pinging it.
@@ -687,13 +690,13 @@ class Platform:
             # endregion
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
-##     def _log_command_result(cls, result, log, secure, no_blocking):
-    def _log_command_result(
-        cls: boostNode.extension.type.SelfClass, result: builtins.dict,
-        log: builtins.bool, secure: builtins.bool,
-        no_blocking: builtins.bool
-    ) -> builtins.dict:
+## python3.3
+##     def _log_command_result(
+##         cls: boostNode.extension.type.SelfClass, result: builtins.dict,
+##         log: builtins.bool, secure: builtins.bool,
+##         no_blocking: builtins.bool
+##     ) -> builtins.dict:
+    def _log_command_result(cls, result, log, secure, no_blocking):
 ##
         '''
             Logs the result of an invoked and given subprocess output.
@@ -706,19 +709,19 @@ class Platform:
         return result
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
+## python3.3
 ##     def _run_one_command(
-##         cls, command, command_arguments, secure, error, shell, no_blocking,
-##         *arguments, **keywords
-##     ):
+##         cls: boostNode.extension.type.SelfClass,
+##         command: collections.Iterable,
+##         command_arguments: collections.Iterable, secure: builtins.bool,
+##         error: builtins.bool, shell: builtins.bool,
+##         no_blocking: builtins.bool, *arguments: builtins.object,
+##         **keywords: builtins.object
+##     ) -> builtins.dict:
     def _run_one_command(
-        cls: boostNode.extension.type.SelfClass,
-        command: collections.Iterable,
-        command_arguments: collections.Iterable, secure: builtins.bool,
-        error: builtins.bool, shell: builtins.bool,
-        no_blocking: builtins.bool, *arguments: builtins.object,
-        **keywords: builtins.object
-    ) -> builtins.dict:
+        cls, command, command_arguments, secure, error, shell, no_blocking,
+        *arguments, **keywords
+    ):
 ##
         '''
             Runs a command line command in its own process.
@@ -730,19 +733,19 @@ class Platform:
             if error and result['return_code'] != 0:
                 sys.exit(result['return_code'])
         else:
-## python2.7
-##             process_handler = subprocess.Popen(
+## python3.3
+##             with subprocess.Popen(
 ##                 command, *arguments, shell=shell,
 ##                 stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-##                 stderr=subprocess.PIPE, **keywords)
-##             if True:
-            with subprocess.Popen(
+##                 stderr=subprocess.PIPE, **keywords
+##             ) as process_handler:
+            process_handler = subprocess.Popen(
                 command, *arguments, shell=shell,
                 stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE, **keywords
-            ) as process_handler:
+                stderr=subprocess.PIPE, **keywords)
+            if True:
 ##
-                if no_blocking:
+                if fcntl and no_blocking:
                     fcntl.fcntl(
                         process_handler.stdout.fileno(), fcntl.F_SETFL,
                         os.O_NONBLOCK)
@@ -754,13 +757,13 @@ class Platform:
                         'error_output': process_handler.stderr}
                 else:
                     result = process_handler.communicate()
-## python2.7
+## python3.3
 ##                     result = {
-##                         'standart_output': result[0],
-##                         'error_output': result[1]}
+##                         'standart_output': result[0].decode(),
+##                         'error_output': result[1].decode()}
                     result = {
-                        'standart_output': result[0].decode(),
-                        'error_output': result[1].decode()}
+                        'standart_output': result[0],
+                        'error_output': result[1]}
 ##
                 result['return_code'] = process_handler.returncode
             if error and result['return_code'] != 0:
@@ -770,18 +773,18 @@ class Platform:
         return result
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
+## python3.3
 ##     def _run_multiple_commands(
-##         cls, commands, command_arguments, secure, error, shell,
-##         *arguments, **keywords
-##     ):
+##         cls: boostNode.extension.type.SelfClass,
+##         commands: collections.Iterable,
+##         command_arguments: collections.Iterable, secure: builtins.bool,
+##         error: builtins.bool, shell: builtins.bool,
+##         *arguments: builtins.object, **keywords: builtins.object
+##     ) -> builtins.dict:
     def _run_multiple_commands(
-        cls: boostNode.extension.type.SelfClass,
-        commands: collections.Iterable,
-        command_arguments: collections.Iterable, secure: builtins.bool,
-        error: builtins.bool, shell: builtins.bool,
-        *arguments: builtins.object, **keywords: builtins.object
-    ) -> builtins.dict:
+        cls, commands, command_arguments, secure, error, shell,
+        *arguments, **keywords
+    ):
 ##
         '''
             Runs a list of command line commands as its own process.
@@ -803,8 +806,8 @@ class Platform:
     # endregion
 
 
-## python2.7 class CommandLine(builtins.object):
-class CommandLine:
+## python3.3 class CommandLine:
+class CommandLine(builtins.object):
     '''
         Defines which possibilities are supported for boolean interactive
         command line user inputs.
@@ -925,9 +928,9 @@ class CommandLine:
             # region special methods
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
-##     def __repr__(cls):
-    def __repr__(cls: boostNode.extension.type.SelfClass) -> builtins.str:
+## python3.3
+##     def __repr__(cls: boostNode.extension.type.SelfClass) -> builtins.str:
+    def __repr__(cls):
 ##
         '''
             Invokes if this object should describe itself by a string.
@@ -944,19 +947,19 @@ class CommandLine:
             # endregion
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
+## python3.3
 ##     def argument_parser(
-##         cls, arguments=(), module_name=__name__, scope={}, meta=False,
-##         description='', version='', default=True, *additional_arguments,
-##         **keywords
-##     ):
+##         cls: boostNode.extension.type.SelfClass, arguments=(),
+##         module_name=__name__, scope={}, meta=False, description='',
+##         version='', default=True,
+##         *additional_arguments: builtins.object,
+##         **keywords: builtins.object
+##     ) -> argparse.Namespace:
     def argument_parser(
-        cls: boostNode.extension.type.SelfClass, arguments=(),
-        module_name=__name__, scope={}, meta=False, description='',
-        version='', default=True,
-        *additional_arguments: builtins.object,
-        **keywords: builtins.object
-    ) -> argparse.Namespace:
+        cls, arguments=(), module_name=__name__, scope={}, meta=False,
+        description='', version='', default=True, *additional_arguments,
+        **keywords
+    ):
 ##
         '''
             Represents a basic argument parsing for command line interface
@@ -1008,12 +1011,12 @@ class CommandLine:
         return arguments
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
-##     def handle_log_level(cls, arguments):
-    def handle_log_level(
-        cls: boostNode.extension.type.SelfClass,
-        arguments: argparse.Namespace
-    ) -> boostNode.extension.type.SelfClass:
+## python3.3
+##     def handle_log_level(
+##         cls: boostNode.extension.type.SelfClass,
+##         arguments: argparse.Namespace
+##     ) -> boostNode.extension.type.SelfClass:
+    def handle_log_level(cls, arguments):
 ##
         '''
             Handles log level in a generic way. If given command line arguments
@@ -1027,11 +1030,11 @@ class CommandLine:
         return cls
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
-##     def boolean_input(cls, question):
-    def boolean_input(
-        cls: boostNode.extension.type.SelfClass, question: builtins.str
-    ) -> builtins.bool:
+## python3.3
+##     def boolean_input(
+##         cls: boostNode.extension.type.SelfClass, question: builtins.str
+##     ) -> builtins.bool:
+    def boolean_input(cls, question):
 ##
         '''
             This methods implements a handy way to get "yes" or "no" answers
@@ -1044,8 +1047,8 @@ class CommandLine:
             ... ) # doctest: +SKIP
             All right? (Choose one of: y, n...)
         '''
-## python2.7         input_string = builtins.raw_input(question.format(
-        input_string = builtins.input(question.format(
+## python3.3         input_string = builtins.input(question.format(
+        input_string = builtins.raw_input(question.format(
             boolean_arguments='(Choose one of: {choices})'.format(
                 choices=', '.join(cls.POSITIVE_INPUTS + cls.NEGATIVE_INPUTS)))
         ).lower()
@@ -1056,11 +1059,11 @@ class CommandLine:
         return cls.boolean_input(question)
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
-##     def determine_wrapped_objects(cls, module):
-    def determine_wrapped_objects(
-        cls: boostNode.extension.type.SelfClass, module: types.ModuleType
-    ) -> builtins.dict:
+## python3.3
+##     def determine_wrapped_objects(
+##         cls: boostNode.extension.type.SelfClass, module: types.ModuleType
+##     ) -> builtins.dict:
+    def determine_wrapped_objects(cls, module):
 ##
         '''
             Returns all aspect orientated wrapped methods in given module.
@@ -1090,26 +1093,26 @@ class CommandLine:
         return objects
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
+## python3.3
 ##     def generic_package_interface(
-##         cls, name=__name__, frame=inspect.currentframe(),
-##         command_line_arguments=(), linter='pep8 --repeat --ignore=E225',
-##         documenter='pydoc', documenter_arguments=('-w',),
+##         cls: boostNode.extension.type.SelfClass, name=__name__,
+##         frame=inspect.currentframe(), command_line_arguments=(),
+##         linter='pep8 --repeat --ignore=E225,E701',
+##         documenter='pydoc3', documenter_arguments=('-w',),
 ##         documentation_path='documentation', clear_old_documentation=True,
 ##         documentation_file_extension='html', temp_file_patterns=(
 ##             '^temp_.+$', '^__pycache__$', '^.+\.pyc$', '^.+~$'),
 ##         exclude_packages=()
-##     ):
+##     ) -> (builtins.tuple, builtins.bool):
     def generic_package_interface(
-        cls: boostNode.extension.type.SelfClass, name=__name__,
-        frame=inspect.currentframe(), command_line_arguments=(),
-        linter='pep8 --repeat --ignore=E225,E701',
-        documenter='pydoc3', documenter_arguments=('-w',),
+        cls, name=__name__, frame=inspect.currentframe(),
+        command_line_arguments=(), linter='pep8 --repeat --ignore=E225',
+        documenter='pydoc', documenter_arguments=('-w',),
         documentation_path='documentation', clear_old_documentation=True,
         documentation_file_extension='html', temp_file_patterns=(
             '^temp_.+$', '^__pycache__$', '^.+\.pyc$', '^.+~$'),
         exclude_packages=()
-    ) -> (builtins.tuple, builtins.bool):
+    ):
 ##
         '''
             Provides a command-line interface like a makefile.
@@ -1146,16 +1149,16 @@ class CommandLine:
         return False
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
+## python3.3
 ##     def generic_module_interface(
-##         cls, module, test=False, default_caller=None,
-##         caller_arguments=(), caller_keywords={}
-##     ):
+##         cls: boostNode.extension.type.SelfClass, module: builtins.dict,
+##         test=False, default_caller=None, caller_arguments=(),
+##         caller_keywords={}
+##     ) -> boostNode.extension.type.SelfClass:
     def generic_module_interface(
-        cls: boostNode.extension.type.SelfClass, module: builtins.dict,
-        test=False, default_caller=None, caller_arguments=(),
-        caller_keywords={}
-    ) -> boostNode.extension.type.SelfClass:
+        cls, module, test=False, default_caller=None,
+        caller_arguments=(), caller_keywords={}
+    ):
 ##
         '''
             Provides a generic command line interface for modules.
@@ -1188,12 +1191,12 @@ class CommandLine:
         return cls
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
-##     def test_module(cls, module, verbose):
-    def test_module(
-        cls: boostNode.extension.type.SelfClass, module: builtins.dict,
-        verbose=False
-    ) -> boostNode.extension.type.SelfClass:
+## python3.3
+##     def test_module(
+##         cls: boostNode.extension.type.SelfClass, module: builtins.dict,
+##         verbose=False
+##     ) -> boostNode.extension.type.SelfClass:
+    def test_module(cls, module, verbose):
 ##
         '''
             Test a given's module doctests.
@@ -1233,14 +1236,14 @@ class CommandLine:
         # region protected methods
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
+## python3.3
 ##     def _determine_argument_parser_keywords(
-##         cls, keywords, meta, description
-##     ):
+##         cls: boostNode.extension.type.SelfClass, keywords: builtins.dict,
+##         meta: builtins.bool, description: builtins.str
+##     ) -> builtins.dict:
     def _determine_argument_parser_keywords(
-        cls: boostNode.extension.type.SelfClass, keywords: builtins.dict,
-        meta: builtins.bool, description: builtins.str
-    ) -> builtins.dict:
+        cls, keywords, meta, description
+    ):
 ##
         '''
             Determines keyword arguments given to python's native command line
@@ -1259,12 +1262,12 @@ class CommandLine:
         return determined_keywords
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
-##     def _validate_command_line_argument(cls, argument, arguments):
-    def _validate_command_line_argument(
-        cls: boostNode.extension.type.SelfClass, argument: builtins.dict,
-        arguments: collections.Iterable
-    ) -> boostNode.extension.type.SelfClass:
+## python3.3
+##     def _validate_command_line_argument(
+##         cls: boostNode.extension.type.SelfClass, argument: builtins.dict,
+##         arguments: collections.Iterable
+##     ) -> boostNode.extension.type.SelfClass:
+    def _validate_command_line_argument(cls, argument, arguments):
 ##
         '''
             Checks command line arguments for rendundant option names.
@@ -1290,11 +1293,11 @@ class CommandLine:
             argument)
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
-##     def _validate_command_line_argument_again_help_argument(cls, argument):
-    def _validate_command_line_argument_again_help_argument(
-        cls: boostNode.extension.type.SelfClass, argument: builtins.dict
-    ) -> boostNode.extension.type.SelfClass:
+## python3.3
+##     def _validate_command_line_argument_again_help_argument(
+##         cls: boostNode.extension.type.SelfClass, argument: builtins.dict
+##     ) -> boostNode.extension.type.SelfClass:
+    def _validate_command_line_argument_again_help_argument(cls, argument):
 ##
         '''
             Checks if given command line argument specification collides with
@@ -1309,11 +1312,11 @@ class CommandLine:
         return cls
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
-##     def _handle_initializer_default_values(cls, scope):
-    def _handle_initializer_default_values(
-        cls: boostNode.extension.type.SelfClass, scope: builtins.dict
-    ) -> builtins.dict:
+## python3.3
+##     def _handle_initializer_default_values(
+##         cls: boostNode.extension.type.SelfClass, scope: builtins.dict
+##     ) -> builtins.dict:
+    def _handle_initializer_default_values(cls, scope):
 ##
         '''
             Determines the default value from the runnable module's
@@ -1326,49 +1329,49 @@ class CommandLine:
             initializer = scope['self']._initialize
             while builtins.hasattr(initializer, '__wrapped__'):
                 initializer = initializer.__wrapped__
-## python2.7
-##             if inspect.getargspec(initializer).defaults:
-##                 parameters = builtins.dict(builtins.zip(
-##                     inspect.getargspec(
-##                         initializer
-##                     ).args[builtins.len(
-##                         inspect.getargspec(initializer).args
-##                     ) - builtins.len(inspect.getargspec(
-##                         initializer
-##                     ).defaults):],
-##                     inspect.getargspec(initializer).defaults))
-##                 if scope['__name__'] in parameters:
+## python3.3
+##             parameters = inspect.signature(initializer).parameters
+##             if scope['__name__'] in parameters:
+##                 if(parameters[scope['__name__']].default is
+##                    inspect.Parameter.empty):
+##                     if builtins.type(
+##                         parameters[scope['__name__']].annotation
+##                     ) is builtins.type:
+##                         '''
+##                             Set default value to default value of sepecified
+##                             parameter type.
+##                         '''
+##                         scope['__initializer_default_value__'] =\
+##                             parameters[scope['__name__']].annotation()
+##                 else:
 ##                     scope['__initializer_default_value__'] =\
-##                         parameters[scope['__name__']]
-            parameters = inspect.signature(initializer).parameters
-            if scope['__name__'] in parameters:
-                if(parameters[scope['__name__']].default is
-                   inspect.Parameter.empty):
-                    if builtins.type(
-                        parameters[scope['__name__']].annotation
-                    ) is builtins.type:
-                        '''
-                            Set default value to default value of sepecified
-                            parameter type.
-                        '''
-                        scope['__initializer_default_value__'] =\
-                            parameters[scope['__name__']].annotation()
-                else:
+##                         parameters[scope['__name__']].default
+            if inspect.getargspec(initializer).defaults:
+                parameters = builtins.dict(builtins.zip(
+                    inspect.getargspec(
+                        initializer
+                    ).args[builtins.len(
+                        inspect.getargspec(initializer).args
+                    ) - builtins.len(inspect.getargspec(
+                        initializer
+                    ).defaults):],
+                    inspect.getargspec(initializer).defaults))
+                if scope['__name__'] in parameters:
                     scope['__initializer_default_value__'] =\
-                        parameters[scope['__name__']].default
+                        parameters[scope['__name__']]
 ##
         return scope
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
+## python3.3
 ##     def _add_command_line_arguments(
-##         cls, arguments, default_arguments, scope
-##     ):
+##         cls: boostNode.extension.type.SelfClass,
+##         arguments: collections.Iterable,
+##         default_arguments: collections.Iterable, scope: builtins.dict
+##     ) -> boostNode.extension.type.SelfClass:
     def _add_command_line_arguments(
-        cls: boostNode.extension.type.SelfClass,
-        arguments: collections.Iterable,
-        default_arguments: collections.Iterable, scope: builtins.dict
-    ) -> boostNode.extension.type.SelfClass:
+        cls, arguments, default_arguments, scope
+    ):
 ##
         '''
             Add's command line arguments to python's native command line
@@ -1398,11 +1401,11 @@ class CommandLine:
         return cls
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
-##     def _determine_test_directory(cls, module):
-    def _determine_test_directory(
-        cls, module: builtins.dict
-    ) -> builtins.object:
+## python3.3
+##     def _determine_test_directory(
+##         cls, module: builtins.dict
+##     ) -> builtins.object:
+    def _determine_test_directory(cls, module):
 ##
         '''
             Determine or create a clean test directory for mocups in test
@@ -1425,17 +1428,17 @@ class CommandLine:
         ).make_new_directory()
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
+## python3.3
 ##     def _call_module_object(
-##         cls, module, callable_objects, object, caller_arguments,
-##         caller_keywords
-##     ):
+##         cls: boostNode.extension.type.SelfClass, module: builtins.dict,
+##         callable_objects: collections.Iterable, object: builtins.str,
+##         caller_arguments: collections.Iterable,
+##         caller_keywords: builtins.dict
+##     ) -> boostNode.extension.type.SelfClass:
     def _call_module_object(
-        cls: boostNode.extension.type.SelfClass, module: builtins.dict,
-        callable_objects: collections.Iterable, object: builtins.str,
-        caller_arguments: collections.Iterable,
-        caller_keywords: builtins.dict
-    ) -> boostNode.extension.type.SelfClass:
+        cls, module, callable_objects, object, caller_arguments,
+        caller_keywords
+    ):
 ##
         '''
             Calls a suitable module object to provide an entry point for
@@ -1448,13 +1451,13 @@ class CommandLine:
         return cls
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
-##     def _determine_callable_objects(cls, module, default_caller, test):
-    def _determine_callable_objects(
-        cls: boostNode.extension.type.SelfClass, module: builtins.dict,
-        default_caller: (builtins.str, builtins.bool, builtins.type(None)),
-        test: builtins.bool
-    ) -> builtins.tuple:
+## python3.3
+##     def _determine_callable_objects(
+##         cls: boostNode.extension.type.SelfClass, module: builtins.dict,
+##         default_caller: (builtins.str, builtins.bool, builtins.type(None)),
+##         test: builtins.bool
+##     ) -> builtins.tuple:
+    def _determine_callable_objects(cls, module, default_caller, test):
 ##
         '''
             Determines all callable objects and a default caller in given
@@ -1482,25 +1485,25 @@ class CommandLine:
         # region protected methods
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
+## python3.3
 ##     def _test_lint_document_modules(
-##         cls, all, arguments, module_names, temp_file_patterns, linter,
-##         documentation_path, clear_old_documentation, documenter,
-##         documenter_arguments, documentation_file_extension, frame,
-##         current_working_directory_save
-##     ):
+##         cls: boostNode.extension.type.SelfClass,
+##         all: builtins.bool, arguments: argparse.Namespace,
+##         module_names: collections.Iterable,
+##         temp_file_patterns: collections.Iterable, linter: builtins.str,
+##         documentation_path: builtins.str,
+##         clear_old_documentation: builtins.bool,
+##         documenter: builtins.str,
+##         documenter_arguments: collections.Iterable,
+##         documentation_file_extension: builtins.str, frame: types.FrameType,
+##         current_working_directory_save: builtins.str
+##     ) -> boostNode.extension.type.SelfClass:
     def _test_lint_document_modules(
-        cls: boostNode.extension.type.SelfClass,
-        all: builtins.bool, arguments: argparse.Namespace,
-        module_names: collections.Iterable,
-        temp_file_patterns: collections.Iterable, linter: builtins.str,
-        documentation_path: builtins.str,
-        clear_old_documentation: builtins.bool,
-        documenter: builtins.str,
-        documenter_arguments: collections.Iterable,
-        documentation_file_extension: builtins.str, frame: types.FrameType,
-        current_working_directory_save: builtins.str
-    ) -> boostNode.extension.type.SelfClass:
+        cls, all, arguments, module_names, temp_file_patterns, linter,
+        documentation_path, clear_old_documentation, documenter,
+        documenter_arguments, documentation_file_extension, frame,
+        current_working_directory_save
+    ):
 ##
         '''
             Test, lints and documents given modules if corresponding command
@@ -1522,11 +1525,11 @@ class CommandLine:
         return cls
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
-##     def _get_modules(cls, name):
-    def _get_modules(
-        cls: boostNode.extension.type.SelfClass, name: builtins.str
-    ) -> builtins.list:
+## python3.3
+##     def _get_modules(
+##         cls: boostNode.extension.type.SelfClass, name: builtins.str
+##     ) -> builtins.list:
+    def _get_modules(cls, name):
 ##
         '''
             Get all module names in given package name.
@@ -1541,12 +1544,12 @@ class CommandLine:
         return module_names
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
-##     def _get_version(cls, version, module_name):
-    def _get_version(
-        cls: boostNode.extension.type.SelfClass, version: builtins.str,
-        module_name: builtins.str
-    ) -> builtins.str:
+## python3.3
+##     def _get_version(
+##         cls: boostNode.extension.type.SelfClass, version: builtins.str,
+##         module_name: builtins.str
+##     ) -> builtins.str:
+    def _get_version(cls, version, module_name):
 ##
         '''
             Generates a version string by for a given module name.
@@ -1570,12 +1573,12 @@ class CommandLine:
             status=sys.modules[module_name].__status__)
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
-##     def _get_description(cls, description, module_name, version):
-    def _get_description(
-        cls: boostNode.extension.type.SelfClass, description: builtins.str,
-        module_name: builtins.str, version: builtins.str
-    ) -> builtins.str:
+## python3.3
+##     def _get_description(
+##         cls: boostNode.extension.type.SelfClass, description: builtins.str,
+##         module_name: builtins.str, version: builtins.str
+##     ) -> builtins.str:
+    def _get_description(cls, description, module_name, version):
 ##
         '''
             Generates a description string for given module.
@@ -1601,17 +1604,17 @@ class CommandLine:
         return ''
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
+## python3.3
 ##     def _put_documentations_together(
-##         cls, documentation_path, frame, current_working_directory_save,
-##         documentation_file_extension
-##     ):
+##         cls: boostNode.extension.type.SelfClass,
+##         documentation_path: builtins.str, frame: types.FrameType,
+##         current_working_directory_save: builtins.str,
+##         documentation_file_extension: builtins.str
+##     ) -> boostNode.extension.type.SelfClass:
     def _put_documentations_together(
-        cls: boostNode.extension.type.SelfClass,
-        documentation_path: builtins.str, frame: types.FrameType,
-        current_working_directory_save: builtins.str,
-        documentation_file_extension: builtins.str
-    ) -> boostNode.extension.type.SelfClass:
+        cls, documentation_path, frame, current_working_directory_save,
+        documentation_file_extension
+    ):
 ##
         '''
             Moves all documentation files in subpackages to root
@@ -1643,19 +1646,19 @@ class CommandLine:
         return cls
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
+## python3.3
 ##     def _document_modules(
-##         cls, documentation_path, clear_old_documentation, module_names,
-##         documenter, documenter_arguments, documentation_file_extension
-##     ):
+##         cls: boostNode.extension.type.SelfClass,
+##         documentation_path: builtins.str,
+##         clear_old_documentation: builtins.bool,
+##         module_names: collections.Iterable, documenter: builtins.str,
+##         documenter_arguments: collections.Iterable,
+##         documentation_file_extension: builtins.str
+##     ) -> boostNode.extension.type.SelfClass:
     def _document_modules(
-        cls: boostNode.extension.type.SelfClass,
-        documentation_path: builtins.str,
-        clear_old_documentation: builtins.bool,
-        module_names: collections.Iterable, documenter: builtins.str,
-        documenter_arguments: collections.Iterable,
-        documentation_file_extension: builtins.str
-    ) -> boostNode.extension.type.SelfClass:
+        cls, documentation_path, clear_old_documentation, module_names,
+        documenter, documenter_arguments, documentation_file_extension
+    ):
 ##
         '''
             Documents given modules with given documenter in given
@@ -1687,12 +1690,12 @@ class CommandLine:
         return cls
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
-##     def _lint_modules(cls, linter, module_names):
-    def _lint_modules(
-        cls: boostNode.extension.type.SelfClass, linter: builtins.str,
-        module_names: collections.Iterable
-    ) -> boostNode.extension.type.SelfClass:
+## python3.3
+##     def _lint_modules(
+##         cls: boostNode.extension.type.SelfClass, linter: builtins.str,
+##         module_names: collections.Iterable
+##     ) -> boostNode.extension.type.SelfClass:
+    def _lint_modules(cls, linter, module_names):
 ##
         '''
             Lints given modules with given linter.
@@ -1714,13 +1717,13 @@ class CommandLine:
         return cls
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
-##     def _test_modules(cls, module_names, temp_file_patterns):
-    def _test_modules(
-        cls: boostNode.extension.type.SelfClass,
-        module_names: collections.Iterable,
-        temp_file_patterns: collections.Iterable
-    ) -> boostNode.extension.type.SelfClass:
+## python3.3
+##     def _test_modules(
+##         cls: boostNode.extension.type.SelfClass,
+##         module_names: collections.Iterable,
+##         temp_file_patterns: collections.Iterable
+##     ) -> boostNode.extension.type.SelfClass:
+    def _test_modules(cls, module_names, temp_file_patterns):
 ##
         '''
             Handle modules in given package.
@@ -1739,18 +1742,18 @@ class CommandLine:
         return cls
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
+## python3.3
 ##     def _handle_packages_in_package(
-##         cls, current_working_directory_save, frame, command_line_arguments,
-##         exclude_packages
-##     ):
+##         cls: boostNode.extension.type.SelfClass,
+##         current_working_directory_save: builtins.str,
+##         frame: types.FrameType,
+##         command_line_arguments: collections.Iterable,
+##         exclude_packages: collections.Iterable
+##     ) -> boostNode.extension.type.SelfClass:
     def _handle_packages_in_package(
-        cls: boostNode.extension.type.SelfClass,
-        current_working_directory_save: builtins.str,
-        frame: types.FrameType,
-        command_line_arguments: collections.Iterable,
-        exclude_packages: collections.Iterable
-    ) -> boostNode.extension.type.SelfClass:
+        cls, current_working_directory_save, frame, command_line_arguments,
+        exclude_packages
+    ):
 ##
         '''
             Handle packages in current directory or package.
@@ -1778,12 +1781,12 @@ class CommandLine:
         return cls
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
-##     def _package_start_helper(cls, name, frame, command_line_arguments):
-    def _package_start_helper(
-        cls: boostNode.extension.type.SelfClass, name: builtins.str,
-        frame: types.FrameType, command_line_arguments: collections.Iterable
-    ) -> builtins.tuple:
+## python3.3
+##     def _package_start_helper(
+##         cls: boostNode.extension.type.SelfClass, name: builtins.str,
+##         frame: types.FrameType, command_line_arguments: collections.Iterable
+##     ) -> builtins.tuple:
+    def _package_start_helper(cls, name, frame, command_line_arguments):
 ##
         '''
             This method does some starting routine for initializing an
@@ -1800,15 +1803,15 @@ class CommandLine:
             current_working_directory_save)
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
+## python3.3
 ##     def _restore_current_directory(
-##         cls, clear, temp_file_patterns, current_directory=None
-##     ):
+##         cls: boostNode.extension.type.SelfClass, clear: builtins.bool,
+##         temp_file_patterns: collections.Iterable,
+##         current_directory=None
+##     ) -> boostNode.extension.type.SelfClass:
     def _restore_current_directory(
-        cls: boostNode.extension.type.SelfClass, clear: builtins.bool,
-        temp_file_patterns: collections.Iterable,
-        current_directory=None
-    ) -> boostNode.extension.type.SelfClass:
+        cls, clear, temp_file_patterns, current_directory=None
+    ):
 ##
         '''
             Restores former directory state. This method deletes e.g.
@@ -1840,12 +1843,12 @@ class CommandLine:
         return cls
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
-##     def _clear_temp_files(cls, temp_file_patterns):
-    def _clear_temp_files(
-        cls: boostNode.extension.type.SelfClass,
-        temp_file_patterns: collections.Iterable
-    ) -> boostNode.extension.type.SelfClass:
+## python3.3
+##     def _clear_temp_files(
+##         cls: boostNode.extension.type.SelfClass,
+##         temp_file_patterns: collections.Iterable
+##     ) -> boostNode.extension.type.SelfClass:
+    def _clear_temp_files(cls, temp_file_patterns):
 ##
         '''
             Clears all temporary files in current directory.
@@ -1862,13 +1865,13 @@ class CommandLine:
         return cls
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
-##     def _get_packages(cls, current_working_directory_save, frame):
-    def _get_packages(
-        cls: boostNode.extension.type.SelfClass,
-        current_working_directory_save: builtins.str,
-        frame: types.FrameType
-    ) -> builtins.list:
+## python3.3
+##     def _get_packages(
+##         cls: boostNode.extension.type.SelfClass,
+##         current_working_directory_save: builtins.str,
+##         frame: types.FrameType
+##     ) -> builtins.list:
+    def _get_packages(cls, current_working_directory_save, frame):
 ##
         '''
             Returns all sub packages found in the current package.
@@ -1899,12 +1902,12 @@ class CommandLine:
         return packages
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
-##     def _package_argument_parser(cls, name, frame, command_line_arguments):
-    def _package_argument_parser(
-        cls: boostNode.extension.type.SelfClass, name: builtins.str,
-        frame: types.FrameType, command_line_arguments: collections.Iterable
-    ) -> argparse.Namespace:
+## python3.3
+##     def _package_argument_parser(
+##         cls: boostNode.extension.type.SelfClass, name: builtins.str,
+##         frame: types.FrameType, command_line_arguments: collections.Iterable
+##     ) -> argparse.Namespace:
+    def _package_argument_parser(cls, name, frame, command_line_arguments):
 ##
         '''
             Returns a meta parser specialized for package interfaces.
@@ -1932,14 +1935,14 @@ class CommandLine:
             scope={'choices': choices})
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
+## python3.3
 ##     def _render_command_line_argument(
-##         cls, argument, scope={}
-##     ):
+##         cls: boostNode.extension.type.SelfClass, argument: builtins.object,
+##         scope={}
+##     ) -> builtins.object:
     def _render_command_line_argument(
-        cls: boostNode.extension.type.SelfClass, argument: builtins.object,
-        scope={}
-    ) -> builtins.object:
+        cls, argument, scope={}
+    ):
 ##
         '''
             If a given argument property is marked as executable respectively
