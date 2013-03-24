@@ -1,6 +1,8 @@
 #!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 
+# TODO show ip in info mode.
+
 # region header
 
 '''
