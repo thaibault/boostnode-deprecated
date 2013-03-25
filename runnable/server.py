@@ -2,6 +2,10 @@
 # -*- coding: utf-8 -*-
 
 # TODO show ip in info mode.
+# s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+# s.connect(("gmail.com",80))
+# print(s.getsockname()[0])
+# s.close()
 
 # region header
 
