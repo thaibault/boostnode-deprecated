@@ -1,12 +1,6 @@
 #!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 
-# TODO show ip in info mode.
-# s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-# s.connect(("gmail.com",80))
-# print(s.getsockname()[0])
-# s.close()
-
 # region header
 
 '''
@@ -251,6 +245,10 @@ class Web(
              'help': 'Defines the authentication file name.',
              'dest': 'authentication_file_name',
              'metavar': 'STRING'}})
+    '''
+        Globally accessable socket to ask for currently useful ip determining.
+    '''
+    DETERMINE_IP_SOCKET = '8.8.8.8', 80
 
         # endregion
 
@@ -491,12 +489,27 @@ class Web(
         '''
             Prints some information about the way the server was started.
         '''
+        determineIPSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        try:
+            determineIPSocket.connect(self.DETERMINE_IP_SOCKET)
+## python3.3
+##         except (
+##             builtins.BrokenPipeError, socket.gaierror, socket.herror,
+##             socket.timeout, socket.error
+##         ) as exception:
+        except (socket.herror, socket.gaierror, socket.timeout, socket.error):
+##
+            ip = socket.gethostbyname(socket.gethostname())
+        else:
+            ip = determineIPSocket.getsockname()[0]
+        finally:
+            determineIPSocket.close()
         __logger__.info(
             'Webserver is starting %sand listens at port "%d" and webroot '
-            '"%s".',
+            '"%s". Currently reachable ip is "%s".',
             ('a secure connection with public key "%s" ' %
              self._public_key_file._path) if self._public_key_file else '',
-            self.port, self.root._path)
+            self.port, self.root._path, ip)
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -797,10 +810,10 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
 ## python3.3
 ##         except (
 ##             builtins.BrokenPipeError, socket.gaierror, socket.herror,
-##             socket.timeout
+##             socket.timeout, socket.error
 ##         ) as exception:
         except (
-            socket.herror, socket.gaierror, socket.timeout
+            socket.herror, socket.gaierror, socket.timeout, socket.error
         ) as exception:
 ##
             __logger__.info(
@@ -1310,20 +1323,10 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         '''
             Handles a static file-request.
         '''
-        try:
-            with builtins.open(self.requested_file._path, mode='rb') as file:
-                file_content = file.read()
-        except socket.error as exception:
-            if sys.flags.debug or __logger__.isEnabledFor(logging.DEBUG):
-                self.send_error(500, '%s: %s' % (
-                    exception.__class__.__name__,
-                    re.compile('\n+').sub('\n', builtins.str(exception))))
-                raise
-            else:
-                self._send_no_file_error()
-        else:
-            self._send_positive_header(mimetype=self.requested_file.mimetype)
-            self.wfile.write(file_content)
+        with builtins.open(self.requested_file._path, mode='rb') as file:
+            file_content = file.read()
+        self._send_positive_header(mimetype=self.requested_file.mimetype)
+        self.wfile.write(file_content)
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
