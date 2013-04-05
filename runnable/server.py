@@ -382,8 +382,8 @@ class Web(
 ##         dynamic_mimetype_pattern=(
 ##             '^text/x-python$', 'text/x-sh', '^text/x-shellscript$'),
 ##         default_file_name_pattern=(
-##             '^__main__.[a-zA-Z0-9]{2,4}$', '^main.[a-zA-Z0-9]{2,4}$',
-##             '^index.[a-zA-Z0-9]{2,4}$', '^initialize.[a-zA-Z0-9]{2,4}$'),
+##             '^((__main__)|(main)|(index)|(initialize))\.?'
+##             '(?!tpl$)[a-zA-Z0-9]{0,4}$',),
 ##         default_module_name_pattern=(
 ##             '__main__', 'main', 'index', 'initialize'),
 ##         authentication=True, authentication_file_name='.htpasswd',
@@ -401,8 +401,8 @@ class Web(
         dynamic_mimetype_pattern=(
             '^text/x-python$', 'text/x-sh', '^text/x-shellscript$'),
         default_file_name_pattern=(
-            '^__main__.[a-zA-Z0-9]{2,4}$', '^main.[a-zA-Z0-9]{2,4}$',
-            '^index.[a-zA-Z0-9]{2,4}$', '^initialize.[a-zA-Z0-9]{2,4}$'),
+            '^((__main__)|(main)|(index)|(initialize))\.?'
+            '(?!tpl$)[a-zA-Z0-9]{0,4}$',),
         default_module_name_pattern=(
             '__main__', 'main', 'index', 'initialize'),
         authentication=True, authentication_file_name='.htpasswd',
