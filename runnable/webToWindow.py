@@ -368,7 +368,8 @@ class Browser(
         self._default_gui_toolkit = default_gui_toolkit
         self._no_progress_bar = no_progress_bar
         self.__class__.webview_instances.append(self)
-        __logger__.info('Start webgui with "%s"', self.gui_toolkit)
+        __logger__.info(
+            'Start webgui with gui toolkit "%s".', self.gui_toolkit)
         if not __test_mode__:
             builtins.getattr(
                 self, '_initialize_%s_browser' % self.gui_toolkit)()

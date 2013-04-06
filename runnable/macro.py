@@ -292,8 +292,10 @@ class Replace(
         '''
         self._exclude_locations = []
         for path in paths:
-            self._exclude_locations.append(boostNode.extension.file.Handler(
-                location=path))
+            file = boostNode.extension.file.Handler(
+                location=path, must_exist=False)
+            if file:
+                self._exclude_locations.append(file)
         return self._exclude_locations
 
             # endregion

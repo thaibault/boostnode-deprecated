@@ -1260,9 +1260,10 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         '''
         if self.server.web.default:
             return self._handle_given_default_get()
-        for module_name in self.server.web.default_module_name_pattern:
-            if self._handle_default_modules_get(module_name):
-                return self
+        if self.server.web.module_loading:
+            for module_name in self.server.web.default_module_name_pattern:
+                if self._handle_default_modules_get(module_name):
+                    return self
         for file_name_pattern in self.server.web.default_file_name_pattern:
             for file in self.server.web.root:
                 if self._check_pattern((file_name_pattern,), file.name):
@@ -1285,9 +1286,9 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
             if __name__ != '__main__':
                 self.load_module = True
                 return self._set_dynamic_or_static_get(file_name=module_name)
-        elif(self.server.web.module_loading and
-             boostNode.extension.native.Module.get_file_path(
-                 context_path=module_name)):
+        elif boostNode.extension.native.Module.get_file_path(
+            context_path=module_name
+        ):
             self.load_module = True
             return self._set_dynamic_or_static_get(file_name=module_name)
         return False
@@ -1307,9 +1308,14 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
            boostNode.extension.native.Module.get_file_path(
                context_path=self.server.web.default)):
             self.load_module = True
+            __logger__.info(
+                'Determine "%s" as default module.', self.server.web.default)
         self.requested_file = boostNode.extension.file.Handler(
             location=self.server.web.root.path + self.server.web.default,
             must_exist=False)
+        if self.requested_file:
+            __logger__.info(
+                'Determine "%s" as default file.', self.server.web.default)
         return self._set_dynamic_or_static_get(
             file_name=self.server.web.default)
 
@@ -1323,6 +1329,7 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         '''
             Handles a static file-request.
         '''
+        __logger__.debug('Return file "%s".', self.requested_file)
         with builtins.open(self.requested_file._path, mode='rb') as file:
             file_content = file.read()
         self._send_positive_header(mimetype=self.requested_file.mimetype)
@@ -1385,6 +1392,9 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
             self.request_arguments[0]
         self.request_arguments = builtins.list(builtins.map(
             lambda element: builtins.str(element), self.request_arguments))
+        __logger__.debug(
+            'Execute file "%s".',
+            self.server.web.root.path + self.request_arguments[0])
         output, errors = subprocess.Popen(
             self.request_arguments, stdout=subprocess.PIPE,
             stderr=subprocess.PIPE
@@ -1431,6 +1441,7 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         '''Extend requested scope with request dependent globals.'''
         requested_module.__requested_arguments__ = self.request_arguments
         sys.path = sys_path_save
+        __logger__.debug('Run module "%s".', requested_module)
         return self._handle_module_running(
             requested_module, print_default_buffer_save, sys_path_save)
 
