@@ -497,7 +497,9 @@ class Web(
 ##             builtins.BrokenPipeError, socket.gaierror, socket.herror,
 ##             socket.timeout, socket.error
 ##         ) as exception:
-        except (socket.herror, socket.gaierror, socket.timeout, socket.error):
+        except (
+            socket.herror, socket.gaierror, socket.timeout, socket.error
+        ):
 ##
             ip = socket.gethostbyname(socket.gethostname())
         else:
@@ -647,6 +649,10 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
     request_arguments = []
     '''Indicates if an answer is expected from the requested file.'''
     respond = False
+    '''Indicates if a response code was sent yet.'''
+    response_sent = False
+    '''Indicates if a response mime type was sent yet.'''
+    header_sent = False
 
         # endregion
 
@@ -1103,15 +1109,17 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _send_positive_header(
-##         self: boostNode.extension.type.Self, mimetype: builtins.str
+##         self: boostNode.extension.type.Self, mimetype='text/html'
 ##     ) -> boostNode.extension.type.Self:
-    def _send_positive_header(self, mimetype):
+    def _send_positive_header(self, mimetype='text/html'):
 ##
         '''
             This method is called for each successful answered http-request.
         '''
-        self.send_response(200)
-        self.send_header('Content-type', mimetype)
+        if not self.response_sent:
+            self.send_response(200)
+        if not self.header_sent:
+            self.send_header('Content-type', mimetype)
         self.end_headers()
         return self
 
@@ -1353,7 +1361,7 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         self.request_arguments = [
             self.requested_file_name, self.request_uri,
             self.__class__.parse_url(self.request_uri)[1],
-            self.post_dictionary, self.server]
+            self.post_dictionary, self.server, self]
         if '__no_respond__' not in self.post_dictionary:
             self.respond = True
             return self._run_request()
@@ -1409,8 +1417,13 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
                     500, 'Internal server error with cgi program%s: "%s"' %
                     (program_description, re.compile('\n+').sub('\n', errors)))
             else:
-                self._send_positive_header(
-                    mimetype=self.requested_file.mimetype)
+                # Check if given output contains a header.
+                header_match = re.compile(
+                    '^[A-Z0-9]+/([0-9]+\.)+[0-9]+ [0-9]{3} [a-zA-Z ]+\n'
+                    '([^:]+: .+\n)+\n.+'
+                ).match(output)
+                if not header_match:
+                    self._send_positive_header()
                 self.wfile.write(output)
         if errors:
             __logger__.critical(
@@ -1473,8 +1486,7 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
             self._handle_module_exception(requested_module, exception)
         else:
             if self.respond:
-                self._send_positive_header(
-                    mimetype=self.requested_file.mimetype)
+                self._send_positive_header()
         finally:
             if self.respond:
                 if self.server.web.lock.acquire():

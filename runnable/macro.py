@@ -283,12 +283,6 @@ class Replace(
             >>> replace.exclude_locations = [__file_path__]
             >>> replace._exclude_locations # doctest: +ELLIPSIS
             [Object of "Handler" with path "...macro.py" (file).]
-
-            >>> replace.exclude_locations = [
-            ...     'A', 'B'] # doctest: +IGNORE_EXCEPTION_DETAIL
-            Traceback (most recent call last):
-            ...
-            boostNode.extension.native.FileError: Invalid path "...A" for an...
         '''
         self._exclude_locations = []
         for path in paths:
