@@ -680,9 +680,10 @@ class Replace(
             match = re.compile(self._first_line_regex_pattern).match(
                 first_line)
             if match is None:
-                raise __exception__(
+                __logger__.warning(
                     '"%s" hasn\'t path to interpreter in first line.',
                     file.path)
+                return self
             self._current_version = match.group('current_version')
             new_interpreter = match.group('constant_version_pattern').replace(
                 self._current_version, self._new_version)
