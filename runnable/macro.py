@@ -556,10 +556,8 @@ class Replace(
             >>> Replace(
             ...     location=__test_folder__ + 'test', new_version='python3.3'
             ... )._convert_path(
-            ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
-            Traceback (most recent call last):
-            ...
-            boostNode.extension.native.MacroError:...test"...interpreter...
+            ... ) # doctest: +ELLIPSIS
+            Object of "Replace" with file "...test" to convert to "python3.3".
 
             >>> file = boostNode.extension.file.Handler(
             ...     location=__test_folder__ + 'test', must_exist=False)
