@@ -415,10 +415,11 @@ class Web(
             server thread will be started.
         '''
         self.__class__.instances.append(self)
-        public_key_file = boostNode.extension.file.Handler(
-            location=public_key_file_path)
-        if public_key_file.is_file():
-            self._public_key_file = public_key_file
+        if public_key_file_path:
+            public_key_file = boostNode.extension.file.Handler(
+                location=public_key_file_path)
+            if public_key_file.is_file():
+                self._public_key_file = public_key_file
         self.authentication_handler = authentication_handler
 
         self.authentication = authentication
