@@ -701,7 +701,15 @@ class Platform(builtins.object):
         '''
             Logs the result of an invoked and given subprocess output.
         '''
-        if log and not (secure or no_blocking):
+        if builtins.isinstance(result['standart_output'], builtins.list):
+            for index, standart_output in builtins.enumerate(
+                result['standart_output']
+            ):
+                cls._log_command_result({
+                    'standart_output': standart_output,
+                    'error_output': result['error_output'][index]},
+                    log, secure, no_blocking)
+        elif log and not (secure or no_blocking):
             if result['standart_output']:
                 __logger__.info(result['standart_output'])
             if result['error_output']:
@@ -789,7 +797,7 @@ class Platform(builtins.object):
         '''
             Runs a list of command line commands as its own process.
         '''
-        result = {'standart_output': [], 'error_output': [], 'return_code': 0}
+        result = {'standart_output': [], 'error_output': [], 'return_code': []}
         for sub_command in commands:
             sub_result = cls.run(
                 command=sub_command, command_arguments=command_arguments,

@@ -3426,11 +3426,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 ##         function: (builtins.str, types.FunctionType,
 ##                    types.MethodType),
 ##         recursive=False, recursive_in_link=True,
-##         *arguments: builtins.object, **keywords: builtins.object
+##         deepFirst=True, *arguments: builtins.object,
+##         **keywords: builtins.object
 ##     ) -> builtins.bool:
     def iterate_directory(
         self, function, recursive=False, recursive_in_link=True,
-        *arguments, **keywords
+        deepFirst=True, *arguments, **keywords
     ):
 ##
         '''
@@ -3467,7 +3468,17 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> elements # doctest: +ELLIPSIS
             [...'file.py'...]
         '''
-        for file in self:
+        files = self.list()
+        if not deepFirst:
+            files = []
+            for file in self.list():
+                if file.is_directory(allow_link=recursive_in_link):
+                    files.append(file)
+                else:
+                    files.reverse()
+                    files.append(file)
+                    files.reverse()
+        for file in files:
             if boostNode.extension.system.Platform.check_thread():
                 return False
             if builtins.isinstance(function, builtins.str):
@@ -3484,7 +3495,8 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
                     introspection.
                 '''
                 builtins.getattr(file, inspect.stack()[0][3])(
-                    function, recursive, *arguments, **keywords)
+                    function, recursive, recursive_in_link, deepFirst,
+                    *arguments, **keywords)
         return True
 
     @boostNode.paradigm.aspectOrientation.JointPoint
