@@ -82,10 +82,10 @@ class Parser(
          'keywords': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
-             'type': {'execute': 'type(__initializer_default_value__)'},
+             'type': builtins.str,
              #'required': {'execute': '__initializer_default_value__ is None'},
              'help': 'Select a template file to execute.',
-             #'dest': 'template_file',
+             #'dest': 'template',
              'metavar': 'TEMPLATE'}},
         {'arguments': ('-s', '--string'),
          'keywords': {
