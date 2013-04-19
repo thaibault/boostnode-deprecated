@@ -618,7 +618,8 @@ class Parser(
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _initialize(
-##         self: boostNode.extension.type.Self, template='index',
+##         self: boostNode.extension.type.Self,
+##         template: (builtins.str, boostNode.extension.file.Handler),
 ##         string=False,
 ##         placeholder_name_pattern='[a-zA-Z0-9_\[\]\'"\.()\\\\,\-+ :/=]+',
 ##         left_code_delimiter='<%', right_code_delimiter='%>',
@@ -656,7 +657,7 @@ class Parser(
 ##         **keywords: builtins.object
 ##     ) -> boostNode.extension.type.Self:
     def _initialize(
-        self, template='index', string=False,
+        self, template, string=False,
         placeholder_name_pattern='[a-zA-Z0-9_\[\]\'"\.()\\\\,\-+ :/=]+',
         left_code_delimiter='<%', right_code_delimiter='%>',
         right_escaped='%',  # For example: "<%%" evaluates to "<%"
