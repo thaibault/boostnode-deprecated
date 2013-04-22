@@ -6,12 +6,12 @@ This library supports python2.7+ and python3.3+ environements.
 
 Some features are:
 
-    - platform independent webbased gui toolkit
-    - smart, very secure webserver
-    - macro processor for text based files
-    - synchronisation
-    - many extended language feature like signature checking or jointpoints for aspect orientated programming
-    - and much more..
+* platform independent webbased gui toolkit
+* smart, very secure webserver
+* macro processor for text based files
+* synchronisation
+* many extended language feature like signature checking or jointpoints for aspect orientated programming
+* and much more..
 
 Usage
 
@@ -20,20 +20,20 @@ Usage
     import boostNode.extension.native
 
     # some stuff using imported boostNode components...
-    
+
     For advanced usage see the recommended module pattern described in
     "path/to/boosNode/__init__.py".
-    
+
     BoostNode is able to witch itself between python2.X and python3.X.
     To switch boostNode version between python3.X and python 2.X use this
     command:
-    
+
     /path/to/boostNode/runnable/macro.py -p /path/to/boostNode -e py
 
 Copyright
 
-    see ./__init__.py
+see ./__init__.py
 
 License
 
-    see ./__init__.py
+see ./__init__.py

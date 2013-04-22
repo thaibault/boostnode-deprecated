@@ -1083,7 +1083,7 @@ class Parser(
             arguments = (indent_space + print_buffer.content.replace(
                 '\n', '\n' + indent_space),)
             if print_buffer.content.endswith('\n'):
-                arguments = (arguments[0][0:-builtins.len(
+                arguments = (arguments[0][:-builtins.len(
                     '\n' + indent_space)] + '\n',)
             keywords['end'] = ''
         keywords['file'] = self._output
@@ -1202,7 +1202,7 @@ class Parser(
     def _render_code_line(self, match):
 ##
         '''
-            Compiles template to python code.
+            Compiles a template python code line.
         '''
         was_new_line = self._new_line
         self._new_line = True
