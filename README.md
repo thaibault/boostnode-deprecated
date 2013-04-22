@@ -4,8 +4,8 @@ boostNode
 boostNode is a high level python library.
 This library supports python2.7+ and python3.3+ environements.
 
-Some features are
------------------
+Features
+--------
 
 * platform independent webbased gui toolkit
 * smart, very secure webserver
@@ -20,7 +20,6 @@ Usage
 Copy this folder to your projects directory and write something like:
 
     import boostNode.extension.native
-
     # some stuff using imported boostNode components...
 
 For advanced usage see the recommended module pattern described in
