@@ -144,7 +144,11 @@ class Run(
         },
         'laTeX': {
             'commands': {
-                'compile': 'pdflatex "<%code_file.path%>"',
+                'compile': 'pdflatex "<%code_file.path%>" && '
+                           '(bibtex "<%code_file.directory_path%>'
+                           '<%code_file.basename%>.aux" || true) && '
+                           'pdflatex "<%code_file.path%>" && '
+                           'pdflatex "<%code_file.path%>"',
                 'run': 'xdg-open "<%code_file.basename%>.pdf"',
             },
             'extensions': ('tex',),
