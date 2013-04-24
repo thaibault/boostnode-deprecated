@@ -183,12 +183,6 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
     # region dynamic properties
 
-        # region public properties
-
-
-
-        # endregion
-
         # region protected properties
 
     '''
@@ -311,7 +305,9 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> root_location = Handler(
             ...     __test_folder__ + 'init_root_directory',
             ...     make_directory=True)
-            >>> Handler.set_root(location=root_location.path)
+            >>> Handler.set_root(
+            ...     location=root_location.path) # doctest: +ELLIPSIS
+            <class '...Handler'>
 
             >>> location = Handler('/init_A', must_exist=False)
             >>> location.path # doctest: +ELLIPSIS
@@ -341,7 +337,8 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ...     str(exception) # doctest: +ELLIPSIS
             "...Errno..."
 
-            >>> Handler.set_root(location='/')
+            >>> Handler.set_root(location='/') # doctest: +ELLIPSIS
+            <class '...Handler'>
         '''
         self._encoding = encoding
         self._respect_root_path = respect_root_path
@@ -634,15 +631,13 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
             >>> root_save = Handler.get_root()
 
-            >>> Handler.set_root(location='~')
+            >>> Handler.set_root(location='~') # doctest: +ELLIPSIS
+            <class '...Handler'>
             >>> Handler.get_root().path # doctest: +ELLIPSIS
             '...'
 
-            >>> Handler.set_root(location='test')
-            >>> Handler.get_root_().path # doctest: +ELLIPSIS
-            '...test...'
-
-            >>> Handler.set_root(location=root_save)
+            >>> Handler.set_root(location=root_save) # doctest: +ELLIPSIS
+            <class '...Handler'>
         '''
         root_path = os.path.normpath(cls(
             location, respect_root_path=False, output_with_root_prefix=True
@@ -3761,38 +3756,15 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
             >>> root_save = Handler.get_root()
 
-            >>> Handler.set_root(location='/tmp/sandbox/')
-            >>> handler = Handler('/test', must_exist=False)
-            >>> handler._path # doctest: +ELLIPSIS
-            '...tmp...sandbox...test'
-            >>> handler.path # doctest: +ELLIPSIS
-            '...test'
+            >>> Handler.set_root(
+            ...     location='/not/existsing/'
+            ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
+            Traceback (most recent call last):
+            ...
+            FileError: Invalid path "..." ...
 
-            >>> handler = Handler('/tmp/sandbox/test', must_exist=False)
-            >>> handler._path # doctest: +ELLIPSIS
-            '...tmp...sandbox...tmp...sandbox...test'
-            >>> handler.path # doctest: +ELLIPSIS
-            '...tmp...sandbox...test'
-
-            >>> Handler(
-            ...     '/tmp/sandbox/test', must_exist=False,
-            ...     respect_root_path=False
-            ... )._path # doctest: +ELLIPSIS
-            '...tmp...sandbox...test'
-
-            >>> Handler(
-            ...     '/test/', must_exist=False, respect_root_path=False
-            ... )._path # doctest: +ELLIPSIS
-            '...test'
-
-            >>> Handler.set_root(location='/tmp/sandbox/')
-            >>> handler = Handler('test', must_exist=False)
-            >>> handler._path # doctest: +ELLIPSIS
-            '...tmp...sandbox...test'
-            >>> handler.path # doctest: +ELLIPSIS
-            '...test'
-
-            >>> Handler.set_root(location=root_path_save)
+            >>> Handler.set_root(location=root_save) # doctest: +ELLIPSIS
+            <class '...Handler'>
         '''
         operating_system =\
             boostNode.extension.system.Platform().operating_system
