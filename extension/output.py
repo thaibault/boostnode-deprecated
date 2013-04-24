@@ -30,6 +30,7 @@ import inspect
 import logging
 import os
 import sys
+import threading
 ## python3.3 import queue as native_queue
 import Queue as native_queue
 
@@ -80,6 +81,11 @@ class Buffer(
 
         # region protected properties
 
+    '''
+        A lock object to guarantee that no other thread read from buffer
+        during truncating or writing.
+    '''
+    _lock = None
     '''Saves the current buffer content.'''
     _content = ''
     '''Saves the file handler instance for writing content into.'''
@@ -112,6 +118,7 @@ class Buffer(
             ...     file=__test_folder__ + 'buffer').file # doctest: +ELLIPSIS
             Object of "Handler" with path "...buffer" (file).
         '''
+        self._lock = threading.Lock()
         self.queue = self._file = None
         self.last_written = ''
         self._content = ''
@@ -192,16 +199,18 @@ class Buffer(
             >>> Buffer().write('test').content
             'test'
         '''
-        if self.file is not None:
-            self._content = self.file.content
-        elif self.queue:
-            self._content = ''
-            temp_buffer = []
-            while not self.queue.empty():
-                temp_buffer.append(self.queue.get())
-                self._content += temp_buffer[-1]
-            for content in temp_buffer:
-                self.queue.put(content)
+        if self._lock.acquire():
+            if self.file is not None:
+                self._content = self.file.content
+            elif self.queue:
+                self._content = ''
+                temp_buffer = []
+                while not self.queue.empty():
+                    temp_buffer.append(self.queue.get())
+                    self._content += temp_buffer[-1]
+                for content in temp_buffer:
+                    self.queue.put(content)
+        self._lock.release()
         return self._content
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -260,13 +269,15 @@ class Buffer(
             >>> buffer.content
             'hans'
         '''
-        self.last_written = content
-        if self.file is not None:
-            self.file.content += self.last_written
-        elif self.queue:
-            self.queue.put(self.last_written)
-        else:
-            self._content += self.last_written
+        if self._lock.acquire():
+            self.last_written = content
+            if self.file is not None:
+                self.file.content += self.last_written
+            elif self.queue:
+                self.queue.put(self.last_written)
+            else:
+                self._content += self.last_written
+        self._lock.release()
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -318,19 +329,21 @@ class Buffer(
             >>> buffer.content
             ''
         '''
-        if self.file is not None:
-            content = self.file.content
-            if delete:
-                self.file.remove_file()
+        if self._lock.acquire():
+            if self.file is not None:
+                content = self.file.content
+                if delete:
+                    self.file.remove_file()
+                else:
+                    self.file.content = ''
+            elif self.queue:
+                content = ''
+                while not self.queue.empty():
+                    content += self.queue.get()
             else:
-                self.file.content = ''
-        elif self.queue:
-            content = ''
-            while not self.queue.empty():
-                content += self.queue.get()
-        else:
-            content = self._content
-            self._content = ''
+                content = self._content
+                self._content = ''
+        self._lock.release()
         return content
 
     # endregion

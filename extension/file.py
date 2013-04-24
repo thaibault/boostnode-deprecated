@@ -185,16 +185,17 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
         # region public properties
 
-    '''
-        Defines a virtual root path for all methods. Through these class
-        objects aren't locations except in "root_path" available.
-    '''
-    root_path = '/'
+
 
         # endregion
 
         # region protected properties
 
+    '''
+        Defines a virtual root path for all methods. Through these class
+        objects aren't locations except in "_root_path" available.
+    '''
+    _root_path = '/'
     '''Defines the encoding for writing and reading text-based files.'''
     _encoding = ''
     '''
@@ -227,6 +228,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
     _lines = 0
     _mimetype = _type = None
     _respect_root_path = True
+    _output_with_root_prefix = False
     '''
         Properties to realize an iteration over all elements in a given
         directory.
@@ -249,12 +251,13 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 ##     def __init__(
 ##         self: boostNode.extension.type.Self, location=None,
 ##         make_directory=False, right=770, must_exist=True,
-##         encoding='utf-8', respect_root_path=True, has_extension=True
+##         encoding='utf-8', respect_root_path=True,
+##         output_with_root_prefix=False, has_extension=True
 ##     ) -> None:
     def __init__(
         self, location=None, make_directory=False, right=770,
         must_exist=True, encoding='utf-8', respect_root_path=True,
-        has_extension=True
+        output_with_root_prefix=False, has_extension=True
     ):
 ##
         '''
@@ -270,6 +273,8 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             "encoding" Define encoding for reading and writing files.
             "respect_root_path" Defines if a previous statically defined
                                 virtual root path should be considered.
+            "output_with_root_prefix" Defines if "get_path()" returns a path
+                                      with or without root path prefixed.
 
             Examples:
 
@@ -306,7 +311,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> root_location = Handler(
             ...     __test_folder__ + 'init_root_directory',
             ...     make_directory=True)
-            >>> Handler.root_path = root_location.path
+            >>> Handler.set_root(location=root_location.path)
 
             >>> location = Handler('/init_A', must_exist=False)
             >>> location.path # doctest: +ELLIPSIS
@@ -336,13 +341,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ...     str(exception) # doctest: +ELLIPSIS
             "...Errno..."
 
-            >>> Handler.root_path = '/'
+            >>> Handler.set_root(location='/')
         '''
-        self.__class__.root_path = os.path.normpath(
-            self.__class__.root_path)
         self._encoding = encoding
         self._respect_root_path = respect_root_path
-        self._initialize_root_path()
+        self._output_with_root_prefix = output_with_root_prefix
         self._initialized_path = self._initialize_location(location)
         self._initialize_path()
         self._prepend_root_path()
@@ -595,6 +598,64 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
     # region static methods
 
         # region public methods
+
+            # region getter methods
+
+    @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
+## python3.3
+##     def get_root(
+##         cls: boostNode.extension.type.SelfClass
+##     ) -> boostNode.extension.type.SelfClassObject:
+    def get_root(cls):
+##
+        '''
+            Returns a file object referencing to the virtual root path.
+        '''
+        return cls(
+            location=cls._root_path, respect_root_path=False,
+            output_with_root_prefix=True)
+
+            # endregion
+
+            # region setter methods
+
+    @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
+## python3.3
+##     def set_root(
+##         cls: boostNode.extension.type.SelfClass
+##         location: (boostNode.extension.typpe.SelfClassObject, builtins.str)
+##     ) -> boostNode.extension.type.SelfClass:
+    def set_root(cls, location):
+##
+        '''
+            Normalizes root path.
+
+            Examples:
+
+            >>> root_save = Handler.get_root()
+
+            >>> Handler.set_root(location='~')
+            >>> Handler.get_root().path # doctest: +ELLIPSIS
+            '...'
+
+            >>> Handler.set_root(location='test')
+            >>> Handler.get_root_().path # doctest: +ELLIPSIS
+            '...test...'
+
+            >>> Handler.set_root(location=root_save)
+        '''
+        root_path = os.path.normpath(cls(
+            location, respect_root_path=False, output_with_root_prefix=True
+        ).path)
+        if not os.path.isabs(root_path):
+            root_path = os.path.abspath(os.path.normpath(
+                os.path.expanduser(root_path)))
+        if root_path[-builtins.len(os.sep)] != os.sep:
+            root_path += os.sep
+        cls._root_path = root_path
+        return cls
+
+            # endregion
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
@@ -1181,11 +1242,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 ## python3.3
 ##     def get_path(
 ##         self: boostNode.extension.type.Self, location=None,
-##         respect_root_path=None, output_with_root_prefix=False
+##         respect_root_path=None, output_with_root_prefix=None
 ##     ) -> builtins.str:
     def get_path(
         self, location=None, respect_root_path=None,
-        output_with_root_prefix=False
+        output_with_root_prefix=None
     ):
 ##
         '''
@@ -1205,21 +1266,31 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         taken_respect_root_path = respect_root_path
         if respect_root_path is None:
             taken_respect_root_path = self._respect_root_path
+        taken_output_with_root_prefix = output_with_root_prefix
+        if output_with_root_prefix is None:
+            taken_output_with_root_prefix = self._output_with_root_prefix
         if location is None:
             if(self._path[-builtins.len(os.sep)] != os.sep and
                self.is_directory()):
                 self._path += os.sep
-            if output_with_root_prefix:
+            '''
+                NOTE: If the given file isn't present the "_path" could be
+                smaller than the root path. So simply return the internal
+                path in this case.
+            '''
+            if(taken_output_with_root_prefix or
+               not (self and self._path.startswith(self._root_path))):
                 return self._path
             return self._path[builtins.len(
-                self.__class__.root_path) - builtins.len(os.sep):]
+                self._root_path) - builtins.len(os.sep):]
         if not builtins.isinstance(location, self.__class__):
             location = self.__class__(
                 location, respect_root_path=taken_respect_root_path,
+                output_with_root_prefix=taken_output_with_root_prefix,
                 must_exist=False)
         return location.get_path(
             respect_root_path=taken_respect_root_path,
-            output_with_root_prefix=output_with_root_prefix)
+            output_with_root_prefix=taken_output_with_root_prefix)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -1263,7 +1334,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def get_directory_path(
-##         self: boostNode.extension.type.Self, respect_root_path=None
+##         self: boostNode.extension.type.Self, respect_root_path=None,
 ##     ) -> builtins.str:
     def get_directory_path(self, respect_root_path=None):
 ##
@@ -1302,7 +1373,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             taken_respect_root_path = self._respect_root_path
         if taken_respect_root_path:
             return self._directory_path[builtins.len(
-                self.__class__.root_path) - builtins.len(os.sep):]
+                self._root_path) - builtins.len(os.sep):]
         return self._directory_path
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -2615,15 +2686,16 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
                         builtins.ord('A'), builtins.ord('Z') + 1):
                     path = builtins.chr(letter_number) + ':\\\\'
                     if os.path.exists(path):
-                        yield self.__class__(location=path)
+                        yield self.__class__(location=path, must_exist=False)
             else:
                 try:
-                    for file in os.listdir(self._path, *arguments, **keywords):
+                    for file_name in os.listdir(
+                        self._path, *arguments, **keywords
+                    ):
                         try:
                             yield self.__class__(
-                                location=self.path + file, must_exist=False,
-                                encoding=self._encoding,
-                                respect_root_path=self._respect_root_path)
+                                location=self.path + file_name,
+                                must_exist=False)
                         except (builtins.IOError, builtins.OSError):
                             pass
                 except builtins.OSError:
@@ -3175,9 +3247,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             link = self.read_portable_link()
         if link[-builtins.len(os.sep)] != os.sep and os.path.isdir(link):
             link += os.sep
-        link = link[builtins.len(
-            self.__class__.root_path
-        ) - builtins.len(os.sep):]
+        link = link[builtins.len(self._root_path) - builtins.len(os.sep):]
         if as_object:
             if not self.is_referenced_via_absolute_path(location=link):
                 return self.__class__(
@@ -3689,9 +3759,9 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
             Examples:
 
-            >>> root_path_save = Handler.root_path
+            >>> root_save = Handler.get_root()
 
-            >>> Handler.root_path = '/tmp/sandbox/'
+            >>> Handler.set_root(location='/tmp/sandbox/')
             >>> handler = Handler('/test', must_exist=False)
             >>> handler._path # doctest: +ELLIPSIS
             '...tmp...sandbox...test'
@@ -3715,14 +3785,14 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ... )._path # doctest: +ELLIPSIS
             '...test'
 
-            >>> Handler.root_path = '/tmp/sandbox/'
+            >>> Handler.set_root(location='/tmp/sandbox/')
             >>> handler = Handler('test', must_exist=False)
             >>> handler._path # doctest: +ELLIPSIS
             '...tmp...sandbox...test'
             >>> handler.path # doctest: +ELLIPSIS
             '...test'
 
-            >>> Handler.root_path = root_path_save
+            >>> Handler.set_root(location=root_path_save)
         '''
         operating_system =\
             boostNode.extension.system.Platform().operating_system
@@ -3732,17 +3802,17 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         '''
         if(self._respect_root_path and (
                self._initialized_path.startswith(
-                   self.__class__.root_path[:-builtins.len(os.sep)]) or
+                   self._root_path[:-builtins.len(os.sep)]) or
                not self._path.startswith(
-                   self.__class__.root_path[:-builtins.len(os.sep)])) and not (
+                   self._root_path[:-builtins.len(os.sep)])) and not (
                'windows' == operating_system and
                re.compile('^[a-zA-Z]:\\.*').match(self._path) and
-               self.__class__.root_path == os.sep)):
+               self._root_path == os.sep)):
             if self._path.startswith(os.sep):
-                self._path = self.__class__.root_path[:-builtins.len(
+                self._path = self._root_path[:-builtins.len(
                     os.sep)] + self._path
             else:
-                self._path = self.__class__.root_path + self._path
+                self._path = self._root_path + self._path
         return self._path
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -3807,41 +3877,6 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         elif builtins.isinstance(location, self.__class__):
             location = location._path
         return location
-
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _initialize_root_path(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
-    def _initialize_root_path(self):
-##
-        '''
-            Normalizes root path.
-
-            Examples:
-
-            >>> root_path_save = Handler.root_path
-
-            >>> Handler().root_path # doctest: +ELLIPSIS
-            '...'
-
-            >>> Handler.root_path = '~'
-            >>> Handler(must_exist=False).root_path # doctest: +ELLIPSIS
-            '...'
-
-            >>> Handler.root_path = 'test'
-            >>> Handler(must_exist=False).root_path # doctest: +ELLIPSIS
-            '...test...'
-
-            >>> Handler.root_path = root_path_save
-        '''
-        if(not self.is_referenced_via_absolute_path(
-           location=self.__class__.root_path)):
-            self.__class__.root_path = os.path.abspath(os.path.normpath(
-                os.path.expanduser(self.__class__.root_path)))
-        if self.__class__.root_path[-builtins.len(os.sep)] != os.sep:
-            self.__class__.root_path += os.sep
-        return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3

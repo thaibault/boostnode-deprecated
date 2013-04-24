@@ -1073,9 +1073,12 @@ class Object(boostNode.paradigm.objectOrientation.Class):
 ## python3.3
 ##         return builtins.isinstance(object, builtins.bytes)
         try:
-            object.encode('utf-8')
+            object.decode('utf-8')
         except (builtins.UnicodeEncodeError, builtins.UnicodeDecodeError):
-            return True
+            try:
+                object.decode('latin-1')
+            except:
+                return True
         return False
 ##
 

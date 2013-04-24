@@ -1074,6 +1074,7 @@ class Parser(
             indent_space = keywords['indent_space']
             del keywords['indent_space']
 ##
+
         if indent and indent_space:
             print_buffer = boostNode.extension.output.Buffer()
             codewords = copy.deepcopy(keywords)

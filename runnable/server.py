@@ -269,7 +269,7 @@ class Web(
         # region public properties
 
     '''Saves server runtime properties.'''
-    root = port = thread_buffer = lock = service = None
+    root = port = thread_buffer = service = None
     '''Saves a default file if no explicit file was requested.'''
     default = ''
     '''Saves a cli-command for shutting down the server.'''
@@ -435,7 +435,6 @@ class Web(
         self.dynamic_mimetype_pattern = dynamic_mimetype_pattern
         self.default_file_name_pattern = default_file_name_pattern
         self.default_module_name_pattern = default_module_name_pattern
-        self.lock = threading.Lock()
         self.thread_buffer = boostNode.extension.output.Buffer(
             queue=True)
         self.module_loading = module_loading
@@ -1490,14 +1489,12 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
                 self._send_positive_header()
         finally:
             if self.respond:
-                if self.server.web.lock.acquire():
 ## python3.3
-##                     self.wfile.write(
-##                         self.server.web.thread_buffer.clear().encode())
-                    self.wfile.write(
-                        self.server.web.thread_buffer.clear())
+##                 self.wfile.write(
+##                     self.server.web.thread_buffer.clear().encode())
+                self.wfile.write(
+                    self.server.web.thread_buffer.clear())
 ##
-                self.server.web.lock.release()
             boostNode.extension.output.Print.default_buffer =\
                 print_default_buffer_save
         return self
