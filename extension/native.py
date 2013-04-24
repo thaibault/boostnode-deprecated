@@ -1075,10 +1075,7 @@ class Object(boostNode.paradigm.objectOrientation.Class):
         try:
             object.decode('utf-8')
         except (builtins.UnicodeEncodeError, builtins.UnicodeDecodeError):
-            try:
-                object.decode('latin-1')
-            except:
-                return True
+            return True
         return False
 ##
 
