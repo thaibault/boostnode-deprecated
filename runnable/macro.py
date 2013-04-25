@@ -666,6 +666,7 @@ class Replace(
         '''
             Converts source code of given file to new version.
         '''
+        old_file_content = file.content
 ## python3.3         with builtins.open(
         with codecs.open(
             file.path, mode='r', encoding=self._encoding
@@ -709,8 +710,12 @@ class Replace(
             try:
                 file.content = re.compile(self._one_line_regex_pattern).sub(
                     self._replace_alternate_line, file_content)
-            except builtins.UnicodeEncodeError:
-                __logger__.warning('Can\'t decode file "%s".', file.path)
+            except builtins.UnicodeEncodeError as exception:
+                __logger__.warning(
+                    'Can\'t encode to file "%s". %s: %s', file.path,
+                    exception.__class__.__name__, builtins.str(exception))
+                file.content = old_file_content
+                raise
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint

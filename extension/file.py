@@ -619,8 +619,8 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
 ##     def set_root(
-##         cls: boostNode.extension.type.SelfClass
-##         location: (boostNode.extension.typpe.SelfClassObject, builtins.str)
+##         cls: boostNode.extension.type.SelfClass,
+##         location: (boostNode.extension.type.SelfClassObject, builtins.str)
 ##     ) -> boostNode.extension.type.SelfClass:
     def set_root(cls, location):
 ##
@@ -1581,7 +1581,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
                             '''
                             self._content = builtins.str(
                                 (file.read() + file.read()).encode(
-                                    self.DEFAULT_ENCODING))
+                                    encoding=self.DEFAULT_ENCODING))
                         except builtins.UnicodeDecodeError as exception:
                             if strict:
                                 raise

@@ -1061,7 +1061,7 @@ class Object(boostNode.paradigm.objectOrientation.Class):
 ## python3.3
 ##     def is_binary(
 ##         cls: boostNode.extension.type.SelfClass,
-##         object: builtins.object
+##         object: (builtins.str, builtins.bytes)
 ##     ) -> builtins.bool:
     def is_binary(cls, object):
 ##
@@ -1072,11 +1072,12 @@ class Object(boostNode.paradigm.objectOrientation.Class):
         # differenctiation between "string" and "bytes" objects.
 ## python3.3
 ##         return builtins.isinstance(object, builtins.bytes)
-        try:
-            object.decode('utf-8')
-        except (builtins.UnicodeEncodeError, builtins.UnicodeDecodeError):
-            return True
-        return False
+        if builtins.isinstance(object, builtins.unicode):
+            object = object.encode(encoding='utf-8')
+        text_chars = ''.join(builtins.map(
+            builtins.chr,
+            builtins.range(7, 14) + [27] + builtins.range(0x20, 0x100)))
+        return builtins.bool(object.translate(None, text_chars))
 ##
 
     # endregion
