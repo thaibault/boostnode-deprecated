@@ -1258,9 +1258,6 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ... ) # doctest: +ELLIPSIS
             '...get_path...path...'
         '''
-        taken_respect_root_path = respect_root_path
-        if respect_root_path is None:
-            taken_respect_root_path = self._respect_root_path
         taken_output_with_root_prefix = output_with_root_prefix
         if output_with_root_prefix is None:
             taken_output_with_root_prefix = self._output_with_root_prefix
@@ -1278,13 +1275,8 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
                 return self._path
             return self._path[builtins.len(
                 self._root_path) - builtins.len(os.sep):]
-        if not builtins.isinstance(location, self.__class__):
-            location = self.__class__(
-                location, respect_root_path=taken_respect_root_path,
-                output_with_root_prefix=taken_output_with_root_prefix,
-                must_exist=False)
-        return location.get_path(
-            respect_root_path=taken_respect_root_path,
+        return self._get_path(
+            location, respect_root_path,
             output_with_root_prefix=taken_output_with_root_prefix)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -3690,6 +3682,33 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         # endregion
 
         # region protected methods
+
+## python3.3
+##     def _get_path(
+##         self: boostNode.extension.type.Self,
+##         location: (boostNode.extension.type.SelfClassObject, builtins.str),
+##         respect_root_path: (builtins.bool, builtins.type(None)),
+##         output_with_root_prefix: (builtins.bool, builtins.type(None))
+##     ) -> builtins.str:
+    def _get_path(
+        self, location, respect_root_path, output_with_root_prefix
+    ):
+##
+        '''
+            This method is used as helper method for "get_path()".
+            It deals the case where an explicit location was given.
+        '''
+        taken_respect_root_path = respect_root_path
+        if respect_root_path is None:
+            taken_respect_root_path = self._respect_root_path
+        if not builtins.isinstance(location, self.__class__):
+            location = self.__class__(
+                location, respect_root_path=taken_respect_root_path,
+                output_with_root_prefix=output_with_root_prefix,
+                must_exist=False)
+        return location.get_path(
+            respect_root_path=taken_respect_root_path,
+            output_with_root_prefix=output_with_root_prefix)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
