@@ -1853,7 +1853,10 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
                 self._path, mode, *arguments, **keywords
             ) as file_handler:
                 if not builtins.isinstance(content, builtins.unicode):
-                    content = builtins.unicode(content, 'utf-8')
+                    try:
+                        content = builtins.unicode(content, 'utf-8')
+                    except builtins.UnicodeDecodeError:
+                        content = builtins.unicode(content, 'latin1')
                 file_handler.write(content)
 ##
         return self
