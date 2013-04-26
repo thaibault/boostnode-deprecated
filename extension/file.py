@@ -4065,7 +4065,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             Determines windows internal method to get disk free space.
         '''
         if(sys.version_info >= (3,) or
-           builtins.isinstance(path, builtins.unicode)):
+           builtins.isinstance(self._path, builtins.unicode)):
             return ctypes.windll.kernel32.GetDiskFreeSpaceExW
         return ctypes.windll.kernel32.GetDiskFreeSpaceExA
 
