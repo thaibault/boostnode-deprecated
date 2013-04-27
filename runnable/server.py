@@ -751,7 +751,7 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
 ##                         qs=urllib.parse.urlparse(url).query,
 ##                         keep_blank_values=True,
 ##                         strict_parsing=True,
-##                         encoding='utf-8',
+##                         encoding='utf_8',
 ##                         errors='replace')
                     get = urlparse.parse_qs(
                         qs=urlparse.urlparse(url).query,
@@ -851,14 +851,14 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
 ## python3.3
 ##             self.post_dictionary = urllib.parse.parse_qs(self.rfile.read(
 ##                 builtins.int(self.headers['content-length'])
-##             ).decode('utf-8'))
+##             ).decode('utf_8'))
             self.post_dictionary = cgi.parse_qs(
                 self.rfile.read(builtins.int(self.headers.getheader(
                     'content-length'))),
                 keep_blank_values=True)
 ##
             for name, value in self.post_dictionary.items():
-                if boostNode.extension.native.Object.is_binary(object=value):
+                if boostNode.extension.native.Object(object=value).is_binary():
                     self.post_dictionary[name] = {'content': value}
         return self.do_GET()
 
@@ -1004,7 +1004,7 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
 ## python3.3
 ##         return base64.b64encode(('%s:%s' % (
 ##             match.group('name'), match.group('password')
-##         )).encode('utf-8')).decode()
+##         )).encode('utf_8')).decode()
         return base64.b64encode(
             '%s:%s' % (match.group('name'), match.group('password')))
 ##
@@ -1025,7 +1025,7 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
 ##             fp=self.rfile, headers=self.headers, keep_blank_values=True,
 ##             strict_parsing=True,
 ##             environ=self._determine_environement_variables(),
-##             encoding='utf-8')
+##             encoding='utf_8')
         form = cgi.FieldStorage(
             fp=self.rfile, headers=self.headers, keep_blank_values=True,
             strict_parsing=True,

@@ -29,6 +29,7 @@ __version__ = '1.0'
 ## import collections
 pass
 ##
+import encodings
 import inspect
 import os
 import re
@@ -65,6 +66,11 @@ class String(boostNode.paradigm.objectOrientation.Class, builtins.str):
 
         # region public properties
 
+    '''
+        Defines generally important encodings. Which should be tried at first.
+    '''
+    IMPORTANT_ENCODINGS = 'ascii', 'utf_8', 'latin_1', 'utf_16'
+    '''All chars wich should be handle during dealing with web urls.'''
     NON_STANDARD_SPECIAL_URL_SEQUENCES = {
         '%1000': '#', '%1001': '&', '%1002': '=', '%1003': '%', '%1004': '+'}
     '''
@@ -490,6 +496,32 @@ class String(boostNode.paradigm.objectOrientation.Class, builtins.str):
         return self.replace(search)
 
             # endregion
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def determine_encoding(
+##         self: boostNode.extension.type.Self
+##     ) -> builtin.str:
+    def determine_encoding(self):
+##
+        '''
+            Gueses the encoding used in current string. Encodings are checked
+            in alphabetic order.
+        '''
+        if self.content:
+            for encoding in builtins.list(
+                self.IMPORTANT_ENCODINGS
+            ) + builtins.sorted(builtins.filter(
+                lambda encoding: encoding not in self.IMPORTANT_ENCODINGS,
+                builtins.set(encodings.aliases.aliases.values())
+            )):
+                try:
+                    self.content.decode(encoding)
+                except builtins.UnicodeDecodeError:
+                    pass
+                else:
+                    return encoding
+        return self.IMPORTANT_ENCODINGS[0]
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -982,10 +1014,8 @@ class Object(boostNode.paradigm.objectOrientation.Class):
         return self._object_copy
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def restore(self: boostNode.extension.type.Self, object_copy=None):
-    def restore(self, object_copy=None):
-##
+## python3.3     def restore(self: boostNode.extension.type.Self):
+    def restore(self):
         '''
             Restores a given object's attributes by a given copy are last
             copied item.
@@ -993,9 +1023,10 @@ class Object(boostNode.paradigm.objectOrientation.Class):
             Examples:
 
             >>> Module.string = 'hans'
-            >>> object_copy = Object(Module).copy()
+            >>> object = Object(Module)
+            >>> object.copy()
             >>> Module.string = 'peter'
-            >>> Object(Module).restore(object_copy) # doctest: +ELLIPSIS
+            >>> object.restore() # doctest: +ELLIPSIS
             <class ...Module...>
             >>> Module.string
             'hans'
@@ -1007,25 +1038,34 @@ class Object(boostNode.paradigm.objectOrientation.Class):
             >>> object.object.hans = 'B'
             >>> object.object.hans
             'B'
-            >>> object.restore(object_copy).hans
-            'A'
-
-            >>> class B:
-            ...     hans = 'A'
-            >>> object = Object(A())
-            >>> object_copy = object.copy()
-            >>> object.object.hans = 'B'
-            >>> object.object.hans
-            'B'
             >>> object.restore().hans
             'A'
         '''
-        if object_copy is None:
-            object_copy = self._object_copy
-        for attribute, value in object_copy.items():
+        for attribute, value in self._object_copy.items():
             if not (attribute.startswith('__') and attribute.endswith('__')):
                 builtins.setattr(self.object, attribute, value)
         return self.object
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def is_binary(self: boostNode.extension.type.Self) -> builtins.bool:
+    def is_binary(self):
+##
+        '''
+            Determines if given data is binary.
+        '''
+        # NOTE: This is a dirty workaround to handle python2.7 lack of
+        # differenctiation between "string" and "bytes" objects.
+## python3.3
+##         return builtins.isinstance(self.object, builtins.bytes)
+        object = self.object
+        if builtins.isinstance(self.object, builtins.unicode):
+            object = self.object.encode(encoding='utf_8')
+        text_chars = ''.join(builtins.map(
+            builtins.chr,
+            builtins.range(7, 14) + [27] + builtins.range(0x20, 0x100)))
+        return builtins.bool(object.translate(None, text_chars))
+##
 
         # endregion
 
@@ -1056,29 +1096,6 @@ class Object(boostNode.paradigm.objectOrientation.Class):
             'necessary for abstract class "{abstract_class}".'.format(
                 name=inspect.stack()[2][3], class_name=cls.__name__,
                 abstract_class=abstract_class_name))
-
-    @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python3.3
-##     def is_binary(
-##         cls: boostNode.extension.type.SelfClass,
-##         object: (builtins.str, builtins.bytes)
-##     ) -> builtins.bool:
-    def is_binary(cls, object):
-##
-        '''
-            Determines if given data is binary.
-        '''
-        # NOTE: This is a dirty workaround to handle python2.7 lack of
-        # differenctiation between "string" and "bytes" objects.
-## python3.3
-##         return builtins.isinstance(object, builtins.bytes)
-        if builtins.isinstance(object, builtins.unicode):
-            object = object.encode(encoding='utf-8')
-        text_chars = ''.join(builtins.map(
-            builtins.chr,
-            builtins.range(7, 14) + [27] + builtins.range(0x20, 0x100)))
-        return builtins.bool(object.translate(None, text_chars))
-##
 
     # endregion
 

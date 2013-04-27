@@ -336,7 +336,7 @@ class Replace(
 ##                                 '(?P<alternate_version>[^ ]+)\n'
 ##                                 '(?P<alternate_text>((## .*?\n)|(##\n))+)'
 ##                                 '(?P<current_text>.*?\n)##\n',
-##         encoding='utf-8', dry=False, **keywords: builtins.object
+##         encoding='utf_8', dry=False, **keywords: builtins.object
 ##     ) -> boostNode.extension.type.Self:
     def _initialize(
         self, location=None, new_version='__determine_useful__',
@@ -351,7 +351,7 @@ class Replace(
                                 '(?P<alternate_version>[^ ]+)\n'
                                 '(?P<alternate_text>((## .*?\n)|(##\n))+)'
                                 '(?P<current_text>.*?\n)##\n',
-        encoding='utf-8', dry=False, **keywords
+        encoding='utf_8', dry=False, **keywords
     ):
 ##
         '''

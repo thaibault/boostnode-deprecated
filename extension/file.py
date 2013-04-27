@@ -151,7 +151,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
     '''Defines the maximum number of digits for the biggest file-size.'''
     MAX_SIZE_NUMBER_LENGTH = 24  # 10^21 byte = 1 Yottabyte (-1 byte)
     '''Defines char set for handling text-based files internally.'''
-    DEFAULT_ENCODING = 'utf-8'
+    DEFAULT_ENCODING = 'utf_8'
     '''Defines all mimetypes describing a media file.'''
     MEDIA_MIMETYPE_PATTERN = '^audio/.+', '^video/.+'
     '''
@@ -245,12 +245,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 ##     def __init__(
 ##         self: boostNode.extension.type.Self, location=None,
 ##         make_directory=False, right=770, must_exist=True,
-##         encoding='utf-8', respect_root_path=True,
+##         encoding='utf_8', respect_root_path=True,
 ##         output_with_root_prefix=False, has_extension=True
 ##     ) -> None:
     def __init__(
         self, location=None, make_directory=False, right=770,
-        must_exist=True, encoding='utf-8', respect_root_path=True,
+        must_exist=True, encoding='utf_8', respect_root_path=True,
         output_with_root_prefix=False, has_extension=True
     ):
 ##
@@ -867,23 +867,23 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 ##
         '''
             Returns encoding for current file handler. If no encoding was set
-            "utf-8" is default.
+            "utf_8" is default.
 
             Examples:
 
             >>> Handler().encoding
-            'utf-8'
+            'utf_8'
 
             >>> Handler().get_encoding()
-            'utf-8'
+            'utf_8'
 
             >>> handler = Handler(__test_folder__ + 'test', must_exist=False)
             >>> handler.set_content(
-            ...     'test', encoding='US-ASCII'
+            ...     'test', encoding='ascii'
             ... ) # doctest: +ELLIPSIS
             Object of "Handler" ...
             >>> handler.encoding
-            'US-ASCII'
+            'ascii'
         '''
         return self._encoding
 
@@ -1503,13 +1503,13 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
             >>> handler = Handler(location=__file_path__)
             >>> handler.get_content(
-            ...     mode='r', encoding='utf-8') # doctest: +ELLIPSIS
+            ...     mode='r', encoding='utf_8') # doctest: +ELLIPSIS
             '#!/...python...'
 
             >>> handler._encoding
-            'utf-8'
+            'utf_8'
 
-            >>> Handler(location=__file_path__, encoding='utf-8').get_content(
+            >>> Handler(location=__file_path__, encoding='utf_8').get_content(
             ...     mode='r'
             ... ) # doctest: +ELLIPSIS
             '#!/...python...'
@@ -1773,9 +1773,9 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ...     must_exist=False)
             >>> test_file.content = 'hans and peter'
 
-            >>> test_file.encoding = 'utf-8'
+            >>> test_file.encoding = 'utf_8'
 
-            >>> test_file.set_encoding('utf-8') # doctest: +ELLIPSIS
+            >>> test_file.set_encoding('utf_8') # doctest: +ELLIPSIS
             Object of "Handler" with path "..." ...
         '''
         return self.set_content(
@@ -1832,7 +1832,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
                 '(%s).', self.path, self.type)
         if mode is None:
             mode = 'w'
-            if boostNode.extension.native.Object.is_binary(object=content):
+            if boostNode.extension.native.Object(object=content).is_binary():
                 mode = 'w+b'
         if 'b' in mode:
             with builtins.open(
@@ -1853,10 +1853,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
                 self._path, mode, *arguments, **keywords
             ) as file_handler:
                 if not builtins.isinstance(content, builtins.unicode):
-                    try:
-                        content = builtins.unicode(content, 'utf-8')
-                    except builtins.UnicodeDecodeError:
-                        content = builtins.unicode(content, 'latin1')
+                    content = builtins.unicode(
+                        content,
+                        boostNode.extension.native.String(
+                            content
+                        ).determine_encoding())
                 file_handler.write(content)
 ##
         return self
