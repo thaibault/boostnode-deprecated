@@ -256,16 +256,6 @@ class Web(
 
     # region dynamic properties
 
-        # region protected properties
-
-    '''
-        Holds a file object referencing a "<DOMAIN_NAME>.pem" file needed
-        for open ssl connections.
-    '''
-    _public_key_file = None
-
-        # endregion
-
         # region public properties
 
     '''Saves server runtime properties.'''
@@ -310,6 +300,16 @@ class Web(
     default_module_name_pattern = ()
     '''Indicates if module loading via get query is enabled.'''
     module_loading = False
+
+        # endregion
+
+        # region protected properties
+
+    '''
+        Holds a file object referencing a "<DOMAIN_NAME>.pem" file needed
+        for open ssl connections.
+    '''
+    _public_key_file = None
 
         # endregion
 
@@ -459,7 +459,7 @@ class Web(
             else:
                 self._start_with_dynamic_port()
         self._log_server_status()
-        if __name__ == '__main__' and not __test_mode__:
+        if not __test_mode__ and self.close_order:
             def wait_for_close_order():
                 '''
                     Handler for waiting till a server close order comes through
@@ -602,7 +602,9 @@ class Web(
                 ('', port), CGIHTTPRequestHandler)
 ##
         self.service.web = self
-        threading.Thread(target=self.service.serve_forever).start()
+        server_thread = threading.Thread(target=self.service.serve_forever)
+        server_thread.daemon = True
+        server_thread.start()
         return self
 
         # endregion
