@@ -1028,7 +1028,7 @@ class CommandLine(builtins.object):
             arguments = cls.current_argument_parser.parse_args()
         cls.handle_log_level(arguments)
         if sys.modules[module_name].__doc__ is None:
-            __logger__.info(
+            __logger__.warning(
                 'There is no module level docstring available (It should be '
                 'used as description for this module if running with "help" '
                 'flag).')

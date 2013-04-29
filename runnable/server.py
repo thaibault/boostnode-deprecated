@@ -374,7 +374,7 @@ class Web(
 ## python3.3
 ##     def _initialize(
 ##         self: boostNode.extension.type.Self, root='.', port=0,
-##         default='', public_key_file_path='', close_order=None,
+##         default='', public_key_file_path='', close_order='close',
 ##         request_whitelist=('/.*',), request_blacklist=(),
 ##         # NOTE: Tuple for explicit webserver file reference validation.
 ##         # ('^text/.+', '^image/.+', '^application/(x-)?javascript$')
@@ -393,7 +393,7 @@ class Web(
 ##     ) -> boostNode.extension.type.Self:
     def _initialize(
         self, root='.', port=0, default='', public_key_file_path='',
-        close_order=None, request_whitelist=('/.*',),
+        close_order='close', request_whitelist=('/.*',),
         request_blacklist=(),
         # NOTE: Tuple for explicit webserver file reference validation.
         # ('^text/.+', '^image/.+', '^application/(x-)?javascript$')
