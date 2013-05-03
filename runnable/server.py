@@ -43,6 +43,7 @@ import socket
 import subprocess
 import sys
 import threading
+import time
 ## python3.3
 ## import types
 ## import urllib.parse
@@ -300,6 +301,8 @@ class Web(
     default_module_name_pattern = ()
     '''Indicates if module loading via get query is enabled.'''
     module_loading = False
+    '''Saves the number of running threads.'''
+    number_of_running_threads = 0
 
         # endregion
 
@@ -334,10 +337,12 @@ class Web(
             >>> repr(Web()) # doctest: +ELLIPSIS
             'Object of "Web" with root path "...", port "0" and clo..."clo...'
         '''
-        return 'Object of "{class_name}" with root path "{path}", port '\
-               '"{port}" and close order "{close_order}".'.format(
-                   class_name=self.__class__.__name__, path=self.root,
-                   port=self.port, close_order=self.close_order)
+        return ('Object of "{class_name}" with root path "{path}", port '
+                '"{port}" and close order "{close_order}". Number of running '
+                'threads: {number_of_running_threads}.'.format(
+                    class_name=self.__class__.__name__, path=self.root,
+                    port=self.port, close_order=self.close_order,
+                    number_of_running_threads=self.number_of_running_threads))
 
             # endregion
 
@@ -438,6 +443,8 @@ class Web(
         self.thread_buffer = boostNode.extension.output.Buffer(
             queue=True)
         self.module_loading = module_loading
+        '''NOTE: Make this property an instance property.'''
+        self.number_of_running_threads = 0
         return self._start_server_thread()
 
             # endregion
@@ -475,6 +482,17 @@ class Web(
                 except builtins.KeyboardInterrupt:
                     wait_for_close_order()
             wait_for_close_order()
+            number_of_running_threads = self.number_of_running_threads
+            shown_threads_number = 0
+            while number_of_running_threads > 0:
+                if number_of_running_threads != self.number_of_running_threads:
+                    number_of_running_threads = self.number_of_running_threads
+                if shown_threads_number != number_of_running_threads:
+                    __logger__.info(
+                        'Waiting for %d running threads.',
+                        number_of_running_threads)
+                    shown_threads_number = number_of_running_threads
+                time.sleep(1)
             __logger__.info('Shutting down webserver.')
             self.service.socket.close()
         return self
@@ -1405,10 +1423,12 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         __logger__.debug(
             'Execute file "%s".',
             self.server.web.root.path + self.request_arguments[0])
+        self.server.web.number_of_running_threads += 1
         output, errors = subprocess.Popen(
             self.request_arguments, stdout=subprocess.PIPE,
             stderr=subprocess.PIPE
         ).communicate()
+        self.server.web.number_of_running_threads -= 1
         errors = errors.decode()
         if self.respond:
             if errors:
@@ -1452,6 +1472,7 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
 ## python3.3         sys_path_save = sys.path.copy()
         sys_path_save = copy.copy(sys.path)
         sys.path = [self.server.web.root.path] + sys.path
+        self.server.web.number_of_running_threads += 1
         requested_module = builtins.__import__(self.request_arguments[0])
         '''Extend requested scope with request dependent globals.'''
         requested_module.__requested_arguments__ = self.request_arguments
@@ -1490,6 +1511,7 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
             if self.respond:
                 self._send_positive_header()
         finally:
+            self.server.web.number_of_running_threads -= 1
             if self.respond:
 ## python3.3
 ##                 self.wfile.write(
@@ -1518,7 +1540,7 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
                 self.send_error(
                     500, '%s: %s' %
                     (exception.__class__.__name__,
-                    re.compile('\n+').sub('\n', builtins.str(exception))))
+                     re.compile('\n+').sub('\n', builtins.str(exception))))
             else:
                 self.send_error(500, 'Internal server error')
         if sys.flags.debug or __logger__.isEnabledFor(logging.DEBUG):

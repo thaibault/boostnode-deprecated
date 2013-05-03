@@ -1145,7 +1145,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             if(size >= properties['useful_range'][0] and
                (properties['useful_range'][1] is None or
                 size <= properties['useful_range'][1])
-            ):
+               ):
                 return builtins.str(builtins.round(
                     self.__class__.convert_size_format(
                         size, format=properties['notations'][0]
@@ -3810,13 +3810,14 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             location in root path.
         '''
         if(self._respect_root_path and (
-               self._initialized_path.startswith(
-                   self._root_path[:-builtins.len(os.sep)]) or
-               not self._path.startswith(
-                   self._root_path[:-builtins.len(os.sep)])) and not (
-               'windows' == operating_system and
-               re.compile('^[a-zA-Z]:\\.*').match(self._path) and
-               self._root_path == os.sep)):
+            self._initialized_path.startswith(
+                self._root_path[:-builtins.len(os.sep)]) or
+            not self._path.startswith(
+                self._root_path[:-builtins.len(os.sep)])) and not
+            ('windows' == operating_system and
+             re.compile('^[a-zA-Z]:\\.*').match(self._path) and
+             self._root_path == os.sep)
+           ):
             if self._path.startswith(os.sep):
                 self._path = self._root_path[:-builtins.len(
                     os.sep)] + self._path

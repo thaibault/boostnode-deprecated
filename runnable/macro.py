@@ -501,7 +501,7 @@ class Replace(
             if(self._location.is_file() and
                 (not self._extension or
                  self._location.extension == self._extension)
-            ):
+               ):
                 self._convert_file(file=self._location)
             elif self._location.is_directory():
                 self._convert_directory(directory=self._location)

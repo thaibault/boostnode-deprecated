@@ -1307,7 +1307,7 @@ class CommandLine(builtins.object):
                 builtins.len(argument['arguments']) > 1 and
                 other_argument['arguments'][1] !=
                 argument['arguments'][1])
-            ):
+               ):
                 raise __exception__(
                     'Argument "%s" shadows argument "%s" with shortcut '
                     '"%s".', argument['keywords']['dest'],

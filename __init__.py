@@ -121,11 +121,23 @@ Structure of meta documenting classes. (see bc16 and bc17)
 
                 # endregion
 
-            ## region compensate right indention
+            #+ region compensate right indention
 
         ...
 
-            # endregion
+            #+ endregion
+
+    #+++ region compensate more right indention
+
+        ...
+
+                # endregion
+
+                    #- compensate left indention
+
+        ...
+
+                # endregion
 
             # endregion
 

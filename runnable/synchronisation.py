@@ -331,7 +331,7 @@ class Reflector(
         for path in paths:
             if(boostNode.extension.file.Handler(
                 location=path, must_exist=False).path in search.path
-            ):
+               ):
                 return True
         return False
 
@@ -723,7 +723,7 @@ class Reflector(
         '''
         if(boostNode.extension.system.Platform.check_process_lock(
             description=__module_name__)
-        ):
+           ):
             __logger__.warning(
                 'The last synchronisation process was interrupted in an '
                 'unstable state. %s will finish last process so you can '
@@ -1208,7 +1208,7 @@ class Reflector(
             linked_path = file.read_symbolic_link(as_object=True)
             if(linked_path.path[:builtins.len(self._source_location.path)] ==
                 self._source_location.path
-            ):
+               ):
                 relocated = boostNode.extension.file.Handler(
                     location=self._source_location.path + file.path[
                         builtins.len(self._target_location.path):],
@@ -1330,12 +1330,12 @@ class Reflector(
                 must_exist=False)
 ## python3.3
 ##             if(not source_file.is_symbolic_link() or
-##                source_file.read_symbolic_link(as_object=True) != new_link
-##             ):
+##                 source_file.read_symbolic_link(as_object=True) != new_link
+##                ):
             if(not source_file.is_symbolic_link() or
                 not (source_file.read_symbolic_link(
                      as_object=True) == new_link)
-            ):
+               ):
 ##
                 __logger__.info(
                     'Link "%s" to "%s".', source_file.path, new_link.path)
@@ -1378,14 +1378,14 @@ class Reflector(
         '''
         if(not self.is_path_in_paths(
             search=file, paths=self._exclude_locations)
-        ):
+           ):
             target = boostNode.extension.file.Handler(
                 location=self._target_location.path +
                 file.path[builtins.len(self._source_location.path):],
                 must_exist=False)
             if(file.is_directory() and not target.is_directory() or
                 file.is_file() and not target.is_file()
-            ):
+               ):
                 __logger__.info('Remove "%s".', file.path)
                 return file.remove_deep()
         return True
@@ -1414,7 +1414,7 @@ class Reflector(
         '''
         if(not self.is_path_in_paths(
             search=file, paths=self._exclude_locations)
-        ):
+           ):
             return self._handle_source_element(
                 source_file=file,
                 target_file=boostNode.extension.file.Handler(
