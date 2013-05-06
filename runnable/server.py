@@ -35,6 +35,8 @@ import cgi
 import copy
 ##
 import inspect
+## python3.3 import io
+pass
 import logging
 import multiprocessing
 import os
@@ -71,6 +73,8 @@ import boostNode.extension.system
 
 # region classes
 
+## python3.3
+## pass
 class SocketFileObjectWrapper(socket._fileobject):
     '''
         This class wrapes the native implementation of the server
@@ -99,13 +103,7 @@ class SocketFileObjectWrapper(socket._fileobject):
             # region special methods
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def __init__(
-##         self: boostNode.extension.type.Self, *arguments: builtins.object,
-##         **keywords: builtins.object
-##     ) -> None:
     def __init__(self, *arguments, **keywords):
-##
         '''
             This methods wrapes the initializer to make the first read line
             varibale instance bounded.
@@ -118,21 +116,15 @@ class SocketFileObjectWrapper(socket._fileobject):
 
             # endregion
 
-        # endregion
-
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def readline(self: boostNode.extension.type.Self,
-##         *arguments: builtins.object, **keywords
-##     ) -> builtins.str:
     def readline(self, *arguments, **keywords):
-##
         '''
             Wrapes the readline method to get the first line twice.
         '''
         if self.first_read_line is False:
-            self.first_read_line = socket._fileobject.readline(
-                self, *arguments, **keywords)
+            self.first_read_line = builtins.getattr(
+                socket._fileobject, inspect.stack()[0][3]
+            )(self, *arguments, **keywords)
             return self.first_read_line
         elif self.first_read_line is True:
             '''Take this method via introspection.'''
@@ -143,7 +135,11 @@ class SocketFileObjectWrapper(socket._fileobject):
         self.first_read_line = True
         return result
 
+        # endregion
+
     # endregion
+
+##
 
 
 ## python3.3 class MultiProcessingHTTPServer(http.server.HTTPServer):
@@ -200,7 +196,7 @@ class MultiProcessingHTTPServer(BaseHTTPServer.HTTPServer):
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def is_same_thread_request(
-##         self: boostNode.extension.type.Self, request: socket._socketobject
+##         self: boostNode.extension.type.Self, request: socket.socket
 ##     ) -> builtins.bool:
     def is_same_thread_request(self, request):
 ##
@@ -219,7 +215,7 @@ class MultiProcessingHTTPServer(BaseHTTPServer.HTTPServer):
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def process_request(
-##         self: boostNode.extension.type.Self, request: socket._socketobject,
+##         self: boostNode.extension.type.Self, request: socket.socket,
 ##         *arguments: builtins.object, **keywords: builtins.object
 ##     ) -> None:
     def process_request(self, request, *arguments, **keywords):
@@ -229,12 +225,43 @@ class MultiProcessingHTTPServer(BaseHTTPServer.HTTPServer):
             Read only requests will be forked if enough free processors are
             available.
         '''
+        if self.web.block_new_worker:
+            return None
+## python3.3
+##         self.read_file_socket = request.makefile('rb', -1)
+##         read_file_socket = self.read_file_socket
+##
+##         @boostNode.paradigm.aspectOrientation.JointPoint
+##         def readline(*arguments, **keywords):
+##             '''
+##                 Wrapes the native file object method version.
+##             '''
+##             self = read_file_socket
+##             if not builtins.hasattr(self, 'first_read_line'):
+##                 self.first_read_line = builtins.getattr(
+##                     io.BufferedReader, inspect.stack()[0][3]
+##                 )(self, *arguments, **keywords)
+##                 return self.first_read_line
+##             elif self.first_read_line is True:
+##                 '''Take this method via introspection.'''
+##                 return builtins.getattr(
+##                     io.BufferedReader, inspect.stack()[0][3]
+##                 )(self, *arguments, **keywords)
+##             result = self.first_read_line
+##             self.first_read_line = True
+##             return result
+##         self.read_file_socket.readline = readline
+        '''
+            This assignment replace the python's native
+            "request.makefile('rb', -1)" behavior.
+        '''
         self.read_file_socket = SocketFileObjectWrapper(
-            request._sock, 'rb', -1)
-        '''Takes this method via introspection.'''
-        if(builtins.len(multiprocessing.active_children()) <
-           self.web.maximum_number_of_processes - 1 and
-           not self.is_same_thread_request(request)):
+            request, 'rb', -1)
+##
+        '''Takes this method via introspection from now on.'''
+        if(not self.is_same_thread_request(request) and
+           builtins.len(multiprocessing.active_children()) <
+           self.web.maximum_number_of_processes - 1):
 ## python3.3
 ##             multiprocessing.Process(
 ##                 target=builtins.getattr(
@@ -516,6 +543,8 @@ class Web(
         "DEFAULT_NUMBER_OF_PROCESSES" will be applied.
     '''
     maximum_number_of_processes = 0
+    '''Indicates if new worker are currently allowed to spawn.'''
+    block_new_worker = False
 
         # endregion
 
@@ -709,6 +738,7 @@ class Web(
                 except builtins.KeyboardInterrupt:
                     wait_for_close_order()
             wait_for_close_order()
+            self.block_new_worker = True
             number_of_running_workers = self.number_of_running_threads + \
                 builtins.len(multiprocessing.active_children())
             shown_number = 0
@@ -719,12 +749,15 @@ class Web(
                     number_of_running_workers = \
                         self.number_of_running_threads + \
                         builtins.len(multiprocessing.active_children())
-                if shown_number != number_of_running_workers:
+                if(shown_number != number_of_running_workers and
+                   number_of_running_workers > 0):
                     __logger__.info(
-                        'Waiting for %d running workers.',
-                        number_of_running_workers)
+                        'Waiting for %d running workers (%d threads and '
+                        '%d processes).', number_of_running_workers,
+                        self.number_of_running_threads,
+                        builtins.len(multiprocessing.active_children()))
                     shown_number = number_of_running_workers
-                time.sleep(1)
+                time.sleep(2)
             __logger__.info('Shutting down webserver.')
             self.service.socket.close()
         return self
@@ -759,8 +792,10 @@ class Web(
         __logger__.info(
             'Webserver is starting %sand listens at port "%d" and webroot '
             '"%s". Currently reachable ip is "%s". Maximum parallel process '
-            'is limited to %d.', ('a secure connection with public key "%s" ' %
-                self._public_key_file._path) if self._public_key_file else '',
+            'is limited to %d.', (
+                'a secure connection with public key "%s" ' %
+                self._public_key_file._path
+            ) if self._public_key_file else '',
             self.port, self.root._path, ip, self.maximum_number_of_processes)
         return self
 

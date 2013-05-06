@@ -139,7 +139,7 @@ class Run(
                     'all': './__init__.<%code_file.extension%> all'
                 }
             },
-            'extensions': ('py', 'pyc'),
+            'extensions': ('py', 'pyc', 'pyw'),
             'delete_patterns': ('.*\.pyc$', '^__pycache__$', '^temp_\.*')
         },
         'laTeX': {

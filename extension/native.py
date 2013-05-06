@@ -1346,7 +1346,8 @@ class Module(boostNode.paradigm.objectOrientation.Class):
                     basename = basename[:basename.rfind('.')]
                 if(os.path.isfile(path + os.sep + file_name) and
                    basename == '__init__' and
-                   file_name[file_name.rfind('.') + 1:] in ('py', 'pyc')):
+                   file_name[file_name.rfind('.') + 1:] in
+                   ('py', 'pyc', 'pyw')):
                     return True
         return False
 
