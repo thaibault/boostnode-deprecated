@@ -107,11 +107,14 @@ class SocketFileObjectWrapper(socket._fileobject):
     def __init__(self, *arguments, **keywords):
 ##
         '''
-            This methods wrapes the initializer to make
-            the first read line varibale instance bounded.
+            This methods wrapes the initializer to make the first read line
+            varibale instance bounded.
         '''
         self.first_read_line = False
-        return socket._fileobject.__init__(self, *arguments, **keywords)
+        '''Take this method via introspection.'''
+        return builtins.getattr(
+            socket._fileobject, inspect.stack()[0][3]
+        )(self, *arguments, **keywords)
 
             # endregion
 
@@ -132,8 +135,10 @@ class SocketFileObjectWrapper(socket._fileobject):
                 self, *arguments, **keywords)
             return self.first_read_line
         elif self.first_read_line is True:
-            return socket._fileobject.readline(
-                self, *arguments, **keywords)
+            '''Take this method via introspection.'''
+            return builtins.getattr(
+                socket._fileobject, inspect.stack()[0][3]
+            )(self, *arguments, **keywords)
         result = self.first_read_line
         self.first_read_line = True
         return result
@@ -178,11 +183,38 @@ class MultiProcessingHTTPServer(BaseHTTPServer.HTTPServer):
             socket is instance bounded.
         '''
         self.read_file_socket = None
-        return BaseHTTPServer.HTTPServer.__init__(self, *arguments, **keywords)
+        '''Take this method via introspection.'''
+## python3.3
+##         return builtins.getattr(
+##             http.server.HTTPServer, inspect.stack()[0][3]
+##         )(self, *arguments, **keywords)
+        return builtins.getattr(
+            BaseHTTPServer.HTTPServer, inspect.stack()[0][3]
+        )(self, *arguments, **keywords)
+##
 
             # endregion
 
         # endregion
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def is_same_thread_request(
+##         self: boostNode.extension.type.Self, request: socket._socketobject
+##     ) -> builtins.bool:
+    def is_same_thread_request(self, request):
+##
+        '''
+            Deterimes if the given request could be run in its own dedicated
+            process.
+        '''
+        first_request_line = self.read_file_socket.readline(
+            Web.MAXIMUM_FIRST_GET_REQUEST_LINE_IN_CHARS
+        ).strip()
+        for pattern in self.web.same_thread_request_whitelist:
+            if re.compile(pattern).match(first_request_line):
+                return True
+        return False
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -199,28 +231,33 @@ class MultiProcessingHTTPServer(BaseHTTPServer.HTTPServer):
         '''
         self.read_file_socket = SocketFileObjectWrapper(
             request._sock, 'rb', -1)
-        # TODO
-        # multiprocessing.cpu_count()
-        # builtins.len(multiprocessing.active_children())
-        first_request_line = self.read_file_socket.readline(
-            Web.MAXIMUM_FIRST_GET_REQUEST_LINE_IN_CHARS
-        ).strip()
-        for pattern in self.web.same_thread_request_whitelist:
-            if re.compile(pattern).match(first_request_line):
-                BaseHTTPServer.HTTPServer.process_request(
-                    self, request, *arguments, **keywords)
-                return None
+        '''Takes this method via introspection.'''
+        if(builtins.len(multiprocessing.active_children()) <
+           self.web.maximum_number_of_processes - 1 and
+           not self.is_same_thread_request(request)):
 ## python3.3
-##         multiprocessing.Process(
-##             target=BaseHTTPServer.HTTPServer.process_request,
-##             args=[self, request] + builtins.list(arguments), kwargs=keywords,
-##             daemon=True
-##         ).start()
-        forked_request_process = multiprocessing.Process(
-            target=BaseHTTPServer.HTTPServer.process_request,
-            args=[self, request] + builtins.list(arguments), kwargs=keywords)
-        forked_request_process.daemon = True
-        forked_request_process.start()
+##             multiprocessing.Process(
+##                 target=builtins.getattr(
+##                     http.server.HTTPServer, inspect.stack()[0][3]),
+##                 args=[self, request] + builtins.list(arguments),
+##                 kwargs=keywords, daemon=True
+##             ).start()
+            forked_request_process = multiprocessing.Process(
+                target=builtins.getattr(
+                    BaseHTTPServer.HTTPServer, inspect.stack()[0][3]),
+                args=[self, request] + builtins.list(arguments),
+                kwargs=keywords)
+            forked_request_process.daemon = True
+            forked_request_process.start()
+##
+        else:
+## python3.3
+##             return builtins.getattr(
+##                 http.server.HTTPServer, inspect.stack()[0][3])(
+##                     self, request, *arguments, **keywords)
+            return builtins.getattr(
+                BaseHTTPServer.HTTPServer, inspect.stack()[0][3])(
+                    self, request, *arguments, **keywords)
 ##
 
     # endregion
@@ -410,7 +447,7 @@ class Web(
         This is the maximum number of forked processes if nothing better was
         defined or determined.
     '''
-    DEFAULT_NUMBER_OF_PROCESSES = 4
+    DEFAULT_NUMBER_OF_PROCESSES = 8
     '''This values describes the longest possible first get request line.'''
     MAXIMUM_FIRST_GET_REQUEST_LINE_IN_CHARS = 65537
 
@@ -472,8 +509,6 @@ class Web(
     module_loading = False
     '''Saves the number of running threads.'''
     number_of_running_threads = 0
-    '''Saves the number of running processes.'''
-    number_of_running_processes = 0
     '''
         Number of maximum forked processes. This should be less or equal to
         the number of processors installed in your pc.
@@ -515,7 +550,6 @@ class Web(
             >>> repr(Web()) # doctest: +ELLIPSIS
             'Object of "Web" with root path "...", port "0" and clo..."clo...'
         '''
-        running_processes = self.number_of_running_processes
         return ('Object of "{class_name}" with root path "{path}", port '
                 '"{port}" and close order "{close_order}". Number of running '
                 'threads/processes: {number_of_running_threads}/'
@@ -523,7 +557,8 @@ class Web(
                     class_name=self.__class__.__name__, path=self.root,
                     port=self.port, close_order=self.close_order,
                     number_of_running_threads=self.number_of_running_threads,
-                    number_of_running_processes=running_processes))
+                    number_of_running_processes=builtins.len(
+                        multiprocessing.active_children())))
 
             # endregion
 
@@ -630,13 +665,13 @@ class Web(
         self.maximum_number_of_processes = maximum_number_of_processes
         if not self.maximum_number_of_processes:
             try:
-                self.maximum_number_of_processes = multiprocessing.cpu_count()
+                self.maximum_number_of_processes = \
+                    2 * multiprocessing.cpu_count()
             except builtins.NotImplementedError:
                 self.maximum_number_of_processes = \
                     self.DEFAULT_NUMBER_OF_PROCESSES
-        '''NOTE: Make this properties instance binded.'''
+        '''NOTE: Make this property instance binded.'''
         self.number_of_running_threads = 0
-        self.number_of_running_processes = 0
         return self._start_server_thread()
 
             # endregion
@@ -675,15 +710,15 @@ class Web(
                     wait_for_close_order()
             wait_for_close_order()
             number_of_running_workers = self.number_of_running_threads + \
-                self.number_of_running_processes
+                builtins.len(multiprocessing.active_children())
             shown_number = 0
             while number_of_running_workers > 0:
                 if(number_of_running_workers !=
                    self.number_of_running_threads +
-                   self.number_of_running_processes):
+                   builtins.len(multiprocessing.active_children())):
                     number_of_running_workers = \
                         self.number_of_running_threads + \
-                        self.number_of_running_processes
+                        builtins.len(multiprocessing.active_children())
                 if shown_number != number_of_running_workers:
                     __logger__.info(
                         'Waiting for %d running workers.',
@@ -823,10 +858,8 @@ class Web(
     # endregion
 
 
-## python3.3
-## class CGIHTTPRequestHandler(http.server.CGIHTTPRequestHandler):
+## python3.3 class CGIHTTPRequestHandler(http.server.CGIHTTPRequestHandler):
 class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
-##
     '''
         A small request-handler dealing with incoming file requests.
         It can directly send static files back to client or run dynamic
@@ -906,12 +939,14 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         self.load_module = False
         self.request_arguments = []
         self.respond = False
-        # TODO use func name via introspection and in all other positions.
+        '''Take this method via introspection.'''
 ## python3.3
-##         builtins.super(http.server.CGIHTTPRequestHandler, self).__init__(
-##             *arguments, **keywords)
-        CGIHTTPServer.CGIHTTPRequestHandler.__init__(
-            self, *arguments, **keywords)
+##         builtins.getattr(
+##             http.server.CGIHTTPRequestHandler, inspect.stack()[0][3]
+##         )(self, *arguments, **keywords)
+        builtins.getattr(
+            CGIHTTPServer.CGIHTTPRequestHandler, inspect.stack()[0][3]
+        )(self, *arguments, **keywords)
 ##
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -1110,14 +1145,27 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
                 format, message_or_error_code, response_code_or_message, '')
         return self
 
-    # TODO
     @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def setup(
+##         self: boostNode.extension.type.Self, *arguments: builtins.object,
+##         **keywords: builtins.object
+##     ) -> None:
     def setup(self, *arguments, **keywords):
+##
         '''
-            TODO
+            This method wrapes the python's native request handler to provide
+            our wrapped file socket buffer.
         '''
-        result = CGIHTTPServer.CGIHTTPRequestHandler.setup(
-            self, *arguments, **keywords)
+        '''Take this method via introspection.'''
+## python3.3
+##         result = builtins.getattr(
+##             http.server.CGIHTTPRequestHandler, inspect.stack()[0][3]
+##         )(self, *arguments, **keywords)
+        result = builtins.getattr(
+            CGIHTTPServer.CGIHTTPRequestHandler, inspect.stack()[0][3]
+        )(self, *arguments, **keywords)
+##
         self.rfile = self.server.web.service.read_file_socket
         return result
 
