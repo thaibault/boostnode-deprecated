@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.3
 # -*- coding: utf-8 -*-
 
 # region header
@@ -21,10 +21,10 @@ __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-## python3.3
-## import builtins
-## import collections
-pass
+## python2.7
+## pass
+import builtins
+import collections
 ##
 import functools
 import inspect
@@ -33,8 +33,8 @@ import re
 import sys
 import types
 
-## python3.3 pass
-builtins = sys.modules['__main__'].__builtins__
+## python2.7 builtins = sys.modules['__main__'].__builtins__
+pass
 
 for number in (3, 4):
     sys.path.append(os.path.abspath(sys.path[0] + number * ('..' + os.sep)))
@@ -76,8 +76,8 @@ ASPECTS = []
 
 # region abstract classes
 
-## python3.3 class FunctionDecorator:
-class FunctionDecorator(builtins.object):
+## python2.7 class FunctionDecorator(builtins.object):
+class FunctionDecorator:
     '''Abstract class and interface for function decorator classes.'''
 
     # region dynamic properties
@@ -111,12 +111,12 @@ class FunctionDecorator(builtins.object):
 
             # region special methods
 
-## python3.3
-##     def __init__(
-##         self: boostNode.extension.type.Self,
-##         method: (types.FunctionType, types.MethodType), function=None
-##     ) -> None:
-    def __init__(self, method, function=None):
+## python2.7
+##     def __init__(self, method, function=None):
+    def __init__(
+        self: boostNode.extension.type.Self,
+        method: (types.FunctionType, types.MethodType), function=None
+    ) -> None:
 ##
         '''
             Collects informations about wrapped method.
@@ -159,9 +159,9 @@ class FunctionDecorator(builtins.object):
                     value=builtins.str(method)))
         self.__func__ = self.function
 
-## python3.3
-##     def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
-    def __repr__(self):
+## python2.7
+##     def __repr__(self):
+    def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
 ##
         '''
             Describes current function wrapper.
@@ -194,12 +194,12 @@ class FunctionDecorator(builtins.object):
                     value=builtins.str(self.return_value),
                     type=builtins.type(self.return_value).__name__))
 
-## python3.3
-##     def __call__(
-##         self: boostNode.extension.type.Self, *arguments: builtins.object,
-##         **keywords: builtins.object
-##     ) -> builtins.object:
-    def __call__(self, *arguments, **keywords):
+## python2.7
+##     def __call__(self, *arguments, **keywords):
+    def __call__(
+        self: boostNode.extension.type.Self, *arguments: builtins.object,
+        **keywords: builtins.object
+    ) -> builtins.object:
 ##
         '''
             This method is triggered if wrapped function was called.
@@ -211,12 +211,12 @@ class FunctionDecorator(builtins.object):
         return self.__class__(
             method=self._method_type, function=arguments[0])
 
-## python3.3
-##     def __get__(
-##         self: boostNode.extension.type.Self, object: builtins.object,
-##         class_object=None
-##     ) -> (types.FunctionType, types.MethodType):
-    def __get__(self, object, class_object=None):
+## python2.7
+##     def __get__(self, object, class_object=None):
+    def __get__(
+        self: boostNode.extension.type.Self, object: builtins.object,
+        class_object=None
+    ) -> (types.FunctionType, types.MethodType):
 ##
         '''
             If same function was called twice in same context (recursion)
@@ -241,11 +241,11 @@ class FunctionDecorator(builtins.object):
 
             # endregion
 
-## python3.3
-##     def get_wrapper_function(
-##         self: boostNode.extension.type.Self
-##     ) -> (types.FunctionType, types.MethodType):
-    def get_wrapper_function(self):
+## python2.7
+##     def get_wrapper_function(self):
+    def get_wrapper_function(
+        self: boostNode.extension.type.Self
+    ) -> (types.FunctionType, types.MethodType):
 ##
         '''
             This method should ususally be overwridden. It serves the wrapper
@@ -257,11 +257,11 @@ class FunctionDecorator(builtins.object):
 
         # region protected methods
 
-## python3.3
-##     def _determine_arguments(
-##         self: boostNode.extension.type.Self, arguments: collections.Iterable
-##     ) -> builtins.tuple:
-    def _determine_arguments(self, arguments):
+## python2.7
+##     def _determine_arguments(self, arguments):
+    def _determine_arguments(
+        self: boostNode.extension.type.Self, arguments: collections.Iterable
+    ) -> builtins.tuple:
 ##
         '''
             Determine right set of arguments for different method types.
@@ -278,8 +278,8 @@ class FunctionDecorator(builtins.object):
     # endregion
 
 
-## python3.3 class JointPointHandler:
-class JointPointHandler(builtins.object):
+## python2.7 class JointPointHandler(builtins.object):
+class JointPointHandler:
     '''Abstract class for joint point implementations.'''
 
     # region dynamic properties
@@ -299,14 +299,14 @@ class JointPointHandler(builtins.object):
 
             # region special methods
 
-## python3.3
-##     def __init__(
-##         self: boostNode.extension.type.Self, class_object: builtins.type,
-##         object: builtins.object,
-##         function: (types.FunctionType, types.MethodType),
-##         arguments: collections.Iterable, keywords: builtins.dict
-##     ) -> None:
-    def __init__(self, class_object, object, function, arguments, keywords):
+## python2.7
+##     def __init__(self, class_object, object, function, arguments, keywords):
+    def __init__(
+        self: boostNode.extension.type.Self, class_object: builtins.type,
+        object: builtins.object,
+        function: (types.FunctionType, types.MethodType),
+        arguments: collections.Iterable, keywords: builtins.dict
+    ) -> None:
 ##
         '''
             Saves function call properties.
@@ -316,40 +316,40 @@ class JointPointHandler(builtins.object):
         self.function = function
         self.arguments = arguments
         self.keywords = keywords
-## python3.3
-##         argument_specifications = inspect.signature(
-##             self.function
-##         ).parameters
-##         bound_arguments = inspect.signature(self.function).bind(
-##             *self.arguments, **self.keywords)
-##         self.argument_specifications = []
-##         for name, value in bound_arguments.arguments.items():
-##             if(argument_specifications[name].kind is
-##                inspect.Parameter.VAR_POSITIONAL):
-##                 for index, positional_value in builtins.enumerate(
-##                     value
-##                 ):
-##                     self.argument_specifications.append(Argument(
-##                         parameter=argument_specifications[name],
-##                         value=positional_value, function=self.function,
-##                         name=builtins.str(index + 1) + '. argument'))
-##             elif(argument_specifications[name].kind is
-##                  inspect.Parameter.VAR_KEYWORD):
-##                 for keyword_name, keyword_value in value.items():
-##                     self.argument_specifications.append(Argument(
-##                         parameter=argument_specifications[name],
-##                         value=keyword_value, function=self.function,
-##                         name=keyword_name))
-##             else:
-##                 self.argument_specifications.append(Argument(
-##                     parameter=argument_specifications[name],
-##                     value=value, function=self.function))
-        pass
+## python2.7
+##         pass
+        argument_specifications = inspect.signature(
+            self.function
+        ).parameters
+        bound_arguments = inspect.signature(self.function).bind(
+            *self.arguments, **self.keywords)
+        self.argument_specifications = []
+        for name, value in bound_arguments.arguments.items():
+            if(argument_specifications[name].kind is
+               inspect.Parameter.VAR_POSITIONAL):
+                for index, positional_value in builtins.enumerate(
+                    value
+                ):
+                    self.argument_specifications.append(Argument(
+                        parameter=argument_specifications[name],
+                        value=positional_value, function=self.function,
+                        name=builtins.str(index + 1) + '. argument'))
+            elif(argument_specifications[name].kind is
+                 inspect.Parameter.VAR_KEYWORD):
+                for keyword_name, keyword_value in value.items():
+                    self.argument_specifications.append(Argument(
+                        parameter=argument_specifications[name],
+                        value=keyword_value, function=self.function,
+                        name=keyword_name))
+            else:
+                self.argument_specifications.append(Argument(
+                    parameter=argument_specifications[name],
+                    value=value, function=self.function))
 ##
 
-## python3.3
-##     def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
-    def __repr__(self):
+## python2.7
+##     def __repr__(self):
+    def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
 ##
         '''
             Represents the given function call properties.
@@ -366,8 +366,8 @@ class JointPointHandler(builtins.object):
 
             # endregion
 
-## python3.3     def aspect(self: boostNode.extension.type.Self) -> None:
-    def aspect(self):
+## python2.7     def aspect(self):
+    def aspect(self: boostNode.extension.type.Self) -> None:
 ##
         '''
             This method should be overwridden to provide the essentiel aspect
@@ -382,8 +382,8 @@ class JointPointHandler(builtins.object):
     # endregion
 
 
-## python3.3 class ReturnAspect:
-class ReturnAspect(builtins.object):
+## python2.7 class ReturnAspect(builtins.object):
+class ReturnAspect:
     '''Abstract class for aspects dealing with function's return value.'''
 
     # region dynamic properties
@@ -403,9 +403,9 @@ class ReturnAspect(builtins.object):
 
             # region special methods
 
-## python3.3
-##     def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
-    def __repr__(self):
+## python2.7
+##     def __repr__(self):
+    def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
 ##
         '''
             Represents the current handled function call.
@@ -454,12 +454,12 @@ class ReturnJointPoint(JointPointHandler, ReturnAspect):
 
             # region special methods
 
-## python3.3
-##     def __init__(
-##         self: boostNode.extension.type.Self, *arguments: builtins.object,
-##         **keywords: builtins.object
-##     ) -> None:
-    def __init__(self, *arguments, **keywords):
+## python2.7
+##     def __init__(self, *arguments, **keywords):
+    def __init__(
+        self: boostNode.extension.type.Self, *arguments: builtins.object,
+        **keywords: builtins.object
+    ) -> None:
 ##
         if keywords:
             self.return_value = keywords['return_value']
@@ -467,8 +467,10 @@ class ReturnJointPoint(JointPointHandler, ReturnAspect):
         else:
             self.return_value = arguments[-1]
             arguments = arguments[:-1]
-        builtins.super(ReturnJointPoint, self).__init__(
-            *arguments, **keywords)
+        '''Take this method via introspection.'''
+        return builtins.getattr(
+            JointPointHandler, inspect.stack()[0][3]
+        )(self, *arguments, **keywords)
 
             # endregion
 
@@ -481,8 +483,8 @@ class ReturnJointPoint(JointPointHandler, ReturnAspect):
 
 # region classes
 
-## python3.3 pass
-"""
+## python2.7 """
+pass
 
 
 class Argument(inspect.Parameter):
@@ -506,14 +508,14 @@ class Argument(inspect.Parameter):
 
             # region special methods
 
-## python3.3
-##     def __init__(
-##         self: boostNode.extension.type.Self, parameter: inspect.Parameter,
-##         value: (builtins.object, builtins.type),
-##         function: (types.MethodType, types.FunctionType),
-##         name=None
-##     ) -> None:
-    def __init__(self, parameter, value, function, name=None):
+## python2.7
+##     def __init__(self, parameter, value, function, name=None):
+    def __init__(
+        self: boostNode.extension.type.Self, parameter: inspect.Parameter,
+        value: (builtins.object, builtins.type),
+        function: (types.MethodType, types.FunctionType),
+        name=None
+    ) -> None:
 ##
         '''
             Collects information about argument.
@@ -555,9 +557,9 @@ class Argument(inspect.Parameter):
             self.name = name
         self.function = function
 
-## python3.3
-##     def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
-    def __repr__(self):
+## python2.7
+##     def __repr__(self):
+    def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
 ##
         '''
             Represents current instance as string.
@@ -591,8 +593,8 @@ class Argument(inspect.Parameter):
 
     # endregion
 
-## python3.3 pass
-"""
+## python2.7 """
+pass
 
 
 class PointCut(ReturnAspect):
@@ -604,14 +606,14 @@ class PointCut(ReturnAspect):
 
             # region special methods
 
-## python3.3
-##     def __init__(
-##         self: boostNode.extension.type.Self, class_object: builtins.type,
-##         object: builtins.object,
-##         function: (types.FunctionType, types.MethodType),
-##         arguments: collections.Iterable, keywords: builtins.dict
-##     ) -> None:
-    def __init__(self, class_object, object, function, arguments, keywords):
+## python2.7
+##     def __init__(self, class_object, object, function, arguments, keywords):
+    def __init__(
+        self: boostNode.extension.type.Self, class_object: builtins.type,
+        object: builtins.object,
+        function: (types.FunctionType, types.MethodType),
+        arguments: collections.Iterable, keywords: builtins.dict
+    ) -> None:
 ##
         self.class_object = class_object
         self.object = object
@@ -622,16 +624,16 @@ class PointCut(ReturnAspect):
 
             # endregion
 
-## python3.3
-##     def handle_call(self: boostNode.extension.type.Self) -> builtins.bool:
-    def handle_call(self):
+## python2.7
+##     def handle_call(self):
+    def handle_call(self: boostNode.extension.type.Self) -> builtins.bool:
 ##
         '''
             Implementation of point cut for the aspect orientated way.
             Filters all functions calls and run given advice on given event.
         '''
-## python3.3         def call_handler(advice: builtins.dict) -> builtins.bool:
-        def call_handler(advice):
+## python2.7         def call_handler(advice):
+        def call_handler(advice: builtins.dict) -> builtins.bool:
             '''
                 Supports classes, simple functions or methods as triggered
                 call handler.
@@ -648,18 +650,18 @@ class PointCut(ReturnAspect):
             return True
         return self._handle_aspects(handler=call_handler)
 
-## python3.3
-##     def handle_return(
-##         self: boostNode.extension.type.Self, return_value: builtins.object
-##     ) -> builtins.object:
-    def handle_return(self, return_value):
+## python2.7
+##     def handle_return(self, return_value):
+    def handle_return(
+        self: boostNode.extension.type.Self, return_value: builtins.object
+    ) -> builtins.object:
 ##
         '''
             Implementation of point cut for the aspect orientated way.
             Filters all functions calls and run given advice on given event.
         '''
-## python3.3         def return_handler(advice: builtins.dict) -> None:
-        def return_handler(advice):
+## python2.7         def return_handler(advice):
+        def return_handler(advice: builtins.dict) -> None:
             '''
                 Supports classes, simple functions or methods as triggered
                 return handler.
@@ -681,11 +683,11 @@ class PointCut(ReturnAspect):
 
         # region protected methods
 
-## python3.3
-##     def _handle_aspects(
-##         self: boostNode.extension.type.Self, handler: types.MethodType
-##     ) -> builtins.bool:
-    def _handle_aspects(self, handler):
+## python2.7
+##     def _handle_aspects(self, handler):
+    def _handle_aspects(
+        self: boostNode.extension.type.Self, handler: types.MethodType
+    ) -> builtins.bool:
 ##
         '''
             Iterates through each aspect matching current function call.
@@ -726,11 +728,11 @@ class JointPoint(FunctionDecorator):
 
         # region public methods
 
-## python3.3
-##     def get_wrapper_function(
-##         self: boostNode.extension.type.Self
-##     ) -> (types.FunctionType, types.MethodType):
-    def get_wrapper_function(self):
+## python2.7
+##     def get_wrapper_function(self):
+    def get_wrapper_function(
+        self: boostNode.extension.type.Self
+    ) -> (types.FunctionType, types.MethodType):
 ##
         @functools.wraps(self.function)
         def wrapper_function(*arguments, **keywords):
@@ -746,8 +748,8 @@ class JointPoint(FunctionDecorator):
                 self.return_value = point_cut.handle_return(
                     return_value=self.function(*arguments, **keywords))
             return self.return_value
-## python3.3         pass
-        wrapper_function.__wrapped__ = self.function
+## python2.7         wrapper_function.__wrapped__ = self.function
+        pass
         return wrapper_function
 
         # endregion
