@@ -758,10 +758,10 @@ class Web(
             determineIPSocket.close()
         __logger__.info(
             'Webserver is starting %sand listens at port "%d" and webroot '
-            '"%s". Currently reachable ip is "%s".',
-            ('a secure connection with public key "%s" ' %
-             self._public_key_file._path) if self._public_key_file else '',
-            self.port, self.root._path, ip)
+            '"%s". Currently reachable ip is "%s". Maximum parallel process '
+            'is limited to %d.', ('a secure connection with public key "%s" ' %
+                self._public_key_file._path) if self._public_key_file else '',
+            self.port, self.root._path, ip, self.maximum_number_of_processes)
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
