@@ -28,6 +28,7 @@ __version__ = '1.0'
 pass
 import inspect
 import logging
+import multiprocessing
 import os
 import sys
 import threading
@@ -104,9 +105,10 @@ class Buffer(
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def __init__(
-##         self: boostNode.extension.type.Self, file=None, queue=None
+##         self: boostNode.extension.type.Self, file=None, queue=None,
+##         support_multiprocessing=False
 ##     ) -> None:
-    def __init__(self, file=None, queue=None):
+    def __init__(self, file=None, queue=None, support_multiprocessing=False):
 ##
         '''
             Saves the file path in the current instance. If "file" is "None"
@@ -119,12 +121,18 @@ class Buffer(
             Object of "Handler" with path "...buffer" (file).
         '''
         self._lock = threading.Lock()
+        if support_multiprocessing:
+            self._lock = multiprocessing.Lock()
         self.queue = self._file = None
         self.last_written = ''
         self._content = ''
         if queue is not None:
             self.queue = native_queue.Queue()
-            if builtins.isinstance(queue, native_queue.Queue):
+            if support_multiprocessing:
+                self.queue = multiprocessing.Queue()
+            if(builtins.isinstance(queue, native_queue.Queue) or
+               support_multiprocessing and
+               builtins.isinstance(queue, multiprocessing.queues.Queue)):
                 self.queue = queue
         elif file is not None:
             self._file = boostNode.extension.file.Handler(

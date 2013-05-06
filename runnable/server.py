@@ -36,6 +36,7 @@ import copy
 ##
 import inspect
 import logging
+import multiprocessing
 import os
 import ssl
 import re
@@ -69,6 +70,161 @@ import boostNode.extension.system
 
 
 # region classes
+
+class SocketFileObjectWrapper(socket._fileobject):
+    '''
+        This class wrapes the native implementation of the server
+        socket. The main goal is that the first line from given
+        socket have to be taken twice. This curious feature is the
+        only way to get the requested file as early as needed to decide
+        if we are able to spawn a new process for better load
+        balancing.
+    '''
+
+    # region dynamic properties
+
+        # region public properties
+
+    '''Indicates and saves the first line read of the socket.'''
+    first_read_line = False
+
+        # endregion
+
+    # endregion
+
+    # region dynamic methods
+
+        # region public methods
+
+            # region special methods
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def __init__(
+##         self: boostNode.extension.type.Self, *arguments: builtins.object,
+##         **keywords: builtins.object
+##     ) -> None:
+    def __init__(self, *arguments, **keywords):
+##
+        '''
+            This methods wrapes the initializer to make
+            the first read line varibale instance bounded.
+        '''
+        self.first_read_line = False
+        return socket._fileobject.__init__(self, *arguments, **keywords)
+
+            # endregion
+
+        # endregion
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def readline(self: boostNode.extension.type.Self,
+##         *arguments: builtins.object, **keywords
+##     ) -> builtins.str:
+    def readline(self, *arguments, **keywords):
+##
+        '''
+            Wrapes the readline method to get the first line twice.
+        '''
+        if self.first_read_line is False:
+            self.first_read_line = socket._fileobject.readline(
+                self, *arguments, **keywords)
+            return self.first_read_line
+        elif self.first_read_line is True:
+            return socket._fileobject.readline(
+                self, *arguments, **keywords)
+        result = self.first_read_line
+        self.first_read_line = True
+        return result
+
+    # endregion
+
+
+## python3.3 class MultiProcessingHTTPServer(http.server.HTTPServer):
+class MultiProcessingHTTPServer(BaseHTTPServer.HTTPServer):
+    '''The Class implements a partial multiprocessing supported web server.'''
+
+    # region dynamic properties
+
+        # region public properties
+
+    '''
+        This attribute saves the modfied read file socket to apply it in the
+        request handler.
+    '''
+    read_file_socket = None
+
+        # endregion
+
+    # endregion
+
+    # region dynamic methods
+
+        # region public methods
+
+            # region special methods
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def __init__(
+##         self: boostNode.extension.type.Self, *arguments: builtins.object,
+##         **keywords: builtins.object
+##     ) -> None:
+    def __init__(self, *arguments, **keywords):
+##
+        '''
+            Ths initializer wrapper makes sure that the specical wrapped file
+            socket is instance bounded.
+        '''
+        self.read_file_socket = None
+        return BaseHTTPServer.HTTPServer.__init__(self, *arguments, **keywords)
+
+            # endregion
+
+        # endregion
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def process_request(
+##         self: boostNode.extension.type.Self, request: socket._socketobject,
+##         *arguments: builtins.object, **keywords: builtins.object
+##     ) -> None:
+    def process_request(self, request, *arguments, **keywords):
+##
+        '''
+            This method indicates weater the request is a read only or not.
+            Read only requests will be forked if enough free processors are
+            available.
+        '''
+        self.read_file_socket = SocketFileObjectWrapper(
+            request._sock, 'rb', -1)
+        # TODO
+        # multiprocessing.cpu_count()
+        # builtins.len(multiprocessing.active_children())
+        first_request_line = self.read_file_socket.readline(
+            Web.MAXIMUM_FIRST_GET_REQUEST_LINE_IN_CHARS
+        ).strip()
+        for pattern in self.web.same_thread_request_whitelist:
+            if re.compile(pattern).match(first_request_line):
+                BaseHTTPServer.HTTPServer.process_request(
+                    self, request, *arguments, **keywords)
+                return None
+## python3.3
+##         multiprocessing.Process(
+##             target=BaseHTTPServer.HTTPServer.process_request,
+##             args=[self, request] + builtins.list(arguments), kwargs=keywords,
+##             daemon=True
+##         ).start()
+        forked_request_process = multiprocessing.Process(
+            target=BaseHTTPServer.HTTPServer.process_request,
+            args=[self, request] + builtins.list(arguments), kwargs=keywords)
+        forked_request_process.daemon = True
+        forked_request_process.start()
+##
+
+    # endregion
+
 
 class Web(
     boostNode.paradigm.objectOrientation.Class,
@@ -250,6 +406,13 @@ class Web(
         Globally accessable socket to ask for currently useful ip determining.
     '''
     DETERMINE_IP_SOCKET = '8.8.8.8', 80
+    '''
+        This is the maximum number of forked processes if nothing better was
+        defined or determined.
+    '''
+    DEFAULT_NUMBER_OF_PROCESSES = 4
+    '''This values describes the longest possible first get request line.'''
+    MAXIMUM_FIRST_GET_REQUEST_LINE_IN_CHARS = 65537
 
         # endregion
 
@@ -277,6 +440,12 @@ class Web(
     request_whitelist = ()
     '''A list of regex pattern which no request should match.'''
     request_blacklist = ()
+    '''
+        A list of regex pattern which indicates requests which schould
+        guranteed to be run in the same thread as the server itself.
+        This requests usually modifies shared memory.
+    '''
+    same_thread_request_whitelist = ()
     '''Saves all initializes server instances.'''
     instances = []
     '''
@@ -303,6 +472,15 @@ class Web(
     module_loading = False
     '''Saves the number of running threads.'''
     number_of_running_threads = 0
+    '''Saves the number of running processes.'''
+    number_of_running_processes = 0
+    '''
+        Number of maximum forked processes. This should be less or equal to
+        the number of processors installed in your pc.
+        We will try to determine the number of processors. If this fails
+        "DEFAULT_NUMBER_OF_PROCESSES" will be applied.
+    '''
+    maximum_number_of_processes = 0
 
         # endregion
 
@@ -337,12 +515,15 @@ class Web(
             >>> repr(Web()) # doctest: +ELLIPSIS
             'Object of "Web" with root path "...", port "0" and clo..."clo...'
         '''
+        running_processes = self.number_of_running_processes
         return ('Object of "{class_name}" with root path "{path}", port '
                 '"{port}" and close order "{close_order}". Number of running '
-                'threads: {number_of_running_threads}.'.format(
+                'threads/processes: {number_of_running_threads}/'
+                '{number_of_running_processes}.'.format(
                     class_name=self.__class__.__name__, path=self.root,
                     port=self.port, close_order=self.close_order,
-                    number_of_running_threads=self.number_of_running_threads))
+                    number_of_running_threads=self.number_of_running_threads,
+                    number_of_running_processes=running_processes))
 
             # endregion
 
@@ -381,6 +562,7 @@ class Web(
 ##         self: boostNode.extension.type.Self, root='.', port=0,
 ##         default='', public_key_file_path='', close_order='close',
 ##         request_whitelist=('/.*',), request_blacklist=(),
+##         same_thread_request_whitelist=(),
 ##         # NOTE: Tuple for explicit webserver file reference validation.
 ##         # ('^text/.+', '^image/.+', '^application/(x-)?javascript$')
 ##         static_mimetype_pattern=('^.+/.+$',),
@@ -394,12 +576,12 @@ class Web(
 ##         authentication=True, authentication_file_name='.htpasswd',
 ##         authentication_file_pattern='(?P<name>.+):(?P<password>.+)',
 ##         authentication_handler=None, module_loading=False,
-##         **keywords: builtins.object
+##         maximum_number_of_processes=0, **keywords: builtins.object
 ##     ) -> boostNode.extension.type.Self:
     def _initialize(
         self, root='.', port=0, default='', public_key_file_path='',
         close_order='close', request_whitelist=('/.*',),
-        request_blacklist=(),
+        request_blacklist=(), same_thread_request_whitelist=(),
         # NOTE: Tuple for explicit webserver file reference validation.
         # ('^text/.+', '^image/.+', '^application/(x-)?javascript$')
         static_mimetype_pattern=('^.+/.+$',),
@@ -412,7 +594,8 @@ class Web(
             '__main__', 'main', 'index', 'initialize'),
         authentication=True, authentication_file_name='.htpasswd',
         authentication_file_pattern='(?P<name>.+):(?P<password>.+)',
-        authentication_handler=None, module_loading=False, **keywords
+        authentication_handler=None, module_loading=False,
+        maximum_number_of_processes=0, **keywords
     ):
 ##
         '''
@@ -436,6 +619,7 @@ class Web(
         self.default = default
         self.request_whitelist = request_whitelist
         self.request_blacklist = request_blacklist
+        self.same_thread_request_whitelist = same_thread_request_whitelist
         self.static_mimetype_pattern = static_mimetype_pattern
         self.dynamic_mimetype_pattern = dynamic_mimetype_pattern
         self.default_file_name_pattern = default_file_name_pattern
@@ -443,8 +627,16 @@ class Web(
         self.thread_buffer = boostNode.extension.output.Buffer(
             queue=True)
         self.module_loading = module_loading
-        '''NOTE: Make this property an instance property.'''
+        self.maximum_number_of_processes = maximum_number_of_processes
+        if not self.maximum_number_of_processes:
+            try:
+                self.maximum_number_of_processes = multiprocessing.cpu_count()
+            except builtins.NotImplementedError:
+                self.maximum_number_of_processes = \
+                    self.DEFAULT_NUMBER_OF_PROCESSES
+        '''NOTE: Make this properties instance binded.'''
         self.number_of_running_threads = 0
+        self.number_of_running_processes = 0
         return self._start_server_thread()
 
             # endregion
@@ -482,16 +674,21 @@ class Web(
                 except builtins.KeyboardInterrupt:
                     wait_for_close_order()
             wait_for_close_order()
-            number_of_running_threads = self.number_of_running_threads
-            shown_threads_number = 0
-            while number_of_running_threads > 0:
-                if number_of_running_threads != self.number_of_running_threads:
-                    number_of_running_threads = self.number_of_running_threads
-                if shown_threads_number != number_of_running_threads:
+            number_of_running_workers = self.number_of_running_threads + \
+                self.number_of_running_processes
+            shown_number = 0
+            while number_of_running_workers > 0:
+                if(number_of_running_workers !=
+                   self.number_of_running_threads +
+                   self.number_of_running_processes):
+                    number_of_running_workers = \
+                        self.number_of_running_threads + \
+                        self.number_of_running_processes
+                if shown_number != number_of_running_workers:
                     __logger__.info(
-                        'Waiting for %d running threads.',
-                        number_of_running_threads)
-                    shown_threads_number = number_of_running_threads
+                        'Waiting for %d running workers.',
+                        number_of_running_workers)
+                    shown_number = number_of_running_workers
                 time.sleep(1)
             __logger__.info('Shutting down webserver.')
             self.service.socket.close()
@@ -601,28 +798,24 @@ class Web(
             Initializes a new request-handler and starts its own thread.
         '''
         if self._public_key_file:
-## python3.3
-##             self.service = http.server.HTTPServer(
-##                 (self._public_key_file.basename, port),
-##                 CGIHTTPRequestHandler)
-            self.service = BaseHTTPServer.HTTPServer(
+            self.service = MultiProcessingHTTPServer(
                 (self._public_key_file.basename, port),
                 CGIHTTPRequestHandler)
-##
             self.service.socket = ssl.wrap_socket(
                 self.service.socket, certfile=self._public_key_file._path,
                 server_side=True)
         else:
-## python3.3
-##             self.service = http.server.HTTPServer(
-##                 ('', port), CGIHTTPRequestHandler)
-            self.service = BaseHTTPServer.HTTPServer(
+            self.service = MultiProcessingHTTPServer(
                 ('', port), CGIHTTPRequestHandler)
-##
         self.service.web = self
+## python3.3
+##         threading.Thread(
+##             target=self.service.serve_forever, daemon=True
+##         ).start()
         server_thread = threading.Thread(target=self.service.serve_forever)
         server_thread.daemon = True
         server_thread.start()
+##
         return self
 
         # endregion
@@ -713,6 +906,7 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         self.load_module = False
         self.request_arguments = []
         self.respond = False
+        # TODO use func name via introspection and in all other positions.
 ## python3.3
 ##         builtins.super(http.server.CGIHTTPRequestHandler, self).__init__(
 ##             *arguments, **keywords)
@@ -915,6 +1109,17 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
             __logger__.info(
                 format, message_or_error_code, response_code_or_message, '')
         return self
+
+    # TODO
+    @boostNode.paradigm.aspectOrientation.JointPoint
+    def setup(self, *arguments, **keywords):
+        '''
+            TODO
+        '''
+        result = CGIHTTPServer.CGIHTTPRequestHandler.setup(
+            self, *arguments, **keywords)
+        self.rfile = self.server.web.service.read_file_socket
+        return result
 
         # endregion
 
@@ -1439,7 +1644,7 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
                     500, 'Internal server error with cgi program%s: "%s"' %
                     (program_description, re.compile('\n+').sub('\n', errors)))
             else:
-                # Check if given output contains a header.
+                '''Check if given output contains a header.'''
                 header_match = re.compile(
                     '^[A-Z0-9]+/([0-9]+\.)+[0-9]+ [0-9]{3} [a-zA-Z ]+\n'
                     '([^:]+: .+\n)+\n.+'
