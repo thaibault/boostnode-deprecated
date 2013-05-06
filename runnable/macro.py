@@ -750,7 +750,8 @@ class Replace(
                            '\n%s\n' % match.group('prefix')
                        ).replace(
                            '\n%s \n' % match.group('prefix'),
-                           '\n%s\n' % match.group('prefix')),
+                           '\n%s\n' % match.group('prefix')
+                       ).rstrip(),
                        alternate_text=match.group('alternate_text').replace(
                            '\n%s ' % match.group('prefix'),
                            '\n'

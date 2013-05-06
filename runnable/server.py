@@ -440,8 +440,8 @@ class Web(
         {'arguments': ('-e', '--enable-module-loading'),
          'keywords': {
              'action': 'store_true',
-             'default': {'execute': '__initializer_default_value__'},
-             'required': {'execute': '__initializer_default_value__ is None'},
+             'default': False,
+             'required': False,
              'help': 'Enables module loading via get query. '
                      'Enabling this feature can slow down your request '
                      'performance extremly. Note that self module loading via '
@@ -591,6 +591,38 @@ class Web(
 
             # endregion
 
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def close(
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
+    def close(self):
+##
+        '''Waits for running workers and shuts the server down.'''
+        self.block_new_worker = True
+        number_of_running_workers = self.number_of_running_threads + \
+            builtins.len(multiprocessing.active_children())
+        shown_number = 0
+        while number_of_running_workers > 0:
+            if(number_of_running_workers !=
+               self.number_of_running_threads +
+               builtins.len(multiprocessing.active_children())):
+                number_of_running_workers = \
+                    self.number_of_running_threads + \
+                    builtins.len(multiprocessing.active_children())
+            if(shown_number != number_of_running_workers and
+               number_of_running_workers > 0):
+                __logger__.info(
+                    'Waiting for %d running workers (%d threads and '
+                    '%d processes).', number_of_running_workers,
+                    self.number_of_running_threads,
+                    builtins.len(multiprocessing.active_children()))
+                shown_number = number_of_running_workers
+            time.sleep(2)
+        __logger__.info('Shutting down webserver.')
+        self.service.socket.close()
+        return self
+
         # endregion
 
         # region protected methods.
@@ -736,28 +768,7 @@ class Web(
                 except builtins.KeyboardInterrupt:
                     wait_for_close_order()
             wait_for_close_order()
-            self.block_new_worker = True
-            number_of_running_workers = self.number_of_running_threads + \
-                builtins.len(multiprocessing.active_children())
-            shown_number = 0
-            while number_of_running_workers > 0:
-                if(number_of_running_workers !=
-                   self.number_of_running_threads +
-                   builtins.len(multiprocessing.active_children())):
-                    number_of_running_workers = \
-                        self.number_of_running_threads + \
-                        builtins.len(multiprocessing.active_children())
-                if(shown_number != number_of_running_workers and
-                   number_of_running_workers > 0):
-                    __logger__.info(
-                        'Waiting for %d running workers (%d threads and '
-                        '%d processes).', number_of_running_workers,
-                        self.number_of_running_threads,
-                        builtins.len(multiprocessing.active_children()))
-                    shown_number = number_of_running_workers
-                time.sleep(2)
-            __logger__.info('Shutting down webserver.')
-            self.service.socket.close()
+            self.close()
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -1231,9 +1242,10 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
 ##                     return (self.headers['authorization'] ==
 ##                             'Basic %s' % self._get_login_data(
 ##                                 authentication_file))
-                    return (self.headers.getheader('authorization') ==
-                            'Basic %s' % self._get_login_data(
-                                authentication_file))
+                    return (
+                        self.headers.getheader('authorization') ==
+                        'Basic %s' % self._get_login_data(
+                            authentication_file))
 ##
                 if self._authentication_location != self.server.web.root:
                     break
@@ -1266,12 +1278,8 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         patterns = self.server.web.dynamic_mimetype_pattern +\
             self.server.web.static_mimetype_pattern
         if not self.requested_file:
-            if(self.server.web.module_loading is True and
-               boostNode.extension.native.Module.get_file_path(
-               context_path=self.path) or
-               builtins.isinstance(
-                   self.server.web.module_loading, builtins.str) and
-               self.server.web.module_loading == self.path and
+            if((self.server.web.module_loading is True or
+                self.server.web.module_loading == self.path) and
                boostNode.extension.native.Module.get_file_path(
                    context_path=self.path)):
                 self.load_module = True
@@ -1487,8 +1495,8 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
             elif not self.server.web.module_loading:
                 error_message = (
                     'None of the following default file name pattern "%s" '
-                    'found' % (self.server.web.module_loading, '", "'.join(
-                        self.server.web.default_file_name_pattern)))
+                    'found' % '", "'.join(
+                        self.server.web.default_file_name_pattern))
             if self.path:
                 error_message = (
                     'No accessible file "%s" found' %
@@ -1591,7 +1599,7 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
 ## python3.3
 ##     def _default_get(
 ##         self: boostNode.extension.type.Self
-##     ) -> (boostNode.extension.type.Self, builtins.bool):
+##     ) -> builtins.bool:
     def _default_get(self):
 ##
         '''
@@ -1599,21 +1607,33 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
             with.
         '''
         if self.server.web.default:
-            return self._handle_given_default_get()
-        if self.server.web.module_loading is True:
-            for module_name in self.server.web.default_module_names:
-                if self._handle_default_modules_get(module_name):
-                    return self
-        elif builtins.isinstance(self.server.web.module_loading, builtins.str):
-            for module_name in self.server.web.default_module_names:
-                if(module_name == self.server.web.module_loading and
-                   self._handle_default_modules_get(module_name)):
-                    return self
+            self._handle_given_default_get()
+            return True
+        if self.server.web.module_loading and self._default_get_module():
+            return True
         for file_name_pattern in self.server.web.default_file_name_pattern:
             for file in self.server.web.root:
                 if self._check_pattern((file_name_pattern,), file.name):
                     self.requested_file = file
-                    return self._set_dynamic_or_static_get(file_name=file.name)
+                    self._set_dynamic_or_static_get(file_name=file.name)
+                    return True
+        return False
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def _default_get_module(
+##         self: boostNode.extension.type.Self
+##     ) -> builtins.bool:
+    def _default_get_module(self):
+##
+        '''
+            Handle if possible a default module request.
+        '''
+        for module_name in self.server.web.default_module_names:
+            if((self.server.web.module_loading is True or
+                module_name == self.server.web.module_loading) and
+               self._handle_default_modules_get(module_name)):
+                return True
         return False
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -1648,14 +1668,9 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         '''
             Handles request with no explicit file or module to run.
         '''
-        if(self.server.web.default == '__main__' or
-           self.server.web.dynamic_module_loading is True and
-           boostNode.extension.native.Module.get_file_path(
-               context_path=self.server.web.default) or
-           builtins.isinstance(
-               self.server.web.dynamic_module_loading, builtins.str) and
-           self.server.web.dynamic_module_loading ==
-           self.server.web.default and
+        if((self.server.web.dynamic_module_loading is True or
+            self.server.web.dynamic_module_loading ==
+            self.server.web.default) and
            boostNode.extension.native.Module.get_file_path(
                context_path=self.server.web.default)):
             self.load_module = True
