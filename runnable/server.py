@@ -545,6 +545,11 @@ class Web(
     maximum_number_of_processes = 0
     '''Indicates if new worker are currently allowed to spawn.'''
     block_new_worker = False
+    '''
+        This attribute saves a shared data object. It will be given to all
+        sub workers which computes request results.
+    '''
+    shared_data = None
 
         # endregion
 
@@ -671,7 +676,8 @@ class Web(
 ##         authentication=True, authentication_file_name='.htpasswd',
 ##         authentication_file_pattern='(?P<name>.+):(?P<password>.+)',
 ##         authentication_handler=None, module_loading=None,
-##         maximum_number_of_processes=0, **keywords: builtins.object
+##         maximum_number_of_processes=0, shared_data=None,
+##         **keywords: builtins.object
 ##     ) -> boostNode.extension.type.Self:
     def _initialize(
         self, root='.', port=0, default='', public_key_file_path='',
@@ -689,7 +695,7 @@ class Web(
         authentication=True, authentication_file_name='.htpasswd',
         authentication_file_pattern='(?P<name>.+):(?P<password>.+)',
         authentication_handler=None, module_loading=None,
-        maximum_number_of_processes=0, **keywords
+        maximum_number_of_processes=0, shared_data=None, **keywords
     ):
 ##
         '''
@@ -731,6 +737,7 @@ class Web(
                     self.DEFAULT_NUMBER_OF_PROCESSES
         '''NOTE: Make this property instance binded.'''
         self.number_of_running_threads = 0
+        self.shared_data = shared_data
         return self._start_server_thread()
 
             # endregion
@@ -1162,15 +1169,17 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def send_response(
-##         self: boostNode.extension.type.Self, code=200
+##         self: boostNode.extension.type.Self, code=200,
+##         *arguments: builtins.object, **keywords: builtins.object
 ##     ) -> None:
-    def send_response(self, code=200):
+    def send_response(self, code=200, *arguments, **keywords):
 #
         '''
             Send the given response code to client.
         '''
         self.response_sent = True
-        return CGIHTTPServer.CGIHTTPRequestHandler.send_response(self, code)
+        return CGIHTTPServer.CGIHTTPRequestHandler.send_response(
+            self, code, *arguments, **keywords)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -1451,7 +1460,7 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
             This method is called for each successful answered http-request.
         '''
         if not self.response_sent:
-            self.send_response(code=200)
+            self.send_response()
         if not self.content_type_sent:
             self.send_header('Content-type', mimetype)
         return self
@@ -1747,7 +1756,7 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         self.request_arguments = [
             self.requested_file_name, self.request_uri,
             self.parse_url(self.request_uri)[1],
-            self.post_dictionary, self.server, self]
+            self.post_dictionary, self.server.web.shared_data, self]
         if '__no_respond__' not in self.post_dictionary:
             self.respond = True
             return self._run_request()
