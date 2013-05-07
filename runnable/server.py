@@ -35,6 +35,8 @@ import cgi
 import copy
 ##
 import inspect
+## python3.3 import io
+pass
 import logging
 import multiprocessing
 import os
@@ -71,6 +73,8 @@ import boostNode.extension.system
 
 # region classes
 
+## python3.3
+## pass
 class SocketFileObjectWrapper(socket._fileobject):
     '''
         This class wrapes the native implementation of the server
@@ -99,46 +103,43 @@ class SocketFileObjectWrapper(socket._fileobject):
             # region special methods
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def __init__(
-##         self: boostNode.extension.type.Self, *arguments: builtins.object,
-##         **keywords: builtins.object
-##     ) -> None:
     def __init__(self, *arguments, **keywords):
-##
         '''
-            This methods wrapes the initializer to make
-            the first read line varibale instance bounded.
+            This methods wrapes the initializer to make the first read line
+            varibale instance bounded.
         '''
         self.first_read_line = False
-        return socket._fileobject.__init__(self, *arguments, **keywords)
+        '''Take this method via introspection.'''
+        return builtins.getattr(
+            socket._fileobject, inspect.stack()[0][3]
+        )(self, *arguments, **keywords)
 
             # endregion
 
-        # endregion
-
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def readline(self: boostNode.extension.type.Self,
-##         *arguments: builtins.object, **keywords
-##     ) -> builtins.str:
     def readline(self, *arguments, **keywords):
-##
         '''
             Wrapes the readline method to get the first line twice.
         '''
         if self.first_read_line is False:
-            self.first_read_line = socket._fileobject.readline(
-                self, *arguments, **keywords)
+            self.first_read_line = builtins.getattr(
+                socket._fileobject, inspect.stack()[0][3]
+            )(self, *arguments, **keywords)
             return self.first_read_line
         elif self.first_read_line is True:
-            return socket._fileobject.readline(
-                self, *arguments, **keywords)
+            '''Take this method via introspection.'''
+            return builtins.getattr(
+                socket._fileobject, inspect.stack()[0][3]
+            )(self, *arguments, **keywords)
         result = self.first_read_line
         self.first_read_line = True
         return result
 
+        # endregion
+
     # endregion
+
+##
 
 
 ## python3.3 class MultiProcessingHTTPServer(http.server.HTTPServer):
@@ -178,7 +179,15 @@ class MultiProcessingHTTPServer(BaseHTTPServer.HTTPServer):
             socket is instance bounded.
         '''
         self.read_file_socket = None
-        return BaseHTTPServer.HTTPServer.__init__(self, *arguments, **keywords)
+        '''Take this method via introspection.'''
+## python3.3
+##         return builtins.getattr(
+##             http.server.HTTPServer, inspect.stack()[0][3]
+##         )(self, *arguments, **keywords)
+        return builtins.getattr(
+            BaseHTTPServer.HTTPServer, inspect.stack()[0][3]
+        )(self, *arguments, **keywords)
+##
 
             # endregion
 
@@ -186,8 +195,27 @@ class MultiProcessingHTTPServer(BaseHTTPServer.HTTPServer):
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
+##     def is_same_thread_request(
+##         self: boostNode.extension.type.Self, request: socket.socket
+##     ) -> builtins.bool:
+    def is_same_thread_request(self, request):
+##
+        '''
+            Deterimes if the given request could be run in its own dedicated
+            process.
+        '''
+        first_request_line = self.read_file_socket.readline(
+            Web.MAXIMUM_FIRST_GET_REQUEST_LINE_IN_CHARS
+        ).strip()
+        for pattern in self.web.same_thread_request_whitelist:
+            if re.compile(pattern).match(first_request_line):
+                return True
+        return False
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
 ##     def process_request(
-##         self: boostNode.extension.type.Self, request: socket._socketobject,
+##         self: boostNode.extension.type.Self, request: socket.socket,
 ##         *arguments: builtins.object, **keywords: builtins.object
 ##     ) -> None:
     def process_request(self, request, *arguments, **keywords):
@@ -197,30 +225,66 @@ class MultiProcessingHTTPServer(BaseHTTPServer.HTTPServer):
             Read only requests will be forked if enough free processors are
             available.
         '''
-        self.read_file_socket = SocketFileObjectWrapper(
-            request._sock, 'rb', -1)
-        # TODO
-        # multiprocessing.cpu_count()
-        # builtins.len(multiprocessing.active_children())
-        first_request_line = self.read_file_socket.readline(
-            Web.MAXIMUM_FIRST_GET_REQUEST_LINE_IN_CHARS
-        ).strip()
-        for pattern in self.web.same_thread_request_whitelist:
-            if re.compile(pattern).match(first_request_line):
-                BaseHTTPServer.HTTPServer.process_request(
-                    self, request, *arguments, **keywords)
-                return None
+        if self.web.block_new_worker:
+            return None
 ## python3.3
-##         multiprocessing.Process(
-##             target=BaseHTTPServer.HTTPServer.process_request,
-##             args=[self, request] + builtins.list(arguments), kwargs=keywords,
-##             daemon=True
-##         ).start()
-        forked_request_process = multiprocessing.Process(
-            target=BaseHTTPServer.HTTPServer.process_request,
-            args=[self, request] + builtins.list(arguments), kwargs=keywords)
-        forked_request_process.daemon = True
-        forked_request_process.start()
+##         self.read_file_socket = request.makefile('rb', -1)
+##         read_file_socket = self.read_file_socket
+##
+##         @boostNode.paradigm.aspectOrientation.JointPoint
+##         def readline(*arguments: builtins.object, **keywords: builtins.object):
+##             '''
+##                 Wrapes the native file object method version.
+##             '''
+##             self = read_file_socket
+##             if not builtins.hasattr(self, 'first_read_line'):
+##                 self.first_read_line = builtins.getattr(
+##                     io.BufferedReader, inspect.stack()[0][3]
+##                 )(self, *arguments, **keywords)
+##                 return self.first_read_line
+##             elif self.first_read_line is True:
+##                 '''Take this method via introspection.'''
+##                 return builtins.getattr(
+##                     io.BufferedReader, inspect.stack()[0][3]
+##                 )(self, *arguments, **keywords)
+##             result = self.first_read_line
+##             self.first_read_line = True
+##             return result
+##         self.read_file_socket.readline = readline
+        '''
+            This assignment replace the python's native
+            "request.makefile('rb', -1)" behavior.
+        '''
+        self.read_file_socket = SocketFileObjectWrapper(
+            request, 'rb', -1)
+##
+        '''Takes this method via introspection from now on.'''
+        if(not self.is_same_thread_request(request) and
+           builtins.len(multiprocessing.active_children()) <
+           self.web.maximum_number_of_processes - 1):
+## python3.3
+##             multiprocessing.Process(
+##                 target=builtins.getattr(
+##                     http.server.HTTPServer, inspect.stack()[0][3]),
+##                 args=[self, request] + builtins.list(arguments),
+##                 kwargs=keywords, daemon=True
+##             ).start()
+            forked_request_process = multiprocessing.Process(
+                target=builtins.getattr(
+                    BaseHTTPServer.HTTPServer, inspect.stack()[0][3]),
+                args=[self, request] + builtins.list(arguments),
+                kwargs=keywords)
+            forked_request_process.daemon = True
+            forked_request_process.start()
+##
+        else:
+## python3.3
+##             return builtins.getattr(
+##                 http.server.HTTPServer, inspect.stack()[0][3])(
+##                     self, request, *arguments, **keywords)
+            return builtins.getattr(
+                BaseHTTPServer.HTTPServer, inspect.stack()[0][3])(
+                    self, request, *arguments, **keywords)
 ##
 
     # endregion
@@ -362,7 +426,7 @@ class Web(
              'help': 'Same as file name for module name patterns. '
                      'Note that default files have a lower priority as '
                      'default python modules.',
-             'dest': 'default_module_name_pattern',
+             'dest': 'default_module_names',
              'metavar': 'REGEX_PATTERN'}},
         {'arguments': ('-a', '--authentication'),
          'keywords': {
@@ -376,8 +440,8 @@ class Web(
         {'arguments': ('-e', '--enable-module-loading'),
          'keywords': {
              'action': 'store_true',
-             'default': {'execute': '__initializer_default_value__'},
-             'required': {'execute': '__initializer_default_value__ is None'},
+             'default': False,
+             'required': False,
              'help': 'Enables module loading via get query. '
                      'Enabling this feature can slow down your request '
                      'performance extremly. Note that self module loading via '
@@ -410,7 +474,7 @@ class Web(
         This is the maximum number of forked processes if nothing better was
         defined or determined.
     '''
-    DEFAULT_NUMBER_OF_PROCESSES = 4
+    DEFAULT_NUMBER_OF_PROCESSES = 8
     '''This values describes the longest possible first get request line.'''
     MAXIMUM_FIRST_GET_REQUEST_LINE_IN_CHARS = 65537
 
@@ -464,16 +528,14 @@ class Web(
     '''
     default_file_name_pattern = ()
     '''
-        Saves all mpodule name pattern to be taken as fallback if no explicit
+        Saves all module names to be taken as fallback if no explicit
         file or module was requested.
     '''
-    default_module_name_pattern = ()
+    default_module_names = ()
     '''Indicates if module loading via get query is enabled.'''
-    module_loading = False
+    module_loading = None
     '''Saves the number of running threads.'''
     number_of_running_threads = 0
-    '''Saves the number of running processes.'''
-    number_of_running_processes = 0
     '''
         Number of maximum forked processes. This should be less or equal to
         the number of processors installed in your pc.
@@ -481,6 +543,13 @@ class Web(
         "DEFAULT_NUMBER_OF_PROCESSES" will be applied.
     '''
     maximum_number_of_processes = 0
+    '''Indicates if new worker are currently allowed to spawn.'''
+    block_new_worker = False
+    '''
+        This attribute saves a shared data object. It will be given to all
+        sub workers which computes request results.
+    '''
+    shared_data = None
 
         # endregion
 
@@ -515,7 +584,6 @@ class Web(
             >>> repr(Web()) # doctest: +ELLIPSIS
             'Object of "Web" with root path "...", port "0" and clo..."clo...'
         '''
-        running_processes = self.number_of_running_processes
         return ('Object of "{class_name}" with root path "{path}", port '
                 '"{port}" and close order "{close_order}". Number of running '
                 'threads/processes: {number_of_running_threads}/'
@@ -523,9 +591,42 @@ class Web(
                     class_name=self.__class__.__name__, path=self.root,
                     port=self.port, close_order=self.close_order,
                     number_of_running_threads=self.number_of_running_threads,
-                    number_of_running_processes=running_processes))
+                    number_of_running_processes=builtins.len(
+                        multiprocessing.active_children())))
 
             # endregion
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def close(
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
+    def close(self):
+##
+        '''Waits for running workers and shuts the server down.'''
+        self.block_new_worker = True
+        number_of_running_workers = self.number_of_running_threads + \
+            builtins.len(multiprocessing.active_children())
+        shown_number = 0
+        while number_of_running_workers > 0:
+            if(number_of_running_workers !=
+               self.number_of_running_threads +
+               builtins.len(multiprocessing.active_children())):
+                number_of_running_workers = \
+                    self.number_of_running_threads + \
+                    builtins.len(multiprocessing.active_children())
+            if(shown_number != number_of_running_workers and
+               number_of_running_workers > 0):
+                __logger__.info(
+                    'Waiting for %d running workers (%d threads and '
+                    '%d processes).', number_of_running_workers,
+                    self.number_of_running_threads,
+                    builtins.len(multiprocessing.active_children()))
+                shown_number = number_of_running_workers
+            time.sleep(2)
+        __logger__.info('Shutting down webserver.')
+        self.service.socket.close()
+        return self
 
         # endregion
 
@@ -571,12 +672,12 @@ class Web(
 ##         default_file_name_pattern=(
 ##             '^((__main__)|(main)|(index)|(initialize))\.?'
 ##             '(?!tpl$)[a-zA-Z0-9]{0,4}$',),
-##         default_module_name_pattern=(
-##             '__main__', 'main', 'index', 'initialize'),
+##         default_module_names=('__main__', 'main', 'index', 'initialize'),
 ##         authentication=True, authentication_file_name='.htpasswd',
 ##         authentication_file_pattern='(?P<name>.+):(?P<password>.+)',
-##         authentication_handler=None, module_loading=False,
-##         maximum_number_of_processes=0, **keywords: builtins.object
+##         authentication_handler=None, module_loading=None,
+##         maximum_number_of_processes=0, shared_data=None,
+##         **keywords: builtins.object
 ##     ) -> boostNode.extension.type.Self:
     def _initialize(
         self, root='.', port=0, default='', public_key_file_path='',
@@ -590,12 +691,11 @@ class Web(
         default_file_name_pattern=(
             '^((__main__)|(main)|(index)|(initialize))\.?'
             '(?!tpl$)[a-zA-Z0-9]{0,4}$',),
-        default_module_name_pattern=(
-            '__main__', 'main', 'index', 'initialize'),
+        default_module_names=('__main__', 'main', 'index', 'initialize'),
         authentication=True, authentication_file_name='.htpasswd',
         authentication_file_pattern='(?P<name>.+):(?P<password>.+)',
-        authentication_handler=None, module_loading=False,
-        maximum_number_of_processes=0, **keywords
+        authentication_handler=None, module_loading=None,
+        maximum_number_of_processes=0, shared_data=None, **keywords
     ):
 ##
         '''
@@ -623,20 +723,21 @@ class Web(
         self.static_mimetype_pattern = static_mimetype_pattern
         self.dynamic_mimetype_pattern = dynamic_mimetype_pattern
         self.default_file_name_pattern = default_file_name_pattern
-        self.default_module_name_pattern = default_module_name_pattern
+        self.default_module_names = default_module_names
         self.thread_buffer = boostNode.extension.output.Buffer(
             queue=True)
         self.module_loading = module_loading
         self.maximum_number_of_processes = maximum_number_of_processes
         if not self.maximum_number_of_processes:
             try:
-                self.maximum_number_of_processes = multiprocessing.cpu_count()
+                self.maximum_number_of_processes = \
+                    2 * multiprocessing.cpu_count()
             except builtins.NotImplementedError:
                 self.maximum_number_of_processes = \
                     self.DEFAULT_NUMBER_OF_PROCESSES
-        '''NOTE: Make this properties instance binded.'''
+        '''NOTE: Make this property instance binded.'''
         self.number_of_running_threads = 0
-        self.number_of_running_processes = 0
+        self.shared_data = shared_data
         return self._start_server_thread()
 
             # endregion
@@ -674,24 +775,7 @@ class Web(
                 except builtins.KeyboardInterrupt:
                     wait_for_close_order()
             wait_for_close_order()
-            number_of_running_workers = self.number_of_running_threads + \
-                self.number_of_running_processes
-            shown_number = 0
-            while number_of_running_workers > 0:
-                if(number_of_running_workers !=
-                   self.number_of_running_threads +
-                   self.number_of_running_processes):
-                    number_of_running_workers = \
-                        self.number_of_running_threads + \
-                        self.number_of_running_processes
-                if shown_number != number_of_running_workers:
-                    __logger__.info(
-                        'Waiting for %d running workers.',
-                        number_of_running_workers)
-                    shown_number = number_of_running_workers
-                time.sleep(1)
-            __logger__.info('Shutting down webserver.')
-            self.service.socket.close()
+            self.close()
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -723,10 +807,12 @@ class Web(
             determineIPSocket.close()
         __logger__.info(
             'Webserver is starting %sand listens at port "%d" and webroot '
-            '"%s". Currently reachable ip is "%s".',
-            ('a secure connection with public key "%s" ' %
-             self._public_key_file._path) if self._public_key_file else '',
-            self.port, self.root._path, ip)
+            '"%s". Currently reachable ip is "%s". Maximum parallel process '
+            'is limited to %d.', (
+                'a secure connection with public key "%s" ' %
+                self._public_key_file._path
+            ) if self._public_key_file else '',
+            self.port, self.root._path, ip, self.maximum_number_of_processes)
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -823,10 +909,8 @@ class Web(
     # endregion
 
 
-## python3.3
-## class CGIHTTPRequestHandler(http.server.CGIHTTPRequestHandler):
+## python3.3 class CGIHTTPRequestHandler(http.server.CGIHTTPRequestHandler):
 class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
-##
     '''
         A small request-handler dealing with incoming file requests.
         It can directly send static files back to client or run dynamic
@@ -865,7 +949,7 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
     '''Indicates if a response code was sent yet.'''
     response_sent = False
     '''Indicates if a response mime type was sent yet.'''
-    header_sent = False
+    content_type_sent = False
 
         # endregion
 
@@ -906,12 +990,14 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         self.load_module = False
         self.request_arguments = []
         self.respond = False
-        # TODO use func name via introspection and in all other positions.
+        '''Take this method via introspection.'''
 ## python3.3
-##         builtins.super(http.server.CGIHTTPRequestHandler, self).__init__(
-##             *arguments, **keywords)
-        CGIHTTPServer.CGIHTTPRequestHandler.__init__(
-            self, *arguments, **keywords)
+##         builtins.getattr(
+##             http.server.CGIHTTPRequestHandler, inspect.stack()[0][3]
+##         )(self, *arguments, **keywords)
+        builtins.getattr(
+            CGIHTTPServer.CGIHTTPRequestHandler, inspect.stack()[0][3]
+        )(self, *arguments, **keywords)
 ##
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -1018,14 +1104,16 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
                         boostNode.extension.file.Handler(
                             location=self.requested_file.directory_path)
             if self._is_authenticated():
-                if self._is_valid_request():
-                    if self._create_environment_variables():
+                self._create_environment_variables()
+                valid_request = self._is_valid_request()
+                if valid_request:
+                    if self.path:
                         if self._is_valid_reference():
                             return self._set_dynamic_or_static_get(
                                 file_name=self.path)
                     elif self._default_get():
                         return self
-                return self._send_no_file_error()
+                return self._send_no_file_error(valid_request)
             return self._send_no_authentication_error()
 ## python3.3
 ##         except (
@@ -1080,6 +1168,25 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
+##     def send_response(
+##         self: boostNode.extension.type.Self, *arguments: builtins.object,
+##         **keywords: builtins.object
+##     ) -> None:
+    def send_response(self, *arguments, **keywords):
+##
+        '''
+            Send the given response code to client.
+        '''
+        self.response_sent = True
+## python3.3
+##         return http.server.CGIHTTPRequestHandler.send_response(
+##             self, *arguments, **keywords)
+        return CGIHTTPServer.CGIHTTPRequestHandler.send_response(
+            self, *arguments, **keywords)
+##
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
 ##     def log_message(
 ##         self: boostNode.extension.type.Self, format: builtins.str,
 ##         message_or_error_code: (builtins.int, builtins.str),
@@ -1110,14 +1217,27 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
                 format, message_or_error_code, response_code_or_message, '')
         return self
 
-    # TODO
     @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def setup(
+##         self: boostNode.extension.type.Self, *arguments: builtins.object,
+##         **keywords: builtins.object
+##     ) -> None:
     def setup(self, *arguments, **keywords):
+##
         '''
-            TODO
+            This method wrapes the python's native request handler to provide
+            our wrapped file socket buffer.
         '''
-        result = CGIHTTPServer.CGIHTTPRequestHandler.setup(
-            self, *arguments, **keywords)
+        '''Take this method via introspection.'''
+## python3.3
+##         result = builtins.getattr(
+##             http.server.CGIHTTPRequestHandler, inspect.stack()[0][3]
+##         )(self, *arguments, **keywords)
+        result = builtins.getattr(
+            CGIHTTPServer.CGIHTTPRequestHandler, inspect.stack()[0][3]
+        )(self, *arguments, **keywords)
+##
         self.rfile = self.server.web.service.read_file_socket
         return result
 
@@ -1148,9 +1268,10 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
 ##                     return (self.headers['authorization'] ==
 ##                             'Basic %s' % self._get_login_data(
 ##                                 authentication_file))
-                    return (self.headers.getheader('authorization') ==
-                            'Basic %s' % self._get_login_data(
-                                authentication_file))
+                    return (
+                        self.headers.getheader('authorization') ==
+                        'Basic %s' % self._get_login_data(
+                            authentication_file))
 ##
                 if self._authentication_location != self.server.web.root:
                     break
@@ -1183,9 +1304,10 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         patterns = self.server.web.dynamic_mimetype_pattern +\
             self.server.web.static_mimetype_pattern
         if not self.requested_file:
-            if(self.server.web.module_loading and
+            if((self.server.web.module_loading is True or
+                self.server.web.module_loading == self.path) and
                boostNode.extension.native.Module.get_file_path(
-               context_path=self.path)):
+                   context_path=self.path)):
                 self.load_module = True
                 return True
         elif((not self.requested_file.is_file() or
@@ -1343,9 +1465,8 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         '''
         if not self.response_sent:
             self.send_response(200)
-        if not self.header_sent:
+        if not self.content_type_sent:
             self.send_header('Content-type', mimetype)
-        self.end_headers()
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -1373,9 +1494,9 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _send_no_file_error(
-##         self: boostNode.extension.type.Self
+##         self: boostNode.extension.type.Self, valid_request=True
 ##     ) -> boostNode.extension.type.Self:
-    def _send_no_file_error(self):
+    def _send_no_file_error(self, valid_request=True):
 ##
         '''
             Generates a http-404-error if no useful file was found for
@@ -1384,8 +1505,23 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         error_message = 'Requested file not found'
         if __logger__.isEnabledFor(logging.DEBUG) or sys.flags.debug:
             error_message = (
-                'None of the following default file-pattern "%s" was found' %
-                '", "'.join(self.server.web.default_module_name_pattern))
+                'Eather none of the following default module names "%s" nor '
+                'none of the following default file name pattern "%s" found' %
+                ('", "'.join(self.server.web.default_module_names),
+                 '", "'.join(self.server.web.default_file_name_pattern)))
+            if builtins.isinstance(
+                self.server.web.module_loading, builtins.str
+            ):
+                error_message = (
+                    'Eather default module name "%s" nor '
+                    'none of the following default file name pattern "%s" '
+                    'found' % (self.server.web.module_loading, '", "'.join(
+                        self.server.web.default_file_name_pattern)))
+            elif not self.server.web.module_loading:
+                error_message = (
+                    'None of the following default file name pattern "%s" '
+                    'found' % '", "'.join(
+                        self.server.web.default_file_name_pattern))
             if self.path:
                 error_message = (
                     'No accessible file "%s" found' %
@@ -1393,7 +1529,11 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
                         location=self.server.web.root.path + self.path,
                         must_exist=False
                     )._path)
-            if self.requested_file:
+            if not valid_request:
+                error_message = (
+                    "Given request isn't valid. Check your white- and "
+                    'blacklists')
+            if self.requested_file.is_file():
                 error_message +=\
                     '. Detected mime-type "%s"' % self.requested_file.mimetype
         self.send_error(404, re.compile('\n+').sub('\n', error_message))
@@ -1443,7 +1583,7 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
             Checks if current request matches on of the given pattern.
         '''
         for pattern in pattern_list:
-            if re.compile(pattern).match(self.path):
+            if re.compile(pattern).match(self.request_uri):
                 return True
         return False
 
@@ -1484,7 +1624,7 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
 ## python3.3
 ##     def _default_get(
 ##         self: boostNode.extension.type.Self
-##     ) -> (boostNode.extension.type.Self, builtins.bool):
+##     ) -> builtins.bool:
     def _default_get(self):
 ##
         '''
@@ -1492,16 +1632,33 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
             with.
         '''
         if self.server.web.default:
-            return self._handle_given_default_get()
-        if self.server.web.module_loading:
-            for module_name in self.server.web.default_module_name_pattern:
-                if self._handle_default_modules_get(module_name):
-                    return self
+            self._handle_given_default_get()
+            return True
+        if self.server.web.module_loading and self._default_get_module():
+            return True
         for file_name_pattern in self.server.web.default_file_name_pattern:
             for file in self.server.web.root:
                 if self._check_pattern((file_name_pattern,), file.name):
                     self.requested_file = file
-                    return self._set_dynamic_or_static_get(file_name=file.name)
+                    self._set_dynamic_or_static_get(file_name=file.name)
+                    return True
+        return False
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def _default_get_module(
+##         self: boostNode.extension.type.Self
+##     ) -> builtins.bool:
+    def _default_get_module(self):
+##
+        '''
+            Handle if possible a default module request.
+        '''
+        for module_name in self.server.web.default_module_names:
+            if((self.server.web.module_loading is True or
+                module_name == self.server.web.module_loading) and
+               self._handle_default_modules_get(module_name)):
+                return True
         return False
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -1536,8 +1693,9 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         '''
             Handles request with no explicit file or module to run.
         '''
-        if(self.server.web.default == '__main__' or
-           self.server.web.dynamic_module_loading and
+        if((self.server.web.dynamic_module_loading is True or
+            self.server.web.dynamic_module_loading ==
+            self.server.web.default) and
            boostNode.extension.native.Module.get_file_path(
                context_path=self.server.web.default)):
             self.load_module = True
@@ -1562,11 +1720,27 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         '''
             Handles a static file-request.
         '''
-        __logger__.debug('Return file "%s".', self.requested_file)
-        with builtins.open(self.requested_file._path, mode='rb') as file:
-            file_content = file.read()
-        self._send_positive_header(mimetype=self.requested_file.mimetype)
-        self.wfile.write(file_content)
+## python3.3
+##         if(self.headers.getheader('If-Modified-Since') !=
+##            self.date_time_string(
+##                builtins.int(self.requested_file.timestamp))):
+        if(self.headers.get('If-Modified-Since') !=
+           self.date_time_string(
+               builtins.int(self.requested_file.timestamp))):
+##
+            __logger__.debug('Return file "%s".', self.requested_file)
+            self._send_positive_header(mimetype=self.requested_file.mimetype)
+            self.send_header('Last-Modified', self.date_time_string(
+                builtins.int(self.requested_file.timestamp)))
+            self.send_header(
+                'Content-Length', builtins.int(self.requested_file.size))
+            self.end_headers()
+            self.wfile.write(self.requested_file.get_content(mode='rb'))
+        else:
+            __logger__.debug(
+                'Sent not modified (304) for "%s".', self.requested_file)
+            self.send_response(304)
+            self.end_headers()
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -1585,8 +1759,8 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         '''
         self.request_arguments = [
             self.requested_file_name, self.request_uri,
-            self.__class__.parse_url(self.request_uri)[1],
-            self.post_dictionary, self.server, self]
+            self.parse_url(self.request_uri)[1],
+            self.post_dictionary, self.server.web.shared_data, self]
         if '__no_respond__' not in self.post_dictionary:
             self.respond = True
             return self._run_request()
@@ -1651,6 +1825,7 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
                 ).match(output)
                 if not header_match:
                     self._send_positive_header()
+                    self.end_headers()
                 self.wfile.write(output)
         if errors:
             __logger__.critical(
@@ -1715,6 +1890,7 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         else:
             if self.respond:
                 self._send_positive_header()
+                self.end_headers()
         finally:
             self.server.web.number_of_running_threads -= 1
             if self.respond:
