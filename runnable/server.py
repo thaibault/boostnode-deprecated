@@ -40,6 +40,8 @@ pass
 import logging
 import multiprocessing
 import os
+## python3.3 import socketserver
+import SocketServer
 import ssl
 import re
 import socket
@@ -142,8 +144,14 @@ class SocketFileObjectWrapper(socket._fileobject):
 ##
 
 
-## python3.3 class MultiProcessingHTTPServer(http.server.HTTPServer):
-class MultiProcessingHTTPServer(BaseHTTPServer.HTTPServer):
+## python3.3
+## class MultiProcessingHTTPServer(
+##     socketserver.ThreadingMixIn, http.server.HTTPServer
+## ):
+class MultiProcessingHTTPServer(
+    SocketServer.ThreadingMixIn, BaseHTTPServer.HTTPServer
+):
+##
     '''The Class implements a partial multiprocessing supported web server.'''
 
     # region dynamic properties
@@ -266,7 +274,7 @@ class MultiProcessingHTTPServer(BaseHTTPServer.HTTPServer):
         '''Takes this method via introspection from now on.'''
         if(not self.is_same_thread_request(request) and
            self.web.number_of_running_processes <
-           self.web.maximum_number_of_processs):
+           self.web.maximum_number_of_processes):
             self.web.number_of_running_processes += 1
 
 ## python3.3
@@ -1162,7 +1170,7 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         elif data_type == 'application/x-www-form-urlencoded':
 ## python3.3
 ##             self.post_dictionary = urllib.parse.parse_qs(self.rfile.read(
-##                 builtins.int(self.headers['content-length'])
+##                 builtins.int(self.headers.get('content-length'))
 ##             ).decode('utf_8'))
             self.post_dictionary = cgi.parse_qs(
                 self.rfile.read(builtins.int(self.headers.getheader(
@@ -1275,7 +1283,7 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
                     location=file_path, must_exist=False)
                 if authentication_file:
 ## python3.3
-##                     return (self.headers['authorization'] ==
+##                     return (self.headers.get('authorization') ==
 ##                             'Basic %s' % self._get_login_data(
 ##                                 authentication_file))
                     return (
@@ -1492,7 +1500,7 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         self.send_response(401)
         message = 'You request a potected location'
 ## python3.3
-##         if self.headers['authorization']:
+##         if self.headers.get('authorization'):
         if self.headers.getheader('authorization'):
 ##
             message = 'The authentication failed'
@@ -1730,14 +1738,9 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         '''
             Handles a static file-request.
         '''
-## python3.3
-##         if(self.headers.getheader('If-Modified-Since') !=
-##            self.date_time_string(
-##                builtins.int(self.requested_file.timestamp))):
         if(self.headers.get('If-Modified-Since') !=
            self.date_time_string(
                builtins.int(self.requested_file.timestamp))):
-##
             __logger__.debug('Return file "%s".', self.requested_file)
             self._send_positive_header(mimetype=self.requested_file.mimetype)
             self.send_header('Last-Modified', self.date_time_string(
