@@ -991,11 +991,21 @@ class CommandLine(builtins.object):
 
             Examples:
 
+            >>> import copy
+            >>> log_level = boostNode.extension.output.Logger.default_level
+            >>> sys_argv_save = copy.copy(sys.argv)
+            >>> del sys.argv[1:]
+
             >>> sys.argv += '--long', 'hans'
             >>> CommandLine.argument_parser((
             ...     {'arguments': ('-s', '--long'),
             ...      'keywords': {'action': 'store', 'type': str}},))
             Namespace(log_level='critical', long='hans')
+
+            >>> sys.argv = sys_argv_save
+            >>> boostNode.extension.output.Logger.change_all(
+            ...     level=log_level) # doctest: +ELLIPSIS
+            <class ...boostNode.extension.output.Logger...>
         '''
         version = cls._get_version(version, module_name)
         description = cls._get_description(description, module_name, version)
@@ -1851,7 +1861,8 @@ class CommandLine(builtins.object):
             cls._clear_temp_files(temp_file_patterns)
         if current_directory is not None:
             boostNode.extension.file.Handler(
-                location=current_directory).change_working_directory()
+                location=current_directory
+            ).change_working_directory()
         return cls
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)

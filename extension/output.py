@@ -613,6 +613,21 @@ class Logger(boostNode.paradigm.objectOrientation.Class):
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
+##     def flush(
+##         cls: boostNode.extension.type.SelfClass
+##     ) -> boostNode.extension.type.SelfClass:
+    def flush(cls):
+##
+        '''
+            Flushes all buffers in all logger handlers.
+        '''
+        for logger in cls.instances:
+            for handler in logger.handlers:
+                handler.stream.flush()
+        return cls
+
+    @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
+## python3.3
 ##     def get(
 ##         cls: boostNode.extension.type.SelfClass, name=__name__, level=(),
 ##         buffer=(), terminator=(), format=()
@@ -628,7 +643,7 @@ class Logger(boostNode.paradigm.objectOrientation.Class):
 
             Examples:
 
-            >>> logger_a = Logger.get('test', buffer=__test_buffer__)
+            >>> logger_a = Logger.get('test', buffer=(__test_buffer__,))
             >>> logger_b = Logger.get('test')
             >>> logger_a is logger_b
             True
@@ -641,7 +656,7 @@ class Logger(boostNode.paradigm.objectOrientation.Class):
         '''
         for logger in cls.instances:
             if logger.name == name:
-                if not (level or buffer or terminator or format):
+                if level or buffer or terminator or format:
                     cls.instances[cls.instances.index(
                         logger
                     )] = cls._generate_logger(
@@ -673,21 +688,24 @@ class Logger(boostNode.paradigm.objectOrientation.Class):
             >>> Logger.change_all() # doctest: +ELLIPSIS
             <class ...Logger...>
         '''
-        if buffer:
-            cls.buffer = buffer
         if level:
             cls.default_level = level
+        if buffer:
+            cls.buffer = buffer
         if terminator:
             cls.terminator = terminator
         if format:
             cls.format = format
         for index, logger in builtins.enumerate(cls.instances):
-            new_handler = logging.StreamHandler(stream=cls.buffer),
-            if not buffer:
-## python3.3                new_handler = logger.handlers.copy()
-                new_handler = copy.copy(logger.handlers)
-            for handler, format, level, terminator in builtins.zip(
-                new_handler, cls.format, cls.default_level, cls.terminator
+## python3.3             new_handler = logger.handlers.copy()
+            new_handler = copy.copy(logger.handlers)
+            if buffer:
+                new_handler = []
+                for new_buffer in cls.buffer:
+                    new_handler.append(logging.StreamHandler(
+                        stream=new_buffer))
+            for handler, level, terminator, format in builtins.zip(
+                new_handler, cls.default_level, cls.terminator, cls.format
             ):
                 handler.setFormatter(logging.Formatter(format))
                 handler.terminator = terminator
@@ -722,10 +740,10 @@ class Logger(boostNode.paradigm.objectOrientation.Class):
             level = cls.default_level
         if not buffer:
             buffer = cls.buffer
-        if not format:
-            format = cls.format
         if not terminator:
             terminator = cls.terminator
+        if not format:
+            format = cls.format
         for handler in logging.getLogger(name).handlers:
             logging.getLogger(name).removeHandler(handler)
         logger = logging.getLogger(name)

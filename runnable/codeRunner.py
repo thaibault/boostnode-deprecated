@@ -618,10 +618,8 @@ class Run(
             Generates logging output for wrapping around generated output by
             running code file.
         '''
-        terminator_save = []
-        for logging_handler in __logger__.handlers:
-            terminator_save.append(logging_handler.terminator)
-            logging_handler.terminator = ''
+        terminator_save = boostNode.extension.output.Logger.terminator
+        boostNode.extension.output.Logger.change_all(terminator=('',))
 ## python3.3
 ##         __logger__.info(
 ##             '%s with "%s".\nstandart output:\n[',
