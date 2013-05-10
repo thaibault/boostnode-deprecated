@@ -618,14 +618,15 @@ class Run(
             Generates logging output for wrapping around generated output by
             running code file.
         '''
-        terminator_save = boostNode.extension.output.Logger.terminator
-        format_save = boostNode.extension.output.Logger.format
-        boostNode.extension.output.Logger.change_all(terminator='')
+        terminator_save = []
+        for logging_handler in __logger__.handlers:
+            terminator_save.append(logging_handler.terminator)
+            logging_handler.terminator = ''
 ## python3.3
 ##         __logger__.info(
 ##             '%s with "%s".\nstandart output:\n[',
 ##             command_name.capitalize(), command.strip())
-##         sys.stdout.flush()
+##         boostNode.extension.output.Logger.flush()
         if __logger__.isEnabledFor(logging.INFO):
             boostNode.extension.output.Print(
                 '%s with "%s".\nstandart output:\n[' %
@@ -634,10 +635,9 @@ class Run(
 ##
         boostNode.extension.output.Print(
             result['standart_output'], end='', flush=True)
-        boostNode.extension.output.Logger.change_all(format='')
 ## python3.3
 ##         __logger__.info(']\nerror output:\n[')
-##         sys.stdout.flush()
+##         boostNode.extension.output.Logger.flush()
         if __logger__.isEnabledFor(logging.INFO):
             boostNode.extension.output.Print(
                 ']\nerror output:\n[', end='', flush=True)
@@ -647,7 +647,6 @@ class Run(
         boostNode.extension.output.Print(result['error_output'], end='')
         __logger__.info(']')
         __logger__.info('Return code: "%d".', result['return_code'])
-        boostNode.extension.output.Logger.change_all(format=format_save)
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint

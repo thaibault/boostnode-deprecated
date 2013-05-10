@@ -991,23 +991,11 @@ class CommandLine(builtins.object):
 
             Examples:
 
-            Note that "sys.argv" has a "copy()" method since python3.3. You
-            can upgrade this code if no older version are needed to support.
-            >>> import copy
-            >>> log_level_sav = boostNode.extension.output.Logger.default_level
-            >>> sys_argv_save = copy.copy(sys.argv)
-            >>> del sys.argv[1:]
-
             >>> sys.argv += '--long', 'hans'
             >>> CommandLine.argument_parser((
             ...     {'arguments': ('-s', '--long'),
             ...      'keywords': {'action': 'store', 'type': str}},))
             Namespace(log_level='critical', long='hans')
-
-            >>> sys.argv = sys_argv_save
-            >>> boostNode.extension.output.Logger.change_all(
-            ...     level=log_level_sav) # doctest: +ELLIPSIS
-            <class ...boostNode.extension.output.Logger...>
         '''
         version = cls._get_version(version, module_name)
         description = cls._get_description(description, module_name, version)
@@ -1050,7 +1038,7 @@ class CommandLine(builtins.object):
         if(builtins.hasattr(arguments, 'log_level') and
            arguments.log_level is not None):
             boostNode.extension.output.Logger.change_all(
-                level=arguments.log_level)
+                level=(arguments.log_level,))
         return cls
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
@@ -1244,7 +1232,7 @@ class CommandLine(builtins.object):
         boostNode.extension.output.Print.default_buffer =\
             module['scope'].__test_buffer__
         boostNode.extension.output.Logger.change_all(
-            level='info', buffer=module['scope'].__test_buffer__)
+            level=('info',), buffer=(module['scope'].__test_buffer__,))
         doctest.testmod(module['scope'], verbose=verbose)
         '''Recover old output buffer.'''
         boostNode.extension.output.Logger.change_all(
@@ -1943,7 +1931,7 @@ class CommandLine(builtins.object):
             ... ) # doctest: +SKIP
             Namespace(...)
         '''
-        boostNode.extension.output.Logger.change_all(level='info')
+        boostNode.extension.output.Logger.change_all(level=('info',))
         package_name = boostNode.extension.native.Module.get_package_name(
             frame)
         choices = cls.PACKAGE_INTERFACE_ARGUMENTS[0]['keywords']['choices']

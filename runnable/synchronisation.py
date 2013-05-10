@@ -1082,7 +1082,7 @@ class Reflector(
             'exclude paths: "{exclude_locations}"\n'
             'native symbolic links: "{native_symbolic_link_option}"\n'.format(
                 class_name=self.__class__.__name__,
-                log_level=boostNode.extension.output.Logger.default_level,
+                log_level=boostNode.extension.output.Logger.default_level[0],
                 source_path=self._source_location.path,
                 target_path=self._target_location.path,
                 rights=self._target_rights, limit=self._limit,

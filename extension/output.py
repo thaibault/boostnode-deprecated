@@ -26,6 +26,7 @@ __version__ = '1.0'
 
 ## python3.3 import builtins
 pass
+import copy
 import inspect
 import logging
 import multiprocessing
@@ -529,18 +530,22 @@ class Print(boostNode.paradigm.objectOrientation.Class):
     # endregion
 
 
-# TODO support multi output logger.
-# oder buffer mit mehreren Ausgängen.
 class Logger(boostNode.paradigm.objectOrientation.Class):
+    '''
+        This class provides handling with all components dealing with
+        logger object. It stores all logger components in a single
+        data structure.
+    '''
 
     # region dynamic properties
 
         # region public properties
 
-    default_level = 'critical'
-    format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-    terminator = '\n'
-    buffer = sys.stdout
+    '''Defining all default components of the logger objects.'''
+    default_level = 'critical',
+    format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    terminator = '\n',
+    buffer = sys.stdout,
     instances = []
 
         # endregion
@@ -609,12 +614,11 @@ class Logger(boostNode.paradigm.objectOrientation.Class):
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
 ##     def get(
-##         cls: boostNode.extension.type.SelfClass, name=__name__, level=None,
-##         buffer=None, terminator=None, format=None
+##         cls: boostNode.extension.type.SelfClass, name=__name__, level=(),
+##         buffer=(), terminator=(), format=()
 ##     ) -> logging.getLoggerClass():
     def get(
-        cls, name=__name__, level=None, buffer=None, terminator=None,
-        format=None
+        cls, name=__name__, level=(), buffer=(), terminator=(), format=()
     ):
 ##
         '''
@@ -635,27 +639,25 @@ class Logger(boostNode.paradigm.objectOrientation.Class):
             >>> __test_buffer__.content # doctest: +ELLIPSIS
             '... - test - CRITICAL - Log some information.\\n'
         '''
-        for logger, handler, formatter in cls.instances:
+        for logger in cls.instances:
             if logger.name == name:
-                if not (level is None and buffer is None and
-                        terminator is None and format is None):
+                if not (level or buffer or terminator or format):
                     cls.instances[cls.instances.index(
-                        [logger, handler, formatter])] = cls._generate_logger(
-                            name, level, buffer, terminator, format)
+                        logger
+                    )] = cls._generate_logger(
+                        name, level, buffer, terminator, format)
                 return logger
         cls.instances.append(cls._generate_logger(
             name, level, buffer, terminator, format))
-        return cls.instances[-1][0]
+        return cls.instances[-1]
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
 ##     def change_all(
-##         cls: boostNode.extension.type.SelfClass, level=None, buffer=None,
-##         terminator=None, format=None
+##         cls: boostNode.extension.type.SelfClass, level=(), buffer=(),
+##         terminator=(), format=()
 ##     ) -> boostNode.extension.type.SelfClass:
-    def change_all(
-        cls, level=None, buffer=None, terminator=None, format=None
-    ):
+    def change_all(cls, level=(), buffer=(), terminator=(), format=()):
 ##
         '''
             This method changes the given properties to all created logger
@@ -671,28 +673,31 @@ class Logger(boostNode.paradigm.objectOrientation.Class):
             >>> Logger.change_all() # doctest: +ELLIPSIS
             <class ...Logger...>
         '''
-        if buffer is not None:
+        if buffer:
             cls.buffer = buffer
-        if level is not None:
+        if level:
             cls.default_level = level
-        if terminator is not None:
+        if terminator:
             cls.terminator = terminator
-        if format is not None:
+        if format:
             cls.format = format
-        index = 0
-        for logger, handler, formatter in cls.instances:
-            new_handler = logging.StreamHandler(stream=cls.buffer)
-            if buffer is None:
-                new_handler = handler
-            new_handler.setFormatter(logging.Formatter(cls.format))
-            new_handler.terminator = cls.terminator
-            new_handler.setLevel(cls.default_level.upper())
-            logger.removeHandler(handler)
-            logger.addHandler(new_handler)
+        for index, logger in builtins.enumerate(cls.instances):
+            new_handler = logging.StreamHandler(stream=cls.buffer),
+            if not buffer:
+## python3.3                new_handler = logger.handlers.copy()
+                new_handler = copy.copy(logger.handlers)
+            for handler, format, level, terminator in builtins.zip(
+                new_handler, cls.format, cls.default_level, cls.terminator
+            ):
+                handler.setFormatter(logging.Formatter(format))
+                handler.terminator = terminator
+                handler.setLevel(level.upper())
+            for handler in logger.handlers:
+                logger.removeHandler(handler)
+            for handler in new_handler:
+                logger.addHandler(handler)
             logger.setLevel(builtins.getattr(
-                logging, cls.default_level.upper()))
-            cls.instances[index][1] = new_handler
-            index += 1
+                logging, cls.default_level[0].upper()))
         return cls
 
         # endregion
@@ -703,10 +708,9 @@ class Logger(boostNode.paradigm.objectOrientation.Class):
 ## python3.3
 ##     def _generate_logger(
 ##         cls: boostNode.extension.type.SelfClass, name: builtins.str,
-##         level: (builtins.str, builtins.type(None)), buffer: builtins.object,
-##         terminator: (builtins.str, builtins.type(None)),
-##         format: (builtins.str, builtins.type(None))
-##     ) -> builtins.list:
+##         level: builtins.tuple, buffer: builtins.tuple,
+##         terminator: builtins.tuple, format: builtins.tuple
+##     ) -> logging.getLoggerClass():
     def _generate_logger(cls, name, level, buffer, terminator, format):
 ##
         '''
@@ -714,30 +718,28 @@ class Logger(boostNode.paradigm.objectOrientation.Class):
             with given arguments or default properties saved as class
             properties.
         '''
-        if level is None:
+        if not level:
             level = cls.default_level
-        if buffer is None:
+        if not buffer:
             buffer = cls.buffer
-        if format is None:
+        if not format:
             format = cls.format
-        if terminator is None:
+        if not terminator:
             terminator = cls.terminator
-        logger_components = [
-            logging.getLogger(name), logging.StreamHandler(stream=buffer),
-            logging.Formatter(format)]
         for handler in logging.getLogger(name).handlers:
             logging.getLogger(name).removeHandler(handler)
-        logger_components[1].terminator = terminator
-        '''Set logger level.'''
-        logger_components[0].setLevel(builtins.getattr(
-            logging, level.upper()))
-        '''Set handler level.'''
-        logger_components[1].setLevel(level.upper())
-        '''Add formatter to console handler.'''
-        logger_components[1].setFormatter(logger_components[2])
-        '''Add handler to logger.'''
-        logger_components[0].addHandler(logger_components[1])
-        return logger_components
+        logger = logging.getLogger(name)
+        for _buffer, _terminator, _level, _format in builtins.zip(
+            buffer, terminator, level, format
+        ):
+            handler = logging.StreamHandler(stream=_buffer)
+            handler.terminator = _terminator
+            handler.setLevel(_level.upper())
+            handler.setFormatter(logging.Formatter(_format))
+            logger.addHandler(handler)
+        '''Set meta logger level to first given level.'''
+        logger.setLevel(builtins.getattr(logging, level[0].upper()))
+        return logger
 
         # endregion
 
