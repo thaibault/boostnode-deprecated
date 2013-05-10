@@ -190,6 +190,24 @@ class Buffer(
         '''
         return self.content
 
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def __bool__(self: boostNode.extension.type.Self) -> builtins.bool:
+    def __nonzero__(self):
+##
+        '''
+            Invokes if this object is tried to interpreted as boolean.
+
+            Examples:
+
+            >>> bool(Buffer().write('test'))
+            True
+
+            >>> bool(Buffer())
+            False
+        '''
+        return builtins.bool(self.content)
+
             # endregion
 
         # endregion
@@ -511,6 +529,8 @@ class Print(boostNode.paradigm.objectOrientation.Class):
     # endregion
 
 
+# TODO support multi output logger.
+# oder buffer mit mehreren Ausgängen.
 class Logger(boostNode.paradigm.objectOrientation.Class):
 
     # region dynamic properties
@@ -677,7 +697,7 @@ class Logger(boostNode.paradigm.objectOrientation.Class):
 
         # endregion
 
-        # region protected methods
+        # region protected  methods
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
