@@ -815,10 +815,8 @@ class Parser(
             match = re.compile(self._command_line_placeholder_pattern.format(
                 placeholder=self._placeholder_name_pattern)
             ).match(variable)
-            value = match.group('value')
-            if not re.compile(self._placeholder_name_pattern).match(value):
-                value = builtins.eval(value)
-            keywords.update({match.group('variable_name'): value})
+            keywords.update(
+                {match.group('variable_name'): match.group('value')})
         return keywords
 
     @boostNode.paradigm.aspectOrientation.JointPoint
