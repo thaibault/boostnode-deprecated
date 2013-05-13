@@ -13474,7 +13474,6 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
         var _this = this;
         Documentation.__super__.initialize.call(this, options);
         this._domNodes = this.grapDomNodes(this._options.domNodes);
-        this.log(this._domNodes.tableOfContentLinks);
         this.on(this._domNodes.tableOfContentLinks, 'click', function() {
           return jQuery.scrollTo(jQuery(this).attr('href'), 'slow');
         });
