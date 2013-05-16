@@ -1,10 +1,10 @@
 #!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 
+# region header
+
 # vim: set tabstop=4 shiftwidth=4 expandtab:
 # vim: foldmethod=marker foldmarker=region,endregion:
-
-# region header
 
 '''
     Extension is a high level interface for interaction with pythons native
