@@ -33,7 +33,7 @@ Features
   aspect orientated programming automatic getter or setter generation.
   (see aspect/signature, paradigm/aspectOrientation.py or
    paradigm/objectOrientation.py).
-* Many additional introspection features and native type extensions.
+* Many additional introspection features and native type extensions
   (see extension/native.py).
 * Very highlevel file abstraction layer with sanboxing support
   (see extension/file.py).
