@@ -26,10 +26,11 @@ Features
 --------
 
 * platform independent webbased gui toolkit
-* smart, very secure webserver
+* smart, very secure multiprocessing webserver
 * macro processor for text based files
-* synchronisation
-* many extended language feature like signature checking or jointpoints for aspect orientated programming
+* file synchronisation
+* many extended language feature like signature checking or jointpoints for
+  aspect orientated programming
 * and much more..
 
 Usage
