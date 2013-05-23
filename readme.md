@@ -25,14 +25,25 @@ This library supports python2.7+ and python3.3+ environements.
 Features
 --------
 
-* platform independent webbased gui toolkit
-* smart, very secure multiprocessing webserver
-* macro processor for text based files
-* file synchronisation
-* many extended language feature like signature checking or jointpoints for
-  aspect orientated programming
-* high level code file handling
-* template engine with embedded python code in any text based file.
+* Platform independent webbased gui toolkit (see runnable/webToWindow.py).
+* Smart, very secure and multiprocessing webserver (see runnable/server.py).
+* Macro processor for text based files (see runnable/macro.py).
+* File synchronisation (see runnable/synchronisation.py).
+* Many extended language feature like signature checking, jointpoints for
+  aspect orientated programming automatic getter or setter generation.
+  (see aspect/signature, paradigm/aspectOrientation.py or
+   paradigm/objectOrientation.py).
+* Many additional introspection features and native type extensions.
+  (see extension/native.py).
+* Very highlevel file abstraction layer with sanboxing support
+  (see extension/file.py).
+* Highlevel code file handling (see runnable/codeFile.py).
+* Template engine with embedded python code in any text based file
+  (see runnable/template.py).
+* Finer grained import mechanism support (see extension/dependent.py).
+* Full featured global logging mechanism handling (see extension/system.py)
+* Very generic full featured command line argument parsing interface (
+  see extension/system.py and extension/output.py).
 
 Usage
 -----
