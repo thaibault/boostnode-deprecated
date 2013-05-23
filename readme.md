@@ -32,6 +32,7 @@ Features
 * many extended language feature like signature checking or jointpoints for
   aspect orientated programming
 * high level code file handling
+* template engine with embedded python code in any text based file.
 
 Usage
 -----
