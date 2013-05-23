@@ -31,7 +31,7 @@ Features
 * file synchronisation
 * many extended language feature like signature checking or jointpoints for
   aspect orientated programming
-* and much more..
+* high level code file handling
 
 Usage
 -----
