@@ -1,10 +1,14 @@
 #!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 
-# region header
+# region vim modline
 
 # vim: set tabstop=4 shiftwidth=4 expandtab:
 # vim: foldmethod=marker foldmarker=region,endregion:
+
+# endregion
+
+# region header
 
 '''
     This package provides base classes and functions for implementing some

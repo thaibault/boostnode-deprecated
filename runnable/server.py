@@ -1,10 +1,14 @@
 #!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 
-# region header
+# region vim modline
 
 # vim: set tabstop=4 shiftwidth=4 expandtab:
 # vim: foldmethod=marker foldmarker=region,endregion:
+
+# endregion
+
+# region header
 
 '''
     Provides a number of servers.
@@ -1392,12 +1396,12 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
 ##         form = cgi.FieldStorage(
 ##             fp=self.rfile, headers=self.headers, keep_blank_values=True,
 ##             strict_parsing=True,
-##             environ=self._determine_environement_variables(),
+##             environ=self._determine_environment_variables(),
 ##             encoding='utf_8')
         form = cgi.FieldStorage(
             fp=self.rfile, headers=self.headers, keep_blank_values=True,
             strict_parsing=True,
-            environ=self._determine_environement_variables())
+            environ=self._determine_environment_variables())
 ##
         post_dictionary = {}
         for name in form:
@@ -1428,10 +1432,10 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
-##     def _determine_environement_variables(
+##     def _determine_environment_variables(
 ##         self: boostNode.extension.type.Self
 ##     ) -> os._Environ:
-    def _determine_environement_variables(self):
+    def _determine_environment_variables(self):
 ##
         '''
             Determines all needed envirnoment variables needed to determine

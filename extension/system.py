@@ -1,10 +1,14 @@
 #!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 
-# region header
+# region vim modline
 
 # vim: set tabstop=4 shiftwidth=4 expandtab:
 # vim: foldmethod=marker foldmarker=region,endregion:
+
+# endregion
+
+# region header
 
 '''
     This module provides classes for handling issues with the operating
@@ -136,7 +140,7 @@ class Runnable(builtins.object):
             'Object of "A" implementing a command line runnable interfaceto...'
         '''
         return 'Object of "%s" implementing a command line runnable interface'\
-               'to be usable outside this python environement.' % cls.__name__
+               'to be usable outside this python environment.' % cls.__name__
 
             # endregion
 
