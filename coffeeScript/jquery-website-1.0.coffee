@@ -1,4 +1,4 @@
-## standalone
+## require
 
 # region vim modline
 
@@ -26,22 +26,22 @@
     @name jQuery
     @see www.jquery.com
 ###
-## require
-## this.window.require([
-##     ['less', 'less-1.3.3'],
-##
-##     ['jQuery.Tools', 'jquery-tools-1.0.coffee'],
-##
-##     ['jQuery.fn.carousel', 'bootstrap-2.3.1'],
-##
-##     ['jQuery.scrollTo', 'jquery-scrollTo-1.4.3.1'],
-##     ['jQuery.fn.touchwipe', 'jquery-touchwipe.1.1.1'],
-##
-##     ['jQuery.fn.spin', 'jquery-spin-1.2.8'],
-##
-##     ['jQuery.fn.hashchange', 'jquery-observeHashChange-1.0']],
-## (less, jQuery) ->
-((jQuery) ->
+## standalone
+## ((jQuery) ->
+this.window.require([
+    ['less', 'less-1.3.3'],
+
+    ['jQuery.Tools', 'jquery-tools-1.0.coffee'],
+
+    ['jQuery.fn.carousel', 'bootstrap-2.3.1'],
+
+    ['jQuery.scrollTo', 'jquery-scrollTo-1.4.3.1'],
+    ['jQuery.fn.touchwipe', 'jquery-touchwipe.1.1.1'],
+
+    ['jQuery.fn.spin', 'jquery-spin-1.2.8'],
+
+    ['jQuery.fn.hashchange', 'jquery-observeHashChange-1.0']],
+(less, jQuery) ->
 ##
 
 # endregion
@@ -434,5 +434,5 @@ ga('create', '{1}', 'github.io');ga('send', 'pageview');"
 
 # endregion
 
-## require )
-).call this, this.jQuery
+## standalone ).call this, this.jQuery
+)

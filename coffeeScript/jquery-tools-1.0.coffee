@@ -1,4 +1,4 @@
-## standalone
+## require
 
 # region vim modline
 
@@ -34,8 +34,8 @@
     @name jQuery
     @see www.jquery.com
 ###
-## require this.require([['jQuery', 'jquery-1.9.1']], (jQuery) ->
-((jQuery) ->
+## standalone ((jQuery) ->
+this.require([['jQuery', 'jquery-1.9.1']], (jQuery) ->
 
 # endregion
 
@@ -1082,5 +1082,5 @@ jQuery('div#id').InheritedFromTools(options);
 
 # endregion
 
-## require )
-).call this, this.jQuery
+## standalone ).call this, this.jQuery
+)
