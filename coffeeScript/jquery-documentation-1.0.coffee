@@ -1,4 +1,4 @@
-## standalone
+## require
 
 # region modline
 
@@ -34,12 +34,12 @@
     @name jQuery
     @see www.jquery.com
 ###
-## require
-## this.window.require([
-##     ['jQuery.Website', 'jquery-website-1.0.coffee'],
-##     ['jQuery.fn.carousel', 'bootstrap-2.3.1']],
-## (jQuery) ->
-((jQuery) ->
+## standalone
+## ((jQuery) ->
+this.window.require([
+    ['jQuery.Website', 'jquery-website-1.0.coffee'],
+    ['jQuery.fn.carousel', 'bootstrap-2.3.1']],
+(jQuery) ->
 ##
 
 # endregion
@@ -115,5 +115,5 @@
 
 # endregion
 
-## require )
-).call this, this.jQuery
+## standalone ).call this, this.jQuery
+)
