@@ -687,7 +687,7 @@ class Replace(
                 first_line)
             if match is None:
                 __logger__.warning(
-                    '"%s" hasn\'t path to interpreter in first line.',
+                    '"%s" hasn\'t path to version in first line.',
                     file.path)
                 return self
             self._current_version = match.group('current_version')

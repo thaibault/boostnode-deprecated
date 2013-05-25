@@ -102,6 +102,18 @@ class Run(
              'dest': 'meta_help'}})
     '''Holds all supported code types and there methods to do common stuff.'''
     SUPPORTED_CODES = {
+        'template': {
+            'commands': {
+                'compile': "bash --login -c '"
+                           'template "<%code_file.path%>" 1>'
+                           '"<%code_file.directory_path%>'
+                           '<%code_file.basename%>.html"\'',
+                'run': 'bash --login -c \'webbrowser '
+                       '"<%code_file.directory_path%>'
+                       '<%code_file.basename%>.html"\''
+            },
+            'extensions': ('tpl',)
+        },
         'c': {
             'commands': {
                 'compile': 'g++ "<%code_file.path%>" -o '
