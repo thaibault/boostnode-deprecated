@@ -50,6 +50,7 @@ Usage
 
 Copy this folder to your projects directory and write something like:
 
+    #!/usr/bin/python
     import boostNode.extension.native
     # some stuff using imported boostNode components...
 
