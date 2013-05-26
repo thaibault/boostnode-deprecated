@@ -62,8 +62,9 @@ BoostNode is able to witch itself between python2.X and python3.X.
 To switch boostNode version between python3.X and python 2.X use this
 command:
 
-    :::bash
-    >>> /path/to/boostNode/runnable/macro.py -p /path/to/boostNode -e py
+```bash
+>>> /path/to/boostNode/runnable/macro.py -p /path/to/boostNode -e py
+```
 
 Copyright
 ---------
