@@ -17011,7 +17011,7 @@ License
 endregion -->
 
 <h1 id="boostnode">boostNode</h1>
-<p>boostNode is a high level python library.
+<p>boostNode is a high level python library.<br />
 This library supports python2.7+ and python3.3+ environements.</p>
 <h2 id="features">Features</h2>
 <ul>
@@ -17019,34 +17019,41 @@ This library supports python2.7+ and python3.3+ environements.</p>
 <li>Smart, very secure and multiprocessing webserver (see runnable/server.py).</li>
 <li>Macro processor for text based files (see runnable/macro.py).</li>
 <li>File synchronisation (see runnable/synchronisation.py).</li>
-<li>Many extended language feature like signature checking, jointpoints for
-  aspect orientated programming automatic getter or setter generation.
-  (see aspect/signature, paradigm/aspectOrientation.py or
+<li>Many extended language feature like signature checking, jointpoints for<br />
+  aspect orientated programming automatic getter or setter generation.<br />
+  (see aspect/signature, paradigm/aspectOrientation.py or<br />
    paradigm/objectOrientation.py).</li>
-<li>Many additional introspection features and native type extensions
+<li>Many additional introspection features and native type extensions<br />
   (see extension/native.py).</li>
-<li>Very highlevel file abstraction layer with sanboxing support
+<li>Very highlevel file abstraction layer with sanboxing support<br />
   (see extension/file.py).</li>
 <li>Highlevel code file handling (see runnable/codeFile.py).</li>
-<li>Template engine with embedded python code in any text based file
+<li>Template engine with embedded python code in any text based file<br />
   (see runnable/template.py).</li>
 <li>Finer grained import mechanism support (see extension/dependent.py).</li>
 <li>Full featured global logging mechanism handling (see extension/system.py)</li>
-<li>Very generic full featured command line argument parsing interface (
+<li>Very generic full featured command line argument parsing interface (<br />
   see extension/system.py and extension/output.py).</li>
 </ul>
 <h2 id="usage">Usage</h2>
 <p>Copy this folder to your projects directory and write something like:</p>
-<pre><code>import boostNode.extension.native
-# some stuff using imported boostNode components...
-</code></pre>
-<p>For advanced usage see the recommended module pattern described in
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="codehilite"><pre><span class="c">#!/usr/bin/python</span>
+<span class="kn">import</span> <span class="nn">boostNode.extension.native</span>
+<span class="c"># some stuff using imported boostNode components...</span>
+</pre></div>
+</td></tr></table>
+
+<p>For advanced usage see the recommended module pattern described in<br />
 "path/to/boosNode/<strong>init</strong>.py".</p>
-<p>BoostNode is able to witch itself between python2.X and python3.X.
-To switch boostNode version between python3.X and python 2.X use this
+<p>BoostNode is able to witch itself between python2.X and python3.X.<br />
+To switch boostNode version between python3.X and python 2.X use this<br />
 command:</p>
-<pre><code>/path/to/boostNode/runnable/macro.py -p /path/to/boostNode -e py
-</code></pre>
+<div class="codehilite"><pre><span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">boostNode</span><span class="o">/</span><span class="n">runnable</span><span class="o">/</span><span class="n">macro</span><span class="p">.</span><span class="n">py</span> <span class="o">-</span><span class="n">p</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">boostNode</span> <span class="o">-</span><span class="n">e</span> <span class="n">py</span>
+</pre></div>
+
+
 <h2 id="copyright">Copyright</h2>
 <p>see ./__init__.py</p>
 <h2 id="license">License</h2>
