@@ -65,9 +65,9 @@ command:
 Copyright
 ---------
 
-see ./__init__.py
+see ./\_\_init__.py
 
 License
 -------
 
-see ./__init__.py
+see ./\_\_init__.py
