@@ -50,7 +50,7 @@ Usage
 
 Copy this folder to your projects directory and write something like:
 
-    #!/usr/bin/python
+    #!/usr/bin/env python
 
     import boostNode.extension.native
     # some stuff using imported boostNode components...
@@ -62,7 +62,7 @@ BoostNode is able to witch itself between python2.X and python3.X.
 To switch boostNode version between python3.X and python 2.X use this
 command:
 
-    #!/usr/bin/bash
+    #!/usr/bin/env bash
 
     /path/to/boostNode/runnable/macro.py -p /path/to/boostNode -e py
 
