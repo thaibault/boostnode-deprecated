@@ -35,9 +35,9 @@ Features
   paradigm/objectOrientation.py).
 * Many additional introspection features and native type extensions
   (see extension/native.py).
-* Very highlevel file abstraction layer with sanboxing support
+* Very highlevel file abstraction layer with sandboxing support
   (see extension/file.py).
-* Highlevel code file handling (see runnable/codeFile.py).
+* Highlevel code file handling (see runnable/codeRunner.py).
 * Template engine with embedded python code in any text based file
   (see runnable/template.py).
 * Finer grained import mechanism support (see extension/dependent.py).
@@ -58,13 +58,16 @@ Copy this folder to your projects directory and write something like:
 For advanced usage see the recommended module pattern described in
 "path/to/boosNode/__init__.py".
 
-BoostNode is able to witch itself between python2.X and python3.X.
+BoostNode is able to switch itself between python2.X and python3.X.
 To switch boostNode version between python3.X and python 2.X use this
 command:
 
 ```bash
 >>> /path/to/boostNode/runnable/macro.py -p /path/to/boostNode -e py
 ```
+
+Note that you have to temporary support the needed python environment
+of given boostNode version to convert to the other one.
 
 Copyright
 ---------
