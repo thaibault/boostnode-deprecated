@@ -17025,9 +17025,9 @@ This library supports python2.7+ and python3.3+ environements.</p>
   paradigm/objectOrientation.py).</li>
 <li>Many additional introspection features and native type extensions<br />
   (see extension/native.py).</li>
-<li>Very highlevel file abstraction layer with sanboxing support<br />
+<li>Very highlevel file abstraction layer with sandboxing support<br />
   (see extension/file.py).</li>
-<li>Highlevel code file handling (see runnable/codeFile.py).</li>
+<li>Highlevel code file handling (see runnable/codeRunner.py).</li>
 <li>Template engine with embedded python code in any text based file<br />
   (see runnable/template.py).</li>
 <li>Finer grained import mechanism support (see extension/dependent.py).</li>
@@ -17049,13 +17049,15 @@ This library supports python2.7+ and python3.3+ environements.</p>
 
 <p>For advanced usage see the recommended module pattern described in<br />
 "path/to/boosNode/<strong>init</strong>.py".</p>
-<p>BoostNode is able to witch itself between python2.X and python3.X.<br />
+<p>BoostNode is able to switch itself between python2.X and python3.X.<br />
 To switch boostNode version between python3.X and python 2.X use this<br />
 command:</p>
 <div class="codehilite"><pre>&gt;&gt;&gt; /path/to/boostNode/runnable/macro.py -p /path/to/boostNode -e py
 </pre></div>
 
 
+<p>Note that you have to temporary support the needed python environment<br />
+of given boostNode version to convert to the other one.</p>
 <h2 id="copyright">Copyright</h2>
 <p>see ./__init__.py</p>
 <h2 id="license">License</h2>
