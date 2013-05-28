@@ -751,7 +751,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 ## python3.3
 ##     def determine_byte_from_other(
 ##         cls: boostNode.extension.type.SelfClass, size: builtins.float,
-##         formats: builtins.dict, given_format='byte', decimal=False
+##         formats: builtins.dict, given_format='byte', decimal=None
 ##     ) -> builtins.float:
     def determine_byte_from_other(
         cls, size, formats, given_format='byte', decimal=None
