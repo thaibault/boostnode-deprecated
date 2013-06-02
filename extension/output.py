@@ -695,14 +695,7 @@ class Logger(boostNode.paradigm.objectOrientation.Class):
             >>> Logger.change_all() # doctest: +ELLIPSIS
             <class ...Logger...>
         '''
-        if level:
-            cls.default_level = level
-        if buffer:
-            cls.buffer = buffer
-        if terminator:
-            cls.terminator = terminator
-        if format:
-            cls.format = format
+        cls._set_properties(level, buffer, terminator, format)
         for index, logger in builtins.enumerate(cls.instances):
 ## python3.3             new_handler = logger.handlers.copy()
             new_handler = copy.copy(logger.handlers)
@@ -728,6 +721,28 @@ class Logger(boostNode.paradigm.objectOrientation.Class):
         # endregion
 
         # region protected  methods
+
+    @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
+## python3.3
+##     def _set_properties(
+##         cls: boostNode.extension.type.SelfClass, level: builtins.tuple,
+##         buffer: builtins.tuple, terminator: builtins.tuple,
+##         format: builtins.tuple
+##     ) -> boostNode.extension.type.SelfClass:
+    def _set_properties(cls, level, buffer, terminator, format):
+##
+        '''
+            This method sets the class properties.
+        '''
+        if level:
+            cls.default_level = level
+        if buffer:
+            cls.buffer = buffer
+        if terminator:
+            cls.terminator = terminator
+        if format:
+            cls.format = format
+        return cls
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
