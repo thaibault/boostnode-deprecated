@@ -975,6 +975,11 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
     response_sent = False
     '''Indicates if a response mime type was sent yet.'''
     content_type_sent = False
+    '''
+        Saves the self describing server version string. This string is
+        included in every response.
+    '''
+    server_version = '{program} {version} {status}'
 
         # endregion
 
@@ -1015,6 +1020,12 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         self.load_module = False
         self.request_arguments = []
         self.respond = False
+        self.server_version = self.server_version.format(
+            program=boostNode.extension.native.String(
+                __module_name__
+            ).camel_case_capitalize().content,
+            version=__version__,
+            status=__status__)
         '''Take this method via introspection.'''
 ## python3.3
 ##         builtins.getattr(
@@ -1171,8 +1182,6 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
             'content-type'))
 ##
         if data_type == 'multipart/form-data':
-## python3.3             self.flush_headers()
-            self.end_headers()
             self.post_dictionary = self._determine_post_dictionary()
         elif data_type == 'application/x-www-form-urlencoded':
 ## python3.3
@@ -1481,9 +1490,12 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _send_positive_header(
-##         self: boostNode.extension.type.Self, mimetype='text/html'
+##         self: boostNode.extension.type.Self, mimetype='text/html',
+##         encoding='UTF-8'
 ##     ) -> boostNode.extension.type.Self:
-    def _send_positive_header(self, mimetype='text/html'):
+    def _send_positive_header(
+        self, mimetype='text/html', encoding='UTF-8'
+    ):
 ##
         '''
             This method is called for each successful answered http-request.
@@ -1491,7 +1503,8 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
         if not self.response_sent:
             self.send_response(200)
         if not self.content_type_sent:
-            self.send_header('Content-type', mimetype)
+            self.send_header(
+                'Content-Type', '%s; charset=%s' % (mimetype, encoding))
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -1512,7 +1525,7 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
 ##
             message = 'The authentication failed'
         self.send_header('WWW-Authenticate', 'Basic realm=\"%s\"' % message)
-        self.send_header('Content-type', 'text/html')
+        self.send_header('Content-Type', 'text/html; charset=UTF-8')
         self.end_headers()
         return self
 
