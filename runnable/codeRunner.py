@@ -127,7 +127,7 @@ class Run(
                 'commands': {
                     'compile': 'make compile',
                     'test': 'make test',
-                    'clear': 'make clean',
+                    'clean': 'make clean',
                     'all': 'make all'
                 }
             },
@@ -153,7 +153,7 @@ class Run(
             'code_manager': {
                 'file_path': '__init__.<%code_file.extension%>',
                 'commands': {
-                    'clear': './__init__.<%code_file.extension%> clear',
+                    'clean': './__init__.<%code_file.extension%> clear',
                     'test': './__init__.<%code_file.extension%> test',
                     'all': './__init__.<%code_file.extension%> all'
                 }
@@ -169,6 +169,15 @@ class Run(
                            'pdflatex "<%code_file.path%>";'
                            'pdflatex "<%code_file.path%>"',
                 'run': 'xdg-open "<%code_file.basename%>.pdf"',
+            },
+            'code_manager': {
+                'file_path': 'Makefile',
+                'commands': {
+                    'compile': 'make compile',
+                    'run': 'make preview',
+                    'clean': 'make clean',
+                    'all': 'make all'
+                }
             },
             'extensions': ('tex',),
             'delete_patterns': ('.*\.aux$', '.*\.log$', '.*\.toc$')
@@ -302,11 +311,11 @@ class Run(
 ## python3.3
 ##     def _initialize(
 ##         self: boostNode.extension.type.Self, code_file_path='',
-##         default_command_sequence=('compile', 'run', 'clear'), **keywords
+##         default_command_sequence=('compile', 'run', 'clean'), **keywords
 ##     ) -> boostNode.extension.type.Self:
     def _initialize(
         self, code_file_path='',
-        default_command_sequence=('compile', 'run', 'clear'), **keywords
+        default_command_sequence=('compile', 'run', 'clean'), **keywords
     ):
 ##
         '''
