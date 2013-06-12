@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.3
+#!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 
 # region vim modline
@@ -28,14 +28,14 @@ __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-## python2.7 pass
-import builtins
+## python3.3 import builtins
+pass
 import inspect
 import os
 import sys
 
-## python2.7 builtins = sys.modules['__main__'].__builtins__
-pass
+## python3.3 pass
+builtins = sys.modules['__main__'].__builtins__
 
 for number in (3, 4):
     sys.path.append(os.path.abspath(sys.path[0] + number * ('..' + os.sep)))
