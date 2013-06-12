@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.3
 # -*- coding: utf-8 -*-
 
 # region vim modline
@@ -10,8 +10,8 @@
 
 # region header
 
-## python3.3 pass
-from __future__ import print_function
+## python2.7 from __future__ import print_function
+pass
 
 '''
     This module provides classes for dealing with python's way to transport
@@ -31,8 +31,8 @@ __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-## python3.3 import builtins
-pass
+## python2.7 pass
+import builtins
 import copy
 import inspect
 import logging
@@ -40,11 +40,11 @@ import multiprocessing
 import os
 import sys
 import threading
-## python3.3 import queue as native_queue
-import Queue as native_queue
+## python2.7 import Queue as native_queue
+import queue as native_queue
 
-## python3.3 pass
-builtins = sys.modules['__main__'].__builtins__
+## python2.7 builtins = sys.modules['__main__'].__builtins__
+pass
 
 for number in (3, 4):
     sys.path.append(os.path.abspath(sys.path[0] + number * ('..' + os.sep)))
@@ -111,14 +111,14 @@ class Buffer(
             # region special methods
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
+## python2.7
 ##     def __init__(
-##         self: boostNode.extension.type.Self, file=None, queue=None,
-##         support_multiprocessing=False
-##     ) -> None:
+##         self, file=None, queue=None, support_multiprocessing=False
+##     ):
     def __init__(
-        self, file=None, queue=None, support_multiprocessing=False
-    ):
+        self: boostNode.extension.type.Self, file=None, queue=None,
+        support_multiprocessing=False
+    ) -> None:
 ##
         '''
             Saves the file path in the current instance. If "file" is "None"
@@ -149,9 +149,9 @@ class Buffer(
                 location=file, must_exist=False)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
-    def __repr__(self):
+## python2.7
+##     def __repr__(self):
+    def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
 ##
         '''
             Invokes if this object should describe itself by a string.
@@ -184,9 +184,9 @@ class Buffer(
                    type_addition=type_addition, content=self.content)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def __str__(self: boostNode.extension.type.Self) -> builtins.str:
-    def __str__(self):
+## python2.7
+##     def __str__(self):
+    def __str__(self: boostNode.extension.type.Self) -> builtins.str:
 ##
         '''
             Invokes if this object is tried to interpreted as string.
@@ -199,9 +199,9 @@ class Buffer(
         return self.content
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def __bool__(self: boostNode.extension.type.Self) -> builtins.bool:
-    def __nonzero__(self):
+## python2.7
+##     def __nonzero__(self):
+    def __bool__(self: boostNode.extension.type.Self) -> builtins.bool:
 ##
         '''
             Invokes if this object is tried to interpreted as boolean.
@@ -223,9 +223,9 @@ class Buffer(
         # region getter methods
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def get_content(self: boostNode.extension.type.Self) -> builtins.str:
-    def get_content(self):
+## python2.7
+##     def get_content(self):
+    def get_content(self: boostNode.extension.type.Self) -> builtins.str:
 ##
         '''
             Getter for the current content.
@@ -249,11 +249,11 @@ class Buffer(
         return self._content
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def get_file(
-##         self: boostNode.extension.type.Self
-##     ) -> (boostNode.extension.file.Handler, builtins.type(None)):
-    def get_file(self):
+## python2.7
+##     def get_file(self):
+    def get_file(
+        self: boostNode.extension.type.Self
+    ) -> (boostNode.extension.file.Handler, builtins.type(None)):
 ##
         '''
             Getter for current file path if file buffering is selected.
@@ -277,11 +277,11 @@ class Buffer(
         # endregion
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def write(
-##         self: boostNode.extension.type.Self, content: builtins.str
-##     ) -> boostNode.extension.type.Self:
-    def write(self, content):
+## python2.7
+##     def write(self, content):
+    def write(
+        self: boostNode.extension.type.Self, content: builtins.str
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Writes content to the current output buffer file.
@@ -315,11 +315,11 @@ class Buffer(
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def flush(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
-    def flush(self):
+## python2.7
+##     def flush(self):
+    def flush(
+        self: boostNode.extension.type.Self
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Flush methods usually called to guarantee that all objects putted
@@ -334,11 +334,11 @@ class Buffer(
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def clear(
-##         self: boostNode.extension.type.Self, delete=True
-##     ) -> builtins.str:
-    def clear(self, delete=True):
+## python2.7
+##     def clear(self, delete=True):
+    def clear(
+        self: boostNode.extension.type.Self, delete=True
+    ) -> builtins.str:
 ##
         '''
             Removes the current output buffer content.
@@ -424,12 +424,12 @@ class Print(boostNode.paradigm.objectOrientation.Class):
             # region special methods
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def __init__(
-##         self: boostNode.extension.type.Self, *output: builtins.object,
-##         **codewords: builtins.object
-##     ) -> None:
-    def __init__(self, *output, **codewords):
+## python2.7
+##     def __init__(self, *output, **codewords):
+    def __init__(
+        self: boostNode.extension.type.Self, *output: builtins.object,
+        **codewords: builtins.object
+    ) -> None:
 ##
         '''
             Writes something to the output buffer or prints to standard
@@ -485,19 +485,19 @@ class Print(boostNode.paradigm.objectOrientation.Class):
                 output[index] = builtins.str(keywords['seperator']) +\
                     builtins.str(out)
         output = [keywords['start']] + output + [keywords['end']]
-## python3.3
-##         builtins.print(
-##             *output, sep='', end='', file=keywords['buffer'],
-##             flush=keywords['flush'])
-        builtins.print(*output, sep='', end='', file=keywords['buffer'])
-        if keywords['flush']:
-            sys.stdout.flush()
+## python2.7
+##         builtins.print(*output, sep='', end='', file=keywords['buffer'])
+##         if keywords['flush']:
+##             sys.stdout.flush()
+        builtins.print(
+            *output, sep='', end='', file=keywords['buffer'],
+            flush=keywords['flush'])
 ##
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def __str__(self: boostNode.extension.type.Self) -> builtins.str:
-    def __str__(self):
+## python2.7
+##     def __str__(self):
+    def __str__(self: boostNode.extension.type.Self) -> builtins.str:
 ##
         '''
             Is triggered if this object should be converted to string.
@@ -512,9 +512,9 @@ class Print(boostNode.paradigm.objectOrientation.Class):
         return ''
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
-    def __repr__(self):
+## python2.7
+##     def __repr__(self):
+    def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
 ##
         '''
             Invokes if this object should describe itself by a string.
@@ -566,9 +566,9 @@ class Logger(boostNode.paradigm.objectOrientation.Class):
             # region special methods
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python3.3
-##     def __str__(cls: boostNode.extension.type.SelfClass) -> builtins.str:
-    def __str__(cls):
+## python2.7
+##     def __str__(cls):
+    def __str__(cls: boostNode.extension.type.SelfClass) -> builtins.str:
 ##
         '''
             Is triggered if a "Logger" object should be converted to string.
@@ -583,9 +583,9 @@ class Logger(boostNode.paradigm.objectOrientation.Class):
         return ''
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python3.3
-##     def __repr__(cls: boostNode.extension.type.SelfClass) -> builtins.str:
-    def __repr__(cls):
+## python2.7
+##     def __repr__(cls):
+    def __repr__(cls: boostNode.extension.type.SelfClass) -> builtins.str:
 ##
         '''
             Invokes if this object should describe itself by a string.
@@ -619,11 +619,11 @@ class Logger(boostNode.paradigm.objectOrientation.Class):
             # endregion
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python3.3
-##     def flush(
-##         cls: boostNode.extension.type.SelfClass
-##     ) -> boostNode.extension.type.SelfClass:
-    def flush(cls):
+## python2.7
+##     def flush(cls):
+    def flush(
+        cls: boostNode.extension.type.SelfClass
+    ) -> boostNode.extension.type.SelfClass:
 ##
         '''
             Flushes all buffers in all logger handlers.
@@ -634,14 +634,14 @@ class Logger(boostNode.paradigm.objectOrientation.Class):
         return cls
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python3.3
+## python2.7
 ##     def get(
-##         cls: boostNode.extension.type.SelfClass, name=__name__, level=(),
-##         buffer=(), terminator=(), format=()
-##     ) -> logging.getLoggerClass():
+##         cls, name=__name__, level=(), buffer=(), terminator=(), format=()
+##     ):
     def get(
-        cls, name=__name__, level=(), buffer=(), terminator=(), format=()
-    ):
+        cls: boostNode.extension.type.SelfClass, name=__name__, level=(),
+        buffer=(), terminator=(), format=()
+    ) -> logging.getLoggerClass():
 ##
         '''
             Returns a new or existing instance of a logger with given
@@ -674,12 +674,12 @@ class Logger(boostNode.paradigm.objectOrientation.Class):
         return cls.instances[-1]
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python3.3
-##     def change_all(
-##         cls: boostNode.extension.type.SelfClass, level=(), buffer=(),
-##         terminator=(), format=()
-##     ) -> boostNode.extension.type.SelfClass:
-    def change_all(cls, level=(), buffer=(), terminator=(), format=()):
+## python2.7
+##     def change_all(cls, level=(), buffer=(), terminator=(), format=()):
+    def change_all(
+        cls: boostNode.extension.type.SelfClass, level=(), buffer=(),
+        terminator=(), format=()
+    ) -> boostNode.extension.type.SelfClass:
 ##
         '''
             This method changes the given properties to all created logger
@@ -697,8 +697,8 @@ class Logger(boostNode.paradigm.objectOrientation.Class):
         '''
         cls._set_properties(level, buffer, terminator, format)
         for index, logger in builtins.enumerate(cls.instances):
-## python3.3             new_handler = logger.handlers.copy()
-            new_handler = copy.copy(logger.handlers)
+## python2.7             new_handler = copy.copy(logger.handlers)
+            new_handler = logger.handlers.copy()
             if buffer:
                 new_handler = []
                 for new_buffer in cls.buffer:
@@ -723,13 +723,13 @@ class Logger(boostNode.paradigm.objectOrientation.Class):
         # region protected  methods
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python3.3
-##     def _set_properties(
-##         cls: boostNode.extension.type.SelfClass, level: builtins.tuple,
-##         buffer: builtins.tuple, terminator: builtins.tuple,
-##         format: builtins.tuple
-##     ) -> boostNode.extension.type.SelfClass:
-    def _set_properties(cls, level, buffer, terminator, format):
+## python2.7
+##     def _set_properties(cls, level, buffer, terminator, format):
+    def _set_properties(
+        cls: boostNode.extension.type.SelfClass, level: builtins.tuple,
+        buffer: builtins.tuple, terminator: builtins.tuple,
+        format: builtins.tuple
+    ) -> boostNode.extension.type.SelfClass:
 ##
         '''
             This method sets the class properties.
@@ -745,13 +745,13 @@ class Logger(boostNode.paradigm.objectOrientation.Class):
         return cls
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python3.3
-##     def _generate_logger(
-##         cls: boostNode.extension.type.SelfClass, name: builtins.str,
-##         level: builtins.tuple, buffer: builtins.tuple,
-##         terminator: builtins.tuple, format: builtins.tuple
-##     ) -> logging.getLoggerClass():
-    def _generate_logger(cls, name, level, buffer, terminator, format):
+## python2.7
+##     def _generate_logger(cls, name, level, buffer, terminator, format):
+    def _generate_logger(
+        cls: boostNode.extension.type.SelfClass, name: builtins.str,
+        level: builtins.tuple, buffer: builtins.tuple,
+        terminator: builtins.tuple, format: builtins.tuple
+    ) -> logging.getLoggerClass():
 ##
         '''
             Creates a new logger instance by initializing all its components
