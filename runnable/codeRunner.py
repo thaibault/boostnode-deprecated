@@ -88,7 +88,7 @@ class Run(
              'action': 'store',
              'nargs': '*',
              'default': {'execute': '__initializer_default_value__'},
-             'type': {'execute': 'type(__initializer_default_value__)'},
+             'type': builtins.str,
              'required': {'execute': '__initializer_default_value__ is None'},
              'help': 'Select a default sequence of things to do with code '
                      'files.',
