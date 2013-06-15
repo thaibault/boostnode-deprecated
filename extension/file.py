@@ -4159,6 +4159,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
 # region footer
 
+'''
+    Extends this module with some magic environment variables to provide better
+    introspection support. A generic command line interface for some code
+    preprocessing tools is provided by default.
+'''
 boostNode.extension.dependent.Resolve(
     name=__name__, frame=inspect.currentframe(), default_caller=False)
 

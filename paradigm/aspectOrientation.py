@@ -767,6 +767,7 @@ class JointPoint(FunctionDecorator):
 
 # region footer
 
+'''Resolve cyclic dependency issues.'''
 boostNode.extension.dependent.Resolve(
     name=__name__, frame=inspect.currentframe(), default_caller=False)
 

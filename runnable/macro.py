@@ -847,6 +847,7 @@ class Replace(
 
 # region footer
 
+'''Resolve cyclic dependency issues.'''
 boostNode.extension.dependent.Resolve(
     name=__name__, frame=inspect.currentframe())
 

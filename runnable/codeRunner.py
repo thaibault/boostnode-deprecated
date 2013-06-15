@@ -771,8 +771,13 @@ class Run(
 
 # endregion
 
-# region footer
+ # region footer
 
+'''
+    Extends this module with some magic environment variables to provide better
+    introspection support. A generic command line interface for some code
+    preprocessing tools is provided by default.
+'''
 boostNode.extension.native.Module.default(
     name=__name__, frame=inspect.currentframe())
 

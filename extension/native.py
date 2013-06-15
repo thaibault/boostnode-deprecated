@@ -1188,13 +1188,13 @@ class Module(boostNode.paradigm.objectOrientation.Class):
             >>> Module.get_context_path(
             ...     frame=inspect.currentframe()
             ... ) # doctest: +ELLIPSIS
-            'boostNode.extension...doctest...Module'
+            '...boostNode.extension...doctest...Module'
 
-            >>> Module.get_context_path(path='./native')
-            'boostNode.extension.native'
+            >>> Module.get_context_path(path='./native') # doctest: +ELLIPSIS
+            '...boostNode.extension.native'
 
-            >>> Module.get_context_path(path='.')
-            'boostNode.extension'
+            >>> Module.get_context_path(path='.') # doctest: +ELLIPSIS
+            '...boostNode.extension'
         '''
         if path is None:
             path = frame.f_code.co_filename
@@ -1654,6 +1654,7 @@ class Module(boostNode.paradigm.objectOrientation.Class):
 
 # region footer
 
+'''Resolve cyclic dependency issues.'''
 boostNode.extension.dependent.Resolve(
     name=__name__, frame=inspect.currentframe(), default_caller=False)
 

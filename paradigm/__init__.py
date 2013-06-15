@@ -47,10 +47,15 @@ import boostNode.extension.dependent
 '''Determine all modules in this folder via introspection.'''
 __all__ = boostNode.extension.dependent.Resolve.get_all()
 
-# region footer
+ # region footer
 
 if __name__ == '__main__':
     from boostNode.extension.system import CommandLine
+    '''
+        Extends this module with some magic environment variables to provide
+        better introspection support. A generic command line interface for some
+        code preprocessing tools is provided by default.
+    '''
     CommandLine.generic_package_interface(
         name=__name__, frame=inspect.currentframe())
 

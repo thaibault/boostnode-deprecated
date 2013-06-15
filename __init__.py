@@ -292,9 +292,6 @@ import boostNode.extension.native
 
 # endregion
 
-'''Determine all modules in this folder via introspection.'''
-__all__ = []
-
 '''
     Add signature checking for all functions and methods with joint points in
     this package.
@@ -305,6 +302,11 @@ boostNode.aspect.signature.add_check(
 
 # region footer
 
+'''
+    Extends this module with some magic environment variables to provide better
+    introspection support. A generic command line interface for some code
+    preprocessing tools is provided by default.
+'''
 boostNode.extension.system.CommandLine.generic_package_interface(
     name=__name__, frame=inspect.currentframe())
 

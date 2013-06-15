@@ -1153,7 +1153,7 @@ class CommandLine(builtins.object):
             >>> CommandLine.generic_package_interface(
             ...     name=__name__, frame=inspect.currentframe()
             ... ) # doctest: +SKIP
-            Namespace(log_level='info' ...)
+            Namespace(log_level='info'...)
         '''
         if name == '__main__':
             all, arguments, current_working_directory_save =\
@@ -1708,11 +1708,6 @@ class CommandLine(builtins.object):
                 modules=module_names, arguments=documenter_arguments)
         if result is False:
             __logger__.warning('Documenter "%s" wasn\'t found.', documenter)
-        else:
-            if result[0].strip():
-                __logger__.info(result[0].strip())
-            if result[1].strip():
-                __logger__.warning(result[1].strip())
         for file in boostNode.extension.file.Handler():
             if file.extension == documentation_file_extension:
                 file.directory_path = documentation.path
@@ -2000,6 +1995,7 @@ class CommandLine(builtins.object):
 
 # region footer
 
+'''Resolve cyclic dependency issues.'''
 boostNode.extension.dependent.Resolve(
     name=__name__, frame=inspect.currentframe(), default_caller=False,
     dependencies=('boostNode.extension.native.__loaded__',))
