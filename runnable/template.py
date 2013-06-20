@@ -111,6 +111,16 @@ class Parser(
                      'name.',
              'dest': 'placeholder_name_pattern',
              'metavar': 'REGEX_PATTERN'}},
+        {'arguments': ('-', '--command-line-placeholder-name-pattern'),
+         'keywords': {
+             'action': 'store',
+             'default': {'execute': '__initializer_default_value__'},
+             'type': {'execute': 'type(__initializer_default_value__)'},
+             'required': {'execute': '__initializer_default_value__ is None'},
+             'help': 'Define the regex pattern of a template placeholder '
+                     'name given via the command line interface.',
+             'dest': 'command_line_placeholder_name_pattern',
+             'metavar': 'REGEX_PATTERN'}},
         {'arguments': ('-d', '--left-code-delimiter'),
          'keywords': {
              'action': 'store',
@@ -238,6 +248,7 @@ class Parser(
         In general it defines the syntax.
     '''
     _placeholder_name_pattern = ''
+    _command_line_placeholder_name_pattern = ''
     _left_code_delimiter = ''
     _right_code_delimiter = ''
     _placeholder_pattern = ''
@@ -665,7 +676,8 @@ class Parser(
 ##         self: boostNode.extension.type.Self,
 ##         template: (builtins.str, boostNode.extension.file.Handler),
 ##         string=False,
-##         placeholder_name_pattern='[a-zA-Z0-9_\[\]\'"\.()\\\\,\-+ :/=]+',
+##         placeholder_name_pattern='[a-zA-Z0-9_\[\]\'"\.()\\\\,\-+ :/={}]+',
+##         command_line_placeholder_name_pattern='[a-zA-Z0-9_\[\]\.(),\-+]+',
 ##         left_code_delimiter='<%', right_code_delimiter='%>',
 ##         right_escaped='%',  # For example: "<%%" evaluates to "<%"
 ##         placeholder_pattern='{left_delimiter}[ \t]*({placeholder})'
@@ -702,7 +714,9 @@ class Parser(
 ##     ) -> boostNode.extension.type.Self:
     def _initialize(
         self, template, string=False,
-        placeholder_name_pattern='[a-zA-Z0-9_\[\]\'"\.()\\\\,\-+ :/=]+',
+        placeholder_name_pattern='[a-zA-Z0-9_\[\]\'"\.()\\\\,\-+ :/={}]+',
+        command_line_placeholder_name_pattern=
+            '[a-zA-Z0-9_\[\]\.(),\-+]+',
         left_code_delimiter='<%', right_code_delimiter='%>',
         right_escaped='%',  # For example: "<%%" evaluates to "<%"
         placeholder_pattern='{left_delimiter}[ \t]*({placeholder})[ \t]'
@@ -761,12 +775,14 @@ class Parser(
         self.right_escaped = right_escaped
 
         self._placeholder_name_pattern = placeholder_name_pattern
+        self._command_line_placeholder_name_pattern = \
+            command_line_placeholder_name_pattern
         self._left_code_delimiter = left_code_delimiter
         self._right_code_delimiter = right_code_delimiter
         self._placeholder_pattern = placeholder_pattern
         self._template_context_default_indent = template_context_default_indent
         self._template_pattern = template_pattern
-        self._command_line_placeholder_pattern =\
+        self._command_line_placeholder_pattern = \
             command_line_placeholder_pattern
         self._native_template_pattern = native_template_pattern
         self._output = boostNode.extension.output.Buffer()
@@ -817,7 +833,7 @@ class Parser(
         keywords = {}
         for variable in self._command_line_arguments.scope_variables:
             match = re.compile(self._command_line_placeholder_pattern.format(
-                placeholder=self._placeholder_name_pattern)
+                placeholder=self._command_line_placeholder_name_pattern)
             ).match(variable)
             keywords.update(
                 {match.group('variable_name'): match.group('value')})
