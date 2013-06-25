@@ -410,6 +410,8 @@ class Parser(
             {...'print': ..._print...}
         '''
         self._builtins.update({
+            '__indent__': self.indent,
+            'FileHandler': boostNode.extension.file.Handler,
             'print': self._print,
             'include': self._include,
             'str': builtins.str,
@@ -417,7 +419,6 @@ class Parser(
             'json': json,
             'False': False,
             'True': True,
-            '__indent__': self.indent,
             'locals': builtins.locals})
         return self._builtins
 
@@ -831,7 +832,7 @@ class Parser(
             {...'hans': 'peter'...}
         '''
         # NOTE: We add a filehandler by default.
-        keywords = {'FileHandler': boostNode.extension.file.Handler}
+        keywords = {}
         for variable in self._command_line_arguments.scope_variables:
             match = re.compile(self._command_line_placeholder_pattern.format(
                 placeholder=self._command_line_placeholder_name_pattern)
