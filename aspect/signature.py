@@ -162,7 +162,7 @@ class CheckObject(builtins.object):
     def _is_multiple_type(cls, type):
 ##
         '''
-            Check wether a given specification allows multiple types.
+            Check weather a given specification allows multiple types.
 
             Examples:
 
@@ -201,10 +201,10 @@ class CheckObject(builtins.object):
     def _is_right_type(cls, given_type, expected_type):
 ##
         '''
-            Check wether a given type is expected type or given type is a
+            Check weather a given type is expected type or given type is a
             subclass of expected type.
 
-            Fixes bug that "bool" is a subtype of "int".
+            Fixes bug that in python a boolean is a subtype of an integer.
 
             Examples:
 
@@ -254,8 +254,14 @@ class CheckObject(builtins.object):
             ...     def __init__(self):
             ...         self.function = test
             ...         self._method_type = staticmethod
-            >>> repr(A()) # doctest: +ELLIPSIS
+            >>> a = A()
+
+            >>> repr(a) # doctest: +ELLIPSIS
             'Object of "A" with class object "None", object "None", called...'
+
+            >>> a.class_object = A
+            >>> repr(a) # doctest: +ELLIPSIS
+            'Object of "A" with class object "A", object "None", called...'
         '''
         class_object_name = 'None'
         if self.class_object is not None:
@@ -295,6 +301,10 @@ class CheckObject(builtins.object):
 
             >>> a.get_function_path()
             'test'
+
+            >>> a.class_object = A
+            >>> a.get_function_path()
+            'A.test'
         '''
 ## python3.3
 ##         return self.function.__qualname__

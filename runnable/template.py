@@ -830,7 +830,8 @@ class Parser(
             >>> tpl._generate_scope_variables() # doctest: +ELLIPSIS
             {...'hans': 'peter'...}
         '''
-        keywords = {}
+        # NOTE: We add a filehandler by default.
+        keywords = {'FileHandler': boostNode.extension.file.Handler}
         for variable in self._command_line_arguments.scope_variables:
             match = re.compile(self._command_line_placeholder_pattern.format(
                 placeholder=self._command_line_placeholder_name_pattern)
