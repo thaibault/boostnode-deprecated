@@ -1068,7 +1068,7 @@ class Object(boostNode.paradigm.objectOrientation.Class):
             Determines if given data is binary.
         '''
         # NOTE: This is a dirty workaround to handle python2.7 lack of
-        # differenctiation between "string" and "bytes" objects.
+        # differentiation between "string" and "bytes" objects.
 ## python3.3
 ##         return builtins.isinstance(self.object, builtins.bytes)
         object = self.object
