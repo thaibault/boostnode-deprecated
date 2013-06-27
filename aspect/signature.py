@@ -297,11 +297,15 @@ class CheckObject(builtins.object):
             ...     def __init__(self):
             ...         self.function = test
             ...         self._method_type = staticmethod
+            ...     def test():
+            ...         pass
+
             >>> a = A()
 
             >>> a.get_function_path()
             'test'
 
+            >>> a.function = A.test
             >>> a.class_object = A
             >>> a.get_function_path()
             'A.test'

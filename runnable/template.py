@@ -679,11 +679,8 @@ class Parser(
 ##         string=False,
 ##         placeholder_name_pattern='[a-zA-Z0-9_\[\]\'"\.()\\\\,\-+ :/={}]+',
 ##         command_line_placeholder_name_pattern='[a-zA-Z0-9_\[\]\.(),\-+]+',
-##         left_code_delimiter='<%', right_code_delimiter='%>',
-##         right_escaped='%',  # For example: "<%%" evaluates to "<%"
 ##         placeholder_pattern='{left_delimiter}[ \t]*({placeholder})'
 ##                             '[ \t]*{right_delimiter}',
-##         template_context_default_indent=4,
 ##         template_pattern='(?P<E>(?P<before_escaped>'
 ##                          '(?P<indent_escaped>[ \t]*)'
 ##                          '(.(?!{left_delimiter}))*?.?){left_delimiter}'
@@ -703,12 +700,15 @@ class Parser(
 ##                          '(?P<none_code_end>\n|$))|'
 ##
 ##                          '(?P<L>^(?P<indent_line>[ \t]*)\n)',
-##         command_line_placeholder_pattern='(?P<variable_name>{placeholder})'
-##                                          '(?P<seperator>.)(?P<value>.+)',
+##         command_line_placeholder_pattern='^(?P<variable_name>{placeholder})'
+##                                          '(?P<seperator>.)(?P<value>.+)$',
 ##         native_template_pattern='<%[ \t]*(?:(?P<escaped>%)|'
 ##                                 '(?:(?P<named>[a-zA-Z0-9_]+)[ \t]*% >)|'
 ##                                 '(?:(?P<braced>[a-zA-Z0-9_]+)[ \t]*%>)|'
 ##                                 '(?P<invalid>))',
+##         left_code_delimiter='<%', right_code_delimiter='%>',
+##         right_escaped='%',  # For example: "<%%" evaluates to "<%"
+##         template_context_default_indent=4,
 ##         builtins=(builtins.all, builtins.filter, builtins.map,
 ##                   builtins.enumerate, builtins.range, builtins.locals),
 ##         **keywords: builtins.object
@@ -716,13 +716,9 @@ class Parser(
     def _initialize(
         self, template, string=False,
         placeholder_name_pattern='[a-zA-Z0-9_\[\]\'"\.()\\\\,\-+ :/={}]+',
-        command_line_placeholder_name_pattern=
-            '[a-zA-Z0-9_\[\]\.(),\-+]+',
-        left_code_delimiter='<%', right_code_delimiter='%>',
-        right_escaped='%',  # For example: "<%%" evaluates to "<%"
+        command_line_placeholder_name_pattern='[a-zA-Z0-9_\[\]\.(),\-+]+',
         placeholder_pattern='{left_delimiter}[ \t]*({placeholder})[ \t]'
                             '*{right_delimiter}',
-        template_context_default_indent=4,
         template_pattern='(?P<E>(?P<before_escaped>'
                          '(?P<indent_escaped>[ \t]*)'
                          '(.(?!{left_delimiter}))*?.?){left_delimiter}'
@@ -741,12 +737,15 @@ class Parser(
                          '.+)(?P<none_code_end>\n|$))|'
 
                          '(?P<L>^(?P<indent_line>[ \t]*)\n)',
-        command_line_placeholder_pattern='(?P<variable_name>{placeholder})'
-                                         '(?P<seperator>.)(?P<value>.+)',
+        command_line_placeholder_pattern='^(?P<variable_name>{placeholder})'
+                                         '(?P<seperator>.)(?P<value>.+)$',
         native_template_pattern='<%[ \t]*(?:(?P<escaped>%)|'
                                 '(?:(?P<named>[a-zA-Z0-9_]+)[ \t]*% >)|'
                                 '(?:(?P<braced>[a-zA-Z0-9_]+)[ \t]*%>)|'
                                 '(?P<invalid>))',
+        left_code_delimiter='<%', right_code_delimiter='%>',
+        right_escaped='%',  # For example: "<%%" evaluates to "<%"
+        template_context_default_indent=4,
         builtins=(builtins.all, builtins.filter, builtins.map,
                   builtins.enumerate, builtins.range, builtins.locals),
         **keywords
@@ -831,14 +830,18 @@ class Parser(
             >>> tpl._generate_scope_variables() # doctest: +ELLIPSIS
             {...'hans': 'peter'...}
         '''
-        # NOTE: We add a filehandler by default.
         keywords = {}
         for variable in self._command_line_arguments.scope_variables:
-            match = re.compile(self._command_line_placeholder_pattern.format(
+            pattern = self._command_line_placeholder_pattern.format(
                 placeholder=self._command_line_placeholder_name_pattern)
-            ).match(variable)
-            keywords.update(
-                {match.group('variable_name'): match.group('value')})
+            match = re.compile(pattern, flags=re.DOTALL).match(variable)
+            if match:
+                keywords.update(
+                    {match.group('variable_name'): match.group('value')})
+            else:
+                raise __exception__(
+                    'Given placeholder value tuple "%s" couldn\'t be parsed. '
+                    'Your string have to match "%s".', variable, pattern)
         return keywords
 
     @boostNode.paradigm.aspectOrientation.JointPoint

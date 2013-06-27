@@ -47,6 +47,7 @@ pass
 import logging
 import multiprocessing
 import os
+import signal
 ## python3.3 import socketserver
 import SocketServer
 import ssl
@@ -527,8 +528,8 @@ class Web(
     '''A list of regex pattern which no request should match.'''
     request_blacklist = ()
     '''
-        A list of regex pattern which indicates requests which schould
-        guranteed to be run in the same thread as the server itself.
+        A list of regular expression pattern which indicates requests which
+        should guaranteed to be run in the same thread as the server itself.
         This requests usually modifies shared memory.
     '''
     same_thread_request_whitelist = ()
@@ -623,9 +624,10 @@ class Web(
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def close(
-##         self: boostNode.extension.type.Self
+##         self: boostNode.extension.type.Self, *arguments: builtins.object,
+##         **keywords: builtins.object
 ##     ) -> boostNode.extension.type.Self:
-    def close(self):
+    def close(self, *arguments, **keywords):
 ##
         '''Waits for running workers and shuts the server down.'''
         self.block_new_worker = True
@@ -650,6 +652,12 @@ class Web(
             time.sleep(2)
         __logger__.info('Shutting down webserver.')
         self.service.socket.close()
+        '''
+            Take this method type by the abstract class via introspection.
+        '''
+        builtins.getattr(
+            boostNode.extension.system.Runnable, inspect.stack()[0][3]
+        )(*arguments, **keywords)
         return self
 
         # endregion
@@ -727,13 +735,14 @@ class Web(
             server thread will be started.
         '''
         self.__class__.instances.append(self)
+
         if public_key_file_path:
             public_key_file = boostNode.extension.file.Handler(
                 location=public_key_file_path)
             if public_key_file.is_file():
                 self._public_key_file = public_key_file
-        self.authentication_handler = authentication_handler
 
+        self.authentication_handler = authentication_handler
         self.authentication = authentication
         self.authentication_file_name = authentication_file_name
         self.authentication_file_pattern = authentication_file_pattern
@@ -785,22 +794,7 @@ class Web(
                 self._start_with_dynamic_port()
         self._log_server_status()
         if not __test_mode__ and self.close_order:
-            def wait_for_close_order():
-                '''
-                    Handler for waiting till a server close order comes through
-                    the command line interface.
-                '''
-                try:
-                    wait_for_close = ''
-                    while wait_for_close != self.close_order:
-## python3.3                         wait_for_close = builtins.input(
-                        wait_for_close = builtins.raw_input(
-                            'Write "%s" for shutting down server:\n' %
-                            self.close_order)
-                except builtins.KeyboardInterrupt:
-                    wait_for_close_order()
-            wait_for_close_order()
-            self.close()
+            self.wait_for_close_order()
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint

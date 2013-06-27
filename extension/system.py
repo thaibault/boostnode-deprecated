@@ -29,6 +29,7 @@ __status__ = 'stable'
 __version__ = '1.0'
 
 import argparse
+import atexit
 ## python3.3
 ## import builtins
 ## import collections
@@ -41,7 +42,9 @@ except ImportError:
     fcntl = None
 import inspect
 import logging
+import multiprocessing
 import os
+import signal
 import socket
 import struct
 import subprocess
@@ -75,6 +78,24 @@ class Runnable(builtins.object):
         platform independent.
     '''
 
+    # region dynamic properties
+
+        # region public properties
+
+    '''Saves a cli-command for shutting down the server.'''
+    close_order = 'close'
+
+        # endregion
+
+        # region private properties
+
+    '''This lock prevents form triggering the close method twice.'''
+    __close_lock = multiprocessing.Lock()
+
+        # endregion
+
+    # endregion'
+
     # region dynamic methods
 
         # region public methods
@@ -103,6 +124,9 @@ class Runnable(builtins.object):
         if(caller_module is this_module and
            childrens_module.__name__ == '__main__' and
            not childrens_module.__test_mode__) or run:
+            atexit.register(self.trigger_close)
+            for signal_number in (signal.SIGTERM, signal.SIGINT):
+                signal.signal(signal_number, self.trigger_close)
             try:
                 self._run(*arguments, **keywords)
             except builtins.Exception as exception:
@@ -121,6 +145,55 @@ class Runnable(builtins.object):
                     sys.exit(1)
         else:
             self._initialize(*arguments, **keywords)
+
+            # endregion
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def wait_for_close_order(
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
+    def wait_for_close_order(self):
+##
+        '''
+            Handler for waiting till a server close order comes through
+            the command line interface.
+        '''
+        try:
+            wait_for_close = ''
+            while wait_for_close != self.close_order:
+## python3.3                 wait_for_close = builtins.input(
+                wait_for_close = builtins.raw_input(
+                    'Write "%s" for shutting "%s":\n' %
+                    (self.close_order, self.__class__.__name__))
+        except (builtins.KeyboardInterrupt, builtins.EOFError):
+            pass
+        return self
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def trigger_close(
+##         self: boostNode.extension.type.Self, signal_number=None,
+##         stack_frame=None
+##     ) -> boostNode.extension.type.Self:
+    def trigger_close(self, signal_number=None, stack_frame=None):
+##
+        '''Method for cleaning up running workers.'''
+        if self.__close_lock.acquire(False):
+            self.close(signal_number, stack_frame)
+            if signal_number == signal.SIGINT:
+                sys.exit(130)
+        return self
+
+        # endregion
+
+    # endregion
+
+    # region static methods
+
+        # region public methods
+
+            # region special methods
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
@@ -143,14 +216,6 @@ class Runnable(builtins.object):
                'to be usable outside this python environment.' % cls.__name__
 
             # endregion
-
-        # endregion
-
-    # endregion
-
-    # region static methods
-
-        # region public methods
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
@@ -186,6 +251,23 @@ class Runnable(builtins.object):
         '''
         arguments += (cls._get_potential_wrapped_method(cls._run.__name__),)
         return cls(*arguments, **keywords)
+
+    @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
+## python3.3
+##     def close(
+##         cls: boostNode.extension.type.SelfClass, signal_number=None,
+##         stack_frame=None
+##     ) -> boostNode.extension.type.SelfClass:
+    def close(cls, signal_number=None, stack_frame=None):
+##
+        '''
+            This method should usually be overwritten to handle cleanup jobs.
+        '''
+        reason = ' caused by program trigger'
+        if signal_number:
+            reason = ' caused by signal "%d"' % signal_number
+        __logger__.debug('Closing "%s"%s.', cls.__name__, reason)
+        return cls
 
         # endregion
 
