@@ -88,6 +88,21 @@ ASPECTS = []
 class FunctionDecorator(builtins.object):
     '''Abstract class and interface for function decorator classes.'''
 
+    # region constant properties
+
+        # region public properties
+
+    '''This property hold a list of common python's native decorators.'''
+    COMMON_DECORATORS = (
+        builtins.classmethod, builtins.staticmethod, builtins.property,
+        builtins.super, atexit.register)
+
+        # endregion
+
+    # endregion
+
+    # endregion
+
     # region dynamic properties
 
         # region public properties
@@ -146,10 +161,7 @@ class FunctionDecorator(builtins.object):
             self.return_value = None
         self._method_type = None
 
-        # TODO support more common decorator
-        if method in (
-            builtins.classmethod, builtins.staticmethod, atexit.register
-        ):
+        if method in self.COMMON_DECORATORS:
             self.function = function
             self._method_type = method
         elif(builtins.isinstance(
@@ -159,11 +171,12 @@ class FunctionDecorator(builtins.object):
         else:
             raise builtins.TypeError(
                 'First argument for initializing "{class_name}" must be '
-                '"{classmethod}", "{staticmethod}", "{function_type}" or '
+                '"{common_methods}", "{function_type}" or '
                 '"{method_type}" but "{type}" ({value}) given.'.format(
                     class_name=self.__class__.__name__,
-                    classmethod=builtins.classmethod.__name__,
-                    staticmethod=builtins.staticmethod.__name__,
+                    common_methods='", "'.join(builtins.map(
+                        lambda decorator: decorator.__name__,
+                        self.COMMON_DECORATORS)),
                     function_type=types.FunctionType.__name__,
                     method_type=types.MethodType.__name__,
                     type=builtins.type(method).__name__,

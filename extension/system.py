@@ -129,27 +129,7 @@ class Runnable(builtins.object):
         if(caller_module is this_module and
            childrens_module.__name__ == '__main__' and
            not childrens_module.__test_mode__) or run:
-            self.__termination_lock.acquire()
-            signal_numbers = \
-                boostNode.extension.system.Platform.TERMINATION_SIGNAL_NUMBERS
-            for signal_number in signal_numbers:
-                signal.signal(signal_number, self.trigger_close)
-            try:
-                self._run(*arguments, **keywords)
-            except builtins.Exception as exception:
-                if(childrens_module.__test_mode__ or
-                   childrens_module.__logger__.isEnabledFor(logging.DEBUG) or
-                   sys.flags.debug):
-                    raise
-                else:
-                    __logger__.critical(
-                        '{exception_name}: {exception_message}\nType "'
-                        '{program_file_path} --help" for additional '
-                        'informations.'.format(
-                            exception_name=exception.__class__.__name__,
-                            exception_message=builtins.str(exception),
-                            program_file_path=sys.argv[0]))
-                    sys.exit(1)
+            self._handle_module_running(childrens_module, arguments, keywords)
         else:
             self._initialize(*arguments, **keywords)
 
@@ -326,6 +306,41 @@ class Runnable(builtins.object):
         return cls
 
             # endregion
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def _handle_module_running(
+##         self: boostNode.extension.type.Self, arguments: builtins.tuple,
+##         keywords: builtins.dict
+##     ) -> self: boostNode.extension.type.Self:
+    def _handle_module_running(
+        self, childrens_module, arguments, keywords
+    ):
+##
+        '''Handle the running interface for current module.'''
+        if not childrens_module.__test_mode__:
+            self.__termination_lock.acquire()
+            signal_numbers = \
+                boostNode.extension.system.Platform.TERMINATION_SIGNAL_NUMBERS
+            for signal_number in signal_numbers:
+                signal.signal(signal_number, self.trigger_close)
+        try:
+            self._run(*arguments, **keywords)
+        except builtins.Exception as exception:
+            if(childrens_module.__test_mode__ or
+               childrens_module.__logger__.isEnabledFor(logging.DEBUG) or
+               sys.flags.debug):
+                raise
+            else:
+                __logger__.critical(
+                    '{exception_name}: {exception_message}\nType "'
+                    '{program_file_path} --help" for additional '
+                    'informations.'.format(
+                        exception_name=exception.__class__.__name__,
+                        exception_message=builtins.str(exception),
+                        program_file_path=sys.argv[0]))
+                sys.exit(1)
+        return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
