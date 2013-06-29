@@ -310,9 +310,10 @@ class Runnable(builtins.object):
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _handle_module_running(
-##         self: boostNode.extension.type.Self, arguments: builtins.tuple,
+##         self: boostNode.extension.type.Self,
+##         childrens_module: types.ModuleType, arguments: builtins.tuple,
 ##         keywords: builtins.dict
-##     ) -> self: boostNode.extension.type.Self:
+##     ) -> boostNode.extension.type.Self:
     def _handle_module_running(
         self, childrens_module, arguments, keywords
     ):
