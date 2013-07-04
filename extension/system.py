@@ -1045,7 +1045,7 @@ class CommandLine(builtins.object):
          'keywords': {
              'action': 'store_true',
              'default': False,
-             'help': 'Test current library verbosly.',
+             'help': 'Test current library verbosely.',
              'dest': 'verbose_test'}},
         {'arguments': ('-m', '--meta-help'),
          'keywords': {

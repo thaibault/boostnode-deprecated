@@ -146,7 +146,7 @@ class Parser(
              'type': {'execute': 'type(__initializer_default_value__)'},
              'required': {'execute': '__initializer_default_value__ is None'},
              'help': 'Defines the string which indicates on the right side of '
-                     "a code delimiter that it shouldn't be availuated as "
+                     "a code delimiter that it shouldn't be evaluated as "
                      'code delimiter.',
              'dest': 'right_escaped',
              'metavar': 'STRING'}},

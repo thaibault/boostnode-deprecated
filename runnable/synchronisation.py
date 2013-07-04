@@ -106,6 +106,7 @@ class Reflector(
              'default': {'execute': '__initializer_default_value__'},
              'type': builtins.str,
              'required': {'execute': '__initializer_default_value__ is None'},
+            # TODO check if we can get shorter.
              'help': 'Select locations which should be handle with higher '
                      'priority %s will try to copy these files into the '
                      'cache.' %
@@ -120,6 +121,7 @@ class Reflector(
              'default': {'execute': '__initializer_default_value__'},
              'type': builtins.str,
              'required': {'execute': '__initializer_default_value__ is None'},
+            # TODO check if we can get shorter.
              'help': 'Select locations which should be ignored. '
                      "%s doesn't touch these files in source and its "
                      'corresponding locations in target.' %

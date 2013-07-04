@@ -1,3 +1,13 @@
+# Generated documentation
+documentation
+*/documentation
+
+# Generated temporary testing files.
+temp_*
+*/temp_*
+*/*/temp_*
+
+# Temporary created python caching files.
 *.py[cod]
 
 # C extensions
