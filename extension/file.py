@@ -735,8 +735,8 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         if decimal is None:
             decimal = cls.DECIMAL
         match = re.compile(cls.REGEX_FORMAT.format(
-            units=cls.determine_regex_units(formats=cls.FORMATS))).match(
-                size_and_unit.lower())
+            units=cls.determine_regex_units(formats=cls.FORMATS)
+        )).match(size_and_unit.lower())
         if match:
             return cls.convert_size_format(
                 size=cls.determine_byte_from_other(
@@ -1050,10 +1050,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
                         this class via introspection.
                     '''
                     size += builtins.getattr(
-                        file, inspect.stack()[0][3])(
-                            limit, follow_link=False, *arguments,
-                            **recursive_keywords
-                        ) + self.BLOCK_SIZE_IN_BYTE
+                        file, inspect.stack()[0][3]
+                    )(
+                        limit, follow_link=False, *arguments,
+                        **recursive_keywords
+                    ) + self.BLOCK_SIZE_IN_BYTE
         elif self.is_file():
             size = os.path.getsize(self._path)
         elif self.is_link:
@@ -1657,17 +1658,17 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             "#!/bin/bash\\n\\n# (?P<label>.*?) portable link file\\n\\nsiz..."
         '''
         self._portable_regex_link_pattern = re.compile(
-            string.Template.delimiter + '{?' + string.Template.idpattern +
-            '}?').sub(
-                '(.*?)', string.Template(
-                    boostNode.extension.native.String(
-                        self.portable_link_pattern
-                    ).validate_regex(eception=['$', '\\']).content
-                ).safe_substitute(
-                    size='(?P<size>[0-9]+)',
-                    label='(?P<label>.*?)',
-                    path='(?P<path>.*?)',
-                    name='(?P<name>.*?)'))
+            string.Template.delimiter + '{?' + string.Template.idpattern + '}?'
+        ).sub(
+            '(.*?)', string.Template(
+                boostNode.extension.native.String(
+                    self.portable_link_pattern
+                ).validate_regex(eception=['$', '\\']).content
+            ).safe_substitute(
+                size='(?P<size>[0-9]+)',
+                label='(?P<label>.*?)',
+                path='(?P<path>.*?)',
+                name='(?P<name>.*?)'))
         return self._portable_regex_link_pattern
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -2466,9 +2467,10 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             other_backup = backup
             backup = self.__class__(
                 location=self.directory_path + TemplateParser(
-                    template=name_wrapper, string=True).render(
-                        file=backup
-                    ).output,
+                    template=name_wrapper, string=True
+                ).render(
+                    file=backup
+                ).output,
                 must_exist=False)
             if not backup:
 ## python3.3

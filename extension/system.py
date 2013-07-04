@@ -534,9 +534,9 @@ class Platform(builtins.object):
         maximum_timeout_in_seconds = 60
         while counter <= number_of_tries and not (
             down or cls.check_computer_reachability(
-                timeout_in_seconds, host)) or (
-                    down and cls.check_computer_reachability(
-                        timeout_in_seconds, host)):
+                timeout_in_seconds, host
+            )) or (down and cls.check_computer_reachability(
+                timeout_in_seconds, host)):
             counter += 1
             handler(mac_address, broadcast)
             __logger__.info(

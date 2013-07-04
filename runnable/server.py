@@ -293,11 +293,26 @@ class MultiProcessingHTTPServer(
 ##
 
             def process_request_no_termination_wrapper():
-                signal_numbers = boostNode.extension.system.Platform.\
-                    TERMINATION_SIGNAL_NUMBERS
-                for signal_number in signal_numbers:
-                    signal.signal(signal_number, signal.SIG_IGN)
-                parent_function(self, request, *arguments, **keywords)
+                try:
+                    signal_numbers = boostNode.extension.system.Platform.\
+                        TERMINATION_SIGNAL_NUMBERS
+                    for signal_number in signal_numbers:
+                        signal.signal(signal_number, signal.SIG_IGN)
+                    parent_function(self, request, *arguments, **keywords)
+## python3.3
+##                 except (
+##                     builtins.BrokenPipeError, socket.gaierror,
+##                     socket.herror, socket.timeout, socket.error
+##                 ) as exception:
+                except (
+                    socket.herror, socket.gaierror, socket.timeout,
+                    socket.error
+                ) as exception:
+##
+                    __logger__.info(
+                        'Connection interrupted. %s: %s',
+                        exception.__class__.__name__, builtins.str(exception))
+
 ## python3.3
 ##             multiprocessing.Process(
 ##                 target=process_request_no_termination_wrapper, daemon=True
@@ -310,11 +325,11 @@ class MultiProcessingHTTPServer(
         else:
 ## python3.3
 ##             return builtins.getattr(
-##                 http.server.HTTPServer, inspect.stack()[0][3])(
-##                     self, request, *arguments, **keywords)
+##                 http.server.HTTPServer, inspect.stack()[0][3]
+##             )(self, request, *arguments, **keywords)
             return builtins.getattr(
-                BaseHTTPServer.HTTPServer, inspect.stack()[0][3])(
-                    self, request, *arguments, **keywords)
+                BaseHTTPServer.HTTPServer, inspect.stack()[0][3]
+            )(self, request, *arguments, **keywords)
 ##
 
     # endregion
@@ -996,7 +1011,7 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
 
     # endregion
 
-    # region dynamic methods
+    # region dynamic  methods
 
         # region public methods
 
@@ -1110,7 +1125,7 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
 
     # endregion
 
-    # region dynamic methods
+    # region dynamic  methods
 
         # region public methods
 

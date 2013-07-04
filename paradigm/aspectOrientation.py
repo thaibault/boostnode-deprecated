@@ -603,14 +603,16 @@ class Argument(inspect.Parameter):
             default_value = ''
 ## python3.3         function_path = self.function.__qualname__
         function_path = self.function.__name__
-        return ('Object of "{name}" ({kind}) bounded to "{function_path}" '
-                'with name "{argument_name}", {default_value}annotation '
-                '"{annotation}" and value "{value}".').format(
-                    name=self.__class__.__name__, kind=builtins.str(self.kind),
-                    function_path=function_path, argument_name=self.name,
-                    default_value=default_value,
-                    annotation=builtins.str(self.annotation),
-                    value=builtins.str(self.value))
+        return (
+            'Object of "{name}" ({kind}) bounded to "{function_path}" '
+            'with name "{argument_name}", {default_value}annotation '
+            '"{annotation}" and value "{value}".'
+        ).format(
+            name=self.__class__.__name__, kind=builtins.str(self.kind),
+            function_path=function_path, argument_name=self.name,
+            default_value=default_value,
+            annotation=builtins.str(self.annotation),
+            value=builtins.str(self.value))
 
             # endregion
 

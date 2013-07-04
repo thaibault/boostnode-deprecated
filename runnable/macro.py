@@ -711,8 +711,9 @@ class Replace(
                 path=file.path, current_version=self._current_version,
                 new_version=self._new_version))
         file_content = first_line + re.compile(
-            self._more_line_regex_pattern, re.DOTALL).sub(
-                self._replace_alternate_lines, file_content)
+            self._more_line_regex_pattern, re.DOTALL
+        ).sub(
+            self._replace_alternate_lines, file_content)
         if not self._dry:
             try:
                 file.content = re.compile(self._one_line_regex_pattern).sub(

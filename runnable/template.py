@@ -365,8 +365,8 @@ class Parser(
         if not self._indent and self.content:
             self._indent = self._template_context_default_indent
             match = re.compile(
-                '^<% __indent__ = ([1-9][0-9]*)(;|\n)?.*?$').match(
-                    boostNode.extension.native.String(self.content).readline())
+                '^<% __indent__ = ([1-9][0-9]*)(;|\n)?.*?$'
+            ).match(boostNode.extension.native.String(self.content).readline())
             if match:
                 self._indent = builtins.int(match.group(1))
         return self._indent
@@ -1313,8 +1313,8 @@ class Parser(
                 code_line[slice_position:])
         return (
             "include(indent_space='" + match.group('indent_code')[slice:] +
-            "')" + code_line[builtins.len('include(') +
-            length_of_include_call + 1:])
+            "')" +
+            code_line[builtins.len('include(') + length_of_include_call + 1:])
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -1514,8 +1514,9 @@ class Parser(
         if string.endswith(delimiter[0]):
             string = string[0:-1] + '\\' + string[-1]
         return (
-            "print(%s, end='')\n" % (delimiter + string.replace('\n', '\\n') +
-            end.replace('\n', '\\n') + delimiter))
+            "print(%s, end='')\n" % (
+                delimiter + string.replace('\n', '\\n') +
+                end.replace('\n', '\\n') + delimiter))
 
                 # endregion
 
