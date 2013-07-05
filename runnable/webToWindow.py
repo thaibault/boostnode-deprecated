@@ -17,7 +17,7 @@
 '''
     For conventions see "boostNode/__init__.py" on
     https://github.com/thaibault/boostNode
-''''''Resolve cyclic dependency issues.'''
+'''
 
 __author__ = 'Torben Sickert'
 __copyright__ = 'see boostNode/__init__.py'

@@ -413,7 +413,7 @@ class Platform(builtins.object):
         Saves a list of process signal codes which should bring the application
         down.
     '''
-    TERMINATION_SIGNAL_NUMBERS = signal.SIGTERM, signal.SIGINT, signal.SIGHUP
+    TERMINATION_SIGNALS = 'SIGTERM', 'SIGINT', 'SIGHUP'
 
         # endregion
 
@@ -436,6 +436,8 @@ class Platform(builtins.object):
         paused threads will continue their work.
     '''
     pause_thread = False
+    '''Holds all process termination signal numbers.'''
+    termination_signal_numbers = ()
 
         # endregion
 
@@ -461,6 +463,10 @@ class Platform(builtins.object):
             >>> os # doctest: +SKIP
             'posix'
         '''
+        for termination_signal_number in cls.TERMINATION_SIGNALS:
+            if builtins.hasattr(signal, termination_signal_number):
+                cls.termination_signal_numbers = builtins.getattr(
+                    signal, termination_signal_number)
         if 'nt' == os.name:
             cls.operating_system = 'windows'
         elif 'darvin' == sys.platform:

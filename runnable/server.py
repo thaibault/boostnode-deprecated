@@ -295,7 +295,7 @@ class MultiProcessingHTTPServer(
             def process_request_no_termination_wrapper():
                 try:
                     signal_numbers = boostNode.extension.system.Platform.\
-                        TERMINATION_SIGNAL_NUMBERS
+                        termination_signal_numbers
                     for signal_number in signal_numbers:
                         signal.signal(signal_number, signal.SIG_IGN)
                     parent_function(self, request, *arguments, **keywords)
