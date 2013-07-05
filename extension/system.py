@@ -322,7 +322,7 @@ class Runnable(builtins.object):
         if not childrens_module.__test_mode__:
             self.__termination_lock.acquire()
             signal_numbers = \
-                boostNode.extension.system.Platform.TERMINATION_SIGNAL_NUMBERS
+                boostNode.extension.system.Platform.termination_signal_numbers
             for signal_number in signal_numbers:
                 signal.signal(signal_number, self.trigger_close)
         try:
@@ -437,7 +437,7 @@ class Platform(builtins.object):
     '''
     pause_thread = False
     '''Holds all process termination signal numbers.'''
-    termination_signal_numbers = ()
+    termination_signal_numbers = []
 
         # endregion
 
@@ -465,8 +465,8 @@ class Platform(builtins.object):
         '''
         for termination_signal_number in cls.TERMINATION_SIGNALS:
             if builtins.hasattr(signal, termination_signal_number):
-                cls.termination_signal_numbers = builtins.getattr(
-                    signal, termination_signal_number)
+                cls.termination_signal_numbers.append(builtins.getattr(
+                    signal, termination_signal_number))
         if 'nt' == os.name:
             cls.operating_system = 'windows'
         elif 'darvin' == sys.platform:
