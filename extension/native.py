@@ -1640,8 +1640,8 @@ class Module(boostNode.paradigm.objectOrientation.Class):
         for sub_module in context_path.split('.'):
             found_last_sub_module = False
             for sub_location in location:
-                if (sub_location.basename == sub_module and not (
-                        only_source_files and
+                if(sub_location.basename == sub_module and
+                   not (only_source_files and
                         sub_location.extension == 'pyc')):
                     found_last_sub_module = True
                     location = sub_location

@@ -168,19 +168,23 @@ class Runnable(builtins.object):
     @boostNode.paradigm.aspectOrientation.JointPoint(atexit.register)
 ## python3.3
 ##     def trigger_close(
-##         self: boostNode.extension.type.Self, signal_number=None,
-##         stack_frame=None
+##         self=None, signal_number=None, stack_frame=None
 ##     ) -> boostNode.extension.type.Self:
-    def trigger_close(self, signal_number=None, stack_frame=None):
+    def trigger_close(self=None, signal_number=None, stack_frame=None):
 ##
         '''Method for cleaning up running workers.'''
-        if self.__close_lock.acquire(False):
+        if self is not None and self.__close_lock.acquire(False):
             self.close(signal_number, stack_frame)
             self.__termination_lock.release()
-            # NOTE: "sys.exit" has to be called to terminate all child threads.
             if signal_number == signal.SIGINT:
                 sys.exit(130)
-            sys.exit()
+            if not (__test_mode__ or __logger__.isEnabledFor(logging.DEBUG) or
+                    sys.flags.debug):
+                '''
+                    NOTE: "sys.exit" has to be called to terminate all child
+                    threads.
+                '''
+                sys.exit()
         return self
 
         # endregion
@@ -261,7 +265,7 @@ class Runnable(builtins.object):
         '''
             This method should usually be overwritten to handle cleanup jobs.
         '''
-        reason = ' caused by program trigger'
+        reason = ' caused by program trigger or normal termination'
         if signal_number:
             reason = ' caused by signal "%d"' % signal_number
         __logger__.debug('Closing "%s"%s.', cls.__name__, reason)
@@ -341,6 +345,8 @@ class Runnable(builtins.object):
                         exception_message=builtins.str(exception),
                         program_file_path=sys.argv[0]))
                 sys.exit(1)
+        finally:
+            self.trigger_close()
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
@@ -575,7 +581,7 @@ class Platform(builtins.object):
         data = b'FFFFFFFFFFFF' + (mac_address * 20).encode()
         send_data = b''
         '''Split up the hex values and pack.'''
-        for counter in builtins.range(0, builtins.len(data), 2):
+        for counter in builtins.range(builtins.len(data), 2):
             send_data += struct.pack(
                 'B', builtins.int(data[counter:counter + 2], 16))
         '''Broadcast it to the network.'''

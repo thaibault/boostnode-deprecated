@@ -230,21 +230,55 @@ class MultiProcessingHTTPServer(
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
-##     def process_request(
-##         self: boostNode.extension.type.Self, request: socket.socket,
-##         *arguments: builtins.object, **keywords: builtins.object
+##     def process_request_no_termination_wrapper(
+##         self: boostNode.extension.type.Self,
+##         parent_function: types.FunctionType, request: socket.socket,
+##         arguments: builtins.tuple, keywords: builtins.dict
 ##     ) -> None:
-    def process_request(self, request, *arguments, **keywords):
+    def process_request_no_termination_wrapper(
+        self, parent_function, request, arguments, keywords
+    ):
 ##
         '''
-            This method indicates weater the request is a read only or not.
+            Wraps the normal "process_request" method. To manage the process
+            forking stuff.
+        '''
+        try:
+            signal_numbers = boostNode.extension.system.Platform.\
+                termination_signal_numbers
+            for signal_number in signal_numbers:
+                signal.signal(signal_number, signal.SIG_IGN)
+            parent_function(self, request, *arguments, **keywords)
+## python3.3
+##         except (
+##             builtins.BrokenPipeError, socket.gaierror,
+##             socket.herror, socket.timeout, socket.error
+##         ) as exception:
+        except (
+            socket.herror, socket.gaierror, socket.timeout, socket.error
+        ) as exception:
+##
+            __logger__.info(
+                'Connection interrupted. %s: %s', exception.__class__.__name__,
+                builtins.str(exception))
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def process_request(
+##         self: boostNode.extension.type.Self, request_socket: socket.socket,
+##         *arguments: builtins.object, **keywords: builtins.object
+##     ) -> None:
+    def process_request(self, request_socket, *arguments, **keywords):
+##
+        '''
+            This method indicates weather the request is a read only or not.
             Read only requests will be forked if enough free processors are
             available.
         '''
         if self.web.block_new_worker:
             return None
 ## python3.3
-##         self.read_file_socket = request.makefile('rb', -1)
+##         self.read_file_socket = request_socket.makefile('rb', -1)
 ##         read_file_socket = self.read_file_socket
 ##
 ##         @boostNode.paradigm.aspectOrientation.JointPoint
@@ -252,7 +286,7 @@ class MultiProcessingHTTPServer(
 ##             *arguments: builtins.object, **keywords: builtins.object
 ##         ) -> builtins.bytes:
 ##             '''
-##                 Wrapes the native file object method version.
+##                 Wraps the native file object method version.
 ##             '''
 ##             self = read_file_socket
 ##             if not builtins.hasattr(self, 'first_read_line'):
@@ -271,66 +305,55 @@ class MultiProcessingHTTPServer(
 ##         self.read_file_socket.readline = readline
         '''
             This assignment replace the python's native
-            "request.makefile('rb', -1)" behavior.
+            "socket.socket.makefile('rb', -1)" behavior.
         '''
         self.read_file_socket = SocketFileObjectWrapper(
-            request, 'rb', -1)
+            request_socket, 'rb', -1)
 ##
         '''NOTE: We have to add 1 for the server processes itself.'''
         self.web.number_of_running_processes = \
             builtins.len(multiprocessing.active_children()) + 1
-        '''Takes this method via introspection from now on.'''
-        if(not self.is_same_thread_request(request) and
+        if(not self.is_same_thread_request(request_socket) and
            self.web.number_of_running_processes <
            self.web.maximum_number_of_processes):
             self.web.number_of_running_processes += 1
-
+            '''Takes this method via introspection from now on.'''
 ## python3.3
 ##             parent_function = builtins.getattr(
 ##                 http.server.HTTPServer, inspect.stack()[0][3])
+##             multiprocessing.Process(
+##                 target=self.process_request_no_termination_wrapper,
+##                 daemon=True,
+##                 args=(parent_function, request_socket, arguments, keywords)
+##             ).start()
             parent_function = builtins.getattr(
                 BaseHTTPServer.HTTPServer, inspect.stack()[0][3])
-##
-
-            def process_request_no_termination_wrapper():
-                try:
-                    signal_numbers = boostNode.extension.system.Platform.\
-                        termination_signal_numbers
-                    for signal_number in signal_numbers:
-                        signal.signal(signal_number, signal.SIG_IGN)
-                    parent_function(self, request, *arguments, **keywords)
-## python3.3
-##                 except (
-##                     builtins.BrokenPipeError, socket.gaierror,
-##                     socket.herror, socket.timeout, socket.error
-##                 ) as exception:
-                except (
-                    socket.herror, socket.gaierror, socket.timeout,
-                    socket.error
-                ) as exception:
-##
-                    __logger__.info(
-                        'Connection interrupted. %s: %s',
-                        exception.__class__.__name__, builtins.str(exception))
-
-## python3.3
-##             multiprocessing.Process(
-##                 target=process_request_no_termination_wrapper, daemon=True
-##             ).start()
             forked_request_process = multiprocessing.Process(
-                target=process_request_no_termination_wrapper)
+                target=self.process_request_no_termination_wrapper,
+                args=(parent_function, request_socket, arguments, keywords))
             forked_request_process.daemon = True
             forked_request_process.start()
 ##
         else:
+            try:
 ## python3.3
-##             return builtins.getattr(
-##                 http.server.HTTPServer, inspect.stack()[0][3]
-##             )(self, request, *arguments, **keywords)
-            return builtins.getattr(
-                BaseHTTPServer.HTTPServer, inspect.stack()[0][3]
-            )(self, request, *arguments, **keywords)
+##                 return builtins.getattr(
+##                     http.server.HTTPServer, inspect.stack()[0][3]
+##                 )(self, request_socket, *arguments, **keywords)
+##             except (
+##                 builtins.BrokenPipeError, socket.gaierror, socket.herror,
+##                 socket.timeout, socket.error
+##             ) as exception:
+                return builtins.getattr(
+                    BaseHTTPServer.HTTPServer, inspect.stack()[0][3]
+                )(self, request_socket, *arguments, **keywords)
+            except (
+                socket.herror, socket.gaierror, socket.timeout, socket.error
+            ) as exception:
 ##
+                __logger__.info(
+                    'Connection interrupted. %s: %s',
+                    exception.__class__.__name__, builtins.str(exception))
 
     # endregion
 
@@ -366,7 +389,7 @@ class Web(
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},
-             'choices': builtins.range(0, 2 ** 16),
+             'choices': builtins.range(2 ** 16),
              'required': {'execute': '__initializer_default_value__ is None'},
              'help': 'Defines the port number to access the webserver.',
              'dest': 'port',
@@ -510,7 +533,17 @@ class Web(
              'required': {'execute': '__initializer_default_value__ is None'},
              'help': 'Defines the authentication file name.',
              'dest': 'authentication_file_name',
-             'metavar': 'STRING'}})
+             'metavar': 'STRING'}},
+        {'arguments': ('-k', '--maximum-number-of-processes'),
+         'keywords': {
+             'action': 'store',
+             'default': {'execute': '__initializer_default_value__'},
+             'type': {'execute': 'type(__initializer_default_value__)'},
+             'required': {'execute': '__initializer_default_value__ is None'},
+             'help': 'Defines the maximum number of concurrent running '
+                     'processes.',
+             'dest': 'maximum_number_of_processes',
+             'metavar': 'NUMBER'}})
     '''
         Globally accessable socket to ask for currently useful ip determining.
     '''
@@ -652,28 +685,29 @@ class Web(
     def close(self, *arguments, **keywords):
 ##
         '''Waits for running workers and shuts the server down.'''
-        self.block_new_worker = True
-        number_of_running_workers = self.number_of_running_threads + \
-            builtins.len(multiprocessing.active_children())
-        shown_number = 0
-        while number_of_running_workers > 0:
-            if(number_of_running_workers !=
-               self.number_of_running_threads +
-               builtins.len(multiprocessing.active_children())):
-                number_of_running_workers = \
-                    self.number_of_running_threads + \
-                    builtins.len(multiprocessing.active_children())
-            if(shown_number != number_of_running_workers and
-               number_of_running_workers > 0):
-                __logger__.info(
-                    'Waiting for %d running workers (%d threads and '
-                    '%d processes).', number_of_running_workers,
-                    self.number_of_running_threads,
-                    builtins.len(multiprocessing.active_children()))
-                shown_number = number_of_running_workers
-            time.sleep(2)
-        __logger__.info('Shutting down webserver.')
-        self.service.socket.close()
+        if self.service:
+            self.block_new_worker = True
+            number_of_running_workers = self.number_of_running_threads + \
+                builtins.len(multiprocessing.active_children())
+            shown_number = 0
+            while number_of_running_workers > 0:
+                if(number_of_running_workers !=
+                   self.number_of_running_threads +
+                   builtins.len(multiprocessing.active_children())):
+                    number_of_running_workers = \
+                        self.number_of_running_threads + \
+                        builtins.len(multiprocessing.active_children())
+                if(shown_number != number_of_running_workers and
+                   number_of_running_workers > 0):
+                    __logger__.info(
+                        'Waiting for %d running workers (%d threads and '
+                        '%d processes).', number_of_running_workers,
+                        self.number_of_running_threads,
+                        builtins.len(multiprocessing.active_children()))
+                    shown_number = number_of_running_workers
+                time.sleep(2)
+            __logger__.info('Shutting down webserver.')
+            self.service.socket.close()
         '''
             Take this method type by the abstract class via introspection.
         '''
@@ -783,7 +817,9 @@ class Web(
             queue=True)
         self.module_loading = module_loading
         self.maximum_number_of_processes = maximum_number_of_processes
-        if not self.maximum_number_of_processes:
+        if boostNode.extension.system.Platform.operating_system == 'windows':
+            self.maximum_number_of_processes = 1
+        elif not self.maximum_number_of_processes:
             try:
                 self.maximum_number_of_processes = \
                     2 * multiprocessing.cpu_count()
@@ -870,7 +906,7 @@ class Web(
         if self._public_key_file:
             ports = [443] + ports
         ports += builtins.list(builtins.set(
-            builtins.range(0, 2 ** 16 - 1)
+            builtins.range(2 ** 16 - 1)
         ).difference(ports))
         for port in ports:
             try:
@@ -909,9 +945,26 @@ class Web(
 ##                 'rights.', self.port
 ##             ) from None
             raise __exception__(
-                "Port %d isn't avalible to run the web-server with given "
+                "Port %d isn't available to run the web-server with given "
                 'rights.', self.port)
 ##
+        return self
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def _serve_service_forever_exception_catcher(
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
+    def _serve_service_forever_exception_catcher(self):
+##
+        '''
+            This method wraps the python's native server "serve_forever()"
+            method to handle incoming exceptions in a separat thread.
+        '''
+        try:
+            return self.service.serve_forever()
+        except socket.error:
+            pass
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -937,9 +990,11 @@ class Web(
         self.service.web = self
 ## python3.3
 ##         threading.Thread(
-##             target=self.service.serve_forever, daemon=True
+##             target=self._serve_service_forever_exception_catcher,
+##             daemon=True
 ##         ).start()
-        server_thread = threading.Thread(target=self.service.serve_forever)
+        server_thread = threading.Thread(
+            target=self._serve_service_forever_exception_catcher)
         server_thread.daemon = True
         server_thread.start()
 ##
@@ -1144,42 +1199,28 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
             It also through an exception and sends an http-error
             if request isn't valid.
         '''
-        try:
-            self._create_environment_variables()
-            self.requested_file = boostNode.extension.file.Handler(
-                location=self.server.web.root.path + self.path,
-                must_exist=False)
-            self._authentication_location = self.server.web.root
-            if self.requested_file:
-                self._authentication_location = self.requested_file
-                if self.requested_file.is_file():
-                    self._authentication_location =\
-                        boostNode.extension.file.Handler(
-                            location=self.requested_file.directory_path)
-            if self._is_authenticated():
-                valid_request = self._is_valid_request()
-                if valid_request:
-                    if self.path:
-                        if self._is_valid_reference():
-                            return self._set_dynamic_or_static_get(
-                                file_name=self.path)
-                    elif self._default_get():
-                        return self
-                return self._send_no_file_error(valid_request)
-            return self._send_no_authentication_error()
-## python3.3
-##         except (
-##             builtins.BrokenPipeError, socket.gaierror, socket.herror,
-##             socket.timeout, socket.error
-##         ) as exception:
-        except (
-            socket.herror, socket.gaierror, socket.timeout, socket.error
-        ) as exception:
-##
-            __logger__.info(
-                'Connection interrupted. %s: %s', exception.__class__.__name__,
-                builtins.str(exception))
-        return self
+        self._create_environment_variables()
+        self.requested_file = boostNode.extension.file.Handler(
+            location=self.server.web.root.path + self.path,
+            must_exist=False)
+        self._authentication_location = self.server.web.root
+        if self.requested_file:
+            self._authentication_location = self.requested_file
+            if self.requested_file.is_file():
+                self._authentication_location =\
+                    boostNode.extension.file.Handler(
+                        location=self.requested_file.directory_path)
+        if self._is_authenticated():
+            valid_request = self._is_valid_request()
+            if valid_request:
+                if self.path:
+                    if self._is_valid_reference():
+                        return self._set_dynamic_or_static_get(
+                            file_name=self.path)
+                elif self._default_get():
+                    return self
+            return self._send_no_file_error(valid_request)
+        return self._send_no_authentication_error()
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3

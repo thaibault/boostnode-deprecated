@@ -197,6 +197,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         objects aren't locations except in "_root_path" available.
     '''
     _root_path = '/'
+    _root_path_initialized = False
     '''Defines the encoding for writing and reading text-based files.'''
     _encoding = ''
     '''
@@ -646,12 +647,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> Handler.set_root(location=root_save) # doctest: +ELLIPSIS
             <class '...Handler'>
         '''
-        root_path = os.path.normpath(cls(
+        root_path = cls(
             location, respect_root_path=False, output_with_root_prefix=True
-        ).path)
+        ).path
         if not os.path.isabs(root_path):
-            root_path = os.path.abspath(os.path.normpath(
-                os.path.expanduser(root_path)))
+            root_path = os.path.abspath(root_path)
         if root_path[-builtins.len(os.sep)] != os.sep:
             root_path += os.sep
         cls._root_path = root_path
@@ -3812,26 +3812,28 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> Handler.set_root(location=root_save) # doctest: +ELLIPSIS
             <class '...Handler'>
         '''
-        operating_system =\
-            boostNode.extension.system.Platform().operating_system
-        '''
-            Prepend root path to given path location, if it wasn't given as
-            location in root path.
-        '''
-        if(self._respect_root_path and (
-            self._initialized_path.startswith(
-                self._root_path[:-builtins.len(os.sep)]) or
-            not self._path.startswith(
-                self._root_path[:-builtins.len(os.sep)])) and not
-            ('windows' == operating_system and
-             re.compile('^[a-zA-Z]:\\.*').match(self._path) and
-             self._root_path == os.sep)
-           ):
-            if self._path.startswith(os.sep):
-                self._path = self._root_path[:-builtins.len(
-                    os.sep)] + self._path
-            else:
-                self._path = self._root_path + self._path
+        if self._respect_root_path:
+            if not self._root_path_initialized:
+                self.set_root(location=self._root_path)
+                self._root_path_initialized = True
+                operating_system =\
+                    boostNode.extension.system.Platform().operating_system
+                '''
+                    Prepend root path to given path location, if it wasn't
+                    given as location in root path.
+                '''
+                if((self._initialized_path.startswith(
+                        self._root_path[:-builtins.len(os.sep)]) or
+                    not self._path.startswith(
+                        self._root_path[:-builtins.len(os.sep)])) and not
+                    ('windows' == operating_system and
+                     re.compile('^[a-zA-Z]:\\.*').match(self._path) and
+                     self._root_path == os.sep)):
+                    if self._path.startswith(os.sep):
+                        self._path = self._root_path[:-builtins.len(
+                            os.sep)] + self._path
+                    else:
+                        self._path = self._root_path + self._path
         return self._path
 
     @boostNode.paradigm.aspectOrientation.JointPoint

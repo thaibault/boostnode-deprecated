@@ -106,12 +106,9 @@ class Reflector(
              'default': {'execute': '__initializer_default_value__'},
              'type': builtins.str,
              'required': {'execute': '__initializer_default_value__ is None'},
-            # TODO check if we can get shorter.
              'help': 'Select locations which should be handle with higher '
-                     'priority %s will try to copy these files into the '
-                     'cache.' %
-                     boostNode.extension.native.Module.get_package_name(
-                         frame=inspect.currentframe()),
+                     'priority this application will try to copy these files '
+                     'into the cache.',
              'dest': 'priority_locations',
              'metavar': 'PATHS'}},
         {'arguments': ('-e', '--exclude-locations'),
@@ -121,12 +118,9 @@ class Reflector(
              'default': {'execute': '__initializer_default_value__'},
              'type': builtins.str,
              'required': {'execute': '__initializer_default_value__ is None'},
-            # TODO check if we can get shorter.
              'help': 'Select locations which should be ignored. '
-                     "%s doesn't touch these files in source and its "
-                     'corresponding locations in target.' %
-                     boostNode.extension.native.Module.get_name(
-                         frame=inspect.currentframe()).capitalize(),
+                     "This application doesn't touch these files in source "
+                     'and its corresponding locations in target.',
              'dest': 'exclude_locations',
              'metavar': 'PATHS'}},
         {'arguments': ('-r', '--target-rights'),

@@ -92,14 +92,15 @@ class FunctionDecorator(builtins.object):
 
         # region public properties
 
+    '''
+        This constant holds a list of python decorators which could be emulated
+        by this function wrapper instances.
+    '''
+    HANDABLE_DECORATORS = [builtins.classmethod, builtins.staticmethod]
     '''This property hold a list of common python's native decorators.'''
-    COMMON_DECORATORS = (
-        builtins.classmethod, builtins.staticmethod, builtins.property,
-        builtins.super, atexit.register)
+    COMMON_DECORATORS = [builtins.property, builtins.super, atexit.register]
 
         # endregion
-
-    # endregion
 
     # endregion
 
@@ -161,9 +162,12 @@ class FunctionDecorator(builtins.object):
             self.return_value = None
         self._method_type = None
 
-        if method in self.COMMON_DECORATORS:
+        if method in self.COMMON_DECORATORS + self.HANDABLE_DECORATORS:
             self.function = function
             self._method_type = method
+            if(self.function is not None and
+               self._method_type in self.COMMON_DECORATORS):
+                self.function = self._method_type(self.function)
         elif(builtins.isinstance(
             method, (types.FunctionType, types.MethodType))
         ):
@@ -176,7 +180,7 @@ class FunctionDecorator(builtins.object):
                     class_name=self.__class__.__name__,
                     common_methods='", "'.join(builtins.map(
                         lambda decorator: decorator.__name__,
-                        self.COMMON_DECORATORS)),
+                        self.COMMON_DECORATORS + self.HANDABLE_DECORATORS)),
                     function_type=types.FunctionType.__name__,
                     method_type=types.MethodType.__name__,
                     type=builtins.type(method).__name__,
@@ -253,7 +257,10 @@ class FunctionDecorator(builtins.object):
             <...FunctionDecorator.__get__...>
         '''
         if self.object is not None:
-            '''Restore old information about given class to function.'''
+            '''
+                Restore old information about given class to function
+                (method_type).
+            '''
             method_type = self._method_type
             self = self.__class__(self.function)
             self._method_type = method_type
@@ -272,7 +279,7 @@ class FunctionDecorator(builtins.object):
     def get_wrapper_function(self):
 ##
         '''
-            This method should ususally be overwridden. It serves the wrapper
+            This method should usually be overridden. It serves the wrapper
             function to manipulate decorated function calls.
         '''
         return self.function
