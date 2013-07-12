@@ -156,13 +156,13 @@ Structure of meta documenting classes. (see bc16 and bc17)
 
     class A:
 
-        # region (Static|Dynamic) (properties|methods)
+        # region (static|dynamic) (properties|methods)
 
-            # region (Public|Protected) (properties|methods)
+            # region (public|protected) (properties|methods)
 
-                # region Property of method or property group
+                # region property of method or property group
 
-                    # region Subproperty of method or property group
+                    # region subproperty of method or property group
 
         ...
 

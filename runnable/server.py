@@ -87,7 +87,7 @@ import boostNode.extension.system
 ## pass
 class SocketFileObjectWrapper(socket._fileobject):
     '''
-        This class wrapes the native implementation of the server
+        This class wraps the native implementation of the server
         socket. The main goal is that the first line from given
         socket have to be taken twice. This curious feature is the
         only way to get the requested file as early as needed to decide
@@ -115,32 +115,32 @@ class SocketFileObjectWrapper(socket._fileobject):
     @boostNode.paradigm.aspectOrientation.JointPoint
     def __init__(self, *arguments, **keywords):
         '''
-            This methods wrapes the initializer to make the first read line
-            varibale instance bounded.
+            This methods wraps the initializer to make the first read line
+            variable instance bounded.
         '''
         self.first_read_line = False
         '''Take this method via introspection.'''
         return builtins.getattr(
-            socket._fileobject, inspect.stack()[0][3]
-        )(self, *arguments, **keywords)
+            builtins.super(self.__class__, self), inspect.stack()[0][3]
+        )(*arguments, **keywords)
 
             # endregion
 
     @boostNode.paradigm.aspectOrientation.JointPoint
     def readline(self, *arguments, **keywords):
         '''
-            Wrapes the readline method to get the first line twice.
+            Wraps the "readline()" method to get the first line twice.
         '''
         if self.first_read_line is False:
             self.first_read_line = builtins.getattr(
-                socket._fileobject, inspect.stack()[0][3]
-            )(self, *arguments, **keywords)
+                builtins.super(self.__class__, self), inspect.stack()[0][3]
+            )(*arguments, **keywords)
             return self.first_read_line
         elif self.first_read_line is True:
             '''Take this method via introspection.'''
             return builtins.getattr(
-                socket._fileobject, inspect.stack()[0][3]
-            )(self, *arguments, **keywords)
+                builtins.super(self.__class__, self), inspect.stack()[0][3]
+            )(*arguments, **keywords)
         result = self.first_read_line
         self.first_read_line = True
         return result
@@ -157,7 +157,7 @@ class SocketFileObjectWrapper(socket._fileobject):
 ##     socketserver.ThreadingMixIn, http.server.HTTPServer
 ## ):
 class MultiProcessingHTTPServer(
-    SocketServer.ThreadingMixIn, BaseHTTPServer.HTTPServer
+    SocketServer.ThreadingMixIn, BaseHTTPServer.HTTPServer, builtins.object
 ):
 ##
     '''The Class implements a partial multiprocessing supported web server.'''
@@ -167,7 +167,7 @@ class MultiProcessingHTTPServer(
         # region public properties
 
     '''
-        This attribute saves the modfied read file socket to apply it in the
+        This attribute saves the modified read file socket to apply it in the
         request handler.
     '''
     read_file_socket = None
@@ -191,19 +191,14 @@ class MultiProcessingHTTPServer(
     def __init__(self, *arguments, **keywords):
 ##
         '''
-            Ths initializer wrapper makes sure that the specical wrapped file
+            This initializer wrapper makes sure that the special wrapped file
             socket is instance bounded.
         '''
-        self.read_file_socket = None
+        self.read_file_socket = self.__class__.read_file_socket
         '''Take this method via introspection.'''
-## python3.3
-##         return builtins.getattr(
-##             http.server.HTTPServer, inspect.stack()[0][3]
-##         )(self, *arguments, **keywords)
         return builtins.getattr(
-            BaseHTTPServer.HTTPServer, inspect.stack()[0][3]
-        )(self, *arguments, **keywords)
-##
+            builtins.super(self.__class__, self), inspect.stack()[0][3]
+        )(*arguments, **keywords)
 
             # endregion
 
@@ -217,7 +212,7 @@ class MultiProcessingHTTPServer(
     def is_same_thread_request(self, request):
 ##
         '''
-            Deterimes if the given request could be run in its own dedicated
+            Determines if the given request could be run in its own dedicated
             process.
         '''
         first_request_line = self.read_file_socket.readline(
@@ -313,21 +308,23 @@ class MultiProcessingHTTPServer(
         '''NOTE: We have to add 1 for the server processes itself.'''
         self.web.number_of_running_processes = \
             builtins.len(multiprocessing.active_children()) + 1
+## python3.3
+##         parent_function = builtins.getattr(
+##             http.server.HTTPServer, inspect.stack()[0][3])
+        parent_function = builtins.getattr(
+            BaseHTTPServer.HTTPServer, inspect.stack()[0][3])
+##
         if(not self.is_same_thread_request(request_socket) and
            self.web.number_of_running_processes <
            self.web.maximum_number_of_processes):
             self.web.number_of_running_processes += 1
             '''Takes this method via introspection from now on.'''
 ## python3.3
-##             parent_function = builtins.getattr(
-##                 http.server.HTTPServer, inspect.stack()[0][3])
 ##             multiprocessing.Process(
 ##                 target=self.process_request_no_termination_wrapper,
 ##                 daemon=True,
 ##                 args=(parent_function, request_socket, arguments, keywords)
 ##             ).start()
-            parent_function = builtins.getattr(
-                BaseHTTPServer.HTTPServer, inspect.stack()[0][3])
             forked_request_process = multiprocessing.Process(
                 target=self.process_request_no_termination_wrapper,
                 args=(parent_function, request_socket, arguments, keywords))
@@ -337,16 +334,14 @@ class MultiProcessingHTTPServer(
         else:
             try:
 ## python3.3
-##                 return builtins.getattr(
-##                     http.server.HTTPServer, inspect.stack()[0][3]
-##                 )(self, request_socket, *arguments, **keywords)
+##                 return parent_function(
+##                     self, request_socket, *arguments, **keywords)
 ##             except (
 ##                 builtins.BrokenPipeError, socket.gaierror, socket.herror,
 ##                 socket.timeout, socket.error
 ##             ) as exception:
-                return builtins.getattr(
-                    BaseHTTPServer.HTTPServer, inspect.stack()[0][3]
-                )(self, request_socket, *arguments, **keywords)
+                return parent_function(
+                    self, request_socket, *arguments, **keywords)
             except (
                 socket.herror, socket.gaierror, socket.timeout, socket.error
             ) as exception:
@@ -415,7 +410,7 @@ class Web(
                      'encryption.',
              'dest': 'public_key_file_path',
              'metavar': 'PATH'}},
-        {'arguments': ('-o', '--close-order'),
+        {'arguments': ('-o', '--stop-order'),
          'keywords': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
@@ -424,7 +419,7 @@ class Web(
              'help': {'execute': '"""Saves a cli-command for shutting down '
                                  'the server (default: "%s").""" % '
                                  '__initializer_default_value__'},
-             'dest': 'close_order',
+             'dest': 'stop_order',
              'metavar': 'STRING'}},
         {'arguments': ('-w', '--request-whitelist'),
          'keywords': {
@@ -569,7 +564,7 @@ class Web(
     '''Saves a default file if no explicit file was requested.'''
     default = ''
     '''Saves a cli-command for shutting down the server.'''
-    close_order = ''
+    stop_order = ''
     '''
         Saves informations how to define authentications in protected
         directories.
@@ -665,11 +660,11 @@ class Web(
             'Object of "Web" with root path "...", port "0" and clo..."clo...'
         '''
         return ('Object of "{class_name}" with root path "{path}", port '
-                '"{port}" and close order "{close_order}". Number of running '
+                '"{port}" and stop order "{stop_order}". Number of running '
                 'threads/processes: {number_of_running_threads}/'
                 '{number_of_running_processes}.'.format(
                     class_name=self.__class__.__name__, path=self.root,
-                    port=self.port, close_order=self.close_order,
+                    port=self.port, stop_order=self.stop_order,
                     number_of_running_threads=self.number_of_running_threads,
                     number_of_running_processes=
                     self.number_of_running_processes))
@@ -678,11 +673,11 @@ class Web(
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
-##     def close(
+##     def stop(
 ##         self: boostNode.extension.type.Self, *arguments: builtins.object,
 ##         **keywords: builtins.object
 ##     ) -> boostNode.extension.type.Self:
-    def close(self, *arguments, **keywords):
+    def stop(self, *arguments, **keywords):
 ##
         '''Waits for running workers and shuts the server down.'''
         if self.service:
@@ -711,10 +706,9 @@ class Web(
         '''
             Take this method type by the abstract class via introspection.
         '''
-        builtins.getattr(
-            boostNode.extension.system.Runnable, inspect.stack()[0][3]
+        return builtins.getattr(
+            builtins.super(self.__class__, self), inspect.stack()[0][3]
         )(*arguments, **keywords)
-        return self
 
         # endregion
 
@@ -736,7 +730,7 @@ class Web(
             Examples:
 
             >>> Web(root='.') # doctest: +ELLIPSIS
-            Object of "Web" with root path "...", port "0" and close order ...
+            Object of "Web" with root path "...", port "0" and stop order ...
         '''
         command_line_arguments = boostNode.extension.system.CommandLine\
             .argument_parser(
@@ -749,7 +743,7 @@ class Web(
 ## python3.3
 ##     def _initialize(
 ##         self: boostNode.extension.type.Self, root='.', port=0,
-##         default='', public_key_file_path='', close_order='close',
+##         default='', public_key_file_path='', stop_order='stop',
 ##         request_whitelist=('/.*',), request_blacklist=(),
 ##         same_thread_request_whitelist=(),
 ##         # NOTE: Tuple for explicit webserver file reference validation.
@@ -769,7 +763,7 @@ class Web(
 ##     ) -> boostNode.extension.type.Self:
     def _initialize(
         self, root='.', port=0, default='', public_key_file_path='',
-        close_order='close', request_whitelist=('/.*',),
+        stop_order='stop', request_whitelist=('/.*',),
         request_blacklist=(), same_thread_request_whitelist=(),
         # NOTE: Tuple for explicit webserver file reference validation.
         # ('^text/.+', '^image/.+', '^application/(x-)?javascript$')
@@ -802,7 +796,7 @@ class Web(
         self.authentication = authentication
         self.authentication_file_name = authentication_file_name
         self.authentication_file_pattern = authentication_file_pattern
-        self.close_order = close_order
+        self.stop_order = stop_order
         self.root = boostNode.extension.file.Handler(location=root)
         self.port = port
         self.default = default
@@ -826,10 +820,12 @@ class Web(
             except builtins.NotImplementedError:
                 self.maximum_number_of_processes = \
                     self.DEFAULT_NUMBER_OF_PROCESSES
-        '''NOTE: Make this properties instance binded.'''
-        self.number_of_running_threads = 0
-        self.number_of_running_processes = 0
         self.shared_data = shared_data
+        '''NOTE: Make this properties instance bounded.'''
+        self.number_of_running_threads = \
+            self.__class__.number_of_running_threads
+        self.number_of_running_processes = \
+            self.__class__.number_of_running_processes
         return self._start_server_thread()
 
             # endregion
@@ -851,8 +847,8 @@ class Web(
             else:
                 self._start_with_dynamic_port()
         self._log_server_status()
-        if not __test_mode__ and self.close_order:
-            self.wait_for_close_order()
+        if not __test_mode__ and self.stop_order:
+            self.wait_for_order()
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -915,11 +911,11 @@ class Web(
                 if not port:
 ## python3.3
 ##                     raise __exception__(
-##                         'No port is avalible to run the web-server with '
+##                         'No port is available to run the web-server with '
 ##                         'given rights.'
 ##                     ) from None
                     raise __exception__(
-                        'No port is avalible to run the web-server with '
+                        'No port is available to run the web-server with '
                         'given rights.')
 ##
             else:
@@ -941,7 +937,7 @@ class Web(
         except socket.error:
 ## python3.3
 ##             raise __exception__(
-##                 "Port %d isn't avalible to run the web-server with given "
+##                 "Port %d isn't available to run the web-server with given "
 ##                 'rights.', self.port
 ##             ) from None
             raise __exception__(
@@ -963,8 +959,11 @@ class Web(
         '''
         try:
             return self.service.serve_forever()
-        except socket.error:
-            pass
+## python3.3         except builtins.ValueError as exception:
+        except socket.error as exception:
+            __logger__.warning(
+                '%s: %s', exception.__class__.__name__,
+                builtins.str(exception))
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -1005,8 +1004,12 @@ class Web(
     # endregion
 
 
-## python3.3 class CGIHTTPRequestHandler(http.server.CGIHTTPRequestHandler):
-class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
+## python3.3
+## class CGIHTTPRequestHandler(http.server.CGIHTTPRequestHandler):
+class CGIHTTPRequestHandler(
+    CGIHTTPServer.CGIHTTPRequestHandler, builtins.object
+):
+##
     '''
         A small request-handler dealing with incoming file requests.
         It can directly send static files back to client or run dynamic
@@ -1031,7 +1034,7 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
     '''References the corresponding file handler to requested file name.'''
     requested_file = None
     '''
-        Defines wether the handler has decided to run a python module or an
+        Defines weather the handler has decided to run a python module or an
         external script.
     '''
     load_module = False
@@ -1098,14 +1101,9 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
             version=__version__,
             status=__status__)
         '''Take this method via introspection.'''
-## python3.3
-##         builtins.getattr(
-##             http.server.CGIHTTPRequestHandler, inspect.stack()[0][3]
-##         )(self, *arguments, **keywords)
-        builtins.getattr(
-            CGIHTTPServer.CGIHTTPRequestHandler, inspect.stack()[0][3]
-        )(self, *arguments, **keywords)
-##
+        return builtins.getattr(
+            builtins.super(self.__class__, self), inspect.stack()[0][3]
+        )(*arguments, **keywords)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -1317,18 +1315,13 @@ class CGIHTTPRequestHandler(CGIHTTPServer.CGIHTTPRequestHandler):
     def setup(self, *arguments, **keywords):
 ##
         '''
-            This method wrapes the python's native request handler to provide
+            This method wraps the python's native request handler to provide
             our wrapped file socket buffer.
         '''
         '''Take this method via introspection.'''
-## python3.3
-##         result = builtins.getattr(
-##             http.server.CGIHTTPRequestHandler, inspect.stack()[0][3]
-##         )(self, *arguments, **keywords)
         result = builtins.getattr(
-            CGIHTTPServer.CGIHTTPRequestHandler, inspect.stack()[0][3]
-        )(self, *arguments, **keywords)
-##
+            builtins.super(self.__class__, self), inspect.stack()[0][3]
+        )(*arguments, **keywords)
         self.rfile = self.server.web.service.read_file_socket
         return result
 

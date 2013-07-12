@@ -34,6 +34,7 @@ import inspect
 import os
 import re
 import sys
+import threading
 ## python3.3 import types
 pass
 import webbrowser
@@ -161,7 +162,18 @@ class Browser(
              'help': 'Defines which string should be shown in window '
                      'decoration if no site with title node was loaded.',
              'dest': 'default_title',
-             'metavar': 'TITLE'}},)
+             'metavar': 'TITLE'}},
+        {'arguments': ('-s', '--stop-order'),
+         'keywords': {
+             'action': 'store',
+             'default': {'execute': '__initializer_default_value__'},
+             'type': {'execute': 'type(__initializer_default_value__)'},
+             'required': {'execute': '__initializer_default_value__ is None'},
+             'help': {'execute': '"""Saves a cli-command for shutting down '
+                                 'the server (default: "%s").""" % '
+                                 '__initializer_default_value__'},
+             'dest': 'stop_order',
+             'metavar': 'STRING'}})
 
         # endregion
 
@@ -177,12 +189,14 @@ class Browser(
         Saves all initialized instances of this class.
     '''
     webview_instances = []
+    '''Saves a cli-command for shutting down the server.'''
+    stop_order = ''
 
         # endregion
 
         # region protected properties
 
-    '''If set gtk will be prefered to show webview otherwise qt.'''
+    '''If set gtk will be preferred to show webview otherwise qt.'''
     _default_gui_toolkit = ''
     '''Holds the current url location.'''
     _url = ''
@@ -191,8 +205,6 @@ class Browser(
     _height_in_pixel = 0
     _fullscreen = False
     _no_window_decoration = False
-    '''A list of functions or methods called when window is closed.'''
-    _close_handler = []
     '''If setted "True" window will be closed on next gtk main iteration.'''
     _gtk_close = False
     '''Defines weather a progress bar for page loading should be shown.'''
@@ -201,6 +213,11 @@ class Browser(
     _gui_toolkit = ''
     '''Saves the default title if no title was set via markup.'''
     _default_title = ''
+    '''
+        This lock object handles to wait until all gtk windows are closed
+         before the program terminates.
+    '''
+    _close_gtk_windows_lock = None
 
         # endregion
 
@@ -228,11 +245,12 @@ class Browser(
             ... )) # doctest: +ELLIPSIS
             'Object of "Browser" with url "http://www.google... x 100 pixel...'
         '''
-        return 'Object of "{class_name}" with url "{url}" in {width} pixel x '\
-               '{height} pixel and gui toolkit "{gui_toolkit}".'.format(
+        return('Object of "{class_name}" with url "{url}" in {width} pixel x '
+               '{height} pixel, stop order "{stop_order}" and gui toolkit '
+               '"{gui_toolkit}".'.format(
                    class_name=self.__class__.__name__, url=self._url,
                    width=self._width_in_pixel, height=self._height_in_pixel,
-                   gui_toolkit=self.gui_toolkit)
+                   stop_order=self.stop_order, gui_toolkit=self.gui_toolkit))
 
             # endregion
 
@@ -280,42 +298,52 @@ class Browser(
             self._url = 'http://' + url
         return self._url
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def set_close_handler(
-##         self: boostNode.extension.type.Self,
-##         handler: (collections.Iterable, types.FunctionType,
-##                   types.MethodType)
-##     ) -> builtins.list:
-    def set_close_handler(self, handler):
-##
-        '''
-            Setter for close handler. Methods in the close handler list will
-            be called before gtk is closed.
-        '''
-        if builtins.isinstance(handler, collections.Iterable):
-            self._close_handler = builtins.list(handler)
-        else:
-            self._close_handler = [handler]
-        return self._close_handler
-
             # endregion
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
-##     def close(
-##         self: boostNode.extension.type.Self
+##     def stop(
+##         self: boostNode.extension.type.Self, *arguments: builtins.object,
+##         reason='', **keywords: builtins.object
 ##     ) -> boostNode.extension.type.Self:
-    def close(self):
+    def stop(self, *arguments, **keywords):
 ##
         '''
             Closes all created webviews. Note that in case of using the default
-            installed browser fallback this instance couldn't be destroyed.
+            installed browser fall-back this instance couldn't be destroyed.
         '''
-        self._gtk_close = True
-        if self.gui_toolkit == 'qt':
-            self.window.closeAllWindows()
-        return self
+## python3.3
+##         pass
+        reason = ''
+        if 'reason' in keywords:
+            reason = keywords['reason']
+            del keywords['reason']
+##
+        if self.window is not None:
+            if self.gui_toolkit == 'qt':
+                self.window.closeAllWindows()
+                if not (builtins.len(arguments) or reason):
+                    reason = 'clicking qt close button'
+            elif self.gui_toolkit == 'gtk':
+                self._gtk_close = True
+                if builtins.len(arguments) and builtins.isinstance(
+                    arguments[0], gtk.Window
+                ):
+                    reason = 'clicking gtk close button'
+                else:
+                    '''
+                        NOTE: We got a close trigger from another thread as
+                        where the main gtk loop is present. We have to wait
+                        until gtk has finished it's closing procedures.
+                    '''
+                    self._close_gtk_windows_lock.acquire()
+        __logger__.info('All "%s" windows closed.', self.gui_toolkit)
+        '''
+            Take this method type by the abstract class via introspection.
+        '''
+        return builtins.getattr(
+            builtins.super(self.__class__, self), inspect.stack()[0][3]
+        )(*arguments, reason=reason, **keywords)
 
         # endregion
 
@@ -353,21 +381,20 @@ class Browser(
 ##         width_in_pixel=800, height_in_pixel=600, fullscreen=False,
 ##         no_window_decoration=False, default_gui_toolkit='qt',
 ##         no_progress_bar=False, default_title='No gui loaded.',
-##         close_handler=None, **keywords: builtins.object
+##         stop_order='stop', **keywords: builtins.object
 ##     ) -> boostNode.extension.type.Self:
     def _initialize(
             self, url, width_in_pixel=800, height_in_pixel=600,
             fullscreen=False, no_window_decoration=False,
             default_gui_toolkit='qt', no_progress_bar=False,
-            default_title='No gui loaded.', close_handler=None, **keywords):
+            default_title='No gui loaded.', stop_order='stop', **keywords):
 ##
         '''
             Initializes a webview or tries to open a default browser if
             no gui suitable gui toolkit is available.
         '''
-        if close_handler is not None:
-            self.close_handler = close_handler
         self.url = url
+        self.stop_order = stop_order
         self._width_in_pixel = width_in_pixel
         self._height_in_pixel = height_in_pixel
         self._fullscreen = fullscreen
@@ -378,8 +405,21 @@ class Browser(
         __logger__.info(
             'Start webgui with gui toolkit "%s".', self.gui_toolkit)
         if not __test_mode__:
-            builtins.getattr(
-                self, '_initialize_%s_browser' % self.gui_toolkit)()
+            self._close_gtk_windows_lock = threading.Lock()
+            self._close_gtk_windows_lock.acquire()
+## python3.3
+##             browser_thread = threading.Thread(
+##                 target=builtins.getattr(
+##                     self, '_initialize_%s_browser' % self.gui_toolkit),
+##                 daemon=True
+##             ).start()
+            browser_thread = threading.Thread(target=builtins.getattr(
+                self, '_initialize_%s_browser' % self.gui_toolkit))
+            browser_thread.daemon = True
+            browser_thread.start()
+##
+            if self.stop_order:
+                self.wait_for_order()
         return self
 
             # endregion
@@ -422,7 +462,7 @@ class Browser(
         self.browser.titleChanged.connect(self._on_qt_title_changed)
         self.browser.resize(self._width_in_pixel, self._height_in_pixel)
         self._initialize_qt_progress_bar().window.lastWindowClosed.connect(
-            self._on_qt_close)
+            self.trigger_stop)
         self.window.exec_()
         return self
 
@@ -474,7 +514,7 @@ class Browser(
         self.vbox.pack_start(self.scroller)
         self._initialize_gtk_progress_bar().scroller.add(self.browser)
         self.browser.open(self._url)
-        self.window.connect('delete_event', self._on_gtk_close)
+        self.window.connect('delete_event', self.trigger_stop)
         self.window.add(self.vbox)
         self.window.set_title(self._default_title)
         self.window.resize(
@@ -522,48 +562,15 @@ class Browser(
 ##
         '''
             Checks if gtk should be closed after the last gtk main iteration.
+            If we return a "False" this method will not be triggered in future.
+            time.
         '''
         if self._gtk_close:
             gtk.main_quit()
-        return True
+            self._close_gtk_windows_lock.release()
+        return not self._gtk_close
 
                 # region event methods
-
-                    # region window methods
-
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _on_qt_close(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
-    def _on_qt_close(self):
-##
-        '''
-            Triggers if the current window will be closed.
-        '''
-        if self._close_handler:
-            for close_handler in self._close_handler:
-                close_handler(self)
-        return self
-
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _on_gtk_close(
-##         self: boostNode.extension.type.Self, window,  # : gtk.Window,
-##         event,  # : gtk.gdk.Event
-##     ) -> boostNode.extension.type.Self:
-    def _on_gtk_close(self, window, event):
-##
-        '''
-            Triggers if the current window will be closed.
-        '''
-        if self._close_handler:
-            for close_handler in self._close_handler:
-                close_handler(self, window, event)
-        gtk.main_quit()
-        return self
-
-                    # endregion
 
                     # region webkit event methods
 

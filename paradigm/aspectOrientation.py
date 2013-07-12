@@ -401,7 +401,7 @@ class JointPointHandler(builtins.object):
     def aspect(self):
 ##
         '''
-            This method should be overwridden to provide the essentiel aspect
+            This method should be overridden to provide the essential aspect
             for handled function call.
         '''
         raise boostNode.extension.native.Object\

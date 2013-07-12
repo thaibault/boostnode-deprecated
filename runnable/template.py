@@ -763,17 +763,17 @@ class Parser(
                 Line 13: Empty Line
         '''
         '''Make needed runtime properties to instance properties.'''
-        self._new_line = True
-        self._indent = 0
-        self._count_lines = 0
-        self._count_no_lines = 0
-        self._current_rendered_content_line_number = 0
-        self._code_dependend_indents = []
-        self._line_shifts = []
-        self._empty_lines = []
+        self._new_line = self.__class__._new_line
+        self._indent = self.__class__._indent
+        self._count_lines = self.__class__._count_lines
+        self._count_no_lines = self.__class__._count_no_lines
+        self._current_rendered_content_line_number = \
+            self.__class__._current_rendered_content_line_number
+        self._code_dependend_indents = self.__class__._code_dependend_indents
+        self._line_shifts = self.__class__._line_shifts
+        self._empty_lines = self.__class__._empty_lines
 
         self.right_escaped = right_escaped
-
         self._placeholder_name_pattern = placeholder_name_pattern
         self._command_line_placeholder_name_pattern = \
             command_line_placeholder_name_pattern

@@ -1405,9 +1405,10 @@ class Module(boostNode.paradigm.objectOrientation.Class):
 ## python3.3
 ##     def get_defined_callables(
 ##         cls: boostNode.extension.type.SelfClass,
-##         scope: (types.ModuleType, builtins.type, builtins.object)
+##         scope: (types.ModuleType, builtins.type, builtins.object),
+##         only_module_level=True
 ##     ) -> builtins.list:
-    def get_defined_callables(cls, scope):
+    def get_defined_callables(cls, scope, only_module_level=True):
 ##
         '''
             Takes a module and gives a list of objects explicit defined in
@@ -1425,22 +1426,26 @@ class Module(boostNode.paradigm.objectOrientation.Class):
             ...         pass
             ...     def __A__():
             ...         pass
-            >>> Module.get_defined_callables(A)
+            >>> Module.get_defined_callables(A, only_module_level=False)
             ['b']
         '''
         callables = []
         for object_name in builtins.set(builtins.dir(scope)):
-            if(builtins.callable(builtins.getattr(scope, object_name)) and
+            object = builtins.getattr(scope, object_name)
+            if builtins.isinstance(
+                object, boostNode.paradigm.aspectOrientation.JointPoint
+            ):
+                object = object.function
+            if(builtins.callable(object) and
                not (object_name.startswith('__') and
                     object_name.endswith('__')) and
-               not (inspect.ismodule(
-                   builtins.getattr(scope, object_name)
-               ) and (
-                   object_name in cls.HIDDEN_BUILTIN_CALLABLES or
-                   inspect.isbuiltin(builtins.getattr(scope, object_name)) or
-                   object_name in sys.modules or
-                   object_name in sys.builtin_module_names or
-                   inspect.getmodule(getattr(scope, object_name)) != scope))):
+               not (inspect.ismodule(object) or
+                    object_name in cls.HIDDEN_BUILTIN_CALLABLES or
+                    inspect.isbuiltin(object) or
+                    object_name in sys.modules or
+                    object_name in sys.builtin_module_names or
+                    (only_module_level and inspect.getmodule(object) !=
+                        scope))):
                 callables.append(object_name)
         return callables
 
