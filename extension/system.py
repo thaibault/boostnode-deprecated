@@ -87,8 +87,6 @@ class Runnable(builtins.object):
         runnable receives a termination signal.
     '''
     __termination_lock = multiprocessing.Lock()
-    '''This lock prevents form triggering the stop method twice.'''
-    __stop_lock = multiprocessing.Lock()
 
         # endregion
 
@@ -117,8 +115,15 @@ class Runnable(builtins.object):
         reinitialisation by given restart order.
     '''
     _childrens_module = None
-    _initiale_arguments = ()
-    _initiale_keywords = {}
+    _initial_arguments = ()
+    _initial_keywords = {}
+
+        # endregion
+
+        # region private properties
+
+    '''This lock prevents form triggering the stop method twice.'''
+    __stop_lock = None
 
         # endregion
 
@@ -187,68 +192,6 @@ class Runnable(builtins.object):
         arguments += (cls._get_potential_wrapped_method(cls._run.__name__),)
         return cls(*arguments, **keywords)
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def wait_for_order(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
-    def wait_for_order(self):
-##
-        '''
-            Handler for waiting till a server stop order comes through
-            the command line interface.
-        '''
-        self._given_order = ''
-        try:
-            while self._given_order not in (
-                self.stop_order, self.restart_order
-            ):
-                given_input_explanation = ''
-                if self._given_order:
-                    given_input_explanation = ' (not "%s")' % self._given_order
-## python3.3
-##                 self._given_order = builtins.input(
-##                     'Write "%s" or "%s"%s for shutting or restarting '
-##                     '"%s":\n' %
-##                     (self.stop_order, self.restart_order,
-##                      given_input_explanation, self.__class__.__name__))
-                self._given_order = builtins.raw_input(
-                    'Write "%s" or "%s"%s for shutting or restarting '
-                    '"%s":\n' %
-                    (self.stop_order, self.restart_order,
-                     given_input_explanation, self.__class__.__name__))
-##
-        except (builtins.IOError, builtins.EOFError):
-            __logger__.info(
-                "We have lost standard input. stop order couldn't be "
-                'received. Use a termination signal instead.')
-            try:
-                self.__class__.__termination_lock.acquire()
-            except builtins.OSError:
-                pass
-        except (builtins.KeyboardInterrupt):
-            __logger__.debug('Standard input stream was interrupted.')
-        return self
-
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def stop(
-##         self: boostNode.extension.type.Self, signal_number=None,
-##         stack_frame=None, reason=''
-##     ) -> boostNode.extension.type.Self:
-    def stop(self, signal_number=None, stack_frame=None, reason=''):
-##
-        '''
-            This method should usually be overwritten to handle cleanup jobs.
-        '''
-        if not reason:
-            reason = 'program trigger or normal termination'
-            if signal_number:
-                reason = 'signal number %d' % signal_number
-        __logger__.debug(
-            'Closing "%s" caused by %s.', self.__class__.__name__, reason)
-        return self
-
         # endregion
 
         # region protected methods
@@ -288,45 +231,6 @@ class Runnable(builtins.object):
         return cls
 
             # endregion
-
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _handle_module_running(
-##         self: boostNode.extension.type.Self,
-##         arguments: builtins.tuple, keywords: builtins.dict
-##     ) -> boostNode.extension.type.Self:
-    def _handle_module_running(self, arguments, keywords):
-##
-        '''Handle the running interface for current module.'''
-        if not self._childrens_module.__test_mode__:
-            self.__class__.__termination_lock.acquire()
-            signal_numbers = \
-                boostNode.extension.system.Platform.termination_signal_numbers
-            for signal_number in signal_numbers:
-                signal.signal(signal_number, self.trigger_stop)
-        try:
-            self._run(*arguments, **keywords)
-        except builtins.Exception as exception:
-            if(self._childrens_module.__test_mode__ or
-               self._childrens_module.__logger__.isEnabledFor(logging.DEBUG) or
-               sys.flags.debug):
-                raise
-            else:
-                __logger__.critical(
-                    '{exception_name}: {exception_message}\nType "'
-                    '{program_file_path} --help" for additional '
-                    'informations.'.format(
-                        exception_name=exception.__class__.__name__,
-                        exception_message=builtins.str(exception),
-                        program_file_path=sys.argv[0]))
-                sys.exit(1)
-        finally:
-            '''
-                NOTE: we have to let the exception stope all contexts.
-                Otherwise we could miss helpful exceptions messages.
-            '''
-            self.trigger_stop(exit=False)
-        return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
@@ -396,34 +300,100 @@ class Runnable(builtins.object):
         '''
             A generic initializer for Runnable class implementations.
         '''
-        '''Make this properties instance attributes.'''
+        '''Make this properties instance attributes explicitly.'''
         self.stop_order = self.__class__.stop_order
         self.restart_order = self.__class__.restart_order
         self._given_order = self.__class__._given_order
         self._childrens_module = self.__class__._childrens_module
+        self.__stop_lock = self.__class__.__stop_lock
 
-        '''NOTE: Attach this property to child class.'''
+        '''Attach this properties to child class.'''
         self.__class__._given_order = self._given_order
         self.__class__._childrens_module = self._childrens_module
+        self.__class__.__stop_lock = self.__stop_lock
 
         run = False
         if(builtins.len(arguments) and arguments[-1] ==
            self._get_potential_wrapped_method(self._run.__name__)):
             arguments = arguments[:-1]
             run = True
+        self.__stop_lock = multiprocessing.Lock()
         self._childrens_module = inspect.getmodule(self.__class__)
         caller_module = inspect.getmodule(inspect.stack()[2][0])
         this_module = inspect.getmodule(inspect.stack()[0][0])
         if(caller_module is this_module and
            self._childrens_module.__name__ == '__main__' and
            not self._childrens_module.__test_mode__) or run:
-            self._initiale_arguments = arguments
-            self._initiale_keywords = keywords
-            self._handle_module_running(arguments, keywords)
+            self._initial_arguments = arguments
+            self._initial_keywords = keywords
+
+            self._handle_module_running(arguments, keywords, run)
         else:
             self._initialize(*arguments, **keywords)
 
             # endregion
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def wait_for_order(
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
+    def wait_for_order(self):
+##
+        '''
+            Handler for waiting till a server stop order comes through
+            the command line interface.
+        '''
+        self._given_order = ''
+        try:
+            while self._given_order not in (
+                self.stop_order, self.restart_order
+            ):
+                given_input_explanation = ''
+                if self._given_order:
+                    given_input_explanation = ' (not "%s")' % self._given_order
+## python3.3
+##                 self._given_order = builtins.input(
+##                     'Write "%s" or "%s"%s for shutting or restarting '
+##                     '"%s":\n' %
+##                     (self.stop_order, self.restart_order,
+##                      given_input_explanation, self.__class__.__name__))
+                self._given_order = builtins.raw_input(
+                    'Write "%s" or "%s"%s for shutting or restarting '
+                    '"%s":\n' %
+                    (self.stop_order, self.restart_order,
+                     given_input_explanation, self.__class__.__name__))
+##
+        except (builtins.IOError, builtins.EOFError):
+            __logger__.info(
+                "We have lost standard input. stop order couldn't be "
+                'received. Use a termination signal instead.')
+            try:
+                self.__class__.__termination_lock.acquire()
+            except builtins.OSError:
+                pass
+        except (builtins.KeyboardInterrupt):
+            __logger__.debug('Standard input stream was interrupted.')
+        return self
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def stop(
+##         self: boostNode.extension.type.Self, signal_number=None,
+##         stack_frame=None, reason=''
+##     ) -> boostNode.extension.type.Self:
+    def stop(self, signal_number=None, stack_frame=None, reason=''):
+##
+        '''
+            This method should usually be overwritten to handle cleanup jobs.
+        '''
+        if not reason:
+            reason = 'program trigger or normal termination'
+            if signal_number:
+                reason = 'signal number %d' % signal_number
+        __logger__.debug(
+            'Closing "%s" caused by %s.', self.__class__.__name__, reason)
+        return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint(atexit.register)
 ## python3.3
@@ -434,7 +404,7 @@ class Runnable(builtins.object):
     def trigger_stop(self=None, *arguments, **keywords):
 ##
         '''Method for cleaning up running workers.'''
-        if self is not None and self.__class__.__stop_lock.acquire(False):
+        if self is not None and self.__stop_lock.acquire(False):
 ## python3.3
 ##             pass
             exit = True
@@ -448,19 +418,69 @@ class Runnable(builtins.object):
             ):
                 reason = 'given order "%s"' % self._given_order
             self.stop(*arguments, reason=reason, **keywords)
-            self.__class__.__termination_lock.release()
-            if builtins.len(arguments) and arguments[0] == signal.SIGINT:
-                sys.exit(130)
-            elif self._given_order == self.restart_order:
-                self.__class__.__stop_lock.release()
-                self._handle_module_running(
-                    self._initiale_arguments, self._initiale_keywords)
-            elif exit:
-                '''
-                    NOTE: "sys.exit()" has to be called to terminate all child
-                    threads.
-                '''
-                sys.exit()
+            if self._given_order == self.restart_order:
+                __logger__.debug(
+                    'Restart "%s" with arguments "%s" and keywords "%s".',
+                    self.__class__.__name__,
+                    '", "'.join(self._initial_arguments),
+                    builtins.str(self._initial_keywords))
+                self.__class__.run(
+                    *self._initial_arguments, **self._initial_keywords)
+            else:
+                self.__class__.__termination_lock.release()
+                if builtins.len(arguments) and arguments[0] == signal.SIGINT:
+                    sys.exit(130)
+                elif exit:
+                    '''
+                        NOTE: "sys.exit()" has to be called to terminate all
+                        child threads.
+                    '''
+                    sys.exit()
+        return self
+
+        # endregion
+
+        # region protected methods
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def _handle_module_running(
+##         self: boostNode.extension.type.Self,
+##         arguments: builtins.tuple, keywords: builtins.dict,
+##         run: builtins.bool
+##     ) -> boostNode.extension.type.Self:
+    def _handle_module_running(self, arguments, keywords, run):
+##
+        '''Handle the running interface for current module.'''
+        if not (self._childrens_module.__test_mode__ or run):
+            self.__class__.__termination_lock.acquire()
+            signal_numbers = \
+                boostNode.extension.system.Platform.termination_signal_numbers
+            for signal_number in signal_numbers:
+                signal.signal(signal_number, self.trigger_stop)
+        try:
+            self._run(*arguments, **keywords)
+        except builtins.Exception as exception:
+            if(self._childrens_module.__test_mode__ or
+               self._childrens_module.__logger__.isEnabledFor(logging.DEBUG) or
+               sys.flags.debug):
+                raise
+            else:
+                __logger__.critical(
+                    '{exception_name}: {exception_message}\nType "'
+                    '{program_file_path} --help" for additional '
+                    'informations.'.format(
+                        exception_name=exception.__class__.__name__,
+                        exception_message=builtins.str(exception),
+                        program_file_path=sys.argv[0]))
+                sys.exit(1)
+        finally:
+            '''
+                NOTE: we have to let the exception stop all contexts to make
+                sure that the whole traceback could be printed before
+                termination.
+            '''
+            self.trigger_stop(exit=False)
         return self
 
         # endregion

@@ -702,6 +702,8 @@ class Web(
                     shown_number = number_of_running_workers
                 time.sleep(2)
             __logger__.info('Shutting down webserver.')
+            self.__class__.instances.remove(self)
+            self.service.socket.shutdown(socket.SHUT_RDWR)
             self.service.socket.close()
         '''
             Take this method type by the abstract class via introspection.
@@ -961,7 +963,7 @@ class Web(
             return self.service.serve_forever()
 ## python3.3         except builtins.ValueError as exception:
         except socket.error as exception:
-            __logger__.warning(
+            __logger__.info(
                 '%s: %s', exception.__class__.__name__,
                 builtins.str(exception))
         return self
@@ -1292,7 +1294,7 @@ class CGIHTTPRequestHandler(
             thread.
         '''
         if builtins.len(self.server.web.instances) > 1:
-            format += '(port: %d)' % self.server.web.port
+            format += ' (port: %d)' % self.server.web.port
         error_message = 'See exception detail.'
         if message_or_error_code == 500:
             response_code_or_message = error_message
