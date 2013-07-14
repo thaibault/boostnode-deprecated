@@ -314,10 +314,9 @@ class Browser(
         '''
 ## python3.3
 ##         pass
-        reason = ''
-        if 'reason' in keywords:
-            reason = keywords['reason']
-            del keywords['reason']
+        reason, keywords = boostNode.extension.native.Dictionary(
+            content=keywords
+        ).pop(name='reason', default_value='')
 ##
         if self.window is not None:
             if self.gui_toolkit == 'qt':

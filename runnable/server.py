@@ -657,7 +657,7 @@ class Web(
             Examples:
 
             >>> repr(Web()) # doctest: +ELLIPSIS
-            'Object of "Web" with root path "...", port "0" and clo..."clo...'
+            'Object of "Web" with root path "...", port "0" and sto..."sto...'
         '''
         return ('Object of "{class_name}" with root path "{path}", port '
                 '"{port}" and stop order "{stop_order}". Number of running '

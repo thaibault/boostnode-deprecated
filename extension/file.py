@@ -1394,9 +1394,9 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         '''
 ## python3.3
 ##         pass
-        output_with_root_prefix = keywords.get('output_with_root_prefix')
-        if 'output_with_root_prefix' in keywords:
-            del keywords['output_with_root_prefix']
+        output_with_root_prefix, keywords = \
+            boostNode.extension.native.Dictionary(content=keywords).pop(
+                name='output_with_root_prefix')
 ##
         path = self.get_path(output_with_root_prefix=output_with_root_prefix)
         if builtins.len(path) and path[-builtins.len(os.sep)] == os.sep:
@@ -1432,9 +1432,10 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         '''
 ## python3.3
 ##         pass
-        output_with_root_prefix = keywords.get('output_with_root_prefix')
-        if 'output_with_root_prefix' in keywords:
-            del keywords['output_with_root_prefix']
+        output_with_root_prefix, keywords = \
+            boostNode.extension.native.Dictionary(
+                content=keywords
+            ).pop(name='output_with_root_prefix')
 ##
         if self._has_extension:
             path = self.get_path(
@@ -1926,9 +1927,9 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         '''
 ## python3.3
 ##         pass
-        respect_root_path = keywords.get('respect_root_path')
-        if 'respect_root_path' in keywords:
-            del keywords['respect_root_path']
+        respect_root_path, keywords = boostNode.extension.native.Dictionary(
+            content=keywords
+        ).pop(name='respect_root_path')
 ##
         return self.move(
             target=self.get_path(
@@ -2809,9 +2810,9 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         '''
 ## python3.3
 ##         pass
-        respect_root_path = keywords.get('respect_root_path')
-        if 'respect_root_path' in keywords:
-            del keywords['respect_root_path']
+        respect_root_path, keywords = boostNode.extension.native.Dictionary(
+            content=keywords
+        ).pop(name='respect_root_path')
 ##
         target = self.get_path(
             location=target, respect_root_path=respect_root_path,
@@ -3353,9 +3354,9 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         '''
 ## python3.3
 ##         pass
-        respect_root_path = keywords.get('respect_root_path')
-        if 'respect_root_path' in keywords:
-            del keywords['respect_root_path']
+        respect_root_path, keywords = boostNode.extension.native.Dictionary(
+            content=keywords
+        ).pop(name='respect_root_path')
 ##
         shutil.copytree(
             src=self._path, dst=self.get_path(
@@ -3740,14 +3741,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         '''
 ## python3.3
 ##         pass
-        force = False
-        if 'force' in keywords:
-            force = keywords['force']
-            del keywords['force']
-        relative = None
-        if 'relative' in keywords:
-            relative = keywords['relative']
-            del keywords['relative']
+        keywords_dictionary = boostNode.extension.native.Dictionary(
+            content=keywords)
+        force, keywords = keywords_dictionary.pop(
+            name='force', default_value=False)
+        relative, keywords = keywords_dictionary.pop(name='relative')
 ##
         target = self.__class__(location=target, must_exist=False)
         if force:

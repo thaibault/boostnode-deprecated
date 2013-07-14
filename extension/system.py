@@ -404,13 +404,13 @@ class Runnable(builtins.object):
     def trigger_stop(self=None, *arguments, **keywords):
 ##
         '''Method for cleaning up running workers.'''
-        if self is not None and self.__stop_lock.acquire(False):
+        if(not (__test_mode__ or self is None) and
+           self.__stop_lock.acquire(False)):
 ## python3.3
 ##             pass
-            exit = True
-            if 'exit' in keywords:
-                exit = keywords['exit']
-                del keywords['exit']
+            exit, keywords = boostNode.extension.native.Dictionary(
+                content=keywords
+            ).pop(name='exit', default_value=True)
 ##
             reason = ''
             if self._given_order and self._given_order in (

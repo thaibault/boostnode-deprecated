@@ -1108,14 +1108,12 @@ class Parser(
         '''
 ## python3.3
 ##         pass
-        indent = True
-        if 'indent' in keywords:
-            indent = keywords['indent']
-            del keywords['indent']
-        indent_space = ''
-        if 'indent_space' in keywords:
-            indent_space = keywords['indent_space']
-            del keywords['indent_space']
+        keywords_dictionary = boostNode.extension.native.Dictionary(
+            content=keywords)
+        indent, keywords = keywords_dictionary.pop(
+            name='indent', default_value=True)
+        indent_space, keywords = keywords_dictionary.pop(
+            name='indent_space', default_value='')
 ##
 
         if indent and indent_space:

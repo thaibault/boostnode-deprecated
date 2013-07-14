@@ -912,6 +912,9 @@ class String(boostNode.paradigm.objectOrientation.Class, builtins.str):
 
 
 class Object(boostNode.paradigm.objectOrientation.Class):
+    '''
+        This class extends all native python classes.
+    '''
 
     # region dynamic properties
 
@@ -1113,7 +1116,105 @@ class Object(boostNode.paradigm.objectOrientation.Class):
     # endregion
 
 
+class Dictionary(boostNode.paradigm.objectOrientation.Class, builtins.dict):
+    '''
+        This class extends the native dictionary object.
+    '''
+
+    # region dynamic properties
+
+        # region public properties
+
+    '''The main property. It saves the current dictionary.'''
+    content = {}
+
+        # endregion
+
+    # endregion
+
+    # region dynamic methods
+
+        # region public methods
+
+            # region special methods
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def __init__(
+##         self: boostNode.extension.type.Self, content: collections.Iterable
+##     ) -> None:
+    def __init__(self, content):
+##
+        '''
+            Generates a new high level wrapper around given object.
+
+            Examples:
+
+            >>> Dictionary((('hans', 5), (4, 3))) # doctest: +ELLIPSIS
+            Object of "Dictionary" ().
+        '''
+        self.content = builtins.dict(content)
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
+    def __repr__(self):
+##
+        '''
+            Invokes if this object should describe itself by a string.
+
+            Examples:
+
+            >>> repr(Dictionary((('hans', 5), (4, 3)))) # doctest: +ELLIPSIS
+            'Object of "Dictionary" ().'
+        '''
+        return 'Object of "{class_name}" ({content}).'.format(
+            class_name=self.__class__.__name__,
+            content=builtins.repr(self.content))
+
+            # endregion
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def pop(
+##         self: boostNode.extension.type.Self, name: builtins.str,
+##         default_value=None
+##     ) -> builtins.tuple:
+    def pop(self, name, default_value=None):
+##
+        '''
+            Get a keyword element as it would be set by a default value.
+            If name is present in current saved dictionary its value will be
+            returned in a tuple with currently saved dictionary.
+            The corresponding data will be erased from dictionary.
+
+            Examples:
+
+            >>> dictionary = Dictionary({'hans': 'peter', 5: 3})
+            >>> dictionary.pop('hans', 5)
+            ('peter', {5: 3})
+
+            >>> dictionary.pop('hans', 5)
+            (5, {5: 3})
+
+            >>> Dictionary({5: 3}).pop('hans', True)
+            (True, {5: 3})
+        '''
+        if name in self.content:
+            result = self.content[name]
+            del self.content[name]
+            return result, self.content
+        return default_value, self.content
+
+        # endregion
+
+    # endregion
+
+
 class Module(boostNode.paradigm.objectOrientation.Class):
+    '''
+        This class add some features for dealing with modules.
+    '''
 
     # region constant properties
 
