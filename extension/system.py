@@ -427,7 +427,7 @@ class Runnable(builtins.object):
                 self.__class__.run(
                     *self._initial_arguments, **self._initial_keywords)
             else:
-                self._terminate(arguments)
+                self._terminate(arguments, exit)
         return self
 
         # endregion
@@ -437,9 +437,10 @@ class Runnable(builtins.object):
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
 ##     def _terminate(
-##         cls: boostNode.extension.type.SelfClass, arguments: builtins.tuple
+##         cls: boostNode.extension.type.SelfClass, arguments: builtins.tuple,
+##         exit: builtins.bool
 ##     ) -> boostNode.extension.type.SelfClass:
-    def _terminate(cls, arguments):
+    def _terminate(cls, arguments, exit):
 ##
         '''Termines current runnable and all child threads.'''
         cls.__termination_lock.release()
@@ -696,7 +697,6 @@ class Platform(builtins.object):
         except socket.error:
             return False
         finally:
-            wake_socket.shutdown(socket.SHUT_RDWR)
             wake_socket.close()
         return True
 
@@ -933,15 +933,15 @@ class Platform(builtins.object):
         '''
             Checks if a remote computer is available by pinging it.
         '''
-        socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        socket.settimeout(timeout_in_seconds)
+        check_computer_reachability_socket = socket.socket(
+            socket.AF_INET, socket.SOCK_STREAM)
+        check_computer_reachability_socket.settimeout(timeout_in_seconds)
         try:
-            socket.connect((host, 22))
+            check_computer_reachability_socket.connect((host, 22))
         except socket.error:
             return False
         finally:
-            socket.shutdown(socket.SHUT_RDWR)
-            socket.close()
+            check_computer_reachability_socket.close()
         return True
 
             # endregion
