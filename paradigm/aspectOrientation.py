@@ -768,6 +768,8 @@ class JointPoint(FunctionDecorator):
         self: boostNode.extension.type.Self
     ) -> (types.FunctionType, types.MethodType):
 ##
+        if sys.flags.optimize > 1:
+            return self.function
         @functools.wraps(self.function)
         def wrapper_function(*arguments, **keywords):
             '''Unpack wrapper methods.'''
