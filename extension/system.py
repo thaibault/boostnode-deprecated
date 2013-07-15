@@ -865,10 +865,10 @@ class Platform(builtins.object):
             "secure" Disable output piping by python and run command in systems
                      native process.
             "error" If "False" exceptions by running command are kept back.
-            "shell" Simulate a shell if "True". If explict command arguments
+            "shell" Simulate a shell if "True". If explicit command arguments
                     are given shell's default value is "True" and "False"
                     otherwise.
-            "log" If "True" standart output will be logged with level "info"
+            "log" If "True" standard output will be logged with level "info"
                   and error output with level "warning".
             "no_blocking" If "True" resulting output won't be a string. You
                           will get an python "IOBuffer" like object.
@@ -881,17 +881,17 @@ class Platform(builtins.object):
             Examples:
 
             >>> Platform.run(command='ls') # doctest: +SKIP
-            {...'standart_output': ...}
+            {...'standard_output': ...}
 
             >>> Platform.run(
             ...     command=('ls', 'chmod +x test.py'), shell=True
             ... ) # doctest: +SKIP
-            {...'standart_output': ...}
+            {...'standard_output': ...}
 
             >>> Platform.run(
             ...     command='not', command_arguments=('existing',), error=False
             ... ) # doctest: +ELLIPSIS
-            {...'standart_output': ...}
+            {...'standard_output': ...}
 
             >>> Platform.run(
             ...     command='not', command_arguments=('existing',)
@@ -958,17 +958,17 @@ class Platform(builtins.object):
         '''
             Logs the result of an invoked and given subprocess output.
         '''
-        if builtins.isinstance(result['standart_output'], builtins.list):
-            for index, standart_output in builtins.enumerate(
-                result['standart_output']
+        if builtins.isinstance(result['standard_output'], builtins.list):
+            for index, standard_output in builtins.enumerate(
+                result['standard_output']
             ):
                 cls._log_command_result({
-                    'standart_output': standart_output,
+                    'standard_output': standard_output,
                     'error_output': result['error_output'][index]},
                     log, secure, no_blocking)
         elif log and not (secure or no_blocking):
-            if result['standart_output']:
-                __logger__.info(result['standart_output'])
+            if result['standard_output']:
+                __logger__.info(result['standard_output'])
             if result['error_output']:
                 __logger__.warning(result['error_output'])
         return result
@@ -991,7 +991,7 @@ class Platform(builtins.object):
         '''
             Runs a command line command in its own process.
         '''
-        result = {'standart_output': '', 'error_output': '', 'return_code': 1}
+        result = {'standard_output': '', 'error_output': '', 'return_code': 1}
         command = ' '.join([command] + builtins.list(command_arguments))
         if secure:
             result['return_code'] = os.system(command)
@@ -1038,16 +1038,16 @@ class Platform(builtins.object):
             fcntl.fcntl(
                 process_handler.stderr.fileno(), fcntl.F_SETFL, os.O_NONBLOCK)
             result = {
-                'standart_output': process_handler.stdout,
+                'standard_output': process_handler.stdout,
                 'error_output': process_handler.stderr}
         else:
             result = process_handler.communicate()
 ## python3.3
 ##             result = {
-##                 'standart_output': result[0].decode(),
+##                 'standard_output': result[0].decode(),
 ##                 'error_output': result[1].decode()}
             result = {
-                'standart_output': result[0],
+                'standard_output': result[0],
                 'error_output': result[1]}
 ##
             result['return_code'] = process_handler.returncode
@@ -1070,14 +1070,14 @@ class Platform(builtins.object):
         '''
             Runs a list of command line commands as its own process.
         '''
-        result = {'standart_output': [], 'error_output': [], 'return_code': []}
+        result = {'standard_output': [], 'error_output': [], 'return_code': []}
         for sub_command in commands:
             sub_result = cls.run(
                 command=sub_command, command_arguments=command_arguments,
                 secure=secure, error=error, shell=shell, *arguments,
                 **keywords)
             if builtins.isinstance(sub_result, builtins.dict):
-                result['standart_output'].append(sub_result['standart_output'])
+                result['standard_output'].append(sub_result['standard_output'])
                 result['error_output'].append(sub_result['error_output'])
                 result['return_code'].append(sub_result['return_code'])
         return result

@@ -1589,13 +1589,13 @@ class Module(boostNode.paradigm.objectOrientation.Class):
                 command_arguments=builtins.list(arguments) + [module.path],
                 log=log, **keywords))
         result = ['', '']
-        first_standart_output = first_error_output = True
+        first_standard_output = first_error_output = True
         for result_element in results:
-            if result_element['standart_output'].strip():
-                if not first_standart_output:
+            if result_element['standard_output'].strip():
+                if not first_standard_output:
                     result[0] += delimiter
-                result[0] += result_element['standart_output'].strip()
-                first_standart_output = False
+                result[0] += result_element['standard_output'].strip()
+                first_standard_output = False
             if result_element['error_output'].strip():
                 if not first_error_output:
                     result[1] += delimiter

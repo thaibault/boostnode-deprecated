@@ -650,17 +650,17 @@ class Run(
         boostNode.extension.output.Logger.change_all(terminator=('',))
 ## python3.3
 ##         __logger__.info(
-##             '%s with "%s".\nstandart output:\n[',
+##             '%s with "%s".\nstandard output:\n[',
 ##             command_name.capitalize(), command.strip())
 ##         boostNode.extension.output.Logger.flush()
         if __logger__.isEnabledFor(logging.INFO):
             boostNode.extension.output.Print(
-                '%s with "%s".\nstandart output:\n[' %
+                '%s with "%s".\nstandard output:\n[' %
                 (command_name.capitalize(), command.strip()),
                 end='', flush=True)
 ##
         boostNode.extension.output.Print(
-            result['standart_output'], end='', flush=True)
+            result['standard_output'], end='', flush=True)
 ## python3.3
 ##         __logger__.info(']\nerror output:\n[')
 ##         boostNode.extension.output.Logger.flush()

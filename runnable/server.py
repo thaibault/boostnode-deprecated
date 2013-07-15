@@ -592,7 +592,7 @@ class Web(
     static_mimetype_pattern = ()
     '''
         Saves all mimetype pattern to interpret as files which should be
-        ran. There standart output will be given back to request.
+        ran. There standard output will be given back to request.
     '''
     dynamic_mimetype_pattern = ()
     '''
