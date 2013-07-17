@@ -524,10 +524,16 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ...     location=__test_folder__ + 'contains_not_existing.py',
             ...     must_exist=False) in Handler()
             False
+
+            >>> 'temp_not_existing_file' in Handler()
+            False
+
+            >>> __file_path__ in Handler()
+            True
         '''
         if builtins.isinstance(item, self.__class__):
             return item in self.list()
-        elif builtins.isinstance(item, builtins.str):
+        else:
             for element in self:
                 if item in (element._path, element.relative_path):
                     return True
@@ -551,6 +557,9 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
             >>> len(Handler(location=__file_path__))
             1
+
+            >>> len(Handler(Handler().directory_path)) > 1
+            True
         '''
         if self.is_directory():
             return builtins.len(builtins.list(self.list()))
@@ -585,6 +594,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
             >>> repr(Handler(location=__file_path__)) # doctest: +ELLIPSIS
             'Object of "Handler" with path "...file.py" ... (file).'
+
+            >>> link = Handler('temp_symbolic_link', must_exist=False)
+            >>> created = Handler(location=__file_path__).make_symbolic_link(
+            ...     link)
+            >>> repr(link) # doctest: +ELLIPSIS
+            'Object of "Handler" with path "...temp_sy..." ... (link to ...).'
         '''
         type = self.type
         if self.is_symbolic_link():

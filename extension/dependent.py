@@ -49,9 +49,7 @@ for number in (3, 4):
 
 ## python3.3 class Resolve:
 class Resolve(builtins.object):
-    '''
-        Handles dependencies with modules.
-    '''
+    '''Handles dependencies with modules.'''
 
     # region dynamic properties
 
@@ -97,12 +95,18 @@ class Resolve(builtins.object):
             >>> def test():
             ...     print('hans')
 
-            >>> r = Resolve(
+            >>> resolve = Resolve(
             ...     __name__, inspect.currentframe(), function=test,
             ...     dependencies=())
             hans
             >>> Resolve._load_stack
             []
+
+            >>> sys.modules[__name__].test = test
+            >>> resolve = Resolve(
+            ...     __name__, inspect.currentframe(), function=test,
+            ...     dependencies=())
+            hans
 
             >>> Resolve(
             ...     __name__, inspect.currentframe(), dependencies=())
@@ -268,9 +272,11 @@ class Resolve(builtins.object):
         del cls._load_stack[key]
         if load['function']:
             if load['function'].__name__ in builtins.dir(
-                    sys.modules[load['name']]):
-                builtins.getattr(sys.modules[load['name']],
-                                 load['function'].__name__)
+                sys.modules[load['name']]
+            ):
+                builtins.getattr(
+                    sys.modules[load['name']], load['function'].__name__
+                )()
             else:
                 load['function']()
         else:

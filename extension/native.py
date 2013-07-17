@@ -63,7 +63,207 @@ import boostNode.paradigm.objectOrientation
 
 # region classes
 
-class String(boostNode.paradigm.objectOrientation.Class, builtins.str):
+class Object(boostNode.paradigm.objectOrientation.Class):
+    '''
+        This class extends all native python classes.
+    '''
+
+    # region dynamic properties
+
+        # region public properties
+
+    object = None
+
+        # endregion
+
+        # region protected properties
+
+    _object_copy = {}
+
+        # endregion
+
+    # endregion
+
+    # region dynamic methods
+
+        # region public methods
+
+            # region special methods
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def __init__(
+##         self: boostNode.extension.type.Self, object=None
+##     ) -> None:
+    def __init__(self, object=None):
+##
+        '''
+            Generates a new high level wrapper around given object.
+
+            Examples:
+
+            >>> Object('hans') # doctest: +ELLIPSIS
+            Object of "str" ('hans').
+        '''
+        self.object = object
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
+    def __repr__(self):
+##
+        '''
+            Invokes if this object should describe itself by a string.
+        '''
+        return 'Object of "{class_name}" ({object}).'.format(
+            class_name=self.object.__class__.__name__,
+            object=builtins.repr(self.object))
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def __str__(self: boostNode.extension.type.Self) -> builtins.str:
+    def __str__(self):
+##
+        '''
+            Is triggered if this object should be converted to string.
+
+            Examples:
+
+            >>> str(Object(['hans']))
+            "['hans']"
+        '''
+        return builtins.str(self.object)
+
+            # endregion
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def copy(self: boostNode.extension.type.Self) -> builtins.dict:
+    def copy(self):
+##
+        '''
+            Copies a given object's attributes and returns them.
+
+            Examples:
+
+            >>> class A:
+            ...     pass
+            >>> a = A()
+            >>> a.string = 'hans'
+            >>> object_copy = Object(a).copy()
+            >>> for key, value in object_copy.items():
+            ...     if 'string' == key:
+            ...         print(value)
+            hans
+
+            >>> class B:
+            ...     hans = 'A'
+            >>> object = Object(B())
+            >>> object_copy = object.copy()
+            >>> object.object.hans = 'B'
+            >>> object.object.hans
+            'B'
+            >>> object_copy['hans']
+            'A'
+        '''
+        self._object_copy = {}
+        for attribute in builtins.dir(self.object):
+            if not (attribute.startswith('__') and attribute.endswith('__')):
+                self._object_copy[attribute] = builtins.getattr(
+                    self.object, attribute)
+        return self._object_copy
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3     def restore(self: boostNode.extension.type.Self):
+    def restore(self):
+        '''
+            Restores a given object's attributes by a given copy are last
+            copied item.
+
+            Examples:
+
+            >>> class A:
+            ...     pass
+            >>> A.string = 'hans'
+            >>> object = Object(A)
+            >>> object.copy()
+            {'string': 'hans'}
+            >>> A.string = 'peter'
+            >>> object.restore() # doctest: +ELLIPSIS
+            <class ...A...>
+            >>> A.string
+            'hans'
+
+            >>> class A:
+            ...     hans = 'A'
+            >>> object = Object(A())
+            >>> object_copy = object.copy()
+            >>> object.object.hans = 'B'
+            >>> object.object.hans
+            'B'
+            >>> object.restore().hans
+            'A'
+        '''
+        for attribute, value in self._object_copy.items():
+            if not (attribute.startswith('__') and attribute.endswith('__')):
+                builtins.setattr(self.object, attribute, value)
+        return self.object
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def is_binary(self: boostNode.extension.type.Self) -> builtins.bool:
+    def is_binary(self):
+##
+        '''
+            Determines if given data is binary.
+        '''
+        # NOTE: This is a dirty workaround to handle python2.7 lack of
+        # differentiation between "string" and "bytes" objects.
+## python3.3
+##         return builtins.isinstance(self.object, builtins.bytes)
+        object = self.object
+        if builtins.isinstance(self.object, builtins.unicode):
+            object = self.object.encode(encoding='utf_8')
+        text_chars = ''.join(builtins.map(
+            builtins.chr,
+            builtins.range(7, 14) + [27] + builtins.range(0x20, 0x100)))
+        return builtins.bool(object.translate(None, text_chars))
+##
+
+        # endregion
+
+    # endregion
+
+    # region static methods
+
+    @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
+## python3.3
+##     def determine_abstract_method_exception(
+##         cls: boostNode.extension.type.SelfClass,
+##         abstract_class_name: builtins.str
+##     ) -> builtins.NotImplementedError:
+    def determine_abstract_method_exception(cls, abstract_class_name):
+##
+        '''
+            Generates a suitable exception for raising if a method is called
+            initially indented to be overwritten.
+        '''
+        '''
+            Note: fetch third frame "inspect.stack()[2]"
+                0: this
+                1: Decorator wrapper
+                2: caller
+        '''
+        return builtins.NotImplementedError(
+            'Method "{name}" wasn\'t implemented by "{class_name}" and is '
+            'necessary for abstract class "{abstract_class}".'.format(
+                name=inspect.stack()[2][3], class_name=cls.__name__,
+                abstract_class=abstract_class_name))
+
+    # endregion
+
+
+class String(Object, builtins.str):
     '''
         The string class inherits besides the interface class all pythons
         native string methods.
@@ -911,212 +1111,7 @@ class String(boostNode.paradigm.objectOrientation.Class, builtins.str):
     # endregion
 
 
-class Object(boostNode.paradigm.objectOrientation.Class):
-    '''
-        This class extends all native python classes.
-    '''
-
-    # region dynamic properties
-
-        # region public properties
-
-    object = None
-
-        # endregion
-
-        # region protected properties
-
-    _object_copy = {}
-
-        # endregion
-
-    # endregion
-
-    # region dynamic methods
-
-        # region public methods
-
-            # region special methods
-
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def __init__(
-##         self: boostNode.extension.type.Self, object: builtins.object
-##     ) -> None:
-    def __init__(self, object):
-##
-        '''
-            Generates a new high level wrapper around given object.
-
-            Examples:
-
-            >>> Object('hans') # doctest: +ELLIPSIS
-            Object of "str" ('hans').
-        '''
-        self.object = object
-
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
-    def __repr__(self):
-##
-        '''
-            Invokes if this object should describe itself by a string.
-
-            Examples:
-
-            >>> repr(Object('hans')) # doctest: +ELLIPSIS
-            'Object of "str" (\\'hans\\').'
-        '''
-        return 'Object of "{class_name}" ({object}).'.format(
-            class_name=self.object.__class__.__name__,
-            object=builtins.repr(self.object))
-
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def __str__(self: boostNode.extension.type.Self) -> builtins.str:
-    def __str__(self):
-##
-        '''
-            Is triggered if this object should be converted to string.
-
-            Examples:
-
-            >>> str(Object(['hans']))
-            "['hans']"
-        '''
-        return builtins.str(self.object)
-
-            # endregion
-
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def copy(self: boostNode.extension.type.Self) -> builtins.dict:
-    def copy(self):
-##
-        '''
-            Copies a given object's attributes and returns them.
-
-            Examples:
-
-            >>> class A:
-            ...     pass
-            >>> a = A()
-            >>> a.string = 'hans'
-            >>> object_copy = Object(a).copy()
-            >>> for key, value in object_copy.items():
-            ...     if 'string' == key:
-            ...         print(value)
-            hans
-
-            >>> class B:
-            ...     hans = 'A'
-            >>> object = Object(B())
-            >>> object_copy = object.copy()
-            >>> object.object.hans = 'B'
-            >>> object.object.hans
-            'B'
-            >>> object_copy['hans']
-            'A'
-        '''
-        self._object_copy = {}
-        for attribute in builtins.dir(self.object):
-            if not (attribute.startswith('__') and attribute.endswith('__')):
-                self._object_copy[attribute] = builtins.getattr(
-                    self.object, attribute)
-        return self._object_copy
-
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3     def restore(self: boostNode.extension.type.Self):
-    def restore(self):
-        '''
-            Restores a given object's attributes by a given copy are last
-            copied item.
-
-            Examples:
-
-            >>> class A:
-            ...     pass
-            >>> A.string = 'hans'
-            >>> object = Object(A)
-            >>> object.copy()
-            {'string': 'hans'}
-            >>> A.string = 'peter'
-            >>> object.restore() # doctest: +ELLIPSIS
-            <class ...A...>
-            >>> A.string
-            'hans'
-
-            >>> class A:
-            ...     hans = 'A'
-            >>> object = Object(A())
-            >>> object_copy = object.copy()
-            >>> object.object.hans = 'B'
-            >>> object.object.hans
-            'B'
-            >>> object.restore().hans
-            'A'
-        '''
-        for attribute, value in self._object_copy.items():
-            if not (attribute.startswith('__') and attribute.endswith('__')):
-                builtins.setattr(self.object, attribute, value)
-        return self.object
-
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def is_binary(self: boostNode.extension.type.Self) -> builtins.bool:
-    def is_binary(self):
-##
-        '''
-            Determines if given data is binary.
-        '''
-        # NOTE: This is a dirty workaround to handle python2.7 lack of
-        # differentiation between "string" and "bytes" objects.
-## python3.3
-##         return builtins.isinstance(self.object, builtins.bytes)
-        object = self.object
-        if builtins.isinstance(self.object, builtins.unicode):
-            object = self.object.encode(encoding='utf_8')
-        text_chars = ''.join(builtins.map(
-            builtins.chr,
-            builtins.range(7, 14) + [27] + builtins.range(0x20, 0x100)))
-        return builtins.bool(object.translate(None, text_chars))
-##
-
-        # endregion
-
-    # endregion
-
-    # region static methods
-
-    @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python3.3
-##     def determine_abstract_method_exception(
-##         cls: boostNode.extension.type.SelfClass,
-##         abstract_class_name: builtins.str
-##     ) -> builtins.NotImplementedError:
-    def determine_abstract_method_exception(cls, abstract_class_name):
-##
-        '''
-            Generates a suitable exception for raising if a method is called
-            initially indented to be overwritten.
-        '''
-        '''
-            Note: fetch third frame "inspect.stack()[2]"
-                0: this
-                1: Decorator wrapper
-                2: caller
-        '''
-        return builtins.NotImplementedError(
-            'Method "{name}" wasn\'t implemented by "{class_name}" and is '
-            'necessary for abstract class "{abstract_class}".'.format(
-                name=inspect.stack()[2][3], class_name=cls.__name__,
-                abstract_class=abstract_class_name))
-
-    # endregion
-
-
-class Dictionary(boostNode.paradigm.objectOrientation.Class, builtins.dict):
+class Dictionary(Object, builtins.dict):
     '''
         This class extends the native dictionary object.
     '''
@@ -1211,7 +1206,7 @@ class Dictionary(boostNode.paradigm.objectOrientation.Class, builtins.dict):
     # endregion
 
 
-class Module(boostNode.paradigm.objectOrientation.Class):
+class Module(Object):
     '''
         This class add some features for dealing with modules.
     '''
