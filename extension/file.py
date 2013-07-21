@@ -659,17 +659,19 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> Handler.get_root().path # doctest: +ELLIPSIS
             '...'
 
+            >>> Handler('temp_root', make_directory=True) # doctest: +ELLIPSIS
+            Object of "Handler" ...
+            >>> Handler.set_root(location='temp_root') # doctest: +ELLIPSIS
+            <class '...Handler'>
+            >>> Handler.get_root().path # doctest: +ELLIPSIS
+            '...'
+
             >>> Handler.set_root(location=root_save) # doctest: +ELLIPSIS
             <class '...Handler'>
         '''
-        root_path = cls(
+        cls._root_path = cls(
             location, respect_root_path=False, output_with_root_prefix=True
         ).path
-        if not os.path.isabs(root_path):
-            root_path = os.path.abspath(root_path)
-        if root_path[-builtins.len(os.sep)] != os.sep:
-            root_path += os.sep
-        cls._root_path = root_path
         return cls
 
             # endregion
@@ -697,16 +699,19 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> Handler.convert_size_format(size=100, decimal=True)
             100.0
 
-            >>> Handler.convert_size_format(size=1024, format='kb',
-            ...                             decimal=True)
+            >>> Handler.convert_size_format(
+            ...     size=1024, format='kb', decimal=True)
             1.024
 
-            >>> Handler.convert_size_format(size=2 * 1024 ** 2, format='MB',
-            ...                             decimal=False)
+            >>> Handler.convert_size_format(
+            ...     size=2 * 1024 ** 2, format='MB', decimal=False)
             2.0
 
             >>> Handler.convert_size_format(size=0)
             0.0
+
+            >>> Handler.convert_size_format(size=5.2, formats={})
+            5.2
         '''
         size = builtins.float(size)
         if decimal is None:
@@ -746,6 +751,10 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
             >>> Handler.determine_size_from_string(size_and_unit='2 byte')
             2.0
+
+            >>> Handler.determine_size_from_string(
+            ...     size_and_unit='2 bte', decimal=True)
+            False
         '''
         if decimal is None:
             decimal = cls.DECIMAL
@@ -780,6 +789,10 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> Handler.determine_byte_from_other(
             ...     size=10.0, formats=Handler.FORMATS, given_format='MB')
             10485760.0
+
+            >>> Handler.determine_byte_from_other(
+            ...     size=10.0, formats={})
+            10.0
         '''
         if decimal is None:
             decimal = cls.DECIMAL
@@ -839,6 +852,9 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
             >>> Handler.determine_special_path_values() # doctest: +ELLIPSIS
             (...)
+
+            >>> Handler.determine_special_path_values('windows')
+            ()
         '''
         if not operating_system:
             operating_system = boostNode.extension.system.Platform()\
@@ -861,6 +877,20 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 ##
         '''
             Sorts the given list of files. Files come first and folders later.
+
+            Examples:
+
+            >>> current_location = Handler()
+            >>> temporary_file = Handler('temp_file', must_exist=False)
+            >>> temporary_file.content = 'A'
+            >>> [temporary_file,
+            ...  current_location] == Handler._sort_by_file_types([
+            ...     current_location, temporary_file],
+            ...     False)
+            True
+
+            >>> Handler._sort_by_file_types([], True)
+            []
         '''
         sorted_files = []
         for file in files:
@@ -1103,6 +1133,9 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ...     Handler(location=__file_path__).dummy_size,
             ...     int)
             True
+
+            >>> isinstance(Handler().dummy_size, int)
+            True
         '''
         if self.is_file():
             self._dummy_size = builtins.len(
@@ -1161,6 +1194,13 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
             >>> Handler().get_human_readable_size(size=3 * (1024 ** 8) + 1)
             '3.0 yb'
+
+            >>> import copy
+            >>> handler = Handler()
+            >>> formats_backup = copy.copy(handler.FORMATS)
+            >>> Handler().get_human_readable_size(size=3)
+            '3.0 byte'
+            >>> handler.FORMATS = formats_backup
         '''
         if size is None:
             size = self.size
@@ -1174,6 +1214,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
                         size, format=properties['notations'][0]
                     ), 2)
                 ) + ' ' + properties['notations'][0]
+        return builtins.str(builtins.round(size, 2)) + ' byte'
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
