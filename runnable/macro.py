@@ -710,17 +710,10 @@ class Replace(
             '"{new_version}".'.format(
                 path=file.path, current_version=self._current_version,
                 new_version=self._new_version))
-        if file.name == 'main.coffee':
-            print(file.path + (100*'-'))
-            print('['+file_content+']')
-            print('['+self._more_line_regex_pattern+']')
         file_content = first_line + re.compile(
             self._more_line_regex_pattern, re.DOTALL
         ).sub(
             self._replace_alternate_lines, file_content)
-        if file.name == 'main.coffee':
-            print(file.path + (100*'-'))
-            print(file_content)
         if not self._dry:
             try:
                 file.content = re.compile(self._one_line_regex_pattern).sub(
