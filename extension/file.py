@@ -1037,7 +1037,8 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             "self.convert_size_format()".
 
             "limit" Break and return current calculated size if limit is
-            reached or doesn't if limit is 0.
+                    reached or doesn't if limit is 0. Limit is interpreted in
+                    bytes.
 
             Examples:
 
@@ -1080,6 +1081,20 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             True
             >>> isinstance(size, float)
             True
+
+            >>> size = Handler('/').get_size(0)
+            >>> size > 0
+            True
+
+            >>> size = Handler('/').get_size(limit=1)
+            >>> size > 0
+            True
+
+            >>> Handler().make_symbolic_link(__test_folder__ + 'get_size_link')
+            True
+            >>> size = Handler(__test_folder__ + 'get_size_link').get_size(1)
+            >>> size > 0
+            True
         '''
         size = 0
         if os.path.ismount(self._path):
@@ -1087,12 +1102,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         elif self.is_directory(allow_link=follow_link):
             size = self.BLOCK_SIZE_IN_BYTE
             for file in self:
-                if not limit or self._size < limit:
+                if not limit or size < limit:
                     recursive_keywords = copy.deepcopy(keywords)
                     recursive_keywords['format'] = 'byte'
                     '''
-                        Take this method type by another instance of
-                        this class via introspection.
+                        Take this method type by another instance of this class
+                        via introspection.
                     '''
                     size += builtins.getattr(
                         file, inspect.stack()[0][3]
@@ -1100,10 +1115,10 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
                         limit, follow_link=False, *arguments,
                         **recursive_keywords
                     ) + self.BLOCK_SIZE_IN_BYTE
-        elif self.is_file():
-            size = os.path.getsize(self._path)
-        elif self.is_link:
+        elif self.is_symbolic_link():
             size = self.BLOCK_SIZE_IN_BYTE
+        else:
+            size = os.path.getsize(self._path)
         return builtins.float(self.convert_size_format(
             size, *arguments, **keywords))
 
@@ -1198,7 +1213,8 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> import copy
             >>> handler = Handler()
             >>> formats_backup = copy.copy(handler.FORMATS)
-            >>> Handler().get_human_readable_size(size=3)
+            >>> handler.FORMATS = {}
+            >>> handler.get_human_readable_size(size=3)
             '3.0 byte'
             >>> handler.FORMATS = formats_backup
         '''
@@ -1249,6 +1265,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             True
             >>> Handler(__test_folder__ + 'get_type_link').type
             'symbolicLink'
+
+            >>> test_type.make_portable_link(
+            ...     __test_folder__ + 'get_type_link', force=True)
+            True
+            >>> Handler(__test_folder__ + 'get_type_link').type
+            'portableLink'
         '''
         self._type = 'undefined'
         if self.is_portable_link():
@@ -1280,11 +1302,18 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             'text/...python'
 
             >>> Handler(
-            ...     location=__file_path__).get_mimetype() # doctest: +ELLIPSIS
+            ...     location=__file_path__
+            ... ).get_mimetype() # doctest: +ELLIPSIS
             'text/...python'
 
             >>> Handler().mimetype
             ''
+
+            >>> handler = Handler(
+            ...     location='temp_get_mimetype.unknownType', must_exist=False)
+            >>> handler.content = 'hans'
+            >>> handler.mimetype # doctest: +ELLIPSIS
+            'text/x-unknownType'
         '''
         self._mimetype = mimetypes.guess_type(self._path)[0]
         if not builtins.isinstance(self._mimetype, builtins.str):
@@ -1375,6 +1404,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ...     location='../../'
             ... ).relative_path == '..' + os.sep + '..'
             True
+
+            >>> Handler(
+            ...     location='../../'
+            ... ).get_relative_path(context='../')
+            '..'
         '''
         if context is None:
             return os.path.relpath(self._path, *arguments, **keywords)
