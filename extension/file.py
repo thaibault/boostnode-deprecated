@@ -1446,6 +1446,15 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ...         break
             >>> same
             True
+
+            >>> root_path_backup = Handler._root_path
+            >>> Handler.set_root(Handler(
+            ...     __file_path__
+            ... ).directory_path) # doctest: +ELLIPSIS
+            <class '...Handler'>
+            >>> Handler().directory_path == root_path_backup
+            True
+            >>> Handler._root_path = root_path_backup
         '''
         self._directory_path = self.get_path(
             output_with_root_prefix=output_with_root_prefix)
@@ -2727,10 +2736,17 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ...     __test_folder__ + 'touch', make_directory=True)
             >>> old_timestamp = directory.timestamp
             >>> time.sleep(0.01)
+
             >>> directory.touch()
             True
             >>> old_timestamp != directory.timestamp # doctest: +SKIP
             True
+
+            >>> directory.touch((1330, 1332))
+            True
+
+            >>> directory.touch(False)
+            False
         '''
         if not arguments:
             arguments = (None,)
@@ -3001,6 +3017,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> handler.remove_file()
             True
             >>> handler.is_file()
+            False
+
+            >>> handler.remove_file()
+            True
+
+            >>> Handler().remove_file()
             False
         '''
         if self:
@@ -3549,6 +3571,14 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             True
             >>> target.content # doctest: +ELLIPSIS
             "#!/bin/bash\\n\\n# Handler portable link file\\n\\nsize...\\n..."
+
+            >>> target = Handler(
+            ...     location=__test_folder__ + 'link', must_exist=False)
+            >>> Handler(location=__file_path__).make_portable_link(
+            ...     target, force=True, label='hans')
+            True
+            >>> target.content # doctest: +ELLIPSIS
+            "#!/bin/bash\\n\\n# hans portable link file\\n\\nsize...\\n..."
         '''
         target = self.__class__(location=target, must_exist=False)
         if target and force:
@@ -3585,6 +3615,9 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ... ).make_portable_link(target, force=True)
             >>> target.read_portable_link() # doctest: +ELLIPSIS
             '...directory...'
+
+            >>> Handler().read_portable_link()
+            ''
         '''
         if self.is_portable_link():
             return re.compile(
