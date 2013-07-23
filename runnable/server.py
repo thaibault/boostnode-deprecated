@@ -703,7 +703,10 @@ class Web(
                 time.sleep(2)
             __logger__.info('Shutting down webserver.')
             self.__class__.instances.remove(self)
-            self.service.socket.shutdown(socket.SHUT_RDWR)
+            try:
+                self.service.socket.shutdown(socket.SHUT_RDWR)
+            except socket.error:
+                pass
             self.service.socket.close()
         '''
             Take this method type by the abstract class via introspection.
@@ -879,7 +882,10 @@ class Web(
         else:
             ip = determineIPSocket.getsockname()[0]
         finally:
-            determineIPSocket.shutdown(socket.SHUT_RDWR)
+            try:
+                determineIPSocket.shutdown(socket.SHUT_RDWR)
+            except socket.error:
+                pass
             determineIPSocket.close()
         __logger__.info(
             'Webserver is starting %sand listens at port "%d" and webroot '
