@@ -402,8 +402,11 @@ class String(Object, builtins.str):
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
-##     def __init__(self: boostNode.extension.type.Self, content=None) -> None:
-    def __init__(self, content=None):
+##     def __init__(
+##         self: boostNode.extension.type.Self, content=None,
+##         *arguments: builtins.object, **keywords: builtins.object
+##     ) -> None:
+    def __init__(self, content=None, *arguments, **keywords):
 ##
         '''
             Initialize a new "String" object.
@@ -421,6 +424,12 @@ class String(Object, builtins.str):
         if content is None:
             content = ''
         self.content = builtins.str(content)
+        '''
+            Take this method type by the abstract class via introspection.
+        '''
+        return builtins.getattr(
+            builtins.super(self.__class__, self), inspect.stack()[0][3]
+        )(content, *arguments, **keywords)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -610,9 +619,9 @@ class String(Object, builtins.str):
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def validate_regex(
-##         self: boostNode.extension.type.Self, eception=[]
+##         self: boostNode.extension.type.Self, exclude_symbols=[]
 ##     ) -> boostNode.extension.type.Self:
-    def validate_regex(self, eception=[]):
+    def validate_regex(self, exclude_symbols=[]):
 ##
         '''
             Validates the current string for using in a regex pattern.
@@ -623,7 +632,7 @@ class String(Object, builtins.str):
             >>> String("that's no regex: .*$").validate_regex()
             Object of "String" with "that's no regex: \.\*\$" saved.
 
-            >>> String().validate_regex(eception=[]).content
+            >>> String().validate_regex(exclude_symbols=[]).content
             ''
 
             >>> String('-\[]()^$*+.}-').validate_regex(['}']).content
@@ -635,12 +644,12 @@ class String(Object, builtins.str):
             '\\\\-\\\\\\\\[]()^$*+.{\\\\}\\\\-'
         '''
         '''The escape sequence must also be escaped; but at first.'''
-        if not '\\' in eception:
+        if not '\\' in exclude_symbols:
             self.replace('\\', '\\\\')
         return self.replace(
             search=self.__class__.get_escaping_replace_dictionary(
-                builtins.tuple(builtins.set(
-                    self.SPECIAL_REGEX_SEQUENCES) - builtins.set(eception))))
+                builtins.tuple(builtins.set(self.SPECIAL_REGEX_SEQUENCES) -
+                    builtins.set(exclude_symbols))))
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -1568,20 +1577,22 @@ class Module(Object):
             >>> Module.execute_program_for_modules(
             ...     'linter', 'pyflakes', boostNode.extension.__all__
             ... ) # doctest: +SKIP
-            [('...', '...'), ...]
+            [(..., ...), ...]
 
             >>> Module.execute_program_for_modules(
             ...     'program', 'not_existing', boostNode.extension.__all__,
             ...     error=False) # doctest: +ELLIPSIS
-            ('', '...')
+            ('', ...)
         '''
         results = []
         for module in modules:
-            module = boostNode.extension.file.Handler(
+            module_file = boostNode.extension.file.Handler(
                 location=module + '.' + extension)
             results.append(boostNode.extension.system.Platform.run(
                 command=program,
-                command_arguments=builtins.list(arguments) + [module.path],
+                command_arguments=builtins.list(
+                    arguments
+                ) + [module_file.path],
                 log=log, **keywords))
         result = ['', '']
         first_standard_output = first_error_output = True

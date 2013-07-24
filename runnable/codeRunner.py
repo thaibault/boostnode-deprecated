@@ -33,6 +33,7 @@ __version__ = '1.0'
 ## import collections
 pass
 ##
+import copy
 import inspect
 import logging
 import os
@@ -136,26 +137,26 @@ class Run(
         },
         'bash': {
             'commands': {
-                'run': '<%code_file.path%> <%arguments%>',
+                'run': '"<%code_file.path%>" <%arguments%>',
             },
             'extensions': ('bash',)
         },
         'shell': {
             'commands': {
-                'run': '<%code_file.path%> <%arguments%>',
+                'run': '"<%code_file.path%>" <%arguments%>',
             },
             'extensions': ('sh', 'shell')
         },
         'python': {
             'commands': {
-                'run': '<%code_file.path%> <%arguments%>',
+                'run': '"<%code_file.path%>" <%arguments%>',
             },
             'code_manager': {
                 'file_path': '__init__.<%code_file.extension%>',
                 'commands': {
-                    'clean': './__init__.<%code_file.extension%> clear',
-                    'test': './__init__.<%code_file.extension%> test',
-                    'all': './__init__.<%code_file.extension%> all'
+                    'clean': '__init__.<%code_file.extension%> clear',
+                    'test': '__init__.<%code_file.extension%> test',
+                    'all': '__init__.<%code_file.extension%> all'
                 }
             },
             'extensions': ('py', 'pyc', 'pyw'),
@@ -460,8 +461,7 @@ class Run(
 
             Examples:
 
-            >>> Run()._determine_code_file(
-            ...     path='') # doctest: +ELLIPSIS
+            >>> Run()._determine_code_file(path='') # doctest: +ELLIPSIS
             Object of "Handler" with path "..." (file).
         '''
         if path:
@@ -501,13 +501,14 @@ class Run(
             {...'type': 'python'...}
 
             >>> Run()._find_informations_by_extension(
-            ...     'not_existsing', code_file)
+            ...     'not_existing', code_file)
             False
         '''
         for name, properties in self.SUPPORTED_CODES.items():
             if extension in properties['extensions']:
-                return {'type': name, 'properties': self._render_properties(
-                    properties, code_file)}
+                return {
+                    'type': name, 'properties': self._render_properties(
+                        properties, code_file)}
         return False
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -688,7 +689,7 @@ class Run(
         self._validate_code_file()
         self._current_code = self._find_informations_by_extension(
             extension=self._code_file.extension, code_file=self._code_file)
-        self._current_commands =\
+        self._current_commands = \
             self._current_code['properties']['commands']
         __logger__.info('Detected "%s".', self._current_code['type'])
         self._check_code_manager()
@@ -751,19 +752,20 @@ class Run(
             >>> Run()._render_properties({'hans': 'peter'}, code_file)
             {'hans': 'peter'}
         '''
-        for key, value in properties.items():
+        rendered_properties = copy.copy(properties)
+        for key, value in rendered_properties.items():
             if builtins.isinstance(value, builtins.dict):
-                properties[key] = self._render_properties(
+                rendered_properties[key] = self._render_properties(
                     properties=value, code_file=code_file)
             elif builtins.isinstance(value, builtins.str):
-                properties[key] = boostNode.runnable.template.Parser(
+                rendered_properties[key] = boostNode.runnable.template.Parser(
                     template=value, string=True
                 ).render(
                     code_file=code_file,
                     arguments=' '.join(self._command_line_arguments),
                     path_seperator=os.sep
                 ).output
-        return properties
+        return rendered_properties
 
         # endregion
 

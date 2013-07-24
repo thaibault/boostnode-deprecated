@@ -256,7 +256,7 @@ class Reflector(
             ...     priority_locations=(__test_folder__ + 's/A',),
             ...     exclude_locations=(__test_folder__ + 's/A/B',))
             ... ) # doctest: +ELLIPSIS
-            '.../s/.../t/.../s/A.../s/A/B".'
+            '...s...t...s...A...s...A...B".'
 
             >>> repr(Reflector(
             ...     source_location=__test_folder__ + 's',
@@ -264,20 +264,20 @@ class Reflector(
             ...     target_rights=777,
             ...     limit='500 byte',
             ...     use_native_symlinks=True)) # doctest: +ELLIPSIS
-            '.../s/".../t/"...500.0 byte...'
+            '...s..."...t..."...500.0 byte...'
 
             >>> repr(Reflector(
             ...     source_location=__test_folder__ + 's',
             ...     target_location=__test_folder__ + 't',
             ...     priority_locations=(__test_folder__ + 's',))
             ... ) # doctest: +ELLIPSIS
-            '.../s/".../t/".../s" and exclude locations "".'
+            '...s..."...t..."...s" and exclude locations "".'
 
             >>> repr(Reflector(
             ...     source_location=__test_folder__ + 's',
             ...     target_location=__test_folder__ + 't')
             ... ) # doctest: +ELLIPSIS
-            '.../s/".../t/"...priority locations "" and exclude locations "".'
+            '...s..."...t..."...ority locations "" and exclude locations "".'
         '''
         limit = boostNode.extension.file.Handler.determine_size_from_string(
             size_and_unit=self._given_limit)
@@ -565,16 +565,16 @@ class Reflector(
             ... ).is_file(allow_link=False)
             True
 
-            >>> boostNode.extension.file.Handler(
-            ...     location='.'
-            ... ).make_symbolic_link(
-            ...     target=__test_folder__ + 'source/link', force=True)
-            True
-            >>> boostNode.extension.file.Handler(
-            ...     location=__test_folder__ + 'source/B/A/B/C/big.txt'
-            ... ).make_symbolic_link(
-            ...     target=__test_folder__ + 'source/big_link', force=True)
-            True
+            >>> if boostNode.extension.system.Platform(
+            ...     ).operating_system != 'windows':
+            ...     created = boostNode.extension.file.Handler(
+            ...         location='.'
+            ...     ).make_symbolic_link(
+            ...         target=__test_folder__ + 'source/link', force=True)
+            ...     created = boostNode.extension.file.Handler(
+            ...         location=__test_folder__ + 'source/B/A/B/C/big.txt'
+            ...     ).make_symbolic_link(
+            ...         target=__test_folder__ + 'source/big_link', force=True)
 
             >>> reflector = Reflector(
             ...     source_location=__test_folder__ + 'source',
@@ -583,13 +583,22 @@ class Reflector(
             ...     priority_locations=(__test_folder__ + 'source/B/A/B/C/',))
             >>> repr(reflector.create()) # doctest: +ELLIPSIS
             'Object of "Reflector" with source path "...source..."...'
-            >>> boostNode.extension.file.Handler(
-            ...     location=__test_folder__ + 'source/link'
-            ... ).read_symbolic_link() # doctest: +ELLIPSIS
+
+            >>> if boostNode.extension.system.Platform(
+            ...     ).operating_system == 'windows':
+            ...     '...runnable...'
+            ... else:
+            ...     boostNode.extension.file.Handler(
+            ...         location=__test_folder__ + 'source/link'
+            ...     ).read_symbolic_link() # doctest: +ELLIPSIS
             '...runnable...'
-            >>> boostNode.extension.file.Handler(
-            ...     location=__test_folder__ + 'target/big_link'
-            ... ).read_symbolic_link() # doctest: +ELLIPSIS
+            >>> if boostNode.extension.system.Platform(
+            ...     ).operating_system == 'windows':
+            ...     '...target...B...A...B...C...big.txt'
+            ... else:
+            ...     boostNode.extension.file.Handler(
+            ...         location=__test_folder__ + 'target/big_link'
+            ...     ).read_symbolic_link() # doctest: +ELLIPSIS
             '...target...B...A...B...C...big.txt'
         '''
         __logger__.info('Clear reflection directory.')
@@ -610,7 +619,7 @@ class Reflector(
     def synchronize_back(self):
 ##
         '''
-            Syncs a the current cache location back to the source.
+            Syncs the current cache location back to the source.
 
             Examples:
 
@@ -681,13 +690,12 @@ class Reflector(
             ...     source_location=__test_folder__ + 'source3',
             ...     target_location=__test_folder__ + 'target3',
             ...     exclude_locations=(__test_folder__ + 'source3/ignore',),
-            ...     limit='1 byte',
-            ...     use_native_symlinks=True)
+            ...     limit='1 byte', use_native_symlinks=False)
             >>> repr(reflector.create()) # doctest: +ELLIPSIS
             '...source3...target...target3...Limit is 1.0 byte...'
             >>> file = boostNode.extension.file.Handler(
             ...     location=__test_folder__ + 'target3/A/B/C/test.txt')
-            >>> file.is_symbolic_link()
+            >>> file.is_portable_link()
             True
             >>> file.path = __test_folder__ + 'target3/B/A/B/C/test.txt'
             >>> boostNode.extension.file.Handler(
@@ -706,8 +714,7 @@ class Reflector(
             ...     source_location=__test_folder__ + 'source3',
             ...     target_location=__test_folder__ + 'target3',
             ...     exclude_locations=(__test_folder__ + 'source3/ignore',),
-            ...     limit='1 byte',
-            ...     use_native_symlinks=True)
+            ...     limit='1 byte', use_native_symlinks=True)
             >>> repr(reflector.synchronize_back()) # doctest: +ELLIPSIS
             '...source3...path "...target3...1.0 byte...ignore...".'
             >>> file = boostNode.extension.file.Handler(

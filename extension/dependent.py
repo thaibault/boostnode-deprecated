@@ -189,6 +189,8 @@ class Resolve(builtins.object):
             >>> Resolve.get_all(__test_folder__ + 'get_all')
             []
         '''
+        if not (sys.path[0] or path):
+            path = os.getcwd()
         return builtins.list(builtins.set(builtins.map(
             lambda name: name[:name.rfind('.')],
             builtins.filter(

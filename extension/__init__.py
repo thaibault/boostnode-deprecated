@@ -38,8 +38,13 @@ import sys
 ## python3.3 pass
 builtins = sys.modules['__main__'].__builtins__
 
+'''Make this package importable from current location.'''
 for number in (3, 4):
-    sys.path.append(os.path.abspath(sys.path[0] + number * ('..' + os.sep)))
+    path = os.path.abspath(sys.path[0] + number * ('..' + os.sep))
+    if not path in sys.path:
+        sys.path.append(path)
+if not sys.path[0]:
+    sys.path[0] = os.getcwd()
 
 # endregion
 

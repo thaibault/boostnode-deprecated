@@ -278,6 +278,7 @@ import sys
 ## python3.3 pass
 builtins = sys.modules['__main__'].__builtins__
 
+'''Make this package importable from current location.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * ('..' + os.sep)))
 
 '''

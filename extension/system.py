@@ -49,6 +49,7 @@ import socket
 import struct
 import subprocess
 import sys
+import tempfile
 import time
 ## python3.3 import types
 pass
@@ -1479,7 +1480,8 @@ class CommandLine(builtins.object):
         '''
             Test a given's module doctests.
         '''
-        test_folder = cls._determine_test_directory(module)
+        test_folder = boostNode.extension.file.Handler(
+            location=tempfile.mkdtemp(suffix=module['scope'].__name__))
         module['scope'].__test_folder__ = test_folder.path
         module['scope'].__test__ = cls.determine_wrapped_objects(
             module=module['scope'])
@@ -1499,7 +1501,11 @@ class CommandLine(builtins.object):
             module['scope'].__test_buffer__
         boostNode.extension.output.Logger.change_all(
             level=('info',), buffer=(module['scope'].__test_buffer__,))
-        doctest.testmod(module['scope'], verbose=verbose)
+        # TODO Integrate during porting to python3.4: doctest.FAIL_FAST
+        doctest.testmod(
+            module['scope'], verbose=verbose,
+            optionflags=doctest.DONT_ACCEPT_TRUE_FOR_1 |
+                        doctest.REPORT_ONLY_FIRST_FAILURE)
         '''Recover old output buffer.'''
         boostNode.extension.output.Logger.change_all(
             level=log_level_save, buffer=logger_buffer_save)
@@ -1677,33 +1683,6 @@ class CommandLine(builtins.object):
             cls.current_argument_parser.add_argument(
                 *argument['arguments'], **argument['keywords'])
         return cls
-
-    @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python3.3
-##     def _determine_test_directory(
-##         cls, module: builtins.dict
-##     ) -> builtins.object:
-    def _determine_test_directory(cls, module):
-##
-        '''
-            Determine or create a clean test directory for mocups in test
-            cases.
-        '''
-        modules_file_path = __file_path__
-        if '__file_path__' in builtins.dir(module['scope']):
-            modules_file_path = module['scope'].__file_path__
-        test_root_path = boostNode.extension.file.Handler(
-            location=modules_file_path
-        ).directory_path
-        alternate_test_root_location = boostNode.extension.file.Handler(
-            location='/tmp', must_exist=False)
-        if(Platform().operating_system == 'linux' and
-           alternate_test_root_location):
-            test_root_path = alternate_test_root_location.path
-        return boostNode.extension.file.Handler(
-            location=test_root_path + '/temp_' + module['name'] + '_test',
-            must_exist=False
-        ).make_new_directory()
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
@@ -1949,12 +1928,9 @@ class CommandLine(builtins.object):
             '"{documenter}".'.format(
                 modules='", "'.join(module_names),
                 documenter=documenter))
-        result = boostNode.extension.native.Module\
-            .execute_program_for_modules(
-                program_type='documenter', program=documenter,
-                modules=module_names, arguments=documenter_arguments)
-        if result is False:
-            __logger__.warning('Documenter "%s" wasn\'t found.', documenter)
+        boostNode.extension.native.Module.execute_program_for_modules(
+            program_type='documenter', program=documenter,
+            modules=module_names, arguments=documenter_arguments, error=False)
         for file in boostNode.extension.file.Handler():
             if file.extension == documentation_file_extension:
                 file.directory_path = documentation.path

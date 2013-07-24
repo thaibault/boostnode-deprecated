@@ -43,7 +43,6 @@ import os
 import re
 import shutil
 import sre_constants
-import string
 import sys
 ## python3.3 import types
 pass
@@ -170,8 +169,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         Internal bash variable pattern: "$bash_variable".
     '''
     PORTABLE_DEFAULT_LINK_PATTERN = (
-        "#!/bin/bash\n\n# $label portable link file\n\nsize=$size\ntarget='"
-        "$path'\n\n$executable_path --open \$target")
+        "#!/bin/bash\n\n# {label} portable link file\n\nsize={size}\ntarget='"
+        "{path}'\n\n'{executable_path}' --open \"$target\"")
+    PORTABLE_WINDOWS_DEFAULT_LINK_PATTERN = (
+        "{label} portable link file\n\n$size={size}\ntarget='"
+        "{path}'\n\n'{executable_path}' --open \"$target\"")
+
     '''
         This file pattern is used for all media files which should easily open
         the referenced media with a useful program on the one hand and behave
@@ -310,12 +313,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> Handler(location=Handler()).path # doctest: +ELLIPSIS
             '...boostNode...extension...'
 
-            >>> root_location = Handler(
+            >>> root_path_backup = Handler._root_path
+            >>> Handler._root_path = Handler(
             ...     __test_folder__ + 'init_root_directory',
-            ...     make_directory=True)
-            >>> Handler.set_root(
-            ...     location=root_location.path) # doctest: +ELLIPSIS
-            <class '...Handler'>
+            ...     make_directory=True
+            ... )._path
 
             >>> location = Handler('/init_A', must_exist=False)
             >>> location.path # doctest: +ELLIPSIS
@@ -341,12 +343,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> try:
             ...     Handler(
             ...         __test_folder__ + 'init_A', make_directory=True)
-            ... except builtins.Exception as exception:
-            ...     str(exception) # doctest: +ELLIPSIS
-            "...Errno..."
+            ... except:
+            ...     True
+            True
 
-            >>> Handler.set_root(location='/') # doctest: +ELLIPSIS
-            <class '...Handler'>
+            >>> Handler._root_path = root_path_backup
         '''
         self._encoding = encoding
         self._respect_root_path = respect_root_path
@@ -525,7 +526,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ...     must_exist=False) in Handler()
             False
 
-            >>> 'temp_not_existing_file' in Handler()
+            >>> 'not_existing_file' in Handler()
             False
 
             >>> __file_path__ in Handler()
@@ -595,11 +596,16 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> repr(Handler(location=__file_path__)) # doctest: +ELLIPSIS
             'Object of "Handler" with path "...file.py" ... (file).'
 
-            >>> link = Handler('temp_symbolic_link', must_exist=False)
-            >>> created = Handler(location=__file_path__).make_symbolic_link(
-            ...     link)
-            >>> repr(link) # doctest: +ELLIPSIS
-            'Object of "Handler" with path "...temp_sy..." ... (link to ...).'
+            >>> link = Handler(__test_folder__ + 'repr_link', must_exist=False)
+            >>> if boostNode.extension.system.Platform(
+            ...     ).operating_system == 'windows':
+            ...     True
+            ... else:
+            ...     created = Handler(
+            ...         location=__file_path__
+            ...     ).make_symbolic_link(link)
+            ...     link.is_symbolic_link()
+            True
         '''
         type = self.type
         if self.is_symbolic_link():
@@ -652,22 +658,16 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
             Examples:
 
-            >>> root_save = Handler.get_root()
+            >>> root_path_backup = Handler._root_path
 
-            >>> Handler.set_root(location='~') # doctest: +ELLIPSIS
+            >>> handler = Handler(
+            ...     __test_folder__ + 'set_root', make_directory=True)
+            >>> Handler.set_root(location=handler) # doctest: +ELLIPSIS
             <class '...Handler'>
             >>> Handler.get_root().path # doctest: +ELLIPSIS
             '...'
 
-            >>> Handler('temp_root', make_directory=True) # doctest: +ELLIPSIS
-            Object of "Handler" ...
-            >>> Handler.set_root(location='temp_root') # doctest: +ELLIPSIS
-            <class '...Handler'>
-            >>> Handler.get_root().path # doctest: +ELLIPSIS
-            '...'
-
-            >>> Handler.set_root(location=root_save) # doctest: +ELLIPSIS
-            <class '...Handler'>
+            >>> Handler._root_path = root_path_backup
         '''
         cls._root_path = cls(
             location, respect_root_path=False, output_with_root_prefix=True
@@ -859,9 +859,9 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         if not operating_system:
             operating_system = boostNode.extension.system.Platform()\
                 .operating_system
-        if operating_system != 'windows':
-            return ('~',)
-        return ()
+        if operating_system == 'windows':
+            return ()
+        return ('~',)
 
         # endregion
 
@@ -881,7 +881,8 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             Examples:
 
             >>> current_location = Handler()
-            >>> temporary_file = Handler('temp_file', must_exist=False)
+            >>> temporary_file = Handler(
+            ...     __test_folder__ + '_sort_by_file_types', must_exist=False)
             >>> temporary_file.content = 'A'
             >>> [temporary_file,
             ...  current_location] == Handler._sort_by_file_types([
@@ -1090,10 +1091,16 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> size > 0
             True
 
-            >>> Handler().make_symbolic_link(__test_folder__ + 'get_size_link')
-            True
-            >>> size = Handler(__test_folder__ + 'get_size_link').get_size(1)
-            >>> size > 0
+            >>> if boostNode.extension.system.Platform(
+            ...     ).operating_system == 'windows':
+            ...     True
+            ... else:
+            ...     created = Handler().make_symbolic_link(
+            ...         __test_folder__ + 'get_size_link')
+            ...     size = Handler(
+            ...         __test_folder__ + 'get_size_link'
+            ...     ).get_size(1)
+            ...     size > 0
             True
         '''
         size = 0
@@ -1261,15 +1268,23 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> test_type.get_type()
             'file'
 
-            >>> test_type.make_symbolic_link(__test_folder__ + 'get_type_link')
+            >>> if boostNode.extension.system.Platform(
+            ...     ).operating_system == 'windows':
+            ...     True
+            ... else:
+            ...     created = test_type.make_symbolic_link(
+            ...         __test_folder__ + 'get_type_link')
+            ...     Handler(
+            ...         __test_folder__ + 'get_type_link'
+            ...     ).type == 'symbolicLink'
             True
-            >>> Handler(__test_folder__ + 'get_type_link').type
-            'symbolicLink'
 
+            >>> target = Handler(
+            ...     __test_folder__ + 'get_type_link', must_exist=False)
             >>> test_type.make_portable_link(
             ...     __test_folder__ + 'get_type_link', force=True)
             True
-            >>> Handler(__test_folder__ + 'get_type_link').type
+            >>> target.type
             'portableLink'
         '''
         self._type = 'undefined'
@@ -1310,7 +1325,8 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ''
 
             >>> handler = Handler(
-            ...     location='temp_get_mimetype.unknownType', must_exist=False)
+            ...     location=__test_folder__ + 'get_mimetype.unknownType',
+            ...     must_exist=False)
             >>> handler.content = 'hans'
             >>> handler.mimetype # doctest: +ELLIPSIS
             'text/x-unknownType'
@@ -1713,11 +1729,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             Examples:
 
             >>> Handler().portable_link_pattern # doctest: +ELLIPSIS
-            "#!/bin/bash\\n\\n# ..."
+            '...portable ...'
 
             >>> handler = Handler(location=__file_path__)
             >>> handler.portable_link_pattern # doctest: +ELLIPSIS
-            "#!/bin/bash\\n\\n# ..."
+            '...portable ...'
 
             >>> Handler(
             ...     location=__test_folder__ +
@@ -1727,12 +1743,13 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             '[playlist]\\n\\nFile1=...'
         '''
         pattern = self.PORTABLE_DEFAULT_LINK_PATTERN
+        if boostNode.extension.system.Platform().operating_system == 'windows':
+            pattern = self.PORTABLE_WINDOWS_DEFAULT_LINK_PATTERN
         if self.is_media():
             pattern = self.PORTABLE_MEDIA_LINK_PATTERN
-        self._portable_link_pattern = string.Template(
-            pattern
-        ).safe_substitute(
-            executable_path=os.path.abspath(sys.argv[0]))
+        self._portable_link_pattern = pattern.format(
+            executable_path=os.path.abspath(sys.argv[0]),
+            label='{label}', size='{size}', path='{path}')
         return self._portable_link_pattern
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -1751,24 +1768,17 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             Examples:
 
             >>> Handler().portable_regex_link_pattern # doctest: +ELLIPSIS
-            "#!/bin/bash\\n\\n# (?P<label>.*?) portable link file\\n\\nsiz..."
+            '...portable...'
 
             >>> Handler().get_portable_regex_link_pattern(
             ...     ) # doctest: +ELLIPSIS
-            "#!/bin/bash\\n\\n# (?P<label>.*?) portable link file\\n\\nsiz..."
+            '...portable...'
         '''
-        self._portable_regex_link_pattern = re.compile(
-            string.Template.delimiter + '{?' + string.Template.idpattern + '}?'
-        ).sub(
-            '(.*?)', string.Template(
-                boostNode.extension.native.String(
-                    self.portable_link_pattern
-                ).validate_regex(eception=['$', '\\']).content
-            ).safe_substitute(
-                size='(?P<size>[0-9]+)',
-                label='(?P<label>.*?)',
-                path='(?P<path>.*?)',
-                name='(?P<name>.*?)'))
+        self._portable_regex_link_pattern = boostNode.extension.native.String(
+            self.portable_link_pattern
+        ).validate_regex(exclude_symbols=('{', '}', '-')).content.format(
+            size='(?P<size>[0-9]+)', label='(?P<label>.*?)',
+            path='(?P<path>.*?)')
         return self._portable_regex_link_pattern
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -1801,22 +1811,18 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             Examples:
 
             >>> Handler().portable_link_content # doctest: +ELLIPSIS
-            "#!/bin/bash\\n\\n# %s...
+            '...portable...'
 
             >>> Handler().get_portable_link_content(
             ...     label='test-label (%s)') # doctest: +ELLIPSIS
-            "#!/bin/bash\\n\\n# test-label (%s)..."
+            '...test-label (%s)...'
         '''
-        self._portable_link_content = re.compile(r'\\(.)').sub(
-            '\\1', string.Template(
-                self.portable_link_pattern
-            ).safe_substitute(
-                label=label,
-                size=builtins.int(self.size),
-                path=self._determine_relative_path(
-                    relative, target_path
-                ).replace('%', '%%'),
-                name=self.name.replace('%', '%%')))
+        self._portable_link_content = self.portable_link_pattern.format(
+            label=label, size=builtins.int(self.size),
+            path=self._determine_relative_path(
+                relative, target_path
+            ).replace('%', '%%'),
+            name=self.name.replace('%', '%%'))
         return self._portable_link_content
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -2050,13 +2056,13 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
             >>> handler = Handler(
             ...     __test_folder__ + 'set_name', make_directory=True)
-            >>> handler.name = __test_folder__ + 'set_name_edited'
+            >>> handler.name = 'set_name_edited'
             >>> handler.is_directory()
             True
             >>> handler.name
             'set_name_edited'
 
-            >>> handler.set_name(__test_folder__ + 'set_name_edited2')
+            >>> handler.set_name('set_name_edited2')
             True
             >>> handler.is_directory()
             True
@@ -2066,7 +2072,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> handler = Handler(
             ...     __test_folder__ + 'set_name.e', must_exist=False)
             >>> handler.content = 'A'
-            >>> handler.name = __test_folder__ + 'set_name.ext'
+            >>> handler.name = 'set_name.ext'
             >>> handler.is_file()
             True
             >>> handler.name
@@ -2093,13 +2099,13 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
             >>> handler = Handler(
             ...     __test_folder__ + 'set_basename3', make_directory=True)
-            >>> handler.basename = __test_folder__ + 'set_basename_edited3'
+            >>> handler.basename = 'set_basename_edited3'
             >>> handler.name
             'set_basename_edited3'
 
             >>> handler = Handler(
             ...     __test_folder__ + 'set_basename4', make_directory=True)
-            >>> handler.set_basename(__test_folder__ + 'set_basename_edited4')
+            >>> handler.set_basename('set_basename_edited4')
             True
             >>> handler.basename
             'set_basename_edited4'
@@ -2107,7 +2113,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> handler = Handler(
             ...     __test_folder__ + 'set_basename5.e', must_exist=False)
             >>> handler.content = 'A'
-            >>> handler.basename = __test_folder__ + 'set_basename_edited5'
+            >>> handler.basename = 'set_basename_edited5'
             >>> handler.name
             'set_basename_edited5.e'
             >>> handler.basename
@@ -2290,36 +2296,41 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
             Examples:
 
-            >>> Handler(location=__file_path__).make_symbolic_link(
-            ...     target=__test_folder__ + 'is_link.py', force=True)
-            True
-            >>> handler = Handler(location=__test_folder__ + 'is_link.py')
-
-            >>> handler.is_symbolic_link()
+            >>> target = Handler(
+            ...     __test_folder__ + 'is_symbolic_link', must_exist=False)
+            >>> if boostNode.extension.system.Platform(
+            ...     ).operating_system == 'windows':
+            ...     True
+            ... else:
+            ...     created = Handler(
+            ...         location=__file_path__
+            ...     ).make_symbolic_link(target, force=True)
+            ...     target.is_symbolic_link()
             True
 
             >>> file = Handler(
-            ...     __test_folder__ + 'is_link_not', must_exist=False)
+            ...     __test_folder__ + 'is_symbolic_link_not', must_exist=False)
             >>> file.content = ' '
             >>> file.is_symbolic_link()
             False
 
             >>> file = Handler(
-            ...     __test_folder__ + 'is_link_not2', make_directory=True)
+            ...     __test_folder__ + 'is_symbolic_link_not2',
+            ...     make_directory=True)
             >>> file.is_symbolic_link()
             False
 
-            >>> target_handler = Handler(
-            ...     location=__test_folder__ + 'is_link_not3',
+            >>> file = Handler(
+            ...     location=__test_folder__ + 'is_symbolic_link_not3',
             ...     must_exist=False)
             >>> Handler(location=__file_path__).make_portable_link(
-            ...     target=target_handler, force=True)
+            ...     target=file, force=True)
             True
 
-            >>> target_handler.is_symbolic_link(allow_portable_link=False)
+            >>> file.is_symbolic_link(allow_portable_link=False)
             False
 
-            >>> handler.is_symbolic_link()
+            >>> file.is_symbolic_link()
             True
         '''
         path = self._path
@@ -2415,11 +2426,16 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> Handler(location=__file_path__).is_portable_link()
             False
 
-            >>> link_target = Handler(
+            >>> target = Handler(
             ...     __test_folder__ + 'is_portable_link', must_exist=False)
-            >>> Handler(location=__file_path__).make_symbolic_link(link_target)
-            True
-            >>> link_target.is_portable_link()
+            >>> if boostNode.extension.system.Platform(
+            ...     ).operating_system == 'windows':
+            ...     False
+            ... else:
+            ...     created = Handler(
+            ...         location=__file_path__
+            ...     ).make_symbolic_link(target)
+            ...     target.is_portable_link()
             False
 
             >>> Handler().is_portable_link()
@@ -2451,10 +2467,10 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
                 pass
             else:
                 try:
-                    return builtins.len(file_content) <= maximum_length and\
+                    return(builtins.len(file_content) <= maximum_length and
                         builtins.bool(re.compile(
                             self.portable_regex_link_pattern
-                        ).match(file_content))
+                        ).match(file_content)))
                 except sre_constants.error:
                     pass
         return False
@@ -2783,7 +2799,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             "...file.py..."
 
             >>> not_existing_file = Handler(
-            ...     'temp_not_existing', must_exist=False)
+            ...     __test_folder__ + 'list_not_existing', must_exist=False)
             >>> not_existing_file.list() # doctest: +ELLIPSIS
             <generator object list at ...>
             >>> len(not_existing_file)
@@ -3267,24 +3283,34 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             Examples:
 
             >>> target = Handler(
-            ...     __test_folder__ + 'make_softlink', must_exist=False)
-            >>> Handler(
-            ...     location=__test_folder__ + 'make_softlink_test_directory',
-            ...     make_directory=True
-            ... ).make_symbolic_link(target, force=True)
-            True
-            >>> target.is_symbolic_link()
+            ...     __test_folder__ + 'make_symbolic_link_target',
+            ...     must_exist=False)
+            >>> if boostNode.extension.system.Platform(
+            ...     ).operating_system == 'windows':
+            ...     True
+            ... else:
+            ...     created = Handler(
+            ...         location=__test_folder__ +
+            ...             'make_symbolic_link_directory_source',
+            ...         make_directory=True
+            ...     ).make_symbolic_link(target, force=True)
+            ...     target.is_symbolic_link()
             True
 
             >>> target = Handler(
-            ...     __test_folder__ + 'make_softlink2', must_exist=False)
-            >>> source = Handler(
-            ...     location=__test_folder__ + 'make_softlink_test_file',
+            ...     __test_folder__ + 'make_symbolic_link_target',
             ...     must_exist=False)
-            >>> source.content = ' '
-            >>> source.make_symbolic_link(target, force=True)
-            True
-            >>> Handler(target).is_symbolic_link()
+            >>> if boostNode.extension.system.Platform(
+            ...     ).operating_system == 'windows':
+            ...     True
+            ... else:
+            ...     source = Handler(
+            ...         location=__test_folder__ +
+            ...             'make_symbolic_link_file_source',
+            ...         must_exist=False)
+            ...     source.content = ' '
+            ...     created = source.make_symbolic_link(target, force=True)
+            ...     target.is_symbolic_link()
             True
         '''
         return self._make_link(*arguments, symbolic=True, **keywords)
@@ -3308,12 +3334,17 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             Examples:
 
             >>> target = Handler(
-            ...     __test_folder__ + 'make_hardlink2', must_exist=False)
-            >>> source = Handler(
-            ...     location=__test_folder__ + 'make_hardlink_test_file',
-            ...     must_exist=False)
-            >>> source.content = ' '
-            >>> source.make_hardlink(target, force=True)
+            ...     __test_folder__ + 'make_hardlink_target', must_exist=False)
+            >>> if boostNode.extension.system.Platform(
+            ...     ).operating_system == 'windows':
+            ...     True
+            ... else:
+            ...     source = Handler(
+            ...         location=__test_folder__ + 'make_hardlink_source',
+            ...         must_exist=False)
+            ...     source.content = ' '
+            ...     created = source.make_hardlink(target, force=True)
+            ...     target.is_file()
             True
         '''
         return self._make_link(*arguments, symbolic=False, **keywords)
@@ -3347,19 +3378,24 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
             Examples:
 
-            >>> Handler(location=__file_path__).make_symbolic_link(
-            ...     target=__test_folder__ + 'read_link.py', force=True)
+            >>> source = Handler(location=__file_path__)
+            >>> target = Handler(
+            ...     __test_folder__ + 'read_symbolic_link', must_exist=False)
+            >>> if boostNode.extension.system.Platform(
+            ...     ).operating_system == 'windows':
+            ...     True
+            ... else:
+            ...     created = source.make_symbolic_link(
+            ...         target=target, force=True)
+            ...     target.read_symbolic_link() == __file_path__
             True
 
-            >>> Handler(
-            ...     location=__test_folder__ + 'read_link.py'
-            ... ).read_symbolic_link() # doctest: +ELLIPSIS
-            '...file.py'
-
-            >>> Handler(
-            ...     location=__test_folder__ + 'read_link.py'
-            ... ).read_symbolic_link(as_object=True) # doctest: +ELLIPSIS
-            Object of "Handler" with path "...file.py" (file).
+            >>> if boostNode.extension.system.Platform(
+            ...     ).operating_system == 'windows':
+            ...     True
+            ... else:
+            ...     target.read_symbolic_link(as_object=True) == source
+            True
         '''
         path = self._path
         if self._path[-builtins.len(os.sep)] == os.sep:
@@ -3560,7 +3596,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ...     target, force=True)
             True
             >>> target.content # doctest: +ELLIPSIS
-            "#!/bin/bash\\n\\n# Handler portable link file\\n\\nsize...\\n..."
+            '...portable...'
 
             >>> target = Handler(
             ...     location=__test_folder__ + 'directory_link',
@@ -3570,7 +3606,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ... ).make_portable_link(target, force=True)
             True
             >>> target.content # doctest: +ELLIPSIS
-            "#!/bin/bash\\n\\n# Handler portable link file\\n\\nsize...\\n..."
+            '...portable...'
 
             >>> target = Handler(
             ...     location=__test_folder__ + 'link', must_exist=False)
@@ -3578,7 +3614,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ...     target, force=True, label='hans')
             True
             >>> target.content # doctest: +ELLIPSIS
-            "#!/bin/bash\\n\\n# hans portable link file\\n\\nsize...\\n..."
+            '...portable...'
         '''
         target = self.__class__(location=target, must_exist=False)
         if target and force:
@@ -3809,7 +3845,8 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         if builtins.hasattr(os, 'startfile'):
             return os.startfile(self._path)
         shell_file = boostNode.extension.native.String(
-            self._path).validate_shell()
+            self._path
+        ).validate_shell()
         if builtins.hasattr(os, 'open'):
             return boostNode.extension.system.Platform.run(
                 command='open', command_arguments=(shell_file,))
@@ -3860,7 +3897,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
     ):
 ##
         '''
-            Makes hard or softlinks and handles the optional force option.
+            Makes hard or symbolic links and handles the optional force option.
         '''
 ## python3.3
 ##         pass
@@ -4115,14 +4152,18 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
             Examples:
 
-            >>> Handler()._make_platform_dependent_link(
-            ...     symbolic=True,
-            ...     target=Handler(
-            ...         __test_folder__ +
-            ...         '_make_platform_dependent_link',
-            ...         must_exist=False),
-            ...     relative=False
-            ... ) # doctest: +ELLIPSIS
+            >>> if boostNode.extension.system.Platform(
+            ...     ).operating_system == 'windows':
+            ...     True
+            ... else:
+            ...     Handler()._make_platform_dependent_link(
+            ...         symbolic=True,
+            ...         target=Handler(
+            ...             __test_folder__ +
+            ...             '_make_platform_dependent_link',
+            ...             must_exist=False),
+            ...         relative=False
+            ...     ) # doctest: +ELLIPSIS
             True
         '''
         target_path = target._path
@@ -4222,7 +4263,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             True
 
             >>> Handler(
-            ...     'temp_not_existsing', must_exist=False
+            ...     'not_existing', must_exist=False
             ... )._get_platform_dependent_free_and_total_space()
             False
         '''
