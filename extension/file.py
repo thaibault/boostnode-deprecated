@@ -1221,8 +1221,8 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> handler = Handler()
             >>> formats_backup = copy.copy(handler.FORMATS)
             >>> handler.FORMATS = {}
-            >>> handler.get_human_readable_size(size=3)
-            '3.0 byte'
+            >>> handler.get_human_readable_size(size=3) # doctest: +ELLIPSIS
+            '3... byte'
             >>> handler.FORMATS = formats_backup
         '''
         if size is None:
@@ -2468,9 +2468,9 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             else:
                 try:
                     return(builtins.len(file_content) <= maximum_length and
-                        builtins.bool(re.compile(
-                            self.portable_regex_link_pattern
-                        ).match(file_content)))
+                           builtins.bool(re.compile(
+                               self.portable_regex_link_pattern
+                           ).match(file_content)))
                 except sre_constants.error:
                     pass
         return False

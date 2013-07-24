@@ -1505,7 +1505,7 @@ class CommandLine(builtins.object):
         doctest.testmod(
             module['scope'], verbose=verbose,
             optionflags=doctest.DONT_ACCEPT_TRUE_FOR_1 |
-                        doctest.REPORT_ONLY_FIRST_FAILURE)
+            doctest.REPORT_ONLY_FIRST_FAILURE)
         '''Recover old output buffer.'''
         boostNode.extension.output.Logger.change_all(
             level=log_level_save, buffer=logger_buffer_save)

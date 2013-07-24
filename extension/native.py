@@ -619,27 +619,27 @@ class String(Object, builtins.str):
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def validate_regex(
-##         self: boostNode.extension.type.Self, exclude_symbols=[]
+##         self: boostNode.extension.type.Self, exclude_symbols=()
 ##     ) -> boostNode.extension.type.Self:
-    def validate_regex(self, exclude_symbols=[]):
+    def validate_regex(self, exclude_symbols=()):
 ##
         '''
-            Validates the current string for using in a regex pattern.
-            Special regular expression chars will be escaped.
+            Validates the current string for using in a regular expression
+            pattern. Special regular expression chars will be escaped.
 
             Examples:
 
             >>> String("that's no regex: .*$").validate_regex()
             Object of "String" with "that's no regex: \.\*\$" saved.
 
-            >>> String().validate_regex(exclude_symbols=[]).content
+            >>> String().validate_regex(exclude_symbols=()).content
             ''
 
-            >>> String('-\[]()^$*+.}-').validate_regex(['}']).content
+            >>> String('-\[]()^$*+.}-').validate_regex(('}',)).content
             '\\\\-\\\\\\\\\\\\[\\\\]\\\\(\\\\)\\\\^\\\\$\\\\*\\\\+\\\\.}\\\\-'
 
             >>> String('-\[]()^$*+.{}-').validate_regex(
-            ...     ['[', ']', '(', ')', '^', '$', '*', '+', '.', '{']
+            ...     ('[', ']', '(', ')', '^', '$', '*', '+', '.', '{')
             ... ).content
             '\\\\-\\\\\\\\[]()^$*+.{\\\\}\\\\-'
         '''
@@ -648,7 +648,8 @@ class String(Object, builtins.str):
             self.replace('\\', '\\\\')
         return self.replace(
             search=self.__class__.get_escaping_replace_dictionary(
-                builtins.tuple(builtins.set(self.SPECIAL_REGEX_SEQUENCES) -
+                builtins.tuple(
+                    builtins.set(self.SPECIAL_REGEX_SEQUENCES) -
                     builtins.set(exclude_symbols))))
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -1155,7 +1156,7 @@ class Dictionary(Object, builtins.dict):
             Examples:
 
             >>> Dictionary((('hans', 5), (4, 3))) # doctest: +ELLIPSIS
-            Object of "Dictionary" ().
+            Object of "Dictionary" (...hans...5...).
         '''
         self.content = builtins.dict(content)
 
@@ -1166,11 +1167,6 @@ class Dictionary(Object, builtins.dict):
 ##
         '''
             Invokes if this object should describe itself by a string.
-
-            Examples:
-
-            >>> repr(Dictionary((('hans', 5), (4, 3)))) # doctest: +ELLIPSIS
-            'Object of "Dictionary" ().'
         '''
         return 'Object of "{class_name}" ({content}).'.format(
             class_name=self.__class__.__name__,
