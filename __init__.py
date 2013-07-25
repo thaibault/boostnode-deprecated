@@ -272,6 +272,7 @@ __version__ = '1.0'
 ## python3.3 import builtins
 pass
 import inspect
+import logging
 import os
 import sys
 
@@ -287,9 +288,16 @@ sys.path.append(os.path.abspath(sys.path[0] + 2 * ('..' + os.sep)))
 '''
 sys.dont_write_bytecode = True
 
-import boostNode.aspect.signature
-import boostNode.extension.system
-import boostNode.extension.native
+try:
+    import boostNode.aspect.signature
+    import boostNode.extension.system
+    import boostNode.extension.native
+except builtins.WindowsError as exception:
+    logging.error(
+        "Running subprocesses on windows without being administrator isn't "
+        'possible. %s: %s', exception.__class__.__name__,
+        builtins.str(exception))
+    sys.exit(1)
 
 # endregion
 
