@@ -288,11 +288,13 @@ sys.path.append(os.path.abspath(sys.path[0] + 2 * ('..' + os.sep)))
 '''
 sys.dont_write_bytecode = True
 
+if not builtins.getattr(__builtins__, "WindowsError", None):
+    class WindowsError(OSError): pass
 try:
     import boostNode.aspect.signature
     import boostNode.extension.system
     import boostNode.extension.native
-except builtins.WindowsError as exception:
+except WindowsError as exception:
     logging.error(
         "Running subprocesses on windows without being administrator isn't "
         'possible. %s: %s', exception.__class__.__name__,

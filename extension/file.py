@@ -402,7 +402,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             True
 
             >>> bool(Handler(
-            ...     location=__test_folder__ + 'nonzero_not_existsing_file',
+            ...     location=__test_folder__ + 'nonzero_not_existing_file',
             ...     must_exist=False))
             False
 
@@ -599,13 +599,13 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> link = Handler(__test_folder__ + 'repr_link', must_exist=False)
             >>> if boostNode.extension.system.Platform(
             ...     ).operating_system == 'windows':
-            ...     True
+            ...     repr(link)
             ... else:
             ...     created = Handler(
             ...         location=__file_path__
             ...     ).make_symbolic_link(link)
-            ...     link.is_symbolic_link()
-            True
+            ...     repr(link) # doctest: +ELLIPSIS
+            'Object of "Handler" with path ...'
         '''
         type = self.type
         if self.is_symbolic_link():
@@ -1091,15 +1091,14 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> size > 0
             True
 
+            >>> link = Handler(
+            ...     __test_folder__ + 'get_size_link', must_exist=False)
             >>> if boostNode.extension.system.Platform(
             ...     ).operating_system == 'windows':
             ...     True
             ... else:
-            ...     created = Handler().make_symbolic_link(
-            ...         __test_folder__ + 'get_size_link')
-            ...     size = Handler(
-            ...         __test_folder__ + 'get_size_link'
-            ...     ).get_size(1)
+            ...     created = Handler().make_symbolic_link(link)
+            ...     size = link.get_size(1, follow_link=False)
             ...     size > 0
             True
         '''
@@ -1487,7 +1486,8 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 ## python3.3
 ##     def get_name(
 ##         self: boostNode.extension.type.Self, *arguments: builtins.object,
-##         output_with_root_prefix=None, **keywords: builtins.object
+##         output_with_root_prefix=None, force_windows_behavior=False,
+##         **keywords: builtins.object
 ##     ) -> builtins.str:
     def get_name(self, *arguments, **keywords):
 ##
@@ -1506,18 +1506,28 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
             >>> Handler().get_name()
             'extension'
+
+            >>> handler = Handler('C:', must_exist=False)
+            >>> handler._path = 'C:'
+            >>> handler.get_name(
+            ...     force_windows_behavior=True)
+            'C:'
         '''
 ## python3.3
 ##         pass
-        output_with_root_prefix, keywords = \
-            boostNode.extension.native.Dictionary(content=keywords).pop(
-                name='output_with_root_prefix')
+        keywords_dictionary = boostNode.extension.native.Dictionary(
+            content=keywords)
+        output_with_root_prefix, keywords = keywords_dictionary.pop(
+            name='output_with_root_prefix')
+        force_windows_behavior, keywords = keywords_dictionary.pop(
+            name='force_windows_behavior')
 ##
         path = self.get_path(output_with_root_prefix=output_with_root_prefix)
         if builtins.len(path) and path[-builtins.len(os.sep)] == os.sep:
             path = path[:-builtins.len(os.sep)]
-        if(boostNode.extension.system.Platform().operating_system ==
-           'windows' and re.compile('^[A-Z]:$').match(path)):
+        if((boostNode.extension.system.Platform().operating_system ==
+            'windows' or force_windows_behavior) and
+           re.compile('^[A-Za-z]:$').match(path)):
             return path
         return os.path.basename(path, *arguments, **keywords)
 
@@ -1553,12 +1563,10 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ).pop(name='output_with_root_prefix')
 ##
         if self._has_extension:
-            path = self.get_path(
-                output_with_root_prefix=output_with_root_prefix)
-            if path[-builtins.len(os.sep)] == os.sep:
-                path = path[:-builtins.len(os.sep)]
-            return os.path.splitext(
-                os.path.basename(path, *arguments, **keywords)
+            return os.path.splitext(os.path.basename(
+                self.get_path(
+                    output_with_root_prefix=output_with_root_prefix),
+                *arguments, **keywords)
             )[0]
         return self.name
 
@@ -1641,86 +1649,98 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> Handler(
             ...     location=__test_folder__ + 'get_content_not_existing',
             ...     must_exist=False
-            ... ).content
-            ''
+            ... ).content # doctest: +IGNORE_EXCEPTION_DETAIL
+            Traceback (most recent call last):
+            ...
+            FileError: Invalid path "..." ...
 
             >>> Handler().content # doctest: +ELLIPSIS
             <generator object list at 0x...>
 
-            >>> Handler().get_content(mode='b') # doctest: +ELLIPSIS
+            >>> Handler().get_content(mode='r') # doctest: +ELLIPSIS
             <generator object list at 0x...>
 
-            >>> test = Handler(
-            ...     __test_folder__ + 'get_content_binary',
-            ...     must_exist=False)
-            >>> test.content = ' '
-            >>> test.get_content(mode='U')
+            >>> handler = Handler(
+            ...     __test_folder__ + 'get_content', must_exist=False)
+
+            >>> handler.content = ' '
+            >>> handler.get_content(mode='r+b')
             ' '
+
+            >>> handler.content = ' äüöß hans'
+
+            >>> handler.get_content(
+            ...     encoding='ascii', strict=True
+            ... ) # doctest: +ELLIPSIS
+            Traceback (most recent call last):
+            ...
+            UnicodeDecodeError: 'ascii' codec can't decode byte ...
+
+            >>> handler.get_content(encoding='ascii')
+            ''
         '''
-        if self:
-            if self.is_file():
-                if 'b' in mode:
-                    with builtins.open(
-                        self._path, mode, *arguments, **keywords
-                    ) as file:
-                        self._content = file.read()
-                else:
-                    if not 'encoding' in keywords:
-                        keywords['encoding'] = self._encoding
-                    else:
-                        self._encoding = keywords['encoding']
-## python3.3
-##                     with builtins.open(
-##                         self._path, mode, *arguments, **keywords
-##                     ) as file:
-##                         try:
-##                             '''
-##                                 NOTE: Double call of "read()" is a
-##                                 workaround for python bug when finishing
-##                                 reading file without end reached.
-##                             '''
-##                             self._content = file.read() + file.read()
-##                         except builtins.UnicodeDecodeError as exception:
-##                             __logger__.warning(
-##                                 'File "%s" couldn\'t be wridden. %s: %s',
-##                                 self.path, exception.__class__.__name__,
-##                                 builtins.str(exception))
-##                             return ''
-                    with codecs.open(
-                        self._path, mode, *arguments, **keywords
-                    ) as file:
-                        try:
-                            '''
-                                NOTE: Double call of "read()" is a
-                                workaround for python bug when finishing
-                                reading file without end reached.
-                            '''
-                            self._content = builtins.str(
-                                (file.read() + file.read()).encode(
-                                    encoding=self.DEFAULT_ENCODING))
-                        except builtins.UnicodeDecodeError as exception:
-                            if strict:
-                                raise
-                            __logger__.warning(
-                                'File "%s" couldn\'t be ridden. %s: %s',
-                                self.path, exception.__class__.__name__,
-                                builtins.str(exception))
-                            return ''
-##
-                return self._content
-            elif self.is_directory():
-                return self.list()
+        if self.is_file():
+            if 'b' in mode:
+                with builtins.open(
+                    self._path, mode, *arguments, **keywords
+                ) as file:
+                    self._content = file.read()
             else:
-                raise __exception__(
-                    'Could only get content of file or directory.')
-        return ''
+                if not 'encoding' in keywords:
+                    keywords['encoding'] = self._encoding
+                else:
+                    self._encoding = keywords['encoding']
+## python3.3
+##                 with builtins.open(
+##                     self._path, mode, *arguments, **keywords
+##                 ) as file:
+##                     try:
+##                         '''
+##                             NOTE: Double call of "read()" is a
+##                             workaround for python bug when finishing
+##                             reading file without end reached.
+##                         '''
+##                         self._content = file.read() + file.read()
+##                     except builtins.UnicodeDecodeError as exception:
+##                         __logger__.warning(
+##                             'File "%s" couldn\'t be wridden. %s: %s',
+##                             self.path, exception.__class__.__name__,
+##                             builtins.str(exception))
+##                         return ''
+                with codecs.open(
+                    self._path, mode, *arguments, **keywords
+                ) as file:
+                    try:
+                        '''
+                            NOTE: Double call of "read()" is a
+                            workaround for python bug when finishing
+                            reading file without end reached.
+                        '''
+                        self._content = builtins.str(
+                            (file.read() + file.read()).encode(
+                                encoding=self.DEFAULT_ENCODING))
+                    except builtins.UnicodeDecodeError as exception:
+                        if strict:
+                            raise
+                        __logger__.warning(
+                            'File "%s" couldn\'t be ridden. %s: %s',
+                            self.path, exception.__class__.__name__,
+                            builtins.str(exception))
+                        return ''
+##
+            return self._content
+        elif self.is_directory():
+            return self.list()
+        raise __exception__(
+            'Could only get content of file or directory (not "%s").',
+            self.path)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def get_portable_link_pattern(
-##         self: boostNode.extension.type.Self
+##         self: boostNode.extension.type.Self, force_windows_behavior=False
 ##     ) -> builtins.str:
-    def get_portable_link_pattern(self):
+    def get_portable_link_pattern(self, force_windows_behavior=False):
 ##
         '''
             Determines the portable link file content pattern. With the
@@ -1729,6 +1749,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             Examples:
 
             >>> Handler().portable_link_pattern # doctest: +ELLIPSIS
+            '...portable ...'
+
+            >>> Handler().get_portable_link_pattern(
+            ...     force_windows_behavior=True
+            ... ) # doctest: +ELLIPSIS
             '...portable ...'
 
             >>> handler = Handler(location=__file_path__)
@@ -1743,7 +1768,8 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             '[playlist]\\n\\nFile1=...'
         '''
         pattern = self.PORTABLE_DEFAULT_LINK_PATTERN
-        if boostNode.extension.system.Platform().operating_system == 'windows':
+        if(boostNode.extension.system.Platform().operating_system ==
+           'windows' or force_windows_behavior):
             pattern = self.PORTABLE_WINDOWS_DEFAULT_LINK_PATTERN
         if self.is_media():
             pattern = self.PORTABLE_MEDIA_LINK_PATTERN
@@ -1939,6 +1965,20 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
             >>> handler.set_content('AA') # doctest: +ELLIPSIS
             Object of "Handler" with path "..." ...
+
+            >>> handler.set_content('hans', mode='w') # doctest: +ELLIPSIS
+            Object of "Handler" with path "..." ...
+
+            >>> handler.set_content('hans', mode='w+b') # doctest: +ELLIPSIS
+            Object of "Handler" with path "..." ...
+
+            >>> handler.set_content(unicode('hans')) # doctest: +ELLIPSIS
+            Object of "Handler" with path "..." ...
+
+            >>> Handler().set_content('AA') # doctest: +IGNORE_EXCEPTION_DETAIL
+            Traceback (most recent call last):
+            ...
+            FileError: Set content is only possible for files and not for "...
         '''
         if self.is_element() and not self.is_file():
             raise __exception__(
@@ -2152,6 +2192,9 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             True
             >>> handler.extension
             'wav'
+
+            >>> handler.set_extension('')
+            True
         '''
         if extension:
             self._has_extension = True
@@ -2207,12 +2250,20 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         '''
             A simple replacement of the os.path.samefile() function not
             existing on the Windows platform.
+
+            Examples:
+
+            >>> Handler().is_same_file(Handler())
+            True
         '''
         other_location = self.__class__(location=other_location)
+## python3.3
+##         return os.path.samefile(self._path, other_location._path)
         try:
             return os.path.samefile(self._path, other_location._path)
         except builtins.AttributeError:
             return self == other_location
+##
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -2266,6 +2317,9 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             True
 
             >>> Handler().is_file()
+            False
+
+            >>> Handler().is_file(allow_link=False)
             False
         '''
         if allow_link:
@@ -2372,6 +2426,9 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
             >>> Handler().is_referenced_via_absolute_path(location='/')
             True
+
+            >>> Handler().is_referenced_via_absolute_path(location=Handler())
+            False
         '''
         if location is None:
             location = self._initialized_path
@@ -2508,7 +2565,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             False
 
             >>> Handler(
-            ...     __test_folder__ + 'is_element_not_existsing',
+            ...     __test_folder__ + 'is_element_not_existing',
             ...     must_exist=False
             ... ).is_element()
             False
@@ -2575,6 +2632,19 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             "backup_if_exists" indicates if a backup should be make even if
                                there is already a file object with given backup
                                name and content (if "compare_content" is set).
+
+            Examples:
+
+            TODO check in Detail.
+
+            >>> handler = Handler(__test_folder__ + 'backup', must_exist=False)
+            >>> handler.content = ' '
+
+            >>> handler.backup() # doctest: +ELLIPSIS
+            Object of "Handler" with path "...
+
+            >>> handler.backup(backup_if_exists=False) # doctest: +ELLIPSIS
+            Object of "Handler" with path "...
         '''
         from boostNode.runnable.template import Parser as TemplateParser
 
@@ -3954,14 +4024,14 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
     def _prepend_root_path(self):
 ##
         '''
-            Preprends root path prefix to current file path.
+            Prepends root path prefix to current file path.
 
             Examples:
 
             >>> root_save = Handler.get_root()
 
             >>> Handler.set_root(
-            ...     location='/not/existsing/'
+            ...     location='/not/existing/'
             ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
