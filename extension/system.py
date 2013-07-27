@@ -1501,11 +1501,16 @@ class CommandLine(builtins.object):
             module['scope'].__test_buffer__
         boostNode.extension.output.Logger.change_all(
             level=('info',), buffer=(module['scope'].__test_buffer__,))
-        # TODO Integrate during porting to python3.4: doctest.FAIL_FAST
+## python3.4
+##         doctest.testmod(
+##             module['scope'], verbose=verbose,
+##             optionflags=doctest.DONT_ACCEPT_TRUE_FOR_1 |
+##             doctest.REPORT_ONLY_FIRST_FAILURE | doctest.FAIL_FAST)
         doctest.testmod(
             module['scope'], verbose=verbose,
             optionflags=doctest.DONT_ACCEPT_TRUE_FOR_1 |
             doctest.REPORT_ONLY_FIRST_FAILURE)
+##
         '''Recover old output buffer.'''
         boostNode.extension.output.Logger.change_all(
             level=log_level_save, buffer=logger_buffer_save)
