@@ -1520,7 +1520,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         output_with_root_prefix, keywords = keywords_dictionary.pop(
             name='output_with_root_prefix')
         force_windows_behavior, keywords = keywords_dictionary.pop(
-            name='force_windows_behavior')
+            name='force_windows_behavior', default_value=False)
 ##
         path = self.get_path(output_with_root_prefix=output_with_root_prefix)
         if builtins.len(path) and path[-builtins.len(os.sep)] == os.sep:
@@ -2635,22 +2635,52 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
             Examples:
 
-            TODO check in Detail.
-
             >>> handler = Handler(__test_folder__ + 'backup', must_exist=False)
             >>> handler.content = ' '
+            >>> template = '<%file.basename%>_b<%file.extension_suffix%>'
 
-            >>> handler.backup() # doctest: +ELLIPSIS
+            >>> handler.backup(template) # doctest: +ELLIPSIS
+            Object of "Handler" with path "...
+            >>> Handler(__test_folder__ + 'backup_b') # doctest: +ELLIPSIS
             Object of "Handler" with path "...
 
-            >>> handler.backup(backup_if_exists=False) # doctest: +ELLIPSIS
+            >>> handler.backup(template) # doctest: +ELLIPSIS
             Object of "Handler" with path "...
+            >>> Handler(__test_folder__ + 'backup_b_b').is_file()
+            True
+
+            >>> handler.backup(
+            ...     template, backup_if_exists=False
+            ... ) # doctest: +ELLIPSIS
+            Object of "Handler" with path "...
+            >>> Handler(
+            ...     __test_folder__ + 'backup_b_b_b', must_exist=False
+            ... ).is_file()
+            False
+
+            >>> handler.content = 'A'
+            >>> handler.backup(
+            ...     template, backup_if_exists=False
+            ... ) # doctest: +ELLIPSIS
+            Object of "Handler" with path "...
+            >>> Handler(__test_folder__ + 'backup_b_b_b').is_file()
+            True
+
+            >>> handler.content = 'B'
+            >>> handler.backup(
+            ...     template, backup_if_exists=False, compare_content=False
+            ... ) # doctest: +ELLIPSIS
+            Object of "Handler" with path "...
+            >>> Handler(
+            ...     __test_folder__ + 'backup_b_b_b_b', must_exist=False
+            ... ).is_file()
+            False
         '''
         from boostNode.runnable.template import Parser as TemplateParser
 
         backup = self
         while True:
-            other_backup = backup
+            earlier_backup = backup
             backup = self.__class__(
                 location=self.directory_path + TemplateParser(
                     template=name_wrapper, string=True
@@ -2658,18 +2688,22 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
                     file=backup
                 ).output,
                 must_exist=False)
+            '''
+                Iterate till we have wrapped file name which doesn't exist yet.
+            '''
             if not backup:
+                '''Check if a new created backup would be redundant.'''
 ## python3.3
-##                 if(other_backup != self and not backup_if_exists and
+##                 if(earlier_backup != self and not backup_if_exists and
 ##                    (not compare_content or self.is_equivalent(
-##                        other=other_backup))):
-                if(not (other_backup == self) and not backup_if_exists and
+##                        other=earlier_backup))):
+                if(not (earlier_backup == self) and not backup_if_exists and
                    (not compare_content or self.is_equivalent(
-                       other=other_backup))):
+                       other=earlier_backup))):
 ##
                     return self
                 self.copy(target=backup)
-                return self
+                break
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -3251,10 +3285,29 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
     def make_new_directory(self, wrapper_pattern='{file_name}_temp'):
 ##
         '''
-            Makes a new directory in each case. If current directory name
-            already exists the given wrapper pattern is used as long resulting
-            name is unique. The Filehandler which creates the folder will be
+            Makes a new directory in each case. E.g. if current directory name
+            already exists. The given wrapper pattern is used as long resulting
+            name is unique. The handler which creates the folder will be
             given back.
+
+            Examples:
+
+            >>> handler = Handler(
+            ...     __test_folder__ + 'make_new_directory', must_exist=False)
+
+            >>> handler.make_new_directory().path # doctest: +ELLIPSIS
+            '...make_new_directory...'
+
+            >>> handler.make_new_directory().path # doctest: +ELLIPSIS
+            '...make_new_directory_temp...'
+
+            >>> handler.make_new_directory().path # doctest: +ELLIPSIS
+            '...make_new_directory_temp_temp...'
+
+            >>> handler.make_new_directory(
+            ...     wrapper_pattern='{file_name}_t'
+            ... ).path # doctest: +ELLIPSIS
+            '...make_new_directory_t...'
         '''
         location = self.__class__(self, must_exist=False)
         while location:
@@ -3879,12 +3932,6 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             for pattern in patterns:
                 if re.compile(pattern).match(file.name):
                     file.remove_deep()
-            if file.is_directory():
-                '''
-                    Take this method type by another instance of
-                    this class via introspection.
-                '''
-                builtins.getattr(file, inspect.stack()[0][3])(*patterns)
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -3941,6 +3988,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         '''
             This method is used as helper method for "get_path()".
             It deals the case where an explicit location was given.
+
+            Examples:
+
+            >>> Handler()._get_path(os.sep, True, False) # doctest: +ELLIPSIS
+            '...'
         '''
         taken_respect_root_path = respect_root_path
         if respect_root_path is None:
@@ -3961,13 +4013,20 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 ##         target: (boostNode.extension.type.SelfClassObject, builtins.str),
 ##         symbolic: builtins.bool, *arguments: builtins.object, force=False,
 ##         relative=None, **keywords: builtins.object
-##     ):
+##     ) -> builtins.bool:
     def _make_link(
         self, target, symbolic, *arguments, **keywords
     ):
 ##
         '''
             Makes hard or symbolic links and handles the optional force option.
+
+            Examples:
+
+            >>> target = Handler(
+            ...     __test_folder__ + '_make_link', make_directory=True)
+            >>> Handler()._make_link(target, symbolic=True)
+            False
         '''
 ## python3.3
 ##         pass
