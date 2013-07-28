@@ -43,6 +43,7 @@ import os
 import re
 import shutil
 import sre_constants
+import stat
 import sys
 ## python3.3 import types
 pass
@@ -152,12 +153,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         sizes.
     '''
     DECIMAL = False
+    '''Defines char set for handling text-based files internally.'''
+    DEFAULT_ENCODING = 'utf_8'
     '''Defines the maximum number of signs in a file path.'''
     MAX_PATH_LENGTH = 32767
     '''Defines the maximum number of digits for the biggest file-size.'''
     MAX_SIZE_NUMBER_LENGTH = 24  # 10^21 byte = 1 Yottabyte (-1 byte)
-    '''Defines char set for handling text-based files internally.'''
-    DEFAULT_ENCODING = 'utf_8'
     '''Defines all mimetypes describing a media file.'''
     MEDIA_MIMETYPE_PATTERN = '^audio/.+', '^video/.+'
     '''
@@ -255,14 +256,15 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 ## python3.3
 ##     def __init__(
 ##         self: boostNode.extension.type.Self, location=None,
-##         make_directory=False, right=770, must_exist=True,
-##         encoding='utf_8', respect_root_path=True,
-##         output_with_root_prefix=False, has_extension=True
+##         make_directory=False, must_exist=True, encoding='',
+##         respect_root_path=True, output_with_root_prefix=False,
+##         has_extension=True, *arguments: builtins.object,
+##         **keywords: builtins.object
 ##     ) -> None:
     def __init__(
-        self, location=None, make_directory=False, right=770,
-        must_exist=True, encoding='utf_8', respect_root_path=True,
-        output_with_root_prefix=False, has_extension=True
+        self, location=None, make_directory=False, must_exist=True,
+        encoding='', respect_root_path=True, output_with_root_prefix=False,
+        has_extension=True, *arguments, **keywords
     ):
 ##
         '''
@@ -338,7 +340,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ... ) # doctest: +ELLIPSIS +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
-            FileError: Invalid path "...init_A" for an obj...
+            boostNode.extension.native.FileError: Invalid path "...init_A" ...
 
             >>> try:
             ...     Handler(
@@ -349,26 +351,22 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
             >>> Handler._root_path = root_path_backup
         '''
+        if not encoding:
+            encoding = self.DEFAULT_ENCODING
         self._encoding = encoding
         self._respect_root_path = respect_root_path
         self._output_with_root_prefix = output_with_root_prefix
         self._initialized_path = self._initialize_location(location)
         self._initialize_path()
         self._prepend_root_path()
-        if make_directory and not self:
-            self.make_directory(right)
-        if not self._set_path(path=self._path) and must_exist:
-            raise __exception__(
-                'Invalid path "{path}" for an object of "{class_name}". Given '
-                'path was "{given_path}".'.format(
-                    path=self.path, class_name=self.__class__.__name__,
-                    given_path=location))
+        self._handle_path_existence(
+            location, make_directory, must_exist, arguments, keywords
+        )._initialize_platform_dependencies()
         if(builtins.len(self.name) and not '.' in self.name[1:] or
            self.is_directory()):
             self._has_extension = False
         else:
             self._has_extension = has_extension
-        self._initialize_platform_dependencies()
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -490,14 +488,13 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
             Examples:
 
-            >>> dir = Handler(
-            ...     __test_folder__ + 'delitem_test', make_directory=True)
-            >>> a = Handler(
-            ...     __test_folder__ + 'delitem_test/a', must_exist=False)
-            >>> a.content = ' '
-            >>> a.is_file()
+            >>> directory = Handler(
+            ...     __test_folder__ + 'delitem', make_directory=True)
+            >>> file = Handler(directory.path + 'file', must_exist=False)
+            >>> file.content = ' '
+            >>> file.is_file()
             True
-            >>> del dir[0]
+            >>> del directory[0]
         '''
         return self[key].remove_deep()
 
@@ -920,7 +917,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 ##
         '''
             Returns encoding for current file handler. If no encoding was set
-            "utf_8" is default.
+            "Handler.DEFAULT_ENCODING" is default.
 
             Examples:
 
@@ -1016,7 +1013,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> test.get_lines()
             5
         '''
-        with builtins.open(self._path, 'r') as file:
+        with builtins.open(self._path, mode='r') as file:
             for line in file:
                 self._lines += 1
         return self._lines
@@ -1370,8 +1367,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         if output_with_root_prefix is None:
             taken_output_with_root_prefix = self._output_with_root_prefix
         if location is None:
-            if(self._path[-builtins.len(os.sep)] != os.sep and
-               self.is_directory()):
+            if not self._path.endswith(os.sep) and self.is_directory():
                 self._path += os.sep
             '''
                 NOTE: If the given file isn't present the "_path" could be
@@ -1523,7 +1519,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             name='force_windows_behavior', default_value=False)
 ##
         path = self.get_path(output_with_root_prefix=output_with_root_prefix)
-        if builtins.len(path) and path[-builtins.len(os.sep)] == os.sep:
+        if builtins.len(path) and path.endswith(os.sep):
             path = path[:-builtins.len(os.sep)]
         if((boostNode.extension.system.Platform().operating_system ==
             'windows' or force_windows_behavior) and
@@ -1649,10 +1645,10 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> Handler(
             ...     location=__test_folder__ + 'get_content_not_existing',
             ...     must_exist=False
-            ... ).content # doctest: +IGNORE_EXCEPTION_DETAIL
+            ... ).get_content(strict=True) # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
-            FileError: Invalid path "..." ...
+            boostNode.extension.native.FileError: ...
 
             >>> Handler().content # doctest: +ELLIPSIS
             <generator object list at 0x...>
@@ -1676,9 +1672,10 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ...
             UnicodeDecodeError: 'ascii' codec can't decode byte ...
 
-            >>> handler.get_content(encoding='ascii')
-            ''
+            >>> handler.content
+            '  hans'
         '''
+        self._content = ''
         if self.is_file():
             if 'b' in mode:
                 with builtins.open(
@@ -1686,54 +1683,41 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
                 ) as file:
                     self._content = file.read()
             else:
-                if not 'encoding' in keywords:
-                    keywords['encoding'] = self._encoding
-                else:
+                if 'encoding' in keywords:
                     self._encoding = keywords['encoding']
+                else:
+                    keywords['encoding'] = self._encoding
+                errors = 'strict' if strict else 'ignore'
 ## python3.3
 ##                 with builtins.open(
-##                     self._path, mode, *arguments, **keywords
+##                     self._path, mode, *arguments, errors=errors, **keywords
 ##                 ) as file:
-##                     try:
-##                         '''
-##                             NOTE: Double call of "read()" is a
-##                             workaround for python bug when finishing
-##                             reading file without end reached.
-##                         '''
-##                         self._content = file.read() + file.read()
-##                     except builtins.UnicodeDecodeError as exception:
-##                         __logger__.warning(
-##                             'File "%s" couldn\'t be wridden. %s: %s',
-##                             self.path, exception.__class__.__name__,
-##                             builtins.str(exception))
-##                         return ''
+##                     '''
+##                         NOTE: Double call of "read()" is a
+##                         workaround for python bug when finishing
+##                         reading file without end reached.
+##                     '''
+##                     self._content = file.read() + file.read()
                 with codecs.open(
-                    self._path, mode, *arguments, **keywords
+                    self._path, mode, *arguments, errors=errors, **keywords
                 ) as file:
-                    try:
-                        '''
-                            NOTE: Double call of "read()" is a
-                            workaround for python bug when finishing
-                            reading file without end reached.
-                        '''
-                        self._content = builtins.str(
-                            (file.read() + file.read()).encode(
-                                encoding=self.DEFAULT_ENCODING))
-                    except builtins.UnicodeDecodeError as exception:
-                        if strict:
-                            raise
-                        __logger__.warning(
-                            'File "%s" couldn\'t be ridden. %s: %s',
-                            self.path, exception.__class__.__name__,
-                            builtins.str(exception))
-                        return ''
+                    '''
+                        NOTE: Double call of "read()" is a
+                        workaround for python bug when finishing
+                        reading file without end reached.
+                    '''
+                    self._content = builtins.str(
+                        (file.read() + file.read()).encode(
+                            encoding=self._encoding))
 ##
             return self._content
         elif self.is_directory():
             return self.list()
-        raise __exception__(
-            'Could only get content of file or directory (not "%s").',
-            self.path)
+        if strict:
+            raise __exception__(
+                'Could only get content of file or directory (not "%s").',
+                self.path)
+        return self._content
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -1978,16 +1962,15 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> Handler().set_content('AA') # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
-            FileError: Set content is only possible for files and not for "...
+            boostNode.extension.native.FileError: Set content is only ...
+
+            >>> handler.set_content(bytes(chr(1))) # doctest: +ELLIPSIS
+            Object of "Handler" with path "..." ...
         '''
-        if self.is_element() and not self.is_file():
-            raise __exception__(
-                'Set content is only possible for files and not for "%s" '
-                '(%s).', self.path, self.type)
-        if mode is None:
-            mode = 'w'
-            if boostNode.extension.native.Object(object=content).is_binary():
-                mode = 'w+b'
+        mode = self._prepare_content_status(mode, content)
+        if self._path.endswith(os.sep):
+            self._path = self._path[:-builtins.len(os.sep)]
+        self._path
         if 'b' in mode:
             with builtins.open(
                 self._path, mode, *arguments, **keywords
@@ -2255,6 +2238,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
             >>> Handler().is_same_file(Handler())
             True
+
+            >>> same_file_backup = os.path.samefile
+            >>> del os.path.samefile
+            >>> Handler().is_same_file(Handler())
+            True
+            >>> os.path.samefile = same_file_backup
         '''
         other_location = self.__class__(location=other_location)
 ## python3.3
@@ -2388,7 +2377,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             True
         '''
         path = self._path
-        if self._path[-builtins.len(os.sep)] == os.sep:
+        if self._path.endswith(os.sep):
             path = self._path[:-builtins.len(os.sep)]
         if allow_portable_link:
             return self.is_symbolic_link(allow_portable_link=False) or\
@@ -2483,7 +2472,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> Handler(location=__file_path__).is_portable_link()
             False
 
-            >>> target = Handler(
+            >>> handler = Handler(
             ...     __test_folder__ + 'is_portable_link', must_exist=False)
             >>> if boostNode.extension.system.Platform(
             ...     ).operating_system == 'windows':
@@ -2491,8 +2480,8 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ... else:
             ...     created = Handler(
             ...         location=__file_path__
-            ...     ).make_symbolic_link(target)
-            ...     target.is_portable_link()
+            ...     ).make_symbolic_link(handler)
+            ...     handler.is_portable_link()
             False
 
             >>> Handler().is_portable_link()
@@ -2504,11 +2493,18 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ... ).is_portable_link()
             False
 
-            >>> handler = Handler(location=__file_path__).make_portable_link(
-            ...     target=__test_folder__ + 'is_portable_link.py', force=True)
-            >>> Handler(
-            ...     __test_folder__ + 'is_portable_link.py').is_portable_link()
+            >>> Handler(location=__file_path__).make_portable_link(
+            ...     target=handler, force=True)
             True
+            >>> handler.is_portable_link()
+            True
+
+            >>> handler.set_content(
+            ...     10 * 'ä', encoding='latin1'
+            ... ) # doctest: +ELLIPSIS
+            Object of "Handler" with path "...
+            >>> handler.is_portable_link()
+            False
         '''
         if os.path.isfile(self._path):
             maximum_length = (
@@ -2517,19 +2513,26 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
                 # Maximum label line length + Maximum name length.
                 120 + self.MAX_FILE_NAME_LENGTH)
             try:
-                with builtins.open(self._path, 'r') as file:
+## python3.3
+##                 with builtins.open(
+##                     self._path, mode='r', encoding=self.DEFAULT_ENCODING,
+##                     errors='strict'
+##                 ) as file:
+                with codecs.open(
+                    self._path, mode='r', encoding=self.DEFAULT_ENCODING,
+                    errors='strict'
+                ) as file:
                     file_content = file.read(maximum_length + 1).strip()
+##
             except(builtins.IOError, builtins.TypeError,
                    builtins.UnicodeDecodeError):
                 pass
             else:
-                try:
-                    return(builtins.len(file_content) <= maximum_length and
-                           builtins.bool(re.compile(
-                               self.portable_regex_link_pattern
-                           ).match(file_content)))
-                except sre_constants.error:
-                    pass
+                return(
+                    builtins.len(file_content) <= maximum_length and
+                    builtins.bool(re.compile(
+                        self.portable_regex_link_pattern
+                    ).match(file_content)))
         return False
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -2639,6 +2642,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> handler.content = ' '
             >>> template = '<%file.basename%>_b<%file.extension_suffix%>'
 
+            >>> builtins
             >>> handler.backup(template) # doctest: +ELLIPSIS
             Object of "Handler" with path "...
             >>> Handler(__test_folder__ + 'backup_b') # doctest: +ELLIPSIS
@@ -2684,9 +2688,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             backup = self.__class__(
                 location=self.directory_path + TemplateParser(
                     template=name_wrapper, string=True
-                ).render(
-                    file=backup
-                ).output,
+                ).render(file=backup).output,
                 must_exist=False)
             '''
                 Iterate till we have wrapped file name which doesn't exist yet.
@@ -2720,11 +2722,9 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
             Examples:
 
-            >>> Handler(__test_folder__).is_equivalent(__test_folder__)
-            True
-
-            >>> Handler(__test_folder__).is_equivalent(Handler(
-            ... __test_folder__))
+            >>> handler = Handler(
+            ...     __test_folder__ + 'is_equivalent', make_directory=True)
+            >>> handler.is_equivalent(handler)
             True
 
             >>> Handler(__test_folder__).is_equivalent(
@@ -2910,6 +2910,24 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             0
             >>> list(not_existing_file.list())
             []
+
+            >>> not_accessible_file = Handler(
+            ...     __test_folder__ + 'list_not_accessible',
+            ...     make_directory=True)
+            >>> not_accessible_file.change_right(000) # doctest: +ELLIPSIS
+            Object of "Handler" with path "...
+            >>> list(Handler(__test_folder__)) # doctest: +ELLIPSIS
+            [...]
+            >>> not_accessible_file.remove_directory()
+            True
+
+            >>> not_accessible_file.content = ' '
+            >>> not_accessible_file.change_right(000) # doctest: +ELLIPSIS
+            Object of "Handler" with path "...
+            >>> list(Handler(__test_folder__)) # doctest: +ELLIPSIS
+            [...]
+            >>> not_accessible_file.remove_file()
+            True
         '''
         if self:
             if(self._path == '\\' and
@@ -2955,31 +2973,50 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
             Examples:
 
-            >>> Handler(location=__test_folder__ + 'remove_directory',
-            ...         make_directory=True) # doctest: +ELLIPSIS
-            Object of "Handler" with path "...remove_directory..." (dir...
-            >>> Handler(
-            ...     location=__test_folder__ + 'remove_directory'
-            ... ).remove_directory()
+            >>> handler = Handler(
+            ...     __test_folder__ + 'remove_directory', make_directory=True)
+
+            >>> handler.remove_directory()
             True
 
-            >>> Handler(
-            ...     __test_folder__ + 'remove_directory_not_existing',
-            ...     must_exist=False
-            ... ).remove_directory()
-            True
-
-            >>> file = Handler(__test_folder__ + 'file', must_exist=False)
-            >>> file.content = ' '
-            >>> file.remove_directory() # doctest: +ELLIPSIS
+            >>> handler.remove_directory()
             False
+
+            >>> handler.content = ' '
+            >>> handler.remove_directory()
+            False
+            >>> handler.remove_file()
+            True
+
+            >>> handler.make_directory()
+            True
+            >>> handler.change_right(000) # doctest: +ELLIPSIS
+            Object of "Handler" with path "...
+            >>> handler.remove_directory()
+            True
+
+            >>> handler.make_directory()
+            True
+            >>> file = Handler(handler.path + 'file', make_directory=True)
+            >>> handler.change_right(100) # doctest: +ELLIPSIS
+            Object of "Handler" with path "...
+            >>> file.change_right(000) # doctest: +ELLIPSIS
+            Object of "Handler" with path "...
+            >>> file.remove_directory()
+            False
+            >>> handler.change_right(700) # doctest: +ELLIPSIS
+            Object of "Handler" with path "...
+            >>> file.remove_directory()
+            True
         '''
-        if self:
+        if self.is_directory():
             try:
                 os.rmdir(self._path, *arguments, **keywords)
             except:
                 return False
-        return True
+            else:
+                return True
+        return False
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -3009,8 +3046,6 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ...     location=__test_folder__ + 'move', make_directory=True)
             >>> target = Handler(
             ...     location=__test_folder__ + 'move2', must_exist=False)
-            >>> target.remove_deep()
-            True
             >>> handler.move(target)
             True
             >>> target.is_directory()
@@ -3021,8 +3056,6 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> handler.content = ' '
             >>> target = Handler(
             ...     location=__test_folder__ + 'move_file2', must_exist=False)
-            >>> target.remove_file()
-            True
             >>> handler.move(target)
             True
             >>> target.is_file()
@@ -3079,32 +3112,38 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> root = Handler(
             ...     location=__test_folder__ + 'remove_deep',
             ...     make_directory=True)
-            >>> root # doctest: +ELLIPSIS
-            Object of "Handler" with path "...remove_deep..." (directory).
-            >>> Handler(location=__test_folder__ + 'remove_deep/sub_dir',
-            ...         make_directory=True) # doctest: +ELLIPSIS
+            >>> Handler(
+            ...     location=__test_folder__ + 'remove_deep/sub_dir',
+            ...     make_directory=True) # doctest: +ELLIPSIS
             Object of "Handler" with path "...remove_deep...sub_dir..."...
             >>> root.remove_deep()
             True
             >>> root.is_directory()
             False
 
-            >>> file = Handler(
-            ...     location=__test_folder__ + 'remove_deep', must_exist=False)
-            >>> file.remove_deep()
+            >>> root.remove_deep()
+            False
+
+            >>> root.content = ' '
+            >>> root.remove_deep()
             True
 
-            >>> file = Handler(
-            ...     location=__test_folder__ + 'remove_deep', must_exist=False)
-            >>> file.content = ' '
-            >>> file.remove_deep()
+            >>> root.make_directory()
             True
+            >>> file = Handler(root.path + 'file', make_directory=True)
+            >>> root.change_right(000) # doctest: +ELLIPSIS
+            Object of "Handler" with path "...
+            >>> file.remove_deep()
+            False
         '''
         if self.is_directory(allow_link=False):
-            shutil.rmtree(self._path, *arguments, **keywords)
-        else:
-            self.remove_file()
-        return not self.is_element()
+            try:
+                shutil.rmtree(self._path, *arguments, **keywords)
+            except:
+                return False
+            else:
+                return True
+        return self.remove_file()
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -3122,15 +3161,16 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             pythons native "os.remove"; the unlink name is its traditional Unix
             name.
 
-            Returns "True" if file isn't there anymore and "False" otherwise.
+            Returns "True" if file was deleted successfully and "False"
+            otherwise.
 
             Examples:
 
             >>> Handler(location=__file_path__).copy(
-            ...     target=__test_folder__ + 'remove_file.py')
+            ...     target=__test_folder__ + 'remove_file')
             True
 
-            >>> handler = Handler(location=__test_folder__ + 'remove_file.py')
+            >>> handler = Handler(location=__test_folder__ + 'remove_file')
             >>> handler.is_file()
             True
 
@@ -3140,32 +3180,46 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             False
 
             >>> handler.remove_file()
+            False
+
+            >>> handler.make_directory()
+            True
+            >>> file = Handler(handler.path + 'file', must_exist=False)
+            >>> file.content = ' '
+            >>> handler.change_right(100) # doctest: +ELLIPSIS
+            Object of "Handler" with path "...
+            >>> file.change_right(000) # doctest: +ELLIPSIS
+            Object of "Handler" with path "...
+            >>> file.remove_file()
+            False
+            >>> handler.change_right(700) # doctest: +ELLIPSIS
+            Object of "Handler" with path "...
+            >>> file.remove_file()
             True
 
             >>> Handler().remove_file()
             False
         '''
-        if self:
-            operating_system =\
+        if self.is_file():
+            operating_system = \
                 boostNode.extension.system.Platform().operating_system
             if(self.is_symbolic_link(allow_portable_link=False) and
                self.is_directory() and operating_system == 'windows'):
                 return self.remove_directory()
-            path = self._path
-            if self._path.endswith(os.sep):
-                path = self._path[:-builtins.len(os.sep)]
             try:
-                os.remove(path, *arguments, **keywords)
+                os.remove(self._path, *arguments, **keywords)
             except:
                 return False
-        return not self.is_file()
+            else:
+                return True
+        return False
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def change_right(
-##         self: boostNode.extension.type.Self, right=770
+##         self: boostNode.extension.type.Self, right, octal=True
 ##     ) -> boostNode.extension.type.Self:
-    def change_right(self, right=770):
+    def change_right(self, right, octal=True):
 ##
         '''
             Implements the pythons native "os.chmod()" method in an object
@@ -3199,28 +3253,36 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
             Examples:
 
-            >>> Handler(location=__file_path__).copy(
-            ...     target=__test_folder__ + 'change_right.py')
+            >>> handler = Handler(
+            ...     __test_folder__ + 'change_right', must_exist=False)
+            >>> Handler(location=__file_path__).copy(target=handler)
             True
-            >>> Handler(
-            ...     location=__test_folder__ + 'change_right.py').change_right(
-            ...         right=766) # doctest: +ELLIPSIS
-            Object of "Handler" with path "...change_right.py...
+            >>> handler.change_right(right=766) # doctest: +ELLIPSIS
+            Object of "Handler" with path "...change_right...
 
-            >>> Handler(
+            >>> handler.change_right(
+            ...     stat.S_IWUSR | stat.S_IXUSR, octal=False
+            ... ) # doctest: +ELLIPSIS
+            Object of "Handler" with path "...change_right...
+
+            >>> handler = Handler(
             ...     __test_folder__ + 'change_right_folder',
-            ...     make_directory=True
-            ... ).copy(target=__test_folder__ + 'change_right_folder_2')
-            True
-            >>> Handler(
-            ...     location=__test_folder__ + 'change_right_folder_2'
-            ... ).change_right(right=766) # doctest: +ELLIPSIS
-            Object of "Handler" with path "...change_right_folder_2..." (di...
+            ...     make_directory=True)
+            >>> handler.change_right(right=766) # doctest: +ELLIPSIS
+            Object of "Handler" with path "...change_right_folder..." ...
+
+            >>> handler.change_right(
+            ...     stat.S_IWRITE | stat.S_IREAD, octal=False
+            ... ) # doctest: +ELLIPSIS
+            Object of "Handler" with path "...change_right...
         '''
-        os.chmod(self._path, builtins.eval('0o%d' % right))
+        if octal:
+            os.chmod(self._path, builtins.eval('0o%d' % right))
+        else:
+            os.chmod(self._path, right)
         if self.is_directory():
-            self.iterate_directory(
-                function=self.change_right.__name__, right=right)
+            '''Take this method name via introspection.'''
+            self.iterate_directory(function=inspect.stack()[0][3], right=right)
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -3229,10 +3291,10 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 ##         self: boostNode.extension.type.Self,
 ##         target: (boostNode.extension.type.SelfClassObject,
 ##                  builtins.str),
-##         right=770, *arguments: builtins.object,
+##         *arguments: builtins.object, right=None, octal=True,
 ##         **keywords: builtins.object
 ##     ) -> builtins.bool:
-    def copy(self, target, right=770, *arguments, **keywords):
+    def copy(self, target, *arguments, **keywords):
 ##
         '''
             Implements the pythons native "shutil.copy()" method in an object
@@ -3267,13 +3329,25 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             True
             >>> target.is_directory()
             True
+
+            >>> target.copy(__test_folder__ + 'copy_directory3', right=777)
+            True
         '''
+## python3.3
+##         pass
+        default_keywords = boostNode.extension.native.Dictionary(
+            content=keywords)
+        right, keywords = default_keywords.pop(name='right')
+        octal, keywords = default_keywords.pop(
+            name='octal', default_value=True)
+##
         target = self.__class__(location=target, must_exist=False)
         if self.is_file():
             shutil.copy2(self._path, target._path, *arguments, **keywords)
         else:
             shutil.copytree(self._path, target._path)
-        target.change_right(right)
+        if right is not None:
+            target.change_right(right, octal)
         return target.type == self.type
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -3320,17 +3394,17 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def make_directory(
-##         self: boostNode.extension.type.Self, right=770,
-##         *arguments: builtins.object, **keywords: builtins.object
+##         self: boostNode.extension.type.Self, *arguments: builtins.object,
+##         right=700, octal=True, **keywords: builtins.object
 ##     ) -> builtins.bool:
-    def make_directory(self, right=770, *arguments, **keywords):
+    def make_directory(self, *arguments, **keywords):
 ##
         '''
             Implements the pythons native "os.mkdir()" method in an object
             oriented way.
 
             Create a directory named path with numeric mode. The default
-            mode is "770" (octal). If the directory already exists, "OSError"
+            mode is "700" (octal). If the directory already exists, "OSError"
             is raised.
 
             "right" is new the right for the current object's path location.
@@ -3343,15 +3417,30 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> handler = Handler(
             ...     location=__test_folder__ + 'make_directory',
             ...     must_exist=False)
+
             >>> handler.is_element()
             False
             >>> handler.make_directory()
             True
             >>> handler.is_directory()
             True
+
+            >>> handler.remove_directory()
+            True
+            >>> handler.make_directory(right=None)
+            True
         '''
-        os.mkdir(self._path, right, *arguments, **keywords)
-        self.change_right(right)
+## python3.3
+##         pass
+        default_keywords = boostNode.extension.native.Dictionary(
+            content=keywords)
+        right, keywords = default_keywords.pop(name='right', default_value=700)
+        octal, keywords = default_keywords.pop(
+            name='octal', default_value=True)
+##
+        os.mkdir(self._path, *arguments, **keywords)
+        if right is not None:
+            self.change_right(right, octal)
         return self.is_directory()
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -3519,15 +3608,27 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ... else:
             ...     target.read_symbolic_link(as_object=True) == source
             True
+
+            >>> target.remove_file()
+            True
+            >>> if boostNode.extension.system.Platform(
+            ...     ).operating_system == 'windows':
+            ...     'Object of "Handler" with path "...'
+            ... else:
+            ...     os.symlink('../', target._path)
+            ...     target.read_symbolic_link(
+            ...         as_object=True
+            ...     ) # doctest: +ELLIPSIS
+            Object of "Handler" with path "...
         '''
         path = self._path
-        if self._path[-builtins.len(os.sep)] == os.sep:
+        if self._path.endswith(os.sep):
             path = self._path[:-builtins.len(os.sep)]
         if self.is_symbolic_link(allow_portable_link=False):
             link = os.readlink(path, *arguments, **keywords)
         else:
             link = self.read_portable_link()
-        if link[-builtins.len(os.sep)] != os.sep and os.path.isdir(link):
+        if not link.endswith(os.sep) and os.path.isdir(link):
             link += os.sep
         link = link[builtins.len(self._root_path) - builtins.len(os.sep):]
         if as_object:
@@ -3599,28 +3700,23 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ...     location=__test_folder__ + 'deep_copy',
             ...     make_directory=True)
             >>> Handler(
-            ...     location=__test_folder__ + 'deep_copy/sub_dir',
+            ...     location=handler.path + 'sub_dir',
             ...     make_directory=True
             ... ) # doctest: +ELLIPSIS
             Object of "Handler" with path "...deep_copy...sub_di..." (d...
             >>> Handler(
-            ...     location=__test_folder__ + 'deep_copy/second_sub_dir',
+            ...     location=handler.path + 'second_sub_dir',
             ...     make_directory=True
             ... ) # doctest: +ELLIPSIS
             Object of "Handler" with path "...deep_copy...second_sub_di...
 
-            >>> dir = Handler(
-            ...     location=__test_folder__ + 'deep_copy_dir',
-            ...     must_exist=False)
-            >>> dir.remove_deep()
-            True
-            >>> handler.deep_copy(target=dir) # doctest: +ELLIPSIS
+            >>> target = Handler(
+            ...     __test_folder__ + 'deep_copy_dir', must_exist=False)
+            >>> handler.deep_copy(target) # doctest: +ELLIPSIS
             Object of "Handler" with path "...deep_copy..." (directory).
-            >>> Handler(location=dir.path + 'sub_dir').is_directory()
+            >>> Handler(location=target.path + 'sub_dir').is_directory()
             True
-            >>> Handler(
-            ...     location=dir.path + '/second_sub_dir'
-            ... ).is_directory()
+            >>> Handler(target.path + '/second_sub_dir').is_directory()
             True
         '''
 ## python3.3
@@ -3799,6 +3895,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
             >>> handler = Handler(
             ...     location=__test_folder__ + 'dir', make_directory=True)
+
             >>> sub_handler = Handler(
             ...     location=__test_folder__ + 'dir/sub_dir',
             ...     make_directory=True)
@@ -3808,8 +3905,14 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             False
             >>> handler.is_directory()
             True
+
+            >>> handler.clear_directory()
+            False
         '''
-        return self.iterate_directory(function=self.remove_deep.__name__)
+        if builtins.len(self):
+            self.iterate_directory(self.remove_deep.__name__)
+            return not builtins.len(self)
+        return False
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -3841,7 +3944,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             current thread was terminated and "True" otherwise.
 
             If function call returns "False" further iterations in
-            current dimension will be stoped. If function's return value is
+            current dimension will be stopped. If function's return value is
             "None", current file object is a directory and recursion is
             enabled the iteration will not enter current directory.
 
@@ -3853,12 +3956,30 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> Handler().iterate_directory(function=lambda file: False)
             False
 
-            >>> elements = list()
+            >>> elements = []
+
             >>> Handler().iterate_directory(
             ...     function=lambda file: elements.append(file.name))
             True
             >>> elements # doctest: +ELLIPSIS
             [...'file.py'...]
+
+            >>> Handler().iterate_directory(
+            ...     lambda file: elements.append(file.name), deep_first=False)
+            True
+
+            >>> boostNode.extension.system.Platform.terminate_thread = True
+            >>> Handler().iterate_directory(lambda file: True)
+            False
+            >>> boostNode.extension.system.Platform.terminate_thread = False
+
+            >>> Handler(
+            ...     Handler(__file_path__).directory_path + '../'
+            ... ).iterate_directory(
+            ...     lambda file: True, deep_first=False,
+            ...     recursive=True)
+            True
+
         '''
         files = self.list()
         if not deep_first:
@@ -3975,6 +4096,24 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         # region protected methods
 
 ## python3.3
+##     def _prepare_content_status(
+##         self: boostNode.extension.type.Self, mode: builtins.str,
+##         content: (builtins.str, builtins.bytes)
+##     ) -> builtins.str:
+    def _prepare_content_status(self, mode, content):
+##
+        '''Initializes a file for changing its content,'''
+        if self.is_element() and not self.is_file():
+            raise __exception__(
+                'Set content is only possible for files and not for "%s" '
+                '(%s).', self.path, self.type)
+        if mode is None:
+            mode = 'w'
+            if boostNode.extension.native.Object(object=content).is_binary():
+                mode = 'w+b'
+        return mode
+
+## python3.3
 ##     def _get_path(
 ##         self: boostNode.extension.type.Self,
 ##         location: (boostNode.extension.type.SelfClassObject, builtins.str),
@@ -4053,13 +4192,33 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 ## python3.3
 ##     def _is_equivalent_folder(
 ##         self: boostNode.extension.type.Self,
-##         other: boostNode.extension.type.SelfClassObject
+##         other: boostNode.extension.type.SelfClassObject, second_round=False
 ##     ) -> builtins.bool:
-    def _is_equivalent_folder(self, other):
+    def _is_equivalent_folder(self, other, second_round=False):
 ##
         '''
             Returns "True" if given folder contains likewise content.
             Serves as helper method.
+
+            Examples:
+
+            >>> target = Handler(
+            ...     __test_folder__ + '_is_equivalent_folder',
+            ...      must_exist=False)
+
+            >>> Handler().copy(target)
+            True
+            >>> del target[0]
+            >>> target._is_equivalent_folder(Handler())
+            False
+
+            >>> target.remove_deep()
+            True
+            >>> Handler().copy(target)
+            True
+            >>> target[0].content = ' '
+            >>> Handler()._is_equivalent_folder(target)
+            False
         '''
         for file in self:
             same_so_far = False
@@ -4073,7 +4232,9 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
                         return False
             if not same_so_far:
                 return False
-        return True
+        '''We have to check the other way around.'''
+        return second_round or other._is_equivalent_folder(
+            self, second_round=True)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -4094,34 +4255,82 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
-            FileError: Invalid path "..." ...
+            boostNode.extension.native.FileError: Invalid path "..." ...
 
             >>> Handler.set_root(location=root_save) # doctest: +ELLIPSIS
             <class '...Handler'>
+
+            >>> handler = Handler()
+            >>> handler._prepend_root_path() # doctest: +ELLIPSIS
+            '...'
+
+            >>> handler._root_path_initialized = False
+            >>> handler._path = 'C:\\\\'
+            >>> handler._prepend_root_path() # doctest: +ELLIPSIS
+            '...'
         '''
-        if self._respect_root_path:
-            if not self._root_path_initialized:
-                self.set_root(location=self._root_path)
-                self._root_path_initialized = True
-                operating_system =\
-                    boostNode.extension.system.Platform().operating_system
-                '''
-                    Prepend root path to given path location, if it wasn't
-                    given as location in root path.
-                '''
-                if((self._initialized_path.startswith(
-                        self._root_path[:-builtins.len(os.sep)]) or
-                    not self._path.startswith(
-                        self._root_path[:-builtins.len(os.sep)])) and not
-                    ('windows' == operating_system and
-                     re.compile('^[a-zA-Z]:\\.*').match(self._path) and
-                     self._root_path == os.sep)):
-                    if self._path.startswith(os.sep):
-                        self._path = self._root_path[:-builtins.len(
-                            os.sep)] + self._path
-                    else:
-                        self._path = self._root_path + self._path
+        if self._respect_root_path and not self._root_path_initialized:
+            self.set_root(location=self._root_path)
+            self._root_path_initialized = True
+            operating_system = \
+                boostNode.extension.system.Platform().operating_system
+            '''
+                Prepend root path to given path location, if it wasn't
+                given as location in root path.
+            '''
+            if((self._initialized_path.startswith(
+                    self._root_path[:-builtins.len(os.sep)]) or
+                not self._path.startswith(
+                    self._root_path[:-builtins.len(os.sep)])) and not
+                ('windows' == operating_system and
+                 re.compile('^[a-zA-Z]:\\.*').match(self._path) and
+                 self._root_path == os.sep)):
+                if self._path.startswith(os.sep):
+                    self._path = self._root_path[:-builtins.len(
+                        os.sep)] + self._path
+                else:
+                    self._path = self._root_path + self._path
         return self._path
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def _handle_path_existence(
+##         self: boostNode.extension.type.Self,
+##         location: (builtins.str, boostNode.extension.type.SelfClassObject),
+##         make_directory: builtins.bool, must_exist: builtins.bool,
+##         arguments: builtins.tuple, keywords: builtins.dict
+##     ) -> boostNode.extension.type.Self:
+    def _handle_path_existence(
+        self, location, make_directory, must_exist, arguments, keywords
+    ):
+##
+        '''
+            Make initial existence like it was specified on initialisation.
+
+            Examples:
+
+            >>> Handler(
+            ...     __test_folder__ + '_handle_path_existence_not_existing',
+            ...     must_exist=False
+            ... )._handle_path_existence(Handler(
+            ...     __test_folder__ + '_handle_path_existence_not_existing',
+            ...      must_exist=False), False, True, (), {}
+            ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
+            Traceback (most recent call last):
+            ...
+            boostNode.extension.native.FileError: Invalid path...
+        '''
+        if make_directory and not self:
+            self.make_directory(*arguments, **keywords)
+        if not self._set_path(path=self._path) and must_exist:
+            if builtins.isinstance(location, self.__class__):
+                location = location._path
+            raise __exception__(
+                'Invalid path "{path}" for an object of "{class_name}". Given '
+                'path was "{given_path}".'.format(
+                    path=self.path, class_name=self.__class__.__name__,
+                    given_path=location))
+        return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -4237,11 +4446,31 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         '''
             Creates a symbolic link weather their exists already a file with
             given link location or link target doesn't exist.
+
+            Examples:
+
+            >>> Handler()._make_forced_link(
+            ...     True, Handler(), False
+            ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
+            Traceback (most recent call last):
+            ...
+            boostNode.extension.native.FileError: ...
+
+            >>> Handler(
+            ...     __test_folder__ + '_make_forced_link_not_existing',
+            ...     must_exist=False
+            ... )._make_forced_link(
+            ...     True, Handler(
+            ...         __test_folder__ + '_make_forced_link_target',
+            ...         must_exist=False),
+            ...     False)
+            True
         '''
         if self == target:
             raise __exception__('It isn\'t possible to link to itself.')
         if target:
-            target.remove_deep()
+            if not target.remove_deep():
+                return False
         if not self:
             '''
                 Create a necessary dummy path to create symbolic links pointing
@@ -4296,12 +4525,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             True
         '''
         target_path = target._path
-        if target._path[-builtins.len(os.sep)] == os.sep:
+        if target._path.endswith(os.sep):
             target_path = target._path[:-builtins.len(os.sep)]
         source_path = self._determine_relative_path(relative, target_path)
         if source_path.endswith(os.sep):
             source_path = source_path[:-builtins.len(os.sep)]
-        operating_system =\
+        operating_system = \
             boostNode.extension.system.Platform().operating_system
         if symbolic:
             try:
@@ -4310,7 +4539,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 ##                     os.symlink(
 ##                         source_path, target_path,
 ##                         target_is_directory=self.is_directory())
-                    create_symbolic_link =\
+                    create_symbolic_link = \
                         ctypes.windll.kernel32.CreateSymbolicLinkW
                     create_symbolic_link.argtypes = (
                         ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_uint32)
@@ -4419,18 +4648,22 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 # -> (posix.statvfs_result, builtins.type(None))
 ## python3.3
 ##     def _initialize_platform_dependencies(
-##         self: boostNode.extension.type.Self
+##         self: boostNode.extension.type.Self, force_macintosh_behavior=False
 ##     ):
-    def _initialize_platform_dependencies(self):
+    def _initialize_platform_dependencies(
+        self, force_macintosh_behavior=False
+    ):
 ##
         '''
             Handles platform specified stuff like determining inode size.
 
             Examples:
 
-            >>> Handler()._initialize_platform_dependencies(
-            ... ) # doctest: +ELLIPSIS +SKIP
-            posix.statvfs_result(f_bsize=..., f_frsize=..., f_blocks=..., ...)
+            >>> len(Handler()._initialize_platform_dependencies()) > 0
+            True
+
+            >>> len(Handler()._initialize_platform_dependencies(True)) > 0
+            True
         '''
         os_statvfs = None
         if((os.path.isfile(self._path) or os.path.isdir(self._path)) and
@@ -4438,9 +4671,9 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             os_statvfs = os.statvfs(self._path)
             self.__class__.BLOCK_SIZE_IN_BYTE = os_statvfs.f_bsize
             self.__class__.MAX_FILE_NAME_LENGTH = os_statvfs.f_namemax
-            operating_system =\
+            operating_system = \
                 boostNode.extension.system.Platform().operating_system
-            if operating_system == 'macintosh':
+            if operating_system == 'macintosh' or force_macintosh_behavior:
                 self.DECIMAL = True
         return os_statvfs
 

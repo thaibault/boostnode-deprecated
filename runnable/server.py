@@ -1214,7 +1214,7 @@ class CGIHTTPRequestHandler(
         if self.requested_file:
             self._authentication_location = self.requested_file
             if self.requested_file.is_file():
-                self._authentication_location =\
+                self._authentication_location = \
                     boostNode.extension.file.Handler(
                         location=self.requested_file.directory_path)
         if self._is_authenticated():
@@ -1368,7 +1368,7 @@ class CGIHTTPRequestHandler(
 ##
                 if self._authentication_location != self.server.web.root:
                     break
-                self._authentication_location =\
+                self._authentication_location = \
                     boostNode.extension.file.Handler(
                         location=self._authentication_location.directory_path)
 ## python3.3
@@ -1631,7 +1631,7 @@ class CGIHTTPRequestHandler(
                     "Given request isn't valid. Check your white- and "
                     'blacklists')
             if self.requested_file.is_file():
-                error_message +=\
+                error_message += \
                     '. Detected mime-type "%s"' % self.requested_file.mimetype
         self.send_error(404, re.compile('\n+').sub('\n', error_message))
         return self
@@ -1938,9 +1938,9 @@ class CGIHTTPRequestHandler(
             piped to requested client.
         '''
         '''Redirect output buffer.'''
-        print_default_buffer_save =\
+        print_default_buffer_save = \
             boostNode.extension.output.Print.default_buffer
-        boostNode.extension.output.Print.default_buffer =\
+        boostNode.extension.output.Print.default_buffer = \
             self.server.web.thread_buffer
 ## python3.3         sys_path_save = sys.path.copy()
         sys_path_save = copy.copy(sys.path)
@@ -1993,7 +1993,7 @@ class CGIHTTPRequestHandler(
                 self.wfile.write(
                     self.server.web.thread_buffer.clear())
 ##
-            boostNode.extension.output.Print.default_buffer =\
+            boostNode.extension.output.Print.default_buffer = \
                 print_default_buffer_save
         return self
 

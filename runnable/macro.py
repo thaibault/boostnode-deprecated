@@ -319,7 +319,7 @@ class Replace(
             Validates the given input. Gives usage info or raises exception if
             the given inputs don't make sense.
         '''
-        command_line_arguments =\
+        command_line_arguments = \
             boostNode.extension.system.CommandLine.argument_parser(
                 arguments=self.COMMAND_LINE_ARGUMENTS,
                 module_name=__name__,

@@ -306,7 +306,7 @@ class Resolve(builtins.object):
             otherwise.
         '''
         if 'boostNode' in builtins.dir(sys.modules[name]):
-            displaced_module =\
+            displaced_module = \
                 sys.modules[name].boostNode.extension.native.Module
             sys.modules[name].boostNode.extension.system.CommandLine\
                 .generic_module_interface(

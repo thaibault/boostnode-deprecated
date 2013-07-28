@@ -158,7 +158,7 @@ class FunctionDecorator(builtins.object):
             ...
             TypeError: First ... but "int" (5) given.
         '''
-        self.class_object = self.object = self.function =\
+        self.class_object = self.object = self.function = \
             self.return_value = None
         self._method_type = None
 
@@ -421,7 +421,7 @@ class ReturnAspect(builtins.object):
 
         # region public properties
 
-    class_object = object = function = arguments = keywords = return_value =\
+    class_object = object = function = arguments = keywords = return_value = \
         None
 
         # endregion

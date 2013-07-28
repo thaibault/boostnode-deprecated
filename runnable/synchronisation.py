@@ -650,9 +650,6 @@ class Reflector(
             ... ).is_file(allow_link=False)
             True
 
-            >>> boostNode.extension.file.Handler(
-            ...     location=__test_folder__ + 'target2').clear_directory()
-            True
             >>> len(boostNode.extension.file.Handler(
             ...     location=__test_folder__ + 'source2')) > 0
             True
@@ -778,7 +775,7 @@ class Reflector(
             Initializes a new instance of the option parser for the
             application interface.
         '''
-        self._command_line_arguments =\
+        self._command_line_arguments = \
             boostNode.extension.system.CommandLine.argument_parser(
                 arguments=self.COMMAND_LINE_ARGUMENTS,
                 module_name=__name__,

@@ -1406,7 +1406,7 @@ class CommandLine(builtins.object):
             Namespace(log_level='info'...)
         '''
         if name == '__main__':
-            all, arguments, current_working_directory_save =\
+            all, arguments, current_working_directory_save = \
                 cls._package_start_helper(name, frame, command_line_arguments)
             try:
                 module_names = cls._handle_packages_in_package(
@@ -1487,9 +1487,9 @@ class CommandLine(builtins.object):
             module=module['scope'])
         module['scope'].__name__ = '__main__'
         module['scope'].__test_mode__ = True
-        module['scope'].__test_buffer__ =\
+        module['scope'].__test_buffer__ = \
             boostNode.extension.output.Buffer()
-        default_print_buffer_save =\
+        default_print_buffer_save = \
             boostNode.extension.output.Print.default_buffer
         log_level_save = boostNode.extension.output.Logger.default_level
         logger_buffer_save = boostNode.extension.output.Logger.buffer
@@ -1497,7 +1497,7 @@ class CommandLine(builtins.object):
             Modules get log level "info" as default for their test
             cases.
         '''
-        boostNode.extension.output.Print.default_buffer =\
+        boostNode.extension.output.Print.default_buffer = \
             module['scope'].__test_buffer__
         boostNode.extension.output.Logger.change_all(
             level=('info',), buffer=(module['scope'].__test_buffer__,))
@@ -1514,7 +1514,7 @@ class CommandLine(builtins.object):
         '''Recover old output buffer.'''
         boostNode.extension.output.Logger.change_all(
             level=log_level_save, buffer=logger_buffer_save)
-        boostNode.extension.output.Print.default_buffer =\
+        boostNode.extension.output.Print.default_buffer = \
             default_print_buffer_save
         if not sys.flags.debug:
             test_folder.remove_deep()
@@ -1630,10 +1630,10 @@ class CommandLine(builtins.object):
 ##                             Set default value to default value of sepecified
 ##                             parameter type.
 ##                         '''
-##                         scope['__initializer_default_value__'] =\
+##                         scope['__initializer_default_value__'] = \
 ##                             parameters[scope['__name__']].annotation()
 ##                 else:
-##                     scope['__initializer_default_value__'] =\
+##                     scope['__initializer_default_value__'] = \
 ##                         parameters[scope['__name__']].default
             if inspect.getargspec(initializer).defaults:
                 parameters = builtins.dict(builtins.zip(
@@ -1646,7 +1646,7 @@ class CommandLine(builtins.object):
                     ).defaults):],
                     inspect.getargspec(initializer).defaults))
                 if scope['__name__'] in parameters:
-                    scope['__initializer_default_value__'] =\
+                    scope['__initializer_default_value__'] = \
                         parameters[scope['__name__']]
 ##
         return scope

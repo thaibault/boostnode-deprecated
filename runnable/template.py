@@ -654,7 +654,7 @@ class Parser(
             >>> template.output
             'hans also hans'
         '''
-        self._command_line_arguments =\
+        self._command_line_arguments = \
             boostNode.extension.system.CommandLine.argument_parser(
                 arguments=self.COMMAND_LINE_ARGUMENTS,
                 module_name=__name__, scope={'self': self})
@@ -927,7 +927,7 @@ class Parser(
                 builtins.str(exception), rendered_content)
 ##
         except builtins.Exception as exception:
-            line_info, exception_message, native_exception_description =\
+            line_info, exception_message, native_exception_description = \
                 self._handle_template_exception(exception)
             self._raise_template_exception(
                 line_info, exception_message, native_exception_description,
@@ -963,7 +963,7 @@ class Parser(
             for property in builtins.dir(exception):
                 if not (property.startswith('__') and
                         property.endswith('__')):
-                    native_exception_description +=\
+                    native_exception_description += \
                         property + ': "' + builtins.str(
                             builtins.getattr(exception, property)
                         ) + '"\n'
@@ -1478,7 +1478,7 @@ class Parser(
                            builtins.len(dependend_indent)):
                             indent = (counter + 1) * ' '
                             slice = counter + 1
-                    self._code_dependend_indents =\
+                    self._code_dependend_indents = \
                         self._code_dependend_indents[:slice]
             else:
                 indent = builtins.len(self._code_dependend_indents) * ' '
