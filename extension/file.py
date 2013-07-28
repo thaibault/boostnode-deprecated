@@ -36,6 +36,7 @@ import builtins
 import ctypes
 ## python2.7 import codecs
 pass
+import collections
 import copy
 import inspect
 import mimetypes
