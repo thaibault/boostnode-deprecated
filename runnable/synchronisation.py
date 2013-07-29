@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.3
+#!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 
 # region vim modline
@@ -29,10 +29,10 @@ __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-## python2.7
-## import __builtin__ as builtins
-import builtins
-import collections
+## python3.3
+## import builtins
+## import collections
+import __builtin__ as builtins
 ##
 import inspect
 import os
@@ -233,9 +233,9 @@ class Reflector(
             # region special methods
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def __repr__(self):
-    def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
+## python3.3
+##     def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
+    def __repr__(self):
 ##
         '''
             Invokes if this object should describe itself by a string.
@@ -302,12 +302,12 @@ class Reflector(
             # region boolean methods
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
-##     def is_path_in_paths(cls, search, paths):
-    def is_path_in_paths(
-            cls: boostNode.extension.type.SelfClass,
-            search: boostNode.extension.file.Handler,
-            paths: collections.Iterable) -> builtins.bool:
+## python3.3
+##     def is_path_in_paths(
+##             cls: boostNode.extension.type.SelfClass,
+##             search: boostNode.extension.file.Handler,
+##             paths: collections.Iterable) -> builtins.bool:
+    def is_path_in_paths(cls, search, paths):
 ##
         '''
             Checks if a given path represented in a given list of paths or it's
@@ -348,11 +348,11 @@ class Reflector(
             # region getter methods
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def get_status_in_percent(self):
-    def get_status_in_percent(
-        self: boostNode.extension.type.Self
-    ) -> builtins.float:
+## python3.3
+##     def get_status_in_percent(
+##         self: boostNode.extension.type.Self
+##     ) -> builtins.float:
+    def get_status_in_percent(self):
 ##
         '''
             Calculates the edited part of files in percent.
@@ -391,11 +391,11 @@ class Reflector(
             # endregion
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def open(self, files):
-    def open(
-        self: boostNode.extension.type.Self, files: collections.Iterable
-    ) -> boostNode.extension.type.Self:
+## python3.3
+##     def open(
+##         self: boostNode.extension.type.Self, files: collections.Iterable
+##     ) -> boostNode.extension.type.Self:
+    def open(self, files):
 ##
         '''
             Opens the given files by using the "boostNode.file.Handler.open()"
@@ -417,11 +417,11 @@ class Reflector(
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def create(self):
-    def create(
-        self: boostNode.extension.type.Self
-    ) -> boostNode.extension.type.Self:
+## python3.3
+##     def create(
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
+    def create(self):
 ##
         '''
             Creates a new reflection cache of the given source object.
@@ -609,11 +609,11 @@ class Reflector(
         return self._create_reflection_files()
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def synchronize_back(self):
-    def synchronize_back(
-        self: boostNode.extension.type.Self
-    ) -> boostNode.extension.type.Self:
+## python3.3
+##     def synchronize_back(
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
+    def synchronize_back(self):
 ##
         '''
             Syncs the current cache location back to the source.
@@ -761,11 +761,11 @@ class Reflector(
             # region runnable implementation
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def _run(self):
-    def _run(
-        self: boostNode.extension.type.Self
-    ) -> boostNode.extension.type.Self:
+## python3.3
+##     def _run(
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
+    def _run(self):
 ##
         '''
             Entry point for command line call of this progam.
@@ -783,24 +783,24 @@ class Reflector(
             namespace=self._command_line_arguments))
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
+## python3.3
 ##     def _initialize(
-##         self, source_location, target_location=None, limit='100 MB',
-##         priority_locations=(), exclude_locations=(),
-##         target_rights=777, synchronize_back=False, create=False,
-##         use_native_symlinks=False,
+##         self: boostNode.extension.type.Self,
+##         source_location: (boostNode.extension.file.Handler, builtins.str),
+##         target_location=None, limit='100 MB', priority_locations=(),
+##         exclude_locations=(), target_rights=777, synchronize_back=False,
+##         create=False, use_native_symlinks=False,
 ##         minimum_reflection_size_in_byte=100 * 10 ** 3,  # 100 Kilobyte
-##         **keywords
-##     ):
+##         **keywords: builtins.object
+##     ) -> boostNode.extension.type.Self:
     def _initialize(
-        self: boostNode.extension.type.Self,
-        source_location: (boostNode.extension.file.Handler, builtins.str),
-        target_location=None, limit='100 MB', priority_locations=(),
-        exclude_locations=(), target_rights=777, synchronize_back=False,
-        create=False, use_native_symlinks=False,
+        self, source_location, target_location=None, limit='100 MB',
+        priority_locations=(), exclude_locations=(),
+        target_rights=777, synchronize_back=False, create=False,
+        use_native_symlinks=False,
         minimum_reflection_size_in_byte=100 * 10 ** 3,  # 100 Kilobyte
-        **keywords: builtins.object
-    ) -> boostNode.extension.type.Self:
+        **keywords
+    ):
 ##
         '''
             Initializes a new object of a given synchronisation process.
@@ -909,11 +909,11 @@ class Reflector(
             # endregion
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def _create_or_synchronize_back(self):
-    def _create_or_synchronize_back(
-        self: boostNode.extension.type.Self
-    ) -> boostNode.extension.type.Self:
+## python3.3
+##     def _create_or_synchronize_back(
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
+    def _create_or_synchronize_back(self):
 ##
         '''
             Synchronizes and/or creates a new reflection cache dependent on
@@ -945,11 +945,11 @@ class Reflector(
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def _validate_inputs(self):
-    def _validate_inputs(
-        self: boostNode.extension.type.Self
-    ) -> boostNode.extension.type.Self:
+## python3.3
+##     def _validate_inputs(
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
+    def _validate_inputs(self):
 ##
         '''
             Validates the given parameters to the "self.__init__()" method.
@@ -970,11 +970,11 @@ class Reflector(
         return self._check_path_lists()
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def _validate_paths(self):
-    def _validate_paths(
-        self: boostNode.extension.type.Self
-    ) -> boostNode.extension.type.Self:
+## python3.3
+##     def _validate_paths(
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
+    def _validate_paths(self):
 ##
         '''
             Validates source and target (reflection) path.
@@ -994,11 +994,11 @@ class Reflector(
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def _check_path_lists(self):
-    def _check_path_lists(
-        self: boostNode.extension.type.Self
-    ) -> boostNode.extension.type.Self:
+## python3.3
+##     def _check_path_lists(
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
+    def _check_path_lists(self):
 ##
         '''
             Checks if all given paths lists are in locations which makes
@@ -1010,12 +1010,12 @@ class Reflector(
             paths=self._exclude_locations, path_type='Exclude')
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def _check_path_in_source(self, paths, path_type='Given'):
-    def _check_path_in_source(
-        self: boostNode.extension.type.Self, paths: collections.Iterable,
-        path_type='Given'
-    ) -> boostNode.extension.type.Self:
+## python3.3
+##     def _check_path_in_source(
+##         self: boostNode.extension.type.Self, paths: collections.Iterable,
+##         path_type='Given'
+##     ) -> boostNode.extension.type.Self:
+    def _check_path_in_source(self, paths, path_type='Given'):
 ##
         '''
             Checks if the given paths are in source location. This method
@@ -1060,11 +1060,11 @@ class Reflector(
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def _log_status(self):
-    def _log_status(
-        self: boostNode.extension.type.Self
-    ) -> boostNode.extension.type.Self:
+## python3.3
+##     def _log_status(
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
+    def _log_status(self):
 ##
         '''
             Logs the initial status of the current Reflector instance.
@@ -1099,11 +1099,11 @@ class Reflector(
             # region core concern methods
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def _create_reflection_files(self):
-    def _create_reflection_files(
-        self: boostNode.extension.type.Self
-    ) -> boostNode.extension.type.Self:
+## python3.3
+##     def _create_reflection_files(
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
+    def _create_reflection_files(self):
 ##
         '''
             Iterates throw all files which should be included in
@@ -1133,13 +1133,13 @@ class Reflector(
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def _copy_reflection_file(self, source, path, size):
-    def _copy_reflection_file(
-        self: boostNode.extension.type.Self,
-        source: boostNode.extension.file.Handler, path: builtins.str,
-        size: builtins.float
-    ) -> boostNode.extension.type.Self:
+## python3.3
+##     def _copy_reflection_file(
+##         self: boostNode.extension.type.Self,
+##         source: boostNode.extension.file.Handler, path: builtins.str,
+##         size: builtins.float
+##     ) -> boostNode.extension.type.Self:
+    def _copy_reflection_file(self, source, path, size):
 ##
         '''
             Serves as helper method for "_create_reflection_files()".
@@ -1165,12 +1165,12 @@ class Reflector(
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def _create_reflection_link(self, source, path):
-    def _create_reflection_link(
-        self: boostNode.extension.type.Self,
-        source: boostNode.extension.file.Handler, path: builtins.str
-    ) -> boostNode.extension.type.Self:
+## python3.3
+##     def _create_reflection_link(
+##         self: boostNode.extension.type.Self,
+##         source: boostNode.extension.file.Handler, path: builtins.str
+##     ) -> boostNode.extension.type.Self:
+    def _create_reflection_link(self, source, path):
 ##
         '''
             Creates a link to the given source element in target.
@@ -1193,12 +1193,12 @@ class Reflector(
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def _relocate_moved_file(self, file):
-    def _relocate_moved_file(
-        self: boostNode.extension.type.Self,
-        file: boostNode.extension.file.Handler
-    ) -> builtins.bool:
+## python3.3
+##     def _relocate_moved_file(
+##         self: boostNode.extension.type.Self,
+##         file: boostNode.extension.file.Handler
+##     ) -> builtins.bool:
+    def _relocate_moved_file(self, file):
 ##
         '''
             Determines if the given Handler object ("file") was
@@ -1223,13 +1223,13 @@ class Reflector(
         return True
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def _relocate_missing_file(self, relocated, linked_path):
-    def _relocate_missing_file(
-        self: boostNode.extension.type.Self,
-        relocated: boostNode.extension.file.Handler,
-        linked_path: boostNode.extension.file.Handler
-    ) -> builtins.bool:
+## python3.3
+##     def _relocate_missing_file(
+##         self: boostNode.extension.type.Self,
+##         relocated: boostNode.extension.file.Handler,
+##         linked_path: boostNode.extension.file.Handler
+##     ) -> builtins.bool:
+    def _relocate_missing_file(self, relocated, linked_path):
 ##
         '''
             Serves as helper method for "_relocate_moved_file()".
@@ -1260,12 +1260,12 @@ class Reflector(
         return True
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def _copy_cache_to_source(self, file):
-    def _copy_cache_to_source(
-        self: boostNode.extension.type.Self,
-        file: boostNode.extension.file.Handler
-    ) -> builtins.bool:
+## python3.3
+##     def _copy_cache_to_source(
+##         self: boostNode.extension.type.Self,
+##         file: boostNode.extension.file.Handler
+##     ) -> builtins.bool:
+    def _copy_cache_to_source(self, file):
 ##
         '''
             Copy a real (not dummy files or symbolic links) cache file to
@@ -1301,16 +1301,16 @@ class Reflector(
             return True
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
+## python3.3
 ##     def _copy_link_in_cache_to_source(
-##         self, source_file, file, target_path_len
-##     ):
+##         self: boostNode.extension.type.Self,
+##         source_file: boostNode.extension.file.Handler,
+##         file: boostNode.extension.file.Handler,
+##         target_path_len: builtins.int
+##     ) -> builtins.bool:
     def _copy_link_in_cache_to_source(
-        self: boostNode.extension.type.Self,
-        source_file: boostNode.extension.file.Handler,
-        file: boostNode.extension.file.Handler,
-        target_path_len: builtins.int
-    ) -> builtins.bool:
+        self, source_file, file, target_path_len
+    ):
 ##
         '''
             Copies link in the reflection area which wasn't interpreted as
@@ -1332,13 +1332,13 @@ class Reflector(
                 location=self._source_location.path + link.path[
                     target_path_len:],
                 must_exist=False)
-## python2.7
+## python3.3
 ##             if(not source_file.is_symbolic_link() or
-##                 not (source_file.read_symbolic_link(
-##                      as_object=True) == new_link)
+##                 source_file.read_symbolic_link(as_object=True) != new_link
 ##                ):
             if(not source_file.is_symbolic_link() or
-                source_file.read_symbolic_link(as_object=True) != new_link
+                not (source_file.read_symbolic_link(
+                     as_object=True) == new_link)
                ):
 ##
                 __logger__.info(
@@ -1351,12 +1351,12 @@ class Reflector(
                 file.path)
         elif(link.path[:builtins.len(self._source_location.path)] !=
              self._source_location.path):
-## python2.7
-##             if not (source_file.read_symbolic_link(as_object=True) ==
-##                     file.read_symbolic_link(as_object=True)):
-            if(not source_file.is_symbolic_link() or
-               source_file.read_symbolic_link(as_object=True) !=
-               file.read_symbolic_link(as_object=True)):
+## python3.3
+##             if(not source_file.is_symbolic_link() or
+##                source_file.read_symbolic_link(as_object=True) !=
+##                file.read_symbolic_link(as_object=True)):
+            if not (source_file.read_symbolic_link(as_object=True) ==
+                    file.read_symbolic_link(as_object=True)):
 ##
                 __logger__.info('Copy link "%s" as link.', file.path)
                 return link.make_symbolic_link(source_file, force=True)
@@ -1366,12 +1366,12 @@ class Reflector(
         return True
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def _delete_source_file_not_existing_in_target(self, file):
-    def _delete_source_file_not_existing_in_target(
-        self: boostNode.extension.type.Self,
-        file: boostNode.extension.file.Handler
-    ) -> builtins.bool:
+## python3.3
+##     def _delete_source_file_not_existing_in_target(
+##         self: boostNode.extension.type.Self,
+##         file: boostNode.extension.file.Handler
+##     ) -> builtins.bool:
+    def _delete_source_file_not_existing_in_target(self, file):
 ##
         '''
             Delete a given source file if deleted in cache since last cache
@@ -1395,15 +1395,15 @@ class Reflector(
         return True
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
+## python3.3
 ##     def _create_reflection_structure(
-##         self, file, target, priority=False
-##     ):
+##         self: boostNode.extension.type.Self,
+##         file: boostNode.extension.file.Handler,
+##         target: boostNode.extension.file.Handler, priority=False
+##     ) -> builtins.bool:
     def _create_reflection_structure(
-        self: boostNode.extension.type.Self,
-        file: boostNode.extension.file.Handler,
-        target: boostNode.extension.file.Handler, priority=False
-    ) -> builtins.bool:
+        self, file, target, priority=False
+    ):
 ##
         '''
             Copies or represent a file in the source in reflection area.
@@ -1429,16 +1429,16 @@ class Reflector(
         return True
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
+## python3.3
 ##     def _handle_source_element(
-##         self, source_file, target_file, priority
-##     ):
+##         self: boostNode.extension.type.Self,
+##         source_file: boostNode.extension.file.Handler,
+##         target_file: boostNode.extension.file.Handler,
+##         priority: builtins.bool
+##     ) -> builtins.bool:
     def _handle_source_element(
-        self: boostNode.extension.type.Self,
-        source_file: boostNode.extension.file.Handler,
-        target_file: boostNode.extension.file.Handler,
-        priority: builtins.bool
-    ) -> builtins.bool:
+        self, source_file, target_file, priority
+    ):
 ##
         '''
             Serves as helper method for "self._create_reflection_structure()".
@@ -1475,13 +1475,13 @@ class Reflector(
         return True
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def _handle_source_link(self, source_file, target_file):
-    def _handle_source_link(
-        self: boostNode.extension.type.Self,
-        source_file: boostNode.extension.file.Handler,
-        target_file: boostNode.extension.file.Handler
-    ) -> builtins.bool:
+## python3.3
+##     def _handle_source_link(
+##         self: boostNode.extension.type.Self,
+##         source_file: boostNode.extension.file.Handler,
+##         target_file: boostNode.extension.file.Handler
+##     ) -> builtins.bool:
+    def _handle_source_link(self, source_file, target_file):
 ##
         '''
             Serves as helper method for "self._handle_source_element()".

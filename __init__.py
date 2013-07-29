@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.3
+#!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 
 # region vim modline
@@ -269,8 +269,8 @@ __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-## python2.7 import __builtin__ as builtins
-import builtins
+## python3.3 import builtins
+import __builtin__ as builtins
 import inspect
 import logging
 import os
