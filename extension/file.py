@@ -866,8 +866,8 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 ## python2.7
 ##     def _sort_by_file_types(cls, files, recursive_in_link):
     def _sort_by_file_types(
-        cls: boostNode.extension.type.SelfClass, files: collections.Iterable,
-        recursive_in_link: builtins.bool
+        cls: boostNode.extension.type.SelfClass,
+        files: collections.Iterable, recursive_in_link: builtins.bool
     ) -> builtins.list:
 ##
         '''
@@ -1658,8 +1658,8 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ...     __test_folder__ + 'get_content', must_exist=False)
 
             >>> handler.content = ' '
-            >>> handler.get_content(mode='r+b') # doctest: +ELLIPSIS
-            ...' '
+            >>> handler.get_content(mode='r+b') == b' '
+            True
 
             >>> handler.content = ' äüöß hans'
 
@@ -1951,24 +1951,37 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> handler.set_content('hans', mode='w') # doctest: +ELLIPSIS
             Object of "Handler" with path "..." ...
 
-            >>> handler.set_content('hans', mode='w+b') # doctest: +ELLIPSIS
+            >>> handler.set_content(b'hans', mode='w+b') # doctest: +ELLIPSIS
             Object of "Handler" with path "..." ...
 
-            >>> handler.set_content(unicode('hans')) # doctest: +ELLIPSIS
+            >>> ## python2.7
+            >>> if sys.version_info.major < 3:
+            ...     handler.set_content(unicode('hans'))
+            ... else:
+            ...     handler.set_content(b'hans') # doctest: +ELLIPSIS
             Object of "Handler" with path "..." ...
+            >>> ##
+            >>> handler.content
+            'hans'
 
             >>> Handler().set_content('AA') # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
             boostNode.extension.native.FileError: Set content is only ...
 
-            >>> handler.set_content(bytes(chr(1))) # doctest: +ELLIPSIS
+            >>> ## python2.7
+            >>> if sys.version_info.major < 3:
+            ...     handler.set_content(str(chr(1))) # doctest: +ELLIPSIS
+            ... else:
+            ...     handler.set_content(
+            ...         bytes(chr(1), handler.DEFAULT_ENCODING)
+            ...     ) # doctest: +ELLIPSIS
             Object of "Handler" with path "..." ...
+            >>> ##
         '''
         mode = self._prepare_content_status(mode, content)
         if self._path.endswith(os.sep):
             self._path = self._path[:-builtins.len(os.sep)]
-        self._path
         if 'b' in mode:
             with builtins.open(
                 self._path, mode, *arguments, **keywords
@@ -2244,13 +2257,10 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> os.path.samefile = same_file_backup
         '''
         other_location = self.__class__(location=other_location)
-## python2.7
-##         try:
-##             return os.path.samefile(self._path, other_location._path)
-##         except builtins.AttributeError:
-##             return self == other_location
-        return os.path.samefile(self._path, other_location._path)
-##
+        try:
+            return os.path.samefile(self._path, other_location._path)
+        except builtins.AttributeError:
+            return self == other_location
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python2.7
