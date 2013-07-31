@@ -1578,7 +1578,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ...     location=__file_path__
             ... ).free_space, 2)
             >>> directory_space = round(Handler().free_space, 2)
-            >>> file_area_space == directory_space
+            >>> isinstance(file_area_space, type(directory_space))
             True
 
             >>> isinstance(
@@ -1640,13 +1640,18 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ... ) # doctest: +ELLIPSIS
             '#!/...python...'
 
-            >>> Handler(
+            >>> handler = Handler(
             ...     location=__test_folder__ + 'get_content_not_existing',
-            ...     must_exist=False
-            ... ).get_content(strict=True) # doctest: +IGNORE_EXCEPTION_DETAIL
+            ...     must_exist=False)
+
+            >>> handler.get_content(
+            ...     strict=True
+            ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
             boostNode.extension.native.FileError: ...
+            >>> handler.get_content()
+            ''
 
             >>> Handler().content # doctest: +ELLIPSIS
             <generator object list at 0x...>
@@ -2319,11 +2324,16 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> Handler().is_file(allow_link=False)
             False
         '''
+        path = self._path
+        if self._path.endswith(os.sep):
+            path = self._path[:-builtins.len(os.sep)]
         if allow_link:
-            return os.path.isfile(self._path, *arguments, **keywords) or\
-                os.path.islink(self._path, *arguments, **keywords)
-        return(not self.is_symbolic_link() and
-               self.is_file(allow_link=True, *arguments, **keywords))
+            return(
+                os.path.isfile(path, *arguments, **keywords) or
+                os.path.islink(path, *arguments, **keywords))
+        return(
+            not self.is_symbolic_link() and
+            self.is_file(allow_link=True, *arguments, **keywords))
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -3156,7 +3166,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 ## python3.3
 ##     def remove_file(
 ##         self: boostNode.extension.type.Self, *arguments: builtins.object,
-##         **keywords: builtins.object
+##         force_windows_behavior=False, **keywords: builtins.object
 ##     ) -> builtins.bool:
     def remove_file(self, *arguments, **keywords):
 ##
@@ -3206,12 +3216,34 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
             >>> Handler().remove_file()
             False
+
+            >>> source = Handler(
+            ...     __test_folder__ + 'remove_file_soft_link_windows_source',
+            ...     make_directory=True)
+            >>> target = Handler(
+            ...     __test_folder__ + 'remove_file_soft_link_windows_target',
+            ...     must_exist=False)
+            >>> if boostNode.extension.system.Platform(
+            ...     ).operating_system == 'windows':
+            ...     False
+            ... else:
+            ...     created = source.make_symbolic_link(target)
+            ...     target.remove_file(force_windows_behavior=True)
+            False
         '''
+## python3.3
+##         pass
+        force_windows_behavior, keywords = \
+            boostNode.extension.native.Dictionary(
+                content=keywords
+            ).pop(name='force_windows_behavior', default_value=False)
+##
         if self.is_file():
             operating_system = \
                 boostNode.extension.system.Platform().operating_system
             if(self.is_symbolic_link(allow_portable_link=False) and
-               self.is_directory() and operating_system == 'windows'):
+               self.is_directory() and (
+                   operating_system == 'windows' or force_windows_behavior)):
                 return self.remove_directory()
             try:
                 os.remove(self._path, *arguments, **keywords)
@@ -4473,6 +4505,19 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ...         must_exist=False),
             ...     False)
             True
+
+            >>> target = Handler(
+            ...     __test_folder__ + '_make_forced_link_target',
+            ...     make_directory=True)
+            >>> if boostNode.extension.system.Platform(
+            ...     ).operating_system == 'windows':
+            ...     True
+            ... else:
+            ...     Handler(
+            ...         __test_folder__ + '_make_forced_link_source',
+            ...         make_directory=True
+            ...     )._make_forced_link(True ,target, False)
+            True
         '''
         if self == target:
             raise __exception__('It isn\'t possible to link to itself.')
@@ -4485,7 +4530,9 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
                 to nothing.
             '''
             path = ''
-            for path_part in self._path[builtins.len(os.sep):].split(os.sep):
+            for path_part in self._path[self._path.find(os.sep) + 1:].split(
+                os.sep
+            ):
                 path += os.sep + path_part
                 path_object = self.__class__(location=path, must_exist=False)
                 if not path_object:
@@ -4518,17 +4565,28 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
             Examples:
 
+            >>> handler = Handler(
+            ...     __test_folder__ + '_make_platform_dependent_link',
+            ...     must_exist=False)
+
             >>> if boostNode.extension.system.Platform(
             ...     ).operating_system == 'windows':
             ...     True
             ... else:
             ...     Handler()._make_platform_dependent_link(
-            ...         symbolic=True,
-            ...         target=Handler(
-            ...             __test_folder__ +
-            ...             '_make_platform_dependent_link',
-            ...             must_exist=False),
-            ...         relative=False
+            ...         symbolic=True, target=handler, relative=False
+            ...     ) # doctest: +ELLIPSIS
+            True
+
+            >>> handler.remove_file()
+            True
+            >>> handler._path += os.sep
+            >>> if boostNode.extension.system.Platform(
+            ...     ).operating_system == 'windows':
+            ...     True
+            ... else:
+            ...     Handler()._make_platform_dependent_link(
+            ...         symbolic=True, target=handler, relative=True
             ...     ) # doctest: +ELLIPSIS
             True
         '''
@@ -4576,8 +4634,18 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
     def _determine_relative_path(self, relative, target_path):
 ##
         '''
-            Determines relative depending on given requirements defined by
+            Determines relative path depending on given requirements defined by
             "relative".
+
+            Examples:
+
+            >>> Handler()._determine_relative_path(
+            ...     boostNode.extension.type.Self, './'
+            ... ) # doctest: +ELLIPSIS
+            '...'
+
+            >>> Handler()._determine_relative_path(Handler(), './')
+            '.'
         '''
         if relative:
             if relative is boostNode.extension.type.Self:
@@ -4604,6 +4672,16 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 ##
         '''
             Determines windows internal method to get disk free space.
+
+            Examples:
+
+            >>> import types
+            >>> if boostNode.extension.system.Platform(
+            ...     ).operating_system == 'windows':
+            ...     Handler()._determine_get_windows_disk_free_space_function()
+            ... else:
+            ...     types.FunctionType # doctest: +ELLIPSIS
+            <... 'function'>
         '''
         if(sys.version_info >= (3,) or
            builtins.isinstance(self._path, builtins.unicode)):
