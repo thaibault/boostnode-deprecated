@@ -398,8 +398,9 @@ class Reflector(
     def open(self, files):
 ##
         '''
-            Opens the given files by using the "boostNode.file.Handler.open()"
-            method. It can handle symbolic and portable links.
+            Opens the given files by using the
+            "boostNode.extension.system.Platform.open()" method. It can handle
+            symbolic and portable links.
         '''
         for file in files:
             file = boostNode.extension.file.Handler(
@@ -408,12 +409,13 @@ class Reflector(
                 referenced_file = boostNode.extension.file.Handler(
                     location=file.read_portable_link(), must_exist=False)
                 if referenced_file:
-                    referenced_file.open()
+                    boostNode.extension.system.Platform.open(
+                        location=referenced_file)
                     return self
                 raise __exception__(
                     'The referenced object "%s" of portable symlink "%s" '
                     'isn\'t currently available.', referenced_file, file.path)
-            file.open()
+            boostNode.extension.system.Platform.open(location=file)
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint

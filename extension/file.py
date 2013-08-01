@@ -2255,11 +2255,15 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> Handler().is_same_file(Handler())
             True
 
-            >>> same_file_backup = os.path.samefile
-            >>> del os.path.samefile
+            >>> if boostNode.extension.system.Platform(
+            ...     ).operating_system != 'windows':
+            ...     same_file_backup = os.path.samefile
+            ...     del os.path.samefile
             >>> Handler().is_same_file(Handler())
             True
-            >>> os.path.samefile = same_file_backup
+            >>> if boostNode.extension.system.Platform(
+            ...     ).operating_system != 'windows':
+            ...     os.path.samefile = same_file_backup
         '''
         other_location = self.__class__(location=other_location)
         try:
@@ -3019,7 +3023,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             Object of "Handler" with path "...
             >>> file.change_right(000) # doctest: +ELLIPSIS
             Object of "Handler" with path "...
-            >>> file.remove_directory()
+            >>> if boostNode.extension.system.Platform(
+            ...     ).operating_system == 'windows':
+            ...     False
+            ... else:
+            ...     file.remove_directory()
             False
             >>> handler.change_right(700) # doctest: +ELLIPSIS
             Object of "Handler" with path "...
@@ -3030,7 +3038,13 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             try:
                 os.rmdir(self._path, *arguments, **keywords)
             except:
-                return False
+                try:
+                    self.change_right(right=stat.S_IWRITE, octal=False)
+                    os.rmdir(self._path, *arguments, **keywords)
+                except:
+                    return False
+                else:
+                    return True
             else:
                 return True
         return False
@@ -3150,14 +3164,24 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> file = Handler(root.path + 'file', make_directory=True)
             >>> root.change_right(000) # doctest: +ELLIPSIS
             Object of "Handler" with path "...
-            >>> file.remove_deep()
+            >>> if boostNode.extension.system.Platform(
+            ...     ).operating_system == 'windows':
+            ...     False
+            ... else:
+            ...     file.remove_deep()
             False
         '''
         if self.is_directory(allow_link=False):
             try:
                 shutil.rmtree(self._path, *arguments, **keywords)
             except:
-                return False
+                try:
+                    self.change_right(right=stat.S_IWRITE, octal=False)
+                    shutil.rmtree(self._path, *arguments, **keywords)
+                except:
+                    return False
+                else:
+                    return True
             else:
                 return True
         return self.remove_file()
@@ -3203,13 +3227,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             True
             >>> file = Handler(handler.path + 'file', must_exist=False)
             >>> file.content = ' '
-            >>> handler.change_right(100) # doctest: +ELLIPSIS
-            Object of "Handler" with path "...
             >>> file.change_right(000) # doctest: +ELLIPSIS
-            Object of "Handler" with path "...
-            >>> file.remove_file()
-            False
-            >>> handler.change_right(700) # doctest: +ELLIPSIS
             Object of "Handler" with path "...
             >>> file.remove_file()
             True
@@ -3248,7 +3266,13 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             try:
                 os.remove(self._path, *arguments, **keywords)
             except:
-                return False
+                try:
+                    self.change_right(right=stat.S_IWRITE, octal=False)
+                    os.remove(self._path, *arguments, **keywords)
+                except:
+                    return False
+                else:
+                    return True
             else:
                 return True
         return False
@@ -3648,13 +3672,17 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ...     target.read_symbolic_link(as_object=True) == source
             True
 
-            >>> target.remove_file()
+            >>> if boostNode.extension.system.Platform(
+            ...     ).operating_system == 'windows':
+            ...     True
+            ... else:
+            ...     target.remove_file()
             True
             >>> if boostNode.extension.system.Platform(
             ...     ).operating_system == 'windows':
-            ...     'Object of "Handler" with path "...'
+            ...     target
             ... else:
-            ...     os.symlink('../', target._path)
+            ...     created = Handler('../').make_symbolic_link(target)
             ...     target.read_symbolic_link(
             ...         as_object=True
             ...     ) # doctest: +ELLIPSIS
@@ -3673,8 +3701,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         if as_object:
             if not self.is_referenced_via_absolute_path(location=link):
                 return self.__class__(
-                    location=self.directory_path + link,
-                    must_exist=False)
+                    location=self.directory_path + link, must_exist=False)
             return self.__class__(location=link, must_exist=False)
         return link
 
@@ -3886,9 +3913,9 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def read_portable_link(
-##         self: boostNode.extension.type.Self
-##     ) -> builtins.str:
-    def read_portable_link(self):
+##         self: boostNode.extension.type.Self, as_object=False
+##     ) -> boostNode.extension.type.Self:
+    def read_portable_link(self, as_object=False):
 ##
         '''
             Reads the referenced path of a given portable link file.
@@ -3896,28 +3923,38 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             Examples:
 
             >>> target = Handler(
-            ...     location=__test_folder__ + 'link.py', must_exist=False)
+            ...     location=__test_folder__ + 'read_portable_link',
+            ...     must_exist=False)
+
             >>> handler = Handler(location=__file_path__).make_portable_link(
             ...     target, force=True)
-            >>> target.read_portable_link() # doctest: +ELLIPSIS
-            '...file.py'
+            >>> target.read_portable_link(as_object=True) == Handler(__file_path__)
+            True
 
-            >>> target = Handler(
-            ...     location=__test_folder__ + 'link3', must_exist=False)
+            >>> target.remove_file()
+            True
             >>> handler = Handler(
-            ...     __test_folder__ + 'directory', make_directory=True
+            ...     __test_folder__ + 'read_portable_link_directory',
+            ...     make_directory=True
             ... ).make_portable_link(target, force=True)
-            >>> target.read_portable_link() # doctest: +ELLIPSIS
-            '...directory...'
+            >>> target.read_portable_link(as_object=True) # doctest: +ELLIPSIS
+            Object of ...read_portable_link_directory...
 
-            >>> Handler().read_portable_link()
-            ''
+            >>> Handler().read_portable_link(
+            ...     ) # doctest: +IGNORE_EXCEPTION_DETAIL
+            Traceback (most recent call last):
+            ...
+            boostNode.extension.native.FileError: ...
         '''
         if self.is_portable_link():
-            return re.compile(
-                self.portable_regex_link_pattern
-            ).match(self.content.strip()).group('path')
-        return ''
+            path = re.compile(self.portable_regex_link_pattern).match(
+                self.content.strip()
+            ).group('path')
+            path = path[builtins.len(self._root_path) - builtins.len(os.sep):]
+            if as_object:
+                return self.__class__(location=path, must_exist=False)
+            return path
+        raise __exception__('"%s" isn\t a portable link.', self._path)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -4093,42 +4130,6 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
                 if re.compile(pattern).match(file.name):
                     file.remove_deep()
         return self
-
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def open(self: boostNode.extension.type.Self) -> builtins.dict:
-    def open(self):
-##
-        '''
-            Opens the current file with its default user preference
-            application.
-
-            On Unix, the return value is the exit state of the process encoded
-            in the format specified for wait(). Note that "POSIX" does not
-            specify the meaning of the return value of the C system() function,
-            so the return value of the Python function is system-dependent.
-            On Windows, the return value is that returned by the system shell
-            after running command. The shell is given by the Windows
-            environment variable "COMSPEC": it is usually "cmd.exe",
-            which returns the exit status of the command run; on systems
-            using a non-native shell, consult your shell documentation.
-
-            Examples:
-
-            >>> Handler(location=__file_path__).open() # doctest: +SKIP
-
-            >>> Handler().open() # doctest: +SKIP
-        '''
-        if builtins.hasattr(os, 'startfile'):
-            return os.startfile(self._path)
-        shell_file = boostNode.extension.native.String(
-            self._path
-        ).validate_shell()
-        if builtins.hasattr(os, 'open'):
-            return boostNode.extension.system.Platform.run(
-                command='open', command_arguments=(shell_file,))
-        return boostNode.extension.system.Platform.run(
-            command='xdg-open', command_arguments=(shell_file,))
 
         # endregion
 
@@ -4496,14 +4497,18 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ...
             boostNode.extension.native.FileError: ...
 
-            >>> Handler(
-            ...     __test_folder__ + '_make_forced_link_not_existing',
-            ...     must_exist=False
-            ... )._make_forced_link(
-            ...     True, Handler(
-            ...         __test_folder__ + '_make_forced_link_target',
-            ...         must_exist=False),
-            ...     False)
+            >>> if boostNode.extension.system.Platform(
+            ...     ).operating_system == 'windows':
+            ...     True
+            ... else:
+            ...     Handler(
+            ...         __test_folder__ + '_make_forced_link_not_existing',
+            ...         must_exist=False
+            ...     )._make_forced_link(
+            ...         True, Handler(
+            ...             __test_folder__ + '_make_forced_link_target',
+            ...             must_exist=False),
+            ...         False)
             True
 
             >>> target = Handler(
@@ -4578,7 +4583,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ...     ) # doctest: +ELLIPSIS
             True
 
-            >>> handler.remove_file()
+            >>> if boostNode.extension.system.Platform(
+            ...     ).operating_system == 'windows':
+            ...     True
+            ... else:
+            ...     handler.remove_file()
             True
             >>> handler._path += os.sep
             >>> if boostNode.extension.system.Platform(
@@ -4675,13 +4684,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
             Examples:
 
-            >>> import types
             >>> if boostNode.extension.system.Platform(
             ...     ).operating_system == 'windows':
             ...     Handler()._determine_get_windows_disk_free_space_function()
             ... else:
-            ...     types.FunctionType # doctest: +ELLIPSIS
-            <... 'function'>
+            ...     Handler# doctest: +ELLIPSIS
+            <...>
         '''
         if(sys.version_info >= (3,) or
            builtins.isinstance(self._path, builtins.unicode)):
@@ -4745,11 +4753,13 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
             Examples:
 
-            >>> len(Handler()._initialize_platform_dependencies()) > 0
-            True
+            >>> Handler()._initialize_platform_dependencies(
+            ...     ).__class__ # doctest: +ELLIPSIS
+            <...>
 
-            >>> len(Handler()._initialize_platform_dependencies(True)) > 0
-            True
+            >>> Handler()._initialize_platform_dependencies(
+            ...     True).__class__ # doctest: +ELLIPSIS
+            <...>
         '''
         os_statvfs = None
         if((os.path.isfile(self._path) or os.path.isdir(self._path)) and

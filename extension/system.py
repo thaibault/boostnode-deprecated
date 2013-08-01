@@ -517,6 +517,10 @@ class Platform(builtins.object):
         down.
     '''
     TERMINATION_SIGNALS = 'SIGTERM', 'SIGINT', 'SIGHUP'
+    '''Saves a list of known unix commands to open a specified file.'''
+    UNIX_OPEN_APPLICATIONS = (
+        'gnome-open', 'kde-open', 'xdg-open', 'gedit', 'mousepad', 'gvim',
+        'vim', 'emacs', 'nano', 'vi', 'less', 'cat')
 
         # endregion
 
@@ -548,9 +552,9 @@ class Platform(builtins.object):
 
     # region static methods
 
-        # region public methods
+        # region public
 
-            # region special methods
+            # region special
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3     def __init__(cls: boostNode.extension.type.SelfClass) -> None:
@@ -700,6 +704,8 @@ class Platform(builtins.object):
 
             # endregion
 
+        # region thread handling
+
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
 ##     def check_thread(cls, waiting_delay_in_seconds=2) -> builtins.bool:
@@ -724,7 +730,7 @@ class Platform(builtins.object):
             >>> Platform.check_thread()
             False
 
-            >>> Platform.pasue_thread = True
+            >>> Platform.pause_thread = True
             >>> Platform.terminate_thread = True
             >>> Platform.check_thread()
             True
@@ -740,6 +746,10 @@ class Platform(builtins.object):
                 return True
             time.sleep(waiting_delay_in_seconds)
         return False
+
+        # endregion
+
+        # region process handling
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
@@ -913,6 +923,51 @@ class Platform(builtins.object):
                 secure=secure, error=error, shell=shell, *arguments,
                 **keywords)
         return cls._log_command_result(result, log, secure, no_blocking)
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def open(
+##         cls: boostNode.extension.type.SelfClass,
+##         location: (builtins.str, boostNode.extension.file.Handler)
+##     ) -> builtins.dict:
+    def open(cls, location):
+##
+        '''
+            Opens the current file with its default user preference
+            application.
+
+            On Unix, the return value is the exit state of the process encoded
+            in the format specified for wait(). Note that "POSIX" does not
+            specify the meaning of the return value of the C system() function,
+            so the return value of the Python function is system-dependent.
+            On Windows, the return value is that returned by the system shell
+            after running command. The shell is given by the Windows
+            environment variable "COMSPEC": it is usually "cmd.exe",
+            which returns the exit status of the command run; on systems
+            using a non-native shell, consult your shell documentation.
+
+            Examples:
+
+            >>> Platform.open('/path/to/file') # doctest: +SKIP
+
+            >>> Platform.open(boostNode.extension.file.Handler(
+            ...     '/path/to/file'
+            ... )) # doctest: +SKIP
+        '''
+        file = boostNode.extension.file.Handler(location)
+        if builtins.hasattr(os, 'startfile'):
+            return os.startfile(file)
+        shell_file = boostNode.extension.native.String(
+            file._path
+        ).validate_shell()
+        for unix_application_name in cls.UNIX_OPEN_APPLICATIONS:
+            result = boostNode.extension.system.Platform.run(
+                command=unix_application_name, command_arguments=(shell_file,))
+            if result['return_code'] == 0:
+                break
+        return result
+
+            # endregion
 
         # endregion
 

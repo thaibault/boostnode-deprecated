@@ -285,7 +285,7 @@ sys.path.append(os.path.abspath(sys.path[0] + 2 * ('..' + os.sep)))
 '''
 sys.dont_write_bytecode = True
 
-if not builtins.getattr(__builtins__, "WindowsError", None):
+if not builtins.getattr(builtins, "WindowsError", None):
     class WindowsError(builtins.OSError):
         pass
 try:
