@@ -129,9 +129,9 @@ class Class(builtins.object):
 
     # region static methods
 
-        # region public methods
+        # region public
 
-            # region special methods
+            # region special
 
     @builtins.classmethod
 ## python3.3     def __repr__(cls: builtins.type) -> builtins.str:
@@ -175,7 +175,7 @@ class Class(builtins.object):
 
         # region public method
 
-            # region special methods
+            # region special
 
 ## python3.3
 ##     def __getattr__(
@@ -272,7 +272,7 @@ class Class(builtins.object):
 
             # endregion
 
-            # region boolean methods
+            # region boolean
 
 ## python3.3     def is_method(self, name: builtins.str) -> builtins.bool:
     def is_method(self, name):
@@ -320,7 +320,7 @@ class Class(builtins.object):
 
         # endregion
 
-        # region protected methods.
+        # region protected
 
 ## python3.3
 ##     def _setattr_helper(

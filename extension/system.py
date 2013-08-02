@@ -78,7 +78,7 @@ class Runnable(builtins.object):
 
     # region static properties
 
-        # region private properties
+        # region private
 
     '''
         This lock is acquired at startup und will be released as soon the
@@ -92,7 +92,7 @@ class Runnable(builtins.object):
 
     # region dynamic properties
 
-        # region public properties
+        # region public
 
     '''Saves a cli-command for shutting down the runnable implementation.'''
     stop_order = 'stop'
@@ -101,7 +101,7 @@ class Runnable(builtins.object):
 
         # endregion
 
-        # region protected properties
+        # region protected
 
     '''
         Currently given inputs via command line during "wait_for_order()"
@@ -118,7 +118,7 @@ class Runnable(builtins.object):
 
         # endregion
 
-        # region private properties
+        # region private
 
     '''This lock prevents form triggering the stop method twice.'''
     __stop_lock = None
@@ -129,9 +129,9 @@ class Runnable(builtins.object):
 
     # region static methods
 
-        # region public methods
+        # region public
 
-            # region special methods
+            # region special
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
@@ -192,7 +192,7 @@ class Runnable(builtins.object):
 
         # endregion
 
-        # region protected methods
+        # region protected
 
             # region has to be implemented
 
@@ -283,9 +283,9 @@ class Runnable(builtins.object):
 
     # region dynamic methods
 
-        # region public methods
+        # region public
 
-            # region special methods
+            # region special
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -430,7 +430,7 @@ class Runnable(builtins.object):
 
         # endregion
 
-        # region protected methods
+        # region protected
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
@@ -510,7 +510,7 @@ class Platform(builtins.object):
 
     # region constant properties
 
-        # region public properties
+        # region public
 
     '''
         Saves a list of process signal codes which should bring the application
@@ -528,7 +528,7 @@ class Platform(builtins.object):
 
     # region dynamic properties
 
-        # region public properties
+        # region public
 
     '''Saves the current operating system type.'''
     operating_system = 'unknown'
@@ -925,10 +925,11 @@ class Platform(builtins.object):
         return cls._log_command_result(result, log, secure, no_blocking)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
+    # NOTE: "location" can't get file handler signature type. It isn't loaded
+    # yet.
 ## python3.3
 ##     def open(
-##         cls: boostNode.extension.type.SelfClass,
-##         location: (builtins.str, boostNode.extension.file.Handler)
+##         cls: boostNode.extension.type.SelfClass, location
 ##     ) -> builtins.dict:
     def open(cls, location):
 ##
@@ -971,7 +972,7 @@ class Platform(builtins.object):
 
         # endregion
 
-        # region protected methods
+        # region protected
 
             # region change computer status
 
@@ -1149,7 +1150,7 @@ class CommandLine(builtins.object):
 
     # region constant properties
 
-        # region public properties
+        # region public
 
     POSITIVE_INPUTS = 'y', 'yes', 'positive'
     NEGATIVE_INPUTS = 'n', 'no', 'not', 'none', 'negative'
@@ -1246,7 +1247,7 @@ class CommandLine(builtins.object):
 
     # region dynamic properties
 
-        # region public properties
+        # region public
 
     current_argument_parser = None
 
@@ -1256,9 +1257,9 @@ class CommandLine(builtins.object):
 
     # region static methods
 
-        # region public methods
+        # region public
 
-            # region special methods
+            # region special
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
@@ -1574,7 +1575,7 @@ class CommandLine(builtins.object):
 
         # endregion
 
-        # region protected methods
+        # region protected
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
@@ -1794,7 +1795,7 @@ class CommandLine(builtins.object):
 
         # endregion
 
-        # region protected methods
+        # region protected
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3

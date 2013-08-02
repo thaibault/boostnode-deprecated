@@ -66,7 +66,7 @@ class Replace(
 
     # region constant properties
 
-        # region public properties
+        # region public
 
     '''Defines options for manipulating the programs default behavior.'''
     COMMAND_LINE_ARGUMENTS = (
@@ -171,7 +171,7 @@ class Replace(
 
     # region dynamic properties
 
-        # region protected properties
+        # region protected
 
     '''Current location for deep code parsing.'''
     _location = None
@@ -200,9 +200,9 @@ class Replace(
 
     # region dynamic methods
 
-        # region public methods
+        # region public
 
-            # region special methods
+            # region special
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -227,7 +227,7 @@ class Replace(
 
             # endregion
 
-            # region setter methods
+            # region setter
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -301,7 +301,7 @@ class Replace(
 
         # endregion
 
-        # region protected methods
+        # region protected
 
             # region runnable implementation
 
@@ -386,7 +386,7 @@ class Replace(
 
             # endregion
 
-            # region boolean methods
+            # region boolean
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -409,7 +409,7 @@ class Replace(
 
             # endregion
 
-            # region core concern methods
+            # region core concern
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3

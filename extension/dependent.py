@@ -53,7 +53,7 @@ class Resolve(builtins.object):
 
     # region dynamic properties
 
-        # region protected properties
+        # region protected
 
     '''
         Saves a list of needed dependencies to call a defined opst event
@@ -67,9 +67,9 @@ class Resolve(builtins.object):
 
     # region dynamic methods
 
-        # region public methods
+        # region public
 
-            # region special methods
+            # region special
 
 ## python3.3
 ##     def __init__(
@@ -137,9 +137,9 @@ class Resolve(builtins.object):
 
     # region static methods
 
-        # region public methods
+        # region public
 
-            # region special methods
+            # region special
 
     @builtins.classmethod
 ## python3.3     def __repr__(cls: builtins.type) -> builtins.str:
@@ -204,7 +204,7 @@ class Resolve(builtins.object):
 
         # endregion
 
-        # region protected methods
+        # region protected
 
     @builtins.classmethod
 ## python3.3     def _load(cls: builtins.type) -> builtins.bool:

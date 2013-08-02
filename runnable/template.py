@@ -76,7 +76,7 @@ class Parser(
 
     # region constant properties
 
-        # region public properties
+        # region public
 
     '''
         Holds all command line interface argument informations.
@@ -221,7 +221,7 @@ class Parser(
 
     # region dynamic properties
 
-        # region public properties
+        # region public
 
     '''Holds the given template as string.'''
     content = ''
@@ -231,12 +231,12 @@ class Parser(
     native_template_object = None
     '''Template file handler.'''
     file = None
-    '''Saves previous initially defined escape symbole.'''
+    '''Saves previous initially defined escape symbols.'''
     right_escaped = ''
 
         # endregion
 
-        # region protected properties
+        # region protected
 
     '''Holds a name space of every argument given by the command line.'''
     _command_line_arguments = None
@@ -294,9 +294,9 @@ class Parser(
 
     # region dynamic methods
 
-        # region public methods
+        # region public
 
-            # region special methods
+            # region special
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -349,7 +349,7 @@ class Parser(
 
             # endregion
 
-            # region getter methods
+            # region getter
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -421,7 +421,7 @@ class Parser(
 
             # endregion
 
-            # region wrapper methods
+            # region wrapper
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -514,7 +514,7 @@ class Parser(
 
             # endregion
 
-            # region parsing methods
+            # region parsing
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -623,7 +623,7 @@ class Parser(
 
         # endregion
 
-        # region protected methods
+        # region protected
 
             # region runnable implementation
 
@@ -1156,7 +1156,7 @@ class Parser(
 
             # endregion
 
-            # region callback methods
+            # region callback
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -1185,7 +1185,7 @@ class Parser(
 
                 # endregion
 
-                # region helper methods
+                # region helper
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3

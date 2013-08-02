@@ -72,7 +72,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
     # region constant properties
 
-        # region public properties
+        # region public
 
     '''
         Pattern for supported formats to handle size of file system elements.
@@ -192,7 +192,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
     # region dynamic properties
 
-        # region protected properties
+        # region protected
 
     '''
         Defines a virtual root path for all methods. Through these class
@@ -246,9 +246,9 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
     # region dynamic methods
 
-        # region public methods
+        # region public
 
-            # region special methods
+            # region special
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -618,9 +618,9 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
     # region static methods
 
-        # region public methods
+        # region public
 
-            # region getter methods
+            # region getter
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
@@ -638,7 +638,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
             # endregion
 
-            # region setter methods
+            # region setter
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
@@ -860,7 +860,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
         # endregion
 
-        # region protected methods
+        # region protected
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
@@ -904,9 +904,9 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
     # region dynamic methods
 
-        # region public methods
+        # region public
 
-            # region getter methods
+            # region getter
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -1878,7 +1878,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
             # endregion
 
-            # region setter methods
+            # region setter
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -2236,7 +2236,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
             # endregion
 
-            # region boolean methods
+            # region boolean
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -3914,7 +3914,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 ## python3.3
 ##     def read_portable_link(
 ##         self: boostNode.extension.type.Self, as_object=False
-##     ) -> boostNode.extension.type.Self:
+##     ) -> (builtins.str, boostNode.extension.type.SelfClassObject):
     def read_portable_link(self, as_object=False):
 ##
         '''
@@ -4134,7 +4134,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
         # endregion
 
-        # region protected methods
+        # region protected
 
 ## python3.3
 ##     def _prepare_content_status(
@@ -4552,7 +4552,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return self._make_platform_dependent_link(
             symbolic, target, relative, *arguments, **keywords)
 
-            # region handle platform dependencies methods
+            # region handle platform dependencies
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3

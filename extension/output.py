@@ -76,7 +76,7 @@ class Buffer(
 
     # region dynamic properties
 
-        # region public properties
+        # region public
 
     '''Saves the queue instance for writing content into.'''
     queue = None
@@ -85,7 +85,7 @@ class Buffer(
 
         # endregion
 
-        # region protected properties
+        # region protected
 
     '''
         A lock object to guarantee that no other thread read from buffer
@@ -103,9 +103,9 @@ class Buffer(
 
     # region dynamic methods
 
-        # region public methods
+        # region public
 
-            # region special methods
+            # region special
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -217,7 +217,7 @@ class Buffer(
 
         # endregion
 
-        # region getter methods
+        # region getter
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -387,7 +387,7 @@ class Print(boostNode.paradigm.objectOrientation.Class):
 
     # region dynamic properties
 
-        # region public properties
+        # region public
 
     '''
         Print this string before every first argument to every "put()"
@@ -416,9 +416,9 @@ class Print(boostNode.paradigm.objectOrientation.Class):
 
     # region dynamic methods
 
-        # region public methods
+        # region public
 
-            # region special methods
+            # region special
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -543,7 +543,7 @@ class Logger(boostNode.paradigm.objectOrientation.Class):
 
     # region dynamic properties
 
-        # region public properties
+        # region public
 
     '''Defining all default components of the logger objects.'''
     default_level = 'critical',
@@ -558,9 +558,9 @@ class Logger(boostNode.paradigm.objectOrientation.Class):
 
     # region static methods
 
-        # region public methods
+        # region public
 
-            # region special methods
+            # region special
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
@@ -717,7 +717,7 @@ class Logger(boostNode.paradigm.objectOrientation.Class):
 
         # endregion
 
-        # region protected  methods
+        # region protected
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3

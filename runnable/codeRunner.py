@@ -66,7 +66,7 @@ class Run(
 
     # region constant properties
 
-        # region public properties
+        # region public
 
     '''
         Holds all command line interface argument informations.
@@ -163,11 +163,13 @@ class Run(
             'commands': {
                 'compile': 'pdflatex "<%code_file.path%>" && '
                            'bibtex "<%code_file.directory_path%>'
-                           '<%code_file.basename%>.aux" && '
+                           '<%code_file.basename%>.aux"; '
                            'pdflatex "<%code_file.path%>" && '
                            'pdflatex "<%code_file.path%>"',
-                # TODO use Platform().open
-                'run': 'xdg-open "<%code_file.basename%>.pdf"',
+                'run': ' || '.join(builtins.map(
+                    lambda name: name + ' "<%code_file.basename%>.pdf"',
+                    boostNode.extension.system.Platform.UNIX_OPEN_APPLICATIONS)
+                )
             },
             'code_manager': {
                 'file_path': 'Makefile',
@@ -179,7 +181,9 @@ class Run(
                 }
             },
             'extensions': ('tex',),
-            'delete_patterns': ('.*\.aux$', '.*\.log$', '.*\.toc$')
+            'delete_patterns': (
+                '^.+\.aux$', '^.+\.log$', '^.+\.toc$', '^.+\.out$',
+                '^.+\.blg$', '^.+\.bbl$', '^.+\.lol$')
         },
         'java': {
             'commands': {
@@ -197,7 +201,7 @@ class Run(
 
     # region dynamic properties
 
-        # region public properties
+        # region public
 
     '''
         Holds the current code file and there potentially presented code
@@ -207,7 +211,7 @@ class Run(
 
         # endregion
 
-        # region protected properties
+        # region protected
 
     '''
         Saves every properties for current code taken from
@@ -232,9 +236,9 @@ class Run(
 
     # region dynamic methods
 
-        # region public methods
+        # region public
 
-            # region special methods
+            # region special
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -266,7 +270,7 @@ class Run(
 
         # endregion
 
-        # region protected methods
+        # region protected
 
             # region runnable implementation
 
@@ -384,7 +388,7 @@ class Run(
             >>> Run(
             ...     code_file_path=__test_folder__ + 'runnable'
             ... )._run_commands() # doctest: +ELLIPSIS
-            Object of "Run" with detected path "...runnable.py".
+            Object of "Run" with detected path "...runnable...".
             >>> __test_buffer__.content # doctest: +ELLIPSIS
             '...Detected "python"...No "compile" necessary...'
         '''
@@ -617,7 +621,7 @@ class Run(
 ##
         '''
             Runs the given command by printing out what is running by
-            preseniting there results.
+            presenting there results.
 
             Examples:
 
@@ -632,7 +636,7 @@ class Run(
             command_name, command,
             result=boostNode.extension.system.Platform.run(
                 command=command.strip(), shell=True, error=False))
-        if return_code != 0:
+        if return_code != 0 and not __test_mode__:
             sys.exit(return_code)
         return self
 
@@ -641,7 +645,7 @@ class Run(
 ##     def _log_command_run(
 ##         self: boostNode.extension.type.Self, command_name: builtins.str,
 ##         command: builtins.str, result: builtins.dict
-##     ) -> boostNode.extension.type.Self:
+##     ) -> builtins.int:
     def _log_command_run(self, command_name, command, result):
 ##
         '''
@@ -673,7 +677,8 @@ class Run(
         boostNode.extension.output.Logger.change_all(
             terminator=terminator_save)
         boostNode.extension.output.Print(result['error_output'], end='')
-        __logger__.info(']')
+        if __logger__.isEnabledFor(logging.INFO):
+            boostNode.extension.output.Print(']', flush=True)
         __logger__.info('Return code: "%d".', result['return_code'])
         return result['return_code']
 

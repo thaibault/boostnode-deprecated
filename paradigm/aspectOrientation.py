@@ -87,7 +87,7 @@ class FunctionDecorator(builtins.object):
 
     # region constant properties
 
-        # region public properties
+        # region public
 
     '''
         This constant holds a list of python decorators which could be emulated
@@ -103,9 +103,9 @@ class FunctionDecorator(builtins.object):
 
     # region dynamic properties
 
-        # region public properties
+        # region public
 
-            # region special properties
+            # region special
 
     '''Necessary for providing python's native function properties.'''
     __func__ = None
@@ -117,7 +117,7 @@ class FunctionDecorator(builtins.object):
 
         # endregion
 
-        # region protected properties
+        # region protected
 
     '''Saves method types like static or class bounded.'''
     _method_type = None
@@ -128,9 +128,9 @@ class FunctionDecorator(builtins.object):
 
     # region dynamic methods
 
-        # region public methods
+        # region public
 
-            # region special methods
+            # region special
 
 ## python3.3
 ##     def __init__(
@@ -283,7 +283,7 @@ class FunctionDecorator(builtins.object):
 
         # endregion
 
-        # region protected methods
+        # region protected
 
 ## python3.3
 ##     def _determine_arguments(
@@ -312,7 +312,7 @@ class JointPointHandler(builtins.object):
 
     # region dynamic properties
 
-        # region public properties
+        # region public
 
     class_object = object = function = arguments = keywords = None
     argument_specifications = []
@@ -323,9 +323,9 @@ class JointPointHandler(builtins.object):
 
     # region dynamic methods
 
-        # region public methods
+        # region public
 
-            # region special methods
+            # region special
 
 ## python3.3
 ##     def __init__(
@@ -416,7 +416,7 @@ class ReturnAspect(builtins.object):
 
     # region dynamic properties
 
-        # region public properties
+        # region public
 
     class_object = object = function = arguments = keywords = return_value = \
         None
@@ -427,9 +427,9 @@ class ReturnAspect(builtins.object):
 
     # region dynamic methods
 
-        # region public methods
+        # region public
 
-            # region special methods
+            # region special
 
 ## python3.3
 ##     def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
@@ -468,7 +468,7 @@ class ReturnJointPoint(JointPointHandler, ReturnAspect):
 
     # region dynamic properties
 
-        # region public properties
+        # region public
 
     return_value = None
 
@@ -478,9 +478,9 @@ class ReturnJointPoint(JointPointHandler, ReturnAspect):
 
     # region dynamic methods
 
-        # region public methods
+        # region public
 
-            # region special methods
+            # region special
 
 ## python3.3
 ##     def __init__(
@@ -520,7 +520,7 @@ class Argument(inspect.Parameter):
 
     # region dynamic properties
 
-        # region public properties
+        # region public
 
     '''Holds some informations about arguments passing through the function.'''
     empty = default = annotation = kind = value = function = None
@@ -532,9 +532,9 @@ class Argument(inspect.Parameter):
 
     # region dynamic methods
 
-        # region public methods
+        # region public
 
-            # region special methods
+            # region special
 
 ## python3.3
 ##     def __init__(
@@ -633,9 +633,9 @@ class PointCut(ReturnAspect):
 
     # region dynamic methods
 
-        # region public methods
+        # region public
 
-            # region special methods
+            # region special
 
 ## python3.3
 ##     def __init__(
@@ -712,7 +712,7 @@ class PointCut(ReturnAspect):
 
         # endregion
 
-        # region protected methods
+        # region protected
 
 ## python3.3
 ##     def _handle_aspects(
@@ -757,7 +757,7 @@ class JointPoint(FunctionDecorator):
 
     # region dynamic methods
 
-        # region public methods
+        # region public
 
 ## python3.3
 ##     def get_wrapper_function(

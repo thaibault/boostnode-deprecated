@@ -95,7 +95,7 @@ class SocketFileObjectWrapper(socket._fileobject):
 
     # region dynamic properties
 
-        # region public properties
+        # region public
 
     '''Indicates and saves the first line read of the socket.'''
     first_read_line = False
@@ -106,9 +106,9 @@ class SocketFileObjectWrapper(socket._fileobject):
 
     # region dynamic methods
 
-        # region public methods
+        # region public
 
-            # region special methods
+            # region special
 
     @boostNode.paradigm.aspectOrientation.JointPoint
     def __init__(self, *arguments, **keywords):
@@ -162,7 +162,7 @@ class MultiProcessingHTTPServer(
 
     # region dynamic properties
 
-        # region public properties
+        # region public
 
     '''
         This attribute saves the modified read file socket to apply it in the
@@ -176,9 +176,9 @@ class MultiProcessingHTTPServer(
 
     # region dynamic methods
 
-        # region public methods
+        # region public
 
-            # region special methods
+            # region special
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -362,7 +362,7 @@ class Web(
 
     # region constant properties
 
-        # region public properties
+        # region public
 
     '''
         Holds all command line interface argument informations.
@@ -555,7 +555,7 @@ class Web(
 
     # region dynamic properties
 
-        # region public properties
+        # region public
 
     '''Saves server runtime properties.'''
     root = port = thread_buffer = service = None
@@ -626,7 +626,7 @@ class Web(
 
         # endregion
 
-        # region protected properties
+        # region protected
 
     '''
         Holds a file object referencing a "<DOMAIN_NAME>.pem" file needed
@@ -640,9 +640,9 @@ class Web(
 
     # region dynamic methods
 
-        # region public methods
+        # region public
 
-            # region special methods
+            # region special
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -715,7 +715,7 @@ class Web(
 
         # endregion
 
-        # region protected methods.
+        # region protected
 
             # region runnable implementation
 
@@ -1025,7 +1025,7 @@ class CGIHTTPRequestHandler(
 
     # region dynamic properties
 
-        # region public properties
+        # region public
 
     '''Properties defined by incoming request.'''
     request_uri = ''
@@ -1064,7 +1064,7 @@ class CGIHTTPRequestHandler(
 
         # endregion
 
-        # region protected properties
+        # region protected
 
     '''
         Points to location which is authoritative to be reachable from
@@ -1078,9 +1078,9 @@ class CGIHTTPRequestHandler(
 
     # region dynamic  methods
 
-        # region public methods
+        # region public
 
-            # region special methods
+            # region special
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -1138,7 +1138,7 @@ class CGIHTTPRequestHandler(
 
     # region static methods
 
-        # region public methods
+        # region public
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
@@ -1187,9 +1187,9 @@ class CGIHTTPRequestHandler(
 
     # region dynamic  methods
 
-        # region public methods
+        # region public
 
-            # region event methods
+            # region event
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -1334,9 +1334,9 @@ class CGIHTTPRequestHandler(
 
         # endregion
 
-        # region protected methods
+        # region protected
 
-            # region boolean methods
+            # region boolean
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3

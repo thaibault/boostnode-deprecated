@@ -58,7 +58,7 @@ class Reflector(
 
     # region constant properties
 
-        # region public properties
+        # region public
 
     COMMAND_LINE_ARGUMENTS = (
         {'arguments': ('source_location',),
@@ -175,7 +175,7 @@ class Reflector(
 
     # region dynamic properties
 
-        # region protected properties
+        # region protected
 
     '''Defines source and target objects for there locations.'''
     _source_location = _target_location = None
@@ -228,9 +228,9 @@ class Reflector(
 
     # region dynamic methods
 
-        # region public methods
+        # region public
 
-            # region special methods
+            # region special
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -297,9 +297,9 @@ class Reflector(
 
     # region static methods
 
-        # region public methods
+        # region public
 
-            # region boolean methods
+            # region boolean
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
@@ -343,9 +343,9 @@ class Reflector(
 
     # region dynamic methods
 
-        # region public methods
+        # region public
 
-            # region getter methods
+            # region getter
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -758,7 +758,7 @@ class Reflector(
 
         # endregion
 
-        # region protected methods
+        # region protected
 
             # region runnable implementation
 
@@ -1098,7 +1098,7 @@ class Reflector(
                 native_symbolic_link_option=native_symbolic_link_option))
         return self
 
-            # region core concern methods
+            # region core concern
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3

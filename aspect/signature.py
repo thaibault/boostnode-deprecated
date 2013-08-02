@@ -95,7 +95,7 @@ class CheckObject(builtins.object):
 
     # region dynamic properties
 
-        # region public properties
+        # region public
 
     '''
         Holds informations about the function and their bounding that is to be
@@ -105,7 +105,7 @@ class CheckObject(builtins.object):
 
         # endregion
 
-        # region protected properties
+        # region protected
 
     '''
         Saves informations in which way the give method is used. It could by
@@ -119,9 +119,9 @@ class CheckObject(builtins.object):
 
     # region static methods
 
-        # region public methods
+        # region public
 
-            # region special methods
+            # region special
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
@@ -146,9 +146,9 @@ class CheckObject(builtins.object):
 
         # endregion
 
-        # region protected methods
+        # region protected
 
-            # region boolean functions
+            # region boolean
 
     @builtins.classmethod
 ## python3.3
@@ -231,9 +231,9 @@ class CheckObject(builtins.object):
 
     # region dynamic methods
 
-        # region public methods
+        # region public
 
-            # region special methods
+            # region special
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -274,7 +274,7 @@ class CheckObject(builtins.object):
 
             # endregion
 
-            # region getter methods
+            # region getter
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -318,7 +318,7 @@ class CheckObject(builtins.object):
 
         # endregion
 
-        # region protected methods
+        # region protected
 
 ## python3.3
 ##     def _handle_multiple_types(
@@ -1024,7 +1024,7 @@ class Check(boostNode.paradigm.aspectOrientation.FunctionDecorator):
 
     # region dynamic methods
 
-        # region public methods
+        # region public
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -1103,7 +1103,7 @@ class CheckArguments(
 
     # region dynamic methods
 
-        # region public methods
+        # region public
 
 ## python3.3
 ##     def aspect(
@@ -1138,7 +1138,7 @@ class CheckArguments(
 
         # endregion
 
-        # region protected methods
+        # region protected
 
 ## python3.3
 ##     def _check_argument_cases(
@@ -1202,7 +1202,7 @@ class CheckReturnValue(
 
     # region dynamic methods
 
-        # region public methods
+        # region public
 
 ## python3.3
 ##     def aspect(self: boostNode.extension.type.Self) -> builtins.object:

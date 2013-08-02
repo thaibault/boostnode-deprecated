@@ -81,7 +81,7 @@ class Browser(
 
     # region constant properties
 
-        # region public properties
+        # region public
 
     '''
         Holds all command line interface argument informations.
@@ -178,7 +178,7 @@ class Browser(
 
     # region dynamic properties
 
-        # region public properties
+        # region public
 
     '''Dynamic runtime objects for constructing a simple web window.'''
     window = scroller = vbox = progress_bar = browser = None
@@ -191,7 +191,7 @@ class Browser(
 
         # endregion
 
-        # region protected properties
+        # region protected
 
     '''If set gtk will be preferred to show webview otherwise qt.'''
     _default_gui_toolkit = ''
@@ -222,9 +222,9 @@ class Browser(
 
     # region dynamic methods
 
-        # region public methods
+        # region public
 
-            # region special methods
+            # region special
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -251,7 +251,7 @@ class Browser(
 
             # endregion
 
-            # region getter methods
+            # region getter
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -277,7 +277,7 @@ class Browser(
 
             # endregion
 
-            # region setter methods
+            # region setter
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -343,7 +343,7 @@ class Browser(
 
         # endregion
 
-        # region protected methods
+        # region protected
 
             # region runnable implementation
 
@@ -566,9 +566,9 @@ class Browser(
             self._close_gtk_windows_lock.release()
         return not self._gtk_close
 
-                # region event methods
+                # region event
 
-                    # region webkit event methods
+                    # region webkit event
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3

@@ -67,13 +67,13 @@ class Object(boostNode.paradigm.objectOrientation.Class):
 
     # region dynamic properties
 
-        # region public properties
+        # region public
 
     object = None
 
         # endregion
 
-        # region protected properties
+        # region protected
 
     _object_copy = {}
 
@@ -83,9 +83,9 @@ class Object(boostNode.paradigm.objectOrientation.Class):
 
     # region dynamic methods
 
-        # region public methods
+        # region public
 
-            # region special methods
+            # region special
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -268,7 +268,7 @@ class String(Object, builtins.str):
 
     # region constant properties
 
-        # region public properties
+        # region public
 
     '''
         Defines generally important encodings. Which should be tried at first.
@@ -375,14 +375,14 @@ class String(Object, builtins.str):
 
     # region dynamic properties
 
-        # region public properties
+        # region public
 
     '''The main string property. It saves the current string.'''
     content = ''
 
         # endregion
 
-        # region protected properties
+        # region protected
 
     '''Saves the current line for the "readline()" method.'''
     _current_line_number = 0
@@ -393,9 +393,9 @@ class String(Object, builtins.str):
 
     # region dynamic methods
 
-        # region public methods
+        # region public
 
-            # region special methods
+            # region special
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -514,7 +514,7 @@ class String(Object, builtins.str):
 
     # region static methods
 
-        # region public methods
+        # region public
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
@@ -559,9 +559,9 @@ class String(Object, builtins.str):
 
     # region dynamic methods
 
-        # region public methods
+        # region public
 
-            # region validation methods.
+            # region validation
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -1031,9 +1031,9 @@ class String(Object, builtins.str):
 
         # endregion
 
-        # region protected methods
+        # region protected
 
-            # region find python code end brackted helper methods
+            # region find python code end bracket helper
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -1125,7 +1125,7 @@ class Dictionary(Object, builtins.dict):
 
     # region dynamic properties
 
-        # region public properties
+        # region public
 
     '''The main property. It saves the current dictionary.'''
     content = {}
@@ -1136,9 +1136,9 @@ class Dictionary(Object, builtins.dict):
 
     # region dynamic methods
 
-        # region public methods
+        # region public
 
-            # region special methods
+            # region special
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -1215,7 +1215,7 @@ class Module(Object):
 
     # region constant properties
 
-         # region public properties
+         # region public
 
 ## python3.3
 ##     HIDDEN_BUILTIN_CALLABLES = ()
@@ -1232,7 +1232,7 @@ class Module(Object):
 
     # region dynamic properties
 
-        # region protected properties
+        # region protected
 
     _context_path = _name = _package_name = _file_path = ''
 
@@ -1242,9 +1242,9 @@ class Module(Object):
 
     # region static methods
 
-        # region public methods
+        # region public
 
-            # region special methods
+            # region special
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
@@ -1267,7 +1267,7 @@ class Module(Object):
 
             # endregion
 
-            # region getter methods
+            # region getter
 
     @builtins.classmethod
 ## python3.3
@@ -1432,7 +1432,7 @@ class Module(Object):
 
             # endregion
 
-            # region boolean methods
+            # region boolean
 
     @builtins.classmethod
 ## python3.3
@@ -1726,7 +1726,7 @@ class Module(Object):
 
         # endregion
 
-        # region protected methods
+        # region protected
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
