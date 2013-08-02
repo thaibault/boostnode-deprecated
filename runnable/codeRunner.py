@@ -129,7 +129,7 @@ class Run(
                     'all': 'make all'
                 }
             },
-            'extensions': ('cpp', 'c'),
+            'extensions': ('cpp', 'c', 'cc'),
             'delete_patterns': ('.*\.o$', '.*Main$', '.*Test$')
         },
         'bash': {
@@ -166,6 +166,7 @@ class Run(
                            '<%code_file.basename%>.aux" && '
                            'pdflatex "<%code_file.path%>" && '
                            'pdflatex "<%code_file.path%>"',
+                # TODO use Platform().open
                 'run': 'xdg-open "<%code_file.basename%>.pdf"',
             },
             'code_manager': {
@@ -627,10 +628,13 @@ class Run(
             >>> __test_buffer__.content # doctest: +SKIP
             'List with "ls". output [...codeRunner...]'
         '''
-        return self._log_command_run(
+        return_code = self._log_command_run(
             command_name, command,
             result=boostNode.extension.system.Platform.run(
                 command=command.strip(), shell=True, error=False))
+        if return_code != 0:
+            sys.exit(return_code)
+        return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -671,7 +675,7 @@ class Run(
         boostNode.extension.output.Print(result['error_output'], end='')
         __logger__.info(']')
         __logger__.info('Return code: "%d".', result['return_code'])
-        return self
+        return result['return_code']
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3

@@ -3928,7 +3928,8 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
             >>> handler = Handler(location=__file_path__).make_portable_link(
             ...     target, force=True)
-            >>> target.read_portable_link(as_object=True) == Handler(__file_path__)
+            >>> target.read_portable_link(as_object=True) == Handler(
+            ...     __file_path__)
             True
 
             >>> target.remove_file()
