@@ -558,6 +558,10 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             True
         '''
         if self.is_directory():
+            '''
+                NOTE: We have to call "list()" explicit to avoid an endless
+                recursion.
+            '''
             return builtins.len(builtins.list(self.list()))
         elif self.is_file():
             return 1
@@ -2949,6 +2953,13 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             [...]
             >>> not_accessible_file.remove_file()
             True
+
+            >>> if boostNode.extension.system.Platform(
+            ...     ).operating_system == 'windows':
+            ...     len(Handler('/')) > 0
+            ... else:
+            ...     True
+            True
         '''
         if self:
             if(self._path == '\\' and
@@ -2956,9 +2967,9 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
                'windows'):
                 for letter_number in builtins.range(
                         builtins.ord('A'), builtins.ord('Z') + 1):
-                    path = builtins.chr(letter_number) + ':\\\\'
+                    path = builtins.chr(letter_number) + ':\\'
                     if os.path.exists(path):
-                        yield self.__class__(location=path, must_exist=False)
+                        yield self.__class__(location=path)
             else:
                 try:
                     for file_name in os.listdir(
@@ -3660,8 +3671,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ...     ).operating_system == 'windows':
             ...     True
             ... else:
-            ...     created = source.make_symbolic_link(
-            ...         target=target, force=True)
+            ...     created = source.make_symbolic_link(target, force=True)
             ...     target.read_symbolic_link() == __file_path__
             True
 
@@ -3682,7 +3692,8 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ...     ).operating_system == 'windows':
             ...     target
             ... else:
-            ...     created = Handler('../').make_symbolic_link(target)
+            ...     created = Handler('../').make_symbolic_link(
+            ...         target, relative=True)
             ...     target.read_symbolic_link(
             ...         as_object=True
             ...     ) # doctest: +ELLIPSIS
@@ -4560,7 +4571,8 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 ##         self: boostNode.extension.type.Self, symbolic: builtins.bool,
 ##         target: boostNode.extension.type.SelfClassObject,
 ##         relative: (builtins.object, builtins.type),
-##         *arguments: builtins.object, **keywords: builtins.object
+##         *arguments: builtins.object, force_windows_behavior=False,
+##         **keywords: builtins.object
 ##     ) -> builtins.bool:
     def _make_platform_dependent_link(
         self, symbolic, target, relative, *arguments, **keywords
@@ -4580,8 +4592,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ...     True
             ... else:
             ...     Handler()._make_platform_dependent_link(
-            ...         symbolic=True, target=handler, relative=False
-            ...     ) # doctest: +ELLIPSIS
+            ...         symbolic=True, target=handler, relative=False)
             True
 
             >>> if boostNode.extension.system.Platform(
@@ -4596,10 +4607,28 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ...     True
             ... else:
             ...     Handler()._make_platform_dependent_link(
-            ...         symbolic=True, target=handler, relative=True
-            ...     ) # doctest: +ELLIPSIS
+            ...         symbolic=True, target=handler, relative=True)
+            True
+
+            >>> handler = Handler(
+            ...     __test_folder__ + '_make_platform_dependent_link_windows',
+            ...     must_exist=False)
+            >>> if boostNode.extension.system.Platform(
+            ...     ).operating_system == 'windows':
+            ...     True
+            ... else:
+            ...     Handler()._make_platform_dependent_link(
+            ...         symbolic=True, target=handler, relative=True,
+            ...         force_windows_behavior=True)
             True
         '''
+## python3.3
+##         pass
+        force_windows_behavior, keywords = \
+            boostNode.extension.native.Dictionary(
+                content=keywords
+            ).pop(name='force_windows_behavior', default_value=False)
+##
         target_path = target._path
         if target._path.endswith(os.sep):
             target_path = target._path[:-builtins.len(os.sep)]
@@ -4610,7 +4639,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             boostNode.extension.system.Platform().operating_system
         if symbolic:
             try:
-                if operating_system == 'windows':
+                if operating_system == 'windows' or force_windows_behavior:
 ## python3.3
 ##                     os.symlink(
 ##                         source_path, target_path,
@@ -4620,9 +4649,9 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
                     create_symbolic_link.argtypes = (
                         ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_uint32)
                     create_symbolic_link.restype = ctypes.c_ubyte
-                    if(create_symbolic_link(
-                       target_path, source_path,
-                       (1 if self.is_directory() else 0)) == 0):
+                    if create_symbolic_link(
+                        target_path, source_path, self.is_directory()
+                    ) == 0:
                         raise ctypes.WinError()
 ##
                 else:
