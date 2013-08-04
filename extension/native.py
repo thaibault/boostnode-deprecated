@@ -537,7 +537,7 @@ class String(Object, builtins.str):
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def __bool__(self: boostNode.extension.type.Self) -> builtins.bool:
-    def __nonezero__(self):
+    def __nonzero__(self):
 ##
         '''
             Triggers if the current object should be interpreted as
@@ -820,6 +820,14 @@ class String(Object, builtins.str):
         '''
             Acts like pythons native "builtins.str.capitalize()" method but
             preserves camel case characters.
+
+            Examples:
+
+            >>> String().camel_case_capitalize().content
+            ''
+
+            >>> String('haNs').camel_case_capitalize().content
+            'HaNs'
         '''
         if self.content:
             self.content = self.content[0].upper() + self.content[1:]
@@ -1237,6 +1245,10 @@ class Dictionary(Object, builtins.dict):
 ##
         '''
             Invokes if this object should describe itself by a string.
+
+            Examples:
+
+            >>> repr(Dictionary({'a': 'hans'}))
         '''
         return 'Object of "{class_name}" ({content}).'.format(
             class_name=self.__class__.__name__,
