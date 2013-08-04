@@ -197,7 +197,7 @@ Structure of dependencies
     9. boostNode.*
 
     This means that a module in level "i" could only import a full module
-    in its header in level "j" if "j < i" is valid.
+    in its header in level "j" if "j < i" holds.
     If your try to import a module from a higher level ("j < i") you could
     try to use the "from ... import ..." statement in the needed context
     dependent scope or your can use the "depdent" module to define

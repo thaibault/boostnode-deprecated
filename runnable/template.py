@@ -362,7 +362,7 @@ class Parser(
         if not self._indent and self.content:
             self._indent = self._template_context_default_indent
             match = re.compile(
-                '^<% __indent__ = ([1-9][0-9]*)(;|\n)?.*?$'
+                '^<% *__indent__ *= *([1-9][0-9]*)(;|\n)?.*?$'
             ).match(boostNode.extension.native.String(self.content).readline())
             if match:
                 self._indent = builtins.int(match.group(1))
@@ -595,7 +595,8 @@ class Parser(
         '''
         self._number_of_rendered_content_lines = builtins.len(
             boostNode.extension.native.String(
-                self.rendered_content).readlines())
+                self.rendered_content
+            ).readlines())
 
         @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3

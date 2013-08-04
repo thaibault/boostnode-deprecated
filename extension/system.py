@@ -209,7 +209,7 @@ class Runnable(builtins.object):
         '''
         raise boostNode.extension.native.Object\
             .determine_abstract_method_exception(
-                abstract_class_name=Runnable.__name__)
+                abstract_class_name=Runnable.__name__, class_name=cls.__name__)
         return cls
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
@@ -225,7 +225,7 @@ class Runnable(builtins.object):
         '''
         raise boostNode.extension.native.Object\
             .determine_abstract_method_exception(
-                abstract_class_name=Runnable.__name__)
+                abstract_class_name=Runnable.__name__, class_name=cls.__name__)
         return cls
 
             # endregion

@@ -398,12 +398,13 @@ class JointPointHandler(builtins.object):
     def aspect(self):
 ##
         '''
-            This method should be overridden to provide the essential aspect
+            This method should be overwritten to provide the essential aspect
             for handled function call.
         '''
         raise boostNode.extension.native.Object\
             .determine_abstract_method_exception(
-                abstract_class_name=JointPointHandler.__name__)
+                abstract_class_name=JointPointHandler.__name__,
+                class_name=cls.__name__)
 
         # endregion
 

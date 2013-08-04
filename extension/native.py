@@ -61,20 +61,20 @@ import boostNode.paradigm.objectOrientation
 # region classes
 
 class Object(boostNode.paradigm.objectOrientation.Class):
-    '''
-        This class extends all native python classes.
-    '''
+    '''This class extends all native python classes.'''
 
     # region dynamic properties
 
         # region public
 
+    '''The object itself.'''
     object = None
 
         # endregion
 
         # region protected
 
+    '''Saves a copy of currently saved object.'''
     _object_copy = {}
 
         # endregion
@@ -193,6 +193,7 @@ class Object(boostNode.paradigm.objectOrientation.Class):
 
             >>> class A:
             ...     hans = 'A'
+            ...     __special__ = 'B'
             >>> object = Object(A())
             >>> object_copy = object.copy()
             >>> object.object.hans = 'B'
@@ -202,8 +203,7 @@ class Object(boostNode.paradigm.objectOrientation.Class):
             'A'
         '''
         for attribute, value in self._object_copy.items():
-            if not (attribute.startswith('__') and attribute.endswith('__')):
-                builtins.setattr(self.object, attribute, value)
+            builtins.setattr(self.object, attribute, value)
         return self.object
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -213,6 +213,23 @@ class Object(boostNode.paradigm.objectOrientation.Class):
 ##
         '''
             Determines if given data is binary.
+
+            Examples:
+
+            >>> Object('A').is_binary()
+            False
+
+            >>> if sys.version_info.major < 3:
+            ...     Object(chr(1)).is_binary()
+            ... else:
+            ...     Object(bytes('A', 'utf_8')).is_binary()
+            True
+
+            >>> if sys.version_info.major < 3:
+            ...     Object(unicode('hans')).is_binary()
+            ... else:
+            ...     Object('hans').is_binary()
+            False
         '''
         # NOTE: This is a dirty workaround to handle python2.7 lack of
         # differentiation between "string" and "bytes" objects.
@@ -237,24 +254,54 @@ class Object(boostNode.paradigm.objectOrientation.Class):
 ## python3.3
 ##     def determine_abstract_method_exception(
 ##         cls: boostNode.extension.type.SelfClass,
-##         abstract_class_name: builtins.str
+##         abstract_class_name: builtins.str, class_name=None
 ##     ) -> builtins.NotImplementedError:
-    def determine_abstract_method_exception(cls, abstract_class_name):
+    def determine_abstract_method_exception(
+        cls, abstract_class_name, class_name=None
+    ):
 ##
         '''
             Generates a suitable exception for raising if a method is called
             initially indented to be overwritten.
+
+            Examples:
+
+            >>> class A(Object):
+            ...     @classmethod
+            ...     def abstract_method(cls):
+            ...         raise cls.determine_abstract_method_exception(
+            ...             A.__name__)
+            >>> class B(A):
+            ...     pass
+            >>> B.abstract_method() # doctest: +ELLIPSIS
+            Traceback (most recent call last):
+            ...
+            NotImplementedError: Method "abstract_method" wasn't implemented...
+
+            >>> class A:
+            ...     @classmethod
+            ...     def abstract_method(cls):
+            ...         raise Object.determine_abstract_method_exception(
+            ...             A.__name__, cls.__name__)
+            >>> class B(A):
+            ...     pass
+            >>> B.abstract_method() # doctest: +ELLIPSIS
+            Traceback (most recent call last):
+            ...
+            NotImplementedError: Method "abstract_method" wasn't implemented...
         '''
         '''
-            Note: fetch third frame "inspect.stack()[2]"
+            NOTE: fetch third frame "inspect.stack()[2]"
                 0: this
                 1: Decorator wrapper
                 2: caller
         '''
+        if class_name is None:
+            class_name = cls.__name__
         return builtins.NotImplementedError(
             'Method "{name}" wasn\'t implemented by "{class_name}" and is '
             'necessary for abstract class "{abstract_class}".'.format(
-                name=inspect.stack()[2][3], class_name=cls.__name__,
+                name=inspect.stack()[2][3], class_name=class_name,
                 abstract_class=abstract_class_name))
 
     # endregion
@@ -264,6 +311,9 @@ class String(Object, builtins.str):
     '''
         The string class inherits besides the interface class all pythons
         native string methods.
+        NOTE: This class has to implement inherited special methods like
+        "__str__()" and "__len__()" because they have to use the "content"
+        property which could be manipulated by not inherited methods.
     '''
 
     # region constant properties
@@ -610,6 +660,11 @@ class String(Object, builtins.str):
 ##
         '''
             Validates current string for using as snippet in a html document.
+
+            Examples:
+
+            >>> String('<html></html>').validate_html().content
+            '&lt;html&gt;&lt;/html&gt;'
         '''
         return self.replace(self.SPECIAL_HTML_SEQUENCES)
 
@@ -639,6 +694,9 @@ class String(Object, builtins.str):
             ...     ('[', ']', '(', ')', '^', '$', '*', '+', '.', '{')
             ... ).content
             '\\\\-\\\\\\\\[]()^$*+.{\\\\}\\\\-'
+
+            >>> String('-').validate_regex(('\\\\',)).content
+            '\\\\-'
         '''
         '''The escape sequence must also be escaped; but at first.'''
         if not '\\' in exclude_symbols:
@@ -719,8 +777,22 @@ class String(Object, builtins.str):
     def determine_encoding(self):
 ##
         '''
-            Gueses the encoding used in current string. Encodings are checked
+            Guesses the encoding used in current string. Encodings are checked
             in alphabetic order.
+
+            Examples:
+
+            >>> String().determine_encoding() == String.IMPORTANT_ENCODINGS[0]
+            True
+
+            >>> String('hans').determine_encoding(
+            ...     ) == String.IMPORTANT_ENCODINGS[0]
+            True
+
+
+            >>> String('hans').determine_encoding(
+            ...     ) == String.IMPORTANT_ENCODINGS[0]
+            True
         '''
         if self.content:
             for encoding in builtins.list(
@@ -730,6 +802,7 @@ class String(Object, builtins.str):
                 builtins.set(encodings.aliases.aliases.values())
             )):
                 try:
+                    # TODO python3 hasn't a decode method here!
                     self.content.decode(encoding)
                 except builtins.UnicodeDecodeError:
                     pass

@@ -129,18 +129,19 @@ class CheckObject(builtins.object):
     def __init__(cls):
 ##
         '''
-            If this method wasn't be overwridden an exception is raised.
+            If this method wasn't be overwritten an exception is raised.
 
             Examples:
 
             >>> CheckObject() # doctest: +ELLIPSIS
             Traceback (most recent call last):
             ...
-            NotImplementedError: Method "__init__" wasn't implemented by "Ob...
+            NotImplementedError: Method "__init__" wasn't implemented by "...
         '''
         raise boostNode.extension.native.Object\
             .determine_abstract_method_exception(
-                abstract_class_name=CheckObject.__name__)
+                abstract_class_name=CheckObject.__name__,
+                class_name=cls.__name__)
 
             # endregion
 
