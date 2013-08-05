@@ -636,7 +636,7 @@ class Parser(
     def _run(self):
 ##
         '''
-            Entry point for command line call of this progam.
+            Entry point for command line call of this program.
             Loads the given template. If it is given by the command line it
             will be interpreted directly.
 
