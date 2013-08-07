@@ -777,8 +777,8 @@ class String(Object, builtins.str):
     def determine_encoding(self):
 ##
         '''
-            Guesses the encoding used in current string. Encodings are checked
-            in alphabetic order.
+            Guesses the encoding used in current string (bytes). Encodings are
+            checked in alphabetic order.
 
             Examples:
 
@@ -793,8 +793,12 @@ class String(Object, builtins.str):
             >>> String('hans').determine_encoding(
             ...     ) == String.IMPORTANT_ENCODINGS[0]
             True
+
+            >>> String(b'hans').determine_encoding(
+            ...     ) == String.IMPORTANT_ENCODINGS[0]
+            True
         '''
-        if self.content:
+        if self.content and builtins.isinstance(self.content, builtins.bytes):
             for encoding in builtins.list(
                 self.IMPORTANT_ENCODINGS
             ) + builtins.sorted(builtins.filter(
@@ -802,7 +806,6 @@ class String(Object, builtins.str):
                 builtins.set(encodings.aliases.aliases.values())
             )):
                 try:
-                    # TODO python3 hasn't a decode method here!
                     self.content.decode(encoding)
                 except builtins.UnicodeDecodeError:
                     pass
