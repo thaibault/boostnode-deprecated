@@ -1449,7 +1449,7 @@ class CommandLine(builtins.object):
         '''
             Provides a command-line interface like a makefile.
             Supported features are linting, generate documentation, testing and
-            removing temporay files.
+            removing temporary files.
 
             Examples:
 

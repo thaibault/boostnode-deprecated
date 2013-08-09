@@ -36,6 +36,7 @@ __version__ = '1.0'
 ## import collections
 import __builtin__ as builtins
 ##
+import copy
 import encodings
 import inspect
 import os
@@ -166,8 +167,8 @@ class Object(boostNode.paradigm.objectOrientation.Class):
         self._object_copy = {}
         for attribute in builtins.dir(self.object):
             if not (attribute.startswith('__') and attribute.endswith('__')):
-                self._object_copy[attribute] = builtins.getattr(
-                    self.object, attribute)
+                self._object_copy[attribute] = copy.copy(builtins.getattr(
+                    self.object, attribute))
         return self._object_copy
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -1622,6 +1623,11 @@ class Module(Object):
 ##
         '''
             Checks if given location is pointed to a python package.
+
+            Examples:
+
+            >>> Module.is_package(__file_path__)
+            False
         '''
         if os.path.isdir(path):
             for file_name in os.listdir(path):
@@ -1665,6 +1671,9 @@ class Module(Object):
 
             >>> Module.determine_caller(['A'], False)
             False
+
+            >>> Module.determine_caller(['AError', 'A'], None)
+            'A'
         '''
         if not (caller or caller is False):
             for object in callable_objects:
@@ -1702,6 +1711,13 @@ class Module(Object):
             ...     def b():
             ...         pass
             ...     def __A__():
+            ...         pass
+            >>> Module.get_defined_callables(A, only_module_level=False)
+            ['b']
+
+            >>> class A:
+            ...     @boostNode.paradigm.aspectOrientation.JointPoint
+            ...     def b():
             ...         pass
             >>> Module.get_defined_callables(A, only_module_level=False)
             ['b']
@@ -1753,8 +1769,15 @@ class Module(Object):
 
             >>> Module.execute_program_for_modules(
             ...     'program', 'not_existing', boostNode.extension.__all__,
-            ...     error=False) # doctest: +ELLIPSIS
+            ...     error=False
+            ... ) # doctest: +ELLIPSIS
             ('', ...)
+
+            >>> Module.execute_program_for_modules(
+            ...     'program', 'ls', boostNode.extension.__all__,
+            ...     error=False
+            ... ) # doctest: +ELLIPSIS
+            (..., ...)
         '''
         results = []
         for module in modules:
@@ -1807,15 +1830,16 @@ class Module(Object):
             <class 'boostNode.extension.native.NativeError'>
             >>> __module_name__
             'native'
+            >>> raise __exception__(
+            ...     '%s', 'hans'
+            ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
+            Traceback (most recent call last):
+            ...
+            NativeError: hans
 
             >>> Module.extend(
             ...     __name__, module=sys.modules['doctest']
             ... ) # doctest: +ELLIPSIS
-            {...'name': 'doctest'...}
-
-            >>> Module.extend(
-            ...     __name__, module=sys.modules['doctest'],
-            ...     frame=inspect.currentframe()) # doctest: +SKIP
             {...'name': 'doctest'...}
         '''
         if module is None:
@@ -1844,8 +1868,8 @@ class Module(Object):
 ## python3.3
 ##     def default(
 ##         cls: boostNode.extension.type.SelfClass, name: builtins.str,
-##         frame: types.FrameType, default_caller=None,
-##         caller_arguments=(), caller_keywords={}
+##         frame: types.FrameType, default_caller=None, caller_arguments=(),
+##         caller_keywords={}
 ##     ) -> boostNode.extension.type.SelfClass:
     def default(
         cls, name, frame, default_caller=None, caller_arguments=(),
@@ -1859,12 +1883,10 @@ class Module(Object):
 
             Examples:
 
-            >>> Module.default(
-            ...     __name__, inspect.currentframe()) # doctest: +SKIP
-
-            >>> Module.default(
-            ...     __name__, inspect.currentframe(), default_caller='Main'
-            ... ) # doctest: +SKIP
+            >>> command_line_arguments_save = copy.copy(sys.argv)
+            >>> Module.default(__name__, inspect.currentframe())
+            <class '__main__.Module'>
+            >>> sys.argv = command_line_arguments_save
         '''
         boostNode.extension.system.CommandLine.generic_module_interface(
             module=cls.extend(name, frame),
@@ -1891,12 +1913,13 @@ class Module(Object):
             Examples:
 
             >>> Module.default_package(
-            ...     'not_existing', inspect.currentframe()) # doctest: +SKIP
-            False
+            ...     'not_existing', inspect.currentframe())
+            Traceback (most recent call last):
+            ...
+            KeyError: 'not_existing'
 
-            >>> Module.default_package(
-            ...     'doctest', inspect.currentframe()) # doctest: +SKIP
-            (True, Namespace(), '...')
+            >>> Module.default_package('doctest', inspect.currentframe())
+            False
         '''
         cls.extend(name, frame)
         return boostNode.extension.system.CommandLine\
