@@ -470,7 +470,10 @@ class String(Object, builtins.str):
         '''
         if content is None:
             content = ''
-        self.content = builtins.str(content)
+        if(not builtins.isinstance(content, (builtins.str, builtins.bytes)) or
+           builtins.isinstance(content, String)):
+            content = builtins.str(content)
+        self.content = content
         '''
             Take this method type by the abstract class via introspection.
         '''
@@ -797,6 +800,14 @@ class String(Object, builtins.str):
             >>> String(b'hans').determine_encoding(
             ...     ) == String.IMPORTANT_ENCODINGS[0]
             True
+
+            >>> if sys.version_info.major < 3:
+            ...     String(u'ä'.encode('latin1')).determine_encoding(
+            ...         ) == String.IMPORTANT_ENCODINGS[0]
+            ... else:
+            ...     String('ä'.encode('latin1')).determine_encoding(
+            ...         ) == String.IMPORTANT_ENCODINGS[0]
+            False
         '''
         if self.content and builtins.isinstance(self.content, builtins.bytes):
             for encoding in builtins.list(
@@ -844,8 +855,19 @@ class String(Object, builtins.str):
     def find_python_code_end_bracket(self):
 ##
         '''
-            Searches for the next not escaped closeing end bracked in current
+            Searches for the next not escaped closing end clamped in current
             string interpreted as python code.
+
+            Examples:
+
+            >>> string = 'hans () peter)'
+            >>> String(
+            ...     'hans () peter)'
+            ... ).find_python_code_end_bracket() == string.rfind(')')
+            True
+
+            >>> String().find_python_code_end_bracket()
+            False
         '''
         brackets = skip = index = 0
         quote = False
@@ -862,7 +884,7 @@ class String(Object, builtins.str):
 ##     def replace(
 ##         self: boostNode.extension.type.Self,
 ##         search: (builtins.str, builtins.dict),
-##         replace='', *arguments, **keywords
+##         replace='', *arguments: builtins.object, **keywords: builtins.object
 ##     ) -> boostNode.extension.type.Self:
     def replace(self, search, replace='', *arguments, **keywords):
 ##
@@ -903,8 +925,9 @@ class String(Object, builtins.str):
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def sub(
-##         self: boostNode.extension.type.Self, search: builtins.str,
-##         replace='', *arguments, **keywords
+##         self: boostNode.extension.type.Self,
+##         search: (builtins.str, builtins.dict), replace='', *arguments,
+##         **keywords: builtins.object
 ##     ) -> boostNode.extension.type.Self:
     def sub(self, search, replace='', *arguments, **keywords):
 ##
@@ -960,32 +983,35 @@ class String(Object, builtins.str):
 
             >>> String('hans').sub('hans', 'peter').content
             'peter'
+
+            >>> String('hans').sub({'hans': 'peter'}).content
+            'peter'
         '''
         if builtins.isinstance(search, builtins.dict):
             for search_string, replacement in search.items():
-                '''
-                    Take this method name via introspection.
-                '''
+                '''Take this method name via introspection.'''
                 self.content = builtins.getattr(
-                    self, inspect.stack()[0][3]
+                    re.compile(builtins.str(search_string)),
+                    inspect.stack()[0][3]
                 )(
-                    builtins.str(search_string), builtins.str(replacement),
-                    *arguments, **keywords)
+                    builtins.str(replacement), self.content, *arguments,
+                    **keywords)
         else:
             '''
-                Take this method name from regex object via introspection.
+                Take this method name from regular expression object via
+                introspection.
             '''
             self.content = builtins.getattr(
-                re.compile(builtins.str(search)),
-                inspect.stack()[0][3]
+                re.compile(builtins.str(search)), inspect.stack()[0][3]
             )(builtins.str(replace), self.content, *arguments, **keywords)
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def subn(
-##         self: boostNode.extension.type.Self, search: builtins.str,
-##         replace='', *arguments, **keywords
+##         self: boostNode.extension.type.Self,
+##         search: (builtins.str, builtins.dict), replace='',
+##         *arguments: builtins.object, **keywords: builtins.object
 ##     ) -> builtins.tuple:
     def subn(self, search, replace='', *arguments, **keywords):
 ##
@@ -997,14 +1023,30 @@ class String(Object, builtins.str):
 
             Perform the same operation as "self.sub()", but returns a tuple:
             ("new_string", "number_of_subs_made"").
+
+            Examples:
+
+            >>> result = String().subn('a')
+            >>> result[0].content
+            ''
+            >>> result[1]
+            0
+
+            >>> result = String('hans').subn({'a': 'b', 'n': 'c'})
+            >>> result[0].content
+            'hbcs'
+            >>> result[1]
+            2
         '''
         if builtins.isinstance(search, builtins.dict):
             number_of_replaces = 0
             for search_string, replacement in search.items():
                 self.content, temp_number_of_replaces = builtins.getattr(
-                    self, inspect.stack()[0][3]
-                )(builtins.str(search_string), builtins.str(replacement),
-                  *arguments, **keywords)
+                    re.compile(builtins.str(search_string)),
+                    inspect.stack()[0][3]
+                )(
+                    builtins.str(replacement), self.content, *arguments,
+                    **keywords)
                 number_of_replaces += temp_number_of_replaces
         else:
             self.content, number_of_replaces = builtins.getattr(
@@ -1097,9 +1139,10 @@ class String(Object, builtins.str):
     def delete_variables_from_regex(self):
 ##
         '''
-            Removes python supported varibales in regex strings.
-            This method is useful if apython regex should be given to another
-            regex engine which doesn't support variables.
+            Removes python supported variables in regular expression strings.
+            This method is useful if a python regular expression should be
+            given to another regular expression engine which doesn't support
+            variables.
 
             Examples:
 
@@ -1131,7 +1174,33 @@ class String(Object, builtins.str):
     ):
 ##
         '''
-            Helper method for "self.find_python_code_end_bracket()".
+            Helper method for "find_python_code_end_bracket()".
+
+            Examples:
+
+            >>> String()._handle_char_to_find_end_bracket(
+            ...     0, '\\\\', True, 0, 0)
+            (1, '\\\\', True, 1, 0)
+
+            >>> String()._handle_char_to_find_end_bracket(
+            ...     1, 'a', True, 1, 0)
+            (2, 'a', True, 0, 0)
+
+            >>> String()._handle_char_to_find_end_bracket(
+            ...     1, 'a', True, 0, 0)
+            (2, 'a', True, 0, 0)
+
+            >>> String()._handle_char_to_find_end_bracket(
+            ...     1, '"', True, 0, 0)
+            (2, '"', True, 0, 0)
+
+            >>> String()._handle_char_to_find_end_bracket(
+            ...     1, '(', True, 0, 0)
+            (2, '(', True, 0, 0)
+
+            >>> String()._handle_char_to_find_end_bracket(
+            ...     1, '"', False, 0, 0)
+            (2, '"', '"', 0, 0)
         '''
         if char == '\\':
             '''Handle escape sequences.'''
@@ -1151,7 +1220,7 @@ class String(Object, builtins.str):
             quote, skip = self._handle_start_quotes_to_find_end_bracket(
                 index, char, quote, skip)
         elif char == '(':
-            '''Handle openening brackets.'''
+            '''Handle opening brackets.'''
             brackets += 1
         return index + 1, char, quote, skip, brackets
 
@@ -1167,7 +1236,13 @@ class String(Object, builtins.str):
     ):
 ##
         '''
-            Helper method for "self.find_python_code_end_bracket()".
+            Helper method for "find_python_code_end_bracket()".
+
+            Examples:
+
+            >>> String('aaa')._handle_start_quotes_to_find_end_bracket(
+            ...     0, 'a', True, 0)
+            ('aaa', 2)
         '''
         if self.content[index:index + 3] == 3 * char:
             quote = char * 3
@@ -1186,7 +1261,16 @@ class String(Object, builtins.str):
     def _handle_quotes_to_find_end_bracket(self, index, char, quote, skip):
 ##
         '''
-            Helper method for "self.find_python_code_end_bracket()".
+            Helper method for "find_python_code_end_bracket()".
+
+            Examples:
+
+            >>> String()._handle_quotes_to_find_end_bracket(0, '"', '"', 0)
+            ('"', False, 0)
+
+            >>> String('aaa')._handle_quotes_to_find_end_bracket(
+            ...     0, 'a', 'aaa', 0)
+            ('a', False, 2)
         '''
         if char == quote:
             quote = False
@@ -1227,9 +1311,10 @@ class Dictionary(Object, builtins.dict):
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def __init__(
-##         self: boostNode.extension.type.Self, content: collections.Iterable
+##         self: boostNode.extension.type.Self, content: collections.Iterable,
+##         *arguments: builtins.object, **keywords: builtins.object
 ##     ) -> None:
-    def __init__(self, content):
+    def __init__(self, content, *arguments, **keywords):
 ##
         '''
             Generates a new high level wrapper around given object.
@@ -1240,6 +1325,12 @@ class Dictionary(Object, builtins.dict):
             Object of "Dictionary" (...hans...5...).
         '''
         self.content = builtins.dict(content)
+        '''
+            Take this method type by the abstract class via introspection.
+        '''
+        return builtins.getattr(
+            builtins.super(self.__class__, self), inspect.stack()[0][3]
+        )(content, *arguments, **keywords)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -1641,7 +1732,7 @@ class Module(Object):
 ##         cls: boostNode.extension.type.SelfClass,
 ##         program_type: builtins.str, program: builtins.str,
 ##         modules: collections.Iterable, arguments=(),
-##         extension='py', delimiter=', ', log=True, **keywords
+##         extension='py', delimiter=', ', log=True, **keywords: builtins.object
 ##     ) -> builtins.tuple:
     def execute_program_for_modules(
         cls, program_type, program, modules, arguments=(),
@@ -1809,8 +1900,7 @@ class Module(Object):
         '''
         cls.extend(name, frame)
         return boostNode.extension.system.CommandLine\
-            .generic_package_interface(
-                name, frame, *arguments, **keywords)
+            .generic_package_interface(name, frame, *arguments, **keywords)
 
         # endregion
 
