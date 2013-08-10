@@ -1965,9 +1965,7 @@ class CGIHTTPRequestHandler(
         sys_path_save
     ):
 ##
-        '''
-            Handles exceptions raising in requested modules.
-        '''
+        '''Handles exceptions raising in requested modules.'''
         get_defined_callables = boostNode.extension.native.Module\
             .get_defined_callables
         try:

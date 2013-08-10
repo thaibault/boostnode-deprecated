@@ -1703,7 +1703,8 @@ class Module(Object):
             Examples:
 
             >>> Module.get_defined_callables(
-            ...     sys.modules['__main__']) # doctest: +ELLIPSIS
+            ...     sys.modules['__main__']
+            ... ) # doctest: +ELLIPSIS
             [...'Module'...]
 
             >>> class A:
@@ -1715,11 +1716,13 @@ class Module(Object):
             >>> Module.get_defined_callables(A, only_module_level=False)
             ['b']
 
-            >>> class A:
-            ...     @boostNode.paradigm.aspectOrientation.JointPoint
-            ...     def b():
-            ...         pass
-            >>> Module.get_defined_callables(A, only_module_level=False)
+            >>> @boostNode.paradigm.aspectOrientation.JointPoint
+            ... def b():
+            ...     pass
+            >>> temporary_object = object
+            >>> a = A()
+            >>> a.b = b
+            >>> Module.get_defined_callables(a, only_module_level=False)
             ['b']
         '''
         callables = []
