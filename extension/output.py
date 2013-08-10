@@ -326,11 +326,13 @@ class Buffer(
             Examples:
 
             >>> buffer = Buffer(file=__test_folder__ + 'clear')
+
             >>> buffer.clear() # doctest: +ELLIPSIS
             '...'
             >>> buffer.write('hans') # doctest: +ELLIPSIS
             Objec...(file buffered with "...clear...with content "hans".
-            >>> buffer.clear()
+
+            >>> buffer.clear(False)
             'hans'
             >>> buffer.content
             ''
@@ -340,6 +342,20 @@ class Buffer(
             Object of "Buffer" (memory buffered) with content "hans".
             >>> buffer.clear()
             'hans'
+            >>> buffer.content
+            ''
+
+            >>> buffer = Buffer(queue=True)
+
+            >>> buffer.clear()
+            ''
+
+            >>> buffer.write('hans')
+            Object of "Buffer" (queue buffered) with content "hans".
+            >>> buffer.write('hans')
+            Object of "Buffer" (queue buffered) with content "hanshans".
+            >>> buffer.clear()
+            'hanshans'
             >>> buffer.content
             ''
         '''
@@ -429,6 +445,20 @@ class Print(boostNode.paradigm.objectOrientation.Class):
 
             Examples:
 
+            >>> buffer = Buffer()
+
+            >>> Print(native_queue.Queue(), buffer=buffer) # doctest: +ELLIPSIS
+            Object of "Print" with "...
+
+            >>> queue1 = native_queue.Queue()
+            >>> queue2 = native_queue.Queue()
+            >>> queue1.put('hans')
+            >>> queue2.put('hans')
+            >>> Print(
+            ...     queue1, queue2, buffer=buffer, flush=True
+            ... ) # doctest: +ELLIPSIS
+            Object of "Print" with "...
+
             >>> Print.default_buffer = Buffer()
             >>> Print('hans', 'hans again') # doctest: +ELLIPSIS
             Object of "Print" with "Object of "Buffer" (mem... "hans hans again
@@ -486,6 +516,11 @@ class Print(boostNode.paradigm.objectOrientation.Class):
 
             >>> str(Print('peter', buffer=Buffer()))
             'peter\\n'
+
+            >>> print = Print('', buffer=Buffer())
+            >>> print.buffer = None
+            >>> str(print)
+            ''
         '''
         if builtins.isinstance(self.buffer, Buffer):
             return builtins.str(self.buffer)
@@ -555,12 +590,20 @@ class Logger(boostNode.paradigm.objectOrientation.Class):
 
             Examples:
 
+            >>> str(Logger())
+            ''
+
+            >>> logger_backup = Logger.buffer
+            >>> Logger.buffer = Buffer(),
             >>> str(Logger()) # doctest: +ELLIPSIS
             ''
+            >>> Logger.buffer = logger_backup
         '''
-        if builtins.isinstance(cls.buffer, Buffer):
-            return builtins.str(cls.buffer)
-        return ''
+        result = ''
+        for buffer in cls.buffer:
+            if builtins.isinstance(buffer, Buffer):
+                result += builtins.str(buffer)
+        return result
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
@@ -573,28 +616,33 @@ class Logger(boostNode.paradigm.objectOrientation.Class):
             Examples:
 
             >>> repr(Logger()) # doctest: +ELLIPSIS
-            '...Logger...logger "...", handler "...", formatter "..." and ...'
+            'Object of "Logger" with logger "...
+
+            >>> logger1 = Logger.get()
+            >>> repr(Logger()) # doctest: +ELLIPSIS
+            'Object of "Logger" with logger "...
+
+            >>> logger1 = Logger.get()
+            >>> logger2 = Logger.get('hans')
+            >>> repr(Logger()) # doctest: +ELLIPSIS
+            'Object of "Logger" with logger "... and ...
         '''
-        counter = 1
-        logger_string = handler_string = formatter_string = ''
-        for logger, handler, formatter in cls.instances:
-            start = '"'
+        handler_string = formatter_string = ''
+        for index, logger in builtins.enumerate(cls.instances):
+            start = ', "'
             end = '"'
-            if counter == builtins.len(cls.instances):
-                start = 'and "'
+            if index + 1 == builtins.len(cls.instances):
+                start = ' and "'
                 end = ''
-            elif counter == 0:
-                end = start = ''
-            logger_string += start + builtins.repr(logger) + end
-            handler_string += start + builtins.repr(handler) + end
-            formatter_string += start + builtins.repr(formatter) + end
-            counter += 1
-        return ('Object of "{class_name}" with logger "{logger}", handler '
-                '"{handler}", formatter "{formatter}" and buffer '
-                '"{buffer}".'.format(
-                    class_name=cls.__name__, logger=logger_string,
-                    handler=handler_string, formatter=formatter_string,
-                    buffer=builtins.repr(cls.buffer)))
+            if index == 0:
+                start = ''
+            handler_string += start + builtins.repr(logger.handlers[0]) + end
+            formatter_string += start + builtins.repr(logger.handlers[0].formatter) + end
+        return ('Object of "{class_name}" with logger "{handler}", formatter '
+                '"{formatter}" and buffer "{buffer}".'.format(
+                    class_name=cls.__name__, handler=handler_string,
+                    formatter=formatter_string,
+                    buffer=builtins.str(cls.buffer)))
 
             # endregion
 
@@ -607,6 +655,11 @@ class Logger(boostNode.paradigm.objectOrientation.Class):
 ##
         '''
             Flushes all buffers in all logger handlers.
+
+            Examples:
+
+            >>> Logger.flush() # doctest: +ELLIPSIS
+            <class '...Logger'>
         '''
         for logger in cls.instances:
             for handler in logger.handlers:
