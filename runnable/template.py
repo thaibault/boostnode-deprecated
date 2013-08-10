@@ -643,10 +643,10 @@ class Parser(
             Examples:
 
             >>> boostNode.extension.file.Handler(
-            ...     __test_folder__ + 'test.tpl', must_exist=False
+            ...     __test_folder__ + '_run', must_exist=False
             ... ).content = 'hans <%placeholder%>'
             >>> template = Parser(
-            ...     template=__test_folder__ + 'test.tpl')
+            ...     template=__test_folder__ + '_run')
             >>> template.substitute(placeholder='also hans')
             Object of "Parser" with template "hans <%placeholder%>".
             >>> template.output
@@ -699,7 +699,7 @@ class Parser(
 ##
 ##                          '(?P<L>^(?P<indent_line>[ \t]*)\n)',
 ##         command_line_placeholder_pattern='^(?P<variable_name>{placeholder})'
-##                                          '(?P<seperator>.)(?P<value>.+)$',
+##                                          '(?P<separator>.)(?P<value>.+)$',
 ##         native_template_pattern='<%[ \t]*(?:(?P<escaped>%)|'
 ##                                 '(?:(?P<named>[a-zA-Z0-9_]+)[ \t]*% >)|'
 ##                                 '(?:(?P<braced>[a-zA-Z0-9_]+)[ \t]*%>)|'
@@ -736,7 +736,7 @@ class Parser(
 
                          '(?P<L>^(?P<indent_line>[ \t]*)\n)',
         command_line_placeholder_pattern='^(?P<variable_name>{placeholder})'
-                                         '(?P<seperator>.)(?P<value>.+)$',
+                                         '(?P<separator>.)(?P<value>.+)$',
         native_template_pattern='<%[ \t]*(?:(?P<escaped>%)|'
                                 '(?:(?P<named>[a-zA-Z0-9_]+)[ \t]*% >)|'
                                 '(?:(?P<braced>[a-zA-Z0-9_]+)[ \t]*%>)|'

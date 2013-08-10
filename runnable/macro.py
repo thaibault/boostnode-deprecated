@@ -252,11 +252,12 @@ class Replace(
             'python...'
 
             >>> boostNode.extension.file.Handler(
-            ...     location=__test_folder__ + 'macro_file', must_exist=False
+            ...     location=__test_folder__ + 'set_new_version',
+            ...     must_exist=False
             ... ).content = ('#!/usr/bin/env version\\n\\n## '
             ...              'alternate_version hans\\npeter\\n')
             >>> replace = Replace(
-            ...     location=__test_folder__ + 'macro_file'
+            ...     location=__test_folder__ + 'set_new_version'
             ... )._convert_path()
             >>> replace.new_version = '__determine_useful__'
             >>> replace._new_version
@@ -465,13 +466,14 @@ class Replace(
             Examples:
 
             >>> boostNode.extension.file.Handler(
-            ...     location=__test_folder__ + 'macro', must_exist=False
+            ...     __test_folder__ + '_determine_useful_version_in_file',
+            ...     must_exist=False
             ... ).content = 'hans\\n## new_version peter\\nklaus\\n'
             >>> Replace(
             ...     location=__file_path__
             ... )._determine_useful_version_in_file(
             ...     file=boostNode.extension.file.Handler(
-            ...         location=__test_folder__ + 'macro'))
+            ...         __test_folder__ + '_determine_useful_version_in_file'))
             'new_version'
         '''
         try:
@@ -556,28 +558,33 @@ class Replace(
             "file" - the file to be converted.
 
             >>> boostNode.extension.file.Handler(
-            ...     location=__test_folder__ + 'test', must_exist=False
+            ...     location=__test_folder__ + '_convert_file',
+            ...     must_exist=False
             ... ).content = 'hans'
             >>> Replace(
-            ...     location=__test_folder__ + 'test', new_version='python3.3'
+            ...     location=__test_folder__ + '_convert_file',
+            ...     new_version='python3.3'
             ... )._convert_path(
             ... ) # doctest: +ELLIPSIS
-            Object of "Replace" with file "...test" to convert to "python3.3".
+            Object of "Replace" with file "..._convert_file" to convert to ...
 
             >>> file = boostNode.extension.file.Handler(
-            ...     location=__test_folder__ + 'test', must_exist=False)
+            ...     location=__test_folder__ + '_convert_file',
+            ...     must_exist=False)
             >>> file.content = ('#!/usr/bin/python3.3\\n'
             ...                 '\\n'
             ...                 '## python2.7 hans\\n'
             ...                'AB\\n')
             >>> interpreter = Replace(
-            ...     location=__test_folder__ + 'test', new_version='python2.7'
+            ...     location=__test_folder__ + '_convert_file',
+            ...     new_version='python2.7'
             ... )._convert_path()
             >>> file.content
             '#!/usr/bin/python2.7\\n\\n## python3.3 AB\\nhans\\n'
 
             >>> file = boostNode.extension.file.Handler(
-            ...     location=__test_folder__ + 'test', must_exist=False)
+            ...     location=__test_folder__ + '_convert_file',
+            ...     must_exist=False)
             >>> file.content = ('#!/bin/python3.3\\n'
             ...                 '\\n'
             ...                 '## python2.7\\n'
@@ -587,13 +594,15 @@ class Replace(
             ...                 'D\\n'
             ...                 '##\\n')
             >>> interpreter = Replace(
-            ...     location=__test_folder__ + 'test', new_version='python2.7'
+            ...     location=__test_folder__ + '_convert_file',
+            ...     new_version='python2.7'
             ... )._convert_path()
             >>> file.content
             '#!/bin/python2.7\\n\\n## python3.3\\n## C\\n## D\\nA\\nB\\n##\\n'
 
             >>> file = boostNode.extension.file.Handler(
-            ...     location=__test_folder__ + 'test', must_exist=False)
+            ...     location=__test_folder__ + '_convert_file',
+            ...     must_exist=False)
             >>> file.content = ('#!/bin/python2.7\\n'
             ...                 '\\n'
             ...                 '## python3.3\\n'
@@ -602,13 +611,15 @@ class Replace(
             ...                 '#\\n'
             ...                 '##\\n')
             >>> interpreter = Replace(
-            ...     location=__test_folder__ + 'test', new_version='python3.3'
+            ...     location=__test_folder__ + '_convert_file',
+            ...     new_version='python3.3'
             ... )._convert_path()
             >>> file.content
             '#!/bin/python3.3\\n\\n## python2.7\\n## B\\n## #\\nA\\n##\\n'
 
             >>> file = boostNode.extension.file.Handler(
-            ...     location=__test_folder__ + 'test', must_exist=False)
+            ...     location=__test_folder__ + '_convert_file',
+            ...     must_exist=False)
             >>> file.content = ('#!/bin/python3.3\\n'
             ...                 '\\n'
             ...                 '## python2.7\\n'
@@ -618,13 +629,15 @@ class Replace(
             ...                 'B\\n'
             ...                 '##\\n')
             >>> interpreter = Replace(
-            ...     location=__test_folder__ + 'test', new_version='python3.3'
+            ...     location=__test_folder__ + '_convert_file',
+            ...     new_version='python3.3'
             ... )._convert_path()
             >>> file.content
             '#!/bin/python3.3\\n\\n## python2.7\\n## A\\n##\\n## B\\nB\\n##\\n'
 
             >>> file = boostNode.extension.file.Handler(
-            ...     location=__test_folder__ + 'test', must_exist=False)
+            ...     location=__test_folder__ + '_convert_file',
+            ...     must_exist=False)
             >>> file.content = ('#!/bin/python2.7\\n'
             ...                 '\\n'
             ...                 '## python3.3\\n'
@@ -634,19 +647,22 @@ class Replace(
             ...                 'C\\n'
             ...                 '##\\n')
             >>> interpreter = Replace(
-            ...     location=__test_folder__ + 'test', new_version='python3.3'
+            ...     location=__test_folder__ + '_convert_file',
+            ...     new_version='python3.3'
             ... )._convert_path()
             >>> file.content
             '#!/bin/python3.3\\n\\n## python2.7\\n## B\\n##\\n## C\\nA\\n##\\n'
 
             >>> file = boostNode.extension.file.Handler(
-            ...     location=__test_folder__ + 'test', must_exist=False)
+            ...     location=__test_folder__ + '_convert_file',
+            ...     must_exist=False)
             >>> file.content = ('#!/bin/python2.7\\n'
             ...                 '\\n'
             ...                 '## python3.3\\n'
             ...                 'A\\n')
             >>> interpreter = Replace(
-            ...     location=__test_folder__ + 'test', new_version='python3.3'
+            ...     location=__test_folder__ + '_convert_file',
+            ...     new_version='python3.3'
             ... )._convert_path()
             >>> file.content
             '#!/bin/python3.3\\n\\n## python2.7 A\\n\\n'

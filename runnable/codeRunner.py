@@ -251,12 +251,12 @@ class Run(
             Examples:
 
             >>> boostNode.extension.file.Handler(
-            ...     __test_folder__ + 'runnable.py', must_exist=False
+            ...     __test_folder__ + '__repr__.py', must_exist=False
             ... ).content = '#!/usr/bin/env python'
             >>> repr(Run(
-            ...     code_file_path=__test_folder__ + 'runnable')
+            ...     code_file_path=__test_folder__ + '__repr__.py')
             ... ) # doctest: +ELLIPSIS
-            'Object of "Run" with detected path "...runnable.py".'
+            'Object of "Run" with detected path "...__repr__.py".'
         '''
         if self._code_file:
             return 'Object of "{class_name}" with detected path '\
@@ -289,11 +289,11 @@ class Run(
             Examples:
 
             >>> boostNode.extension.file.Handler(
-            ...     location=__test_folder__ + 'runner', make_directory=True
+            ...     location=__test_folder__ + '_run', make_directory=True
             ... ) # doctest: +ELLIPSIS
-            Object of "Handler" with path "...runner..." (directory).
+            Object of "Handler" with path "..._run..." (directory).
             >>> Run(
-            ...     code_file_path=__test_folder__ + 'runner/'
+            ...     code_file_path=__test_folder__ + '_run/'
             ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
@@ -345,15 +345,16 @@ class Run(
             Examples:
 
             >>> garbage = boostNode.extension.file.Handler(
-            ...     __test_folder__ + 'temp_garbage', make_directory=True)
+            ...     __test_folder__ + 'temp_tidy_up', make_directory=True)
             >>> boostNode.extension.file.Handler(
-            ...     __test_folder__ + 'temp_runnable.py', must_exist=False
+            ...     __test_folder__ + '_tidy_up_runnable.py',
+            ...     must_exist=False
             ... ).content = '#!/usr/bin/env python'
-            >>> runner = Run(code_file_path=__test_folder__ + 'temp_runnable')
+            >>> runner = Run(__test_folder__ + '_tidy_up_runnable.py')
             >>> runner # doctest: +ELLIPSIS
-            Object of "Run" with detected path "...temp_runnable.py".
-            >>> runner._tidy_up()
-            Object of "Run" with no detected path.
+            Object of "Run" with detected path "..._tidy_up_runnable.py".
+            >>> runner._tidy_up() # doctest: +ELLIPSIS
+            Object of "Run" with detected path "..._tidy_up_runnable.py".
             >>> garbage.is_element()
             False
         '''
@@ -383,12 +384,12 @@ class Run(
             >>> __test_buffer__.clear() # doctest: +ELLIPSIS
             '...'
             >>> boostNode.extension.file.Handler(
-            ...     __test_folder__ + 'runnable.py', must_exist=False
+            ...     __test_folder__ + '_run_commands.py', must_exist=False
             ... ).content = '#!/usr/bin/env python'
             >>> Run(
-            ...     code_file_path=__test_folder__ + 'runnable'
+            ...     code_file_path=__test_folder__ + '_run_commands.py'
             ... )._run_commands() # doctest: +ELLIPSIS
-            Object of "Run" with detected path "...runnable...".
+            Object of "Run" with detected path "..._run_commands.py...".
             >>> __test_buffer__.content # doctest: +ELLIPSIS
             '...Detected "python"...No "compile" necessary...'
         '''
@@ -421,17 +422,19 @@ class Run(
             Examples:
 
             >>> boostNode.extension.file.Handler(
-            ...     __test_folder__ + 'temp_runnable.py', must_exist=False
+            ...     __test_folder__ + '_check_code_manager.py',
+            ...     must_exist=False
             ... ).content = '#!/usr/bin/env python'
             >>> boostNode.extension.file.Handler(
             ...     __test_folder__ + '__init__.py', must_exist=False
             ... ).content = '#!/usr/bin/env python'
 
-            >>> runner = Run(code_file_path=__test_folder__ + 'temp_runnable')
+            >>> runner = Run(
+            ...     code_file_path=__test_folder__ + '_check_code_manager.py')
             >>> __test_buffer__.clear() # doctest: +ELLIPSIS
             '...'
             >>> runner._check_code_manager() # doctest: +ELLIPSIS
-            Object of "Run" with detected path "...temp_runnable.py".
+            Object of "Run" with detected path "..._check_code_manager.py".
             >>> __test_buffer__.content # doctest: +ELLIPSIS
             '...Detected code manager "...__init__.py".\\n'
         '''
@@ -496,7 +499,8 @@ class Run(
             Examples:
 
             >>> code_file = boostNode.extension.file.Handler(
-            ...     location=__test_folder__ + 'runner.py', must_exist=False)
+            ...     __test_folder__ + '_find_informations_by_extension.py',
+            ...     must_exist=False)
             >>> Run()._find_informations_by_extension(
             ...     extension='py', code_file=code_file
             ... ) # doctest: +ELLIPSIS
@@ -526,12 +530,14 @@ class Run(
 
             Examples:
 
-            >>> boostNode.extension.file.Handler(
-            ...     __test_folder__ + 'runnable.py', must_exist=False
-            ... ).content = '#!/usr/bin/env python'
+            >>> file = boostNode.extension.file.Handler(
+            ...     __test_folder__ + '_search_supported_file_by_path.py',
+            ...     must_exist=False)
+            >>> file.content = '#!/usr/bin/env python'
             >>> Run()._search_supported_file_by_path(
-            ...     path=__test_folder__ + 'runnable') # doctest: +ELLIPSIS
-            Object of "Handler" with path "...runnable.py" (file).
+            ...     path=file.directory_path + file.basename
+            ... ) # doctest: +ELLIPSIS
+            Object of "Handler" with pat..._search_supported_file_by_path.py...
 
             >>> Run()._search_supported_file_by_path(
             ...     path='') # doctest: +ELLIPSIS
@@ -740,7 +746,8 @@ class Run(
             Examples:
 
             >>> code_file = boostNode.extension.file.Handler(
-            ...     location=__test_folder__ + 'runner.cpp', must_exist=False)
+            ...     location=__test_folder__ + '_render_properties.cpp',
+            ...     must_exist=False)
 
             >>> Run()._render_properties({
             ...     'commands': {
@@ -769,7 +776,7 @@ class Run(
                 ).render(
                     code_file=code_file,
                     arguments=' '.join(self._command_line_arguments),
-                    path_seperator=os.sep
+                    path_separator=os.sep
                 ).output
         return rendered_properties
 

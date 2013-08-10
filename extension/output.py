@@ -66,7 +66,7 @@ class Buffer(
 
         Examples:
 
-        >>> buffer = Buffer(file=__test_folder__ + 'buffer')
+        >>> buffer = Buffer(file=__test_folder__ + 'Buffer')
         >>> buffer.clear() # doctest: +ELLIPSIS
         '...'
         >>> print('hans', file=buffer, end='+')
@@ -80,6 +80,8 @@ class Buffer(
 
     '''Saves the queue instance for writing content into.'''
     queue = None
+    '''Saves the file handler instance for writing content into.'''
+    file = None
     '''Saves the last written input.'''
     last_written = ''
 
@@ -94,8 +96,6 @@ class Buffer(
     _lock = None
     '''Saves the current buffer content.'''
     _content = ''
-    '''Saves the file handler instance for writing content into.'''
-    _file = None
 
         # endregion
 
@@ -124,13 +124,19 @@ class Buffer(
             Examples:
 
             >>> Buffer(
-            ...     file=__test_folder__ + 'buffer').file # doctest: +ELLIPSIS
-            Object of "Handler" with path "...buffer" (file).
+            ...     file=__test_folder__ + '__init__'
+            ... ).file # doctest: +ELLIPSIS
+            Object of "Handler" with path "...__init__" ...
+
+            >>> Buffer(
+            ...     queue=True, support_multiprocessing=True
+            ... ).queue # doctest: +ELLIPSIS
+            <multiprocessing.queues.Queue object at ...>
         '''
         self._lock = threading.Lock()
         if support_multiprocessing:
             self._lock = multiprocessing.Lock()
-        self.queue = self._file = None
+        self.queue = self.file = None
         self.last_written = ''
         self._content = ''
         if queue is not None:
@@ -142,7 +148,7 @@ class Buffer(
                builtins.isinstance(queue, multiprocessing.queues.Queue)):
                 self.queue = queue
         elif file is not None:
-            self._file = boostNode.extension.file.Handler(
+            self.file = boostNode.extension.file.Handler(
                 location=file, must_exist=False)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -158,9 +164,9 @@ class Buffer(
             >>> repr(Buffer())
             'Object of "Buffer" (memory buffered) with content "".'
 
-            >>> buffer = Buffer(file=__test_folder__ + 'buffer')
+            >>> buffer = Buffer(file=__test_folder__ + '__repr__')
             >>> buffer.write('hans') # doctest: +ELLIPSIS
-            Object of "Buffer" (file buffered with "...buffer" (file)."...
+            Object of "Buffer" (file buffered with "...__repr__" (file)."...
 
             >>> repr(Buffer(queue=True))
             'Object of "Buffer" (queue buffered) with content "".'
@@ -231,6 +237,9 @@ class Buffer(
 
             >>> Buffer().write('test').content
             'test'
+
+            >>> Buffer(queue=True).write('test').content
+            'test'
         '''
         with self._lock:
             if self.file is not None:
@@ -244,32 +253,6 @@ class Buffer(
                 for content in temp_buffer:
                     self.queue.put(content)
         return self._content
-
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def get_file(
-##         self: boostNode.extension.type.Self
-##     ) -> (boostNode.extension.file.Handler, builtins.type(None)):
-    def get_file(self):
-##
-        '''
-            Getter for current file path if file buffering is selected.
-
-            Examples:
-
-            >>> Buffer(
-            ...     file=__test_folder__ + 'buffer').file # doctest: +ELLIPSIS
-            Object of "Handler" with path "...buffer" (undefined).
-
-            >>> Buffer(file=__test_folder__ + 'buffer').write(
-            ...     'test').file # doctest: +ELLIPSIS
-            Object of "Handler" with path "...buffer" (file).
-        '''
-        if self._file and not self._file.is_file():
-            raise __exception__(
-                'Buffer isn\'t pointing to file ("{path}" is a '
-                '{type}).'.format(path=self._file.path, type=self._file.type))
-        return self._file
 
         # endregion
 
@@ -287,11 +270,11 @@ class Buffer(
 
             Examples:
 
-            >>> buffer = Buffer(file=__test_folder__ + 'buffer')
+            >>> buffer = Buffer(file=__test_folder__ + 'write')
             >>> buffer.clear() # doctest: +ELLIPSIS
             '...'
             >>> buffer.write('hans') # doctest: +ELLIPSIS
-            Object of "Buffer" (file buffered with "...buffer...nt "hans".
+            Object of "Buffer" (file buffered with "...write...nt "hans".
             >>> buffer.content
             'hans'
 
@@ -342,11 +325,11 @@ class Buffer(
 
             Examples:
 
-            >>> buffer = Buffer(file=__test_folder__ + 'buffer')
+            >>> buffer = Buffer(file=__test_folder__ + 'clear')
             >>> buffer.clear() # doctest: +ELLIPSIS
             '...'
             >>> buffer.write('hans') # doctest: +ELLIPSIS
-            Objec...(file buffered with "...buffer...with content "hans".
+            Objec...(file buffered with "...clear...with content "hans".
             >>> buffer.clear()
             'hans'
             >>> buffer.content
@@ -381,7 +364,7 @@ class Buffer(
 
 class Print(boostNode.paradigm.objectOrientation.Class):
     '''
-        Provids a high level printing class on top of pythons native print
+        Provides a high level printing class on top of pythons native print
         function.
     '''
 
@@ -397,7 +380,7 @@ class Print(boostNode.paradigm.objectOrientation.Class):
     '''
         Print this string between every given element to one "put()" call.
     '''
-    seperator = ' '
+    separator = ' '
     '''
         Print this string after every last argument to every "put()" call.
     '''
@@ -435,7 +418,7 @@ class Print(boostNode.paradigm.objectOrientation.Class):
             "output" are the strings which should be printed or saved.
             "codewords" represents all possible optional arguments.
                 "codeword['start']"
-                "codeword['seperator']"
+                "codeword['separator']"
                 "codeword['end']"
                 "codeword['flush']"
                 "codeword['buffer']" could be any instance as buffer which
@@ -461,7 +444,7 @@ class Print(boostNode.paradigm.objectOrientation.Class):
             Object ... (memory buffered) with content "hans, peter and klaus".
         '''
         keywords = {'start': self.__class__.start,
-                    'seperator': self.__class__.seperator,
+                    'separator': self.__class__.separator,
                     'end': self.__class__.end,
                     'buffer': self.__class__.default_buffer,
                     'flush': False}
@@ -472,14 +455,14 @@ class Print(boostNode.paradigm.objectOrientation.Class):
             if builtins.isinstance(out, native_queue.Queue):
                 result = ''
                 while not out.empty():
-                    if index != 0 and keywords['seperator']:
-                        result += builtins.str(keywords['seperator'])
+                    if index != 0 and keywords['separator']:
+                        result += builtins.str(keywords['separator'])
                     result += builtins.str(out.get())
                 output[index] = result
             elif index == 0:
                 output[index] = builtins.str(out)
             else:
-                output[index] = builtins.str(keywords['seperator']) +\
+                output[index] = builtins.str(keywords['separator']) +\
                     builtins.str(out)
         output = [keywords['start']] + output + [keywords['end']]
 ## python3.3
