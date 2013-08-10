@@ -110,9 +110,7 @@ class Object(boostNode.paradigm.objectOrientation.Class):
 ##     def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
     def __repr__(self):
 ##
-        '''
-            Invokes if this object should describe itself by a string.
-        '''
+        '''Invokes if this object should describe itself by a string.'''
         return 'Object of "{class_name}" ({object}).'.format(
             class_name=self.object.__class__.__name__,
             object=builtins.repr(self.object))
@@ -461,13 +459,14 @@ class String(Object, builtins.str):
 
             Examples:
 
-            >>> string = String('hans')
-            >>> string.content
+            >>> String('hans').content
             'hans'
 
-            >>> string = String()
-            >>> string.content
+            >>> String().content
             ''
+
+            >>> String(['A', 5]).content
+            "['A', 5]"
         '''
         if content is None:
             content = ''
@@ -1344,6 +1343,7 @@ class Dictionary(Object, builtins.dict):
             Examples:
 
             >>> repr(Dictionary({'a': 'hans'}))
+            'Object of "Dictionary" ({\\'a\\': \\'hans\\'}).'
         '''
         return 'Object of "{class_name}" ({content}).'.format(
             class_name=self.__class__.__name__,
@@ -1550,26 +1550,26 @@ class Module(Object):
 
             >>> Module.get_package_name(path=True) # doctest: +ELLIPSIS
             '...boostNode...extension...'
+
+            >>> Module.get_package_name(
+            ...     frame=inspect.currentframe(), path=True
+            ... ) # doctest: +ELLIPSIS
+            '...boostNode...extension...'
         '''
         '''
-            NOTE: "must_exist" is necessary for supporting freezed executables.
+            NOTE: "must_exist" is necessary for supporting frozen executables.
         '''
         file = boostNode.extension.file.Handler(
             location=frame.f_code.co_filename, respect_root_path=True,
             must_exist=False)
-        if cls.is_package(path=file.directory_path):
+        if cls.is_package(path=file.directory_path) or not file:
+            if not file:
+                file = boostNode.extension.file.Handler(
+                    location=sys.argv[0], respect_root_path=True)
             if path:
                 return file.directory_path
             return boostNode.extension.file.Handler(
                 location=file.directory_path
-            ).name
-        elif not file:
-            fallback_location = boostNode.extension.file.Handler(
-                location=sys.argv[0], respect_root_path=True)
-            if path:
-                return fallback_location.directory_path
-            return boostNode.extension.file.Handler(
-                location=fallback_location.directory_path
             ).name
         return ''
 
@@ -1596,6 +1596,9 @@ class Module(Object):
             '...doctest.py'
 
             >>> Module.get_file_path('module_that_does_not_exists')
+            False
+
+            >>> Module.get_file_path('')
             False
         '''
         if context_path:
@@ -1751,7 +1754,8 @@ class Module(Object):
 ##         cls: boostNode.extension.type.SelfClass,
 ##         program_type: builtins.str, program: builtins.str,
 ##         modules: collections.Iterable, arguments=(),
-##         extension='py', delimiter=', ', log=True, **keywords: builtins.object
+##         extension='py', delimiter=', ', log=True,
+##         **keywords: builtins.object
 ##     ) -> builtins.tuple:
     def execute_program_for_modules(
         cls, program_type, program, modules, arguments=(),
@@ -1887,8 +1891,13 @@ class Module(Object):
             Examples:
 
             >>> command_line_arguments_save = copy.copy(sys.argv)
-            >>> Module.default(__name__, inspect.currentframe())
-            <class '__main__.Module'>
+            >>> sys.argv += ['--module-object', Module.__name__]
+            >>> if not 'native' in sys.modules:
+            ...     sys.modules['native'] = sys.modules[__name__]
+            >>> Module.default(
+            ...     'native', inspect.currentframe()
+            ... ) # doctest: +ELLIPSIS
+            <class '...Module'>
             >>> sys.argv = command_line_arguments_save
         '''
         boostNode.extension.system.CommandLine.generic_module_interface(

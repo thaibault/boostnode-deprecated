@@ -1405,7 +1405,7 @@ class CommandLine(builtins.object):
             >>> CommandLine.determine_wrapped_objects(
             ...     boostNode.extension.system
             ... ) # doctest: +ELLIPSIS
-            {...'determine_wrapped_objects': <function ...>...}
+            {...'CommandLine.determine_wrapped_objects': <function ...>...}
         '''
         objects = {}
         for name, object in module.__dict__.items():
@@ -1421,7 +1421,8 @@ class CommandLine(builtins.object):
                         if(builtins.isinstance(
                            sub_object,
                            boostNode.paradigm.aspectOrientation.JointPoint)):
-                            objects[sub_name] = sub_object.__func__
+                            objects['%s.%s' % (name, sub_name)] = \
+                                sub_object.__func__
         return objects
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
@@ -1495,12 +1496,6 @@ class CommandLine(builtins.object):
         '''
             Provides a generic command line interface for modules.
             Things like unit testing or calling objects in module are provided.
-
-            Examples:
-
-            >>> CommandLine.module(
-            ...     module={'name': __name__, 'scope': sys.modules[__name__]},
-            ...     default_caller='main', test=False) # doctest: +SKIP
         '''
         if module['name'] == '__main__' or test:
             callable_objects, default_caller = cls._determine_callable_objects(
@@ -1530,9 +1525,7 @@ class CommandLine(builtins.object):
 ##     ) -> boostNode.extension.type.SelfClass:
     def test_module(cls, module, verbose):
 ##
-        '''
-            Test a given's module doctests.
-        '''
+        '''Test a given's module doctests.'''
         test_folder = boostNode.extension.file.Handler(
             location=tempfile.mkdtemp(suffix=module['scope'].__name__))
         module['scope'].__test_folder__ = test_folder.path
@@ -1547,8 +1540,7 @@ class CommandLine(builtins.object):
         log_level_save = boostNode.extension.output.Logger.default_level
         logger_buffer_save = boostNode.extension.output.Logger.buffer
         '''
-            Modules get log level "info" as default for their test
-            cases.
+            Modules get log level "info" as default for their test cases.
         '''
         boostNode.extension.output.Print.default_buffer = \
             module['scope'].__test_buffer__
