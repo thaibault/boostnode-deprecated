@@ -163,10 +163,13 @@ class Object(boostNode.paradigm.objectOrientation.Class):
             'A'
         '''
         self._object_copy = {}
-        for attribute in builtins.dir(self.object):
-            if not (attribute.startswith('__') and attribute.endswith('__')):
-                self._object_copy[attribute] = copy.copy(builtins.getattr(
-                    self.object, attribute))
+        for attribute_name in builtins.dir(self.object):
+            attribute = builtins.getattr(self.object, attribute_name)
+            if not ((attribute_name.startswith('__') and
+                     attribute_name.endswith('__')) or
+                    builtins.callable(attribute)):
+                self._object_copy[attribute_name] = copy.copy(
+                    builtins.getattr(self.object, attribute_name))
         return self._object_copy
 
     @boostNode.paradigm.aspectOrientation.JointPoint

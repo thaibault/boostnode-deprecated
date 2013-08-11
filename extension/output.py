@@ -637,7 +637,9 @@ class Logger(boostNode.paradigm.objectOrientation.Class):
             if index == 0:
                 start = ''
             handler_string += start + builtins.repr(logger.handlers[0]) + end
-            formatter_string += start + builtins.repr(logger.handlers[0].formatter) + end
+            formatter_string += start + builtins.repr(
+                logger.handlers[0].formatter
+            ) + end
         return ('Object of "{class_name}" with logger "{handler}", formatter '
                 '"{formatter}" and buffer "{buffer}".'.format(
                     class_name=cls.__name__, handler=handler_string,
@@ -685,6 +687,7 @@ class Logger(boostNode.paradigm.objectOrientation.Class):
 
             >>> logger_a = Logger.get('test', buffer=(__test_buffer__,))
             >>> logger_b = Logger.get('test')
+            >>> logger_c = Logger.get('test', buffer=(__test_buffer__,))
             >>> logger_a is logger_b
             True
 
@@ -766,6 +769,14 @@ class Logger(boostNode.paradigm.objectOrientation.Class):
 ##
         '''
             This method sets the class properties.
+
+            Examples:
+
+            >>> Logger._set_properties(
+            ...     level=Logger.default_level, buffer=Logger.buffer,
+            ...     terminator=Logger.terminator, format=Logger.format
+            ... ) # doctest: +ELLIPSIS
+            <class '...Logger'>
         '''
         if level:
             cls.default_level = level
@@ -790,6 +801,13 @@ class Logger(boostNode.paradigm.objectOrientation.Class):
             Creates a new logger instance by initializing all its components
             with given arguments or default properties saved as class
             properties.
+
+            Examples:
+
+            >>> Logger._generate_logger(
+            ...     'test', ('info',), (Buffer(),), ('',), ('',)
+            ... ) # doctest: +ELLIPSIS
+            <logging.Logger object at ...>
         '''
         if not level:
             level = cls.default_level
