@@ -1625,7 +1625,7 @@ class CommandLine(builtins.object):
                            sub_object,
                            boostNode.paradigm.aspectOrientation.JointPoint)):
                             objects['%s.%s' % (name, sub_name)] = \
-                                sub_object.__func__
+                                sub_object.function
         return objects
 
     # TODO stand

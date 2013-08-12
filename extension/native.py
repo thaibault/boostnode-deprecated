@@ -1731,7 +1731,6 @@ class Module(Object):
             ['b']
         '''
         callables = []
-        # TODO isn't __dict__ more efficient.
         for object_name in builtins.set(builtins.dir(scope)):
             object = builtins.getattr(scope, object_name)
             if builtins.isinstance(
