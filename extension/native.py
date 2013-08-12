@@ -1697,8 +1697,7 @@ class Module(Object):
 ## python3.3
 ##     def get_defined_callables(
 ##         cls: boostNode.extension.type.SelfClass,
-##         scope: (types.ModuleType, builtins.type, builtins.object),
-##         only_module_level=True
+##         scope: (builtins.type, builtins.object), only_module_level=True
 ##     ) -> builtins.list:
     def get_defined_callables(cls, scope, only_module_level=True):
 ##
@@ -1732,6 +1731,7 @@ class Module(Object):
             ['b']
         '''
         callables = []
+        # TODO isn't __dict__ more efficient.
         for object_name in builtins.set(builtins.dir(scope)):
             object = builtins.getattr(scope, object_name)
             if builtins.isinstance(
