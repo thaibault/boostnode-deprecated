@@ -508,7 +508,7 @@ class Web(
                      'performance extremly. Note that self module loading via '
                      '"__main__" is independly possible.',
              'dest': 'module_loading'}},
-        {'arguments': ('-g', '--authentication-file-pattern'),
+        {'arguments': ('-g', '--authentication-file-content-pattern'),
          'keywords': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
@@ -516,7 +516,7 @@ class Web(
              'required': {'execute': '__initializer_default_value__ is None'},
              'help': 'Defines the regex pattern to define how to parse '
                      'authentication files.',
-             'dest': 'authentication_file_pattern',
+             'dest': 'authentication_file_content_pattern',
              'metavar': 'REGEX_PATTERN'}},
         {'arguments': ('-i', '--authentication-file-name-pattern'),
          'keywords': {
@@ -569,11 +569,13 @@ class Web(
     '''
     authentication = False
     authentication_file_name = ''
-    authentication_file_pattern = ''
+    authentication_file_content_pattern = ''
     authentication_handler = None
-    '''A list of regex pattern which every request have to match.'''
+    '''
+        A list of regular expression pattern which every request have to match.
+    '''
     request_whitelist = ()
-    '''A list of regex pattern which no request should match.'''
+    '''A list of regular expression pattern which no request should match.'''
     request_blacklist = ()
     '''
         A list of regular expression pattern which indicates requests which
@@ -759,7 +761,7 @@ class Web(
 ##             '(?!tpl$)[a-zA-Z0-9]{0,4}$',),
 ##         default_module_names=('__main__', 'main', 'index', 'initialize'),
 ##         authentication=True, authentication_file_name='.htpasswd',
-##         authentication_file_pattern='(?P<name>.+):(?P<password>.+)',
+##         authentication_file_content_pattern='(?P<name>.+):(?P<password>.+)',
 ##         authentication_handler=None, module_loading=None,
 ##         maximum_number_of_processes=0, shared_data=None,
 ##         **keywords: builtins.object
@@ -778,7 +780,7 @@ class Web(
             '(?!tpl$)[a-zA-Z0-9]{0,4}$',),
         default_module_names=('__main__', 'main', 'index', 'initialize'),
         authentication=True, authentication_file_name='.htpasswd',
-        authentication_file_pattern='(?P<name>.+):(?P<password>.+)',
+        authentication_file_content_pattern='(?P<name>.+):(?P<password>.+)',
         authentication_handler=None, module_loading=None,
         maximum_number_of_processes=0, shared_data=None, **keywords
     ):
@@ -798,7 +800,8 @@ class Web(
         self.authentication_handler = authentication_handler
         self.authentication = authentication
         self.authentication_file_name = authentication_file_name
-        self.authentication_file_pattern = authentication_file_pattern
+        self.authentication_file_content_pattern = \
+            authentication_file_content_pattern
         self.stop_order = stop_order
         self.root = boostNode.extension.file.Handler(location=root)
         self.port = port
@@ -1345,11 +1348,9 @@ class CGIHTTPRequestHandler(
 ##     ) -> builtins.bool:
     def _is_authenticated(self):
 ##
-        '''
-            Determines wheater current request is authenticated.
-        '''
+        '''Determines weather current request is authenticated.'''
         if self.server.web.authentication:
-            while True:
+            while self.server.web.authentication_file_name:
                 file_path = self._authentication_location.path +\
                     self.server.web.authentication_file_name
                 authentication_file = boostNode.extension.file.Handler(
@@ -1373,11 +1374,11 @@ class CGIHTTPRequestHandler(
 ##             return builtins.bool(
 ##                 self.server.web.authentication_handler is None or
 ##                 self.server.web.authentication_handler(
-##                     self.headers['authorization'], self.path))
+##                     self.headers['authorization'], self.request_uri))
             return builtins.bool(
                 self.server.web.authentication_handler is None or
                 self.server.web.authentication_handler(
-                    self.headers.getheader('authorization'), self.path))
+                    self.headers.getheader('authorization'), self.request_uri))
 ##
         return True
 
@@ -1437,7 +1438,7 @@ class CGIHTTPRequestHandler(
         __logger__.info(
             'Use authentication file "%s".', authentication_file._path)
         match = re.compile(
-            self.server.web.authentication_file_pattern
+            self.server.web.authentication_file_content_pattern
         ).match(authentication_file.content.strip())
 ## python3.3
 ##         return base64.b64encode(('%s:%s' % (
