@@ -559,6 +559,8 @@ class Web(
 
     '''Saves server runtime properties.'''
     root = port = thread_buffer = service = None
+    '''Saves the host name.'''
+    host_name = ''
     '''Saves a default file if no explicit file was requested.'''
     default = ''
     '''Saves a cli-command for shutting down the server.'''
@@ -747,7 +749,7 @@ class Web(
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _initialize(
-##         self: boostNode.extension.type.Self, root='.', port=0,
+##         self: boostNode.extension.type.Self, root='.', host_name='', port=0,
 ##         default='', public_key_file_path='', stop_order='stop',
 ##         request_whitelist=('/.*',), request_blacklist=(),
 ##         same_thread_request_whitelist=(),
@@ -767,9 +769,10 @@ class Web(
 ##         **keywords: builtins.object
 ##     ) -> boostNode.extension.type.Self:
     def _initialize(
-        self, root='.', port=0, default='', public_key_file_path='',
-        stop_order='stop', request_whitelist=('/.*',),
-        request_blacklist=(), same_thread_request_whitelist=(),
+        self, root='.', host_name='', port=0, default='',
+        public_key_file_path='', stop_order='stop',
+        request_whitelist=('/.*',), request_blacklist=(),
+        same_thread_request_whitelist=(),
         # NOTE: Tuple for explicit webserver file reference validation.
         # ('^text/.+', '^image/.+', '^application/(x-)?javascript$')
         static_mimetype_pattern=('^.+/.+$',),
@@ -804,6 +807,7 @@ class Web(
             authentication_file_content_pattern
         self.stop_order = stop_order
         self.root = boostNode.extension.file.Handler(location=root)
+        self.host_name = host_name
         self.port = port
         self.default = default
         self.request_whitelist = request_whitelist
@@ -988,14 +992,13 @@ class Web(
         '''
         if self._public_key_file:
             self.service = MultiProcessingHTTPServer(
-                (self._public_key_file.basename, port),
-                CGIHTTPRequestHandler)
+                (self.host_name, port), CGIHTTPRequestHandler)
             self.service.socket = ssl.wrap_socket(
                 self.service.socket, certfile=self._public_key_file._path,
                 server_side=True)
         else:
             self.service = MultiProcessingHTTPServer(
-                ('', port), CGIHTTPRequestHandler)
+                (self.host_name, port), CGIHTTPRequestHandler)
         self.service.web = self
 ## python3.3
 ##         threading.Thread(
