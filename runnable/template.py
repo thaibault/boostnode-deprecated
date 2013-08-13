@@ -898,6 +898,11 @@ class Parser(
         '''
         template_scope.update({'__builtins__': self.builtins})
         try:
+            # TODO this is very expensive for long templates.
+            # 500 lines takes 14 seconds!
+            #import datetime
+            #start = datetime.datetime.now()
+            #print((datetime.datetime.now()-start).seconds)
 ## python3.3
 ##             builtins.exec(self.rendered_content, template_scope)
             exec(self.rendered_content, template_scope)
@@ -959,8 +964,7 @@ class Parser(
         native_exception_description = ''
         if sys.flags.debug or __logger__.isEnabledFor(logging.DEBUG):
             for property in builtins.dir(exception):
-                if not (property.startswith('__') and
-                        property.endswith('__')):
+                if not (property.startswith('__') and property.endswith('__')):
                     native_exception_description += \
                         property + ': "' + builtins.str(
                             builtins.getattr(exception, property)
@@ -1113,13 +1117,15 @@ class Parser(
         indent_space, keywords = keywords_dictionary.pop(
             name='indent_space', default_value='')
 ##
-
         if indent and indent_space:
+            '''
+                If an indent level was given prepend given indent space to each
+                line.
+            '''
             print_buffer = boostNode.extension.output.Buffer()
             codewords = copy.deepcopy(keywords)
             codewords.update({'buffer': print_buffer})
             boostNode.extension.output.Print(*arguments, **codewords)
-            del arguments
             arguments = (indent_space + print_buffer.content.replace(
                 '\n', '\n' + indent_space),)
             if print_buffer.content.endswith('\n'):
@@ -1217,8 +1223,7 @@ class Parser(
             Handles none code.
         '''
         indent = self._get_code_indent(
-            current_indent=match.group('indent_none_code'),
-            mode='normal')
+            current_indent=match.group('indent_none_code'), mode='passiv')
         last_empty_lines = self._flush_empty_lines(indent)
         was_new_line = self._new_line
         self._new_line = False
@@ -1241,18 +1246,16 @@ class Parser(
 ##     ) -> builtins.str:
     def _render_code_line(self, match):
 ##
-        '''
-            Compiles a template python code line.
-        '''
+        '''Compiles a template python code line.'''
         was_new_line = self._new_line
         self._new_line = True
         self._count_lines += 1
-        code_line = self._save_output_method_indent_level(
-            code_line=match.group('code').strip(), was_new_line=was_new_line,
-            match=match)
+        code_line = match.group('code').strip()
         indent = self._get_code_indent(
             current_indent=match.group('indent_code'),
-            mode='activ' if code_line[-1] == ':' else 'normal')
+            mode='activ' if code_line[-1] == ':' else 'passiv')
+        code_line = self._save_output_method_indent_level(
+            code_line, was_new_line, match)
         return self._flush_empty_lines(indent) + indent + code_line
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -1299,8 +1302,8 @@ class Parser(
         ).find_python_code_end_bracket()
         slice_position = builtins.len('include(') + length_of_include_call
         if code_line[builtins.len('include('):slice_position]:
-            slice_position = builtins.len('include(') + length_of_include_call\
-                + 1
+            slice_position = builtins.len('include(') + \
+                length_of_include_call + 1
             return (
                 'include(' + code_line[builtins.len('include('):builtins.len(
                     'include('
@@ -1352,8 +1355,7 @@ class Parser(
             Handles escaped none code.
         '''
         indent = self._get_code_indent(
-            current_indent=match.group('indent_escaped'),
-            mode='normal')
+            current_indent=match.group('indent_escaped'), mode='passiv')
         last_empty_lines = self._flush_empty_lines(indent)
         was_new_line = self._new_line
         if match.group('escaped_end'):
@@ -1382,8 +1384,7 @@ class Parser(
             Handles placeholder.
         '''
         indent = self._get_code_indent(
-            current_indent=match.group('indent_placeholder'),
-            mode='normal')
+            current_indent=match.group('indent_placeholder'), mode='passiv')
         last_empty_lines = self._flush_empty_lines(indent)
         if match.group('before_placeholder'):
             self._count_no_lines += 1
@@ -1447,40 +1448,38 @@ class Parser(
 ## python3.3
 ##     def _get_code_indent(
 ##         self: boostNode.extension.type.Self, current_indent: builtins.str,
-##         mode='normal'
+##         mode='passiv'
 ##     ) -> builtins.str:
-    def _get_code_indent(self, current_indent, mode='normal'):
+    def _get_code_indent(self, current_indent, mode='passiv'):
 ##
         '''
             Returns the right indent in code as string depending on the
             current indention level and context.
 
             "mode" can have three different states.
-                normal: This mode describes a the ability to close or continue
+                passiv: This mode describes the ability to close or continue
                         the current context by their level of indention.
-                passiv: Means that this code should be indented as current
-                        context.
                 activ: Means a new code depending context is open.
                        The following code is depended on this line.
         '''
         indent = ''
         if self._code_dependend_indents:
             if self._new_line:
-                if mode == 'passiv':
-                    indent = builtins.len(self._code_dependend_indents) * ' '
-                else:
-                    slice = 0
-                    indents = builtins.enumerate(self._code_dependend_indents)
-                    for counter, dependend_indent in indents:
-                        if(builtins.len(current_indent) >
-                           builtins.len(dependend_indent)):
-                            indent = (counter + 1) * ' '
-                            slice = counter + 1
-                    self._code_dependend_indents = \
-                        self._code_dependend_indents[:slice]
+                slice = 0
+                indents = builtins.enumerate(self._code_dependend_indents)
+                for counter, dependend_indent in indents:
+                    if(builtins.len(current_indent) >
+                       builtins.len(dependend_indent)):
+                        indent = (counter + 1) * ' '
+                        slice = counter + 1
+                '''Close code indent blocks.'''
+                self._code_dependend_indents = \
+                    self._code_dependend_indents[:slice]
             else:
+                '''Prepend code dependent indent to get right context.'''
                 indent = builtins.len(self._code_dependend_indents) * ' '
         if mode == 'activ':
+            '''Expect a new dependent indented code block.'''
             self._code_dependend_indents.append(current_indent)
         return indent
 
@@ -1509,10 +1508,9 @@ class Parser(
             string = '\\' + string
         if string.endswith(delimiter[0]):
             string = string[0:-1] + '\\' + string[-1]
-        return (
-            "print(%s, end='')\n" % (
-                delimiter + string.replace('\n', '\\n') +
-                end.replace('\n', '\\n') + delimiter))
+        return ("print(%s, end='')\n" % (
+            delimiter + string.replace('\n', '\\n') +
+            end.replace('\n', '\\n') + delimiter))
 
                 # endregion
 
