@@ -1378,7 +1378,8 @@ class CGIHTTPRequestHandler(
             return builtins.bool(
                 self.server.web.authentication_handler is None or
                 self.server.web.authentication_handler(
-                    self.headers.getheader('authorization'), self.request_uri))
+                    self.headers.getheader('authorization'),
+                    self.request_uri))
 ##
         return True
 

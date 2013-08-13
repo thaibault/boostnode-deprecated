@@ -108,7 +108,7 @@ class Parser(
                      'name.',
              'dest': 'placeholder_name_pattern',
              'metavar': 'REGEX_PATTERN'}},
-        {'arguments': ('-', '--command-line-placeholder-name-pattern'),
+        {'arguments': ('-o', '--command-line-placeholder-name-pattern'),
          'keywords': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
@@ -213,7 +213,13 @@ class Parser(
              'required': False,
              'help': 'Select scope variables for the given template file.',
              'dest': 'scope_variables',
-             'metavar': 'VARIABLES'}},)
+             'metavar': 'VARIABLES'}},
+        {'arguments': ('-k', '--pretty-indent'),
+         'keywords': {
+             'action': 'store_true',
+             'default': {'execute': '__initializer_default_value__'},
+             'help': 'Spend time on generating right indented output.',
+             'dest': 'pretty_indent'}})
 
         # endregion
 
@@ -268,6 +274,7 @@ class Parser(
     _count_lines = 0
     _count_no_lines = 0
     _code_dependend_indents = []
+    _pretty_indent = False
     '''
         A list of tuple holding the number of phantom lines till its
         corresponding real line in source code.
@@ -709,7 +716,7 @@ class Parser(
 ##         template_context_default_indent=4,
 ##         builtins=(builtins.all, builtins.filter, builtins.map,
 ##                   builtins.enumerate, builtins.range, builtins.locals),
-##         **keywords: builtins.object
+##         pretty_indent=False, **keywords: builtins.object
 ##     ) -> boostNode.extension.type.Self:
     def _initialize(
         self, template, string=False,
@@ -746,7 +753,7 @@ class Parser(
         template_context_default_indent=4,
         builtins=(builtins.all, builtins.filter, builtins.map,
                   builtins.enumerate, builtins.range, builtins.locals),
-        **keywords
+        pretty_indent=False, **keywords
     ):
 ##
         '''
@@ -772,6 +779,8 @@ class Parser(
         self._empty_lines = self.__class__._empty_lines
 
         self.right_escaped = right_escaped
+
+        self._pretty_indent = pretty_indent
         self._placeholder_name_pattern = placeholder_name_pattern
         self._command_line_placeholder_name_pattern = \
             command_line_placeholder_name_pattern
@@ -898,11 +907,6 @@ class Parser(
         '''
         template_scope.update({'__builtins__': self.builtins})
         try:
-            # TODO this is very expensive for long templates.
-            # 500 lines takes 14 seconds!
-            #import datetime
-            #start = datetime.datetime.now()
-            #print((datetime.datetime.now()-start).seconds)
 ## python3.3
 ##             builtins.exec(self.rendered_content, template_scope)
             exec(self.rendered_content, template_scope)
@@ -995,7 +999,7 @@ class Parser(
 ##         line_info: builtins.str, exception_message: builtins.str,
 ##         native_exception_description: builtins.str,
 ##         native_exception: builtins.Exception
-##     ) -> boostNode.extension.type.Self:
+##     ) -> None:
     def _raise_template_exception(
         self, line_info, exception_message, native_exception_description,
         native_exception
@@ -1032,7 +1036,6 @@ class Parser(
         exception.has_template_info = True
 ## python3.3         raise exception from None
         raise exception
-        return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -1087,7 +1090,9 @@ class Parser(
 
             # region wrapper methods for template context
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    # NOTE: This method is heavily used during rendering. It should be as fast
+    # as possible. So the JointPoint is deactivated.
+    # @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _print(
 ##         self: boostNode.extension.type.Self, *arguments: builtins.object,
@@ -1108,32 +1113,35 @@ class Parser(
             >>> tpl.output
             'hans\\n and klaus\\nfritz is also present.'
         '''
+        if self._pretty_indent:
 ## python3.3
-##         pass
-        keywords_dictionary = boostNode.extension.native.Dictionary(
-            content=keywords)
-        indent, keywords = keywords_dictionary.pop(
-            name='indent', default_value=True)
-        indent_space, keywords = keywords_dictionary.pop(
-            name='indent_space', default_value='')
+##             pass
+            keywords_dictionary = boostNode.extension.native.Dictionary(
+                content=keywords)
+            indent, keywords = keywords_dictionary.pop(
+                name='indent', default_value=True)
+            indent_space, keywords = keywords_dictionary.pop(
+                name='indent_space', default_value='')
 ##
-        if indent and indent_space:
-            '''
-                If an indent level was given prepend given indent space to each
-                line.
-            '''
-            print_buffer = boostNode.extension.output.Buffer()
-            codewords = copy.deepcopy(keywords)
-            codewords.update({'buffer': print_buffer})
-            boostNode.extension.output.Print(*arguments, **codewords)
-            arguments = (indent_space + print_buffer.content.replace(
-                '\n', '\n' + indent_space),)
-            if print_buffer.content.endswith('\n'):
-                arguments = (arguments[0][:-builtins.len(
-                    '\n' + indent_space)] + '\n',)
-            keywords['end'] = ''
-        keywords['file'] = self._output
-        return builtins.print(*arguments, **keywords)
+            if indent and indent_space:
+                '''
+                    If an indent level was given prepend given indent space to
+                    each line.
+                '''
+                print_buffer = boostNode.extension.output.Buffer()
+                codewords = copy.deepcopy(keywords)
+                codewords.update({'buffer': print_buffer})
+                boostNode.extension.output.Print(*arguments, **codewords)
+                arguments = (indent_space + print_buffer.content.replace(
+                    '\n', '\n' + indent_space),)
+                if print_buffer.content.endswith('\n'):
+                    arguments = [arguments[0][:-builtins.len(
+                        '\n' + indent_space)] + '\n'] + list(arguments[1:])
+                keywords['end'] = ''
+            keywords['file'] = self._output
+            return builtins.print(*arguments, **keywords)
+        return builtins.print(
+            *arguments, file=self._output, end=keywords.get('end'))
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
