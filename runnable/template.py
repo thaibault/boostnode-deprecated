@@ -684,27 +684,30 @@ class Parser(
 ##         string=False,
 ##         placeholder_name_pattern='[a-zA-Z0-9_\[\]\'"\.()\\\\,\-+ :/={}]+',
 ##         command_line_placeholder_name_pattern='[a-zA-Z0-9_\[\]\.(),\-+]+',
-##         placeholder_pattern='{left_delimiter}[ \t]*({placeholder})'
+##         placeholder_pattern='{left_delimiter}[ \t]*(?:{placeholder})'
 ##                             '[ \t]*{right_delimiter}',
-##         template_pattern='(?P<E>(?P<before_escaped>'
-##                          '(?P<indent_escaped>[ \t]*)'
-##                          '(.(?!{left_delimiter}))*?.?){left_delimiter}'
-##                          '{right_escaped}(?P<escaped_end>\n?))|'
-##
-##                          '(?P<P>(?P<before_placeholder>'
-##                          '(?P<indent_placeholder>[ \t]*)(.(?!'
-##                          '{left_delimiter}))*?.?){left_delimiter}'
-##                          '[ \t]*(?P<placeholder>{placeholder})[ \t]*'
-##                          '{right_delimiter}(?P<placeholder_end>\n?))|'
-##
-##                          '(?P<C>^(?P<indent_code>[ \t]*){left_delimiter}'
-##                          '(?P<code>.+)$)|'
-##
-##                          '(?P<N>'
-##                          '(?P<none_code>(?P<indent_none_code>[ \t]*).+)'
-##                          '(?P<none_code_end>\n|$))|'
-##
-##                          '(?P<L>^(?P<indent_line>[ \t]*)\n)',
+##         template_pattern='(?P<ESCAPED_DELIMITER>'
+##                              '(?P<before_escaped>'
+##                                  '(?P<indent_escaped>[ \t]*)'
+##                                  '(?!{left_delimiter})'
+##                                  '(?:.(?!{left_delimiter}))*?.?'
+##                              ')?{left_delimiter}{right_escaped}'
+##                              '(?P<escaped_end>\n?)'
+##                          ')|(?P<PLACEHOLDER>'
+##                              '(?P<before_placeholder>'
+##                                  '(?P<indent_placeholder>[ \t]*)'
+##                                  '(?!{left_delimiter})'
+##                                  '(?:.(?!{left_delimiter}))*?.?'
+##                              ')?{left_delimiter}[ \t]*'
+##                              '(?P<placeholder>{placeholder})[ \t]*'
+##                              '{right_delimiter}(?P<placeholder_end>\n?)'
+##                          ')|(?P<CODE>'
+##                              '^(?P<indent_code>[ \t]*){left_delimiter}'
+##                              '(?P<code>.+)$'
+##                          ')|(?P<NONE_CODE>'
+##                              '(?P<none_code>(?P<indent_none_code>[ \t]*).+)'
+##                              '(?P<none_code_end>\n|$)'
+##                          ')|(?P<EMPTY_LINE>^(?P<indent_line>[ \t]*)\n)',
 ##         command_line_placeholder_pattern='^(?P<variable_name>{placeholder})'
 ##                                          '(?P<separator>.)(?P<value>.+)$',
 ##         native_template_pattern='<%[ \t]*(?:(?P<escaped>%)|'
@@ -722,26 +725,30 @@ class Parser(
         self, template, string=False,
         placeholder_name_pattern='[a-zA-Z0-9_\[\]\'"\.()\\\\,\-+ :/={}]+',
         command_line_placeholder_name_pattern='[a-zA-Z0-9_\[\]\.(),\-+]+',
-        placeholder_pattern='{left_delimiter}[ \t]*({placeholder})[ \t]'
+        placeholder_pattern='{left_delimiter}[ \t]*(?:{placeholder})[ \t]'
                             '*{right_delimiter}',
-        template_pattern='(?P<E>(?P<before_escaped>'
-                         '(?P<indent_escaped>[ \t]*)'
-                         '(.(?!{left_delimiter}))*?.?){left_delimiter}'
-                         '{right_escaped}(?P<escaped_end>\n?))|'
-
-                         '(?P<P>(?P<before_placeholder>'
-                         '(?P<indent_placeholder>[ \t]*)(.(?!'
-                         '{left_delimiter}))*?.?){left_delimiter}'
-                         '[ \t]*(?P<placeholder>{placeholder})[ \t]*'
-                         '{right_delimiter}(?P<placeholder_end>\n?))|'
-
-                         '(?P<C>^(?P<indent_code>[ \t]*){left_delimiter}'
-                         '(?P<code>.+)$)|'
-
-                         '(?P<N>(?P<none_code>(?P<indent_none_code>[ \t]*)'
-                         '.+)(?P<none_code_end>\n|$))|'
-
-                         '(?P<L>^(?P<indent_line>[ \t]*)\n)',
+        template_pattern='(?P<ESCAPED_DELIMITER>'
+                             '(?P<before_escaped>'
+                                 '(?P<indent_escaped>[ \t]*)'
+                                 '(?!{left_delimiter})'
+                                 '(?:.(?!{left_delimiter}))*?.?'
+                             ')?{left_delimiter}{right_escaped}'
+                             '(?P<escaped_end>\n?)'
+                         ')|(?P<PLACEHOLDER>'
+                             '(?P<before_placeholder>'
+                                 '(?P<indent_placeholder>[ \t]*)'
+                                 '(?!{left_delimiter})'
+                                 '(?:.(?!{left_delimiter}))*?.?'
+                             ')?{left_delimiter}[ \t]*'
+                             '(?P<placeholder>{placeholder})[ \t]*'
+                             '{right_delimiter}(?P<placeholder_end>\n?)'
+                         ')|(?P<CODE>'
+                             '^(?P<indent_code>[ \t]*){left_delimiter}'
+                             '(?P<code>.+)$'
+                         ')|(?P<NONE_CODE>'
+                             '(?P<none_code>(?P<indent_none_code>[ \t]*).+)'
+                             '(?P<none_code_end>\n|$)'
+                         ')|(?P<EMPTY_LINE>^(?P<indent_line>[ \t]*)\n)',
         command_line_placeholder_pattern='^(?P<variable_name>{placeholder})'
                                          '(?P<separator>.)(?P<value>.+)$',
         native_template_pattern='<%[ \t]*(?:(?P<escaped>%)|'
@@ -1185,16 +1192,20 @@ class Parser(
             Helper method for rendering the source template file.
         '''
         if match.group():
-            if match.group('E'):
-                return self._render_escaped_none_code_line(match)
-            if match.group('P'):
-                return self._render_placeholder(match)
-            if match.group('C'):
-                return self._render_code_line(match)
-            if match.group('N'):
+            '''
+                This has been sorted by their average frequency for improving
+                performance.
+            '''
+            if match.group('NONE_CODE'):
                 return self._render_none_code_line(match)
-            if match.group('L'):
+            if match.group('PLACEHOLDER'):
+                return self._render_placeholder(match)
+            if match.group('EMPTY_LINE'):
                 return self._render_empty_line(match)
+            if match.group('CODE'):
+                return self._render_code_line(match)
+            if match.group('ESCAPED_DELIMITER'):
+                return self._render_escaped_none_code_line(match)
         raise __exception__(
             'Given template "%s" isn\'t valid formated.', self.content)
 
@@ -1216,7 +1227,7 @@ class Parser(
         self._new_line = True
         self._count_lines += 1
         self._empty_lines.append(self._render_none_code(
-            string=match.group('L'), end=''))
+            string=match.group('EMPTY_LINE'), end=''))
         return ''
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -1259,9 +1270,11 @@ class Parser(
         self._new_line = True
         self._count_lines += 1
         code_line = match.group('code').strip()
+        mode = 'passiv'
+        if code_line.endswith(':') and not code_line.startswith('#'):
+            mode = 'activ'
         indent = self._get_code_indent(
-            current_indent=match.group('indent_code'),
-            mode='activ' if code_line[-1] == ':' else 'passiv')
+            current_indent=match.group('indent_code'), mode=mode)
         code_line = self._save_output_method_indent_level(
             code_line, was_new_line, match)
         return self._flush_empty_lines(indent) + indent + code_line

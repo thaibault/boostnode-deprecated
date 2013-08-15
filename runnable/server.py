@@ -126,9 +126,7 @@ class SocketFileObjectWrapper(socket._fileobject):
 
     @boostNode.paradigm.aspectOrientation.JointPoint
     def readline(self, *arguments, **keywords):
-        '''
-            Wraps the "readline()" method to get the first line twice.
-        '''
+        '''Wraps the "readline()" method to get the first line twice.'''
         if self.first_read_line is False:
             self.first_read_line = builtins.getattr(
                 builtins.super(self.__class__, self), inspect.stack()[0][3]
@@ -710,9 +708,7 @@ class Web(
             except socket.error:
                 pass
             self.service.socket.close()
-        '''
-            Take this method type by the abstract class via introspection.
-        '''
+        '''Take this method type by the abstract class via introspection.'''
         return builtins.getattr(
             builtins.super(self.__class__, self), inspect.stack()[0][3]
         )(*arguments, **keywords)
@@ -868,9 +864,7 @@ class Web(
 ##     ) -> boostNode.extension.type.Self:
     def _log_server_status(self):
 ##
-        '''
-            Prints some information about the way the server was started.
-        '''
+        '''Prints some information about the way the server was started.'''
         determineIPSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         try:
             determineIPSocket.connect(self.DETERMINE_IP_SOCKET)
@@ -909,10 +903,10 @@ class Web(
 ##     ) -> boostNode.extension.type.Self:
     def _start_with_dynamic_port(self):
 ##
-        '''
-            Searches for the highest free port for listing.
-        '''
-        ports = [80, 8080, 8000, 25, 139, 445, 631, 3306]
+        '''Searches for the highest free port for listing.'''
+        ports = [
+            80, 8008, 8080, 8090, 8280, 8887, 9080, 16080, 3128, 4567,
+            5000, 4711, 443, 5001, 5104, 5800, 8243, 8888]
         if self._public_key_file:
             ports = [443] + ports
         ports += builtins.list(builtins.set(
@@ -943,9 +937,7 @@ class Web(
 ##     ) -> boostNode.extension.type.Self:
     def _start_with_static_port(self):
 ##
-        '''
-            Starts the server listing on the given port, if it is free.
-        '''
+        '''Starts the server listing on the given port, if it is free.'''
         try:
             self._initialize_server_thread(port=self.port)
         except socket.error:
@@ -987,9 +979,7 @@ class Web(
 ##     ) -> boostNode.extension.type.Self:
     def _initialize_server_thread(self, port):
 ##
-        '''
-            Initializes a new request-handler and starts its own thread.
-        '''
+        '''Initializes a new request-handler and starts its own thread.'''
         if self._public_key_file:
             self.service = MultiProcessingHTTPServer(
                 (self.host_name, port), CGIHTTPRequestHandler)
@@ -1099,6 +1089,7 @@ class CGIHTTPRequestHandler(
 ##         '''
     def __init__(self, *arguments, **keywords):
 ##
+        '''Initializes a http request response.'''
         self.request_uri = ''
         self.parameter = ''
         self.post_dictionary = {}
@@ -1240,9 +1231,7 @@ class CGIHTTPRequestHandler(
 ##     ) -> boostNode.extension.type.Self:
     def do_POST(self):
 ##
-        '''
-            Is triggered if a post-request is coming.
-        '''
+        '''Is triggered if a post-request is coming.'''
 ## python3.3
 ##         data_type, post_data = cgi.parse_header(
 ##             self.headers.get_content_type())
@@ -1273,19 +1262,48 @@ class CGIHTTPRequestHandler(
 ##     def send_response(
 ##         self: boostNode.extension.type.Self, *arguments: builtins.object,
 ##         **keywords: builtins.object
-##     ) -> None:
+##     ) -> boostNode.extension.type.Self:
     def send_response(self, *arguments, **keywords):
 ##
         '''
-            Send the given response code to client.
+            Send the given response code to client if no response code was sent
+            yet.
         '''
-        self.response_sent = True
+        if not self.response_sent:
+            self.response_sent = True
 ## python3.3
-##         return http.server.CGIHTTPRequestHandler.send_response(
-##             self, *arguments, **keywords)
-        return CGIHTTPServer.CGIHTTPRequestHandler.send_response(
-            self, *arguments, **keywords)
+##             http.server.CGIHTTPRequestHandler.send_response(
+##                 self, *arguments, **keywords)
+            CGIHTTPServer.CGIHTTPRequestHandler.send_response(
+                self, *arguments, **keywords)
 ##
+        return self
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def send_content_type_header(
+##         self: boostNode.extension.type.Self, *arguments: builtins.object,
+##         mimetype='text/html', encoding='UTF-8',
+##         **keywords: builtins.object
+##     ) -> boostNode.extension.type.Self:
+    def send_content_type_header(self, *arguments, **keywords):
+##
+        '''Sends a content type header to client if not sent yet.'''
+## python3.3
+##         pass
+        default_keywords = boostNode.extension.native.Dictionary(
+            content=keywords)
+        mimetype, keywords = default_keywords.pop(
+            name='mimetype', default_value='text/html')
+        encoding, keywords = default_keywords.pop(
+            name='encoding', default_value='UTF-8')
+##
+        if not self.content_type_sent:
+            self.send_response(200).content_type_sent = True
+            self.send_header(
+                'Content-Type', '%s; charset=%s' % (mimetype, encoding),
+                *arguments, **keywords)
+        return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -1394,7 +1412,7 @@ class CGIHTTPRequestHandler(
     def _is_valid_reference(self):
 ##
         '''
-            Checks wether the requested is one of a python module-, static- or
+            Checks weather the requested is one of a python module-, static- or
             dynamic file request. Returns "True" if so and "False" otherwise.
         '''
         patterns = self.server.web.dynamic_mimetype_pattern +\
@@ -1460,8 +1478,8 @@ class CGIHTTPRequestHandler(
     def _determine_post_dictionary(self):
 ##
         '''
-            Determines the post values given by an html form.
-            File uploads are includes as bytes.
+            Determines the post values given by an html form. File uploads are
+            includes as bytes.
         '''
 ## python3.3
 ##         form = cgi.FieldStorage(
@@ -1509,7 +1527,7 @@ class CGIHTTPRequestHandler(
     def _determine_environment_variables(self):
 ##
         '''
-            Determines all needed envirnoment variables needed to determine
+            Determines all needed environment variables needed to determine
             given post data with cgi module.
         '''
         accept = []
@@ -1551,36 +1569,14 @@ class CGIHTTPRequestHandler(
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
-##     def _send_positive_header(
-##         self: boostNode.extension.type.Self, mimetype='text/html',
-##         encoding='UTF-8'
-##     ) -> boostNode.extension.type.Self:
-    def _send_positive_header(
-        self, mimetype='text/html', encoding='UTF-8'
-    ):
-##
-        '''
-            This method is called for each successful answered http-request.
-        '''
-        if not self.response_sent:
-            self.send_response(200)
-        if not self.content_type_sent:
-            self.send_header(
-                'Content-Type', '%s; charset=%s' % (mimetype, encoding))
-        return self
-
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
 ##     def _send_no_authentication_error(
 ##         self: boostNode.extension.type.Self
 ##     ) -> boostNode.extension.type.Self:
     def _send_no_authentication_error(self):
 ##
-        '''
-            This method is called if authentication has failt.
-        '''
+        '''This method is called if authentication failed.'''
         self.send_response(401)
-        message = 'You request a potected location'
+        message = 'You request a protected location'
 ## python3.3
 ##         if self.headers.get('authorization'):
         if self.headers.getheader('authorization'):
@@ -1648,8 +1644,8 @@ class CGIHTTPRequestHandler(
     def _check_pattern(self, patterns, subject):
 ##
         '''
-            Checks if one of a list of given regular expression
-            patterns matches the given subject.
+            Checks if one of a list of given regular expression patterns
+            matches the given subject.
         '''
         for pattern in patterns:
             if re.compile(pattern).match(subject):
@@ -1679,9 +1675,7 @@ class CGIHTTPRequestHandler(
 ##     ) -> builtins.bool:
     def _request_in_pattern_list(self, pattern_list):
 ##
-        '''
-            Checks if current request matches on of the given pattern.
-        '''
+        '''Checks if current request matches on of the given pattern.'''
         for pattern in pattern_list:
             if re.compile(pattern).match(self.request_uri):
                 return True
@@ -1694,9 +1688,7 @@ class CGIHTTPRequestHandler(
 ##     ) -> builtins.bool:
     def _create_environment_variables(self):
 ##
-        '''
-            Creates all request specified environment-variables.
-        '''
+        '''Creates all request specified environment-variables.'''
         self.request_uri = self.path
         match = re.compile('[^/\?]*/+([^?]*)\??(.*)').match(self.request_uri)
         if match:
@@ -1712,8 +1704,7 @@ class CGIHTTPRequestHandler(
     def _set_dynamic_or_static_get(self, file_name):
 ##
         '''
-            Makes a dynamic or static respond depending on incoming
-            request.
+            Makes a dynamic or static respond depending on incoming request.
         '''
         self.requested_file_name = file_name
         if self._is_dynamic():
@@ -1751,9 +1742,7 @@ class CGIHTTPRequestHandler(
 ##     ) -> builtins.bool:
     def _default_get_module(self):
 ##
-        '''
-            Handle if possible a default module request.
-        '''
+        '''Handle if possible a default module request.'''
         for module_name in self.server.web.default_module_names:
             if((self.server.web.module_loading is True or
                 module_name == self.server.web.module_loading) and
@@ -1790,9 +1779,7 @@ class CGIHTTPRequestHandler(
 ##     ) -> boostNode.extension.type.Self:
     def _handle_given_default_get(self):
 ##
-        '''
-            Handles request with no explicit file or module to run.
-        '''
+        '''Handles request with no explicit file or module to run.'''
         if((self.server.web.dynamic_module_loading is True or
             self.server.web.dynamic_module_loading ==
             self.server.web.default) and
@@ -1817,15 +1804,14 @@ class CGIHTTPRequestHandler(
 ##     ) -> boostNode.extension.type.Self:
     def _static_get(self):
 ##
-        '''
-            Handles a static file-request.
-        '''
+        '''Handles a static file-request.'''
         if(self.headers.get('If-Modified-Since') !=
            self.date_time_string(
                builtins.int(self.requested_file.timestamp))):
             __logger__.debug('Return file "%s".', self.requested_file)
-            self._send_positive_header(mimetype=self.requested_file.mimetype)
-            self.send_header('Last-Modified', self.date_time_string(
+            self.send_content_type_header(
+                mimetype=self.requested_file.mimetype
+            ).send_header('Last-Modified', self.date_time_string(
                 builtins.int(self.requested_file.timestamp)))
             self.send_header(
                 'Content-Length', builtins.int(self.requested_file.size))
@@ -1920,8 +1906,7 @@ class CGIHTTPRequestHandler(
                     '([^:]+: .+\n)+\n.+'
                 ).match(output)
                 if not header_match:
-                    self._send_positive_header()
-                    self.end_headers()
+                    self.send_content_type_header().end_headers()
                 self.wfile.write(output)
         if errors:
             __logger__.critical(
@@ -1966,8 +1951,7 @@ class CGIHTTPRequestHandler(
 ##         sys_path_save: collections.Iterable
 ##     ) -> boostNode.extension.type.Self:
     def _handle_module_running(
-        self, requested_module, print_default_buffer_save,
-        sys_path_save
+        self, requested_module, print_default_buffer_save, sys_path_save
     ):
 ##
         '''Handles exceptions raising in requested modules.'''
@@ -1983,8 +1967,7 @@ class CGIHTTPRequestHandler(
             self._handle_module_exception(requested_module, exception)
         else:
             if self.respond:
-                self._send_positive_header()
-                self.end_headers()
+                self.send_content_type_header().end_headers()
         finally:
             self.server.web.number_of_running_threads -= 1
             if self.respond:
