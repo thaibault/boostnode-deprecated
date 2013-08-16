@@ -1486,7 +1486,7 @@ class CommandLine(builtins.object):
 
             >>> import copy
             >>> log_level = boostNode.extension.output.Logger.default_level
-            >>> sys_argv_save = copy.copy(sys.argv)
+            >>> sys_argv_backup = copy.copy(sys.argv)
             >>> del sys.argv[1:]
             >>> docstring_backup = sys.modules[__name__].__doc__
             >>> sys.argv += '--long', 'hans'
@@ -1502,7 +1502,7 @@ class CommandLine(builtins.object):
             ...      'keywords': {'action': 'store', 'type': str}},))
             Namespace(log_level='critical', long='hans')
 
-            >>> sys.argv = sys_argv_save
+            >>> sys.argv = sys_argv_backup
             >>> sys.modules[__name__].__doc__ = docstring_backup
             >>> boostNode.extension.output.Logger.change_all(
             ...     level=log_level) # doctest: +ELLIPSIS
@@ -1628,7 +1628,6 @@ class CommandLine(builtins.object):
                                 sub_object.function
         return objects
 
-    # TODO stand
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
 ##     def generic_package_interface(
@@ -1659,30 +1658,29 @@ class CommandLine(builtins.object):
             Examples:
 
             >>> CommandLine.generic_package_interface(
-            ...     name=__name__, frame=inspect.currentframe()
-            ... ) # doctest: +SKIP
-            Namespace(log_level='info'...)
+            ...     name='not__main__', frame=inspect.currentframe())
+            False
         '''
         if name == '__main__':
-            all, arguments, current_working_directory_save = \
+            all, arguments, current_working_directory_backup = \
                 cls._package_start_helper(name, frame, command_line_arguments)
             try:
                 module_names = cls._handle_packages_in_package(
-                    current_working_directory_save, frame,
+                    current_working_directory_backup, frame,
                     command_line_arguments, exclude_packages
                 )._get_modules(name)
                 cls._test_lint_document_modules(
                     all, arguments, module_names, temp_file_patterns, linter,
                     documentation_path, clear_old_documentation, documenter,
                     documenter_arguments, documentation_file_extension, frame,
-                    current_working_directory_save)
+                    current_working_directory_backup)
             finally:
                 '''Tidy up.'''
                 cls._restore_current_directory(
                     clear=all or 'clear' in arguments.commands,
-                    current_directory=current_working_directory_save,
+                    current_directory=current_working_directory_backup,
                     temp_file_patterns=temp_file_patterns)
-            return all, arguments, current_working_directory_save
+            return all, arguments, current_working_directory_backup
         return False
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
@@ -1700,6 +1698,31 @@ class CommandLine(builtins.object):
         '''
             Provides a generic command line interface for modules.
             Things like unit testing or calling objects in module are provided.
+
+            Examples:
+
+            >>> import copy
+            >>> sys_argv_backup = copy.copy(sys.argv)
+            >>> sys_stdout_backup = sys.stdout
+            >>> sys.stdout = boostNode.extension.output.Buffer()
+
+            >>> sys.argv += [sys.argv[0], '--meta-help']
+            >>> CommandLine.generic_module_interface({
+            ...     'name': '__main__',
+            ...     'scope': builtins.__import__(__name__)})
+
+            >>> sys.argv += [sys.argv[0], '--module-object', Platform.__name__]
+            >>> CommandLine.generic_module_interface({
+            ...     'name': '__main__',
+            ...     'scope': builtins.__import__(__name__)})
+
+            >>> sys.argv += sys.argv[0:1]
+            >>> CommandLine.generic_module_interface({
+            ...     'name': '__main__',
+            ...     'scope': builtins.__import__(__name__)})
+
+            >>> sys.stdout = sys_stdout_backup
+            >>> sys.argv = sys_argv_backup
         '''
         if module['name'] == '__main__' or test:
             callable_objects, default_caller = cls._determine_callable_objects(
@@ -1721,6 +1744,7 @@ class CommandLine(builtins.object):
                     caller_keywords=caller_keywords)
         return cls
 
+    # TODO stand
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
 ##     def test_module(
@@ -2009,13 +2033,13 @@ class CommandLine(builtins.object):
 ##         documenter: builtins.str,
 ##         documenter_arguments: collections.Iterable,
 ##         documentation_file_extension: builtins.str, frame: types.FrameType,
-##         current_working_directory_save: builtins.str
+##         current_working_directory_backup: builtins.str
 ##     ) -> boostNode.extension.type.SelfClass:
     def _test_lint_document_modules(
         cls, all, arguments, module_names, temp_file_patterns, linter,
         documentation_path, clear_old_documentation, documenter,
         documenter_arguments, documentation_file_extension, frame,
-        current_working_directory_save
+        current_working_directory_backup
     ):
 ##
         '''
@@ -2033,7 +2057,7 @@ class CommandLine(builtins.object):
                 documentation_file_extension
             )._put_documentations_together(
                 documentation_path, frame,
-                current_working_directory_save,
+                current_working_directory_backup,
                 documentation_file_extension)
         return cls
 
@@ -2121,11 +2145,11 @@ class CommandLine(builtins.object):
 ##     def _put_documentations_together(
 ##         cls: boostNode.extension.type.SelfClass,
 ##         documentation_path: builtins.str, frame: types.FrameType,
-##         current_working_directory_save: builtins.str,
+##         current_working_directory_backup: builtins.str,
 ##         documentation_file_extension: builtins.str
 ##     ) -> boostNode.extension.type.SelfClass:
     def _put_documentations_together(
-        cls, documentation_path, frame, current_working_directory_save,
+        cls, documentation_path, frame, current_working_directory_backup,
         documentation_file_extension
     ):
 ##
@@ -2143,7 +2167,7 @@ class CommandLine(builtins.object):
         #if clear_old_documentation:
         #    meta_documentation.clear_directory()
         for package, initializer in cls._get_packages(
-                current_working_directory_save, frame):
+                current_working_directory_backup, frame):
             package_documentation = boostNode.extension.file.Handler(
                 location=package.path + documentation_path, must_exist=False)
             if package_documentation:
@@ -2235,14 +2259,14 @@ class CommandLine(builtins.object):
         '''
         for module_name in module_names:
             __logger__.info('Test module "%s".', module_name)
-            command_line_arguments_save = sys.argv
-            main_module_reference_save = sys.modules['__main__']
+            command_line_arguments_backup = sys.argv
+            main_module_reference_backup = sys.modules['__main__']
             module = builtins.__import__(module_name)
             sys.modules['__main__'] = module
             cls.generic_module_interface(
                 module={'scope': module, 'name': module_name}, test=True)
-            sys.modules['__main__'] = main_module_reference_save
-            sys.argv = command_line_arguments_save
+            sys.modules['__main__'] = main_module_reference_backup
+            sys.argv = command_line_arguments_backup
             cls._clear_temp_files(temp_file_patterns)
         return cls
 
@@ -2250,13 +2274,13 @@ class CommandLine(builtins.object):
 ## python3.3
 ##     def _handle_packages_in_package(
 ##         cls: boostNode.extension.type.SelfClass,
-##         current_working_directory_save: builtins.str,
+##         current_working_directory_backup: builtins.str,
 ##         frame: types.FrameType,
 ##         command_line_arguments: collections.Iterable,
 ##         exclude_packages: collections.Iterable
 ##     ) -> boostNode.extension.type.SelfClass:
     def _handle_packages_in_package(
-        cls, current_working_directory_save, frame, command_line_arguments,
+        cls, current_working_directory_backup, frame, command_line_arguments,
         exclude_packages
     ):
 ##
@@ -2270,7 +2294,7 @@ class CommandLine(builtins.object):
                     del new_command_line_arguments[
                         new_command_line_arguments.index(argument)]
         for package, initializer in cls._get_packages(
-                current_working_directory_save, frame):
+                current_working_directory_backup, frame):
             if not package.basename in builtins.map(
                 lambda package: package.__name__, exclude_packages
             ):
@@ -2299,13 +2323,13 @@ class CommandLine(builtins.object):
         '''
         arguments = cls._package_argument_parser(
             name, frame, command_line_arguments)
-        current_working_directory_save = os.getcwd()
+        current_working_directory_backup = os.getcwd()
         boostNode.extension.file.Handler(
             location=sys.argv[0]
         ).change_working_directory()
         return (
             'all' in arguments.commands, arguments,
-            current_working_directory_save)
+            current_working_directory_backup)
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
@@ -2374,10 +2398,10 @@ class CommandLine(builtins.object):
 ## python3.3
 ##     def _get_packages(
 ##         cls: boostNode.extension.type.SelfClass,
-##         current_working_directory_save: builtins.str,
+##         current_working_directory_backup: builtins.str,
 ##         frame: types.FrameType
 ##     ) -> builtins.list:
-    def _get_packages(cls, current_working_directory_save, frame):
+    def _get_packages(cls, current_working_directory_backup, frame):
 ##
         '''
             Returns all sub packages found in the current package.
@@ -2389,15 +2413,15 @@ class CommandLine(builtins.object):
             ... ) # doctest: +SKIP
             [...]
         '''
-        if(os.getcwd() == current_working_directory_save or
+        if(os.getcwd() == current_working_directory_backup or
            boostNode.extension.file.Handler(
                location=frame.f_code.co_filename, must_exist=False
            ).is_referenced_via_absolute_path()):
-            current_working_directory_save = ''
+            current_working_directory_backup = ''
         else:
-            current_working_directory_save += os.sep
+            current_working_directory_backup += os.sep
         init_file = boostNode.extension.file.Handler(
-            location=current_working_directory_save +
+            location=current_working_directory_backup +
             frame.f_code.co_filename, respect_root_path=False)
         packages = []
         for file in boostNode.extension.file.Handler(
