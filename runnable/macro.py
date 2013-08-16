@@ -335,13 +335,14 @@ class Replace(
 ##         first_line_regex_pattern='(?P<constant_version_pattern>^#!.*?'
 ##                                  '(?P<current_version>[a-zA-Z0-9\.]+))\n',
 ##         one_line_regex_pattern='\n(?P<prefix>##) '
-##                                '(?P<alternate_version>[^\n ]+) '
-##                                '?(?P<alternate_text>.*)\n'
-##                                '(?P<current_text>.*)(\n|\Z)',
-##         more_line_regex_pattern='\n(?P<prefix>##) '
+##                                '(?P<alternate_version>[^\n ]+) ?'
+##                                '(?P<alternate_text>.*)\n'
+##                                '(?P<current_text>.*)(?:\n|\Z)',
+##         more_line_regex_pattern='(?s)\n(?P<prefix>##) '
 ##                                 '(?P<alternate_version>[^ ]+)\n'
-##                                 '(?P<alternate_text>((## .*?\n)|(##\n))+)'
-##                                 '(?P<current_text>.*?(\n|\Z))##\n',
+##                                 '(?P<alternate_text>'
+##                                 '(?:(?:## .*?\n)|(?:##\n))+'  # in brackets
+##                                 ')(?P<current_text>.*?\n)##(?:\n|\Z)',
 ##         encoding='utf_8', dry=False, **keywords: builtins.object
 ##     ) -> boostNode.extension.type.Self:
     def _initialize(
@@ -350,18 +351,23 @@ class Replace(
         first_line_regex_pattern='(?P<constant_version_pattern>^#!.*?'
                                  '(?P<current_version>[a-zA-Z0-9\.]+))\n',
         one_line_regex_pattern='\n(?P<prefix>##) '
-                               '(?P<alternate_version>[^\n ]+) '
-                               '?(?P<alternate_text>.*)\n'
+                               '(?P<alternate_version>[^\n ]+) ?'
+                               '(?P<alternate_text>.*)\n'
                                '(?P<current_text>.*)\n',
-        more_line_regex_pattern='\n(?P<prefix>##) '
+        more_line_regex_pattern='(?s)\n(?P<prefix>##) '
                                 '(?P<alternate_version>[^ ]+)\n'
-                                '(?P<alternate_text>((## .*?\n)|(##\n))+)'
-                                '(?P<current_text>.*?\n)##(\n|\Z)',
+                                '(?P<alternate_text>'
+                                '(?:(?:## .*?\n)|(?:##\n))+'  # in brackets.
+                                ')(?P<current_text>.*?\n)##(?:\n|\Z)',
         encoding='utf_8', dry=False, **keywords
     ):
 ##
         '''
             Triggers the conversion process with given arguments.
+            NOTE: "(?s...)" is equivalent to regular expression flag
+            "re.DOTALL".
+            NOTE: That alternate version in one line regular expression
+            pattern could be empty.
 
             Examples:
 
@@ -725,7 +731,7 @@ class Replace(
                 path=file.path, current_version=self._current_version,
                 new_version=self._new_version))
         file_content = first_line + re.compile(
-            self._more_line_regex_pattern, re.DOTALL
+            self._more_line_regex_pattern
         ).sub(
             self._replace_alternate_lines, file_content)
         if not self._dry:

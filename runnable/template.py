@@ -369,10 +369,11 @@ class Parser(
         if not self._indent and self.content:
             self._indent = self._template_context_default_indent
             match = re.compile(
-                '^<% *__indent__ *= *([1-9][0-9]*)(;|\n)?.*?$'
+                '^<% *__indent__ *= *(?P<number_of_indents>[1-9][0-9]*)'
+                '(?:;|\n)?.*?$'
             ).match(boostNode.extension.native.String(self.content).readline())
             if match:
-                self._indent = builtins.int(match.group(1))
+                self._indent = builtins.int(match.group('number_of_indents'))
         return self._indent
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -508,8 +509,9 @@ class Parser(
                 Substitution replacement for native pendant with no
                 exception raising.
             '''
-            if match.group(1) in keywords:
-                return str(keywords[match.group(1)])
+            if match.group('variable_name') in keywords:
+                return builtins.str(
+                    keywords[match.group('variable_name')])
             return match.group(0)
         self._output.write(re.compile(self._placeholder_pattern.format(
             left_delimiter=self._left_code_delimiter,
@@ -583,8 +585,7 @@ class Parser(
                     self._right_code_delimiter
                 ).validate_regex(),
                 placeholder=self._placeholder_name_pattern,
-                right_escaped=self.right_escaped),
-            re.MULTILINE
+                right_escaped=self.right_escaped)
         ).sub(self._render_code, self.content).strip()
         mapping.update(keywords)
         return self._run_template(template_scope=mapping)
@@ -683,37 +684,52 @@ class Parser(
 ##         template: (builtins.str, boostNode.extension.file.Handler),
 ##         string=False,
 ##         placeholder_name_pattern='[a-zA-Z0-9_\[\]\'"\.()\\\\,\-+ :/={}]+',
-##         command_line_placeholder_name_pattern='[a-zA-Z0-9_\[\]\.(),\-+]+',
-##         placeholder_pattern='{left_delimiter}[ \t]*(?:{placeholder})'
+##         command_line_placeholder_name_pattern='(?s)'
+##                                               '[a-zA-Z0-9_\[\]\.(),\-+]+',
+##         placeholder_pattern='{left_delimiter}[ \t]*'
+##                             '(?P<variable_name>{placeholder})'
 ##                             '[ \t]*{right_delimiter}',
-##         template_pattern='(?P<ESCAPED_DELIMITER>'
-##                              '(?P<before_escaped>'
-##                                  '(?P<indent_escaped>[ \t]*)'
-##                                  '(?!{left_delimiter})'
-##                                  '(?:.(?!{left_delimiter}))*?.?'
-##                              ')?{left_delimiter}{right_escaped}'
-##                              '(?P<escaped_end>\n?)'
+##         template_pattern='(?m)(?P<ESCAPED_DELIMITER>'
+##                          '(?P<before_escaped>'  # in brackets
+##                          '(?P<indent_escaped>[ \t]*)'  # in two brackets
+##                          '(?!{left_delimiter})'  # in two brackets
+##                          '(?:.(?!{left_delimiter}))*?.?'  # in two brackets
+##                          ')?{left_delimiter}{right_escaped}'  # in brackets
+##                          '(?P<escaped_end>\n?)'  # in brackets
 ##                          ')|(?P<PLACEHOLDER>'
-##                              '(?P<before_placeholder>'
-##                                  '(?P<indent_placeholder>[ \t]*)'
-##                                  '(?!{left_delimiter})'
-##                                  '(?:.(?!{left_delimiter}))*?.?'
-##                              ')?{left_delimiter}[ \t]*'
-##                              '(?P<placeholder>{placeholder})[ \t]*'
-##                              '{right_delimiter}(?P<placeholder_end>\n?)'
+##                          '(?P<before_placeholder>'  # in brackets
+##                          '(?P<indent_placeholder>[ \t]*)'  # in two brackets
+##                          '(?!{left_delimiter})'  # in two brackets
+##                          '(?:.(?!{left_delimiter}))*?.?'  # in two brackets
+##                          ')?{left_delimiter}[ \t]*'  # in brackets
+##                          '(?P<placeholder>{placeholder})'  # in brackets
+##                          '[ \t]*'  # in brackets
+##                          '{right_delimiter}'  # in brackets
+##                          '(?P<placeholder_end>\n?)'  # in brackets
 ##                          ')|(?P<CODE>'
-##                              '^(?P<indent_code>[ \t]*){left_delimiter}'
-##                              '(?P<code>.+)$'
+##                          '^(?P<indent_code>[ \t]*)'  # in brackets
+##                          '{left_delimiter}'  # in brackets
+##                          '(?P<code>.+)$'  # in brackets
 ##                          ')|(?P<NONE_CODE>'
-##                              '(?P<none_code>(?P<indent_none_code>[ \t]*).+)'
-##                              '(?P<none_code_end>\n|$)'
+##                          '(?P<none_code>'  # in brackets
+##                          '(?P<indent_none_code>'  # in two brackets
+##                          '[ \t]*'
+##                          ').+'  # in two brackets
+##                          ')'  # in brackets
+##                          '(?P<none_code_end>\n|$)'  # in brackets
 ##                          ')|(?P<EMPTY_LINE>^(?P<indent_line>[ \t]*)\n)',
 ##         command_line_placeholder_pattern='^(?P<variable_name>{placeholder})'
 ##                                          '(?P<separator>.)(?P<value>.+)$',
-##         native_template_pattern='<%[ \t]*(?:(?P<escaped>%)|'
-##                                 '(?:(?P<named>[a-zA-Z0-9_]+)[ \t]*% >)|'
-##                                 '(?:(?P<braced>[a-zA-Z0-9_]+)[ \t]*%>)|'
-##                                 '(?P<invalid>))',
+##         native_template_pattern='<%[ \t]*(?:'
+##                                 '(?P<escaped>%)|'  # in brackets
+##                                 '(?:(?P<named>[a-zA-Z0-9_]+)'  # in brackets
+##                                 '[ \t]*% >)|'  # in two brackets
+##                                 '(?:'  # in brackets
+##                                 '(?P<braced>'  # in two brackets
+##                                 '[a-zA-Z0-9_]+)'  # in tree brackets
+##                                 '[ \t]*%>)|'  # in two brackets
+##                                 '(?P<invalid>)'  # in brackets
+##                                 ')',
 ##         left_code_delimiter='<%', right_code_delimiter='%>',
 ##         right_escaped='%',  # For example: "<%%" evaluates to "<%"
 ##         template_context_default_indent=4,
@@ -724,37 +740,52 @@ class Parser(
     def _initialize(
         self, template, string=False,
         placeholder_name_pattern='[a-zA-Z0-9_\[\]\'"\.()\\\\,\-+ :/={}]+',
-        command_line_placeholder_name_pattern='[a-zA-Z0-9_\[\]\.(),\-+]+',
-        placeholder_pattern='{left_delimiter}[ \t]*(?:{placeholder})[ \t]'
+        command_line_placeholder_name_pattern='(?s)'
+                                              '[a-zA-Z0-9_\[\]\.(),\-+]+',
+        placeholder_pattern='{left_delimiter}[ \t]*'
+                            '(?P<variable_name>{placeholder})[ \t]'
                             '*{right_delimiter}',
-        template_pattern='(?P<ESCAPED_DELIMITER>'
-                             '(?P<before_escaped>'
-                                 '(?P<indent_escaped>[ \t]*)'
-                                 '(?!{left_delimiter})'
-                                 '(?:.(?!{left_delimiter}))*?.?'
-                             ')?{left_delimiter}{right_escaped}'
-                             '(?P<escaped_end>\n?)'
+        template_pattern='(?m)(?P<ESCAPED_DELIMITER>'
+                         '(?P<before_escaped>'  # in brackets
+                         '(?P<indent_escaped>[ \t]*)'  # in two brackets
+                         '(?!{left_delimiter})'  # in two brackets
+                         '(?:.(?!{left_delimiter}))*?.?'  # in two brackets
+                         ')?{left_delimiter}{right_escaped}'  # in brackets
+                         '(?P<escaped_end>\n?)'  # in brackets
                          ')|(?P<PLACEHOLDER>'
-                             '(?P<before_placeholder>'
-                                 '(?P<indent_placeholder>[ \t]*)'
-                                 '(?!{left_delimiter})'
-                                 '(?:.(?!{left_delimiter}))*?.?'
-                             ')?{left_delimiter}[ \t]*'
-                             '(?P<placeholder>{placeholder})[ \t]*'
-                             '{right_delimiter}(?P<placeholder_end>\n?)'
+                         '(?P<before_placeholder>'  # in brackets
+                         '(?P<indent_placeholder>[ \t]*)'  # in two brackets
+                         '(?!{left_delimiter})'  # in two brackets
+                         '(?:.(?!{left_delimiter}))*?.?'  # in two brackets
+                         ')?{left_delimiter}[ \t]*'  # in brackets
+                         '(?P<placeholder>{placeholder})'  # in brackets
+                         '[ \t]*'  # in brackets
+                         '{right_delimiter}'  # in brackets
+                         '(?P<placeholder_end>\n?)'  # in brackets
                          ')|(?P<CODE>'
-                             '^(?P<indent_code>[ \t]*){left_delimiter}'
-                             '(?P<code>.+)$'
+                         '^(?P<indent_code>[ \t]*)'  # in brackets
+                         '{left_delimiter}'  # in brackets
+                         '(?P<code>.+)$'  # in brackets
                          ')|(?P<NONE_CODE>'
-                             '(?P<none_code>(?P<indent_none_code>[ \t]*).+)'
-                             '(?P<none_code_end>\n|$)'
+                         '(?P<none_code>'  # in brackets
+                         '(?P<indent_none_code>'  # in two brackets
+                         '[ \t]*'
+                         ').+'  # in two brackets
+                         ')'  # in brackets
+                         '(?P<none_code_end>\n|$)'  # in brackets
                          ')|(?P<EMPTY_LINE>^(?P<indent_line>[ \t]*)\n)',
         command_line_placeholder_pattern='^(?P<variable_name>{placeholder})'
                                          '(?P<separator>.)(?P<value>.+)$',
-        native_template_pattern='<%[ \t]*(?:(?P<escaped>%)|'
-                                '(?:(?P<named>[a-zA-Z0-9_]+)[ \t]*% >)|'
-                                '(?:(?P<braced>[a-zA-Z0-9_]+)[ \t]*%>)|'
-                                '(?P<invalid>))',
+        native_template_pattern='<%[ \t]*(?:'
+                                '(?P<escaped>%)|'  # in brackets
+                                '(?:(?P<named>[a-zA-Z0-9_]+)'  # in brackets
+                                '[ \t]*% >)|'  # in two brackets
+                                '(?:'  # in brackets
+                                '(?P<braced>'  # in two brackets
+                                '[a-zA-Z0-9_]+)'  # in tree brackets
+                                '[ \t]*%>)|'  # in two brackets
+                                '(?P<invalid>)'  # in brackets
+                                ')',
         left_code_delimiter='<%', right_code_delimiter='%>',
         right_escaped='%',  # For example: "<%%" evaluates to "<%"
         template_context_default_indent=4,
@@ -765,6 +796,10 @@ class Parser(
 ##
         '''
             Initializes output buffer and template scope.
+            NOTE: "(?s...)" and "(?m...)" is equivalent for regular expression
+            flag "re.DOTALL" and "re.MULTILINE".
+            NOTE: This regular expression patterns assumes that the delimiter
+            has at least a length of two.
 
             Documentation of template pattern:
 
@@ -840,7 +875,7 @@ class Parser(
             >>> import argparse
             >>> tpl = Parser(template='hans', string=True)
             >>> tpl._command_line_arguments = argparse.Namespace(
-            ...     scope_variables=('hans{peter', 'peter{hans'))
+            ...     scope_variables=('hans=peter', 'peter=hans'))
             >>> tpl._generate_scope_variables() # doctest: +ELLIPSIS
             {...'hans': 'peter'...}
         '''
@@ -848,7 +883,7 @@ class Parser(
         for variable in self._command_line_arguments.scope_variables:
             pattern = self._command_line_placeholder_pattern.format(
                 placeholder=self._command_line_placeholder_name_pattern)
-            match = re.compile(pattern, flags=re.DOTALL).match(variable)
+            match = re.compile(pattern).match(variable)
             if match:
                 keywords.update(
                     {match.group('variable_name'): match.group('value')})
@@ -1401,9 +1436,7 @@ class Parser(
 ##     ) -> builtins.str:
     def _render_placeholder(self, match):
 ##
-        '''
-            Handles placeholder.
-        '''
+        '''Handles placeholder.'''
         indent = self._get_code_indent(
             current_indent=match.group('indent_placeholder'), mode='passiv')
         last_empty_lines = self._flush_empty_lines(indent)
@@ -1421,7 +1454,7 @@ class Parser(
         before_placeholder = ''
         if match.group('before_placeholder'):
             '''
-                Only cut code dependend indents if placholder is
+                Only cut code dependent indents if placeholder is
                 the first statement in current line.
             '''
             slice = 0
@@ -1468,8 +1501,8 @@ class Parser(
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _get_code_indent(
-##         self: boostNode.extension.type.Self, current_indent: builtins.str,
-##         mode='passiv'
+##         self: boostNode.extension.type.Self,
+##         current_indent: (builtins.type(None), builtins.str), mode='passiv'
 ##     ) -> builtins.str:
     def _get_code_indent(self, current_indent, mode='passiv'):
 ##
@@ -1483,6 +1516,8 @@ class Parser(
                 activ: Means a new code depending context is open.
                        The following code is depended on this line.
         '''
+        if current_indent is None:
+            current_indent = ''
         indent = ''
         if self._code_dependend_indents:
             if self._new_line:
