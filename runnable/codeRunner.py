@@ -157,7 +157,8 @@ class Run(
                 }
             },
             'extensions': ('py', 'pyc', 'pyw'),
-            'delete_patterns': ('.*\.pyc$', '^__pycache__$', '^temp_\.*')
+            'delete_patterns': (
+                '.*\.pyc$', '.*\.pyo', '^__pycache__$', '^temp_\.*')
         },
         'laTeX': {
             'commands': {
