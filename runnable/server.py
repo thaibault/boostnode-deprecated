@@ -128,15 +128,32 @@ class SocketFileObjectWrapper(socket._fileobject):
     def readline(self, *arguments, **keywords):
         '''Wraps the "readline()" method to get the first line twice.'''
         if self.first_read_line is False:
-            self.first_read_line = builtins.getattr(
-                builtins.super(self.__class__, self), inspect.stack()[0][3]
-            )(*arguments, **keywords)
-            return self.first_read_line
+            try:
+                '''Take this method via introspection.'''
+                self.first_read_line = builtins.getattr(
+                    builtins.super(self.__class__, self), inspect.stack()[0][3]
+                )(*arguments, **keywords)
+                return self.first_read_line
+            except (
+                socket.herror, socket.gaierror, socket.timeout, socket.error
+            ) as exception:
+                __logger__.info(
+                    'Connection interrupted. %s: %s',
+                    exception.__class__.__name__, builtins.str(exception))
+                return ''
         elif self.first_read_line is True:
-            '''Take this method via introspection.'''
-            return builtins.getattr(
-                builtins.super(self.__class__, self), inspect.stack()[0][3]
-            )(*arguments, **keywords)
+            try:
+                '''Take this method via introspection.'''
+                return builtins.getattr(
+                    builtins.super(self.__class__, self), inspect.stack()[0][3]
+                )(*arguments, **keywords)
+            except (
+                socket.herror, socket.gaierror, socket.timeout, socket.error
+            ) as exception:
+                __logger__.info(
+                    'Connection interrupted. %s: %s',
+                    exception.__class__.__name__, builtins.str(exception))
+                return ''
         result = self.first_read_line
         self.first_read_line = True
         return result
