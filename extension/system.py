@@ -1847,7 +1847,7 @@ class CommandLine(builtins.object):
             ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
-            SystemError: Argument "abba" shadows argument "abba" with... "-a".
+            boostNode.extension.native.SystemError: Argu..."abba" with... "-a".
         '''
         for other_argument in builtins.list(
             cls.DEFAULT_CALLER_ARGUMENTS
@@ -1888,7 +1888,7 @@ class CommandLine(builtins.object):
             ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
-            SystemError: Argument "hans" shadows default argument "help".
+            boostNode.extension.native.SystemError: Argument "hans"..."help".
         '''
         if(argument['arguments'][0] == '-h' or
            builtins.len(argument['arguments']) > 1 and
@@ -1898,7 +1898,6 @@ class CommandLine(builtins.object):
                 argument['keywords']['dest'])
         return cls
 
-    # TODO
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
 ##     def _handle_initializer_default_values(
@@ -1910,6 +1909,30 @@ class CommandLine(builtins.object):
             Determines the default value from the runnable module's
             "_initialize" method forced to be defined by the "Runnable"
             implementation.
+
+            Examples:
+
+            >>> class A(Runnable):
+            ...     def _initialize(self, a=1, b=2):
+            ...         print(CommandLine._handle_initializer_default_values({
+            ...             'self': self, '__name__': 'a'}))
+            >>> a = A() # doctest: +ELLIPSIS
+            {...'__initializer_default_value__': 1...}
+
+            >>> class A(Runnable):
+            ...     def _initialize(self, b=1):
+            ...         print(CommandLine._handle_initializer_default_values({
+            ...             'self': self, '__name__': 'a'}))
+            >>> a = A() # doctest: +ELLIPSIS
+            {...'__initializer_default_value__': None...}
+
+            >>> class A(Runnable):
+            ...     @boostNode.paradigm.aspectOrientation.JointPoint
+            ...     def _initialize(self, a):
+            ...         print(CommandLine._handle_initializer_default_values({
+            ...             'self': self, '__name__': 'a'}))
+            >>> a = A(2) # doctest: +ELLIPSIS
+            {...'__initializer_default_value__': None...}
         '''
         scope['__initializer_default_value__'] = None
         if 'self' in scope:
@@ -1926,7 +1949,7 @@ class CommandLine(builtins.object):
 ##                         parameters[scope['__name__']].annotation
 ##                     ) is builtins.type:
 ##                         '''
-##                             Set default value to default value of sepecified
+##                             Set default value to default value of specified
 ##                             parameter type.
 ##                         '''
 ##                         scope['__initializer_default_value__'] = \
@@ -1962,11 +1985,23 @@ class CommandLine(builtins.object):
     ):
 ##
         '''
-            Add's command line arguments to python's native command line
+            Adds command line arguments to python's native command line
             argument parser.
+
+            Examples:
+
+            >>> CommandLine._add_command_line_arguments(({
+            ...     'arguments': ('-a', '--hans'),
+            ...     'keywords': {'dest': 'hans',
+            ...                  'help': {'execute': 'fails'}}},),
+            ...     (), {}) # doctest: +IGNORE_EXCEPTION_DETAIL
+            Traceback (most recent call last):
+            ...
+            boostNode.extension.native.SystemError: During rendering argume...
         '''
         for argument in builtins.list(arguments) + builtins.list(
-                default_arguments):
+            default_arguments
+        ):
             cls._validate_command_line_argument(argument, arguments)
             scope['__name__'] = argument['arguments'][0]
             if 'dest' in argument['keywords']:
@@ -2004,6 +2039,21 @@ class CommandLine(builtins.object):
         '''
             Calls a suitable module object to provide an entry point for
             modules supporting a command line interface.
+
+            Examples:
+
+            >>> sys_argv_backup = sys.argv
+
+            >>> class Scope:
+            ...     def hans(self):
+            ...         return 'hans'
+            >>> sys.argv = [sys.argv[0], 'hans', 'peter']
+            >>> CommandLine._call_module_object(
+            ...     {'scope': Scope()}, ('hans',), 'hans', (), {}
+            ... ) # doctest: +ELLIPSIS
+            <class '...CommandLine'>
+
+            >>> sys.argv = sys_argv_backup
         '''
         if builtins.len(sys.argv) > 2 and sys.argv[1] in callable_objects:
             sys.argv = [sys.argv[0]] + sys.argv[2:]
@@ -2011,6 +2061,7 @@ class CommandLine(builtins.object):
             *caller_arguments, **caller_keywords)
         return cls
 
+    # TODO
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
 ##     def _determine_callable_objects(
