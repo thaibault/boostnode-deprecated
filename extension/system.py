@@ -1744,7 +1744,6 @@ class CommandLine(builtins.object):
                     caller_keywords=caller_keywords)
         return cls
 
-    # TODO stand
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
 ##     def test_module(
@@ -1753,7 +1752,7 @@ class CommandLine(builtins.object):
 ##     ) -> boostNode.extension.type.SelfClass:
     def test_module(cls, module, verbose):
 ##
-        '''Test a given's module doctests.'''
+        '''Test a given module's doctests.'''
         test_folder = boostNode.extension.file.Handler(
             location=tempfile.mkdtemp(suffix=module['scope'].__name__))
         module['scope'].__test_folder__ = test_folder.path
@@ -1836,19 +1835,30 @@ class CommandLine(builtins.object):
     def _validate_command_line_argument(cls, argument, arguments):
 ##
         '''
-            Checks command line arguments for rendundant option names.
+            Checks command line arguments for redundant option names.
+
+            Examples:
+
+            >>> CommandLine._validate_command_line_argument({
+            ...     'arguments': ('-a', '--abba'),
+            ...     'keywords': {'dest': 'abba'}},
+            ...     ({'arguments': ('-a', '--baab'),
+            ...       'keywords': {'dest': 'abba'}},)
+            ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
+            Traceback (most recent call last):
+            ...
+            SystemError: Argument "abba" shadows argument "abba" with... "-a".
         '''
         for other_argument in builtins.list(
-                cls.DEFAULT_CALLER_ARGUMENTS) +\
-                builtins.list(cls.DEFAULT_ARGUMENTS) +\
-                builtins.list(arguments):
-            if(other_argument['arguments'][0] ==
-               argument['arguments'][0] and
+            cls.DEFAULT_CALLER_ARGUMENTS
+        ) + builtins.list(
+            cls.DEFAULT_ARGUMENTS
+        ) + builtins.list(arguments):
+            if(other_argument['arguments'][0] == argument['arguments'][0] and
                (builtins.len(argument['arguments']) != builtins.len(
-                   other_argument['arguments']) or
+                    other_argument['arguments']) or
                 builtins.len(argument['arguments']) > 1 and
-                other_argument['arguments'][1] !=
-                argument['arguments'][1])
+                other_argument['arguments'][1] != argument['arguments'][1])
                ):
                 raise __exception__(
                     'Argument "%s" shadows argument "%s" with shortcut '
@@ -1868,6 +1878,17 @@ class CommandLine(builtins.object):
         '''
             Checks if given command line argument specification collides with
             default help command line argument.
+
+            Examples:
+
+            >>> CL = CommandLine
+            >>> CL._validate_command_line_argument_again_help_argument({
+            ...     'arguments': ('-h', '--hans'),
+            ...     'keywords': {'dest': 'hans'}})
+            ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
+            Traceback (most recent call last):
+            ...
+            SystemError: Argument "hans" shadows default argument "help".
         '''
         if(argument['arguments'][0] == '-h' or
            builtins.len(argument['arguments']) > 1 and
@@ -1877,6 +1898,7 @@ class CommandLine(builtins.object):
                 argument['keywords']['dest'])
         return cls
 
+    # TODO
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
 ##     def _handle_initializer_default_values(
