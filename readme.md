@@ -56,7 +56,7 @@ Copy this folder to your projects directory and write something like:
     # some stuff using imported boostNode components...
 
 For advanced usage see the recommended module pattern described in
-"path/to/boosNode/__init__.py".
+"path/to/boosNode/\_\_init\_\_.py".
 
 BoostNode is able to switch itself between python2.X and python3.X.
 To switch boostNode version between python3.X and python 2.X use this
