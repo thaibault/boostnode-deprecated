@@ -1,0 +1,230 @@
+<!doctype html>
+
+<!-- region vim modline
+
+vim: set tabstop=4 shiftwidth=4 expandtab:
+vim: foldmethod=marker foldmarker=region,endregion:
+
+endregion -->
+
+<!-- region header
+
+Copyright Torben Sickert 16.12.2012
+
+License
+   This library written by Torben Sickert stand under a creative commons
+   naming 3.0 unported license.
+   see http://creativecommons.org/licenses/by/3.0/deed.de
+
+endregion -->
+
+
+
+
+
+
+
+
+
+
+<!-- region header -->
+
+<html lang="en">
+    <head>
+
+    <!-- region meta informations -->
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="description" content="boostNode is a high level python library." />
+
+    <!-- endregion -->
+
+    <!-- region fav and touch icons -->
+
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="image/appleTouchIcon/144x144-precomposed.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="image/appleTouchIcon/114x114-precomposed.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="image/appleTouchIcon/72x72-precomposed.png" />
+        <link rel="apple-touch-icon-precomposed" href="image/appleTouchIcon/57x57-precomposed.png" />
+        <link rel="shortcut icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAEAEBAAAAAAAABoBQAAFgAAACgAAAAQAAAAIAAAAAEACAAAAAAAAAEAAAAAAAAAAAAAAAEAAAAAAAC11+YAtdjpAH9ePQBIND8AosTbAL/V4AA9HxwAPSMfAHeP4ABAIx8AQSMfAHeDmQBAJigATDxOAFhUegBCLCgAQiorAEcqIgBELSsAjL73AEQvMQB3ovUAT0hpAHxfQQCDXTsAaWzBAFA3LgA9IRoAPyAXAD4hGgBgZI8AeH6UAD0kIwC83+0Ah2JBAKrJ2QBAJCMAQSgmAFtqqgBhOiUARCcjAGFnoQB3m+oARSeOAGdrmwBuhscAX1lvAHVZQgBhbbMAQiNfAFkuHQBFNEEAUU1nAD0hGwBpdL8APiIeAIFjRQA/Ih4AY2aNAEEjIQB4mNkAd4SeAIKhvgBBIjAARSYhAGZWVQBCLCoAptPvAEgrJwDJ4/EAQy4wAEQuMAB5n+4AYW+xAGRFLACNcFEAuNHgAFNMUwBKMTAAPB8WAEEiZgBINTwAPCAZAD0gGQCAqPcAcpTXAD4hHABfMxsAhmFAAKnI2ABAIh8Aga/6AEEkHABBJR8AXmudAGNVvgC4ydIARS0lAEssGQCt0+cAXllxAGFEMwBXR04AeY26AH9cOwB9pPUAtdnwAGd5tQA+IBoAPyEdAIZgPgCjyeUAYzQWALng8wBzl+EAiGVEAEMmIwBvfcoAc3F6AEEsNQBvfdMAyeXwAHuf8ACy0+gAYF97AFwtFABGNjgAfWA/AGNKPQA8HxgAPiAbAINgPwBAIxsAh2A/AHaU2QBBJB4AgrP2AMfa4gBofsUAQiUhAJG31QBDJSEAUkE+AGd/0QBFI48AodD7AGBrqABDKyoAjGlIAFlZhQBFMDAATi4hALjS3QBzh84AUk5uAEAjHAB2hZMAQSQfAGBmmgBrfr0AQyYlAHhRLwBiaaMARiklAEIsNwBSQlQAyOb1AHmj7ACOvfoAYXOvAIBaOACbw98AjqrCAEg0NAB8Xz4Az+vyAEc1NwBINTcAOx4XAD0gHQBaUVQAPyAdAD8jHQA/JCAAiGNBAEEkIABiXp4AvuDtAD4mJgBtg7IAQCcpAIhoRwBOJBcAi2hHAIdtTQBXXJAAOxwbAIJePAA8IRgAXmKQAEAjHgBsUToAQSQhAEw5TQBAKC0AWFd5AFBESgCJbU4Ab4bFAHxVNACPbEsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgYFTBo4+Rw1PgYGBgYGygVOBHT1vZsuevYxTUlJTgYFWU7VqC6TNd5JDqwodUlOBKz8fQZUwFSoDinEBrBvGi5BQdg5JNl8Zx6WmIWMEynQxxMCiaXhUCC0se695BVmbhFcccluPdZF6ZJiJYJxMU659MiZnupmISHwjALtFEVwCcL6fHqcp0MMuOH9KuU6W0Sc0qV4TqIZrFFjCCV1Eo4OTvDMMzDxVOkbPl50kKItogM5RsbCaFjcQS1o7IAk5v2V+t7NNQiW0YQfItoFsU8HSFxKgizVtD4SBG7KBHVK4c5TFGq1AyWKBgYGygh2BqhhuIoUvGKGBU4GygY2HgQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=" />
+
+    <!-- endregion -->
+
+    <!-- region resources -->
+
+
+        <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+        <!--[if lt IE 9]><script src="javaScript/html5shiv-3.6.2.js"></script><![endif]-->
+        <script type="text/javascript" src="javaScript/coffeeScript-1.6.3.js"></script>
+        <script type="text/coffeescript" src="coffeeScript/require-1.0.coffee"></script>
+        <script type="text/coffeescript" src="coffeeScript/main.coffee"></script>
+
+    <!-- endregion -->
+
+        <title>boostNode</title>
+
+    </head>
+
+<!-- endregion -->
+
+<!-- region body -->
+
+    <body class="documentation">
+        <div class="window-loading-cover"><div></div></div>
+
+    <!-- region header -->
+
+        <div class="header-wrap outer">
+            <header class="inner">
+                <a class="start-up-animation-number-2 forkme-banner" href="https://github.com/thaibault/boostNode">
+                    View on GitHub
+                </a>
+                <h1 class="start-up-animation-number-3" class="project-title">
+                    <a href="http://thaibault.github.io/boostNode">boostNode</a>
+                </h1>
+                <h2 class="start-up-animation-number-4 project-tagline">
+                    boostNode is a high level python library.
+                </h2>
+                <section class="downloads">
+                    <a class="start-up-animation-number-4 zip-source-download" href="https://github.com/thaibault/boostNode/zipball/master">
+                        .zip
+                    </a>
+                    <a class="start-up-animation-number-4 tar-gz-source-download" href="https://github.com/thaibault/boostNode/tarball/master">
+                        .tar.gz
+                    </a>
+                </section>
+            </header>
+        </div>
+
+    <!-- endregion -->
+
+    <!-- region sections -->
+
+        <div class="main-content-wrap outer">
+
+        <!-- region main content -->
+
+            <section class="main-content inner start-up-animation-number-5">
+                <!-- region vim modline
+
+vim: set tabstop=4 shiftwidth=4 expandtab:
+vim: foldmethod=marker foldmarker=region,endregion:
+
+endregion
+
+region header
+
+Copyright Torben Sickert 16.12.2012
+
+License
+   This library written by Torben Sickert stand under a creative commons
+   naming 3.0 unported license.
+   see http://creativecommons.org/licenses/by/3.0/deed.de
+
+endregion -->
+
+<h1 id="boostnode">boostNode</h1>
+<p>boostNode is a high level python library.<br />
+This library supports python2.7+ and python3.3+ environments.</p>
+<h2 id="features">Features</h2>
+<ul>
+<li>Platform independent webbased gui toolkit (see runnable/webToWindow.py).</li>
+<li>Smart, very secure and multiprocessing webserver (see runnable/server.py).</li>
+<li>Macro processor for text based files (see runnable/macro.py).</li>
+<li>File synchronisation (see runnable/synchronisation.py).</li>
+<li>Many extended language feature like signature checking, jointpoints for<br />
+  aspect orientated programming automatic getter or setter generation.<br />
+  (see aspect/signature, paradigm/aspectOrientation.py or<br />
+  paradigm/objectOrientation.py).</li>
+<li>Many additional introspection features and native type extensions<br />
+  (see extension/native.py).</li>
+<li>Very highlevel file abstraction layer with sandboxing support<br />
+  (see extension/file.py).</li>
+<li>Highlevel code file handling (see runnable/codeRunner.py).</li>
+<li>Template engine with embedded python code in any text based file<br />
+  (see runnable/template.py).</li>
+<li>Finer grained import mechanism support (see extension/dependent.py).</li>
+<li>Full featured global logging mechanism handling (see extension/system.py)</li>
+<li>Very generic full featured command line argument parsing interface<br />
+  (see extension/system.py and extension/output.py).</li>
+</ul>
+<h2 id="usage">Usage</h2>
+<p>Copy this folder to your projects directory and write something like:</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="codehilite"><pre><span class="c">#!/usr/bin/env python</span>
+
+<span class="kn">import</span> <span class="nn">boostNode.extension.native</span>
+<span class="c"># some stuff using imported boostNode components...</span>
+</pre></div>
+</td></tr></table>
+
+<p>For advanced usage see the recommended module pattern described in<br />
+"path/to/boosNode/<strong>init</strong>.py".</p>
+<p>BoostNode is able to switch itself between python2.X and python3.X.<br />
+To switch boostNode version between python3.X and python 2.X use this<br />
+command:</p>
+<div class="codehilite"><pre>&gt;&gt;&gt; /path/to/boostNode/runnable/macro.py -p /path/to/boostNode -e py
+</pre></div>
+
+
+<p>Note that you have to temporary support the needed python environment<br />
+of given boostNode version to convert to the other one.</p>
+<h2 id="copyright">Copyright</h2>
+<p>see ./__init__.py</p>
+<h2 id="license">License</h2>
+<p>see ./__init__.py</p>
+            </section>
+
+        <!-- endregion -->
+
+        <!-- region legal notes -->
+
+            <section class="about-this-website inner">
+                <h1>About this website</h1>
+                <p>
+                    Provider of <a href="http://thaibault.github.io/boostNode">http://thaibault.github.io/boostNode</a>:
+                    <br />
+                    Torben Sickert
+                    <br />
+                    Christoph-Mang-Str. 14
+                    <br />
+                    79100 Freiburg
+                    <br />
+                    Tel. 0049 (0) 176 / 10248185
+                    <br />
+                    Email: <a href="mailto:t.sickert@gmail.com">t.sickert@gmail.com</a>
+                    <br />
+                    Website: <a href="http://thaibault.github.io/website">http://thaibault.github.io/website</a>
+                    <br />
+                    <span class="glyphicon glyphicon-arrow-left arrow-left-home"></span>
+                    <a href="#">home</a>
+                </p>
+            </section>
+        </div>
+
+        <!-- endregion -->
+
+    <!-- endregion -->
+
+    <!-- region footer -->
+
+        <div class="footer-wrap outer">
+            <footer class="inner">
+                <p class="start-up-animation-number-6 copyright">
+                    boostNode maintained by
+                    <a href="https://github.com/thaibault">thaibault</a>
+                    &middot; &copy; 2013 Torben Sickert, Inc. &middot;
+                    <a href="#about-this-website">about this website</a>
+                </p>
+                <p class="pull-right"><a href="#top">top</a></p>
+            </footer>
+        </div>
+
+    <!-- endregion -->
+
+<!-- endregion -->
+
+    </body>
+</html>
