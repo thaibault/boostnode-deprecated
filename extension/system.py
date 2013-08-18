@@ -51,8 +51,7 @@ import subprocess
 import sys
 import tempfile
 import time
-## python3.3 import types
-pass
+import types
 
 for number in (3, 4):
     sys.path.append(os.path.abspath(sys.path[0] + number * ('..' + os.sep)))
@@ -2061,7 +2060,6 @@ class CommandLine(builtins.object):
             *caller_arguments, **caller_keywords)
         return cls
 
-    # TODO
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
 ##     def _determine_callable_objects(
@@ -2074,16 +2072,32 @@ class CommandLine(builtins.object):
         '''
             Determines all callable objects and a default caller in given
             module. Both are given back in one tuple.
+
+            Examples:
+
+            >>> class A(types.ModuleType):
+            ...     pass
+
+            >>> CommandLine._determine_callable_objects(
+            ...     {'scope': A('A'), 'name': 'A'}, None, True)
+            ([], None)
+
+            >>> CommandLine._determine_callable_objects(
+            ...     {'scope': A('A'), 'name': 'A'}, None, False
+            ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
+            Traceback (most recent call last):
+            ...
+            boosteNode.extension.system.SystemError: No callable objects in ...
         '''
         callable_objects = boostNode.extension.native.Module\
-            .get_defined_callables(scope=sys.modules[module['name']])
+            .get_defined_callables(scope=module['scope'])
         if callable_objects:
             default_caller = boostNode.extension.native.Module.\
                 determine_caller(
                     caller=default_caller, callable_objects=callable_objects)
         else:
-            message = 'No callable objects in "{name}" ({module}).'.format(
-                name=module['name'], module=module['scope'])
+            message = 'No callable objects in "{name}" ({scope}).'.format(
+                name=module['name'], scope=module['scope'])
             if test:
                 __logger__.info(message)
             else:
@@ -2094,6 +2108,7 @@ class CommandLine(builtins.object):
 
         # region protected
 
+    # TODO
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
 ##     def _test_lint_document_modules(
