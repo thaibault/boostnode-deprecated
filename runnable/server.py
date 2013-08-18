@@ -922,7 +922,7 @@ class Web(
 ##
         '''Searches for the highest free port for listing.'''
         ports = [
-            80, 8008, 8080, 8090, 8280, 8887, 9080, 16080, 3128, 4567,
+            80, 8080, 8008, 8090, 8280, 8887, 9080, 16080, 3128, 4567,
             5000, 4711, 443, 5001, 5104, 5800, 8243, 8888]
         if self._public_key_file:
             ports = [443] + ports
