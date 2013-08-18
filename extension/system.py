@@ -2050,7 +2050,7 @@ class CommandLine(builtins.object):
             >>> CommandLine._call_module_object(
             ...     {'scope': Scope()}, ('hans',), 'hans', (), {}
             ... ) # doctest: +ELLIPSIS
-            <class '...CommandLine'>
+            <class ...CommandLine...>
 
             >>> sys.argv = sys_argv_backup
         '''
@@ -2108,7 +2108,6 @@ class CommandLine(builtins.object):
 
         # region protected
 
-    # TODO
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
 ##     def _test_lint_document_modules(
@@ -2133,6 +2132,16 @@ class CommandLine(builtins.object):
         '''
             Test, lints and documents given modules if corresponding command
             line flags are set.
+
+            Examples:
+
+            >>> class A(argparse.Namespace):
+            ...     commands = ()
+            >>> CommandLine._test_lint_document_modules(
+            ...     False, A(), (), (), '', '', True, '', (),
+            ...     '', inspect.currentframe(), ''
+            ... ) # doctest: +ELLIPSIS
+            <class ...CommandLine...>
         '''
         if all or 'test' in arguments.commands:
             cls._test_modules(module_names, temp_file_patterns)
@@ -2158,6 +2167,15 @@ class CommandLine(builtins.object):
 ##
         '''
             Get all module names in given package name.
+
+            Examples:
+
+            >>> CommandLine._get_modules('__main__')
+            ['__init__']
+
+            >>> __module_name__ in CommandLine._get_modules(
+            ...     'boostNode.extension')
+            True
         '''
         module_names = []
         if(builtins.hasattr(sys.modules[name], '__all__') and
@@ -2219,14 +2237,17 @@ class CommandLine(builtins.object):
             ...     '', '__main__', 'version'
             ... ) # doctest: +ELLIPSIS
             'version - ...'
+
+            >>> CommandLine._get_description(None, 'hans', '1.0')
+            ''
         '''
-        if description is not None:
-            if not description:
-                description = '{version}'
-                if sys.modules[module_name].__doc__ is not None:
-                    description += ' - ' + sys.modules[module_name].__doc__
-            return description.format(version=version)
-        return ''
+        if description is None:
+            return ''
+        if not description:
+            description = '{version}'
+            if sys.modules[module_name].__doc__ is not None:
+                description += ' - ' + sys.modules[module_name].__doc__
+        return description.format(version=version)
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
@@ -2242,28 +2263,33 @@ class CommandLine(builtins.object):
     ):
 ##
         '''
-            Moves all documentation files in subpackages to root
-            package.
+            Moves all documentation files in sub packages to root package.
+
+            Examples:
+
+            >>> CommandLine._put_documentations_together(
+            ...     __test_folder__, inspect.currentframe(), os.getcwd(),
+            ...     'not_existing'
+            ... ) # doctest: +ELLIPSIS
+            <class ...CommandLine...>
         '''
         meta_documentation = boostNode.extension.file.Handler(
             location=documentation_path, make_directory=True)
         '''
-            In this way suppackages deletes their documentations
-            too bevor they will be copied to root package
-            directory.
+            In this way sub packages deletes their documentations too before
+            they will be copied to root package directory.
         '''
-        #if clear_old_documentation:
-        #    meta_documentation.clear_directory()
         for package, initializer in cls._get_packages(
-                current_working_directory_backup, frame):
+            current_working_directory_backup, frame
+        ):
             package_documentation = boostNode.extension.file.Handler(
                 location=package.path + documentation_path, must_exist=False)
             if package_documentation:
                 for file in package_documentation:
                     if file.extension == documentation_file_extension:
                         '''
-                            This two statements have to be in this
-                            order to prevent overwriting files.
+                            This two statements have to be in this order to
+                            prevent overwriting files.
                         '''
                         file.name = package.basename + '.' + file.name
                         file.directory_path = meta_documentation.path
@@ -2288,16 +2314,26 @@ class CommandLine(builtins.object):
         '''
             Documents given modules with given documenter in given
             documentation location.
+
+            Examples:
+
+            >>> CommandLine._document_modules(
+            ...     __test_folder__, True, (), '', (), 'not_existing'
+            ... ) # doctest: +ELLIPSIS
+            <class ...CommandLine...>
+
+            >>> CommandLine._document_modules(
+            ...     __test_folder__, False, (), '', (), 'not_existing'
+            ... ) # doctest: +ELLIPSIS
+            <class ...CommandLine...>
         '''
         documentation = boostNode.extension.file.Handler(
             location=documentation_path, make_directory=True)
         if clear_old_documentation:
             documentation.clear_directory()
         __logger__.info(
-            'Document modules "{modules}" with '
-            '"{documenter}".'.format(
-                modules='", "'.join(module_names),
-                documenter=documenter))
+            'Document modules "{modules}" with "{documenter}".'.format(
+                modules='", "'.join(module_names), documenter=documenter))
         boostNode.extension.native.Module.execute_program_for_modules(
             program_type='documenter', program=documenter,
             modules=module_names, arguments=documenter_arguments, error=False)
@@ -2316,21 +2352,27 @@ class CommandLine(builtins.object):
 ##
         '''
             Lints given modules with given linter.
+
+            Examples:
+
+            >>> CommandLine._lint_modules('', ()) # doctest: +ELLIPSIS
+            <class ...CommandLine...>
+
+            >>> CommandLine._lint_modules(
+            ...     'not_existing', ()
+            ... ) # doctest: +ELLIPSIS
+            <class ...CommandLine...>
         '''
         __logger__.info(
             'Lint modules "{modules}" with "{linter}".'.format(
                 modules='", "'.join(module_names), linter=linter))
-        result = boostNode.extension.native.Module\
-            .execute_program_for_modules(
-                program_type='linter', program=linter, modules=module_names,
-                log=False, error=False)
-        if result is False:
-            __logger__.warning('Linter "%s" wasn\'t found.', linter)
-        else:
-            if result[0].strip():
-                __logger__.warning(result[0].strip())
-            if result[1].strip():
-                __logger__.warning(result[1].strip())
+        result = boostNode.extension.native.Module.execute_program_for_modules(
+            program_type='linter', program=linter, modules=module_names,
+            log=False, error=False)
+        if result[0].strip():
+            __logger__.warning(result[0].strip())
+        if result[1].strip():
+            __logger__.warning(result[1].strip())
         return cls
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
@@ -2344,6 +2386,11 @@ class CommandLine(builtins.object):
 ##
         '''
             Handle modules in given package.
+
+            Examples:
+
+            >>> CommandLine._test_modules((), ()) # doctest: +ELLIPSIS
+            <class ...CommandLine...>
         '''
         for module_name in module_names:
             __logger__.info('Test module "%s".', module_name)
@@ -2374,6 +2421,31 @@ class CommandLine(builtins.object):
 ##
         '''
             Handle packages in current directory or package.
+
+            Examples:
+
+            >>> import copy
+            >>> sys_argv_backup = copy.copy(sys.argv)
+
+            >>> CommandLine._handle_packages_in_package(
+            ...     os.getcwd(), inspect.currentframe(), (), ()
+            ... ) # doctest: +ELLIPSIS
+            <class ...CommandLine...>
+
+            >>> CommandLine._handle_packages_in_package(
+            ...     os.getcwd(), inspect.currentframe(),
+            ...     ({'arguments': ('a',)},), ()
+            ... ) # doctest: +ELLIPSIS
+            <class ...CommandLine...>
+
+            >>> sys.argv.append('a')
+            >>> CommandLine._handle_packages_in_package(
+            ...     os.getcwd(), inspect.currentframe(),
+            ...     ({'arguments': ('a')},), ()
+            ... ) # doctest: +ELLIPSIS
+            <class ...CommandLine...>
+
+            >>> sys.argv = sys_argv_backup
         '''
         new_command_line_arguments = sys.argv[1:]
         for record in command_line_arguments:
@@ -2382,7 +2454,8 @@ class CommandLine(builtins.object):
                     del new_command_line_arguments[
                         new_command_line_arguments.index(argument)]
         for package, initializer in cls._get_packages(
-                current_working_directory_backup, frame):
+            current_working_directory_backup, frame
+        ):
             if not package.basename in builtins.map(
                 lambda package: package.__name__, exclude_packages
             ):
@@ -2406,8 +2479,21 @@ class CommandLine(builtins.object):
     def _package_start_helper(cls, name, frame, command_line_arguments):
 ##
         '''
-            This method does some starting routine for initializing an
-            package interface.
+            This method does some starting routine for initializing a package
+            interface.
+
+            Examples:
+
+            >>> FileHandler = boostNode.extension.file.Handler
+            >>> current_working_directory_backup = FileHandler(os.getcwd())
+
+            >>> CommandLine._package_start_helper(
+            ...     '__main__', inspect.currentframe(), ()
+            ... ) # doctest: +SKIP
+
+            >>> current_working_directory_backup.change_working_directory(
+            ... ) # doctest: +ELLIPSIS
+            Object of "Handler" with path "...
         '''
         arguments = cls._package_argument_parser(
             name, frame, command_line_arguments)
@@ -2436,6 +2522,24 @@ class CommandLine(builtins.object):
 
             Examples:
 
+            >>> FileHandler = boostNode.extension.file.Handler
+            >>> current_working_directory_backup = FileHandler(os.getcwd())
+
+            >>> CommandLine._restore_current_directory(
+            ...     clear=False, temp_file_patterns=()
+            ... ) # doctest: +ELLIPSIS
+            <class ...CommandLine...>
+
+            >>> CommandLine._restore_current_directory(
+            ...     clear=False, temp_file_patterns=(),
+            ...     current_directory=__test_folder__
+            ... ) # doctest: +ELLIPSIS
+            <class ...CommandLine...>
+
+            >>> current_working_directory_backup.change_working_directory(
+            ... ) # doctest: +ELLIPSIS
+            Object of "Handler" with path "...
+
             >>> test_folder = boostNode.extension.file.Handler(
             ...     'temp_test', make_directory=True)
             >>> boostNode.extension.file.Handler(
@@ -2451,6 +2555,10 @@ class CommandLine(builtins.object):
             '...Delete temporary files in "..." which matches "temp_.*".\\n'
             >>> test_folder.is_element()
             False
+
+            >>> current_working_directory_backup.change_working_directory(
+            ... ) # doctest: +ELLIPSIS
+            Object of "Handler" with path "...
         '''
         if clear:
             cls._clear_temp_files(temp_file_patterns)
@@ -2497,9 +2605,8 @@ class CommandLine(builtins.object):
             Examples:
 
             >>> CommandLine._get_packages(
-            ...     '/home/user/scripts', inspect.currentframe()
-            ... ) # doctest: +SKIP
-            [...]
+            ...     __test_folder__, inspect.currentframe())
+            []
         '''
         if(os.getcwd() == current_working_directory_backup or
            boostNode.extension.file.Handler(
@@ -2510,10 +2617,12 @@ class CommandLine(builtins.object):
             current_working_directory_backup += os.sep
         init_file = boostNode.extension.file.Handler(
             location=current_working_directory_backup +
-            frame.f_code.co_filename, respect_root_path=False)
+            frame.f_code.co_filename, respect_root_path=False,
+            must_exist=False)
         packages = []
         for file in boostNode.extension.file.Handler(
-                location=init_file.directory_path):
+            location=init_file.directory_path
+        ):
             if boostNode.extension.native.Module.is_package(path=file.path):
                 packages.append((file, boostNode.extension.file.Handler(
                     location=file.path + init_file.name, must_exist=False)))
