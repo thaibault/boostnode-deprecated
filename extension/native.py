@@ -33,9 +33,9 @@ __version__ = '1.0'
 
 ## python3.3
 ## import builtins
-## import collections
 import __builtin__ as builtins
 ##
+import collections
 import copy
 import encodings
 import inspect
@@ -1303,6 +1303,13 @@ class Dictionary(Object, builtins.dict):
 
         # endregion
 
+        # region protected
+
+    '''Stores an immutable version of current saved dictionary.'''
+    _immutable = ()
+
+        # endregion
+
     # endregion
 
     # region dynamic methods
@@ -1328,9 +1335,7 @@ class Dictionary(Object, builtins.dict):
             Object of "Dictionary" (...hans...5...).
         '''
         self.content = builtins.dict(content)
-        '''
-            Take this method type by the abstract class via introspection.
-        '''
+        '''Take this method type by the abstract class via introspection.'''
         return builtins.getattr(
             builtins.super(self.__class__, self), inspect.stack()[0][3]
         )(content, *arguments, **keywords)
@@ -1362,10 +1367,10 @@ class Dictionary(Object, builtins.dict):
 
             Examples:
 
-            >>> hash(Dictionary({'a': 'hans'}))
+            >>> isinstance(hash(Dictionary({'a': 'hans'})), int)
+            True
         '''
-        # TODO
-        return 10
+        return builtins.hash(self.immutable)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -1385,6 +1390,26 @@ class Dictionary(Object, builtins.dict):
             'hans'
         '''
         return self.content[key]
+
+            # endregion
+
+            # region getter methods
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def get_immutable(
+##         self: boostNode.extension.type.Self
+##     ) -> builtins.tuple:
+    def get_immutable(self):
+##
+        '''
+            Generates an immutable copy of the current dictionary.
+            Mutable iterables are generally translated to sorted tuples.
+        '''
+        self._immutable = copy.copy(self.content)
+        for key, value in self._immutable.items():
+            self._immutable[key] = self._immutable_helper(value)
+        return builtins.tuple(builtins.sorted(self._immutable.items()))
 
             # endregion
 
@@ -1419,6 +1444,41 @@ class Dictionary(Object, builtins.dict):
             del self.content[name]
             return result, self.content
         return default_value, self.content
+
+        # endregion
+
+        # region protected methods
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def _immutable_helper(
+##         self: boostNode.extension.type.Self,
+##         value: (builtins.object, builtins.type)
+##     ) -> (builtins.object, builtins.type):
+    def _immutable_helper(self, value):
+##
+        '''
+            Helper methods for potential immutable given value.
+
+            Examples:
+
+            >>> Dictionary({})._immutable_helper({5: 'hans'})
+            ((5, 'hans'),)
+
+            >>> Dictionary({})._immutable_helper([5, 'hans'])
+            (5, 'hans')
+        '''
+        if builtins.isinstance(value, builtins.dict):
+            value = self.__class__(content=value).immutable
+        elif(builtins.isinstance(value, collections.Iterable) and
+             not builtins.isinstance(value, builtins.str)):
+            value = copy.copy(value)
+            for key, sub_value in builtins.enumerate(value):
+                value[key] = self._immutable_helper(value=sub_value)
+        if not (builtins.hasattr(value, '__hash__') and
+                builtins.callable(builtins.getattr(value, '__hash__'))):
+            value = builtins.tuple(builtins.sorted(value))
+        return value
 
         # endregion
 
