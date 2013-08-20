@@ -131,7 +131,8 @@ class SocketFileObjectWrapper(socket._fileobject):
             try:
                 '''Take this method via introspection.'''
                 self.first_read_line = builtins.getattr(
-                    builtins.super(self.__class__, self), inspect.stack()[0][3]
+                    builtins.super(self.__class__, self),
+                    inspect.stack()[0][3]
                 )(*arguments, **keywords)
                 return self.first_read_line
             except (
@@ -145,7 +146,8 @@ class SocketFileObjectWrapper(socket._fileobject):
             try:
                 '''Take this method via introspection.'''
                 return builtins.getattr(
-                    builtins.super(self.__class__, self), inspect.stack()[0][3]
+                    builtins.super(self.__class__, self),
+                    inspect.stack()[0][3]
                 )(*arguments, **keywords)
             except (
                 socket.herror, socket.gaierror, socket.timeout, socket.error

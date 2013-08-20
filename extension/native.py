@@ -1409,7 +1409,8 @@ class Dictionary(Object, builtins.dict):
         self._immutable = copy.copy(self.content)
         for key, value in self._immutable.items():
             self._immutable[key] = self._immutable_helper(value)
-        return builtins.tuple(builtins.sorted(self._immutable.items()))
+        return builtins.tuple(builtins.sorted(
+            self._immutable.items(), key=builtins.str))
 
             # endregion
 
@@ -1477,7 +1478,7 @@ class Dictionary(Object, builtins.dict):
                 value[key] = self._immutable_helper(value=sub_value)
         if not (builtins.hasattr(value, '__hash__') and
                 builtins.callable(builtins.getattr(value, '__hash__'))):
-            value = builtins.tuple(builtins.sorted(value))
+            value = builtins.tuple(builtins.sorted(value, key=builtins.str))
         return value
 
         # endregion

@@ -1715,11 +1715,6 @@ class CommandLine(builtins.object):
             ...     'name': '__main__',
             ...     'scope': builtins.__import__(__name__)})
 
-            >>> sys.argv += sys.argv[0:1]
-            >>> CommandLine.generic_module_interface({
-            ...     'name': '__main__',
-            ...     'scope': builtins.__import__(__name__)})
-
             >>> sys.stdout = sys_stdout_backup
             >>> sys.argv = sys_argv_backup
         '''
@@ -2218,7 +2213,8 @@ class CommandLine(builtins.object):
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
 ## python3.3
 ##     def _get_description(
-##         cls: boostNode.extension.type.SelfClass, description: builtins.str,
+##         cls: boostNode.extension.type.SelfClass,
+##         description: (builtins.str, builtins.type(None)),
 ##         module_name: builtins.str, version: builtins.str
 ##     ) -> builtins.str:
     def _get_description(cls, description, module_name, version):
