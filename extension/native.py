@@ -1352,6 +1352,40 @@ class Dictionary(Object, builtins.dict):
             class_name=self.__class__.__name__,
             content=builtins.repr(self.content))
 
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def __hash__(self: boostNode.extension.type.Self) -> builtins.int:
+    def __hash__(self):
+##
+        '''
+            Invokes if this object should describe itself by a hash value.
+
+            Examples:
+
+            >>> hash(Dictionary({'a': 'hans'}))
+        '''
+        # TODO
+        return 10
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def __getitem__(
+##         self: boostNode.extension.type.Self,
+##         key: (builtins.object, builtins.type)
+##     ) -> (builtins.object, builtins.type):
+    def __getitem__(self, key):
+##
+        '''
+            Invokes if this object should returns current value stored at given
+            key.
+
+            Examples:
+
+            >>> Dictionary({'a': 'hans'})['a']
+            'hans'
+        '''
+        return self.content[key]
+
             # endregion
 
     @boostNode.paradigm.aspectOrientation.JointPoint
