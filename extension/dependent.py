@@ -323,7 +323,17 @@ class Resolve(builtins.object):
 
 # region footer
 
+'''
+    Preset some variables given by introspection letting the linter know what
+    globale variables are available.
+'''
+__logger__ = __test_mode__ = __exception__ = __module_name__ = None
 if __name__ == '__main__':
+    '''
+        Extends this module with some magic environment variables to provide
+        better introspection support. A generic command line interface for some
+        code preprocessing tools is provided by default.
+    '''
     from boostNode.extension.native import Module
     Module.default(
         name=__name__, frame=inspect.currentframe(), default_caller=False)

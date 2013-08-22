@@ -1363,8 +1363,8 @@ class CGIHTTPRequestHandler(
             request_description=request_description,
             response_code=response_code,
             forwarded_ip=self.headers.get('X-Forwarded-For'),
-            forwareded_host=self.headers.get('X-Forwarded-Host'),
-            forwareded_server=self.headers.get('X-Forwarded-Server'),
+            forwarded_host=self.headers.get('X-Forwarded-Host'),
+            forwarded_server=self.headers.get('X-Forwarded-Server'),
             server_port=self.server.web.port))
         return self
 
@@ -2050,7 +2050,6 @@ class CGIHTTPRequestHandler(
 # region footer
 
 '''
-    TODO check.
     Preset some variables given by introspection letting the linter know what
     globale variables are available.
 '''
