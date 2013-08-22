@@ -1341,22 +1341,21 @@ class CGIHTTPRequestHandler(
             Wrapper method for all logging output coming through the server
             thread.
         '''
-        format = format.strip() + 'client socket: %s:%d'
+        format = (
+            '{client_ip}:{client_port} {request_description} -> '
+            '{response_code}')
         if builtins.len(self.server.web.instances) > 1:
-            format += ' (server port: %d)' % self.server.web.port
-        error_message = 'See exception detail.'
-        if message_or_error_code == 500:
-            response_code_or_message = error_message
-        elif response_code_or_message == 500:
-            message_or_error_code = error_message
-        if message_end is None:
-            __logger__.info(
-                format, message_or_error_code, response_code_or_message,
-                *self.client_address)
-        else:
-            __logger__.info(
-                format, message_or_error_code, response_code_or_message, '',
-                *self.client_address)
+            format += ' (server port: {server_port})'
+        request_description = message_or_error_code
+        response_code = response_code_or_message
+        if builtins.isinstance(message_or_error_code, builtins.int):
+            request_description = response_code_or_message
+            response_code = message_or_error_code
+        __logger__.info(format.format(
+            client_ip=self.client_address[0],
+            client_port=self.client_address[1],
+            request_description=request_description,
+            response_code=response_code, server_port=self.server.web.port))
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
