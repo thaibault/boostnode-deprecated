@@ -1344,6 +1344,12 @@ class CGIHTTPRequestHandler(
         format = (
             '{client_ip}:{client_port} {request_description} -> '
             '{response_code}')
+        if self.headers.get('X-Forwarded-For'):
+            format += ' - forwarded for: {forwarded_ip}'
+        if self.headers.get('X-Forwarded-Host'):
+            format += ' - forwarded host: {forwarded_host}'
+        if self.headers.get('X-Forwarded-Server'):
+            format += ' - forwarded server: {forwarded_server}'
         if builtins.len(self.server.web.instances) > 1:
             format += ' (server port: {server_port})'
         request_description = message_or_error_code
@@ -1355,7 +1361,11 @@ class CGIHTTPRequestHandler(
             client_ip=self.client_address[0],
             client_port=self.client_address[1],
             request_description=request_description,
-            response_code=response_code, server_port=self.server.web.port))
+            response_code=response_code,
+            forwarded_ip=self.headers.get('X-Forwarded-For'),
+            forwareded_host=self.headers.get('X-Forwarded-Host'),
+            forwareded_server=self.headers.get('X-Forwarded-Server'),
+            server_port=self.server.web.port))
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
