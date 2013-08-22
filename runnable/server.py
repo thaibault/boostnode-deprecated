@@ -1341,8 +1341,9 @@ class CGIHTTPRequestHandler(
             Wrapper method for all logging output coming through the server
             thread.
         '''
+        format = format.strip() + 'client socket: %s:%d'
         if builtins.len(self.server.web.instances) > 1:
-            format += ' (port: %d)' % self.server.web.port
+            format += ' (server port: %d)' % self.server.web.port
         error_message = 'See exception detail.'
         if message_or_error_code == 500:
             response_code_or_message = error_message
@@ -1350,10 +1351,12 @@ class CGIHTTPRequestHandler(
             message_or_error_code = error_message
         if message_end is None:
             __logger__.info(
-                format, message_or_error_code, response_code_or_message)
+                format, message_or_error_code, response_code_or_message,
+                *self.client_address)
         else:
             __logger__.info(
-                format, message_or_error_code, response_code_or_message, '')
+                format, message_or_error_code, response_code_or_message, '',
+                *self.client_address)
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -2035,8 +2038,14 @@ class CGIHTTPRequestHandler(
 
 # endregion
 
- # region footer
+# region footer
 
+'''
+    TODO check.
+    Preset some variables given by introspection letting the linter know what
+    globale variables are available.
+'''
+__logger__ = __test_mode__ = __exception__ = __module_name__ = None
 '''
     Extends this module with some magic environment variables to provide better
     introspection support. A generic command line interface for some code
