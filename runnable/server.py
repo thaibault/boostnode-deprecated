@@ -1344,12 +1344,25 @@ class CGIHTTPRequestHandler(
         format = (
             '{client_ip}:{client_port} {request_description} -> '
             '{response_code}')
-        if self.headers.get('X-Forwarded-For'):
-            format += ' - forwarded for: {forwarded_ip}'
-        if self.headers.get('X-Forwarded-Host'):
-            format += ' - forwarded host: {forwarded_host}'
-        if self.headers.get('X-Forwarded-Server'):
-            format += ' - forwarded server: {forwarded_server}'
+        forwarded_ip = forwarded_host = forwarded_server = None
+        if builtins.hasattr(self, 'headers'):
+## python3.3
+##             if self.headers.get('X-Forwarded-For'):
+##                 format += ' - forwarded for: {forwarded_ip}'
+##             if self.headers.get('X-Forwarded-Host'):
+##                 format += ' - forwarded host: {forwarded_host}'
+##             if self.headers.get('X-Forwarded-Server'):
+##                 format += ' - forwarded server: {forwarded_server}'
+            if self.headers.getheader('X-Forwarded-For'):
+                format += ' - forwarded for: {forwarded_ip}'
+            if self.headers.getheader('X-Forwarded-Host'):
+                format += ' - forwarded host: {forwarded_host}'
+            if self.headers.getheader('X-Forwarded-Server'):
+                format += ' - forwarded server: {forwarded_server}'
+##
+            forwarded_ip = self.headers.getheader('X-Forwarded-For')
+            forwarded_host = self.headers.getheader('X-Forwarded-Host')
+            forwarded_server = self.headers.getheader('X-Forwarded-Server')
         if builtins.len(self.server.web.instances) > 1:
             format += ' (server port: {server_port})'
         request_description = message_or_error_code
@@ -1361,11 +1374,10 @@ class CGIHTTPRequestHandler(
             client_ip=self.client_address[0],
             client_port=self.client_address[1],
             request_description=request_description,
-            response_code=response_code,
-            forwarded_ip=self.headers.get('X-Forwarded-For'),
-            forwarded_host=self.headers.get('X-Forwarded-Host'),
-            forwarded_server=self.headers.get('X-Forwarded-Server'),
+            response_code=response_code, forwarded_ip=forwarded_ip,
+            forwarded_host=forwarded_host, forwarded_server=forwarded_server,
             server_port=self.server.web.port))
+##
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -1426,7 +1438,7 @@ class CGIHTTPRequestHandler(
 ##             return builtins.bool(
 ##                 self.server.web.authentication_handler is None or
 ##                 self.server.web.authentication_handler(
-##                     self.headers['authorization'], self.request_uri))
+##                     self.headers.get('authorization'), self.request_uri))
             return builtins.bool(
                 self.server.web.authentication_handler is None or
                 self.server.web.authentication_handler(
@@ -1580,21 +1592,20 @@ class CGIHTTPRequestHandler(
             'HTTP_USER_AGENT': '',
             'HTTP_COOKIE': '',
             'HTTP_REFERER': ''})
-        if 'content-type' in self.headers:
-            variables['CONTENT_TYPE'] = self.headers['content-type']
-        if self.headers.get('content-length'):
-            variables['CONTENT_LENGTH'] = self.headers.get(
-                'content-length')
-        if self.headers.get('referer'):
-            variables['HTTP_REFERER'] = self.headers.get('referer')
-        if self.headers.get('user-agent'):
-            variables['HTTP_USER_AGENT'] = self.headers.get('user-agent')
+        for variable_name in variables:
 ## python3.3
+##             if self.headers.get(variable_name.replace('_', '-').lower()):
+##                 variables[variable_name] = self.headers.get(
+##                     variable_name.replace('_', '-').lower())
 ##         cookie_content = ', '.join(builtins.filter(
 ##             None, self.headers.get_all('cookie', [])))
 ##         if cookie_content:
 ##             variables['HTTP_COOKIE'] = cookie_content
-        pass
+            if self.headers.getheader(
+                variable_name.replace('_', '-').lower()
+            ):
+                variables[variable_name] = self.headers.getheader(
+                    variable_name.replace('_', '-').lower())
 ##
         return variables
 
@@ -1836,9 +1847,14 @@ class CGIHTTPRequestHandler(
     def _static_get(self):
 ##
         '''Handles a static file-request.'''
-        if(self.headers.get('If-Modified-Since') !=
+## python3.3
+##         if(self.headers.get('If-Modified-Since') !=
+##            self.date_time_string(
+##                builtins.int(self.requested_file.timestamp))):
+        if(self.headers.getheader('If-Modified-Since') !=
            self.date_time_string(
                builtins.int(self.requested_file.timestamp))):
+##
             __logger__.debug('Return file "%s".', self.requested_file)
             self.send_content_type_header(
                 mimetype=self.requested_file.mimetype
