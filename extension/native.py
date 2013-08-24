@@ -438,6 +438,8 @@ class String(Object, builtins.str):
 
     '''Saves the current line for the "readline()" method.'''
     _current_line_number = 0
+    '''Saves the encoding of currently saved string.'''
+    _encoding = ''
 
         # endregion
 
@@ -617,6 +619,62 @@ class String(Object, builtins.str):
 
         # region public
 
+            # region getter
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def get_encoding(
+##         self: boostNode.extension.type.Self
+##     ) -> builtins.str:
+    def get_encoding(self):
+##
+        '''
+            Guesses the encoding used in current string (bytes). Encodings are
+            checked in alphabetic order.
+
+            Examples:
+
+            >>> String().encoding == String.IMPORTANT_ENCODINGS[0]
+            True
+
+            >>> String('hans').encoding == String.IMPORTANT_ENCODINGS[0]
+            True
+
+            >>> String('hans').encoding == String.IMPORTANT_ENCODINGS[0]
+            True
+
+            >>> String(b'hans').encoding == String.IMPORTANT_ENCODINGS[0]
+            True
+
+            >>> if sys.version_info.major < 3:
+            ...     String(
+            ...         u'ä'.encode('latin1')
+            ...     ).encoding == String.IMPORTANT_ENCODINGS[0]
+            ... else:
+            ...     String(
+            ...         'ä'.encode('latin1')
+            ...     ).encoding  == String.IMPORTANT_ENCODINGS[0]
+            False
+        '''
+        self._encoding = self.IMPORTANT_ENCODINGS[0]
+        if self.content and builtins.isinstance(self.content, builtins.bytes):
+            for encoding in builtins.list(
+                self.IMPORTANT_ENCODINGS
+            ) + builtins.sorted(builtins.filter(
+                lambda encoding: encoding not in self.IMPORTANT_ENCODINGS,
+                builtins.set(encodings.aliases.aliases.values())
+            )):
+                try:
+                    self.content.decode(encoding)
+                except builtins.UnicodeDecodeError:
+                    pass
+                else:
+                    self._encoding = encoding
+                    break
+        return self._encoding
+
+            # endregion
+
             # region validation
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -774,58 +832,6 @@ class String(Object, builtins.str):
         return self.replace(search)
 
             # endregion
-
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def determine_encoding(
-##         self: boostNode.extension.type.Self
-##     ) -> builtins.str:
-    def determine_encoding(self):
-##
-        '''
-            Guesses the encoding used in current string (bytes). Encodings are
-            checked in alphabetic order.
-
-            Examples:
-
-            >>> String().determine_encoding() == String.IMPORTANT_ENCODINGS[0]
-            True
-
-            >>> String('hans').determine_encoding(
-            ...     ) == String.IMPORTANT_ENCODINGS[0]
-            True
-
-
-            >>> String('hans').determine_encoding(
-            ...     ) == String.IMPORTANT_ENCODINGS[0]
-            True
-
-            >>> String(b'hans').determine_encoding(
-            ...     ) == String.IMPORTANT_ENCODINGS[0]
-            True
-
-            >>> if sys.version_info.major < 3:
-            ...     String(u'ä'.encode('latin1')).determine_encoding(
-            ...         ) == String.IMPORTANT_ENCODINGS[0]
-            ... else:
-            ...     String('ä'.encode('latin1')).determine_encoding(
-            ...         ) == String.IMPORTANT_ENCODINGS[0]
-            False
-        '''
-        if self.content and builtins.isinstance(self.content, builtins.bytes):
-            for encoding in builtins.list(
-                self.IMPORTANT_ENCODINGS
-            ) + builtins.sorted(builtins.filter(
-                lambda encoding: encoding not in self.IMPORTANT_ENCODINGS,
-                builtins.set(encodings.aliases.aliases.values())
-            )):
-                try:
-                    self.content.decode(encoding)
-                except builtins.UnicodeDecodeError:
-                    pass
-                else:
-                    return encoding
-        return self.IMPORTANT_ENCODINGS[0]
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3

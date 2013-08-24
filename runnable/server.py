@@ -1347,22 +1347,19 @@ class CGIHTTPRequestHandler(
         forwarded_ip = forwarded_host = forwarded_server = None
         if builtins.hasattr(self, 'headers'):
 ## python3.3
-##             if self.headers.get('X-Forwarded-For'):
-##                 format += ' - forwarded for: {forwarded_ip}'
-##             if self.headers.get('X-Forwarded-Host'):
-##                 format += ' - forwarded host: {forwarded_host}'
-##             if self.headers.get('X-Forwarded-Server'):
-##                 format += ' - forwarded server: {forwarded_server}'
-            if self.headers.getheader('X-Forwarded-For'):
-                format += ' - forwarded for: {forwarded_ip}'
-            if self.headers.getheader('X-Forwarded-Host'):
-                format += ' - forwarded host: {forwarded_host}'
-            if self.headers.getheader('X-Forwarded-Server'):
-                format += ' - forwarded server: {forwarded_server}'
-##
+##             forwarded_ip = self.headers.get('X-Forwarded-For')
+##             forwarded_host = self.headers.get('X-Forwarded-Host')
+##             forwarded_server = self.headers.get('X-Forwarded-Server')
             forwarded_ip = self.headers.getheader('X-Forwarded-For')
             forwarded_host = self.headers.getheader('X-Forwarded-Host')
             forwarded_server = self.headers.getheader('X-Forwarded-Server')
+##
+            if forwarded_ip:
+                format += ' - forwarded for: {forwarded_ip}'
+            if forwarded_host:
+                format += ' - forwarded host: {forwarded_host}'
+            if forwarded_server:
+                format += ' - forwarded server: {forwarded_server}'
         if builtins.len(self.server.web.instances) > 1:
             format += ' (server port: {server_port})'
         request_description = message_or_error_code
@@ -1377,7 +1374,6 @@ class CGIHTTPRequestHandler(
             response_code=response_code, forwarded_ip=forwarded_ip,
             forwarded_host=forwarded_host, forwarded_server=forwarded_server,
             server_port=self.server.web.port))
-##
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint

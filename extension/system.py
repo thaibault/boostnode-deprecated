@@ -1280,8 +1280,10 @@ class Platform(builtins.object):
             result = process_handler.communicate()
 ## python3.3
 ##             result = {
-##                 'standard_output': result[0].decode(),
-##                 'error_output': result[1].decode()}
+##                 'standard_output': result[0].decode(
+##                     boostNode.extension.native.String(result[0]).encoding),
+##                 'error_output': result[1].decode(
+##                     boostNode.extension.native.String(result[1]).encoding)}
             result = {
                 'standard_output': result[0],
                 'error_output': result[1]}

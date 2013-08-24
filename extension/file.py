@@ -2014,7 +2014,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
                         content,
                         boostNode.extension.native.String(
                             content
-                        ).determine_encoding())
+                        ).encoding)
                 file_handler.write(content)
 ##
         return self
