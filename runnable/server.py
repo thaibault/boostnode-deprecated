@@ -720,7 +720,7 @@ class Web(
                         builtins.len(multiprocessing.active_children()))
                     shown_number = number_of_running_workers
                 time.sleep(2)
-            __logger__.info('Shutting down webserver.')
+            __logger__.info('Shutting down web server.')
             self.__class__.instances.remove(self)
             try:
                 self.service.socket.shutdown(socket.SHUT_RDWR)
