@@ -544,6 +544,15 @@ class Web(
              'help': 'Defines the authentication file name.',
              'dest': 'authentication_file_name',
              'metavar': 'STRING'}},
+        {'arguments': ('-f', '--request-parameter-delimiter'),
+         'keywords': {
+             'action': 'store',
+             'default': {'execute': '__initializer_default_value__'},
+             'type': {'execute': 'type(__initializer_default_value__)'},
+             'required': {'execute': '__initializer_default_value__ is None'},
+             'help': 'Defines the request delimiter parameter.',
+             'dest': 'request_parameter_delimiter',
+             'metavar': 'STRING'}},
         {'arguments': ('-k', '--maximum-number-of-processes'),
          'keywords': {
              'action': 'store',
@@ -644,6 +653,12 @@ class Web(
         sub workers which computes request results.
     '''
     shared_data = None
+    '''
+        This property saves the current request parameter delimiter. It will be
+        used to determine where the requested file name ends if get parameter
+        are given.
+    '''
+    request_parameter_delimiter = ''
 
         # endregion
 
@@ -781,7 +796,7 @@ class Web(
 ##         authentication_file_content_pattern='(?P<name>.+):(?P<password>.+)',
 ##         authentication_handler=None, module_loading=None,
 ##         maximum_number_of_processes=0, shared_data=None,
-##         **keywords: builtins.object
+##         request_parameter_delimiter='\?', **keywords: builtins.object
 ##     ) -> boostNode.extension.type.Self:
     def _initialize(
         self, root='.', host_name='', port=0, default='',
@@ -800,7 +815,8 @@ class Web(
         authentication=True, authentication_file_name='.htpasswd',
         authentication_file_content_pattern='(?P<name>.+):(?P<password>.+)',
         authentication_handler=None, module_loading=None,
-        maximum_number_of_processes=0, shared_data=None, **keywords
+        maximum_number_of_processes=0, shared_data=None,
+        request_parameter_delimiter='\?', **keywords
     ):
 ##
         '''
@@ -836,6 +852,7 @@ class Web(
             queue=True)
         self.module_loading = module_loading
         self.maximum_number_of_processes = maximum_number_of_processes
+        self.request_parameter_delimiter = request_parameter_delimiter
         if boostNode.extension.system.Platform.operating_system == 'windows':
             self.maximum_number_of_processes = 1
         elif not self.maximum_number_of_processes:
@@ -1069,6 +1086,8 @@ class CGIHTTPRequestHandler(
     respond = False
     '''Indicates if a response code was sent yet.'''
     response_sent = False
+    '''Indicates if all headers are sent.'''
+    headers_ended = False
     '''Indicates if a response mime type was sent yet.'''
     content_type_sent = False
     '''
@@ -1091,7 +1110,7 @@ class CGIHTTPRequestHandler(
 
     # endregion
 
-    # region dynamic  methods
+    # region dynamic methods
 
         # region public
 
@@ -1156,12 +1175,12 @@ class CGIHTTPRequestHandler(
 
         # region public
 
-    @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def parse_url(
-##         cls: boostNode.extension.type.SelfClass, url=None
+##         self: boostNode.extension.type.Self, url=None
 ##     ) -> builtins.tuple:
-    def parse_url(cls, url=None):
+    def parse_url(self, url=None):
 ##
         '''
             This static method provides an easy way to split a http
@@ -1170,20 +1189,19 @@ class CGIHTTPRequestHandler(
         if url is None and builtins.len(sys.argv) > 1:
             url = sys.argv[1]
         if url:
+            url = re.compile(
+                self.server.web.request_parameter_delimiter
+            ).sub('?', url, 1)
 ## python3.3             get = urllib.parse.urlparse(url).query
             get = urlparse.urlparse(url).query
             if get:
                 try:
 ## python3.3
 ##                     get = urllib.parse.parse_qs(
-##                         qs=urllib.parse.urlparse(url).query,
-##                         keep_blank_values=True,
-##                         strict_parsing=True,
-##                         encoding='utf_8',
-##                         errors='replace')
+##                         qs=get, keep_blank_values=True, strict_parsing=True,
+##                         encoding='utf_8', errors='replace')
                     get = urlparse.parse_qs(
-                        qs=urlparse.urlparse(url).query,
-                        keep_blank_values=True,
+                        qs=get, keep_blank_values=True,
                         strict_parsing=True)
 ##
                 except builtins.ValueError:
@@ -1290,19 +1308,34 @@ class CGIHTTPRequestHandler(
         '''
         if not self.response_sent:
             self.response_sent = True
+            '''Take this method via introspection.'''
+            builtins.getattr(
+                builtins.super(self.__class__, self), inspect.stack()[0][3]
+            )(*arguments, **keywords)
+        return self
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
-##             http.server.CGIHTTPRequestHandler.send_response(
-##                 self, *arguments, **keywords)
-            CGIHTTPServer.CGIHTTPRequestHandler.send_response(
-                self, *arguments, **keywords)
+##     def end_headers(
+##         self: boostNode.extension.type.Self, *arguments: builtins.object,
+##         **keywords: builtins.object
+##     ) -> boostNode.extension.type.Self:
+    def end_headers(self, *arguments, **keywords):
 ##
+        '''Finishes all sent headers by a trailing new empty line.'''
+        if not self.headers_ended:
+            self.headers_ended = True
+            '''Take this method via introspection.'''
+            builtins.getattr(
+                builtins.super(self.__class__, self), inspect.stack()[0][3]
+            )(*arguments, **keywords)
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def send_content_type_header(
 ##         self: boostNode.extension.type.Self, *arguments: builtins.object,
-##         mimetype='text/html', encoding='UTF-8',
+##         mimetype='text/html', encoding='UTF-8', response_code=200,
 ##         **keywords: builtins.object
 ##     ) -> boostNode.extension.type.Self:
     def send_content_type_header(self, *arguments, **keywords):
@@ -1316,9 +1349,11 @@ class CGIHTTPRequestHandler(
             name='mimetype', default_value='text/html')
         encoding, keywords = default_keywords.pop(
             name='encoding', default_value='UTF-8')
+        response_code, keywords = default_keywords.pop(
+            name='response_code', default_value=200)
 ##
         if not self.content_type_sent:
-            self.send_response(200).content_type_sent = True
+            self.send_response(response_code).content_type_sent = True
             self.send_header(
                 'Content-Type', '%s; charset=%s' % (mimetype, encoding),
                 *arguments, **keywords)
@@ -1697,9 +1732,7 @@ class CGIHTTPRequestHandler(
 ##     ) -> builtins.bool:
     def _is_valid_request(self):
 ##
-        '''
-            Checks if given request fulfill all restrictions.
-        '''
+        '''Checks if given request fulfill all restrictions.'''
         return self._request_in_pattern_list(
             self.server.web.request_whitelist) and\
             not self._request_in_pattern_list(
@@ -1728,10 +1761,14 @@ class CGIHTTPRequestHandler(
 ##
         '''Creates all request specified environment-variables.'''
         self.request_uri = self.path
-        match = re.compile('[^/\?]*/+([^?]*)\??(.*)').match(self.request_uri)
+        match = re.compile(
+            '[^/{delimiter}]*/+(?P<file_name>[^{delimiter}]*){delimiter}?'
+            '(?P<parameter>.*)'.format(
+                delimiter=self.server.web.request_parameter_delimiter)
+        ).match(self.request_uri)
         if match:
-            self.path = match.group(1)
-            self.parameter = match.group(2)
+            self.path = match.group('file_name')
+            self.parameter = match.group('parameter')
         return builtins.bool(self.path)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -1844,28 +1881,42 @@ class CGIHTTPRequestHandler(
 ##
         '''Handles a static file-request.'''
 ## python3.3
-##         if(self.headers.get('If-Modified-Since') !=
+##         if(self.headers.get('If-Modified-Since') ==
 ##            self.date_time_string(
 ##                builtins.int(self.requested_file.timestamp))):
-        if(self.headers.getheader('If-Modified-Since') !=
+        if(self.headers.getheader('If-Modified-Since') ==
            self.date_time_string(
                builtins.int(self.requested_file.timestamp))):
 ##
-            __logger__.debug('Return file "%s".', self.requested_file)
             self.send_content_type_header(
-                mimetype=self.requested_file.mimetype
-            ).send_header('Last-Modified', self.date_time_string(
-                builtins.int(self.requested_file.timestamp)))
-            self.send_header(
+                mimetype=self.requested_file.mimetype, response_code=304
+            )._send_static_file_cache_header(
+                timestamp=self.requested_file.timestamp
+            ).send_header(
                 'Content-Length', builtins.int(self.requested_file.size))
             self.end_headers()
-            self.wfile.write(self.requested_file.get_content(mode='rb'))
-        else:
-            __logger__.debug(
-                'Sent not modified header (304) for "%s".',
-                self.requested_file)
-            self.send_response(304)
-            self.end_headers()
+            return self
+        self.send_content_type_header(
+            mimetype=self.requested_file.mimetype
+        )._send_static_file_cache_header(
+            timestamp=self.requested_file.timestamp
+        ).send_header('Content-Length', builtins.int(self.requested_file.size))
+        self.end_headers()
+        self.wfile.write(self.requested_file.get_content(mode='rb'))
+        return self
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def _send_static_file_cache_header(
+##         self: boostNode.extension.type.Self, timestamp: builtins.float
+##     ) -> boostNode.extension.type.Self:
+    def _send_static_file_cache_header(self, timestamp):
+##
+        '''Response a static file-request header.'''
+        self.send_header('Cache-Control', 'public, max-age=99999999')
+        self.send_header('Last-Modified', self.date_time_string(timestamp))
+        self.send_header('Expires', self.date_time_string(
+            timestamp + 99999999))
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -2009,6 +2060,12 @@ class CGIHTTPRequestHandler(
         except builtins.Exception as exception:
             self._handle_module_exception(requested_module, exception)
         else:
+            # TODO dynamische antworten haben keinen Content length
+            # TODO dynamische Anfragen schein gezippt zu sein.
+            # statische auf jeden fall nicht. Am Ende soll alles gezippt
+            # werden. Vlt. sollte eh die Fallback Variante für statische
+            # anfragen kommen, da sie schneller ist und besser mit großen
+            # Dateien umgehen kann.
             if self.respond:
                 self.send_content_type_header().end_headers()
         finally:
