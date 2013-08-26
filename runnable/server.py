@@ -48,6 +48,7 @@ pass
 import logging
 import multiprocessing
 import os
+import posixpath
 ## python3.3 import socketserver
 import SocketServer
 import ssl
@@ -61,6 +62,7 @@ import time
 ## python3.3
 ## import types
 ## import urllib.parse
+import urllib
 import urlparse
 ##
 
@@ -391,7 +393,7 @@ class Web(
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},
              'required': {'execute': '__initializer_default_value__ is None'},
-             'help': 'Defines which path is used as webroot.',
+             'help': 'Defines which path is used as web root.',
              'dest': 'root',
              'metavar': 'PATH'}},
         {'arguments': ('-p', '--port'),
@@ -401,7 +403,7 @@ class Web(
              'type': {'execute': 'type(__initializer_default_value__)'},
              'choices': builtins.range(2 ** 16),
              'required': {'execute': '__initializer_default_value__ is None'},
-             'help': 'Defines the port number to access the webserver.',
+             'help': 'Defines the port number to access the web server.',
              'dest': 'port',
              'metavar': 'NUMBER'}},
         {'arguments': ('-d', '--default'),
@@ -443,8 +445,8 @@ class Web(
              'default': {'execute': '__initializer_default_value__'},
              'type': builtins.str,
              'required': {'execute': '__initializer_default_value__ is None'},
-             'help': 'Select request type regex patterns which are only '
-                     'allowed for being interpreted.',
+             'help': 'Select request type regular expression patterns which '
+                     'are only allowed for being interpreted.',
              'dest': 'request_whitelist',
              'metavar': 'REGEX_PATTERN'}},
         {'arguments': ('-b', '--request-blacklist'),
@@ -454,8 +456,8 @@ class Web(
              'default': {'execute': '__initializer_default_value__'},
              'type': builtins.str,
              'required': {'execute': '__initializer_default_value__ is None'},
-             'help': "Select request type regex patterns which aren't "
-                     'allowed for being interpreted.',
+             'help': 'Select request type regular expression patterns which '
+                     "aren't allowed for being interpreted.",
              'dest': 'request_blacklist',
              'metavar': 'REGEX_PATTERN'}},
         {'arguments': ('-s', '--static-mimetype-pattern'),
@@ -490,7 +492,7 @@ class Web(
              'type': builtins.str,
              'required': {'execute': '__initializer_default_value__ is None'},
              'help': 'All file name patterns which should be run if there is '
-                     'one present and no other default filepattern/name is '
+                     'one present and no other default file pattern/name is '
                      'given on initialisation.',
              'dest': 'default_file_name_pattern',
              'metavar': 'REGEX_PATTERN'}},
@@ -506,12 +508,22 @@ class Web(
                      'default python modules.',
              'dest': 'default_module_names',
              'metavar': 'REGEX_PATTERN'}},
+        {'arguments': ('-q', '--file-size-stream-threshold-in-byte'),
+         'keywords': {
+             'action': 'store',
+             'default': {'execute': '__initializer_default_value__'},
+             'type': {'execute': 'type(__initializer_default_value__)'},
+             'required': {'execute': '__initializer_default_value__ is None'},
+             'help': 'Defines the minimum number of bytes which triggers the '
+                     'server to send an octet-stream header to client.',
+             'dest': 'file_size_stream_threshold_in_byte',
+             'metavar': 'NUMBER'}},
         {'arguments': ('-a', '--authentication'),
          'keywords': {
              'action': 'store_true',
              'default': {'execute': '__initializer_default_value__'},
              'required': {'execute': '__initializer_default_value__ is None'},
-             'help': 'Enables basic http authentication. You can controle '
+             'help': 'Enables basic http authentication. You can control '
                      'this behavior by providing an authentication file in '
                      'directorys you want to save.',
              'dest': 'authentication'}},
@@ -522,17 +534,25 @@ class Web(
              'required': False,
              'help': 'Enables module loading via get query. '
                      'Enabling this feature can slow down your request '
-                     'performance extremly. Note that self module loading via '
-                     '"__main__" is independly possible.',
+                     'performance extremely. Note that self module loading '
+                     'via "__main__" is independently possible.',
              'dest': 'module_loading'}},
+        {'arguments': ('-z', '--disable-directory-listing'),
+         'keywords': {
+             'action': 'store_false',
+             'default': True,
+             'required': False,
+             'help': 'Disables automatic directory listing if a directory is '
+                     'requested.',
+             'dest': 'directory_listing'}},
         {'arguments': ('-g', '--authentication-file-content-pattern'),
          'keywords': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},
              'required': {'execute': '__initializer_default_value__ is None'},
-             'help': 'Defines the regex pattern to define how to parse '
-                     'authentication files.',
+             'help': 'Defines the regular expression pattern to define how to '
+                     'parse authentication files.',
              'dest': 'authentication_file_content_pattern',
              'metavar': 'REGEX_PATTERN'}},
         {'arguments': ('-i', '--authentication-file-name-pattern'),
@@ -544,7 +564,7 @@ class Web(
              'help': 'Defines the authentication file name.',
              'dest': 'authentication_file_name',
              'metavar': 'STRING'}},
-        {'arguments': ('-f', '--request-parameter-delimiter'),
+        {'arguments': ('-j', '--request-parameter-delimiter'),
          'keywords': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
@@ -659,6 +679,13 @@ class Web(
         are given.
     '''
     request_parameter_delimiter = ''
+    '''
+        Defines the minimum file size till the server sends an octet-stream
+        header.
+    '''
+    file_size_stream_threshold_in_byte = 0
+    '''Indicates if directory listing is allowed.'''
+    directory_listing = False
 
         # endregion
 
@@ -796,7 +823,9 @@ class Web(
 ##         authentication_file_content_pattern='(?P<name>.+):(?P<password>.+)',
 ##         authentication_handler=None, module_loading=None,
 ##         maximum_number_of_processes=0, shared_data=None,
-##         request_parameter_delimiter='\?', **keywords: builtins.object
+##         request_parameter_delimiter='\?',
+##         file_size_stream_threshold_in_byte=1048576,  # 1 MB
+##         directory_listing=True, **keywords: builtins.object
 ##     ) -> boostNode.extension.type.Self:
     def _initialize(
         self, root='.', host_name='', port=0, default='',
@@ -816,7 +845,9 @@ class Web(
         authentication_file_content_pattern='(?P<name>.+):(?P<password>.+)',
         authentication_handler=None, module_loading=None,
         maximum_number_of_processes=0, shared_data=None,
-        request_parameter_delimiter='\?', **keywords
+        request_parameter_delimiter='\?',
+        file_size_stream_threshold_in_byte=1048576,  # 1 MB
+        directory_listing=True, **keywords
     ):
 ##
         '''
@@ -853,6 +884,9 @@ class Web(
         self.module_loading = module_loading
         self.maximum_number_of_processes = maximum_number_of_processes
         self.request_parameter_delimiter = request_parameter_delimiter
+        self.file_size_stream_threshold_in_byte = \
+            file_size_stream_threshold_in_byte
+        self.directory_listing = directory_listing
         if boostNode.extension.system.Platform.operating_system == 'windows':
             self.maximum_number_of_processes = 1
         elif not self.maximum_number_of_processes:
@@ -1239,16 +1273,6 @@ class CGIHTTPRequestHandler(
             if request isn't valid.
         '''
         self._create_environment_variables()
-        self.requested_file = boostNode.extension.file.Handler(
-            location=self.server.web.root.path + self.path,
-            must_exist=False)
-        self._authentication_location = self.server.web.root
-        if self.requested_file:
-            self._authentication_location = self.requested_file
-            if self.requested_file.is_file():
-                self._authentication_location = \
-                    boostNode.extension.file.Handler(
-                        location=self.requested_file.directory_path)
         if self._is_authenticated():
             valid_request = self._is_valid_request()
             if valid_request:
@@ -1489,20 +1513,22 @@ class CGIHTTPRequestHandler(
             Checks weather the requested is one of a python module-, static- or
             dynamic file request. Returns "True" if so and "False" otherwise.
         '''
-        patterns = self.server.web.dynamic_mimetype_pattern +\
-            self.server.web.static_mimetype_pattern
-        if not self.requested_file:
-            if((self.server.web.module_loading is True or
-                self.server.web.module_loading == self.path) and
-               boostNode.extension.native.Module.get_file_path(
-                   context_path=self.path)):
-                self.load_module = True
+        if self.requested_file:
+            patterns = self.server.web.dynamic_mimetype_pattern + \
+                self.server.web.static_mimetype_pattern
+            if self.server.web.directory_listing:
+                patterns += '^$',
+            if(self.requested_file and self.requested_file.name !=
+               self.server.web.authentication_file_name and
+               self._check_pattern(
+                   patterns=patterns, subject=self.requested_file.mimetype
+               ) is not False):
                 return True
-        elif((not self.requested_file.is_file() or
-              self.requested_file.name !=
-              self.server.web.authentication_file_name) and
-             self._check_pattern(
-                 patterns=patterns, subject=self.requested_file.mimetype)):
+        elif((self.server.web.module_loading is True or
+              self.server.web.module_loading == self.path) and
+             boostNode.extension.native.Module.get_file_path(
+                 context_path=self.path)):
+            self.load_module = True
             return True
         return False
 
@@ -1756,7 +1782,7 @@ class CGIHTTPRequestHandler(
 ## python3.3
 ##     def _create_environment_variables(
 ##         self: boostNode.extension.type.Self
-##     ) -> builtins.bool:
+##     ) -> boostNode.extension.type.Self:
     def _create_environment_variables(self):
 ##
         '''Creates all request specified environment-variables.'''
@@ -1766,10 +1792,27 @@ class CGIHTTPRequestHandler(
             '(?P<parameter>.*)'.format(
                 delimiter=self.server.web.request_parameter_delimiter)
         ).match(self.request_uri)
+        self.path = ''
         if match:
-            self.path = match.group('file_name')
+## python3.3
+##             self.path = posixpath.normpath(urllib.parse.unquote(match.group(
+##                 'file_name')))
+            self.path = posixpath.normpath(urllib.unquote(match.group(
+                'file_name')))
+##
+            if self.path == '.':
+                self.path = ''
             self.parameter = match.group('parameter')
-        return builtins.bool(self.path)
+        self.requested_file = boostNode.extension.file.Handler(
+            location=self.server.web.root.path + self.path, must_exist=False)
+        self._authentication_location = self.server.web.root
+        if self.requested_file:
+            self._authentication_location = self.requested_file
+            if self.requested_file.is_file():
+                self._authentication_location = \
+                    boostNode.extension.file.Handler(
+                        location=self.requested_file.directory_path)
+        return self.path
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -1808,6 +1851,9 @@ class CGIHTTPRequestHandler(
                     self.requested_file = file
                     self._set_dynamic_or_static_get(file_name=file.name)
                     return True
+        if self.server.web.directory_listing:
+            self._static_get()
+            return True
         return False
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -1880,6 +1926,25 @@ class CGIHTTPRequestHandler(
     def _static_get(self):
 ##
         '''Handles a static file-request.'''
+        if self.requested_file.is_directory():
+            path_backup = self.path
+            self.path = self.requested_file.path[builtins.len(
+                self.server.web.root.path
+            ) - builtins.len(os.sep):]
+## python3.3
+##             with self.list_directory(self.requested_file._path) as file:
+##                 self.copyfile(file, self.wfile)
+            file_handler = self.list_directory(self.requested_file._path)
+            self.copyfile(file_handler, self.wfile)
+            file_handler.close
+##
+            self.path = path_backup
+            return self
+        try:
+            file_handler = builtins.open(self.requested_file._path, mode='rb')
+        except builtins.IOError:
+            self._send_no_file_error()
+            return self
 ## python3.3
 ##         if(self.headers.get('If-Modified-Since') ==
 ##            self.date_time_string(
@@ -1896,13 +1961,19 @@ class CGIHTTPRequestHandler(
                 'Content-Length', builtins.int(self.requested_file.size))
             self.end_headers()
             return self
-        self.send_content_type_header(
-            mimetype=self.requested_file.mimetype
-        )._send_static_file_cache_header(
+        threshold = self.server.web.file_size_stream_threshold_in_byte
+        if threshold < self.requested_file.size:
+            self.send_content_type_header(mimetype='application/octet-stream')
+            self.send_header('Content-Transfer-Encoding', 'binary')
+        else:
+            self.send_content_type_header(
+                mimetype=self.requested_file.mimetype)
+        self._send_static_file_cache_header(
             timestamp=self.requested_file.timestamp
         ).send_header('Content-Length', builtins.int(self.requested_file.size))
         self.end_headers()
-        self.wfile.write(self.requested_file.get_content(mode='rb'))
+        self.copyfile(file_handler, self.wfile)
+        file_handler.close()
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -1971,7 +2042,7 @@ class CGIHTTPRequestHandler(
             Runs a given external process in a subprocess. Output and errors
             are piped to requested client.
         '''
-        self.request_arguments[0] = self.server.web.root.path +\
+        self.request_arguments[0] = self.server.web.root.path + \
             self.request_arguments[0]
         self.request_arguments = builtins.list(builtins.map(
             lambda element: builtins.str(element), self.request_arguments))
@@ -2063,9 +2134,7 @@ class CGIHTTPRequestHandler(
             # TODO dynamische antworten haben keinen Content length
             # TODO dynamische Anfragen schein gezippt zu sein.
             # statische auf jeden fall nicht. Am Ende soll alles gezippt
-            # werden. Vlt. sollte eh die Fallback Variante für statische
-            # anfragen kommen, da sie schneller ist und besser mit großen
-            # Dateien umgehen kann.
+            # werden.
             if self.respond:
                 self.send_content_type_header().end_headers()
         finally:

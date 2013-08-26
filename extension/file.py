@@ -34,16 +34,14 @@ __version__ = '1.0'
 ## python3.3 import builtins
 import __builtin__ as builtins
 import ctypes
-## python3.3 pass
+## python3.3 import collections
 import codecs
-import collections
 import copy
 import inspect
 import mimetypes
 import os
 import re
 import shutil
-import sre_constants
 import stat
 import sys
 ## python3.3 import types
@@ -1380,7 +1378,8 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
                not (self and self._path.startswith(self._root_path))):
                 return self._path
             return self._path[builtins.len(
-                self._root_path) - builtins.len(os.sep):]
+                self._root_path
+            ) - builtins.len(os.sep):]
         return self._get_path(
             location, respect_root_path,
             output_with_root_prefix=taken_output_with_root_prefix)
