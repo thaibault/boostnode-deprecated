@@ -814,10 +814,10 @@ class Web(
 ##         # ('^text/.+', '^image/.+', '^application/(x-)?javascript$')
 ##         static_mimetype_pattern=('^.+/.+$',),
 ##         dynamic_mimetype_pattern=(
-##             '^text/x-python$', 'text/x-sh', '^text/x-shellscript$'),
+##             '^text/x-(python|sh|bash|shellscript)$',),
 ##         default_file_name_pattern=(
-##             '^((__main__)|(main)|(index)|(initialize))\.?'
-##             '(?!tpl$)[a-zA-Z0-9]{0,4}$',),
+##             '^((__main__)|(main)|(index)|(initialize))\.?(?!tpl$)'
+##             '[a-zA-Z0-9]{0,4}$',),
 ##         default_module_names=('__main__', 'main', 'index', 'initialize'),
 ##         authentication=True, authentication_file_name='.htpasswd',
 ##         authentication_file_content_pattern='(?P<name>.+):(?P<password>.+)',
@@ -836,10 +836,10 @@ class Web(
         # ('^text/.+', '^image/.+', '^application/(x-)?javascript$')
         static_mimetype_pattern=('^.+/.+$',),
         dynamic_mimetype_pattern=(
-            '^text/x-python$', 'text/x-sh', '^text/x-shellscript$'),
+            '^text/x-(python|sh|bash|shellscript)$',),
         default_file_name_pattern=(
-            '^((__main__)|(main)|(index)|(initialize))\.?'
-            '(?!tpl$)[a-zA-Z0-9]{0,4}$',),
+            '^((__main__)|(main)|(index)|(initialize))\.?(?!tpl$)'
+            '[a-zA-Z0-9]{0,4}$',),
         default_module_names=('__main__', 'main', 'index', 'initialize'),
         authentication=True, authentication_file_name='.htpasswd',
         authentication_file_content_pattern='(?P<name>.+):(?P<password>.+)',
@@ -1118,12 +1118,9 @@ class CGIHTTPRequestHandler(
     request_arguments = []
     '''Indicates if an answer is expected from the requested file.'''
     respond = False
-    '''Indicates if a response code was sent yet.'''
-    response_sent = False
-    '''Indicates if all headers are sent.'''
-    headers_ended = False
-    '''Indicates if a response mime type was sent yet.'''
-    content_type_sent = False
+    '''Indicates if the specified response was sent yet.'''
+    response_sent = headers_ended = content_type_sent = content_length_sent = \
+        False
     '''
         Saves the self describing server version string. This string is
         included in every response.
@@ -1357,6 +1354,20 @@ class CGIHTTPRequestHandler(
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
+##     def send_static_file_cache_header(
+##         self: boostNode.extension.type.Self, timestamp: builtins.float
+##     ) -> boostNode.extension.type.Self:
+    def send_static_file_cache_header(self, timestamp):
+##
+        '''Response a static file-request header.'''
+        self.send_header('Cache-Control', 'public, max-age=99999999')
+        self.send_header('Last-Modified', self.date_time_string(timestamp))
+        self.send_header('Expires', self.date_time_string(
+            timestamp + 99999999))
+        return self
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
 ##     def send_content_type_header(
 ##         self: boostNode.extension.type.Self, *arguments: builtins.object,
 ##         mimetype='text/html', encoding='UTF-8', response_code=200,
@@ -1381,6 +1392,31 @@ class CGIHTTPRequestHandler(
             self.send_header(
                 'Content-Type', '%s; charset=%s' % (mimetype, encoding),
                 *arguments, **keywords)
+        return self
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def send_content_length_header(
+##         self: boostNode.extension.type.Self, size: builtins.int,
+##         *arguments: builtins.object, encoding='UTF-8', response_code=200,
+##         **keywords: builtins.object
+##     ) -> boostNode.extension.type.Self:
+    def send_content_length_header(self, size, *arguments, **keywords):
+##
+        '''Sends the content length header to client if not sent yet.'''
+## python3.3
+##         pass
+        default_keywords = boostNode.extension.native.Dictionary(
+            content=keywords)
+        encoding, keywords = default_keywords.pop(
+            name='encoding', default_value='UTF-8')
+        response_code, keywords = default_keywords.pop(
+            name='response_code', default_value=200)
+##
+        if not self.content_length_sent:
+            self.send_response(response_code).content_length_sent = True
+            self.send_header(
+                'Content-Length', size, *arguments, **keywords)
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -1955,10 +1991,10 @@ class CGIHTTPRequestHandler(
 ##
             self.send_content_type_header(
                 mimetype=self.requested_file.mimetype, response_code=304
-            )._send_static_file_cache_header(
+            ).send_static_file_cache_header(
                 timestamp=self.requested_file.timestamp
-            ).send_header(
-                'Content-Length', builtins.int(self.requested_file.size))
+            ).send_content_length_header(
+                size=builtins.int(self.requested_file.size))
             self.end_headers()
             return self
         threshold = self.server.web.file_size_stream_threshold_in_byte
@@ -1968,26 +2004,13 @@ class CGIHTTPRequestHandler(
         else:
             self.send_content_type_header(
                 mimetype=self.requested_file.mimetype)
-        self._send_static_file_cache_header(
+        self.send_static_file_cache_header(
             timestamp=self.requested_file.timestamp
-        ).send_header('Content-Length', builtins.int(self.requested_file.size))
+        ).send_content_length_header(
+            size=builtins.int(self.requested_file.size))
         self.end_headers()
         self.copyfile(file_handler, self.wfile)
         file_handler.close()
-        return self
-
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _send_static_file_cache_header(
-##         self: boostNode.extension.type.Self, timestamp: builtins.float
-##     ) -> boostNode.extension.type.Self:
-    def _send_static_file_cache_header(self, timestamp):
-##
-        '''Response a static file-request header.'''
-        self.send_header('Cache-Control', 'public, max-age=99999999')
-        self.send_header('Last-Modified', self.date_time_string(timestamp))
-        self.send_header('Expires', self.date_time_string(
-            timestamp + 99999999))
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -2055,7 +2078,10 @@ class CGIHTTPRequestHandler(
             stderr=subprocess.PIPE
         ).communicate()
         self.server.web.number_of_running_threads -= 1
-        errors = errors.decode()
+        size = builtins.len(output)
+        errors = errors.decode(
+            encoding=boostNode.extension.native.String(errors).encoding,
+            errors='strict')
         if self.respond:
             if errors:
                 program_description = ''
@@ -2069,9 +2095,13 @@ class CGIHTTPRequestHandler(
                 header_match = re.compile(
                     '^[A-Z0-9]+/([0-9]+\.)+[0-9]+ [0-9]{3} [a-zA-Z ]+\n'
                     '([^:]+: .+\n)+\n.+'
-                ).match(output)
+                ).match(output.decode(
+                    encoding=boostNode.extension.native.String(output).encoding
+                ))
                 if not header_match:
-                    self.send_content_type_header().end_headers()
+                    self.send_content_type_header().send_content_length_header(
+                        size
+                    ).end_headers()
                 self.wfile.write(output)
         if errors:
             __logger__.critical(
@@ -2091,32 +2121,32 @@ class CGIHTTPRequestHandler(
             piped to requested client.
         '''
         '''Redirect output buffer.'''
-        print_default_buffer_save = \
+        print_default_buffer_backup = \
             boostNode.extension.output.Print.default_buffer
         boostNode.extension.output.Print.default_buffer = \
             self.server.web.thread_buffer
-## python3.3         sys_path_save = sys.path.copy()
-        sys_path_save = copy.copy(sys.path)
+## python3.3         sys_path_backup = sys.path.copy()
+        sys_path_backup = copy.copy(sys.path)
         sys.path = [self.server.web.root.path] + sys.path
         self.server.web.number_of_running_threads += 1
         requested_module = builtins.__import__(self.request_arguments[0])
         '''Extend requested scope with request dependent globals.'''
         requested_module.__requested_arguments__ = self.request_arguments
-        sys.path = sys_path_save
+        sys.path = sys_path_backup
         __logger__.debug('Run module "%s".', requested_module)
         return self._handle_module_running(
-            requested_module, print_default_buffer_save, sys_path_save)
+            requested_module, print_default_buffer_backup, sys_path_backup)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
 ##     def _handle_module_running(
 ##         self: boostNode.extension.type.Self,
 ##         requested_module: types.ModuleType,
-##         print_default_buffer_save: builtins.object,
-##         sys_path_save: collections.Iterable
+##         print_default_buffer_backup: builtins.object,
+##         sys_path_backup: collections.Iterable
 ##     ) -> boostNode.extension.type.Self:
     def _handle_module_running(
-        self, requested_module, print_default_buffer_save, sys_path_save
+        self, requested_module, print_default_buffer_backup, sys_path_backup
     ):
 ##
         '''Handles exceptions raising in requested modules.'''
@@ -2131,12 +2161,13 @@ class CGIHTTPRequestHandler(
         except builtins.Exception as exception:
             self._handle_module_exception(requested_module, exception)
         else:
-            # TODO dynamische antworten haben keinen Content length
             # TODO dynamische Anfragen schein gezippt zu sein.
             # statische auf jeden fall nicht. Am Ende soll alles gezippt
             # werden.
             if self.respond:
-                self.send_content_type_header().end_headers()
+                self.send_content_type_header().send_content_length_header(
+                    size=builtins.len(self.server.web.thread_buffer.content)
+                ).end_headers()
         finally:
             self.server.web.number_of_running_threads -= 1
             if self.respond:
@@ -2147,7 +2178,7 @@ class CGIHTTPRequestHandler(
                     self.server.web.thread_buffer.clear())
 ##
             boostNode.extension.output.Print.default_buffer = \
-                print_default_buffer_save
+                print_default_buffer_backup
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
