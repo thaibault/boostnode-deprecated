@@ -155,8 +155,8 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
     MAX_PATH_LENGTH = 32767
     '''Defines the maximum number of digits for the biggest file-size.'''
     MAX_SIZE_NUMBER_LENGTH = 24  # 10^21 byte = 1 Yottabyte (-1 byte)
-    '''Defines all mimetypes describing a media file.'''
-    MEDIA_MIMETYPE_PATTERN = '^audio/.+', '^video/.+'
+    '''Defines all mime-types describing a media file.'''
+    MEDIA_MIME_TYPE_PATTERN = '^audio/.+', '^video/.+'
     '''
         This file pattern is used for all files which should easily open the
         referenced file with a useful program.
@@ -228,7 +228,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
     _disk_used_space = 0
     _timestamp = 0
     _lines = 0
-    _mimetype = _type = None
+    _mime_type = _type = None
     _respect_root_path = True
     _output_with_root_prefix = False
     '''
@@ -549,8 +549,8 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ...     must_exist=False))
             0
 
-            >>> len(Handler(location=__file_path__))
-            1
+            >>> len(Handler(location=__file_path__)) > 1
+            True
 
             >>> len(Handler(Handler().directory_path)) > 1
             True
@@ -562,7 +562,7 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             '''
             return builtins.len(builtins.list(self.list()))
         elif self.is_file():
-            return 1
+            return builtins.int(self.size)
         return 0
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -1296,10 +1296,10 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
-##     def get_mimetype(
+##     def get_mime_type(
 ##         self: boostNode.extension.type.Self, default_type='text'
 ##     ) -> builtins.str:
-    def get_mimetype(self, default_type='text'):
+    def get_mime_type(self, default_type='text'):
 ##
         '''
             Determines the mime-type of the current object.
@@ -1309,34 +1309,34 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
             Examples:
 
-            >>> Handler(location=__file_path__).mimetype # doctest: +ELLIPSIS
+            >>> Handler(location=__file_path__).mime_type # doctest: +ELLIPSIS
             'text/...python'
 
             >>> Handler(
             ...     location=__file_path__
-            ... ).get_mimetype() # doctest: +ELLIPSIS
+            ... ).get_mime_type() # doctest: +ELLIPSIS
             'text/...python'
 
-            >>> Handler().mimetype
+            >>> Handler().mime_type
             ''
 
             >>> handler = Handler(
-            ...     location=__test_folder__ + 'get_mimetype.unknownType',
+            ...     location=__test_folder__ + 'get_mime_type.unknownType',
             ...     must_exist=False)
             >>> handler.content = 'hans'
-            >>> handler.mimetype # doctest: +ELLIPSIS
+            >>> handler.mime_type # doctest: +ELLIPSIS
             'text/x-unknownType'
         '''
-        self._mimetype = mimetypes.guess_type(self._path)[0]
-        if not builtins.isinstance(self._mimetype, builtins.str):
+        self._mime_type = mimetypes.guess_type(self._path)[0]
+        if not builtins.isinstance(self._mime_type, builtins.str):
             if self.is_file():
                 subtype = 'plain'
                 if self.extension:
                     subtype = 'x-' + self.extension
-                self._mimetype = default_type + '/' + subtype
+                self._mime_type = default_type + '/' + subtype
             else:
-                self._mimetype = ''
-        return self._mimetype
+                self._mime_type = ''
+        return self._mime_type
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -2474,8 +2474,8 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ... ).is_media() # doctest: +SKIP
             True
         '''
-        for pattern in self.MEDIA_MIMETYPE_PATTERN:
-            if re.search(pattern, self.mimetype):
+        for pattern in self.MEDIA_MIME_TYPE_PATTERN:
+            if re.search(pattern, self.mime_type):
                 return True
         return False
 

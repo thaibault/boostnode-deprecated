@@ -42,6 +42,7 @@ import cgi
 ## import imp
 import copy
 ##
+import gzip
 import inspect
 ## python3.3 import io
 pass
@@ -49,14 +50,18 @@ import logging
 import multiprocessing
 import os
 import posixpath
-## python3.3 import socketserver
-import SocketServer
+import socketserver
 import ssl
 import re
 import signal
 import socket
 import subprocess
 import sys
+## python3.3
+## import io
+import SocketServer
+import StringIO
+##
 import threading
 import time
 ## python3.3
@@ -460,7 +465,7 @@ class Web(
                      "aren't allowed for being interpreted.",
              'dest': 'request_blacklist',
              'metavar': 'REGEX_PATTERN'}},
-        {'arguments': ('-s', '--static-mimetype-pattern'),
+        {'arguments': ('-s', '--static-mime-type-pattern'),
          'keywords': {
              'action': 'store',
              'nargs': '*',
@@ -470,9 +475,9 @@ class Web(
              'help': 'All mime-type patterns which should recognize a static '
                      'file. Those files will be directly sent to client '
                      'without any preprocessing.',
-             'dest': 'static_mimetype_pattern',
+             'dest': 'static_mime_type_pattern',
              'metavar': 'REGEX_PATTERN'}},
-        {'arguments': ('-y', '--dynamic-mimetype-pattern'),
+        {'arguments': ('-y', '--dynamic-mime-type-pattern'),
          'keywords': {
              'action': 'store',
              'nargs': '*',
@@ -482,7 +487,18 @@ class Web(
              'help': 'All mime-type patterns which should recognize a dynamic '
                      'file. Those files will be interpreted so the result can '
                      'be send back to client.',
-             'dest': 'dynamic_mimetype_pattern',
+             'dest': 'dynamic_mime_type_pattern',
+             'metavar': 'REGEX_PATTERN'}},
+        {'arguments': ('-C', '--compressible-mime-type-pattern'),
+         'keywords': {
+             'action': 'store',
+             'nargs': '*',
+             'default': {'execute': '__initializer_default_value__'},
+             'type': builtins.str,
+             'required': {'execute': '__initializer_default_value__ is None'},
+             'help': 'All mime-type patterns which should compressed before '
+                     'sending through network socket.',
+             'dest': 'compressible_mime_type_pattern',
              'metavar': 'REGEX_PATTERN'}},
         {'arguments': ('-f', '--default-file-name-pattern'),
          'keywords': {
@@ -634,22 +650,27 @@ class Web(
     '''Saves all initializes server instances.'''
     instances = []
     '''
-        Saves all mimetype pattern to interpret as files which shouldn't be
+        Saves all mime-type pattern to interpret as files which shouldn't be
         ran.
     '''
-    static_mimetype_pattern = ()
+    static_mime_type_pattern = ()
     '''
-        Saves all mimetype pattern to interpret as files which should be
+        Saves all mime-type pattern to interpret as files which should be
         ran. There standard output will be given back to request.
     '''
-    dynamic_mimetype_pattern = ()
+    dynamic_mime_type_pattern = ()
     '''
-        Saves all file name pattern to be taken as fallback if no explicit file
-        or module was requested.
+        Saves all mime-type pattern which should be compressed before sending
+        via network.
+    '''
+    compressible_mime_type_pattern = ()
+    '''
+        Saves all file name pattern to be taken as fall-back if no explicit
+        file or module was requested.
     '''
     default_file_name_pattern = ()
     '''
-        Saves all module names to be taken as fallback if no explicit
+        Saves all module names to be taken as fall-back if no explicit
         file or module was requested.
     '''
     default_module_names = ()
@@ -692,8 +713,8 @@ class Web(
         # region protected
 
     '''
-        Holds a file object referencing a "<DOMAIN_NAME>.pem" file needed
-        for open ssl connections.
+        Holds a file object referencing a "<DOMAIN_NAME>.pem" file needed for
+        open ssl connections.
     '''
     _public_key_file = None
 
@@ -812,9 +833,11 @@ class Web(
 ##         same_thread_request_whitelist=(),
 ##         # NOTE: Tuple for explicit webserver file reference validation.
 ##         # ('^text/.+', '^image/.+', '^application/(x-)?javascript$')
-##         static_mimetype_pattern=('^.+/.+$',),
-##         dynamic_mimetype_pattern=(
+##         static_mime_type_pattern=('^.+/.+$',),
+##         dynamic_mime_type_pattern=(
 ##             '^text/x-(python|sh|bash|shellscript)$',),
+##         compressible_mime_type_pattern=(
+##             '^text/.+$', '^application/javascript$'),
 ##         default_file_name_pattern=(
 ##             '^((__main__)|(main)|(index)|(initialize))\.?(?!tpl$)'
 ##             '[a-zA-Z0-9]{0,4}$',),
@@ -834,9 +857,11 @@ class Web(
         same_thread_request_whitelist=(),
         # NOTE: Tuple for explicit webserver file reference validation.
         # ('^text/.+', '^image/.+', '^application/(x-)?javascript$')
-        static_mimetype_pattern=('^.+/.+$',),
-        dynamic_mimetype_pattern=(
+        static_mime_type_pattern=('^.+/.+$',),
+        dynamic_mime_type_pattern=(
             '^text/x-(python|sh|bash|shellscript)$',),
+        compressible_mime_type_pattern=(
+            '^text/.+$', '^application/javascript$'),
         default_file_name_pattern=(
             '^((__main__)|(main)|(index)|(initialize))\.?(?!tpl$)'
             '[a-zA-Z0-9]{0,4}$',),
@@ -851,7 +876,7 @@ class Web(
     ):
 ##
         '''
-            Sets root path of webserver and all properties. Although the
+            Sets root path of web server and all properties. Although the
             server thread will be started.
         '''
         self.__class__.instances.append(self)
@@ -875,8 +900,9 @@ class Web(
         self.request_whitelist = request_whitelist
         self.request_blacklist = request_blacklist
         self.same_thread_request_whitelist = same_thread_request_whitelist
-        self.static_mimetype_pattern = static_mimetype_pattern
-        self.dynamic_mimetype_pattern = dynamic_mimetype_pattern
+        self.static_mime_type_pattern = static_mime_type_pattern
+        self.dynamic_mime_type_pattern = dynamic_mime_type_pattern
+        self.compressible_mime_type_pattern = compressible_mime_type_pattern
         self.default_file_name_pattern = default_file_name_pattern
         self.default_module_names = default_module_names
         self.thread_buffer = boostNode.extension.output.Buffer(
@@ -1126,6 +1152,8 @@ class CGIHTTPRequestHandler(
         included in every response.
     '''
     server_version = '{program} {version} {status}'
+    '''Saves gziped encoded output.'''
+    _encoded_output = None
 
         # endregion
 
@@ -1337,6 +1365,30 @@ class CGIHTTPRequestHandler(
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
+##     def list_directory(
+##         self: boostNode.extension.type.Self, *arguments: builtins.object,
+##         **keywords: builtins.object
+##     ) -> boostNode.extension.type.Self:
+    def list_directory(self, *arguments, **keywords):
+##
+        '''
+            Generates a simple html web page listing requested directory
+            content.
+        '''
+        path_backup = self.path
+        self.path = self.requested_file.path[builtins.len(
+            self.server.web.root.path
+        ) - builtins.len(os.sep):]
+        '''Take this method via introspection.'''
+        file_handler = builtins.getattr(
+            builtins.super(self.__class__, self), inspect.stack()[0][3]
+        )(self.requested_file._path, *arguments, **keywords)
+        self._send_output(output=file_handler)
+        self.path = path_backup
+        return self
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
 ##     def end_headers(
 ##         self: boostNode.extension.type.Self, *arguments: builtins.object,
 ##         **keywords: builtins.object
@@ -1370,7 +1422,7 @@ class CGIHTTPRequestHandler(
 ## python3.3
 ##     def send_content_type_header(
 ##         self: boostNode.extension.type.Self, *arguments: builtins.object,
-##         mimetype='text/html', encoding='UTF-8', response_code=200,
+##         mime_type='text/html', encoding='UTF-8', response_code=200,
 ##         **keywords: builtins.object
 ##     ) -> boostNode.extension.type.Self:
     def send_content_type_header(self, *arguments, **keywords):
@@ -1380,8 +1432,8 @@ class CGIHTTPRequestHandler(
 ##         pass
         default_keywords = boostNode.extension.native.Dictionary(
             content=keywords)
-        mimetype, keywords = default_keywords.pop(
-            name='mimetype', default_value='text/html')
+        mime_type, keywords = default_keywords.pop(
+            name='mime_type', default_value='text/html')
         encoding, keywords = default_keywords.pop(
             name='encoding', default_value='UTF-8')
         response_code, keywords = default_keywords.pop(
@@ -1390,7 +1442,7 @@ class CGIHTTPRequestHandler(
         if not self.content_type_sent:
             self.send_response(response_code).content_type_sent = True
             self.send_header(
-                'Content-Type', '%s; charset=%s' % (mimetype, encoding),
+                'Content-Type', '%s; charset=%s' % (mime_type, encoding),
                 *arguments, **keywords)
         return self
 
@@ -1398,8 +1450,8 @@ class CGIHTTPRequestHandler(
 ## python3.3
 ##     def send_content_length_header(
 ##         self: boostNode.extension.type.Self, size: builtins.int,
-##         *arguments: builtins.object, encoding='UTF-8', response_code=200,
-##         **keywords: builtins.object
+##         *arguments: builtins.object, dynamic_output='', encoding='UTF-8',
+##         response_code=200, **keywords: builtins.object
 ##     ) -> boostNode.extension.type.Self:
     def send_content_length_header(self, size, *arguments, **keywords):
 ##
@@ -1412,11 +1464,40 @@ class CGIHTTPRequestHandler(
             name='encoding', default_value='UTF-8')
         response_code, keywords = default_keywords.pop(
             name='response_code', default_value=200)
+        dynamic_output, keywords = default_keywords.pop(
+            name='dynamic_output', default_value='')
 ##
         if not self.content_length_sent:
             self.send_response(response_code).content_length_sent = True
-            self.send_header(
-                'Content-Length', size, *arguments, **keywords)
+            threshold = self.server.web.file_size_stream_threshold_in_byte
+## python3.3
+##             if(size < threshold and
+##                self.headers.get('Accept-Encoding') and
+##                gzip.__name__ in self.headers.get('Accept-Encoding').split(
+##                    ','
+##                ) and (dynamic_output or self._check_pattern(
+##                    patterns=self.server.web.compressible_mime_type_pattern,
+##                    subject=self.requested_file.mime_type))):
+            if(size < threshold and
+               self.headers.getheader('Accept-Encoding') and
+               gzip.__name__ in self.headers.getheader(
+                   'Accept-Encoding'
+               ).split(',') and
+               (dynamic_output or self._check_pattern(
+                   patterns=self.server.web.compressible_mime_type_pattern,
+                   subject=self.requested_file.mime_type))):
+##
+                self.send_header('Content-Encoding', gzip.__name__)
+                if dynamic_output:
+                    self._encoded_output = self._gzip(content=dynamic_output)
+                else:
+                    self._encoded_output = self._gzip(
+                        content=self.requested_file.content)
+                self.send_header('Content-Length', builtins.len(
+                    self._encoded_output))
+            else:
+                self.send_header(
+                    'Content-Length', size, *arguments, **keywords)
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -1550,14 +1631,14 @@ class CGIHTTPRequestHandler(
             dynamic file request. Returns "True" if so and "False" otherwise.
         '''
         if self.requested_file:
-            patterns = self.server.web.dynamic_mimetype_pattern + \
-                self.server.web.static_mimetype_pattern
+            patterns = self.server.web.dynamic_mime_type_pattern + \
+                self.server.web.static_mime_type_pattern
             if self.server.web.directory_listing:
                 patterns += '^$',
             if(self.requested_file and self.requested_file.name !=
                self.server.web.authentication_file_name and
                self._check_pattern(
-                   patterns=patterns, subject=self.requested_file.mimetype
+                   patterns=patterns, subject=self.requested_file.mime_type
                ) is not False):
                 return True
         elif((self.server.web.module_loading is True or
@@ -1578,10 +1659,10 @@ class CGIHTTPRequestHandler(
             file or is a static type which should be send back unmodified.
         '''
         return builtins.bool(self.load_module or self._check_pattern(
-            self.server.web.dynamic_mimetype_pattern,
+            self.server.web.dynamic_mime_type_pattern,
             boostNode.extension.file.Handler(
                 location=self.server.web.root.path + self.requested_file_name
-            ).mimetype))
+            ).mime_type))
 
             # endregion
 
@@ -1766,7 +1847,7 @@ class CGIHTTPRequestHandler(
                     'blacklists')
             if self.requested_file.is_file():
                 error_message += \
-                    '. Detected mime-type "%s"' % self.requested_file.mimetype
+                    '. Detected mime-type "%s"' % self.requested_file.mime_type
         self.send_error(404, re.compile('\n+').sub('\n', error_message))
         return self
 
@@ -1963,19 +2044,7 @@ class CGIHTTPRequestHandler(
 ##
         '''Handles a static file-request.'''
         if self.requested_file.is_directory():
-            path_backup = self.path
-            self.path = self.requested_file.path[builtins.len(
-                self.server.web.root.path
-            ) - builtins.len(os.sep):]
-## python3.3
-##             with self.list_directory(self.requested_file._path) as file:
-##                 self.copyfile(file, self.wfile)
-            file_handler = self.list_directory(self.requested_file._path)
-            self.copyfile(file_handler, self.wfile)
-            file_handler.close
-##
-            self.path = path_backup
-            return self
+            return self.list_directory()
         try:
             file_handler = builtins.open(self.requested_file._path, mode='rb')
         except builtins.IOError:
@@ -1989,29 +2058,87 @@ class CGIHTTPRequestHandler(
            self.date_time_string(
                builtins.int(self.requested_file.timestamp))):
 ##
-            self.send_content_type_header(
-                mimetype=self.requested_file.mimetype, response_code=304
-            ).send_static_file_cache_header(
-                timestamp=self.requested_file.timestamp
-            ).send_content_length_header(
-                size=builtins.int(self.requested_file.size))
-            self.end_headers()
-            return self
+            return self._send_not_modified_header()
+        return self._send_static_file(output=file_handler)
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def _send_static_file(
+##         self: boostNode.extension.type.Self, output: (builtins.str,)
+##     ) -> boostNode.extension.type.Self:
+    def _send_static_file(self, output):
+##
+        '''Sends given output to client.'''
         threshold = self.server.web.file_size_stream_threshold_in_byte
         if threshold < self.requested_file.size:
-            self.send_content_type_header(mimetype='application/octet-stream')
+            self.send_content_type_header(mime_type='application/octet-stream')
             self.send_header('Content-Transfer-Encoding', 'binary')
         else:
             self.send_content_type_header(
-                mimetype=self.requested_file.mimetype)
+                mime_type=self.requested_file.mime_type)
         self.send_static_file_cache_header(
+            timestamp=self.requested_file.timestamp)
+        self.send_content_length_header(
+            size=builtins.int(self.requested_file.size))
+        self.end_headers()
+        return self._send_output(output)
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def _send_not_modified_header(
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
+    def _send_not_modified_header(self):
+##
+        '''Sends a header to client indicating cached file hasn't changed.'''
+        self.send_content_type_header(
+            mime_type=self.requested_file.mime_type, response_code=304
+        ).send_static_file_cache_header(
             timestamp=self.requested_file.timestamp
         ).send_content_length_header(
             size=builtins.int(self.requested_file.size))
         self.end_headers()
-        self.copyfile(file_handler, self.wfile)
-        file_handler.close()
         return self
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def _send_output(
+##         self: boostNode.extension.type.Self, output: (builtins.str,)
+##     ) -> boostNode.extension.type.Self:
+    def _send_output(self, output):
+##
+        '''Sends the final given output to client.'''
+        if self._encoded_output:
+            self.wfile.write(self._encoded_output)
+        elif builtins.isinstance(output, builtins.str):
+            self.wfile.write(output)
+        else:
+            self.copyfile(output, self.wfile)
+            output.close()
+        return self
+
+    @boostNode.paradigm.aspectOrientation.JointPoint
+## python3.3
+##     def _gzip(
+##         self: boostNode.extension.type.Self, content: builtins.str
+##     ) -> builtins.str:
+    def _gzip(self, content):
+##
+        '''Compresses the given content and returns the encoded result.'''
+## python3.3         output = io.BytesIO()
+        output = StringIO.StringIO()
+        gzip_file_handler = gzip.GzipFile(
+            fileobj=output, mode='w', compresslevel=5)
+## python3.3
+##         if builtins.isinstance(content, builtins.bytes):
+##             gzip_file_handler.write(content)
+##         else:
+##             # TODO utf_8 shouldn't be hardcoded at this point.
+##             gzip_file_handler.write(content.encode(encoding='utf_8'))
+        gzip_file_handler.write(content)
+##
+        gzip_file_handler.close()
+        return output.getvalue()
 
     @boostNode.paradigm.aspectOrientation.JointPoint
 ## python3.3
@@ -2069,14 +2196,17 @@ class CGIHTTPRequestHandler(
             self.request_arguments[0]
         self.request_arguments = builtins.list(builtins.map(
             lambda element: builtins.str(element), self.request_arguments))
-        __logger__.debug(
-            'Execute file "%s".',
-            self.server.web.root.path + self.request_arguments[0])
+        __logger__.debug('Execute file "%s".', self.request_arguments[0])
         self.server.web.number_of_running_threads += 1
-        output, errors = subprocess.Popen(
-            self.request_arguments, stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE
-        ).communicate()
+        try:
+            output, errors = subprocess.Popen(
+                self.request_arguments, stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE
+            ).communicate()
+        except builtins.OSError as exception:
+            output = ''
+            errors = '%s: %s' % (
+                exception.__class__.__name__, builtins.str(exception))
         self.server.web.number_of_running_threads -= 1
         size = builtins.len(output)
         errors = errors.decode(
@@ -2100,13 +2230,13 @@ class CGIHTTPRequestHandler(
                 ))
                 if not header_match:
                     self.send_content_type_header().send_content_length_header(
-                        size
+                        size, dynamic_output=output
                     ).end_headers()
-                self.wfile.write(output)
+                self._send_output(output)
         if errors:
             __logger__.critical(
-                'Error in cgi program "%s": %s', self.request_arguments[0],
-                errors)
+                'Error in common getaway interface program "%s": %s',
+                self.request_arguments[0], errors)
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
@@ -2161,22 +2291,16 @@ class CGIHTTPRequestHandler(
         except builtins.Exception as exception:
             self._handle_module_exception(requested_module, exception)
         else:
-            # TODO dynamische Anfragen schein gezippt zu sein.
-            # statische auf jeden fall nicht. Am Ende soll alles gezippt
-            # werden.
             if self.respond:
                 self.send_content_type_header().send_content_length_header(
-                    size=builtins.len(self.server.web.thread_buffer.content)
+                    size=builtins.len(self.server.web.thread_buffer.content),
+                    dynamic_output=self.server.web.thread_buffer.content
                 ).end_headers()
         finally:
             self.server.web.number_of_running_threads -= 1
             if self.respond:
-## python3.3
-##                 self.wfile.write(
-##                     self.server.web.thread_buffer.clear().encode())
-                self.wfile.write(
-                    self.server.web.thread_buffer.clear())
-##
+                self._send_output(
+                    output=self.server.web.thread_buffer.clear())
             boostNode.extension.output.Print.default_buffer = \
                 print_default_buffer_backup
         return self
