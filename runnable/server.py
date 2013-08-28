@@ -50,7 +50,8 @@ import logging
 import multiprocessing
 import os
 import posixpath
-import socketserver
+## python3.3 import socketserver
+pass
 import ssl
 import re
 import signal
@@ -2346,7 +2347,8 @@ class CGIHTTPRequestHandler(
     Preset some variables given by introspection letting the linter know what
     globale variables are available.
 '''
-__logger__ = __test_mode__ = __exception__ = __module_name__ = None
+__logger__ = __test_mode__ = __exception__ = __module_name__ = \
+    __file_path__ = None
 '''
     Extends this module with some magic environment variables to provide better
     introspection support. A generic command line interface for some code

@@ -359,7 +359,8 @@ class Class(builtins.object):
     Preset some variables given by introspection letting the linter know what
     globale variables are available.
 '''
-__logger__ = __test_mode__ = __exception__ = __module_name__ = None
+__logger__ = __test_mode__ = __exception__ = __module_name__ = \
+    __file_path__ = None
 '''Resolve cyclic dependency issues.'''
 boostNode.extension.dependent.Resolve(
     name=__name__, frame=inspect.currentframe(), default_caller=False)

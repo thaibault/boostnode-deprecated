@@ -50,7 +50,8 @@ __all__ = boostNode.extension.dependent.Resolve.get_all()
     Preset some variables given by introspection letting the linter know what
     globale variables are available.
 '''
-__logger__ = __test_mode__ = __exception__ = __module_name__ = None
+__logger__ = __test_mode__ = __exception__ = __module_name__ = \
+    __file_path__ = None
 if __name__ == '__main__':
     from boostNode.extension.system import CommandLine
     '''
