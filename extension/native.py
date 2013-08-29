@@ -1299,9 +1299,7 @@ class String(Object, builtins.str):
 
 
 class Dictionary(Object, builtins.dict):
-    '''
-        This class extends the native dictionary object.
-    '''
+    '''This class extends the native dictionary object.'''
 
     # region dynamic properties
 
@@ -1496,9 +1494,7 @@ class Dictionary(Object, builtins.dict):
 
 
 class Module(Object):
-    '''
-        This class add some features for dealing with modules.
-    '''
+    '''This class add some features for dealing with modules.'''
 
     # region constant properties
 
