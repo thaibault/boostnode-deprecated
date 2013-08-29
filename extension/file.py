@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.3
+#!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 
 # region vim modline
@@ -31,11 +31,11 @@ __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-## python2.7 import __builtin__ as builtins
-import builtins
+## python3.3 import builtins
+import __builtin__ as builtins
 import ctypes
-## python2.7 import codecs
-import collections
+## python3.3 import collections
+import codecs
 import copy
 import inspect
 import mimetypes
@@ -44,8 +44,8 @@ import re
 import shutil
 import stat
 import sys
-## python2.7 pass
-import types
+## python3.3 import types
+pass
 
 '''Make boostNode packages and modules importable via relative paths.'''
 for number in (3, 4):
@@ -250,19 +250,19 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             # region special
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
+## python3.3
 ##     def __init__(
-##         self, location=None, make_directory=False, must_exist=True,
-##         encoding='', respect_root_path=True, output_with_root_prefix=False,
-##         has_extension=True, *arguments, **keywords
-##     ):
+##         self: boostNode.extension.type.Self, location=None,
+##         make_directory=False, must_exist=True, encoding='',
+##         respect_root_path=True, output_with_root_prefix=False,
+##         has_extension=True, *arguments: builtins.object,
+##         **keywords: builtins.object
+##     ) -> None:
     def __init__(
-        self: boostNode.extension.type.Self, location=None,
-        make_directory=False, must_exist=True, encoding='',
-        respect_root_path=True, output_with_root_prefix=False,
-        has_extension=True, *arguments: builtins.object,
-        **keywords: builtins.object
-    ) -> None:
+        self, location=None, make_directory=False, must_exist=True,
+        encoding='', respect_root_path=True, output_with_root_prefix=False,
+        has_extension=True, *arguments, **keywords
+    ):
 ##
         '''
             Initialize a new instance of a given file system object by path.
@@ -366,11 +366,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             self._has_extension = has_extension
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def __iter__(self):
-    def __iter__(
-        self: boostNode.extension.type.Self
-    ) -> types.GeneratorType:
+## python3.3
+##     def __iter__(
+##         self: boostNode.extension.type.Self
+##     ) -> types.GeneratorType:
+    def __iter__(self):
 ##
         '''
             Invokes if the current object is tried to iterate.
@@ -384,9 +384,9 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return (element for element in self.list())
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def __nonzero__(self):
-    def __bool__(self: boostNode.extension.type.Self) -> builtins.bool:
+## python3.3
+##     def __bool__(self: boostNode.extension.type.Self) -> builtins.bool:
+    def __nonzero__(self):
 ##
         '''
             Invokes when the object is tried to convert in a boolean value.
@@ -410,11 +410,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return self.is_element()
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def __eq__(self, other):
-    def __eq__(
-        self: boostNode.extension.type.Self, other: builtins.object
-    ) -> builtins.bool:
+## python3.3
+##     def __eq__(
+##         self: boostNode.extension.type.Self, other: builtins.object
+##     ) -> builtins.bool:
+    def __eq__(self, other):
 ##
         '''
             Invokes if a comparison of two "Handler" objects is done.
@@ -442,9 +442,9 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return False
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def __hash__(self):
-    def __hash__(self: boostNode.extension.type.Self) -> builtins.int:
+## python3.3
+##     def __hash__(self: boostNode.extension.type.Self) -> builtins.int:
+    def __hash__(self):
 ##
         '''
             Returns a hash value for current path as string.
@@ -457,11 +457,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return builtins.hash(self._path)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def __getitem__(self, key):
-    def __getitem__(
-        self: boostNode.extension.type.Self, key: builtins.int
-    ) -> boostNode.extension.type.SelfClassObject:
+## python3.3
+##     def __getitem__(
+##         self: boostNode.extension.type.Self, key: builtins.int
+##     ) -> boostNode.extension.type.SelfClassObject:
+    def __getitem__(self, key):
 ##
         '''
             Triggers if an element is tried to get with the "[]" operator.
@@ -474,11 +474,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return builtins.tuple(self.list())[key]
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def __delitem__(self, key):
-    def __delitem__(
-        self: boostNode.extension.type.Self, key: builtins.int
-    ) -> builtins.bool:
+## python3.3
+##     def __delitem__(
+##         self: boostNode.extension.type.Self, key: builtins.int
+##     ) -> builtins.bool:
+    def __delitem__(self, key):
 ##
         '''
             Deletes the specified item from the file system.
@@ -496,13 +496,13 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return self[key].remove_deep()
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def __contains__(self, item):
-    def __contains__(
-        self: boostNode.extension.type.Self,
-        item: (boostNode.extension.type.SelfClassObject,
-               builtins.str)
-    ) -> builtins.bool:
+## python3.3
+##     def __contains__(
+##         self: boostNode.extension.type.Self,
+##         item: (boostNode.extension.type.SelfClassObject,
+##                builtins.str)
+##     ) -> builtins.bool:
+    def __contains__(self, item):
 ##
         '''
             Is triggered if you want to determine if an object is in a
@@ -535,9 +535,9 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return False
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def __len__(self):
-    def __len__(self: boostNode.extension.type.Self) -> builtins.int:
+## python3.3
+##     def __len__(self: boostNode.extension.type.Self) -> builtins.int:
+    def __len__(self):
 ##
         '''
             Is triggered if you use the pythons native "builtins.len()"
@@ -567,9 +567,9 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return 0
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def __str__(self):
-    def __str__(self: boostNode.extension.type.Self) -> builtins.str:
+## python3.3
+##     def __str__(self: boostNode.extension.type.Self) -> builtins.str:
+    def __str__(self):
 ##
         '''
             Is triggered if this object should be converted to string.
@@ -582,9 +582,9 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return self.path
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def __repr__(self):
-    def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
+## python3.3
+##     def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
+    def __repr__(self):
 ##
         '''
             Invokes if this object should describe itself by a string.
@@ -626,11 +626,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             # region getter
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
-##     def get_root(cls):
-    def get_root(
-        cls: boostNode.extension.type.SelfClass
-    ) -> boostNode.extension.type.SelfClassObject:
+## python3.3
+##     def get_root(
+##         cls: boostNode.extension.type.SelfClass
+##     ) -> boostNode.extension.type.SelfClassObject:
+    def get_root(cls):
 ##
         '''
             Returns a file object referencing to the virtual root path.
@@ -644,12 +644,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             # region setter
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
-##     def set_root(cls, location):
-    def set_root(
-        cls: boostNode.extension.type.SelfClass,
-        location: (boostNode.extension.type.SelfClassObject, builtins.str)
-    ) -> boostNode.extension.type.SelfClass:
+## python3.3
+##     def set_root(
+##         cls: boostNode.extension.type.SelfClass,
+##         location: (boostNode.extension.type.SelfClassObject, builtins.str)
+##     ) -> boostNode.extension.type.SelfClass:
+    def set_root(cls, location):
 ##
         '''
             Normalizes root path.
@@ -675,15 +675,15 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             # endregion
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
+## python3.3
 ##     def convert_size_format(
-##         cls, size, format='byte', decimal=None, formats=None
-##     ):
+##         cls: boostNode.extension.type.SelfClass,
+##         size: (builtins.int, builtins.float), format='byte',
+##         decimal=None, formats=None
+##     ) -> builtins.float:
     def convert_size_format(
-        cls: boostNode.extension.type.SelfClass,
-        size: (builtins.int, builtins.float), format='byte',
-        decimal=None, formats=None
-    ) -> builtins.float:
+        cls, size, format='byte', decimal=None, formats=None
+    ):
 ##
         '''
             Converts between file size formats.
@@ -724,14 +724,14 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return size
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
+## python3.3
 ##     def determine_size_from_string(
-##         cls, size_and_unit, format='byte', decimal=None
-##     ):
+##         cls: boostNode.extension.type.SelfClass,
+##         size_and_unit: builtins.str, format='byte', decimal=None
+##     ) -> (builtins.float, builtins.bool):
     def determine_size_from_string(
-        cls: boostNode.extension.type.SelfClass,
-        size_and_unit: builtins.str, format='byte', decimal=None
-    ) -> (builtins.float, builtins.bool):
+        cls, size_and_unit, format='byte', decimal=None
+    ):
 ##
         '''
             Becomes a size with unit as string. And gives it as float or
@@ -770,14 +770,14 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return False
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
+## python3.3
 ##     def determine_byte_from_other(
-##         cls, size, formats, given_format='byte', decimal=None
-##     ):
+##         cls: boostNode.extension.type.SelfClass, size: builtins.float,
+##         formats: builtins.dict, given_format='byte', decimal=None
+##     ) -> builtins.float:
     def determine_byte_from_other(
-        cls: boostNode.extension.type.SelfClass, size: builtins.float,
-        formats: builtins.dict, given_format='byte', decimal=None
-    ) -> builtins.float:
+        cls, size, formats, given_format='byte', decimal=None
+    ):
 ##
         '''
             Converts a given size format to byte format.
@@ -802,11 +802,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return size
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
-##     def determine_regex_units(cls, formats=None):
-    def determine_regex_units(
-        cls: boostNode.extension.type.SelfClass, formats=None
-    ) -> builtins.str:
+## python3.3
+##     def determine_regex_units(
+##         cls: boostNode.extension.type.SelfClass, formats=None
+##     ) -> builtins.str:
+    def determine_regex_units(cls, formats=None):
 ##
         '''
             Returns a regular expression for validation if a given size format
@@ -833,11 +833,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return units
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
-##     def determine_special_path_values(cls, operating_system=''):
-    def determine_special_path_values(
-        cls: boostNode.extension.type.SelfClass, operating_system=''
-    ) -> builtins.tuple:
+## python3.3
+##     def determine_special_path_values(
+##         cls: boostNode.extension.type.SelfClass, operating_system=''
+##     ) -> builtins.tuple:
+    def determine_special_path_values(cls, operating_system=''):
 ##
         '''
             Gives all platform dependent symbols for special file system
@@ -866,12 +866,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         # region protected
 
     @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python2.7
-##     def _sort_by_file_types(cls, files, recursive_in_link):
-    def _sort_by_file_types(
-        cls: boostNode.extension.type.SelfClass,
-        files: collections.Iterable, recursive_in_link: builtins.bool
-    ) -> builtins.list:
+## python3.3
+##     def _sort_by_file_types(
+##         cls: boostNode.extension.type.SelfClass,
+##         files: collections.Iterable, recursive_in_link: builtins.bool
+##     ) -> builtins.list:
+    def _sort_by_file_types(cls, files, recursive_in_link):
 ##
         '''
             Sorts the given list of files. Files come first and folders later.
@@ -912,9 +912,9 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             # region getter
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def get_encoding(self):
-    def get_encoding(self: boostNode.extension.type.Self) -> builtins.str:
+## python3.3
+##     def get_encoding(self: boostNode.extension.type.Self) -> builtins.str:
+    def get_encoding(self):
 ##
         '''
             Returns encoding for current file handler. If no encoding was set
@@ -939,9 +939,9 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return self._encoding
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def get_extension(self):
-    def get_extension(self: boostNode.extension.type.Self) -> builtins.str:
+## python3.3
+##     def get_extension(self: boostNode.extension.type.Self) -> builtins.str:
+    def get_extension(self):
 ##
         '''
             Returns the current file extension or an empty string if current
@@ -964,11 +964,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return ''
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def get_timestamp(self):
-    def get_timestamp(
-        self: boostNode.extension.type.Self
-    ) -> builtins.float:
+## python3.3
+##     def get_timestamp(
+##         self: boostNode.extension.type.Self
+##     ) -> builtins.float:
+    def get_timestamp(self):
 ##
         '''
             Getter method for time of last modification of the
@@ -982,9 +982,9 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return os.stat(self._path).st_mtime
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def get_lines(self):
-    def get_lines(self: boostNode.extension.type.Self) -> builtins.int:
+## python3.3
+##     def get_lines(self: boostNode.extension.type.Self) -> builtins.int:
+    def get_lines(self):
 ##
         '''
             Returns the number of lines in the file content referenced by the
@@ -1020,12 +1020,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return self._lines
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def get_size(self, limit=0, follow_link=True, *arguments, **keywords):
-    def get_size(
-        self: boostNode.extension.type.Self, limit=0, follow_link=True,
-        *arguments: builtins.object, **keywords: builtins.object
-    ) -> builtins.float:
+## python3.3
+##     def get_size(
+##         self: boostNode.extension.type.Self, limit=0, follow_link=True,
+##         *arguments: builtins.object, **keywords: builtins.object
+##     ) -> builtins.float:
+    def get_size(self, limit=0, follow_link=True, *arguments, **keywords):
 ##
         '''
             Calculates the used space for this object by the first request of
@@ -1127,11 +1127,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             size, *arguments, **keywords))
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def get_dummy_size(self, label=''):
-    def get_dummy_size(
-        self: boostNode.extension.type.Self, label=''
-    ) -> builtins.int:
+## python3.3
+##     def get_dummy_size(
+##         self: boostNode.extension.type.Self, label=''
+##     ) -> builtins.int:
+    def get_dummy_size(self, label=''):
 ##
         '''
             Calculates the potential dummy size for a portable link pointing
@@ -1162,11 +1162,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return self._dummy_size
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def get_human_readable_size(self, size=None):
-    def get_human_readable_size(
-        self: boostNode.extension.type.Self, size=None
-    ) -> builtins.str:
+## python3.3
+##     def get_human_readable_size(
+##         self: boostNode.extension.type.Self, size=None
+##     ) -> builtins.str:
+    def get_human_readable_size(self, size=None):
 ##
         '''
             Represents a given file size in byte as human readable string.
@@ -1237,9 +1237,9 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return builtins.str(builtins.round(size, 2)) + ' byte'
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def get_type(self):
-    def get_type(self: boostNode.extension.type.Self) -> builtins.str:
+## python3.3
+##     def get_type(self: boostNode.extension.type.Self) -> builtins.str:
+    def get_type(self):
 ##
         '''
             Determines the type of the current object.
@@ -1296,11 +1296,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return self._type
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def get_mime_type(self, default_type='text'):
-    def get_mime_type(
-        self: boostNode.extension.type.Self, default_type='text'
-    ) -> builtins.str:
+## python3.3
+##     def get_mime_type(
+##         self: boostNode.extension.type.Self, default_type='text'
+##     ) -> builtins.str:
+    def get_mime_type(self, default_type='text'):
 ##
         '''
             Determines the mime-type of the current object.
@@ -1340,15 +1340,15 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return self._mime_type
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
+## python3.3
 ##     def get_path(
-##         self, location=None, respect_root_path=None,
-##         output_with_root_prefix=None
-##     ):
+##         self: boostNode.extension.type.Self, location=None,
+##         respect_root_path=None, output_with_root_prefix=None
+##     ) -> builtins.str:
     def get_path(
-        self: boostNode.extension.type.Self, location=None,
-        respect_root_path=None, output_with_root_prefix=None
-    ) -> builtins.str:
+        self, location=None, respect_root_path=None,
+        output_with_root_prefix=None
+    ):
 ##
         '''
             Determines path of current "Handler" object
@@ -1386,12 +1386,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             output_with_root_prefix=taken_output_with_root_prefix)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def get_relative_path(self, context=None, *arguments, **keywords):
-    def get_relative_path(
-        self: boostNode.extension.type.Self, *arguments: builtins.object,
-        context=None, **keywords: builtins.object
-    ) -> builtins.str:
+## python3.3
+##     def get_relative_path(
+##         self: boostNode.extension.type.Self, *arguments: builtins.object,
+##         context=None, **keywords: builtins.object
+##     ) -> builtins.str:
+    def get_relative_path(self, context=None, *arguments, **keywords):
 ##
         '''
             Returns the relative path of current "Handler" object depending on
@@ -1431,11 +1431,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             **keywords)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def get_directory_path(self, output_with_root_prefix=None):
-    def get_directory_path(
-        self: boostNode.extension.type.Self, output_with_root_prefix=None,
-    ) -> builtins.str:
+## python3.3
+##     def get_directory_path(
+##         self: boostNode.extension.type.Self, output_with_root_prefix=None,
+##     ) -> builtins.str:
+    def get_directory_path(self, output_with_root_prefix=None):
 ##
         '''
             Determines the current path of the Directory object without file.
@@ -1481,13 +1481,13 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return self._directory_path
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def get_name(self, *arguments, **keywords):
-    def get_name(
-        self: boostNode.extension.type.Self, *arguments: builtins.object,
-        output_with_root_prefix=None, force_windows_behavior=False,
-        **keywords: builtins.object
-    ) -> builtins.str:
+## python3.3
+##     def get_name(
+##         self: boostNode.extension.type.Self, *arguments: builtins.object,
+##         output_with_root_prefix=None, force_windows_behavior=False,
+##         **keywords: builtins.object
+##     ) -> builtins.str:
+    def get_name(self, *arguments, **keywords):
 ##
         '''
             Determines the current file name without directory path.
@@ -1511,14 +1511,14 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ...     force_windows_behavior=True)
             'C:'
         '''
-## python2.7
-##         keywords_dictionary = boostNode.extension.native.Dictionary(
-##             content=keywords)
-##         output_with_root_prefix, keywords = keywords_dictionary.pop(
-##             name='output_with_root_prefix')
-##         force_windows_behavior, keywords = keywords_dictionary.pop(
-##             name='force_windows_behavior', default_value=False)
-        pass
+## python3.3
+##         pass
+        keywords_dictionary = boostNode.extension.native.Dictionary(
+            content=keywords)
+        output_with_root_prefix, keywords = keywords_dictionary.pop(
+            name='output_with_root_prefix')
+        force_windows_behavior, keywords = keywords_dictionary.pop(
+            name='force_windows_behavior', default_value=False)
 ##
         path = self.get_path(output_with_root_prefix=output_with_root_prefix)
         if builtins.len(path) and path.endswith(os.sep):
@@ -1530,12 +1530,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return os.path.basename(path, *arguments, **keywords)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def get_basename(self, *arguments, **keywords):
-    def get_basename(
-        self: boostNode.extension.type.Self, *arguments: builtins.object,
-        output_with_root_prefix=None, **keywords: builtins.object
-    ) -> builtins.str:
+## python3.3
+##     def get_basename(
+##         self: boostNode.extension.type.Self, *arguments: builtins.object,
+##         output_with_root_prefix=None, **keywords: builtins.object
+##     ) -> builtins.str:
+    def get_basename(self, *arguments, **keywords):
 ##
         '''
             Determines the current file name without directory path and file
@@ -1553,12 +1553,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> Handler().get_basename()
             'extension'
         '''
-## python2.7
-##         output_with_root_prefix, keywords = \
-##             boostNode.extension.native.Dictionary(
-##                 content=keywords
-##             ).pop(name='output_with_root_prefix')
-        pass
+## python3.3
+##         pass
+        output_with_root_prefix, keywords = \
+            boostNode.extension.native.Dictionary(
+                content=keywords
+            ).pop(name='output_with_root_prefix')
 ##
         if self._has_extension:
             return os.path.splitext(os.path.basename(
@@ -1569,9 +1569,9 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return self.name
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def get_free_space(self):
-    def get_free_space(self: boostNode.extension.type.Self) -> builtins.int:
+## python3.3
+##     def get_free_space(self: boostNode.extension.type.Self) -> builtins.int:
+    def get_free_space(self):
 ##
         '''
             Return free space of folder or drive (in bytes).
@@ -1598,11 +1598,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return self._get_platform_dependent_free_and_total_space()[0]
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def get_disk_used_space(self):
-    def get_disk_used_space(
-        self: boostNode.extension.type.Self
-    ) -> builtins.int:
+## python3.3
+##     def get_disk_used_space(
+##         self: boostNode.extension.type.Self
+##     ) -> builtins.int:
+    def get_disk_used_space(self):
 ##
         '''
             Determiens used space of current path containing disk.
@@ -1611,12 +1611,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return disk_status[1] - disk_status[0]
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def get_content(self, mode='r', strict=False, *arguments, **keywords):
-    def get_content(
-        self: boostNode.extension.type.Self, mode='r', strict=False,
-        *arguments: builtins.object, **keywords: builtins.object
-    ) -> (builtins.str, builtins.bytes, types.GeneratorType):
+## python3.3
+##     def get_content(
+##         self: boostNode.extension.type.Self, mode='r', strict=False,
+##         *arguments: builtins.object, **keywords: builtins.object
+##     ) -> (builtins.str, builtins.bytes, types.GeneratorType):
+    def get_content(self, mode='r', strict=False, *arguments, **keywords):
 ##
         '''
             Returns the file content of a text-file. Accepts all arguments
@@ -1695,8 +1695,8 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
                 else:
                     keywords['encoding'] = self._encoding
                 errors = 'strict' if strict else 'ignore'
-## python2.7
-##                 with codecs.open(
+## python3.3
+##                 with builtins.open(
 ##                     self._path, mode, *arguments, errors=errors, **keywords
 ##                 ) as file:
 ##                     '''
@@ -1704,10 +1704,8 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 ##                         workaround for python bug when finishing
 ##                         reading file without end reached.
 ##                     '''
-##                     self._content = builtins.str(
-##                         (file.read() + file.read()).encode(
-##                             encoding=self._encoding))
-                with builtins.open(
+##                     self._content = file.read() + file.read()
+                with codecs.open(
                     self._path, mode, *arguments, errors=errors, **keywords
                 ) as file:
                     '''
@@ -1715,7 +1713,9 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
                         workaround for python bug when finishing
                         reading file without end reached.
                     '''
-                    self._content = file.read() + file.read()
+                    self._content = builtins.str(
+                        (file.read() + file.read()).encode(
+                            encoding=self._encoding))
 ##
             return self._content
         elif self.is_directory():
@@ -1727,11 +1727,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return self._content
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def get_portable_link_pattern(self, force_windows_behavior=False):
-    def get_portable_link_pattern(
-        self: boostNode.extension.type.Self, force_windows_behavior=False
-    ) -> builtins.str:
+## python3.3
+##     def get_portable_link_pattern(
+##         self: boostNode.extension.type.Self, force_windows_behavior=False
+##     ) -> builtins.str:
+    def get_portable_link_pattern(self, force_windows_behavior=False):
 ##
         '''
             Determines the portable link file content pattern. With the
@@ -1770,11 +1770,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return self._portable_link_pattern
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def get_portable_regex_link_pattern(self):
-    def get_portable_regex_link_pattern(
-        self: boostNode.extension.type.Self
-    ) -> builtins.str:
+## python3.3
+##     def get_portable_regex_link_pattern(
+##         self: boostNode.extension.type.Self
+##     ) -> builtins.str:
+    def get_portable_regex_link_pattern(self):
 ##
         '''
             Determines the portable regular expression link file content
@@ -1799,14 +1799,14 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return self._portable_regex_link_pattern
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
+## python3.3
 ##     def get_portable_link_content(
-##         self, label='%s', relative=None, target_path=''
-##     ):
+##         self: boostNode.extension.type.Self, label='%s', relative=None,
+##         target_path=''
+##     ) -> builtins.str:
     def get_portable_link_content(
-        self: boostNode.extension.type.Self, label='%s', relative=None,
-        target_path=''
-    ) -> builtins.str:
+        self, label='%s', relative=None, target_path=''
+    ):
 ##
         '''
             Returns the final portable link content depending on the current
@@ -1843,11 +1843,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return self._portable_link_content
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def get_extension_suffix(self):
-    def get_extension_suffix(
-        self: boostNode.extension.type.Self
-    ) -> builtins.str:
+## python3.3
+##     def get_extension_suffix(
+##         self: boostNode.extension.type.Self
+##     ) -> builtins.str:
+    def get_extension_suffix(self):
 ##
         '''
             Returns the extension of a file or directory (empty string).
@@ -1885,12 +1885,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             # region setter
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def set_encoding(self, encoding, *arguments, **keywords):
-    def set_encoding(
-        self: boostNode.extension.type.Self, encoding: builtins.str,
-        *arguments: builtins.object, **keywords: builtins.object
-    ) -> boostNode.extension.type.Self:
+## python3.3
+##     def set_encoding(
+##         self: boostNode.extension.type.Self, encoding: builtins.str,
+##         *arguments: builtins.object, **keywords: builtins.object
+##     ) -> boostNode.extension.type.Self:
+    def set_encoding(self, encoding, *arguments, **keywords):
 ##
         '''
             Set encoding for a text-base file if current instance refers to
@@ -1913,13 +1913,13 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             content=self.content, encoding=encoding, *arguments, **keywords)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def set_content(self, content, mode=None, *arguments, **keywords):
-    def set_content(
-        self: boostNode.extension.type.Self,
-        content: (builtins.str, builtins.bytes), mode=None,
-        *arguments: builtins.object, **keywords: builtins.object
-    ) -> boostNode.extension.type.Self:
+## python3.3
+##     def set_content(
+##         self: boostNode.extension.type.Self,
+##         content: (builtins.str, builtins.bytes), mode=None,
+##         *arguments: builtins.object, **keywords: builtins.object
+##     ) -> boostNode.extension.type.Self:
+    def set_content(self, content, mode=None, *arguments, **keywords):
 ##
         '''
             Returns the file content of a text-file. Accepts all arguments
@@ -2001,34 +2001,34 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
                 keywords['encoding'] = self._encoding
             else:
                 self._encoding = keywords['encoding']
-## python2.7
-##             with codecs.open(
+## python3.3
+##             with builtins.open(
 ##                 self._path, mode, *arguments, **keywords
 ##             ) as file_handler:
-##                 if not builtins.isinstance(content, builtins.unicode):
-##                     content = builtins.unicode(
-##                         content,
-##                         boostNode.extension.native.String(
-##                             content
-##                         ).encoding)
 ##                 file_handler.write(content)
-            with builtins.open(
+            with codecs.open(
                 self._path, mode, *arguments, **keywords
             ) as file_handler:
+                if not builtins.isinstance(content, builtins.unicode):
+                    content = builtins.unicode(
+                        content,
+                        boostNode.extension.native.String(
+                            content
+                        ).encoding)
                 file_handler.write(content)
 ##
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def set_directory_path(self, location, *arguments, **keywords):
-    def set_directory_path(
-        self: boostNode.extension.type.Self,
-        location: (boostNode.extension.type.SelfClassObject,
-                   builtins.str),
-        *arguments: builtins.object, respect_root_path=None,
-        **keywords: builtins.object
-    ) -> builtins.bool:
+## python3.3
+##     def set_directory_path(
+##         self: boostNode.extension.type.Self,
+##         location: (boostNode.extension.type.SelfClassObject,
+##                    builtins.str),
+##         *arguments: builtins.object, respect_root_path=None,
+##         **keywords: builtins.object
+##     ) -> builtins.bool:
+    def set_directory_path(self, location, *arguments, **keywords):
 ##
         '''
             This function could be understand as wrapper method for "move()".
@@ -2073,11 +2073,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> new_location.is_directory()
             True
         '''
-## python2.7
-##         respect_root_path, keywords = boostNode.extension.native.Dictionary(
-##             content=keywords
-##         ).pop(name='respect_root_path')
-        pass
+## python3.3
+##         pass
+        respect_root_path, keywords = boostNode.extension.native.Dictionary(
+            content=keywords
+        ).pop(name='respect_root_path')
 ##
         return self.move(
             target=self.get_path(
@@ -2085,12 +2085,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ) + os.sep + self.name, *arguments, **keywords)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def set_name(self, name, *arguments, **keywords):
-    def set_name(
-        self: boostNode.extension.type.Self, name: builtins.str,
-        *arguments: builtins.object, **keywords: builtins.object
-    ) -> builtins.bool:
+## python3.3
+##     def set_name(
+##         self: boostNode.extension.type.Self, name: builtins.str,
+##         *arguments: builtins.object, **keywords: builtins.object
+##     ) -> builtins.bool:
+    def set_name(self, name, *arguments, **keywords):
 ##
         '''
             This function could be understand as wrapper method for "move()".
@@ -2127,12 +2127,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             target=self.directory_path + name, *arguments, **keywords)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def set_basename(self, basename, *arguments, **keywords):
-    def set_basename(
-        self: boostNode.extension.type.Self, basename: builtins.str,
-        *arguments: builtins.object, **keywords: builtins.object
-    ) -> builtins.bool:
+## python3.3
+##     def set_basename(
+##         self: boostNode.extension.type.Self, basename: builtins.str,
+##         *arguments: builtins.object, **keywords: builtins.object
+##     ) -> builtins.bool:
+    def set_basename(self, basename, *arguments, **keywords):
 ##
         '''
             This function could be understand as wrapper method for
@@ -2165,12 +2165,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return self.set_name(
             name=basename + self.extension_suffix, *arguments, **keywords)
 
-## python2.7
-##     def set_extension(self, extension, *arguments, **keywords):
-    def set_extension(
-        self: boostNode.extension.type.Self, extension: builtins.str,
-        *arguments: builtins.object, **keywords: builtins.object
-    ) -> builtins.bool:
+## python3.3
+##     def set_extension(
+##         self: boostNode.extension.type.Self, extension: builtins.str,
+##         *arguments: builtins.object, **keywords: builtins.object
+##     ) -> builtins.bool:
+    def set_extension(self, extension, *arguments, **keywords):
 ##
         '''
             This function could be understand as wrapper method for
@@ -2207,12 +2207,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return self.is_element()
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def set_path(self, *arguments, **keywords):
-    def set_path(
-        self: boostNode.extension.type.Self,
-        *arguments: builtins.object, **keywords: builtins.object
-    ) -> builtins.bool:
+## python3.3
+##     def set_path(
+##         self: boostNode.extension.type.Self,
+##         *arguments: builtins.object, **keywords: builtins.object
+##     ) -> builtins.bool:
+    def set_path(self, *arguments, **keywords):
 ##
         '''
             Serves as wrapper function for the "move" method.
@@ -2243,12 +2243,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             # region boolean
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def is_same_file(self, other_location):
-    def is_same_file(
-        self: boostNode.extension.type.Self,
-        other_location: boostNode.extension.type.SelfClassObject
-    ) -> builtins.bool:
+## python3.3
+##     def is_same_file(
+##         self: boostNode.extension.type.Self,
+##         other_location: boostNode.extension.type.SelfClassObject
+##     ) -> builtins.bool:
+    def is_same_file(self, other_location):
 ##
         '''
             A simple replacement of the os.path.samefile() function not
@@ -2276,12 +2276,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             return self == other_location
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def is_directory(self, allow_link=True, *arguments, **keywords):
-    def is_directory(
-        self: boostNode.extension.type.Self, allow_link=True,
-        *arguments: builtins.object, **keywords: builtins.object
-    ) -> builtins.bool:
+## python3.3
+##     def is_directory(
+##         self: boostNode.extension.type.Self, allow_link=True,
+##         *arguments: builtins.object, **keywords: builtins.object
+##     ) -> builtins.bool:
+    def is_directory(self, allow_link=True, *arguments, **keywords):
 ##
         '''
             Implements the pythons native "os.path.isdir()" method in an
@@ -2306,12 +2306,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             self.is_directory(allow_link=True, *arguments, **keywords)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def is_file(self, allow_link=True, *arguments, **keywords):
-    def is_file(
-        self: boostNode.extension.type.Self, allow_link=True,
-        *arguments: builtins.object, **keywords: builtins.object
-    ) -> builtins.bool:
+## python3.3
+##     def is_file(
+##         self: boostNode.extension.type.Self, allow_link=True,
+##         *arguments: builtins.object, **keywords: builtins.object
+##     ) -> builtins.bool:
+    def is_file(self, allow_link=True, *arguments, **keywords):
 ##
         '''
             Implements the pythons native "os.path.isfile()" method in an
@@ -2344,14 +2344,14 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             self.is_file(allow_link=True, *arguments, **keywords))
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
+## python3.3
 ##     def is_symbolic_link(
-##         self, allow_portable_link=True, *arguments, **keywords
-##     ):
+##         self: boostNode.extension.type.Self, allow_portable_link=True,
+##         *arguments: builtins.object, **keywords: builtins.object
+##     ) -> builtins.bool:
     def is_symbolic_link(
-        self: boostNode.extension.type.Self, allow_portable_link=True,
-        *arguments: builtins.object, **keywords: builtins.object
-    ) -> builtins.bool:
+        self, allow_portable_link=True, *arguments, **keywords
+    ):
 ##
         '''
             Implements the pythons native "os.path.islink()" method in an
@@ -2411,11 +2411,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return os.path.islink(path, *arguments, **keywords)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def is_referenced_via_absolute_path(self, location=None):
-    def is_referenced_via_absolute_path(
-        self: boostNode.extension.type.Self, location=None
-    ) -> builtins.bool:
+## python3.3
+##     def is_referenced_via_absolute_path(
+##         self: boostNode.extension.type.Self, location=None
+##     ) -> builtins.bool:
+    def is_referenced_via_absolute_path(self, location=None):
 ##
         '''
             Determines if the given path is an absolute one.
@@ -2452,9 +2452,9 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return os.path.isabs(location)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def is_media(self):
-    def is_media(self: boostNode.extension.type.Self) -> builtins.bool:
+## python3.3
+##     def is_media(self: boostNode.extension.type.Self) -> builtins.bool:
+    def is_media(self):
 ##
         '''
             Determines if the current location referenced to a media file.
@@ -2481,11 +2481,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return False
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def is_portable_link(self):
-    def is_portable_link(
-        self: boostNode.extension.type.Self
-    ) -> builtins.bool:
+## python3.3
+##     def is_portable_link(
+##         self: boostNode.extension.type.Self
+##     ) -> builtins.bool:
+    def is_portable_link(self):
 ##
         '''
             Checks if the current location points to a portable link.
@@ -2539,12 +2539,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
                 # Maximum label line length + Maximum name length.
                 120 + self.MAX_FILE_NAME_LENGTH)
             try:
-## python2.7
-##                 with codecs.open(
+## python3.3
+##                 with builtins.open(
 ##                     self._path, mode='r', encoding=self.DEFAULT_ENCODING,
 ##                     errors='strict'
 ##                 ) as file:
-                with builtins.open(
+                with codecs.open(
                     self._path, mode='r', encoding=self.DEFAULT_ENCODING,
                     errors='strict'
                 ) as file:
@@ -2562,9 +2562,9 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return False
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def is_element(self):
-    def is_element(self: boostNode.extension.type.Self) -> builtins.bool:
+## python3.3
+##     def is_element(self: boostNode.extension.type.Self) -> builtins.bool:
+    def is_element(self):
 ##
         '''
             Determines if the current object path is a valid resource on the
@@ -2602,11 +2602,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return os.path.exists(self._path) or self.is_symbolic_link()
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def is_device_file(self):
-    def is_device_file(
-        self: boostNode.extension.type.Self
-    ) -> builtins.bool:
+## python3.3
+##     def is_device_file(
+##         self: boostNode.extension.type.Self
+##     ) -> builtins.bool:
+    def is_device_file(self):
 ##
         '''
             Determines if the current object path is a device file like a
@@ -2641,18 +2641,18 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             # endregion
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
+## python3.3
 ##     def backup(
-##         self,
-##         name_wrapper='<%file.basename%>_backup<%file.extension_suffix%>',
+##         self: boostNode.extension.type.Self,
+##         name_wrapper=(
+##             '<%file.basename%>_backup<%file.extension_suffix%>'),
 ##         backup_if_exists=True, compare_content=True
-##     ):
+##     ) -> boostNode.extension.type.Self:
     def backup(
-        self: boostNode.extension.type.Self,
-        name_wrapper=(
-            '<%file.basename%>_backup<%file.extension_suffix%>'),
+        self,
+        name_wrapper='<%file.basename%>_backup<%file.extension_suffix%>',
         backup_if_exists=True, compare_content=True
-    ) -> boostNode.extension.type.Self:
+    ):
 ##
         '''
             Creates a backup of current file object in same location.
@@ -2720,11 +2720,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             '''
             if not backup:
                 '''Check if a new created backup would be redundant.'''
-## python2.7
-##                 if(not (earlier_backup == self) and not backup_if_exists and
+## python3.3
+##                 if(earlier_backup != self and not backup_if_exists and
 ##                    (not compare_content or self.is_equivalent(
 ##                        other=earlier_backup))):
-                if(earlier_backup != self and not backup_if_exists and
+                if(not (earlier_backup == self) and not backup_if_exists and
                    (not compare_content or self.is_equivalent(
                        other=earlier_backup))):
 ##
@@ -2734,12 +2734,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def is_equivalent(self, other):
-    def is_equivalent(
-        self: boostNode.extension.type.Self,
-        other: (boostNode.extension.type.SelfClassObject, builtins.str)
-    ) -> builtins.bool:
+## python3.3
+##     def is_equivalent(
+##         self: boostNode.extension.type.Self,
+##         other: (boostNode.extension.type.SelfClassObject, builtins.str)
+##     ) -> builtins.bool:
+    def is_equivalent(self, other):
 ##
         '''
             Returns "True" if given file object contains likewise content as
@@ -2789,11 +2789,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return False
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def change_working_directory(self):
-    def change_working_directory(
-        self: boostNode.extension.type.Self
-    ) -> boostNode.extension.type.Self:
+## python3.3
+##     def change_working_directory(
+##         self: boostNode.extension.type.Self
+##     ) -> boostNode.extension.type.Self:
+    def change_working_directory(self):
 ##
         '''
             Changes the current working directory to the instance saved
@@ -2862,12 +2862,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def touch(self, *arguments, **keywords):
-    def touch(
-        self: boostNode.extension.type.Self, *arguments: builtins.object,
-        **keywords: builtins.object
-    ) -> builtins.bool:
+## python3.3
+##     def touch(
+##         self: boostNode.extension.type.Self, *arguments: builtins.object,
+##         **keywords: builtins.object
+##     ) -> builtins.bool:
+    def touch(self, *arguments, **keywords):
 ##
         '''
             Sets the modification time of current file object to current time.
@@ -2902,12 +2902,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return True
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def list(self, *arguments, **keywords):
-    def list(
-        self: boostNode.extension.type.Self, *arguments: builtins.object,
-        **keywords: builtins.object
-    ) -> types.GeneratorType:
+## python3.3
+##     def list(
+##         self: boostNode.extension.type.Self, *arguments: builtins.object,
+##         **keywords: builtins.object
+##     ) -> types.GeneratorType:
+    def list(self, *arguments, **keywords):
 ##
         '''
             Implements the pythons native "os.listdir()" method in an object
@@ -2985,12 +2985,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
                     pass
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def remove_directory(self, *arguments, **keywords):
-    def remove_directory(
-        self: boostNode.extension.type.Self, *arguments: builtins.object,
-        **keywords: builtins.object
-    ) -> builtins.bool:
+## python3.3
+##     def remove_directory(
+##         self: boostNode.extension.type.Self, *arguments: builtins.object,
+##         **keywords: builtins.object
+##     ) -> builtins.bool:
+    def remove_directory(self, *arguments, **keywords):
 ##
         '''
             Implements the pythons native "os.rmdir()" method in an object
@@ -3061,15 +3061,15 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return False
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def move(self, target, *arguments, **keywords):
-    def move(
-        self: boostNode.extension.type.Self,
-        target: (
-            boostNode.extension.type.SelfClassObject, builtins.str),
-        *arguments: builtins.object, respect_root_path=None,
-        **keywords: builtins.object
-    ) -> builtins.bool:
+## python3.3
+##     def move(
+##         self: boostNode.extension.type.Self,
+##         target: (
+##             boostNode.extension.type.SelfClassObject, builtins.str),
+##         *arguments: builtins.object, respect_root_path=None,
+##         **keywords: builtins.object
+##     ) -> builtins.bool:
+    def move(self, target, *arguments, **keywords):
 ##
         '''
             Implements the pythons native "shutil.move()" method in an object
@@ -3109,11 +3109,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ... ).move(__test_folder__ + 'move_target_not_existing2')
             False
         '''
-## python2.7
-##         respect_root_path, keywords = boostNode.extension.native.Dictionary(
-##             content=keywords
-##         ).pop(name='respect_root_path')
-        pass
+## python3.3
+##         pass
+        respect_root_path, keywords = boostNode.extension.native.Dictionary(
+            content=keywords
+        ).pop(name='respect_root_path')
 ##
         target = self.get_path(
             location=target, respect_root_path=respect_root_path,
@@ -3123,12 +3123,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return self._set_path(path=target)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def remove_deep(self, *arguments, **keywords):
-    def remove_deep(
-        self: boostNode.extension.type.Self, *arguments: builtins.object,
-        **keywords: builtins.object
-    ) -> builtins.bool:
+## python3.3
+##     def remove_deep(
+##         self: boostNode.extension.type.Self, *arguments: builtins.object,
+##         **keywords: builtins.object
+##     ) -> builtins.bool:
+    def remove_deep(self, *arguments, **keywords):
 ##
         '''
             Implements the pythons native "shutil.rmtree()" method in an object
@@ -3198,12 +3198,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return self.remove_file()
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def remove_file(self, *arguments, **keywords):
-    def remove_file(
-        self: boostNode.extension.type.Self, *arguments: builtins.object,
-        force_windows_behavior=False, **keywords: builtins.object
-    ) -> builtins.bool:
+## python3.3
+##     def remove_file(
+##         self: boostNode.extension.type.Self, *arguments: builtins.object,
+##         force_windows_behavior=False, **keywords: builtins.object
+##     ) -> builtins.bool:
+    def remove_file(self, *arguments, **keywords):
 ##
         '''
             Implements the pythons native "os.remove()" method in an object
@@ -3260,12 +3260,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ...     target.remove_file(force_windows_behavior=True)
             False
         '''
-## python2.7
-##         force_windows_behavior, keywords = \
-##             boostNode.extension.native.Dictionary(
-##                 content=keywords
-##             ).pop(name='force_windows_behavior', default_value=False)
-        pass
+## python3.3
+##         pass
+        force_windows_behavior, keywords = \
+            boostNode.extension.native.Dictionary(
+                content=keywords
+            ).pop(name='force_windows_behavior', default_value=False)
 ##
         if self.is_file():
             operating_system = \
@@ -3289,11 +3289,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return False
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def change_right(self, right, octal=True):
-    def change_right(
-        self: boostNode.extension.type.Self, right, octal=True
-    ) -> boostNode.extension.type.Self:
+## python3.3
+##     def change_right(
+##         self: boostNode.extension.type.Self, right, octal=True
+##     ) -> boostNode.extension.type.Self:
+    def change_right(self, right, octal=True):
 ##
         '''
             Implements the pythons native "os.chmod()" method in an object
@@ -3360,15 +3360,15 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def copy(self, target, *arguments, **keywords):
-    def copy(
-        self: boostNode.extension.type.Self,
-        target: (boostNode.extension.type.SelfClassObject,
-                 builtins.str),
-        *arguments: builtins.object, right=None, octal=True,
-        **keywords: builtins.object
-    ) -> builtins.bool:
+## python3.3
+##     def copy(
+##         self: boostNode.extension.type.Self,
+##         target: (boostNode.extension.type.SelfClassObject,
+##                  builtins.str),
+##         *arguments: builtins.object, right=None, octal=True,
+##         **keywords: builtins.object
+##     ) -> builtins.bool:
+    def copy(self, target, *arguments, **keywords):
 ##
         '''
             Implements the pythons native "shutil.copy()" method in an object
@@ -3407,13 +3407,13 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> target.copy(__test_folder__ + 'copy_directory3', right=777)
             True
         '''
-## python2.7
-##         default_keywords = boostNode.extension.native.Dictionary(
-##             content=keywords)
-##         right, keywords = default_keywords.pop(name='right')
-##         octal, keywords = default_keywords.pop(
-##             name='octal', default_value=True)
-        pass
+## python3.3
+##         pass
+        default_keywords = boostNode.extension.native.Dictionary(
+            content=keywords)
+        right, keywords = default_keywords.pop(name='right')
+        octal, keywords = default_keywords.pop(
+            name='octal', default_value=True)
 ##
         target = self.__class__(location=target, must_exist=False)
         if self.is_file():
@@ -3425,12 +3425,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return target.type == self.type
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def make_new_directory(self, wrapper_pattern='{file_name}_temp'):
-    def make_new_directory(
-        self: boostNode.extension.type.Self,
-        wrapper_pattern='{file_name}_temp'
-    ) -> boostNode.extension.type.SelfClassObject:
+## python3.3
+##     def make_new_directory(
+##         self: boostNode.extension.type.Self,
+##         wrapper_pattern='{file_name}_temp'
+##     ) -> boostNode.extension.type.SelfClassObject:
+    def make_new_directory(self, wrapper_pattern='{file_name}_temp'):
 ##
         '''
             Makes a new directory in each case. E.g. if current directory name
@@ -3466,12 +3466,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return location
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def make_directory(self, *arguments, **keywords):
-    def make_directory(
-        self: boostNode.extension.type.Self, *arguments: builtins.object,
-        right=700, octal=True, **keywords: builtins.object
-    ) -> builtins.bool:
+## python3.3
+##     def make_directory(
+##         self: boostNode.extension.type.Self, *arguments: builtins.object,
+##         right=700, octal=True, **keywords: builtins.object
+##     ) -> builtins.bool:
+    def make_directory(self, *arguments, **keywords):
 ##
         '''
             Implements the pythons native "os.mkdir()" method in an object
@@ -3504,26 +3504,26 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> handler.make_directory(right=777)
             True
         '''
-## python2.7
-##         default_keywords = boostNode.extension.native.Dictionary(
-##             content=keywords)
-##         right, keywords = default_keywords.pop(
-##             name='right', default_value=700)
-##         octal, keywords = default_keywords.pop(
-##             name='octal', default_value=True)
-        pass
+## python3.3
+##         pass
+        default_keywords = boostNode.extension.native.Dictionary(
+            content=keywords)
+        right, keywords = default_keywords.pop(
+            name='right', default_value=700)
+        octal, keywords = default_keywords.pop(
+            name='octal', default_value=True)
 ##
         os.mkdir(self._path, *arguments, **keywords)
         self.change_right(right, octal)
         return self.is_directory()
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def make_symbolic_link(self, *arguments, **keywords):
-    def make_symbolic_link(
-        self: boostNode.extension.type.Self, *arguments: builtins.object,
-        **keywords: builtins.object
-    ) -> builtins.bool:
+## python3.3
+##     def make_symbolic_link(
+##         self: boostNode.extension.type.Self, *arguments: builtins.object,
+##         **keywords: builtins.object
+##     ) -> builtins.bool:
+    def make_symbolic_link(self, *arguments, **keywords):
 ##
         '''
             Implements the pythons native "os.symlink()" method in an object
@@ -3602,12 +3602,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return self._make_link(*arguments, symbolic=True, **keywords)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def make_hardlink(self, *arguments, **keywords):
-    def make_hardlink(
-        self: boostNode.extension.type.Self, *arguments: builtins.object,
-        **keywords: builtins.object
-    ) -> builtins.bool:
+## python3.3
+##     def make_hardlink(
+##         self: boostNode.extension.type.Self, *arguments: builtins.object,
+##         **keywords: builtins.object
+##     ) -> builtins.bool:
+    def make_hardlink(self, *arguments, **keywords):
 ##
         '''
             Implements the pythons native "os.link()" method in an object
@@ -3636,12 +3636,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return self._make_link(*arguments, symbolic=False, **keywords)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def read_symbolic_link(self, as_object=False, *arguments, **keywords):
-    def read_symbolic_link(
-        self: boostNode.extension.type.Self, as_object=False,
-        *arguments: builtins.object, **keywords: builtins.object
-    ) -> (builtins.str, boostNode.extension.type.SelfClassObject):
+## python3.3
+##     def read_symbolic_link(
+##         self: boostNode.extension.type.Self, as_object=False,
+##         *arguments: builtins.object, **keywords: builtins.object
+##     ) -> (builtins.str, boostNode.extension.type.SelfClassObject):
+    def read_symbolic_link(self, as_object=False, *arguments, **keywords):
 ##
         '''
             Implements the pythons native "os.readlink()" method in an object
@@ -3717,17 +3717,17 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return link
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
+## python3.3
 ##     def deep_copy(
-##         self, target, symbolic_links=True, *arguments, **keywords
-##     ):
+##         self: boostNode.extension.type.Self,
+##         target: (boostNode.extension.type.SelfClassObject,
+##                  builtins.str),
+##         symbolic_links=True, *arguments: builtins.object,
+##         respect_root_path=None, **keywords: builtins.object
+##     ) -> boostNode.extension.type.Self:
     def deep_copy(
-        self: boostNode.extension.type.Self,
-        target: (boostNode.extension.type.SelfClassObject,
-                 builtins.str),
-        symbolic_links=True, *arguments: builtins.object,
-        respect_root_path=None, **keywords: builtins.object
-    ) -> boostNode.extension.type.Self:
+        self, target, symbolic_links=True, *arguments, **keywords
+    ):
 ##
         '''
             Implements the pythons native "shutil.copytree()" method in an
@@ -3796,11 +3796,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> Handler(target.path + '/second_sub_dir').is_directory()
             True
         '''
-## python2.7
-##         respect_root_path, keywords = boostNode.extension.native.Dictionary(
-##             content=keywords
-##         ).pop(name='respect_root_path')
-        pass
+## python3.3
+##         pass
+        respect_root_path, keywords = boostNode.extension.native.Dictionary(
+            content=keywords
+        ).pop(name='respect_root_path')
 ##
         shutil.copytree(
             src=self._path, dst=self.get_path(
@@ -3810,12 +3810,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def make_directorys(self, *arguments, **keywords):
-    def make_directorys(
-        self: boostNode.extension.type.Self, *arguments: builtins.object,
-        **keywords: builtins.object
-    ) -> builtins.bool:
+## python3.3
+##     def make_directorys(
+##         self: boostNode.extension.type.Self, *arguments: builtins.object,
+##         **keywords: builtins.object
+##     ) -> builtins.bool:
+    def make_directorys(self, *arguments, **keywords):
 ##
         '''
             Implements the pythons native "os.makedirs()" method in an object
@@ -3860,17 +3860,17 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return self.is_directory()
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
+## python3.3
 ##     def make_portable_link(
-##         self, target, force=False, label='', *arguments, **keywords
-##     ):
+##         self: boostNode.extension.type.Self,
+##         target: (boostNode.extension.type.SelfClassObject,
+##                  builtins.str),
+##         force=False, label='', *arguments: (builtins.object, builtins.type),
+##         **keywords: (builtins.object, builtins.type)
+##     ) -> builtins.bool:
     def make_portable_link(
-        self: boostNode.extension.type.Self,
-        target: (boostNode.extension.type.SelfClassObject,
-                 builtins.str),
-        force=False, label='', *arguments: (builtins.object, builtins.type),
-        **keywords: (builtins.object, builtins.type)
-    ) -> builtins.bool:
+        self, target, force=False, label='', *arguments, **keywords
+    ):
 ##
         '''
             Creates a portable link on the current location referencing on the
@@ -3922,11 +3922,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return target.is_portable_link()
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def read_portable_link(self, as_object=False):
-    def read_portable_link(
-        self: boostNode.extension.type.Self, as_object=False
-    ) -> (builtins.str, boostNode.extension.type.SelfClassObject):
+## python3.3
+##     def read_portable_link(
+##         self: boostNode.extension.type.Self, as_object=False
+##     ) -> (builtins.str, boostNode.extension.type.SelfClassObject):
+    def read_portable_link(self, as_object=False):
 ##
         '''
             Reads the referenced path of a given portable link file.
@@ -3969,11 +3969,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         raise __exception__('"%s" isn\t a portable link.', self._path)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def clear_directory(self):
-    def clear_directory(
-        self: boostNode.extension.type.Self
-    ) -> builtins.bool:
+## python3.3
+##     def clear_directory(
+##         self: boostNode.extension.type.Self
+##     ) -> builtins.bool:
+    def clear_directory(self):
 ##
         '''
             Deletes the contents of the current directory location without
@@ -4003,19 +4003,19 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return False
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
+## python3.3
 ##     def iterate_directory(
-##         self, function, recursive=False, recursive_in_link=True,
-##         deep_first=True, *arguments, **keywords
-##     ):
+##         self: boostNode.extension.type.Self,
+##         function: (builtins.str, types.FunctionType, types.MethodType,
+##                    boostNode.paradigm.aspectOrientation.JointPoint),
+##         recursive=False, recursive_in_link=True,
+##         deep_first=True, *arguments: builtins.object,
+##         **keywords: builtins.object
+##     ) -> builtins.bool:
     def iterate_directory(
-        self: boostNode.extension.type.Self,
-        function: (builtins.str, types.FunctionType, types.MethodType,
-                   boostNode.paradigm.aspectOrientation.JointPoint),
-        recursive=False, recursive_in_link=True,
-        deep_first=True, *arguments: builtins.object,
-        **keywords: builtins.object
-    ) -> builtins.bool:
+        self, function, recursive=False, recursive_in_link=True,
+        deep_first=True, *arguments, **keywords
+    ):
 ##
         '''
             Apply a given function or method to the current directory path.
@@ -4094,11 +4094,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return True
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def delete_file_patterns(self, *patterns):
-    def delete_file_patterns(
-        self: boostNode.extension.type.Self, *patterns: builtins.str
-    ) -> boostNode.extension.type.Self:
+## python3.3
+##     def delete_file_patterns(
+##         self: boostNode.extension.type.Self, *patterns: builtins.str
+##     ) -> boostNode.extension.type.Self:
+    def delete_file_patterns(self, *patterns):
 ##
         '''
             Removes files with filenames matching the given patterns.
@@ -4147,12 +4147,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 
         # region protected
 
-## python2.7
-##     def _prepare_content_status(self, mode, content):
-    def _prepare_content_status(
-        self: boostNode.extension.type.Self, mode: builtins.str,
-        content: (builtins.str, builtins.bytes)
-    ) -> builtins.str:
+## python3.3
+##     def _prepare_content_status(
+##         self: boostNode.extension.type.Self, mode: builtins.str,
+##         content: (builtins.str, builtins.bytes)
+##     ) -> builtins.str:
+    def _prepare_content_status(self, mode, content):
 ##
         '''Initializes a file for changing its content,'''
         if self.is_element() and not self.is_file():
@@ -4165,16 +4165,16 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
                 mode = 'w+b'
         return mode
 
-## python2.7
+## python3.3
 ##     def _get_path(
-##         self, location, respect_root_path, output_with_root_prefix
-##     ):
+##         self: boostNode.extension.type.Self,
+##         location: (boostNode.extension.type.SelfClassObject, builtins.str),
+##         respect_root_path: (builtins.bool, builtins.type(None)),
+##         output_with_root_prefix: (builtins.bool, builtins.type(None))
+##     ) -> builtins.str:
     def _get_path(
-        self: boostNode.extension.type.Self,
-        location: (boostNode.extension.type.SelfClassObject, builtins.str),
-        respect_root_path: (builtins.bool, builtins.type(None)),
-        output_with_root_prefix: (builtins.bool, builtins.type(None))
-    ) -> builtins.str:
+        self, location, respect_root_path, output_with_root_prefix
+    ):
 ##
         '''
             This method is used as helper method for "get_path()".
@@ -4198,16 +4198,16 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             output_with_root_prefix=output_with_root_prefix)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
+## python3.3
 ##     def _make_link(
-##         self, target, symbolic, *arguments, **keywords
-##     ):
+##         self: boostNode.extension.type.Self,
+##         target: (boostNode.extension.type.SelfClassObject, builtins.str),
+##         symbolic: builtins.bool, *arguments: builtins.object, force=False,
+##         relative=None, **keywords: builtins.object
+##     ) -> builtins.bool:
     def _make_link(
-        self: boostNode.extension.type.Self,
-        target: (boostNode.extension.type.SelfClassObject, builtins.str),
-        symbolic: builtins.bool, *arguments: builtins.object, force=False,
-        relative=None, **keywords: builtins.object
-    ) -> builtins.bool:
+        self, target, symbolic, *arguments, **keywords
+    ):
 ##
         '''
             Makes hard or symbolic links and handles the optional force option.
@@ -4219,13 +4219,13 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             >>> Handler()._make_link(target, symbolic=True)
             False
         '''
-## python2.7
-##         keywords_dictionary = boostNode.extension.native.Dictionary(
-##             content=keywords)
-##         force, keywords = keywords_dictionary.pop(
-##             name='force', default_value=False)
-##         relative, keywords = keywords_dictionary.pop(name='relative')
-        pass
+## python3.3
+##         pass
+        keywords_dictionary = boostNode.extension.native.Dictionary(
+            content=keywords)
+        force, keywords = keywords_dictionary.pop(
+            name='force', default_value=False)
+        relative, keywords = keywords_dictionary.pop(name='relative')
 ##
         target = self.__class__(location=target, must_exist=False)
         if force:
@@ -4241,12 +4241,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             symbolic, target, relative, *arguments, **keywords)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def _is_equivalent_folder(self, other, second_round=False):
-    def _is_equivalent_folder(
-        self: boostNode.extension.type.Self,
-        other: boostNode.extension.type.SelfClassObject, second_round=False
-    ) -> builtins.bool:
+## python3.3
+##     def _is_equivalent_folder(
+##         self: boostNode.extension.type.Self,
+##         other: boostNode.extension.type.SelfClassObject, second_round=False
+##     ) -> builtins.bool:
+    def _is_equivalent_folder(self, other, second_round=False):
 ##
         '''
             Returns "True" if given folder contains likewise content.
@@ -4289,11 +4289,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             self, second_round=True)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def _prepend_root_path(self):
-    def _prepend_root_path(
-        self: boostNode.extension.type.Self
-    ) -> builtins.str:
+## python3.3
+##     def _prepend_root_path(
+##         self: boostNode.extension.type.Self
+##     ) -> builtins.str:
+    def _prepend_root_path(self):
 ##
         '''
             Prepends root path prefix to current file path.
@@ -4345,17 +4345,17 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return self._path
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
+## python3.3
 ##     def _handle_path_existence(
-##         self, location, make_directory, must_exist, arguments, keywords
-##     ):
+##         self: boostNode.extension.type.Self,
+##         location: (builtins.str, boostNode.extension.type.SelfClassObject,
+##                    builtins.type(None)),
+##         make_directory: builtins.bool, must_exist: builtins.bool,
+##         arguments: builtins.tuple, keywords: builtins.dict
+##     ) -> boostNode.extension.type.Self:
     def _handle_path_existence(
-        self: boostNode.extension.type.Self,
-        location: (builtins.str, boostNode.extension.type.SelfClassObject,
-                   builtins.type(None)),
-        make_directory: builtins.bool, must_exist: builtins.bool,
-        arguments: builtins.tuple, keywords: builtins.dict
-    ) -> boostNode.extension.type.Self:
+        self, location, make_directory, must_exist, arguments, keywords
+    ):
 ##
         '''
             Make initial existence like it was specified on initialisation.
@@ -4386,11 +4386,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def _initialize_path(self):
-    def _initialize_path(
-        self: boostNode.extension.type.Self
-    ) -> builtins.str:
+## python3.3
+##     def _initialize_path(
+##         self: boostNode.extension.type.Self
+##     ) -> builtins.str:
+    def _initialize_path(self):
 ##
         '''
             Normalizes reference to file object.
@@ -4422,13 +4422,13 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return self._path
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def _initialize_location(self, location):
-    def _initialize_location(
-        self: boostNode.extension.type.Self,
-        location: (boostNode.extension.type.SelfClassObject, builtins.str,
-                   builtins.type(None))
-    ) -> builtins.str:
+## python3.3
+##     def _initialize_location(
+##         self: boostNode.extension.type.Self,
+##         location: (boostNode.extension.type.SelfClassObject, builtins.str,
+##                    builtins.type(None))
+##     ) -> builtins.str:
+    def _initialize_location(self, location):
 ##
         '''
             Normalizes a given file object reference to "builtins.str".
@@ -4449,11 +4449,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return location
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def _set_path(self, path):
-    def _set_path(
-        self: boostNode.extension.type.Self, path: builtins.str
-    ) -> builtins.bool:
+## python3.3
+##     def _set_path(
+##         self: boostNode.extension.type.Self, path: builtins.str
+##     ) -> builtins.bool:
+    def _set_path(self, path):
 ##
         '''
             Sets path for the currently used "Handler" object in an convinced
@@ -4484,17 +4484,17 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return self.is_element()
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
+## python3.3
 ##     def _make_forced_link(
-##         self, symbolic, target, relative, *arguments, **keywords
-##     ):
+##         self: boostNode.extension.type.Self,
+##         symbolic: builtins.bool,
+##         target: boostNode.extension.type.SelfClassObject,
+##         relative: (builtins.object, builtins.type),
+##         *arguments: builtins.object, **keywords: builtins.object
+##     ) -> builtins.bool:
     def _make_forced_link(
-        self: boostNode.extension.type.Self,
-        symbolic: builtins.bool,
-        target: boostNode.extension.type.SelfClassObject,
-        relative: (builtins.object, builtins.type),
-        *arguments: builtins.object, **keywords: builtins.object
-    ) -> builtins.bool:
+        self, symbolic, target, relative, *arguments, **keywords
+    ):
 ##
         '''
             Creates a symbolic link weather their exists already a file with
@@ -4566,17 +4566,17 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             # region handle platform dependencies
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
+## python3.3
 ##     def _make_platform_dependent_link(
-##         self, symbolic, target, relative, *arguments, **keywords
-##     ):
+##         self: boostNode.extension.type.Self, symbolic: builtins.bool,
+##         target: boostNode.extension.type.SelfClassObject,
+##         relative: (builtins.object, builtins.type),
+##         *arguments: builtins.object, force_windows_behavior=False,
+##         **keywords: builtins.object
+##     ) -> builtins.bool:
     def _make_platform_dependent_link(
-        self: boostNode.extension.type.Self, symbolic: builtins.bool,
-        target: boostNode.extension.type.SelfClassObject,
-        relative: (builtins.object, builtins.type),
-        *arguments: builtins.object, force_windows_behavior=False,
-        **keywords: builtins.object
-    ) -> builtins.bool:
+        self, symbolic, target, relative, *arguments, **keywords
+    ):
 ##
         '''
             Handles platform dependent stuff by creating a symbolic link.
@@ -4622,12 +4622,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
             ...         force_windows_behavior=True)
             True
         '''
-## python2.7
-##         force_windows_behavior, keywords = \
-##             boostNode.extension.native.Dictionary(
-##                 content=keywords
-##             ).pop(name='force_windows_behavior', default_value=False)
-        pass
+## python3.3
+##         pass
+        force_windows_behavior, keywords = \
+            boostNode.extension.native.Dictionary(
+                content=keywords
+            ).pop(name='force_windows_behavior', default_value=False)
 ##
         target_path = target._path
         if target._path.endswith(os.sep):
@@ -4640,19 +4640,19 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         if symbolic:
             try:
                 if operating_system == 'windows' or force_windows_behavior:
-## python2.7
-##                     create_symbolic_link = \
-##                         ctypes.windll.kernel32.CreateSymbolicLinkW
-##                     create_symbolic_link.argtypes = (
-##                         ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_uint32)
-##                     create_symbolic_link.restype = ctypes.c_ubyte
-##                     if create_symbolic_link(
-##                         target_path, source_path, self.is_directory()
-##                     ) == 0:
-##                         raise ctypes.WinError()
-                    os.symlink(
-                        source_path, target_path,
-                        target_is_directory=self.is_directory())
+## python3.3
+##                     os.symlink(
+##                         source_path, target_path,
+##                         target_is_directory=self.is_directory())
+                    create_symbolic_link = \
+                        ctypes.windll.kernel32.CreateSymbolicLinkW
+                    create_symbolic_link.argtypes = (
+                        ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_uint32)
+                    create_symbolic_link.restype = ctypes.c_ubyte
+                    if create_symbolic_link(
+                        target_path, source_path, self.is_directory()
+                    ) == 0:
+                        raise ctypes.WinError()
 ##
                 else:
                     os.symlink(source_path, target_path)
@@ -4664,13 +4664,13 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return target.is_file()
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def _determine_relative_path(self, relative, target_path):
-    def _determine_relative_path(
-        self: boostNode.extension.type.Self,
-        relative: (builtins.object, builtins.type),
-        target_path: builtins.str
-    ) -> builtins.str:
+## python3.3
+##     def _determine_relative_path(
+##         self: boostNode.extension.type.Self,
+##         relative: (builtins.object, builtins.type),
+##         target_path: builtins.str
+##     ) -> builtins.str:
+    def _determine_relative_path(self, relative, target_path):
 ##
         '''
             Determines relative path depending on given requirements defined by
@@ -4703,11 +4703,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return self._path
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def _determine_get_windows_disk_free_space_function(self):
-    def _determine_get_windows_disk_free_space_function(
-        self: boostNode.extension.type.Self
-    ) -> (builtins.bool, builtins.int):
+## python3.3
+##     def _determine_get_windows_disk_free_space_function(
+##         self: boostNode.extension.type.Self
+##     ) -> (builtins.bool, builtins.int):
+    def _determine_get_windows_disk_free_space_function(self):
 ##
         '''
             Determines windows internal method to get disk free space.
@@ -4727,11 +4727,11 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
         return ctypes.windll.kernel32.GetDiskFreeSpaceExA
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python2.7
-##     def _get_platform_dependent_free_and_total_space(self):
-    def _get_platform_dependent_free_and_total_space(
-        self: boostNode.extension.type.Self
-    ) -> (builtins.bool, builtins.tuple):
+## python3.3
+##     def _get_platform_dependent_free_and_total_space(
+##         self: boostNode.extension.type.Self
+##     ) -> (builtins.bool, builtins.tuple):
+    def _get_platform_dependent_free_and_total_space(self):
 ##
         '''
             Handles platform dependent stuff by determining free and total
@@ -4770,12 +4770,12 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
     @boostNode.paradigm.aspectOrientation.JointPoint
 # NOTE return type only available in unix like systems:
 # -> (posix.statvfs_result, builtins.type(None))
-## python2.7
+## python3.3
 ##     def _initialize_platform_dependencies(
-##         self, force_macintosh_behavior=False
+##         self: boostNode.extension.type.Self, force_macintosh_behavior=False
 ##     ):
     def _initialize_platform_dependencies(
-        self: boostNode.extension.type.Self, force_macintosh_behavior=False
+        self, force_macintosh_behavior=False
     ):
 ##
         '''
