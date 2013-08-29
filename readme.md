@@ -21,6 +21,7 @@ boostNode
 
 boostNode is a high level python library.
 This library supports python2.7+ and python3.3+ environments.
+And will always try to use every new cutting edge python features!
 
 Features
 --------
@@ -78,9 +79,9 @@ of given boostNode version to convert to the other one.
 Copyright
 ---------
 
-see ./\_\_init__.py
+see ./\_\_init\_\_.py
 
 License
 -------
 
-see ./\_\_init__.py
+see ./\_\_init\_\_.py
