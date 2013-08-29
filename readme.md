@@ -79,9 +79,9 @@ of given boostNode version to convert to the other one.
 Copyright
 ---------
 
-see ./\_\_init\_\_.py
+see header in ./\_\_init\_\_.py
 
 License
 -------
 
-see ./\_\_init\_\_.py
+see header in ./\_\_init\_\_.py
