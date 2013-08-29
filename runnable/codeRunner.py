@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.3
 # -*- coding: utf-8 -*-
 
 # region vim modline
@@ -28,10 +28,10 @@ __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-## python3.3
-## import builtins
-## import collections
-import __builtin__ as builtins
+## python2.7
+## import __builtin__ as builtins
+import builtins
+import collections
 ##
 import copy
 import inspect
@@ -243,9 +243,9 @@ class Run(
             # region special
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
-    def __repr__(self):
+## python2.7
+##     def __repr__(self):
+    def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
 ##
         '''
             Invokes if this object should describe itself by a string.
@@ -277,11 +277,11 @@ class Run(
             # region runnable implementation
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _run(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
-    def _run(self):
+## python2.7
+##     def _run(self):
+    def _run(
+        self: boostNode.extension.type.Self
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Entry point for command line call of this progam.
@@ -313,15 +313,15 @@ class Run(
             namespace=command_line_arguments))
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
+## python2.7
 ##     def _initialize(
-##         self: boostNode.extension.type.Self, code_file_path='',
+##         self, code_file_path='',
 ##         default_command_sequence=('compile', 'run', 'clean'), **keywords
-##     ) -> boostNode.extension.type.Self:
+##     ):
     def _initialize(
-        self, code_file_path='',
+        self: boostNode.extension.type.Self, code_file_path='',
         default_command_sequence=('compile', 'run', 'clean'), **keywords
-    ):
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Determines a code file to run and runs them in its own thread by
@@ -334,11 +334,11 @@ class Run(
             # endregion
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _tidy_up(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
-    def _tidy_up(self):
+## python2.7
+##     def _tidy_up(self):
+    def _tidy_up(
+        self: boostNode.extension.type.Self
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Tidies up the current working directory after running the given
@@ -372,11 +372,11 @@ class Run(
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _run_commands(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
-    def _run_commands(self):
+## python2.7
+##     def _run_commands(self):
+    def _run_commands(
+        self: boostNode.extension.type.Self
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Run currently needed commands.
@@ -410,11 +410,11 @@ class Run(
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _check_code_manager(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
-    def _check_code_manager(self):
+## python2.7
+##     def _check_code_manager(self):
+    def _check_code_manager(
+        self: boostNode.extension.type.Self
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Checks if a code manager file exists for the current detected code
@@ -455,11 +455,11 @@ class Run(
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _determine_code_file(
-##         self: boostNode.extension.type.Self, path: builtins.str
-##     ) -> (boostNode.extension.file.Handler, builtins.bool):
-    def _determine_code_file(self, path):
+## python2.7
+##     def _determine_code_file(self, path):
+    def _determine_code_file(
+        self: boostNode.extension.type.Self, path: builtins.str
+    ) -> (boostNode.extension.file.Handler, builtins.bool):
 ##
         '''
             Determines a code file which could make sense to run.
@@ -487,12 +487,12 @@ class Run(
         return self._search_supported_file_in_current_working_directory()
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _find_informations_by_extension(
-##         self: boostNode.extension.type.Self, extension: builtins.str,
-##         code_file: boostNode.extension.file.Handler
-##     ) -> (builtins.dict, builtins.bool):
-    def _find_informations_by_extension(self, extension, code_file):
+## python2.7
+##     def _find_informations_by_extension(self, extension, code_file):
+    def _find_informations_by_extension(
+        self: boostNode.extension.type.Self, extension: builtins.str,
+        code_file: boostNode.extension.file.Handler
+    ) -> (builtins.dict, builtins.bool):
 ##
         '''
             Tries to find the necessary informations for running code with
@@ -520,11 +520,11 @@ class Run(
         return False
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _search_supported_file_by_path(
-##         self: boostNode.extension.type.Self, path: builtins.str
-##     ) -> (boostNode.extension.file.Handler, builtins.bool):
-    def _search_supported_file_by_path(self, path):
+## python2.7
+##     def _search_supported_file_by_path(self, path):
+    def _search_supported_file_by_path(
+        self: boostNode.extension.type.Self, path: builtins.str
+    ) -> (boostNode.extension.file.Handler, builtins.bool):
 ##
         '''
             Tries to find a useful file in current working directory by trying
@@ -560,9 +560,9 @@ class Run(
                         must_exist=False),
                     boostNode.extension.file.Handler(
                         location=location.path + extension, must_exist=False)):
-## python3.3
-##                     if code_file.is_file() and code_file != self_file:
-                    if code_file.is_file() and not (code_file == self_file):
+## python2.7
+##                     if code_file.is_file() and not (code_file == self_file):
+                    if code_file.is_file() and code_file != self_file:
 ##
                         return code_file
                 file = self._search_supported_file_by_directory(
@@ -572,12 +572,12 @@ class Run(
         return False
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _search_supported_file_by_directory(
-##         self: boostNode.extension.type.Self,
-##         location: boostNode.extension.file.Handler, extension: builtins.str,
-##     ) -> (boostNode.extension.file.Handler, builtins.bool):
-    def _search_supported_file_by_directory(self, location, extension):
+## python2.7
+##     def _search_supported_file_by_directory(self, location, extension):
+    def _search_supported_file_by_directory(
+        self: boostNode.extension.type.Self,
+        location: boostNode.extension.file.Handler, extension: builtins.str,
+    ) -> (boostNode.extension.file.Handler, builtins.bool):
 ##
         '''
             Searches in a directory for a suitable code file to run.
@@ -594,11 +594,11 @@ class Run(
         return False
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _search_supported_file_in_current_working_directory(
-##         self: boostNode.extension.type.Self
-##     ) -> (boostNode.extension.file.Handler, builtins.bool):
-    def _search_supported_file_in_current_working_directory(self):
+## python2.7
+##     def _search_supported_file_in_current_working_directory(self):
+    def _search_supported_file_in_current_working_directory(
+        self: boostNode.extension.type.Self
+    ) -> (boostNode.extension.file.Handler, builtins.bool):
 ##
         '''
             Tries to find a useful file in current working directory
@@ -620,12 +620,12 @@ class Run(
         return False
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _run_command(
-##         self: boostNode.extension.type.Self, command_name: builtins.str,
-##         command: builtins.str
-##     ) -> boostNode.extension.type.Self:
-    def _run_command(self, command_name, command):
+## python2.7
+##     def _run_command(self, command_name, command):
+    def _run_command(
+        self: boostNode.extension.type.Self, command_name: builtins.str,
+        command: builtins.str
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Runs the given command by printing out what is running by
@@ -649,12 +649,12 @@ class Run(
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _log_command_run(
-##         self: boostNode.extension.type.Self, command_name: builtins.str,
-##         command: builtins.str, result: builtins.dict
-##     ) -> builtins.int:
-    def _log_command_run(self, command_name, command, result):
+## python2.7
+##     def _log_command_run(self, command_name, command, result):
+    def _log_command_run(
+        self: boostNode.extension.type.Self, command_name: builtins.str,
+        command: builtins.str, result: builtins.dict
+    ) -> builtins.int:
 ##
         '''
             Generates logging output for wrapping around generated output by
@@ -662,25 +662,25 @@ class Run(
         '''
         terminator_save = boostNode.extension.output.Logger.terminator
         boostNode.extension.output.Logger.change_all(terminator=('',))
-## python3.3
-##         __logger__.info(
-##             '%s with "%s".\nstandard output:\n[',
-##             command_name.capitalize(), command.strip())
-##         boostNode.extension.output.Logger.flush()
-        if __logger__.isEnabledFor(logging.INFO):
-            boostNode.extension.output.Print(
-                '%s with "%s".\nstandard output:\n[' %
-                (command_name.capitalize(), command.strip()),
-                end='', flush=True)
+## python2.7
+##         if __logger__.isEnabledFor(logging.INFO):
+##             boostNode.extension.output.Print(
+##                 '%s with "%s".\nstandard output:\n[' %
+##                 (command_name.capitalize(), command.strip()),
+##                 end='', flush=True)
+        __logger__.info(
+            '%s with "%s".\nstandard output:\n[',
+            command_name.capitalize(), command.strip())
+        boostNode.extension.output.Logger.flush()
 ##
         boostNode.extension.output.Print(
             result['standard_output'], end='', flush=True)
-## python3.3
-##         __logger__.info(']\nerror output:\n[')
-##         boostNode.extension.output.Logger.flush()
-        if __logger__.isEnabledFor(logging.INFO):
-            boostNode.extension.output.Print(
-                ']\nerror output:\n[', end='', flush=True)
+## python2.7
+##         if __logger__.isEnabledFor(logging.INFO):
+##             boostNode.extension.output.Print(
+##                 ']\nerror output:\n[', end='', flush=True)
+        __logger__.info(']\nerror output:\n[')
+        boostNode.extension.output.Logger.flush()
 ##
         boostNode.extension.output.Logger.change_all(
             terminator=terminator_save)
@@ -691,11 +691,11 @@ class Run(
         return result['return_code']
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _run_code_file(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
-    def _run_code_file(self):
+## python2.7
+##     def _run_code_file(self):
+    def _run_code_file(
+        self: boostNode.extension.type.Self
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Runs all commands needed to run the current type of code.
@@ -715,11 +715,11 @@ class Run(
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _validate_code_file(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
-    def _validate_code_file(self):
+## python2.7
+##     def _validate_code_file(self):
+    def _validate_code_file(
+        self: boostNode.extension.type.Self
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Checks weather current code file is supported for running.
@@ -734,12 +734,12 @@ class Run(
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _render_properties(
-##         self: boostNode.extension.type.Self, properties: builtins.dict,
-##         code_file: boostNode.extension.file.Handler
-##     ) -> builtins.dict:
-    def _render_properties(self, properties, code_file):
+## python2.7
+##     def _render_properties(self, properties, code_file):
+    def _render_properties(
+        self: boostNode.extension.type.Self, properties: builtins.dict,
+        code_file: boostNode.extension.file.Handler
+    ) -> builtins.dict:
 ##
         '''
             If a given code property is marked as executable respectively

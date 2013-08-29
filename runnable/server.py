@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.3
 # -*- coding: utf-8 -*-
 
 # region vim modline
@@ -28,48 +28,48 @@ __status__ = 'stable'
 __version__ = '1.0'
 
 import base64
-## python3.3
-## import builtins
-import __builtin__ as builtins
-import BaseHTTPServer
-import CGIHTTPServer
+## python2.7
+## import __builtin__ as builtins
+## import BaseHTTPServer
+## import CGIHTTPServer
+import builtins
 ##
 import cgi
-## python3.3
-## import collections
+## python2.7
 ## import copy
-## import http.server
-## import imp
+import collections
 import copy
+import http.server
+import imp
 ##
 import gzip
 import inspect
-## python3.3 import io
-pass
+## python2.7 pass
+import io
 import logging
 import multiprocessing
 import os
 import posixpath
-## python3.3 import socketserver
-pass
+## python2.7 pass
+import socketserver
 import ssl
 import re
 import signal
 import socket
 import subprocess
 import sys
-## python3.3
-## import io
-import SocketServer
-import StringIO
+## python2.7
+## import SocketServer
+## import StringIO
+import io
 ##
 import threading
 import time
-## python3.3
-## import types
-## import urllib.parse
-import urllib
-import urlparse
+## python2.7
+## import urllib
+## import urlparse
+import types
+import urllib.parse
 ##
 
 '''Make boostNode packages and modules importable via relative paths.'''
@@ -90,98 +90,98 @@ import boostNode.extension.system
 
 # region classes
 
-## python3.3
-## pass
-class SocketFileObjectWrapper(socket._fileobject):
-    '''
-        This class wraps the native implementation of the server
-        socket. The main goal is that the first line from given
-        socket have to be taken twice. This curious feature is the
-        only way to get the requested file as early as needed to decide
-        if we are able to spawn a new process for better load
-        balancing.
-    '''
-
-    # region dynamic properties
-
-        # region public
-
-    '''Indicates and saves the first line read of the socket.'''
-    first_read_line = False
-
-        # endregion
-
-    # endregion
-
-    # region dynamic methods
-
-        # region public
-
-            # region special
-
-    @boostNode.paradigm.aspectOrientation.JointPoint
-    def __init__(self, *arguments, **keywords):
-        '''
-            This methods wraps the initializer to make the first read line
-            variable instance bounded.
-        '''
-        self.first_read_line = False
-        '''Take this method via introspection.'''
-        return builtins.getattr(
-            builtins.super(self.__class__, self), inspect.stack()[0][3]
-        )(*arguments, **keywords)
-
-            # endregion
-
-    @boostNode.paradigm.aspectOrientation.JointPoint
-    def readline(self, *arguments, **keywords):
-        '''Wraps the "readline()" method to get the first line twice.'''
-        if self.first_read_line is False:
-            try:
-                '''Take this method via introspection.'''
-                self.first_read_line = builtins.getattr(
-                    builtins.super(self.__class__, self),
-                    inspect.stack()[0][3]
-                )(*arguments, **keywords)
-                return self.first_read_line
-            except (
-                socket.herror, socket.gaierror, socket.timeout, socket.error
-            ) as exception:
-                __logger__.info(
-                    'Connection interrupted. %s: %s',
-                    exception.__class__.__name__, builtins.str(exception))
-                return ''
-        elif self.first_read_line is True:
-            try:
-                '''Take this method via introspection.'''
-                return builtins.getattr(
-                    builtins.super(self.__class__, self),
-                    inspect.stack()[0][3]
-                )(*arguments, **keywords)
-            except (
-                socket.herror, socket.gaierror, socket.timeout, socket.error
-            ) as exception:
-                __logger__.info(
-                    'Connection interrupted. %s: %s',
-                    exception.__class__.__name__, builtins.str(exception))
-                return ''
-        result = self.first_read_line
-        self.first_read_line = True
-        return result
-
-        # endregion
-
-    # endregion
-
+## python2.7
+## class SocketFileObjectWrapper(socket._fileobject):
+##     '''
+##         This class wraps the native implementation of the server
+##         socket. The main goal is that the first line from given
+##         socket have to be taken twice. This curious feature is the
+##         only way to get the requested file as early as needed to decide
+##         if we are able to spawn a new process for better load
+##         balancing.
+##     '''
+##
+##     # region dynamic properties
+##
+##         # region public
+##
+##     '''Indicates and saves the first line read of the socket.'''
+##     first_read_line = False
+##
+##         # endregion
+##
+##     # endregion
+##
+##     # region dynamic methods
+##
+##         # region public
+##
+##             # region special
+##
+##     @boostNode.paradigm.aspectOrientation.JointPoint
+##     def __init__(self, *arguments, **keywords):
+##         '''
+##             This methods wraps the initializer to make the first read line
+##             variable instance bounded.
+##         '''
+##         self.first_read_line = False
+##         '''Take this method via introspection.'''
+##         return builtins.getattr(
+##             builtins.super(self.__class__, self), inspect.stack()[0][3]
+##         )(*arguments, **keywords)
+##
+##             # endregion
+##
+##     @boostNode.paradigm.aspectOrientation.JointPoint
+##     def readline(self, *arguments, **keywords):
+##         '''Wraps the "readline()" method to get the first line twice.'''
+##         if self.first_read_line is False:
+##             try:
+##                 '''Take this method via introspection.'''
+##                 self.first_read_line = builtins.getattr(
+##                     builtins.super(self.__class__, self),
+##                     inspect.stack()[0][3]
+##                 )(*arguments, **keywords)
+##                 return self.first_read_line
+##             except (
+##                 socket.herror, socket.gaierror, socket.timeout, socket.error
+##             ) as exception:
+##                 __logger__.info(
+##                     'Connection interrupted. %s: %s',
+##                     exception.__class__.__name__, builtins.str(exception))
+##                 return ''
+##         elif self.first_read_line is True:
+##             try:
+##                 '''Take this method via introspection.'''
+##                 return builtins.getattr(
+##                     builtins.super(self.__class__, self),
+##                     inspect.stack()[0][3]
+##                 )(*arguments, **keywords)
+##             except (
+##                 socket.herror, socket.gaierror, socket.timeout, socket.error
+##             ) as exception:
+##                 __logger__.info(
+##                     'Connection interrupted. %s: %s',
+##                     exception.__class__.__name__, builtins.str(exception))
+##                 return ''
+##         result = self.first_read_line
+##         self.first_read_line = True
+##         return result
+##
+##         # endregion
+##
+##     # endregion
+##
+pass
 ##
 
 
-## python3.3
+## python2.7
 ## class MultiProcessingHTTPServer(
-##     socketserver.ThreadingMixIn, http.server.HTTPServer
+##     SocketServer.ThreadingMixIn, BaseHTTPServer.HTTPServer, builtins.object
 ## ):
 class MultiProcessingHTTPServer(
-    SocketServer.ThreadingMixIn, BaseHTTPServer.HTTPServer, builtins.object
+    socketserver.ThreadingMixIn, http.server.HTTPServer
 ):
 ##
     '''The Class implements a partial multiprocessing supported web server.'''
@@ -207,12 +207,12 @@ class MultiProcessingHTTPServer(
             # region special
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def __init__(
-##         self: boostNode.extension.type.Self, *arguments: builtins.object,
-##         **keywords: builtins.object
-##     ) -> None:
-    def __init__(self, *arguments, **keywords):
+## python2.7
+##     def __init__(self, *arguments, **keywords):
+    def __init__(
+        self: boostNode.extension.type.Self, *arguments: builtins.object,
+        **keywords: builtins.object
+    ) -> None:
 ##
         '''
             This initializer wrapper makes sure that the special wrapped file
@@ -229,11 +229,11 @@ class MultiProcessingHTTPServer(
         # endregion
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def is_same_thread_request(
-##         self: boostNode.extension.type.Self, request: socket.socket
-##     ) -> builtins.bool:
-    def is_same_thread_request(self, request):
+## python2.7
+##     def is_same_thread_request(self, request):
+    def is_same_thread_request(
+        self: boostNode.extension.type.Self, request: socket.socket
+    ) -> builtins.bool:
 ##
         '''
             Determines if the given request could be run in its own dedicated
@@ -248,15 +248,15 @@ class MultiProcessingHTTPServer(
         return False
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
+## python2.7
 ##     def process_request_no_termination_wrapper(
-##         self: boostNode.extension.type.Self,
-##         parent_function: types.FunctionType, request: socket.socket,
-##         arguments: builtins.tuple, keywords: builtins.dict
-##     ) -> None:
+##         self, parent_function, request, arguments, keywords
+##     ):
     def process_request_no_termination_wrapper(
-        self, parent_function, request, arguments, keywords
-    ):
+        self: boostNode.extension.type.Self,
+        parent_function: types.FunctionType, request: socket.socket,
+        arguments: builtins.tuple, keywords: builtins.dict
+    ) -> None:
 ##
         '''
             Wraps the normal "process_request" method. To manage the process
@@ -268,13 +268,13 @@ class MultiProcessingHTTPServer(
             for signal_number in signal_numbers:
                 signal.signal(signal_number, signal.SIG_IGN)
             parent_function(self, request, *arguments, **keywords)
-## python3.3
+## python2.7
 ##         except (
-##             builtins.BrokenPipeError, socket.gaierror,
-##             socket.herror, socket.timeout, socket.error
+##             socket.herror, socket.gaierror, socket.timeout, socket.error
 ##         ) as exception:
         except (
-            socket.herror, socket.gaierror, socket.timeout, socket.error
+            builtins.BrokenPipeError, socket.gaierror,
+            socket.herror, socket.timeout, socket.error
         ) as exception:
 ##
             __logger__.info(
@@ -282,12 +282,12 @@ class MultiProcessingHTTPServer(
                 builtins.str(exception))
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def process_request(
-##         self: boostNode.extension.type.Self, request_socket: socket.socket,
-##         *arguments: builtins.object, **keywords: builtins.object
-##     ) -> None:
-    def process_request(self, request_socket, *arguments, **keywords):
+## python2.7
+##     def process_request(self, request_socket, *arguments, **keywords):
+    def process_request(
+        self: boostNode.extension.type.Self, request_socket: socket.socket,
+        *arguments: builtins.object, **keywords: builtins.object
+    ) -> None:
 ##
         '''
             This method indicates weather the request is a read only or not.
@@ -296,78 +296,78 @@ class MultiProcessingHTTPServer(
         '''
         if self.web.block_new_worker:
             return None
-## python3.3
-##         self.read_file_socket = request_socket.makefile('rb', -1)
-##         read_file_socket = self.read_file_socket
-##
-##         @boostNode.paradigm.aspectOrientation.JointPoint
-##         def readline(
-##             *arguments: builtins.object, **keywords: builtins.object
-##         ) -> builtins.bytes:
-##             '''
-##                 Wraps the native file object method version.
-##             '''
-##             self = read_file_socket
-##             if not builtins.hasattr(self, 'first_read_line'):
-##                 self.first_read_line = builtins.getattr(
-##                     io.BufferedReader, inspect.stack()[0][3]
-##                 )(self, *arguments, **keywords)
-##                 return self.first_read_line
-##             elif self.first_read_line is True:
-##                 '''Take this method via introspection.'''
-##                 return builtins.getattr(
-##                     io.BufferedReader, inspect.stack()[0][3]
-##                 )(self, *arguments, **keywords)
-##             result = self.first_read_line
-##             self.first_read_line = True
-##             return result
-##         self.read_file_socket.readline = readline
-        '''
-            This assignment replace the python's native
-            "socket.socket.makefile('rb', -1)" behavior.
-        '''
-        self.read_file_socket = SocketFileObjectWrapper(
-            request_socket, 'rb', -1)
+## python2.7
+##         '''
+##             This assignment replace the python's native
+##             "socket.socket.makefile('rb', -1)" behavior.
+##         '''
+##         self.read_file_socket = SocketFileObjectWrapper(
+##             request_socket, 'rb', -1)
+        self.read_file_socket = request_socket.makefile('rb', -1)
+        read_file_socket = self.read_file_socket
+
+        @boostNode.paradigm.aspectOrientation.JointPoint
+        def readline(
+            *arguments: builtins.object, **keywords: builtins.object
+        ) -> builtins.bytes:
+            '''
+                Wraps the native file object method version.
+            '''
+            self = read_file_socket
+            if not builtins.hasattr(self, 'first_read_line'):
+                self.first_read_line = builtins.getattr(
+                    io.BufferedReader, inspect.stack()[0][3]
+                )(self, *arguments, **keywords)
+                return self.first_read_line
+            elif self.first_read_line is True:
+                '''Take this method via introspection.'''
+                return builtins.getattr(
+                    io.BufferedReader, inspect.stack()[0][3]
+                )(self, *arguments, **keywords)
+            result = self.first_read_line
+            self.first_read_line = True
+            return result
+        self.read_file_socket.readline = readline
 ##
         '''NOTE: We have to add 1 for the server processes itself.'''
         self.web.number_of_running_processes = \
             builtins.len(multiprocessing.active_children()) + 1
-## python3.3
+## python2.7
 ##         parent_function = builtins.getattr(
-##             http.server.HTTPServer, inspect.stack()[0][3])
+##             BaseHTTPServer.HTTPServer, inspect.stack()[0][3])
         parent_function = builtins.getattr(
-            BaseHTTPServer.HTTPServer, inspect.stack()[0][3])
+            http.server.HTTPServer, inspect.stack()[0][3])
 ##
         if(not self.is_same_thread_request(request_socket) and
            self.web.number_of_running_processes <
            self.web.maximum_number_of_processes):
             self.web.number_of_running_processes += 1
             '''Takes this method via introspection from now on.'''
-## python3.3
-##             multiprocessing.Process(
+## python2.7
+##             forked_request_process = multiprocessing.Process(
 ##                 target=self.process_request_no_termination_wrapper,
-##                 daemon=True,
-##                 args=(parent_function, request_socket, arguments, keywords)
-##             ).start()
-            forked_request_process = multiprocessing.Process(
+##                 args=(parent_function, request_socket, arguments, keywords))
+##             forked_request_process.daemon = True
+##             forked_request_process.start()
+            multiprocessing.Process(
                 target=self.process_request_no_termination_wrapper,
-                args=(parent_function, request_socket, arguments, keywords))
-            forked_request_process.daemon = True
-            forked_request_process.start()
+                daemon=True,
+                args=(parent_function, request_socket, arguments, keywords)
+            ).start()
 ##
         else:
             try:
-## python3.3
+## python2.7
 ##                 return parent_function(
 ##                     self, request_socket, *arguments, **keywords)
 ##             except (
-##                 builtins.BrokenPipeError, socket.gaierror, socket.herror,
-##                 socket.timeout, socket.error
+##                 socket.herror, socket.gaierror, socket.timeout, socket.error
 ##             ) as exception:
                 return parent_function(
                     self, request_socket, *arguments, **keywords)
             except (
-                socket.herror, socket.gaierror, socket.timeout, socket.error
+                builtins.BrokenPipeError, socket.gaierror, socket.herror,
+                socket.timeout, socket.error
             ) as exception:
 ##
                 __logger__.info(
@@ -731,9 +731,9 @@ class Web(
             # region special
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
-    def __repr__(self):
+## python2.7
+##     def __repr__(self):
+    def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
 ##
         '''
             Invokes if this object should describe itself by a string.
@@ -756,12 +756,12 @@ class Web(
             # endregion
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def stop(
-##         self: boostNode.extension.type.Self, *arguments: builtins.object,
-##         **keywords: builtins.object
-##     ) -> boostNode.extension.type.Self:
-    def stop(self, *arguments, **keywords):
+## python2.7
+##     def stop(self, *arguments, **keywords):
+    def stop(
+        self: boostNode.extension.type.Self, *arguments: builtins.object,
+        **keywords: builtins.object
+    ) -> boostNode.extension.type.Self:
 ##
         '''Waits for running workers and shuts the server down.'''
         if self.service:
@@ -804,11 +804,11 @@ class Web(
             # region runnable implementation
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _run(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
-    def _run(self):
+## python2.7
+##     def _run(self):
+    def _run(
+        self: boostNode.extension.type.Self
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Entry point for command line call of this program.
@@ -827,10 +827,10 @@ class Web(
             namespace=command_line_arguments))
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
+## python2.7
 ##     def _initialize(
-##         self: boostNode.extension.type.Self, root='.', host_name='', port=0,
-##         default='', public_key_file_path='', stop_order='stop',
+##         self, root='.', host_name='', port=0, default='',
+##         public_key_file_path='', stop_order='stop',
 ##         request_whitelist=('/.*',), request_blacklist=(),
 ##         same_thread_request_whitelist=(),
 ##         # NOTE: Tuple for explicit web_server file reference validation.
@@ -850,11 +850,11 @@ class Web(
 ##         maximum_number_of_processes=0, shared_data=None,
 ##         request_parameter_delimiter='\?',
 ##         file_size_stream_threshold_in_byte=1048576,  # 1 MB
-##         directory_listing=True, **keywords: builtins.object
-##     ) -> boostNode.extension.type.Self:
+##         directory_listing=True, **keywords
+##     ):
     def _initialize(
-        self, root='.', host_name='', port=0, default='',
-        public_key_file_path='', stop_order='stop',
+        self: boostNode.extension.type.Self, root='.', host_name='', port=0,
+        default='', public_key_file_path='', stop_order='stop',
         request_whitelist=('/.*',), request_blacklist=(),
         same_thread_request_whitelist=(),
         # NOTE: Tuple for explicit web_server file reference validation.
@@ -874,8 +874,8 @@ class Web(
         maximum_number_of_processes=0, shared_data=None,
         request_parameter_delimiter='\?',
         file_size_stream_threshold_in_byte=1048576,  # 1 MB
-        directory_listing=True, **keywords
-    ):
+        directory_listing=True, **keywords: builtins.object
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Sets root path of web server and all properties. Although the
@@ -935,11 +935,11 @@ class Web(
             # endregion
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _start_server_thread(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
-    def _start_server_thread(self):
+## python2.7
+##     def _start_server_thread(self):
+    def _start_server_thread(
+        self: boostNode.extension.type.Self
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Starts the server's request handler instance and listens for
@@ -956,24 +956,24 @@ class Web(
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _log_server_status(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
-    def _log_server_status(self):
+## python2.7
+##     def _log_server_status(self):
+    def _log_server_status(
+        self: boostNode.extension.type.Self
+    ) -> boostNode.extension.type.Self:
 ##
         '''Prints some information about the way the server was started.'''
         determineIPSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         try:
             determineIPSocket.connect(self.DETERMINE_IP_SOCKET)
-## python3.3
+## python2.7
 ##         except (
-##             builtins.BrokenPipeError, socket.gaierror, socket.herror,
-##             socket.timeout, socket.error
-##         ) as exception:
+##             socket.herror, socket.gaierror, socket.timeout, socket.error
+##         ):
         except (
-            socket.herror, socket.gaierror, socket.timeout, socket.error
-        ):
+            builtins.BrokenPipeError, socket.gaierror, socket.herror,
+            socket.timeout, socket.error
+        ) as exception:
 ##
             ip = socket.gethostbyname(socket.gethostname())
         else:
@@ -995,11 +995,11 @@ class Web(
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _start_with_dynamic_port(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
-    def _start_with_dynamic_port(self):
+## python2.7
+##     def _start_with_dynamic_port(self):
+    def _start_with_dynamic_port(
+        self: boostNode.extension.type.Self
+    ) -> boostNode.extension.type.Self:
 ##
         '''Searches for the highest free port for listing.'''
         ports = [
@@ -1015,47 +1015,47 @@ class Web(
                 self._initialize_server_thread(port)
             except socket.error:
                 if not port:
-## python3.3
+## python2.7
 ##                     raise __exception__(
 ##                         'No port is available to run the web-server with '
-##                         'given rights.'
-##                     ) from None
+##                         'given rights.')
                     raise __exception__(
                         'No port is available to run the web-server with '
-                        'given rights.')
+                        'given rights.'
+                    ) from None
 ##
             else:
                 self.port = port
                 return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _start_with_static_port(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
-    def _start_with_static_port(self):
+## python2.7
+##     def _start_with_static_port(self):
+    def _start_with_static_port(
+        self: boostNode.extension.type.Self
+    ) -> boostNode.extension.type.Self:
 ##
         '''Starts the server listing on the given port, if it is free.'''
         try:
             self._initialize_server_thread(port=self.port)
         except socket.error:
-## python3.3
+## python2.7
 ##             raise __exception__(
 ##                 "Port %d isn't available to run the web-server with given "
-##                 'rights.', self.port
-##             ) from None
+##                 'rights.', self.port)
             raise __exception__(
                 "Port %d isn't available to run the web-server with given "
-                'rights.', self.port)
+                'rights.', self.port
+            ) from None
 ##
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _serve_service_forever_exception_catcher(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
-    def _serve_service_forever_exception_catcher(self):
+## python2.7
+##     def _serve_service_forever_exception_catcher(self):
+    def _serve_service_forever_exception_catcher(
+        self: boostNode.extension.type.Self
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             This method wraps the python's native server "serve_forever()"
@@ -1063,19 +1063,19 @@ class Web(
         '''
         try:
             return self.service.serve_forever()
-## python3.3         except builtins.ValueError as exception:
-        except socket.error as exception:
+## python2.7         except socket.error as exception:
+        except builtins.ValueError as exception:
             __logger__.info(
                 '%s: %s', exception.__class__.__name__,
                 builtins.str(exception))
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _initialize_server_thread(
-##         self: boostNode.extension.type.Self, port: builtins.int
-##     ) -> boostNode.extension.type.Self:
-    def _initialize_server_thread(self, port):
+## python2.7
+##     def _initialize_server_thread(self, port):
+    def _initialize_server_thread(
+        self: boostNode.extension.type.Self, port: builtins.int
+    ) -> boostNode.extension.type.Self:
 ##
         '''Initializes a new request-handler and starts its own thread.'''
         if self._public_key_file:
@@ -1088,15 +1088,15 @@ class Web(
             self.service = MultiProcessingHTTPServer(
                 (self.host_name, port), CGIHTTPRequestHandler)
         self.service.web = self
-## python3.3
-##         threading.Thread(
-##             target=self._serve_service_forever_exception_catcher,
-##             daemon=True
-##         ).start()
-        server_thread = threading.Thread(
-            target=self._serve_service_forever_exception_catcher)
-        server_thread.daemon = True
-        server_thread.start()
+## python2.7
+##         server_thread = threading.Thread(
+##             target=self._serve_service_forever_exception_catcher)
+##         server_thread.daemon = True
+##         server_thread.start()
+        threading.Thread(
+            target=self._serve_service_forever_exception_catcher,
+            daemon=True
+        ).start()
 ##
         return self
 
@@ -1105,11 +1105,11 @@ class Web(
     # endregion
 
 
-## python3.3
-## class CGIHTTPRequestHandler(http.server.CGIHTTPRequestHandler):
-class CGIHTTPRequestHandler(
-    CGIHTTPServer.CGIHTTPRequestHandler, builtins.object
-):
+## python2.7
+## class CGIHTTPRequestHandler(
+##     CGIHTTPServer.CGIHTTPRequestHandler, builtins.object
+## ):
+class CGIHTTPRequestHandler(http.server.CGIHTTPRequestHandler):
 ##
     '''
         A small request-handler dealing with incoming file requests.
@@ -1178,15 +1178,15 @@ class CGIHTTPRequestHandler(
             # region special
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def __init__(
-##         self, *arguments: builtins.object, **keywords: builtins.object
-##     ) -> None:
-##         '''
-##             This method calls is parent. It's necessary to make some class
-##             properties instance properties.
-##         '''
-    def __init__(self, *arguments, **keywords):
+## python2.7
+##     def __init__(self, *arguments, **keywords):
+    def __init__(
+        self, *arguments: builtins.object, **keywords: builtins.object
+    ) -> None:
+        '''
+            This method calls is parent. It's necessary to make some class
+            properties instance properties.
+        '''
 ##
         '''Initializes a http request response.'''
         self.request_uri = ''
@@ -1209,9 +1209,9 @@ class CGIHTTPRequestHandler(
         )(*arguments, **keywords)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
-    def __repr__(self):
+## python2.7
+##     def __repr__(self):
+    def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
 ##
         '''
             Invokes if this object should describe itself by a string.
@@ -1237,11 +1237,11 @@ class CGIHTTPRequestHandler(
         # region public
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def parse_url(
-##         self: boostNode.extension.type.Self, url=None
-##     ) -> builtins.tuple:
-    def parse_url(self, url=None):
+## python2.7
+##     def parse_url(self, url=None):
+    def parse_url(
+        self: boostNode.extension.type.Self, url=None
+    ) -> builtins.tuple:
 ##
         '''
             This static method provides an easy way to split a http
@@ -1253,17 +1253,17 @@ class CGIHTTPRequestHandler(
             url = re.compile(
                 self.server.web.request_parameter_delimiter
             ).sub('?', url, 1)
-## python3.3             get = urllib.parse.urlparse(url).query
-            get = urlparse.urlparse(url).query
+## python2.7             get = urlparse.urlparse(url).query
+            get = urllib.parse.urlparse(url).query
             if get:
                 try:
-## python3.3
-##                     get = urllib.parse.parse_qs(
-##                         qs=get, keep_blank_values=True, strict_parsing=True,
-##                         encoding='utf_8', errors='replace')
-                    get = urlparse.parse_qs(
-                        qs=get, keep_blank_values=True,
-                        strict_parsing=True)
+## python2.7
+##                     get = urlparse.parse_qs(
+##                         qs=get, keep_blank_values=True,
+##                         strict_parsing=True)
+                    get = urllib.parse.parse_qs(
+                        qs=get, keep_blank_values=True, strict_parsing=True,
+                        encoding='utf_8', errors='replace')
 ##
                 except builtins.ValueError:
                     get = {}
@@ -1272,8 +1272,8 @@ class CGIHTTPRequestHandler(
                 get = {}
             for key, value in get.items():
                 get[key] = value[0]
-## python3.3             return urllib.parse.urlparse(url), get
-            return urlparse.urlparse(url), get
+## python2.7             return urlparse.urlparse(url), get
+            return urllib.parse.urlparse(url), get
         return None, {}
 
         # endregion
@@ -1287,11 +1287,11 @@ class CGIHTTPRequestHandler(
             # region event
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def do_GET(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
-    def do_GET(self):
+## python2.7
+##     def do_GET(self):
+    def do_GET(
+        self: boostNode.extension.type.Self
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Is triggered if an incoming get-request is detected.
@@ -1313,30 +1313,30 @@ class CGIHTTPRequestHandler(
         return self._send_no_authentication_error()
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def do_POST(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
-    def do_POST(self):
+## python2.7
+##     def do_POST(self):
+    def do_POST(
+        self: boostNode.extension.type.Self
+    ) -> boostNode.extension.type.Self:
 ##
         '''Is triggered if a post-request is coming.'''
-## python3.3
-##         data_type, post_data = cgi.parse_header(
-##             self.headers.get_content_type())
-        data_type, post_data = cgi.parse_header(self.headers.getheader(
-            'content-type'))
+## python2.7
+##         data_type, post_data = cgi.parse_header(self.headers.getheader(
+##             'content-type'))
+        data_type, post_data = cgi.parse_header(
+            self.headers.get_content_type())
 ##
         if data_type == 'multipart/form-data':
             self.post_dictionary = self._determine_post_dictionary()
         elif data_type == 'application/x-www-form-urlencoded':
-## python3.3
-##             self.post_dictionary = urllib.parse.parse_qs(self.rfile.read(
-##                 builtins.int(self.headers.get('content-length'))
-##             ).decode('utf_8'))
-            self.post_dictionary = cgi.parse_qs(
-                self.rfile.read(builtins.int(self.headers.getheader(
-                    'content-length'))),
-                keep_blank_values=True)
+## python2.7
+##             self.post_dictionary = cgi.parse_qs(
+##                 self.rfile.read(builtins.int(self.headers.getheader(
+##                     'content-length'))),
+##                 keep_blank_values=True)
+            self.post_dictionary = urllib.parse.parse_qs(self.rfile.read(
+                builtins.int(self.headers.get('content-length'))
+            ).decode('utf_8'))
 ##
             for name, value in self.post_dictionary.items():
                 if boostNode.extension.native.Object(object=value).is_binary():
@@ -1346,12 +1346,12 @@ class CGIHTTPRequestHandler(
             # endregion
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def send_response(
-##         self: boostNode.extension.type.Self, *arguments: builtins.object,
-##         **keywords: builtins.object
-##     ) -> boostNode.extension.type.Self:
-    def send_response(self, *arguments, **keywords):
+## python2.7
+##     def send_response(self, *arguments, **keywords):
+    def send_response(
+        self: boostNode.extension.type.Self, *arguments: builtins.object,
+        **keywords: builtins.object
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Send the given response code to client if no response code was sent
@@ -1366,12 +1366,12 @@ class CGIHTTPRequestHandler(
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def list_directory(
-##         self: boostNode.extension.type.Self, *arguments: builtins.object,
-##         **keywords: builtins.object
-##     ) -> boostNode.extension.type.Self:
-    def list_directory(self, *arguments, **keywords):
+## python2.7
+##     def list_directory(self, *arguments, **keywords):
+    def list_directory(
+        self: boostNode.extension.type.Self, *arguments: builtins.object,
+        **keywords: builtins.object
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Generates a simple html web page listing requested directory
@@ -1390,12 +1390,12 @@ class CGIHTTPRequestHandler(
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def end_headers(
-##         self: boostNode.extension.type.Self, *arguments: builtins.object,
-##         **keywords: builtins.object
-##     ) -> boostNode.extension.type.Self:
-    def end_headers(self, *arguments, **keywords):
+## python2.7
+##     def end_headers(self, *arguments, **keywords):
+    def end_headers(
+        self: boostNode.extension.type.Self, *arguments: builtins.object,
+        **keywords: builtins.object
+    ) -> boostNode.extension.type.Self:
 ##
         '''Finishes all sent headers by a trailing new empty line.'''
         if not self.headers_ended:
@@ -1407,11 +1407,11 @@ class CGIHTTPRequestHandler(
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def send_static_file_cache_header(
-##         self: boostNode.extension.type.Self, timestamp: builtins.float
-##     ) -> boostNode.extension.type.Self:
-    def send_static_file_cache_header(self, timestamp):
+## python2.7
+##     def send_static_file_cache_header(self, timestamp):
+    def send_static_file_cache_header(
+        self: boostNode.extension.type.Self, timestamp: builtins.float
+    ) -> boostNode.extension.type.Self:
 ##
         '''Response a static file-request header.'''
         self.send_header('Cache-Control', 'public, max-age=99999999')
@@ -1421,25 +1421,25 @@ class CGIHTTPRequestHandler(
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def send_content_type_header(
-##         self: boostNode.extension.type.Self, *arguments: builtins.object,
-##         mime_type='text/html', encoding='UTF-8', response_code=200,
-##         **keywords: builtins.object
-##     ) -> boostNode.extension.type.Self:
-    def send_content_type_header(self, *arguments, **keywords):
+## python2.7
+##     def send_content_type_header(self, *arguments, **keywords):
+    def send_content_type_header(
+        self: boostNode.extension.type.Self, *arguments: builtins.object,
+        mime_type='text/html', encoding='UTF-8', response_code=200,
+        **keywords: builtins.object
+    ) -> boostNode.extension.type.Self:
 ##
         '''Sends a content type header to client if not sent yet.'''
-## python3.3
-##         pass
-        default_keywords = boostNode.extension.native.Dictionary(
-            content=keywords)
-        mime_type, keywords = default_keywords.pop(
-            name='mime_type', default_value='text/html')
-        encoding, keywords = default_keywords.pop(
-            name='encoding', default_value='UTF-8')
-        response_code, keywords = default_keywords.pop(
-            name='response_code', default_value=200)
+## python2.7
+##         default_keywords = boostNode.extension.native.Dictionary(
+##             content=keywords)
+##         mime_type, keywords = default_keywords.pop(
+##             name='mime_type', default_value='text/html')
+##         encoding, keywords = default_keywords.pop(
+##             name='encoding', default_value='UTF-8')
+##         response_code, keywords = default_keywords.pop(
+##             name='response_code', default_value=200)
+        pass
 ##
         if not self.content_type_sent:
             self.send_response(response_code).content_type_sent = True
@@ -1449,43 +1449,43 @@ class CGIHTTPRequestHandler(
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def send_content_length_header(
-##         self: boostNode.extension.type.Self, size: builtins.int,
-##         *arguments: builtins.object, dynamic_output='', encoding='UTF-8',
-##         response_code=200, **keywords: builtins.object
-##     ) -> boostNode.extension.type.Self:
-    def send_content_length_header(self, size, *arguments, **keywords):
+## python2.7
+##     def send_content_length_header(self, size, *arguments, **keywords):
+    def send_content_length_header(
+        self: boostNode.extension.type.Self, size: builtins.int,
+        *arguments: builtins.object, dynamic_output='', encoding='UTF-8',
+        response_code=200, **keywords: builtins.object
+    ) -> boostNode.extension.type.Self:
 ##
         '''Sends the content length header to client if not sent yet.'''
-## python3.3
-##         pass
-        default_keywords = boostNode.extension.native.Dictionary(
-            content=keywords)
-        encoding, keywords = default_keywords.pop(
-            name='encoding', default_value='UTF-8')
-        response_code, keywords = default_keywords.pop(
-            name='response_code', default_value=200)
-        dynamic_output, keywords = default_keywords.pop(
-            name='dynamic_output', default_value='')
+## python2.7
+##         default_keywords = boostNode.extension.native.Dictionary(
+##             content=keywords)
+##         encoding, keywords = default_keywords.pop(
+##             name='encoding', default_value='UTF-8')
+##         response_code, keywords = default_keywords.pop(
+##             name='response_code', default_value=200)
+##         dynamic_output, keywords = default_keywords.pop(
+##             name='dynamic_output', default_value='')
+        pass
 ##
         if not self.content_length_sent:
             self.send_response(response_code).content_length_sent = True
             threshold = self.server.web.file_size_stream_threshold_in_byte
-## python3.3
+## python2.7
 ##             if(size < threshold and
-##                self.headers.get('Accept-Encoding') and
-##                gzip.__name__ in self.headers.get('Accept-Encoding').split(
-##                    ','
-##                ) and (dynamic_output or self._check_pattern(
+##                self.headers.getheader('Accept-Encoding') and
+##                gzip.__name__ in self.headers.getheader(
+##                    'Accept-Encoding'
+##                ).split(',') and
+##                (dynamic_output or self._check_pattern(
 ##                    patterns=self.server.web.compressible_mime_type_pattern,
 ##                    subject=self.requested_file.mime_type))):
             if(size < threshold and
-               self.headers.getheader('Accept-Encoding') and
-               gzip.__name__ in self.headers.getheader(
-                   'Accept-Encoding'
-               ).split(',') and
-               (dynamic_output or self._check_pattern(
+               self.headers.get('Accept-Encoding') and
+               gzip.__name__ in self.headers.get('Accept-Encoding').split(
+                   ','
+               ) and (dynamic_output or self._check_pattern(
                    patterns=self.server.web.compressible_mime_type_pattern,
                    subject=self.requested_file.mime_type))):
 ##
@@ -1503,17 +1503,17 @@ class CGIHTTPRequestHandler(
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
+## python2.7
 ##     def log_message(
-##         self: boostNode.extension.type.Self, format: builtins.str,
-##         message_or_error_code: (builtins.int, builtins.str),
-##         response_code_or_message: (builtins.str, builtins.int),
+##         self, format, message_or_error_code, response_code_or_message,
 ##         message_end=None
-##     ) -> boostNode.extension.type.Self:
+##     ):
     def log_message(
-        self, format, message_or_error_code, response_code_or_message,
+        self: boostNode.extension.type.Self, format: builtins.str,
+        message_or_error_code: (builtins.int, builtins.str),
+        response_code_or_message: (builtins.str, builtins.int),
         message_end=None
-    ):
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Wrapper method for all logging output coming through the server
@@ -1524,13 +1524,13 @@ class CGIHTTPRequestHandler(
             '{response_code}')
         forwarded_ip = forwarded_host = forwarded_server = None
         if builtins.hasattr(self, 'headers'):
-## python3.3
-##             forwarded_ip = self.headers.get('X-Forwarded-For')
-##             forwarded_host = self.headers.get('X-Forwarded-Host')
-##             forwarded_server = self.headers.get('X-Forwarded-Server')
-            forwarded_ip = self.headers.getheader('X-Forwarded-For')
-            forwarded_host = self.headers.getheader('X-Forwarded-Host')
-            forwarded_server = self.headers.getheader('X-Forwarded-Server')
+## python2.7
+##             forwarded_ip = self.headers.getheader('X-Forwarded-For')
+##             forwarded_host = self.headers.getheader('X-Forwarded-Host')
+##             forwarded_server = self.headers.getheader('X-Forwarded-Server')
+            forwarded_ip = self.headers.get('X-Forwarded-For')
+            forwarded_host = self.headers.get('X-Forwarded-Host')
+            forwarded_server = self.headers.get('X-Forwarded-Server')
 ##
             if forwarded_ip:
                 format += ' - forwarded for: {forwarded_ip}'
@@ -1555,12 +1555,12 @@ class CGIHTTPRequestHandler(
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def setup(
-##         self: boostNode.extension.type.Self, *arguments: builtins.object,
-##         **keywords: builtins.object
-##     ) -> None:
-    def setup(self, *arguments, **keywords):
+## python2.7
+##     def setup(self, *arguments, **keywords):
+    def setup(
+        self: boostNode.extension.type.Self, *arguments: builtins.object,
+        **keywords: builtins.object
+    ) -> None:
 ##
         '''
             This method wraps the python's native request handler to provide
@@ -1580,11 +1580,11 @@ class CGIHTTPRequestHandler(
             # region boolean
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _is_authenticated(
-##         self: boostNode.extension.type.Self
-##     ) -> builtins.bool:
-    def _is_authenticated(self):
+## python2.7
+##     def _is_authenticated(self):
+    def _is_authenticated(
+        self: boostNode.extension.type.Self
+    ) -> builtins.bool:
 ##
         '''Determines weather current request is authenticated.'''
         if self.server.web.authentication:
@@ -1594,39 +1594,39 @@ class CGIHTTPRequestHandler(
                 authentication_file = boostNode.extension.file.Handler(
                     location=file_path, must_exist=False)
                 if authentication_file:
-## python3.3
-##                     return (self.headers.get('authorization') ==
-##                             'Basic %s' % self._get_login_data(
-##                                 authentication_file))
-                    return (
-                        self.headers.getheader('authorization') ==
-                        'Basic %s' % self._get_login_data(
-                            authentication_file))
+## python2.7
+##                     return (
+##                         self.headers.getheader('authorization') ==
+##                         'Basic %s' % self._get_login_data(
+##                             authentication_file))
+                    return (self.headers.get('authorization') ==
+                            'Basic %s' % self._get_login_data(
+                                authentication_file))
 ##
                 if self._authentication_location != self.server.web.root:
                     break
                 self._authentication_location = \
                     boostNode.extension.file.Handler(
                         location=self._authentication_location.directory_path)
-## python3.3
+## python2.7
 ##             return builtins.bool(
 ##                 self.server.web.authentication_handler is None or
 ##                 self.server.web.authentication_handler(
-##                     self.headers.get('authorization'), self.request_uri))
+##                     self.headers.getheader('authorization'),
+##                     self.request_uri))
             return builtins.bool(
                 self.server.web.authentication_handler is None or
                 self.server.web.authentication_handler(
-                    self.headers.getheader('authorization'),
-                    self.request_uri))
+                    self.headers.get('authorization'), self.request_uri))
 ##
         return True
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _is_valid_reference(
-##         self: boostNode.extension.type.Self
-##     ) -> builtins.bool:
-    def _is_valid_reference(self):
+## python2.7
+##     def _is_valid_reference(self):
+    def _is_valid_reference(
+        self: boostNode.extension.type.Self
+    ) -> builtins.bool:
 ##
         '''
             Checks weather the requested is one of a python module-, static- or
@@ -1652,9 +1652,9 @@ class CGIHTTPRequestHandler(
         return False
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _is_dynamic(self: boostNode.extension.type.Self) -> builtins.bool:
-    def _is_dynamic(self):
+## python2.7
+##     def _is_dynamic(self):
+    def _is_dynamic(self: boostNode.extension.type.Self) -> builtins.bool:
 ##
         '''
             Determines if the current request points to a dynamic executable
@@ -1669,47 +1669,47 @@ class CGIHTTPRequestHandler(
             # endregion
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _get_login_data(
-##         self: boostNode.extension.type.Self,
-##         authentication_file: boostNode.extension.file.Handler
-##     ) -> builtins.str:
-    def _get_login_data(self, authentication_file):
+## python2.7
+##     def _get_login_data(self, authentication_file):
+    def _get_login_data(
+        self: boostNode.extension.type.Self,
+        authentication_file: boostNode.extension.file.Handler
+    ) -> builtins.str:
 ##
         __logger__.info(
             'Use authentication file "%s".', authentication_file._path)
         match = re.compile(
             self.server.web.authentication_file_content_pattern
         ).match(authentication_file.content.strip())
-## python3.3
-##         return base64.b64encode(('%s:%s' % (
-##             match.group('name'), match.group('password')
-##         )).encode('utf_8')).decode()
-        return base64.b64encode(
-            '%s:%s' % (match.group('name'), match.group('password')))
+## python2.7
+##         return base64.b64encode(
+##             '%s:%s' % (match.group('name'), match.group('password')))
+        return base64.b64encode(('%s:%s' % (
+            match.group('name'), match.group('password')
+        )).encode('utf_8')).decode()
 ##
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _determine_post_dictionary(
-##         self: boostNode.extension.type.Self
-##     ) -> builtins.dict:
-    def _determine_post_dictionary(self):
+## python2.7
+##     def _determine_post_dictionary(self):
+    def _determine_post_dictionary(
+        self: boostNode.extension.type.Self
+    ) -> builtins.dict:
 ##
         '''
             Determines the post values given by an html form. File uploads are
             includes as bytes.
         '''
-## python3.3
+## python2.7
 ##         form = cgi.FieldStorage(
 ##             fp=self.rfile, headers=self.headers, keep_blank_values=True,
 ##             strict_parsing=True,
-##             environ=self._determine_environment_variables(),
-##             encoding='utf_8')
+##             environ=self._determine_environment_variables())
         form = cgi.FieldStorage(
             fp=self.rfile, headers=self.headers, keep_blank_values=True,
             strict_parsing=True,
-            environ=self._determine_environment_variables())
+            environ=self._determine_environment_variables(),
+            encoding='utf_8')
 ##
         post_dictionary = {}
         for name in form:
@@ -1722,16 +1722,16 @@ class CGIHTTPRequestHandler(
                     value_reference = form[name][index]
                 if(builtins.isinstance(value_reference.file, builtins.file) or
                    value_reference.filename):
-## python3.3
+## python2.7
 ##                     post_dictionary[name].append({
 ##                         'content': value,
 ##                         'name': value_reference.filename,
-##                         'disposition': value_reference.disposition,
-##                         'encoding': value_reference.encoding})
+##                         'disposition': value_reference.disposition})
                     post_dictionary[name].append({
                         'content': value,
                         'name': value_reference.filename,
-                        'disposition': value_reference.disposition})
+                        'disposition': value_reference.disposition,
+                        'encoding': value_reference.encoding})
 ##
                 else:
                     post_dictionary[name].append(value)
@@ -1739,11 +1739,11 @@ class CGIHTTPRequestHandler(
         return post_dictionary
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _determine_environment_variables(
-##         self: boostNode.extension.type.Self
-##     ) -> os._Environ:
-    def _determine_environment_variables(self):
+## python2.7
+##     def _determine_environment_variables(self):
+    def _determine_environment_variables(
+        self: boostNode.extension.type.Self
+    ) -> os._Environ:
 ##
         '''
             Determines all needed environment variables needed to determine
@@ -1756,8 +1756,8 @@ class CGIHTTPRequestHandler(
             else:
                 accept = accept + line[7:].split(',')
         variables = copy.deepcopy(os.environ)
-## python3.3         content_type = self.headers.get_content_type()
-        content_type = self.headers.getheader('content-type')
+## python2.7         content_type = self.headers.getheader('content-type')
+        content_type = self.headers.get_content_type()
         variables.update({
             'HTTP_ACCEPT': ','.join(accept),
             'REQUEST_METHOD': self.command,
@@ -1769,35 +1769,35 @@ class CGIHTTPRequestHandler(
             'HTTP_COOKIE': '',
             'HTTP_REFERER': ''})
         for variable_name in variables:
-## python3.3
-##             if self.headers.get(variable_name.replace('_', '-').lower()):
-##                 variables[variable_name] = self.headers.get(
+## python2.7
+##             if self.headers.getheader(
+##                 variable_name.replace('_', '-').lower()
+##             ):
+##                 variables[variable_name] = self.headers.getheader(
 ##                     variable_name.replace('_', '-').lower())
-##         cookie_content = ', '.join(builtins.filter(
-##             None, self.headers.get_all('cookie', [])))
-##         if cookie_content:
-##             variables['HTTP_COOKIE'] = cookie_content
-            if self.headers.getheader(
-                variable_name.replace('_', '-').lower()
-            ):
-                variables[variable_name] = self.headers.getheader(
+            if self.headers.get(variable_name.replace('_', '-').lower()):
+                variables[variable_name] = self.headers.get(
                     variable_name.replace('_', '-').lower())
+        cookie_content = ', '.join(builtins.filter(
+            None, self.headers.get_all('cookie', [])))
+        if cookie_content:
+            variables['HTTP_COOKIE'] = cookie_content
 ##
         return variables
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _send_no_authentication_error(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
-    def _send_no_authentication_error(self):
+## python2.7
+##     def _send_no_authentication_error(self):
+    def _send_no_authentication_error(
+        self: boostNode.extension.type.Self
+    ) -> boostNode.extension.type.Self:
 ##
         '''This method is called if authentication failed.'''
         self.send_response(401)
         message = 'You request a protected location'
-## python3.3
-##         if self.headers.get('authorization'):
-        if self.headers.getheader('authorization'):
+## python2.7
+##         if self.headers.getheader('authorization'):
+        if self.headers.get('authorization'):
 ##
             message = 'The authentication failed'
         self.send_header('WWW-Authenticate', 'Basic realm=\"%s\"' % message)
@@ -1806,11 +1806,11 @@ class CGIHTTPRequestHandler(
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _send_no_file_error(
-##         self: boostNode.extension.type.Self, valid_request=True
-##     ) -> boostNode.extension.type.Self:
-    def _send_no_file_error(self, valid_request=True):
+## python2.7
+##     def _send_no_file_error(self, valid_request=True):
+    def _send_no_file_error(
+        self: boostNode.extension.type.Self, valid_request=True
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Generates a http-404-error if no useful file was found for
@@ -1854,12 +1854,12 @@ class CGIHTTPRequestHandler(
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _check_pattern(
-##         self: boostNode.extension.type.Self,
-##         patterns: collections.Iterable, subject: builtins.str
-##     ) -> (builtins.str, builtins.bool):
-    def _check_pattern(self, patterns, subject):
+## python2.7
+##     def _check_pattern(self, patterns, subject):
+    def _check_pattern(
+        self: boostNode.extension.type.Self,
+        patterns: collections.Iterable, subject: builtins.str
+    ) -> (builtins.str, builtins.bool):
 ##
         '''
             Checks if one of a list of given regular expression patterns
@@ -1871,11 +1871,11 @@ class CGIHTTPRequestHandler(
         return False
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _is_valid_request(
-##         self: boostNode.extension.type.Self
-##     ) -> builtins.bool:
-    def _is_valid_request(self):
+## python2.7
+##     def _is_valid_request(self):
+    def _is_valid_request(
+        self: boostNode.extension.type.Self
+    ) -> builtins.bool:
 ##
         '''Checks if given request fulfill all restrictions.'''
         return self._request_in_pattern_list(
@@ -1884,12 +1884,12 @@ class CGIHTTPRequestHandler(
                 self.server.web.request_blacklist)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _request_in_pattern_list(
-##         self: boostNode.extension.type.Self,
-##         pattern_list: collections.Iterable
-##     ) -> builtins.bool:
-    def _request_in_pattern_list(self, pattern_list):
+## python2.7
+##     def _request_in_pattern_list(self, pattern_list):
+    def _request_in_pattern_list(
+        self: boostNode.extension.type.Self,
+        pattern_list: collections.Iterable
+    ) -> builtins.bool:
 ##
         '''Checks if current request matches on of the given pattern.'''
         for pattern in pattern_list:
@@ -1898,11 +1898,11 @@ class CGIHTTPRequestHandler(
         return False
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _create_environment_variables(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
-    def _create_environment_variables(self):
+## python2.7
+##     def _create_environment_variables(self):
+    def _create_environment_variables(
+        self: boostNode.extension.type.Self
+    ) -> boostNode.extension.type.Self:
 ##
         '''Creates all request specified environment-variables.'''
         self.request_uri = self.path
@@ -1913,10 +1913,10 @@ class CGIHTTPRequestHandler(
         ).match(self.request_uri)
         self.path = ''
         if match:
-## python3.3
-##             self.path = posixpath.normpath(urllib.parse.unquote(match.group(
+## python2.7
+##             self.path = posixpath.normpath(urllib.unquote(match.group(
 ##                 'file_name')))
-            self.path = posixpath.normpath(urllib.unquote(match.group(
+            self.path = posixpath.normpath(urllib.parse.unquote(match.group(
                 'file_name')))
 ##
             if self.path == '.':
@@ -1934,11 +1934,11 @@ class CGIHTTPRequestHandler(
         return self.path
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _set_dynamic_or_static_get(
-##         self: boostNode.extension.type.Self, file_name: builtins.str
-##     ) -> boostNode.extension.type.Self:
-    def _set_dynamic_or_static_get(self, file_name):
+## python2.7
+##     def _set_dynamic_or_static_get(self, file_name):
+    def _set_dynamic_or_static_get(
+        self: boostNode.extension.type.Self, file_name: builtins.str
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Makes a dynamic or static respond depending on incoming request.
@@ -1949,11 +1949,11 @@ class CGIHTTPRequestHandler(
         return self._static_get()
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _default_get(
-##         self: boostNode.extension.type.Self
-##     ) -> builtins.bool:
-    def _default_get(self):
+## python2.7
+##     def _default_get(self):
+    def _default_get(
+        self: boostNode.extension.type.Self
+    ) -> builtins.bool:
 ##
         '''
             Handles every request which doesn't takes a file or python module
@@ -1976,11 +1976,11 @@ class CGIHTTPRequestHandler(
         return False
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _default_get_module(
-##         self: boostNode.extension.type.Self
-##     ) -> builtins.bool:
-    def _default_get_module(self):
+## python2.7
+##     def _default_get_module(self):
+    def _default_get_module(
+        self: boostNode.extension.type.Self
+    ) -> builtins.bool:
 ##
         '''Handle if possible a default module request.'''
         for module_name in self.server.web.default_module_names:
@@ -1991,11 +1991,11 @@ class CGIHTTPRequestHandler(
         return False
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _handle_default_modules_get(
-##         self: boostNode.extension.type.Self, module_name: builtins.str
-##     ) -> (boostNode.extension.type.Self, builtins.bool):
-    def _handle_default_modules_get(self, module_name):
+## python2.7
+##     def _handle_default_modules_get(self, module_name):
+    def _handle_default_modules_get(
+        self: boostNode.extension.type.Self, module_name: builtins.str
+    ) -> (boostNode.extension.type.Self, builtins.bool):
 ##
         '''
             Handles requests which wants the current defaults modules
@@ -2013,11 +2013,11 @@ class CGIHTTPRequestHandler(
         return False
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _handle_given_default_get(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
-    def _handle_given_default_get(self):
+## python2.7
+##     def _handle_given_default_get(self):
+    def _handle_given_default_get(
+        self: boostNode.extension.type.Self
+    ) -> boostNode.extension.type.Self:
 ##
         '''Handles request with no explicit file or module to run.'''
         if((self.server.web.dynamic_module_loading is True or
@@ -2038,11 +2038,11 @@ class CGIHTTPRequestHandler(
             file_name=self.server.web.default)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _static_get(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
-    def _static_get(self):
+## python2.7
+##     def _static_get(self):
+    def _static_get(
+        self: boostNode.extension.type.Self
+    ) -> boostNode.extension.type.Self:
 ##
         '''Handles a static file-request.'''
         if self.requested_file.is_directory():
@@ -2052,11 +2052,11 @@ class CGIHTTPRequestHandler(
         except builtins.IOError:
             self._send_no_file_error()
             return self
-## python3.3
-##         if(self.headers.get('If-Modified-Since') ==
+## python2.7
+##         if(self.headers.getheader('If-Modified-Since') ==
 ##            self.date_time_string(
 ##                builtins.int(self.requested_file.timestamp))):
-        if(self.headers.getheader('If-Modified-Since') ==
+        if(self.headers.get('If-Modified-Since') ==
            self.date_time_string(
                builtins.int(self.requested_file.timestamp))):
 ##
@@ -2064,11 +2064,11 @@ class CGIHTTPRequestHandler(
         return self._send_static_file(output=file_handler)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _send_static_file(
-##         self: boostNode.extension.type.Self, output: (builtins.str,)
-##     ) -> boostNode.extension.type.Self:
-    def _send_static_file(self, output):
+## python2.7
+##     def _send_static_file(self, output):
+    def _send_static_file(
+        self: boostNode.extension.type.Self, output: (builtins.str,)
+    ) -> boostNode.extension.type.Self:
 ##
         '''Sends given output to client.'''
         threshold = self.server.web.file_size_stream_threshold_in_byte
@@ -2086,11 +2086,11 @@ class CGIHTTPRequestHandler(
         return self._send_output(output)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _send_not_modified_header(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
-    def _send_not_modified_header(self):
+## python2.7
+##     def _send_not_modified_header(self):
+    def _send_not_modified_header(
+        self: boostNode.extension.type.Self
+    ) -> boostNode.extension.type.Self:
 ##
         '''Sends a header to client indicating cached file hasn't changed.'''
         self.send_content_type_header(
@@ -2103,11 +2103,11 @@ class CGIHTTPRequestHandler(
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _send_output(
-##         self: boostNode.extension.type.Self, output: (builtins.str,)
-##     ) -> boostNode.extension.type.Self:
-    def _send_output(self, output):
+## python2.7
+##     def _send_output(self, output):
+    def _send_output(
+        self: boostNode.extension.type.Self, output: (builtins.str,)
+    ) -> boostNode.extension.type.Self:
 ##
         '''Sends the final given output to client.'''
         if self._encoded_output:
@@ -2120,34 +2120,34 @@ class CGIHTTPRequestHandler(
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _gzip(
-##         self: boostNode.extension.type.Self, content: builtins.str
-##     ) -> builtins.str:
-    def _gzip(self, content):
+## python2.7
+##     def _gzip(self, content):
+    def _gzip(
+        self: boostNode.extension.type.Self, content: builtins.str
+    ) -> builtins.str:
 ##
         '''Compresses the given content and returns the encoded result.'''
-## python3.3         output = io.BytesIO()
-        output = StringIO.StringIO()
+## python2.7         output = StringIO.StringIO()
+        output = io.BytesIO()
         gzip_file_handler = gzip.GzipFile(
             fileobj=output, mode='w', compresslevel=5)
-## python3.3
-##         if builtins.isinstance(content, builtins.bytes):
-##             gzip_file_handler.write(content)
-##         else:
-##             # TODO utf_8 shouldn't be hardcoded at this point.
-##             gzip_file_handler.write(content.encode(encoding='utf_8'))
-        gzip_file_handler.write(content)
+## python2.7
+##         gzip_file_handler.write(content)
+        if builtins.isinstance(content, builtins.bytes):
+            gzip_file_handler.write(content)
+        else:
+            # TODO utf_8 shouldn't be hardcoded at this point.
+            gzip_file_handler.write(content.encode(encoding='utf_8'))
 ##
         gzip_file_handler.close()
         return output.getvalue()
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _dynamic_get(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
-    def _dynamic_get(self):
+## python2.7
+##     def _dynamic_get(self):
+    def _dynamic_get(
+        self: boostNode.extension.type.Self
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Handles a dynamic file or python module request.
@@ -2169,11 +2169,11 @@ class CGIHTTPRequestHandler(
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _run_request(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
-    def _run_request(self):
+## python2.7
+##     def _run_request(self):
+    def _run_request(
+        self: boostNode.extension.type.Self
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Decides to run the given script as python-module or standalone
@@ -2184,11 +2184,11 @@ class CGIHTTPRequestHandler(
         return self._run_requested_file()
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _run_requested_file(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
-    def _run_requested_file(self):
+## python2.7
+##     def _run_requested_file(self):
+    def _run_requested_file(
+        self: boostNode.extension.type.Self
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Runs a given external process in a subprocess. Output and errors
@@ -2242,11 +2242,11 @@ class CGIHTTPRequestHandler(
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _run_requested_module(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
-    def _run_requested_module(self):
+## python2.7
+##     def _run_requested_module(self):
+    def _run_requested_module(
+        self: boostNode.extension.type.Self
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             Imports and runs a given python module. Errors and output are
@@ -2257,8 +2257,8 @@ class CGIHTTPRequestHandler(
             boostNode.extension.output.Print.default_buffer
         boostNode.extension.output.Print.default_buffer = \
             self.server.web.thread_buffer
-## python3.3         sys_path_backup = sys.path.copy()
-        sys_path_backup = copy.copy(sys.path)
+## python2.7         sys_path_backup = copy.copy(sys.path)
+        sys_path_backup = sys.path.copy()
         sys.path = [self.server.web.root.path] + sys.path
         self.server.web.number_of_running_threads += 1
         requested_module = builtins.__import__(self.request_arguments[0])
@@ -2270,16 +2270,16 @@ class CGIHTTPRequestHandler(
             requested_module, print_default_buffer_backup, sys_path_backup)
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
+## python2.7
 ##     def _handle_module_running(
-##         self: boostNode.extension.type.Self,
-##         requested_module: types.ModuleType,
-##         print_default_buffer_backup: builtins.object,
-##         sys_path_backup: collections.Iterable
-##     ) -> boostNode.extension.type.Self:
+##         self, requested_module, print_default_buffer_backup, sys_path_backup
+##     ):
     def _handle_module_running(
-        self, requested_module, print_default_buffer_backup, sys_path_backup
-    ):
+        self: boostNode.extension.type.Self,
+        requested_module: types.ModuleType,
+        print_default_buffer_backup: builtins.object,
+        sys_path_backup: collections.Iterable
+    ) -> boostNode.extension.type.Self:
 ##
         '''Handles exceptions raising in requested modules.'''
         get_defined_callables = boostNode.extension.native.Module\
@@ -2308,12 +2308,12 @@ class CGIHTTPRequestHandler(
         return self
 
     @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _handle_module_exception(
-##         self: boostNode.extension.type.Self,
-##         requested_module: types.ModuleType, exception: builtins.Exception
-##     ) -> boostNode.extension.type.Self:
-    def _handle_module_exception(self, requested_module, exception):
+## python2.7
+##     def _handle_module_exception(self, requested_module, exception):
+    def _handle_module_exception(
+        self: boostNode.extension.type.Self,
+        requested_module: types.ModuleType, exception: builtins.Exception
+    ) -> boostNode.extension.type.Self:
 ##
         '''
             This method handles each exception raised by running a module
