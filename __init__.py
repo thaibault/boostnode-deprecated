@@ -91,6 +91,17 @@ Conventions (bcX := boostNode convention number X)
                          parameter3,
                          parameter4)
 
+    - bc22 Indent function call brackets like:
+
+        function_name(
+            parameter1, parameter2, parameter3
+        ).method_name()
+
+        instead of:
+
+        function_name(
+            parameter1, parameter2, parameter3).method_name()
+
 Structure of meta documenting classes. (see bc16 and bc17)
 
     # region header
