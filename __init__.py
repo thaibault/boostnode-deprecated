@@ -195,6 +195,7 @@ Structure of dependencies
     7. boostNode.extension.output
     8. boostNode.extension.system
     9. boostNode.*
+    10. yourOwnModulesOrPackages.*
 
     This means that a module in level "i" could only import a full module
     in its header in level "j" if "j < i" holds.
