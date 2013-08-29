@@ -25,24 +25,30 @@ This library supports python2.7+ and python3.3+ environments.
 Features
 --------
 
-* Platform independent webbased gui toolkit (see runnable/webToWindow.py).
-* Smart, very secure and multiprocessing webserver (see runnable/server.py).
+* Platform independent web-based gui-toolkit (see runnable/webToWindow.py).
+* Smart, very secure and multiprocessing web-server supporting gzip, htaccess,
+  ssl file parsing, directory listing, thread-based and process-based
+  cgi-script handling. Can run every executable script as cgi-script out of the
+  box (see runnable/server.py).
 * Macro processor for text based files (see runnable/macro.py).
 * File synchronisation (see runnable/synchronisation.py).
-* Many extended language feature like signature checking, jointpoints for
+* Many extended language feature like signature checking, joint points for
   aspect orientated programming automatic getter or setter generation.
   (see aspect/signature, paradigm/aspectOrientation.py or
   paradigm/objectOrientation.py).
 * Many additional introspection features and native type extensions
   (see extension/native.py).
-* Very highlevel file abstraction layer with sandboxing support
-  (see extension/file.py).
-* Highlevel code file handling (see runnable/codeRunner.py).
-* Template engine with embedded python code in any text based file
+* Very high-level file abstraction layer with sandboxing support, and backup
+  mechanisms (see extension/file.py).
+* Highlevel code file handling (see runnable/codeRunner.py). Run every
+  source code without manually compiling code.
+* Template engine with embedded python code in any text based file supporting
+  every python syntax and additionally file-include as indention-control
   (see runnable/template.py).
 * Finer grained import mechanism support (see extension/dependent.py).
 * Full featured global logging mechanism handling (see extension/system.py)
-* Very generic full featured command line argument parsing interface
+* Very generic full featured command line argument parsing interface written
+  on top of python's native "ArgumenParser"-modul
   (see extension/system.py and extension/output.py).
 
 Usage
