@@ -39,6 +39,7 @@ import types
 ## python2.7 builtins = sys.modules['__main__'].__builtins__
 pass
 
+'''Make boostNode packages and modules importable via relative paths.'''
 for number in (3, 4):
     sys.path.append(os.path.abspath(sys.path[0] + number * ('..' + os.sep)))
 

@@ -35,7 +35,7 @@ import inspect
 import os
 import sys
 
-'''Make this package importable from current location.'''
+'''Make boostNode packages and modules importable via relative paths.'''
 for number in (3, 4):
     path = os.path.abspath(sys.path[0] + number * ('..' + os.sep))
     if not path in sys.path:

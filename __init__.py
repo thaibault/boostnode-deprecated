@@ -288,7 +288,7 @@ import logging
 import os
 import sys
 
-'''Make this package importable from current location.'''
+'''Make boostNode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * ('..' + os.sep)))
 
 '''
