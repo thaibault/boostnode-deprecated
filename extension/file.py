@@ -4009,8 +4009,8 @@ class Handler(boostNode.paradigm.objectOrientation.Class):
 ##     ):
     def iterate_directory(
         self: boostNode.extension.type.Self,
-        function: (builtins.str, types.FunctionType,
-                   types.MethodType),
+        function: (builtins.str, types.FunctionType, types.MethodType,
+                   boostNode.paradigm.aspectOrientation.JointPoint),
         recursive=False, recursive_in_link=True,
         deep_first=True, *arguments: builtins.object,
         **keywords: builtins.object
