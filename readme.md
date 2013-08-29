@@ -76,6 +76,26 @@ command:
 Note that you have to temporary support the needed python environment
 of given boostNode version to convert to the other one.
 
+Writing own code supporting two different interpreter version is very easy.
+Follow one of the two following syntax examples:
+
+    #!/usr/bin/env interpreterA
+
+    ## interpreterB
+    ## if True || False do {
+    ##     something();
+    ## }
+    # Your multiline code supported by interpreterA
+    if True or False do
+        something()
+    endif
+    ##
+
+    # Your two version of any one line code supportted by interpreterA or
+    # interpreterB
+    ## interpreterB functionCall();
+    functionCall()
+
 Copyright
 ---------
 
