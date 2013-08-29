@@ -1106,11 +1106,9 @@ class Platform:
         elif shell is None:
             shell = True
         if builtins.isinstance(command, builtins.str):
-            print(command)
             result = cls._run_one_command(
                 command, command_arguments, secure, error, shell, no_blocking,
                 *arguments, **keywords)
-            print(result)
         else:
             result = cls._run_multiple_commands(
                 commands=command, command_arguments=command_arguments,
