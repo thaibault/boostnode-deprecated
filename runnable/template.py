@@ -898,7 +898,8 @@ class Parser(
 ## python2.7
 ##     def _load_template(self, template, string):
     def _load_template(
-        self: boostNode.extension.type.Self, template: builtins.str,
+        self: boostNode.extension.type.Self,
+        template: (builtins.str, boostNode.extension.file.Handler),
         string: builtins.bool
     ) -> boostNode.extension.type.Self:
 ##
