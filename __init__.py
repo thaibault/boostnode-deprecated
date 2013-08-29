@@ -34,8 +34,9 @@ Conventions (bcX := boostNode convention number X)
           (protected attributes).
     - bc3 Property with two preceding underscore shouldn't be accessed from
           any location then the object itself (private attributes).
-    - bc4 Follow the python OOP conventions like camel-case class-names or
-          underscore separated methods and property names.
+    - bc4 Follow the python object orientated programming conventions like
+          camel-case class-names or underscore separated methods and property
+          names.
     - bc5 Class-names have a leading upper case letter.
     - bc6 Methods and functions are complete lower case.
     - bc7 Do not use more chars then 79 in one line.
