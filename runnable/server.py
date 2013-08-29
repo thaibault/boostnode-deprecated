@@ -382,7 +382,7 @@ class Web(
     boostNode.extension.system.Runnable
 ):
     '''
-        Provides a small platform independent webserver designed for easily
+        Provides a small platform independent web server designed for easily
         serve a client-server structure.
     '''
 
@@ -833,7 +833,7 @@ class Web(
 ##         public_key_file_path='', stop_order='stop',
 ##         request_whitelist=('/.*',), request_blacklist=(),
 ##         same_thread_request_whitelist=(),
-##         # NOTE: Tuple for explicit webserver file reference validation.
+##         # NOTE: Tuple for explicit web_server file reference validation.
 ##         # ('^text/.+', '^image/.+', '^application/(x-)?javascript$')
 ##         static_mime_type_pattern=('^.+/.+$',),
 ##         dynamic_mime_type_pattern=(
@@ -857,7 +857,7 @@ class Web(
         default='', public_key_file_path='', stop_order='stop',
         request_whitelist=('/.*',), request_blacklist=(),
         same_thread_request_whitelist=(),
-        # NOTE: Tuple for explicit webserver file reference validation.
+        # NOTE: Tuple for explicit web_server file reference validation.
         # ('^text/.+', '^image/.+', '^application/(x-)?javascript$')
         static_mime_type_pattern=('^.+/.+$',),
         dynamic_mime_type_pattern=(
@@ -985,7 +985,7 @@ class Web(
                 pass
             determineIPSocket.close()
         __logger__.info(
-            'Webserver is starting %sand listens at port "%d" and webroot '
+            'Web server is starting %sand listens at port "%d" and webroot '
             '"%s". Currently reachable ip is "%s". Maximum parallel process '
             'is limited to %d.', (
                 'a secure connection with public key "%s" ' %
