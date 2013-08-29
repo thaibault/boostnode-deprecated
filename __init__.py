@@ -49,13 +49,13 @@ Conventions (bcX := boostNode convention number X)
                1. Import all standard modules and packages,
                2. then all from third party,
                3. now import your own modules or packages.
-               4. Sort import names alphabetically and seperate the previous
+               4. Sort import names alphabetically and separate the previous
                   defined parts with blank lines.
     - bc12 Import everthing by its whole name and reference path and use it by
            its full reference path (even builtin units).
     - bc13 Don't use any abbreviations.
     - bc14 Follow the pep8 standards.
-    - bc15 Try to use small cyclomatice complexity in all units.
+    - bc15 Try to use small cyclomatic complexity in all units.
            (e.g. less than 20 or 30).
     - bc16 Use the modules pattern described below.
     - bc17 Use the area statement syntax to structure your code and make it
@@ -70,7 +70,7 @@ Conventions (bcX := boostNode convention number X)
            from "boostNode.extension.system.Runnable".
     - bc19 Make every script or package standalone runnable. That means you
            should use relative import references or append your own import path
-           dynamicly generated.
+           dynamically generated.
     - bc20 Always think that code is more read than written.
     - bc21 By choosing witch quotes to use follow this priority.
                1. Single quote (')
