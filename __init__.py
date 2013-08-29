@@ -184,17 +184,17 @@ Structure of meta documenting classes. (see bc16 and bc17)
 
 Structure of dependencies
 
-    0. builtins
-    1. boostNode.extension.dependent
-    1. boostNode.extension.type
-    2. boostNode.aspect.signature
-    3. boostNode.paradigm.aspectOrientation
-    4. boostNode.paradigm.objectOrientation
-    5. boostNode.extension.native
-    6. boostNode.extension.file
-    7. boostNode.extension.output
-    8. boostNode.extension.system
-    9. boostNode.*
+    0.  builtins
+    1.  boostNode.extension.dependent
+    1.  boostNode.extension.type
+    2.  boostNode.aspect.signature
+    3.  boostNode.paradigm.aspectOrientation
+    4.  boostNode.paradigm.objectOrientation
+    5.  boostNode.extension.native
+    6.  boostNode.extension.file
+    7.  boostNode.extension.output
+    8.  boostNode.extension.system
+    9.  boostNode.*
     10. yourOwnModulesOrPackages.*
 
     This means that a module in level "i" could only import a full module
