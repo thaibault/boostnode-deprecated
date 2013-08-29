@@ -42,7 +42,7 @@ Conventions (bcX := boostNode convention number X)
     - bc8 Use short and/or long description doc-strings for all definitions.
     - bc9 Write doctest for each unit it is possible and try to reach 100% path
           coverage.
-    - bc10 Every temporary generated file (e.g. for mocups) should have its
+    - bc10 Every temporary generated file (e.g. for mockups) should have its
            name prefixed with "temp_" to support automatic clean up after
            running automated test cases.
     - bc11 Sorting imports as following:
