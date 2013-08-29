@@ -96,6 +96,8 @@ Follow one of the two following syntax examples:
     ## interpreterB functionCall();
     functionCall()
 
+Have Fun with boostNode!
+
 Copyright
 ---------
 
