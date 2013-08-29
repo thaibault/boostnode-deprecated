@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.3
 # -*- coding: utf-8 -*-
 
 # region vim modline
@@ -28,16 +28,16 @@ __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-## python3.3 import builtins
-import copy
+## python2.7 import copy
+import builtins
 import inspect
 import os
 import sys
-## python3.3 import types
-pass
+## python2.7 pass
+import types
 
-## python3.3 pass
-builtins = sys.modules['__main__'].__builtins__
+## python2.7 builtins = sys.modules['__main__'].__builtins__
+pass
 
 for number in (3, 4):
     sys.path.append(os.path.abspath(sys.path[0] + number * ('..' + os.sep)))
@@ -47,8 +47,8 @@ for number in (3, 4):
 
 # region classes
 
-## python3.3 class Resolve:
-class Resolve(builtins.object):
+## python2.7 class Resolve(builtins.object):
+class Resolve:
     '''Handles dependencies with modules.'''
 
     # region dynamic properties
@@ -71,18 +71,18 @@ class Resolve(builtins.object):
 
             # region special
 
-## python3.3
+## python2.7
 ##     def __init__(
-##         self, name: builtins.str, frame: types.FrameType,
-##         default_caller=None, function=False,
+##         self, name, frame, default_caller=None, function=False,
 ##         dependencies=('boostNode.extension.system.CommandLine',
 ##                       'boostNode.extension.native.Module')
-##     ) -> None:
+##     ):
     def __init__(
-        self, name, frame, default_caller=None, function=False,
+        self, name: builtins.str, frame: types.FrameType,
+        default_caller=None, function=False,
         dependencies=('boostNode.extension.system.CommandLine',
                       'boostNode.extension.native.Module')
-    ):
+    ) -> None:
 ##
         '''
             Initializes a new instance of dependency definition for a given
@@ -142,8 +142,8 @@ class Resolve(builtins.object):
             # region special
 
     @builtins.classmethod
-## python3.3     def __repr__(cls: builtins.type) -> builtins.str:
-    def __repr__(cls):
+## python2.7     def __repr__(cls):
+    def __repr__(cls: builtins.type) -> builtins.str:
         '''
             Invokes if this object should describe itself by a string.
 
@@ -157,9 +157,9 @@ class Resolve(builtins.object):
             # endregion
 
     @builtins.classmethod
-## python3.3
-##     def get_all(cls: builtins.type, path=sys.path[0]) -> builtins.list:
-    def get_all(cls, path=sys.path[0]):
+## python2.7
+##     def get_all(cls, path=sys.path[0]):
+    def get_all(cls: builtins.type, path=sys.path[0]) -> builtins.list:
 ##
         '''
             This method provides a generic way to determine all modules in
@@ -207,16 +207,16 @@ class Resolve(builtins.object):
         # region protected
 
     @builtins.classmethod
-## python3.3     def _load(cls: builtins.type) -> builtins.bool:
-    def _load(cls):
+## python2.7     def _load(cls):
+    def _load(cls: builtins.type) -> builtins.bool:
         '''
             Checks if all needed dependencies are available for given module
             and runs a given function if provided or a default module
             extension method otherwise.
         '''
-## python3.3
-##         for key, load in builtins.enumerate(cls._load_stack.copy()):
-        for key, load in builtins.enumerate(copy.copy(cls._load_stack)):
+## python2.7
+##         for key, load in builtins.enumerate(copy.copy(cls._load_stack)):
+        for key, load in builtins.enumerate(cls._load_stack.copy()):
 ##
             if cls._is_loaded(load):
                 cls._call_post_event_function(key, load)
@@ -224,11 +224,11 @@ class Resolve(builtins.object):
         return False
 
     @builtins.classmethod
-## python3.3
-##     def _is_loaded(
-##         cls: builtins.type, load: builtins.dict
-##     ) -> builtins.bool:
-    def _is_loaded(cls, load):
+## python2.7
+##     def _is_loaded(cls, load):
+    def _is_loaded(
+        cls: builtins.type, load: builtins.dict
+    ) -> builtins.bool:
 ##
         '''
             Checks if all elements in the given dependency paths are already
@@ -259,11 +259,11 @@ class Resolve(builtins.object):
         return loaded
 
     @builtins.classmethod
-## python3.3
-##     def _call_post_event_function(
-##         cls: builtins.type, key: builtins.int, load: builtins.dict
-##     ) -> builtins.bool:
-    def _call_post_event_function(cls, key, load):
+## python2.7
+##     def _call_post_event_function(cls, key, load):
+    def _call_post_event_function(
+        cls: builtins.type, key: builtins.int, load: builtins.dict
+    ) -> builtins.bool:
 ##
         '''
             Runs given post event handler after all needed dependencies loaded.
@@ -288,12 +288,12 @@ class Resolve(builtins.object):
         return cls._load()
 
     @builtins.classmethod
-## python3.3
-##     def _default_displaced_load(
-##         cls: builtins.type, name: builtins.str, frame: types.FrameType,
-##         default_caller: (builtins.str, builtins.type(None))
-##     ) -> builtins.bool:
-    def _default_displaced_load(cls, name, frame, default_caller):
+## python2.7
+##     def _default_displaced_load(cls, name, frame, default_caller):
+    def _default_displaced_load(
+        cls: builtins.type, name: builtins.str, frame: types.FrameType,
+        default_caller: (builtins.str, builtins.type(None))
+    ) -> builtins.bool:
 ##
         '''
             Provides a typical used method for running in any module's
