@@ -803,6 +803,8 @@ class String(Object, builtins.str):
     ) -> boostNode.extension.type.Self:
 ##
         '''
+            Validates a given url by escaping special chars.
+
             Examples:
 
             >>> String(
