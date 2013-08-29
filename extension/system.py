@@ -1110,6 +1110,7 @@ class Platform:
                 command, command_arguments, secure, error, shell, no_blocking,
                 *arguments, **keywords)
         else:
+            print(command)
             result = cls._run_multiple_commands(
                 commands=command, command_arguments=command_arguments,
                 secure=secure, error=error, shell=shell, *arguments,
