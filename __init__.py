@@ -52,7 +52,7 @@ Conventions (bcX := boostNode convention number X)
                3. now import your own modules or packages.
                4. Sort import names alphabetically and separate the previous
                   defined parts with blank lines.
-    - bc12 Import everthing by its whole name and reference path and use it by
+    - bc12 Import everything by its whole name and reference path and use it by
            its full reference path (even builtin units).
     - bc13 Don't use any abbreviations.
     - bc14 Follow the pep8 standards.
@@ -155,8 +155,6 @@ Structure of meta documenting classes. (see bc16 and bc17)
 
         ...
 
-                # endregion
-
             # endregion
 
         # endregion
@@ -197,7 +195,6 @@ Structure of meta documenting classes. (see bc16 and bc17)
 Structure of dependencies
 
     0.  builtins
-    1.  boostNode.extension.dependent
     1.  boostNode.extension.type
     2.  boostNode.aspect.signature
     3.  boostNode.paradigm.aspectOrientation
@@ -213,9 +210,7 @@ Structure of dependencies
     in its header in level "j" if "j < i" holds.
     If your try to import a module from a higher level ("j < i") you could
     try to use the "from ... import ..." statement in the needed context
-    dependent scope or your can use the "dependent" module to define
-    dependencies and let code waiting till all there dependencies are
-    imported.
+    dependent scope.
 
 Module pattern (see bc16)
 
@@ -266,8 +261,7 @@ Module pattern (see bc16)
 
     # region footer
 
-    boostNode.extension.system.CommandLine.package(
-        name=__name__, frame=inspect.currentframe())
+    CommandLine.package(name=__name__, frame=inspect.currentframe())
 
     # endregion
 """
@@ -291,34 +285,84 @@ import sys
 '''Make boostNode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * ('..' + os.sep)))
 
-'''
-    Prevents python from creating ".pyc" or ".pyo" files during importing
-    modules.
-'''
-sys.dont_write_bytecode = True
+# endregion
+
+# region functions
+
+
+## python3.3 def __get_all_modules__(path=sys.path[0]) -> builtins.list:
+def __get_all_modules__(path=sys.path[0]):
+    '''
+        This method provides a generic way to determine all modules in
+        current package or folder. It is useful for "__init__.py" files.
+
+        Examples:
+
+        >>> __get_all_modules__() # doctest: +ELLIPSIS
+        [...]
+
+        >>> from boostNode.extension.file import Handler as FileHandler
+
+        >>> location = FileHandler(
+        ...     __test_folder__ + '__get_all_modules__', make_directory=True)
+        >>> a = FileHandler(
+        ...     location.path + 'a.py', must_exist=False)
+        >>> a.content = ' '
+        >>> FileHandler(
+        ...     location.path + 'b.pyc', make_directory=True
+        ... ) # doctest: +ELLIPSIS
+        Object of "Handler" with path "...__get_all_modu...b.pyc..." (dire...
+
+        >>> __get_all_modules__(__test_folder__ + '__get_all_modules__')
+        ['a']
+
+        >>> a.remove_file()
+        True
+        >>> __get_all_modules__(__test_folder__ + '__get_all_modules__')
+        []
+    '''
+    if not (sys.path[0] or path):
+        path = os.getcwd()
+    return builtins.list(builtins.set(builtins.map(
+        lambda name: name[:name.rfind('.')],
+        builtins.filter(
+            lambda name: (
+                (name.endswith('.py') or name.endswith('.pyc')) and
+                not name.startswith('__init__.') and os.path.isfile(
+                    path + os.sep + name)),
+            os.listdir(
+                path[:-(builtins.len(os.path.basename(path)) + 1)] if
+                os.path.isfile(path) else path)))))
+
+# endregion
+
+# region classes
 
 if not builtins.getattr(builtins, "WindowsError", None):
     class WindowsError(builtins.OSError):
         pass
+
+# endregion
+
+'''Don't generate cached byte code files for imported modules.'''
+sys.dont_write_bytecode = True
+'''Determine all modules in this folder via introspection.'''
+__all__ = __get_all_modules__()
 try:
-    import boostNode.aspect.signature
-    import boostNode.extension.system
-    import boostNode.extension.native
+    from boostNode.aspect.signature import add_check as add_signature_check
+    from boostNode.extension.native import Module
 except WindowsError as exception:
     logging.error(
         "Running subprocesses on windows without being administrator isn't "
         'possible. %s: %s', exception.__class__.__name__,
         builtins.str(exception))
     sys.exit(1)
-
-# endregion
-
-'''
-    Add signature checking for all functions and methods with joint points in
-    this package.
-'''
-boostNode.aspect.signature.add_check(
-    point_cut='^%s\..*$' % boostNode.extension.native.Module.get_package_name(
+else:
+    '''
+        Add signature checking for all functions and methods with joint points
+        in this package.
+    '''
+    add_signature_check(point_cut='^%s\..*$' % Module.get_package_name(
         frame=inspect.currentframe()))
 
 # region footer
@@ -327,14 +371,15 @@ boostNode.aspect.signature.add_check(
     Preset some variables given by introspection letting the linter know what
     globale variables are available.
 '''
-__logger__ = __test_mode__ = __exception__ = __module_name__ = \
-    __file_path__ = None
+__logger__ = __test_mode__ = __exception__ = __file_path__ = None
 '''
     Extends this module with some magic environment variables to provide better
     introspection support. A generic command line interface for some code
     preprocessing tools is provided by default.
 '''
-boostNode.extension.system.CommandLine.generic_package_interface(
-    name=__name__, frame=inspect.currentframe())
+if __name__ == '__main__':
+    from boostNode.extension.system import CommandLine
+    CommandLine.generic_package_interface(
+        name=__name__, frame=inspect.currentframe())
 
 # endregion

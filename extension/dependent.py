@@ -76,13 +76,11 @@ class Resolve(builtins.object):
 ##     def __init__(
 ##         self, name: builtins.str, frame: types.FrameType,
 ##         default_caller=None, function=False,
-##         dependencies=('boostNode.extension.system.CommandLine',
-##                       'boostNode.extension.native.Module')
+##         dependencies=('CommandLine', 'Module')
 ##     ) -> None:
     def __init__(
         self, name, frame, default_caller=None, function=False,
-        dependencies=('boostNode.extension.system.CommandLine',
-                      'boostNode.extension.native.Module')
+        dependencies=('CommandLine', 'Module')
     ):
 ##
         '''
@@ -123,11 +121,8 @@ class Resolve(builtins.object):
             [{...('A',)...}]
         '''
         self.__class__._load_stack.append({
-            'name': name,
-            'frame': frame,
-            'default_caller': default_caller,
-            'function': function,
-            'dependencies': dependencies})
+            'name': name, 'frame': frame, 'default_caller': default_caller,
+            'function': function, 'dependencies': dependencies})
         self._load()
 
             # endregion
@@ -157,51 +152,7 @@ class Resolve(builtins.object):
 
             # endregion
 
-    @builtins.classmethod
-## python3.3
-##     def get_all(cls: builtins.type, path=sys.path[0]) -> builtins.list:
-    def get_all(cls, path=sys.path[0]):
-##
-        '''
-            This method provides a generic way to determine all modules in
-            current package or folder. It is useful for "__init__.py" files.
 
-            Examples:
-
-            >>> Resolve.get_all() # doctest: +ELLIPSIS
-            [...'dependent'...]
-
-            >>> import boostNode.extension.file
-            >>> location = boostNode.extension.file.Handler(
-            ...     __test_folder__ + 'get_all', make_directory=True)
-            >>> a = boostNode.extension.file.Handler(
-            ...     location.path + 'a.py', must_exist=False)
-            >>> a.content = ' '
-            >>> boostNode.extension.file.Handler(
-            ...     location.path + 'b.pyc', make_directory=True
-            ... ) # doctest: +ELLIPSIS
-            Object of "Handler" with path "...get_all...b.pyc..." (dire...
-
-            >>> Resolve.get_all(__test_folder__ + 'get_all')
-            ['a']
-
-            >>> a.remove_file()
-            True
-            >>> Resolve.get_all(__test_folder__ + 'get_all')
-            []
-        '''
-        if not (sys.path[0] or path):
-            path = os.getcwd()
-        return builtins.list(builtins.set(builtins.map(
-            lambda name: name[:name.rfind('.')],
-            builtins.filter(
-                lambda name: ((name.endswith('.py') or
-                               name.endswith('.pyc')) and
-                              not name.startswith('__init__.') and
-                              os.path.isfile(path + os.sep + name)),
-                os.listdir(
-                    path[:- 1 -builtins.len(os.path.basename(path))] if
-                    os.path.isfile(path) else path)))))
 
         # endregion
 
@@ -307,12 +258,10 @@ class Resolve(builtins.object):
             otherwise.
         '''
         if 'boostNode' in builtins.dir(sys.modules[name]):
-            displaced_module = \
-                sys.modules[name].boostNode.extension.native.Module
-            sys.modules[name].boostNode.extension.system.CommandLine\
-                .generic_module_interface(
-                    module=displaced_module.extend(name, frame),
-                    default_caller=default_caller)
+            displaced_module = sys.modules[name].Module
+            sys.modules[name].CommandLine.generic_module_interface(
+                module=displaced_module.extend(name, frame),
+                default_caller=default_caller)
             return True
         return False
 

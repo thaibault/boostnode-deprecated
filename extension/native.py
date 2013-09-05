@@ -10,6 +10,8 @@
 
 # region header
 
+# TODO check new branch coverage
+
 '''
     Extension is a high level interface for interaction with pythons native
     builtins.
@@ -49,20 +51,20 @@ pass
 for number in (3, 4):
     sys.path.append(os.path.abspath(sys.path[0] + number * ('..' + os.sep)))
 
-import boostNode.extension.dependent
-import boostNode.extension.output
-import boostNode.extension.file
-import boostNode.extension.system
-import boostNode.extension.type
-import boostNode.paradigm.aspectOrientation
-import boostNode.paradigm.objectOrientation
+import boostNode
+## python3.3
+## from boostNode.extension.type import Self, SelfClass, SelfClassObject
+pass
+##
+from boostNode.paradigm.aspectOrientation import JointPoint
+from boostNode.paradigm.objectOrientation import Class
 
 # endregion
 
 
 # region classes
 
-class Object(boostNode.paradigm.objectOrientation.Class):
+class Object(Class):
     '''This class extends all native python classes.'''
 
     # region dynamic properties
@@ -89,13 +91,9 @@ class Object(boostNode.paradigm.objectOrientation.Class):
 
             # region special
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def __init__(
-##         self: boostNode.extension.type.Self, object=None
-##     ) -> None:
+    @JointPoint
+## python3.3     def __init__(self: Self, object=None) -> None:
     def __init__(self, object=None):
-##
         '''
             Generates a new high level wrapper around given object.
 
@@ -106,21 +104,17 @@ class Object(boostNode.paradigm.objectOrientation.Class):
         '''
         self.object = object
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
+    @JointPoint
+## python3.3     def __repr__(self: Self) -> builtins.str:
     def __repr__(self):
-##
         '''Invokes if this object should describe itself by a string.'''
         return 'Object of "{class_name}" ({object}).'.format(
             class_name=self.object.__class__.__name__,
             object=builtins.repr(self.object))
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def __str__(self: boostNode.extension.type.Self) -> builtins.str:
+    @JointPoint
+## python3.3     def __str__(self: Self) -> builtins.str:
     def __str__(self):
-##
         '''
             Is triggered if this object should be converted to string.
 
@@ -133,11 +127,9 @@ class Object(boostNode.paradigm.objectOrientation.Class):
 
             # endregion
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def copy(self: boostNode.extension.type.Self) -> builtins.dict:
+    @JointPoint
+## python3.3     def copy(self: Self) -> builtins.dict:
     def copy(self):
-##
         '''
             Copies a given object's attributes and returns them.
 
@@ -173,8 +165,8 @@ class Object(boostNode.paradigm.objectOrientation.Class):
                     builtins.getattr(self.object, attribute_name))
         return self._object_copy
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3     def restore(self: boostNode.extension.type.Self):
+    @JointPoint
+## python3.3     def restore(self: Self) -> (builtins.object, builtins.type):
     def restore(self):
         '''
             Restores a given object's attributes by a given copy are last
@@ -209,11 +201,9 @@ class Object(boostNode.paradigm.objectOrientation.Class):
             builtins.setattr(self.object, attribute, value)
         return self.object
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def is_binary(self: boostNode.extension.type.Self) -> builtins.bool:
+    @JointPoint
+## python3.3     def is_binary(self: Self) -> builtins.bool:
     def is_binary(self):
-##
         '''
             Determines if given data is binary.
 
@@ -253,11 +243,10 @@ class Object(boostNode.paradigm.objectOrientation.Class):
 
     # region static methods
 
-    @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
+    @JointPoint(builtins.classmethod)
 ## python3.3
 ##     def determine_abstract_method_exception(
-##         cls: boostNode.extension.type.SelfClass,
-##         abstract_class_name: builtins.str, class_name=None
+##         cls: SelfClass, abstract_class_name: builtins.str, class_name=None
 ##     ) -> builtins.NotImplementedError:
     def determine_abstract_method_exception(
         cls, abstract_class_name, class_name=None
@@ -452,11 +441,11 @@ class String(Object, builtins.str):
 
             # region special
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def __init__(
-##         self: boostNode.extension.type.Self, content=None,
-##         *arguments: builtins.object, **keywords: builtins.object
+##         self: Self, content=None, *arguments: builtins.object,
+##         **keywords: builtins.object
 ##     ) -> None:
     def __init__(self, content=None, *arguments, **keywords):
 ##
@@ -487,11 +476,9 @@ class String(Object, builtins.str):
             builtins.super(self.__class__, self), inspect.stack()[0][3]
         )(content, *arguments, **keywords)
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
+    @JointPoint
+## python3.3     def __repr__(self: Self) -> builtins.str:
     def __repr__(self):
-##
         '''
             Invokes if this object should describe itself by a string.
 
@@ -503,11 +490,9 @@ class String(Object, builtins.str):
         return 'Object of "{class_name}" with "{content}" saved.'.format(
             class_name=self.__class__.__name__, content=self.content)
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def __len__(self: boostNode.extension.type.Self) -> builtins.int:
+    @JointPoint
+## python3.3     def __len__(self: Self) -> builtins.int:
     def __len__(self):
-##
         '''
             Triggers if the pythons native "builtins.len()" function tries to
             handle current instance.
@@ -524,11 +509,9 @@ class String(Object, builtins.str):
         '''
         return builtins.len(self.__str__())
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def __str__(self: boostNode.extension.type.Self) -> builtins.str:
+    @JointPoint
+## python3.3     def __str__(self: Self) -> builtins.str:
     def __str__(self):
-##
         '''
             Triggers if the current object should be directly interpreted as
             pythons native string implementation.
@@ -543,11 +526,9 @@ class String(Object, builtins.str):
         '''
         return self.content
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def __bool__(self: boostNode.extension.type.Self) -> builtins.bool:
+    @JointPoint
+## python3.3     def __bool__(self: Self) -> builtins.bool:
     def __nonzero__(self):
-##
         '''
             Triggers if the current object should be interpreted as
             a boolean value directly.
@@ -575,11 +556,11 @@ class String(Object, builtins.str):
 
         # region public
 
-    @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
+    @JointPoint(builtins.classmethod)
 ## python3.3
 ##     def get_escaping_replace_dictionary(
-##         cls: boostNode.extension.type.SelfClass,
-##         sequence: collections.Iterable, escape_sequence='\{symbole}'
+##         cls: SelfClass, sequence: collections.Iterable,
+##         escape_sequence='\{symbole}'
 ##     ) -> builtins.dict:
     def get_escaping_replace_dictionary(
         cls, sequence, escape_sequence='\{symbole}'
@@ -622,13 +603,9 @@ class String(Object, builtins.str):
 
             # region getter
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def get_encoding(
-##         self: boostNode.extension.type.Self
-##     ) -> builtins.str:
+    @JointPoint
+## python3.3     def get_encoding(self: Self) -> builtins.str:
     def get_encoding(self):
-##
         '''
             Guesses the encoding used in current string (bytes). Encodings are
             checked in alphabetic order.
@@ -678,13 +655,9 @@ class String(Object, builtins.str):
 
             # region validation
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def validate_shell(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
+    @JointPoint
+## python3.3     def validate_shell(self: Self) -> Self:
     def validate_shell(self):
-##
         '''
             Validates the current string for using as a command in shell.
             Special shell command chars will be escaped.
@@ -716,11 +689,8 @@ class String(Object, builtins.str):
             search=self.__class__.get_escaping_replace_dictionary(
                 self.SPECIAL_SHELL_SEQUENCES))
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def validate_html(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
+    @JointPoint
+## python3.3     def validate_html(self: Self) -> Self:
     def validate_html(self):
 ##
         '''
@@ -733,13 +703,9 @@ class String(Object, builtins.str):
         '''
         return self.replace(self.SPECIAL_HTML_SEQUENCES)
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def validate_regex(
-##         self: boostNode.extension.type.Self, exclude_symbols=()
-##     ) -> boostNode.extension.type.Self:
+    @JointPoint
+## python3.3     def validate_regex(self: Self, exclude_symbols=()) -> Self:
     def validate_regex(self, exclude_symbols=()):
-##
         '''
             Validates the current string for using in a regular expression
             pattern. Special regular expression chars will be escaped.
@@ -772,13 +738,9 @@ class String(Object, builtins.str):
                     builtins.set(self.SPECIAL_REGEX_SEQUENCES) -
                     builtins.set(exclude_symbols))))
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def validate_format(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
+    @JointPoint
+## python3.3     def validate_format(self: Self) -> Self:
     def validate_format(self):
-##
         '''
             Validates the current string for using in a string with placeholder
             like "{name}". It will be escaped to not interpreted as
@@ -795,13 +757,9 @@ class String(Object, builtins.str):
         self.content = re.compile('{([a-z]+)}').sub(r'\\{\1\\}', self.content)
         return self
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def validate_url(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
+    @JointPoint
+## python3.3     def validate_url(self: Self) -> Self:
     def validate_url(self):
-##
         '''
             Validates a given url by escaping special chars.
 
@@ -836,13 +794,9 @@ class String(Object, builtins.str):
 
             # endregion
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def camel_case_capitalize(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
+    @JointPoint
+## python3.3     def camel_case_capitalize(self: Self) -> Self:
     def camel_case_capitalize(self):
-##
         '''
             Acts like pythons native "builtins.str.capitalize()" method but
             preserves camel case characters.
@@ -859,10 +813,10 @@ class String(Object, builtins.str):
             self.content = self.content[0].upper() + self.content[1:]
         return self
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def find_python_code_end_bracket(
-##         self: boostNode.extension.type.Self
+##         self: Self
 ##     ) -> (builtins.int, builtins.bool):
     def find_python_code_end_bracket(self):
 ##
@@ -891,13 +845,12 @@ class String(Object, builtins.str):
             index, char, quote, skip, brackets = result
         return False
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def replace(
-##         self: boostNode.extension.type.Self,
-##         search: (builtins.str, builtins.dict),
+##         self: Self, search: (builtins.str, builtins.dict),
 ##         replace='', *arguments: builtins.object, **keywords: builtins.object
-##     ) -> boostNode.extension.type.Self:
+##     ) -> Self:
     def replace(self, search, replace='', *arguments, **keywords):
 ##
         '''
@@ -934,13 +887,12 @@ class String(Object, builtins.str):
                 search, replace, *arguments, **keywords)
         return self
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def sub(
-##         self: boostNode.extension.type.Self,
-##         search: (builtins.str, builtins.dict), replace='', *arguments,
-##         **keywords: builtins.object
-##     ) -> boostNode.extension.type.Self:
+##         self: Self, search: (builtins.str, builtins.dict), replace='',
+##         *arguments: builtins.object, **keywords: builtins.object
+##     ) -> Self:
     def sub(self, search, replace='', *arguments, **keywords):
 ##
         '''
@@ -1018,11 +970,10 @@ class String(Object, builtins.str):
             )(builtins.str(replace), self.content, *arguments, **keywords)
         return self
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def subn(
-##         self: boostNode.extension.type.Self,
-##         search: (builtins.str, builtins.dict), replace='',
+##         self: Self, search: (builtins.str, builtins.dict), replace='',
 ##         *arguments: builtins.object, **keywords: builtins.object
 ##     ) -> builtins.tuple:
     def subn(self, search, replace='', *arguments, **keywords):
@@ -1067,13 +1018,9 @@ class String(Object, builtins.str):
             )(builtins.str(replace), self.content, *arguments, **keywords)
         return (self, number_of_replaces)
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def readline(
-##         self: boostNode.extension.type.Self
-##     ) -> (boostNode.extension.type.SelfClassObject, builtins.bool):
+    @JointPoint
+## python3.3     def readline(self: Self) -> (SelfClassObject, builtins.bool):
     def readline(self):
-##
         '''
             Implements the pythons native "bz2.BZ2File.readline()" method in an
             object oriented way.
@@ -1110,11 +1057,10 @@ class String(Object, builtins.str):
                 self.readlines()[self._current_line_number - 1])
         return False
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def readlines(
-##         self: boostNode.extension.type.Self, *arguments: builtins.object,
-##         **keywords: builtins.object
+##         self: Self, *arguments: builtins.object, **keywords: builtins.object
 ##     ) -> builtins.list:
     def readlines(self, *arguments, **keywords):
 ##
@@ -1143,13 +1089,9 @@ class String(Object, builtins.str):
         '''
         return self.content.splitlines(*arguments, **keywords)
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def delete_variables_from_regex(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
+    @JointPoint
+## python3.3     def delete_variables_from_regex(self: Self) -> Self:
     def delete_variables_from_regex(self):
-##
         '''
             Removes python supported variables in regular expression strings.
             This method is useful if a python regular expression should be
@@ -1174,12 +1116,12 @@ class String(Object, builtins.str):
 
             # region find python code end bracket helper
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def _handle_char_to_find_end_bracket(
-##         self: boostNode.extension.type.Self, index: builtins.int,
-##         char: builtins.str, quote: (builtins.str, builtins.bool),
-##         skip: builtins.int, brackets: builtins.int
+##         self: Self, index: builtins.int, char: builtins.str,
+##         quote: (builtins.str, builtins.bool), skip: builtins.int,
+##         brackets: builtins.int
 ##     ) -> (builtins.tuple, builtins.int):
     def _handle_char_to_find_end_bracket(
         self, index, char, quote, skip, brackets
@@ -1236,12 +1178,11 @@ class String(Object, builtins.str):
             brackets += 1
         return index + 1, char, quote, skip, brackets
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def _handle_start_quotes_to_find_end_bracket(
-##         self: boostNode.extension.type.Self, index: builtins.int,
-##         char: builtins.str, quote: (builtins.str, builtins.bool),
-##         skip: builtins.int
+##         self: Self, index: builtins.int, char: builtins.str,
+##         quote: (builtins.str, builtins.bool), skip: builtins.int
 ##     ) -> builtins.tuple:
     def _handle_start_quotes_to_find_end_bracket(
         self, index, char, quote, skip
@@ -1263,12 +1204,11 @@ class String(Object, builtins.str):
             quote = char
         return quote, skip
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def _handle_quotes_to_find_end_bracket(
-##         self: boostNode.extension.type.Self, index: builtins.int,
-##         char: builtins.str, quote: (builtins.str, builtins.bool),
-##         skip: builtins.int
+##         self: Self, index: builtins.int, char: builtins.str,
+##         quote: (builtins.str, builtins.bool), skip: builtins.int
 ##     ) -> builtins.tuple:
     def _handle_quotes_to_find_end_bracket(self, index, char, quote, skip):
 ##
@@ -1325,10 +1265,10 @@ class Dictionary(Object, builtins.dict):
 
             # region special
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def __init__(
-##         self: boostNode.extension.type.Self, content: collections.Iterable,
+##         self: Self, content: collections.Iterable,
 ##         *arguments: builtins.object, **keywords: builtins.object
 ##     ) -> None:
     def __init__(self, content, *arguments, **keywords):
@@ -1347,11 +1287,9 @@ class Dictionary(Object, builtins.dict):
             builtins.super(self.__class__, self), inspect.stack()[0][3]
         )(content, *arguments, **keywords)
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
+    @JointPoint
+## python3.3     def __repr__(self: Self) -> builtins.str:
     def __repr__(self):
-##
         '''
             Invokes if this object should describe itself by a string.
 
@@ -1364,11 +1302,9 @@ class Dictionary(Object, builtins.dict):
             class_name=self.__class__.__name__,
             content=builtins.repr(self.content))
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def __hash__(self: boostNode.extension.type.Self) -> builtins.int:
+    @JointPoint
+## python3.3     def __hash__(self: Self) -> builtins.int:
     def __hash__(self):
-##
         '''
             Invokes if this object should describe itself by a hash value.
 
@@ -1379,11 +1315,10 @@ class Dictionary(Object, builtins.dict):
         '''
         return builtins.hash(self.immutable)
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def __getitem__(
-##         self: boostNode.extension.type.Self,
-##         key: (builtins.object, builtins.type)
+##         self: Self, key: (builtins.object, builtins.type)
 ##     ) -> (builtins.object, builtins.type):
     def __getitem__(self, key):
 ##
@@ -1402,13 +1337,9 @@ class Dictionary(Object, builtins.dict):
 
             # region getter methods
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def get_immutable(
-##         self: boostNode.extension.type.Self
-##     ) -> builtins.tuple:
+    @JointPoint
+## python3.3     def get_immutable(self: Self) -> builtins.tuple:
     def get_immutable(self):
-##
         '''
             Generates an immutable copy of the current dictionary.
             Mutable iterables are generally translated to sorted tuples.
@@ -1421,11 +1352,10 @@ class Dictionary(Object, builtins.dict):
 
             # endregion
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def pop(
-##         self: boostNode.extension.type.Self, name: builtins.str,
-##         default_value=None
+##         self: Self, name: builtins.str, default_value=None
 ##     ) -> builtins.tuple:
     def pop(self, name, default_value=None):
 ##
@@ -1457,11 +1387,10 @@ class Dictionary(Object, builtins.dict):
 
         # region protected methods
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def _immutable_helper(
-##         self: boostNode.extension.type.Self,
-##         value: (builtins.object, builtins.type)
+##         self: Self, value: (builtins.object, builtins.type)
 ##     ) -> (builtins.object, builtins.type):
     def _immutable_helper(self, value):
 ##
@@ -1529,11 +1458,9 @@ class Module(Object):
 
             # region special
 
-    @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
-## python3.3
-##     def __repr__(cls: boostNode.extension.type.SelfClass) -> builtins.str:
+    @JointPoint(builtins.classmethod)
+## python3.3     def __repr__(cls: SelfClass) -> builtins.str:
     def __repr__(cls):
-##
         '''
             Invokes if this object should describe itself by a string.
 
@@ -1552,11 +1479,12 @@ class Module(Object):
 
             # region getter
 
+    # NOTE: This method could have a joint point for avoiding to have cyclic
+    # dependencies.
     @builtins.classmethod
 ## python3.3
 ##     def get_context_path(
-##         cls: boostNode.extension.type.SelfClass,
-##         frame=inspect.currentframe(), path=None
+##         cls: SelfClass, frame=inspect.currentframe(), path=None
 ##     ) -> builtins.str:
     def get_context_path(cls, path=None, frame=inspect.currentframe()):
 ##
@@ -1590,13 +1518,12 @@ class Module(Object):
                 cls._context_path
         return cls._context_path
 
-    @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
+    @JointPoint(builtins.classmethod)
 ## python3.3
 ##     def get_name(
-##         cls: boostNode.extension.type.SelfClass, frame=None,
-##         extension=False, path=False
+##         cls: SelfClass, frame=None, module=None, extension=False, path=False
 ##     ) -> builtins.str:
-    def get_name(cls, frame=None, extension=False, path=False):
+    def get_name(cls, frame=None, module=None, extension=False, path=False):
 ##
         '''
             Returns name of the given context "frame". If no frame is defined
@@ -1615,17 +1542,7 @@ class Module(Object):
             >>> Module.get_name(path=True, extension=True) # doctest: +ELLIPSIS
             '...boostNode...extension...native.py'
         '''
-        if frame is None:
-            frame = inspect.currentframe()
-        '''
-            NOTE: "must_exist" is necessary for supporting freezed executables.
-        '''
-        file = boostNode.extension.file.Handler(
-            location=frame.f_code.co_filename, respect_root_path=False,
-            must_exist=False)
-        if not file:
-            file = boostNode.extension.file.Handler(
-                location=sys.argv[0], respect_root_path=False)
+        file = cls._get_module_file(frame, module)
         if path and extension:
             return file.path
         if extension:
@@ -1634,11 +1551,10 @@ class Module(Object):
             return file.directory_path + file.basename
         return file.basename
 
-    @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
+    @JointPoint(builtins.classmethod)
 ## python3.3
 ##     def get_package_name(
-##         cls: boostNode.extension.type.SelfClass,
-##         frame=inspect.currentframe(), path=False
+##         cls: SelfClass, frame=inspect.currentframe(), path=False
 ##     ) -> builtins.str:
     def get_package_name(cls, frame=inspect.currentframe(), path=False):
 ##
@@ -1659,28 +1575,26 @@ class Module(Object):
             ... ) # doctest: +ELLIPSIS
             '...boostNode...extension...'
         '''
+        from boostNode.extension.file import Handler as FileHandler
         '''
             NOTE: "must_exist" is necessary for supporting frozen executables.
         '''
-        file = boostNode.extension.file.Handler(
+        file = FileHandler(
             location=frame.f_code.co_filename, respect_root_path=True,
             must_exist=False)
         if cls.is_package(path=file.directory_path) or not file:
             if not file:
-                file = boostNode.extension.file.Handler(
+                file = FileHandler(
                     location=sys.argv[0], respect_root_path=True)
             if path:
                 return file.directory_path
-            return boostNode.extension.file.Handler(
-                location=file.directory_path
-            ).name
+            return FileHandler(location=file.directory_path).name
         return ''
 
-    @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
+    @JointPoint(builtins.classmethod)
 ## python3.3
 ##     def get_file_path(
-##         cls: boostNode.extension.type.SelfClass,
-##         context_path: builtins.str, only_source_files=False
+##         cls: SelfClass, context_path: builtins.str, only_source_files=False
 ##     ) -> (builtins.str, builtins.bool):
     def get_file_path(
         cls, context_path, only_source_files=False
@@ -1704,9 +1618,10 @@ class Module(Object):
             >>> Module.get_file_path('')
             False
         '''
+        from boostNode.extension.file import Handler as FileHandler
         if context_path:
             for search_path in sys.path:
-                location = boostNode.extension.file.Handler(
+                location = FileHandler(
                     location=search_path, must_exist=False,
                     respect_root_path=False)
                 if location.is_directory():
@@ -1722,9 +1637,7 @@ class Module(Object):
 
     @builtins.classmethod
 ## python3.3
-##     def is_package(
-##         cls: boostNode.extension.type.SelfClass, path: builtins.str
-##     ) -> builtins.bool:
+##     def is_package(cls: SelfClass, path: builtins.str) -> builtins.bool:
     def is_package(cls, path):
 ##
         '''
@@ -1749,11 +1662,10 @@ class Module(Object):
 
             # endregion
 
-    @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
+    @JointPoint(builtins.classmethod)
 ## python3.3
 ##     def determine_caller(
-##         cls: boostNode.extension.type.SelfClass,
-##         callable_objects: collections.Iterable, caller=None
+##         cls: SelfClass, callable_objects: collections.Iterable, caller=None
 ##     ) -> (builtins.bool, builtins.str, builtins.type(None)):
     def determine_caller(cls, callable_objects, caller=None):
 ##
@@ -1793,11 +1705,11 @@ class Module(Object):
                 return callable_objects[index]
         return caller
 
-    @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
+    @JointPoint(builtins.classmethod)
 ## python3.3
 ##     def get_defined_callables(
-##         cls: boostNode.extension.type.SelfClass,
-##         scope: (builtins.type, builtins.object), only_module_level=True
+##         cls: SelfClass, scope: (builtins.type, builtins.object),
+##         only_module_level=True
 ##     ) -> builtins.list:
     def get_defined_callables(cls, scope, only_module_level=True):
 ##
@@ -1821,7 +1733,7 @@ class Module(Object):
             >>> Module.get_defined_callables(A, only_module_level=False)
             ['b']
 
-            >>> @boostNode.paradigm.aspectOrientation.JointPoint
+            >>> @JointPoint
             ... def b():
             ...     pass
             >>> temporary_object = object
@@ -1833,9 +1745,7 @@ class Module(Object):
         callables = []
         for object_name in builtins.set(builtins.dir(scope)):
             object = builtins.getattr(scope, object_name)
-            if builtins.isinstance(
-                object, boostNode.paradigm.aspectOrientation.JointPoint
-            ):
+            if builtins.isinstance(object, JointPoint):
                 object = object.function
             if(builtins.callable(object) and
                not (object_name.startswith('__') and
@@ -1850,14 +1760,12 @@ class Module(Object):
                 callables.append(object_name)
         return callables
 
-    @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
+    @JointPoint(builtins.classmethod)
 ## python3.3
 ##     def execute_program_for_modules(
-##         cls: boostNode.extension.type.SelfClass,
-##         program_type: builtins.str, program: builtins.str,
-##         modules: collections.Iterable, arguments=(),
-##         extension='py', delimiter=', ', log=True,
-##         **keywords: builtins.object
+##         cls: SelfClass, program_type: builtins.str, program: builtins.str,
+##         modules: collections.Iterable, arguments=(), extension='py',
+##         delimiter=', ', log=True, **keywords: builtins.object
 ##     ) -> builtins.tuple:
     def execute_program_for_modules(
         cls, program_type, program, modules, arguments=(),
@@ -1866,10 +1774,12 @@ class Module(Object):
 ##
         '''
             Runs a given program for every given module.
-            Returns false if no modules were found or given programm isn't
+            Returns false if no modules were found or given program isn't
             installed.
 
             Examples:
+
+            >>> import boostNode.extension
 
             >>> Module.execute_program_for_modules(
             ...     'linter', 'pyflakes', boostNode.extension.__all__
@@ -1888,11 +1798,12 @@ class Module(Object):
             ... ) # doctest: +ELLIPSIS
             (..., ...)
         '''
+        from boostNode.extension.file import Handler as FileHandler
+        from boostNode.extension.system import Platform
         results = []
         for module in modules:
-            module_file = boostNode.extension.file.Handler(
-                location=module + '.' + extension)
-            results.append(boostNode.extension.system.Platform.run(
+            module_file = FileHandler(location=module + '.' + extension)
+            results.append(Platform.run(
                 command=program,
                 command_arguments=builtins.list(
                     arguments
@@ -1913,13 +1824,15 @@ class Module(Object):
                 first_error_output = False
         return builtins.tuple(result)
 
-    @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
+    @JointPoint(builtins.classmethod)
 ## python3.3
 ##     def extend(
-##         cls: boostNode.extension.type.SelfClass, name=__name__,
-##         frame=None, module=None
+##         cls: SelfClass, name=__name__, frame=None, module=None,
+##         post_extend_others=True
 ##     ) -> builtins.dict:
-    def extend(cls, name=__name__, frame=None, module=None):
+    def extend(
+        cls, name=__name__, frame=None, module=None, post_extend_others=True
+    ):
 ##
         '''
             Extends a given scope of an module for useful things like own
@@ -1931,12 +1844,14 @@ class Module(Object):
 
             Examples:
 
+            >>> import logging
+
             >>> Module.extend() # doctest: +ELLIPSIS
             {...native...}
             >>> __logger__ # doctest: +ELLIPSIS
             <logging.Logger object at 0x...>
             >>> __exception__ # doctest: +ELLIPSIS
-            <class 'boostNode.extension.native.NativeError'>
+            <class '...NativeError'>
             >>> __module_name__
             'native'
             >>> raise __exception__(
@@ -1951,35 +1866,44 @@ class Module(Object):
             ... ) # doctest: +ELLIPSIS
             {...'name': 'doctest'...}
         '''
+        from boostNode.extension.output import Logger
         if module is None:
             module = sys.modules[name]
         else:
             name = module.__name__
-        module.__logger__ = boostNode.extension.output.Logger.get(name)
-        if not (builtins.hasattr(module, '__module_name__') and frame is None):
-            module.__module_name__ = cls.get_name(frame)
-        module_name = String(
-            module.__module_name__
-        ).camel_case_capitalize().content
+        module.__logger__ = Logger.get(name)
+        if(not builtins.hasattr(module, '__module_name__') or
+           module.__module_name__ is None):
+            module.__module_name__ = cls.get_name(frame, module)
         module.__exception__ = builtins.type(
-            module_name + 'Error', (builtins.Exception,),
+            String(module.__module_name__).camel_case_capitalize().content +
+            'Error', (builtins.Exception,),
             {'__init__': lambda self, message,
                 *arguments: builtins.Exception.__init__(
                     self, message % arguments
                 ) if arguments else builtins.Exception.__init__(
                     self, message)})
         module.__test_mode__ = False
-        module.__loaded__ = True
-        module.__file_path__ = cls.get_name(frame, path=True, extension=True)
+        module.__file_path__ = cls.get_name(
+            frame, module, path=True, extension=True)
+        '''Extend imported modules which couldn't be extended yet.'''
+        if post_extend_others:
+            for imported_name, imported_module in sys.modules.items():
+                if(imported_name.startswith(boostNode.__name__ + '.') and
+                   builtins.hasattr(imported_module, '__module_name__') and
+                   imported_module.__module_name__ is None):
+                    '''Take this method via introspection.'''
+                    builtins.getattr(cls, inspect.stack()[0][3])(
+                        name=imported_name, module=imported_module,
+                        post_extend_others=False)
         return {'name': name, 'scope': module}
 
-    @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
+    @JointPoint(builtins.classmethod)
 ## python3.3
 ##     def default(
-##         cls: boostNode.extension.type.SelfClass, name: builtins.str,
-##         frame: types.FrameType, default_caller=None, caller_arguments=(),
-##         caller_keywords={}
-##     ) -> boostNode.extension.type.SelfClass:
+##         cls: SelfClass, name: builtins.str, frame: types.FrameType,
+##         default_caller=None, caller_arguments=(), caller_keywords={}
+##     ) -> SelfClass:
     def default(
         cls, name, frame, default_caller=None, caller_arguments=(),
         caller_keywords={}
@@ -2002,18 +1926,18 @@ class Module(Object):
             <class '...Module'>
             >>> sys.argv = command_line_arguments_save
         '''
-        boostNode.extension.system.CommandLine.generic_module_interface(
+        from boostNode.extension.system import CommandLine
+        CommandLine.generic_module_interface(
             module=cls.extend(name, frame),
             default_caller=default_caller, caller_arguments=caller_arguments,
             caller_keywords=caller_keywords)
         return cls
 
-    @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
+    @JointPoint(builtins.classmethod)
 ## python3.3
 ##     def default_package(
-##         cls: boostNode.extension.type.SelfClass, name: builtins.str,
-##         frame: types.FrameType, *arguments: builtins.object,
-##         **keywords: builtins.object
+##         cls: SelfClass, name: builtins.str, frame: types.FrameType,
+##         *arguments: builtins.object, **keywords: builtins.object
 ##     ) -> (builtins.tuple, builtins.bool):
     def default_package(
         cls, name, frame, command_line_arguments=(), *arguments, **keywords
@@ -2035,19 +1959,48 @@ class Module(Object):
             >>> Module.default_package('doctest', inspect.currentframe())
             False
         '''
+        from boostNode.extension.system import CommandLine
         cls.extend(name, frame)
-        return boostNode.extension.system.CommandLine\
-            .generic_package_interface(name, frame, *arguments, **keywords)
+        return CommandLine.generic_package_interface(
+            name, frame, *arguments, **keywords)
 
         # endregion
 
         # region protected
 
-    @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
+    @JointPoint(builtins.classmethod)
+## python3.3
+##     def _get_module_file(
+##         cls: SelfClass, frame: (builtins.type(None), types.FrameType),
+##         module: (builtins.type(None), types.ModuleType)
+##     ) -> FileHandler:
+    def _get_module_file(cls, frame, module):
+##
+        '''Determines the file of a given module or frame context.'''
+        from boostNode.extension.file import Handler as FileHandler
+        file = False
+        if module:
+            file = FileHandler(
+                location=inspect.getsourcefile(module), must_exist=False,
+                respect_root_path=False)
+        if not file:
+            if frame is None:
+                frame = inspect.currentframe()
+            '''
+                NOTE: "must_exist" is necessary for supporting freezed
+                executables.
+            '''
+            file = FileHandler(
+                location=frame.f_code.co_filename, respect_root_path=False,
+                must_exist=False)
+        if not file:
+            file = FileHandler(location=sys.argv[0], respect_root_path=False)
+        return file
+
+    @JointPoint(builtins.classmethod)
 ## python3.3
 ##     def _search_library_file(
-##         cls: boostNode.extension.type.SelfClass,
-##         location: boostNode.extension.file.Handler,
+##         cls: SelfClass, location: builtins.object,
 ##         context_path: builtins.str, only_source_files: builtins.bool
 ##     ) -> (builtins.str, builtins.bool):
     def _search_library_file(
@@ -2084,8 +2037,13 @@ class Module(Object):
 '''
 __logger__ = __test_mode__ = __exception__ = __module_name__ = \
     __file_path__ = None
-'''Resolve cyclic dependency issues.'''
-boostNode.extension.dependent.Resolve(
-    name=__name__, frame=inspect.currentframe(), default_caller=False)
+'''
+    Extends this module with some magic environment variables to provide better
+    introspection support. A generic command line interface for some code
+    preprocessing tools is provided by default.
+'''
+if __name__ == '__main__':
+    Module.default(
+        name=__name__, frame=inspect.currentframe(), default_caller=False)
 
 # endregion

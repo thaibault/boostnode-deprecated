@@ -29,8 +29,6 @@ __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-## python3.3 import builtins
-import __builtin__ as builtins
 import inspect
 import os
 import sys
@@ -39,23 +37,20 @@ import sys
 for number in (3, 4):
     sys.path.append(os.path.abspath(sys.path[0] + number * ('..' + os.sep)))
 
-import boostNode.extension.dependent
-import boostNode.paradigm.objectOrientation
-
 # endregion
 
 
 # region classes
 
-class SelfClass(boostNode.paradigm.objectOrientation.Class):
+class SelfClass:
     '''Type for defining the current object of its method.'''
 
 
-class SelfClassObject(boostNode.paradigm.objectOrientation.Class):
+class SelfClassObject:
     '''Type for defining the current object of its method.'''
 
 
-class Self(boostNode.paradigm.objectOrientation.Class):
+class Self:
     '''Type for defining the current object of its method.'''
 
 # endregion
@@ -68,8 +63,14 @@ class Self(boostNode.paradigm.objectOrientation.Class):
 '''
 __logger__ = __test_mode__ = __exception__ = __module_name__ = \
     __file_path__ = None
-'''Resolve cyclic dependency issues.'''
-boostNode.extension.dependent.Resolve(
-    name=__name__, frame=inspect.currentframe(), default_caller=False)
+'''
+    Extends this module with some magic environment variables to provide better
+    introspection support. A generic command line interface for some code
+    preprocessing tools is provided by default.
+'''
+if __name__ == '__main__':
+    from boostNode.extension.native import Module
+    Module.default(
+        name=__name__, frame=inspect.currentframe(), default_caller=False)
 
 # endregion

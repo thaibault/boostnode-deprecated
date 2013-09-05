@@ -29,7 +29,6 @@ __version__ = '1.0'
 
 ## python3.3 import builtins
 import __builtin__ as builtins
-import collections
 import inspect
 import os
 import re
@@ -58,21 +57,19 @@ else:
 for number in (3, 4):
     sys.path.append(os.path.abspath(sys.path[0] + number * ('..' + os.sep)))
 
-import boostNode.extension.native
-import boostNode.extension.system
-import boostNode.extension.type
-import boostNode.paradigm.aspectOrientation
-import boostNode.paradigm.objectOrientation
+from boostNode.extension.native import Dictionary, Module
+from boostNode.extension.system import CommandLine, Runnable
+## python3.3 from boostNode.extension.type import Self
+pass
+from boostNode.paradigm.aspectOrientation import JointPoint
+from boostNode.paradigm.objectOrientation import Class
 
 # endregion
 
 
 # region classes
 
-class Browser(
-    boostNode.paradigm.objectOrientation.Class,
-    boostNode.extension.system.Runnable
-):
+class Browser(Class, Runnable):
     '''
         Provides a webkit browser without any browser typical visual
         properties. Its only a very simple window for showing web pages.
@@ -227,11 +224,9 @@ class Browser(
 
             # region special
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
+    @JointPoint
+## python3.3     def __repr__(self: Self) -> builtins.str:
     def __repr__(self):
-##
         '''
             Invokes if this object should describe itself by a string.
 
@@ -254,13 +249,9 @@ class Browser(
 
             # region getter
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def get_gui_toolkit(
-##         self: boostNode.extension.type.Self
-##     ) -> builtins.str:
+    @JointPoint
+## python3.3     def get_gui_toolkit(self: Self) -> builtins.str:
     def get_gui_toolkit(self):
-##
         '''
             Determines available gui toolkit.
         '''
@@ -280,16 +271,10 @@ class Browser(
 
             # region setter
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def set_url(
-##         self: boostNode.extension.type.Self, url: builtins.str
-##     ) -> builtins.str:
+    @JointPoint
+## python3.3     def set_url(self: Self, url: builtins.str) -> builtins.str:
     def set_url(self, url):
-##
-        '''
-            Setter for current url.
-        '''
+        '''Setter for current url.'''
         if re.compile('^[a-zA-Z]+://.*$').match(url):
             self._url = url
         else:
@@ -298,12 +283,12 @@ class Browser(
 
             # endregion
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def stop(
-##         self: boostNode.extension.type.Self, *arguments: builtins.object,
-##         reason='', **keywords: builtins.object
-##     ) -> boostNode.extension.type.Self:
+##         self: Self, *arguments: builtins.object, reason='',
+##         **keywords: builtins.object
+##     ) -> Self:
     def stop(self, *arguments, **keywords):
 ##
         '''
@@ -312,9 +297,8 @@ class Browser(
         '''
 ## python3.3
 ##         pass
-        reason, keywords = boostNode.extension.native.Dictionary(
-            content=keywords
-        ).pop(name='reason', default_value='')
+        reason, keywords = Dictionary(content=keywords).pop(
+            name='reason', default_value='')
 ##
         if self.window is not None:
             if self.gui_toolkit == 'qt':
@@ -348,15 +332,11 @@ class Browser(
 
             # region runnable implementation
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _run(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
+    @JointPoint
+## python3.3     def _run(self: Self) -> Self:
     def _run(self):
-##
         '''
-            Entry point for command line call of this progam.
+            Entry point for command line call of this program.
             Initializes all window and webkit components.
 
             Examples:
@@ -367,19 +347,19 @@ class Browser(
             Object of "Browser" with url "http://www.google.com/" in 300 pi...
         '''
         return self._initialize(**self._command_line_arguments_to_dictionary(
-            namespace=boostNode.extension.system.CommandLine.argument_parser(
+            namespace=CommandLine.argument_parser(
                 module_name=__name__, scope={'self': self},
                 arguments=self.COMMAND_LINE_ARGUMENTS)))
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def _initialize(
-##         self: boostNode.extension.type.Self, url: builtins.str,
-##         width_in_pixel=800, height_in_pixel=600, fullscreen=False,
-##         no_window_decoration=False, default_gui_toolkit='qt',
-##         no_progress_bar=False, default_title='No gui loaded.',
-##         stop_order='stop', **keywords: builtins.object
-##     ) -> boostNode.extension.type.Self:
+##         self: Self, url: builtins.str, width_in_pixel=800,
+##         height_in_pixel=600, fullscreen=False, no_window_decoration=False,
+##         default_gui_toolkit='qt', no_progress_bar=False,
+##         default_title='No gui loaded.', stop_order='stop',
+##         **keywords: builtins.object
+##     ) -> Self:
     def _initialize(
             self, url, width_in_pixel=800, height_in_pixel=600,
             fullscreen=False, no_window_decoration=False,
@@ -423,13 +403,9 @@ class Browser(
 
             # region native webview components
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _initialize_default_browser(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
+    @JointPoint
+## python3.3     def _initialize_default_browser(self: Self) -> Self:
     def _initialize_default_browser(self):
-##
         '''
             Starts the default browser with currently stored url.
         '''
@@ -437,13 +413,9 @@ class Browser(
         self.browser.open(self._url)
         return self
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _initialize_qt_browser(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
+    @JointPoint
+## python3.3     def _initialize_qt_browser(self: Self) -> Self:
     def _initialize_qt_browser(self):
-##
         '''
             Starts the qt webkit webview thread.
         '''
@@ -463,13 +435,9 @@ class Browser(
         self.window.exec_()
         return self
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _initialize_qt_progress_bar(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
+    @JointPoint
+## python3.3     def _initialize_qt_progress_bar(self: Self) -> Self:
     def _initialize_qt_progress_bar(self):
-##
         '''
             Initializes the progress bar for qt on bottom of the window for
             showing current state of website rendering.
@@ -493,13 +461,9 @@ class Browser(
             self.browser.loadFinished.connect(self._on_qt_load_finished)
         return self
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _initialize_gtk_browser(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
+    @JointPoint
+## python3.3     def _initialize_gtk_browser(self: Self) -> Self:
     def _initialize_gtk_browser(self):
-##
         '''
             Sets various event-handlers for browser and window objects.
         '''
@@ -530,13 +494,9 @@ class Browser(
         gtk.main()
         return self
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _initialize_gtk_progress_bar(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
+    @JointPoint
+## python3.3     def _initialize_gtk_progress_bar(self: Self) -> Self:
     def _initialize_gtk_progress_bar(self):
-##
         '''
             Initializes the progress bar for gtk on bottom of the window for
             showing current state of website rendering.
@@ -550,13 +510,9 @@ class Browser(
             self.vbox.pack_start(self.progress_bar, False)
         return self
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _check_for_gtk_closing_flag(
-##         self: boostNode.extension.type.Self
-##     ) -> builtins.bool:
+    @JointPoint
+## python3.3     def _check_for_gtk_closing_flag(self: Self) -> builtins.bool:
     def _check_for_gtk_closing_flag(self):
-##
         '''
             Checks if gtk should be closed after the last gtk main iteration.
             If we return a "False" this method will not be triggered in future.
@@ -571,11 +527,9 @@ class Browser(
 
                     # region webkit event
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
-##     def _on_qt_title_changed(
-##         self: boostNode.extension.type.Self, title  # : builtins.str
-##     ) -> boostNode.extension.type.Self:
+##     def _on_qt_title_changed(self: Self, title: builtins.str) -> Self:
     def _on_qt_title_changed(self, title):
 ##
         '''
@@ -585,13 +539,12 @@ class Browser(
         self.browser.setWindowTitle(title)
         return self
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def _on_gtk_title_changed(
-##         self: boostNode.extension.type.Self, webview,  # : webkit.WebView,
-##         frame,  # : webkit.WebFrame,
+##         self: Self, webview: webkit.WebView, frame: webkit.WebFrame,
 ##         title: builtins.str
-##     ) -> boostNode.extension.type.Self:
+##     ) -> Self:
     def _on_gtk_title_changed(self, webview, frame, title):
 ##
         '''
@@ -601,13 +554,9 @@ class Browser(
         self.window.set_title(title)
         return self
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _on_qt_load_started(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
+    @JointPoint
+## python3.3     def _on_qt_load_started(self: Self) -> Self:
     def _on_qt_load_started(self):
-##
         '''
             Triggers if browser starts to load a new web page.
         '''
@@ -615,13 +564,11 @@ class Browser(
         self.progress_bar.setVisible(True)
         return self
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def _on_gtk_load_started(
-##         self: boostNode.extension.type.Self,
-##         webview,  # : webkit.WebView,
-##         frame,  # : webkit.WebFrame
-##     ) -> boostNode.extension.type.Self:
+##         self: Self, webview: webkit.WebView, frame: webkit.WebFrame
+##     ) -> Self:
     def _on_gtk_load_started(self, webview, frame):
 ##
         '''
@@ -631,11 +578,11 @@ class Browser(
         self.progress_bar.set_visible(True)
         return self
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def _on_qt_load_progress_changed(
-##         self: boostNode.extension.type.Self, status: builtins.int
-##     ) -> boostNode.extension.type.Self:
+##         self: Self, status: builtins.int
+##     ) -> Self:
     def _on_qt_load_progress_changed(self, status):
 ##
         '''
@@ -644,13 +591,11 @@ class Browser(
         self.progress_bar.setValue(status)
         return self
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def _on_gtk_load_progress_changed(
-##         self: boostNode.extension.type.Self,
-##         webview,  # : webkit.WebView,
-##         amount,  # : builtins.int
-##     ) -> boostNode.extension.type.Self:
+##         self: Self, webview: webkit.WebView, amount: builtins.int
+##     ) -> Self:
     def _on_gtk_load_progress_changed(self, webview, amount):
 ##
         '''
@@ -659,11 +604,9 @@ class Browser(
         self.progress_bar.set_fraction(amount / 100.0)
         return self
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
-##     def _on_qt_load_finished(
-##         self: boostNode.extension.type.Self, successful: builtins.bool
-##     ) -> boostNode.extension.type.Self:
+##     def _on_qt_load_finished(self: Self, successful: builtins.bool) -> Self:
     def _on_qt_load_finished(self, successful):
 ##
         '''
@@ -672,13 +615,11 @@ class Browser(
         self.progress_bar.setVisible(False)
         return self
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def _on_gtk_load_finished(
-##         self: boostNode.extension.type.Self,
-##         webview,  # : webkit.WebView,
-##         frame,  # : webkit.WebFrame
-##     ) -> boostNode.extension.type.Self:
+##         self: Self, webview: webkit.WebView, frame: webkit.WebFrame
+##     ) -> Self:
     def _on_gtk_load_finished(self, webview, frame):
 ##
         '''
@@ -694,13 +635,9 @@ class Browser(
 
             # endregion
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _determine_gui_toolkits(
-##         self: boostNode.extension.type.Self
-##     ) -> builtins.list:
+    @JointPoint
+## python3.3     def _determine_gui_toolkits(self: Self) -> builtins.list:
     def _determine_gui_toolkits(self):
-##
         '''
             Determines all supported gui toolkits.
 
@@ -736,7 +673,6 @@ __logger__ = __test_mode__ = __exception__ = __module_name__ = \
     introspection support. A generic command line interface for some code
     preprocessing tools is provided by default.
 '''
-boostNode.extension.native.Module.default(
-    name=__name__, frame=inspect.currentframe())
+Module.default(name=__name__, frame=inspect.currentframe())
 
 # endregion

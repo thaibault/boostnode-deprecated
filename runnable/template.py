@@ -51,24 +51,21 @@ import traceback
 for number in (3, 4):
     sys.path.append(os.path.abspath(sys.path[0] + number * ('..' + os.sep)))
 
-import boostNode.extension.dependent
-import boostNode.extension.file
-import boostNode.extension.native
-import boostNode.extension.output
-import boostNode.extension.system
-import boostNode.extension.type
-import boostNode.paradigm.aspectOrientation
-import boostNode.paradigm.objectOrientation
+from boostNode.extension.file import Handler as FileHandler
+from boostNode.extension.native import Dictionary, Module, String
+from boostNode.extension.output import Buffer, Print
+from boostNode.extension.system import CommandLine, Runnable
+## python3.3 from boostNode.extension.type import Self
+pass
+from boostNode.paradigm.aspectOrientation import JointPoint
+from boostNode.paradigm.objectOrientation import Class
 
 # endregion
 
 
 # region classes
 
-class Parser(
-    boostNode.paradigm.objectOrientation.Class,
-    boostNode.extension.system.Runnable
-):
+class Parser(Class, Runnable):
     '''
         This class can parse a string or file to interpret it as template
         for replacing containing placeholder and rendering embedded python
@@ -268,7 +265,7 @@ class Parser(
     '''Indicates if last rendered code snippet was a full line.'''
     _new_line = True
     '''
-        Holds number of whitespaces to indent a context dependent code block
+        Holds number of white spaces to indent a context dependent code block
         in templates.
     '''
     _indent = 0
@@ -306,11 +303,9 @@ class Parser(
 
             # region special
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
+    @JointPoint
+## python3.3     def __repr__(self: Self) -> builtins.str:
     def __repr__(self):
-##
         '''
             Invokes if this object should describe itself by a string.
 
@@ -322,11 +317,9 @@ class Parser(
         return 'Object of "{class_name}" with template "{template}".'.format(
             class_name=self.__class__.__name__, template=self.content)
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def __str__(self: boostNode.extension.type.Self) -> builtins.str:
+    @JointPoint
+## python3.3     def __str__(self: Self) -> builtins.str:
     def __str__(self):
-##
         '''
             Triggers if an instance is tried to be interpreted as a string.
 
@@ -337,11 +330,9 @@ class Parser(
         '''
         return self.content
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def __len__(self: boostNode.extension.type.Self) -> builtins.int:
+    @JointPoint
+## python3.3     def __len__(self: Self) -> builtins.int:
     def __len__(self):
-##
         '''
             Triggers if the pythons native "builtins.len()" function tries to
             handle current instance.
@@ -359,29 +350,25 @@ class Parser(
 
             # region getter
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def get_indent(self: boostNode.extension.type.Self) -> builtins.int:
+    @JointPoint
+## python3.3     def get_indent(self: Self) -> builtins.int:
     def get_indent(self):
-##
         '''
-            Returns a string of whitespaces representing current context.
+            Returns a string of white spaces representing current context.
         '''
         if not self._indent and self.content:
             self._indent = self._template_context_default_indent
             match = re.compile(
                 '^<% *__indent__ *= *(?P<number_of_indents>[1-9][0-9]*)'
                 '(?:;|\n)?.*?$'
-            ).match(boostNode.extension.native.String(self.content).readline())
+            ).match(String(self.content).readline())
             if match:
                 self._indent = builtins.int(match.group('number_of_indents'))
         return self._indent
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def get_output(self: boostNode.extension.type.Self) -> builtins.str:
+    @JointPoint
+## python3.3     def get_output(self: Self) -> builtins.str:
     def get_output(self):
-##
         '''
             Gets the current output buffer. It consists everything printed out
             in code snippets rendered by the template instance or exists as
@@ -395,14 +382,12 @@ class Parser(
             'hans says\\nwho is hans?\\n'
         '''
         if self._output is None:
-            self._output = boostNode.extension.output.Buffer()
+            self._output = Buffer()
         return self._output.content
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def get_builtins(self: boostNode.extension.type.Self) -> builtins.dict:
+    @JointPoint
+## python3.3     def get_builtins(self: Self) -> builtins.dict:
     def get_builtins(self):
-##
         '''
             Defines minimum needed native python features for each template
             scope. It adds user-defined additionally python functions. The
@@ -416,28 +401,21 @@ class Parser(
             {...'print': ..._print...}
         '''
         self._builtins.update({
-            '__indent__': self.indent,
-            'FileHandler': boostNode.extension.file.Handler,
-            'print': self._print,
-            'include': self._include,
-            'str': builtins.str,
-            'len': builtins.len,
-            'json': json,
-            'False': False,
-            'True': True,
-            'locals': builtins.locals})
+            '__indent__': self.indent, 'FileHandler': FileHandler,
+            'print': self._print, 'include': self._include,
+            'str': builtins.str, 'len': builtins.len, 'json': json,
+            'False': False, 'True': True, 'locals': builtins.locals})
         return self._builtins
 
             # endregion
 
             # region wrapper
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def substitute(
-##         self: boostNode.extension.type.Self, *arguments: builtins.str,
-##         **keywords: builtins.object
-##     ) -> boostNode.extension.type.Self:
+##         self: Self, *arguments: builtins.str, **keywords: builtins.object
+##     ) -> Self:
     def substitute(self, *arguments, **keywords):
 ##
         '''
@@ -471,12 +449,11 @@ class Parser(
             *arguments, **keywords))
         return self
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def safe_substitute(
-##         self: boostNode.extension.type.Self, *arguments: builtins.str,
-##         **keywords: builtins.object
-##     ) -> boostNode.extension.type.Self:
+##         self: Self, *arguments: builtins.str, **keywords: builtins.object
+##     ) -> Self:
     def safe_substitute(self, *arguments, **keywords):
 ##
         '''
@@ -526,13 +503,9 @@ class Parser(
 
             # region parsing
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def substitute_all(
-##         self: boostNode.extension.type.Self, replacement=''
-##     ) -> boostNode.extension.type.Self:
+    @JointPoint
+## python3.3     def substitute_all(self: Self, replacement='') -> Self:
     def substitute_all(self, replacement=''):
-##
         '''
             Substitutes every placeholder in template with a given replacement
             string.
@@ -556,12 +529,11 @@ class Parser(
         ).sub(replacement, self.content))
         return self
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def render(
-##         self: boostNode.extension.type.Self, mapping={},
-##         **keywords: builtins.object
-##     ) -> boostNode.extension.type.Self:
+##         self: Self, mapping={}, **keywords: builtins.object
+##     ) -> Self:
     def render(self, mapping={}, **keywords):
 ##
         '''
@@ -579,10 +551,10 @@ class Parser(
         '''
         self.rendered_content = re.compile(
             self._template_pattern.format(
-                left_delimiter=boostNode.extension.native.String(
+                left_delimiter=String(
                     self._left_code_delimiter
                 ).validate_regex(),
-                right_delimiter=boostNode.extension.native.String(
+                right_delimiter=String(
                     self._right_code_delimiter
                 ).validate_regex(),
                 placeholder=self._placeholder_name_pattern,
@@ -591,23 +563,17 @@ class Parser(
         mapping.update(keywords)
         return self._run_template(template_scope=mapping)
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def represent_rendered_content(
-##         self: boostNode.extension.type.Self,
-##     ) -> builtins.str:
+    @JointPoint
+## python3.3     def represent_rendered_content(self: Self) -> builtins.str:
     def represent_rendered_content(self):
-##
         '''
             This method adds line numbers to rendered contend which is
             visible if an template exception occurs in debug mode.
         '''
         self._number_of_rendered_content_lines = builtins.len(
-            boostNode.extension.native.String(
-                self.rendered_content
-            ).readlines())
+            String(self.rendered_content).readlines())
 
-        @boostNode.paradigm.aspectOrientation.JointPoint
+        @JointPoint
 ## python3.3
 ##         def replace_rendered_content_line(
 ##             match: builtins.type(re.compile('').match(''))
@@ -637,13 +603,9 @@ class Parser(
 
             # region runnable implementation
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _run(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
+    @JointPoint
+## python3.3     def _run(self: Self) -> Self:
     def _run(self):
-##
         '''
             Entry point for command line call of this program.
             Loads the given template. If it is given by the command line it
@@ -651,7 +613,7 @@ class Parser(
 
             Examples:
 
-            >>> boostNode.extension.file.Handler(
+            >>> FileHandler(
             ...     __test_folder__ + '_run', must_exist=False
             ... ).content = 'hans <%placeholder%>'
             >>> template = Parser(
@@ -661,10 +623,9 @@ class Parser(
             >>> template.output
             'hans also hans'
         '''
-        self._command_line_arguments = \
-            boostNode.extension.system.CommandLine.argument_parser(
-                arguments=self.COMMAND_LINE_ARGUMENTS,
-                module_name=__name__, scope={'self': self})
+        self._command_line_arguments = CommandLine.argument_parser(
+            arguments=self.COMMAND_LINE_ARGUMENTS, module_name=__name__,
+            scope={'self': self})
         initializer_arguments = self._command_line_arguments_to_dictionary(
             namespace=self._command_line_arguments)
         if(initializer_arguments['builtins'] and
@@ -675,14 +636,13 @@ class Parser(
                 initializer_arguments['builtins'])
         self._initialize(**initializer_arguments).render(
             **self._generate_scope_variables())
-        boostNode.extension.output.Print(self.output)
+        Print(self.output)
         return self
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def _initialize(
-##         self: boostNode.extension.type.Self,
-##         template: (builtins.str, boostNode.extension.file.Handler),
+##         self: Self, template: (builtins.str, FileHandler),
 ##         string=False,
 ##         placeholder_name_pattern='[a-zA-Z0-9_\[\]\'"\.()\\\\,\-+ :/={}]+',
 ##         command_line_placeholder_name_pattern='(?s)'
@@ -737,7 +697,7 @@ class Parser(
 ##         builtins=(builtins.all, builtins.filter, builtins.map,
 ##                   builtins.enumerate, builtins.range, builtins.locals),
 ##         pretty_indent=False, **keywords: builtins.object
-##     ) -> boostNode.extension.type.Self:
+##     ) -> Self:
     def _initialize(
         self, template, string=False,
         placeholder_name_pattern='[a-zA-Z0-9_\[\]\'"\.()\\\\,\-+ :/={}]+',
@@ -835,16 +795,16 @@ class Parser(
         self._command_line_placeholder_pattern = \
             command_line_placeholder_pattern
         self._native_template_pattern = native_template_pattern
-        self._output = boostNode.extension.output.Buffer()
+        self._output = Buffer()
         return self._set_builtins(builtins)._load_template(template, string)
 
             # endregion
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def _set_builtins(
-##         self: boostNode.extension.type.Self, builtins: collections.Iterable
-##     ) -> boostNode.extension.type.Self:
+##         self: Self, builtins: collections.Iterable
+##     ) -> Self:
     def _set_builtins(self, builtins):
 ##
         '''
@@ -860,13 +820,9 @@ class Parser(
             self._builtins[builtin.__name__] = builtin
         return self
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _generate_scope_variables(
-##         self: boostNode.extension.type.Self
-##     ) -> builtins.dict:
+    @JointPoint
+## python3.3     def _generate_scope_variables(self: Self) -> builtins.dict:
     def _generate_scope_variables(self):
-##
         '''
             Generates scope variables given by the command line interface and
             embeds them into the template.
@@ -894,13 +850,12 @@ class Parser(
                     'Your string have to match "%s".', variable, pattern)
         return keywords
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def _load_template(
-##         self: boostNode.extension.type.Self,
-##         template: (builtins.str, boostNode.extension.file.Handler),
+##         self: Self, template: (builtins.str, FileHandler),
 ##         string: builtins.bool
-##     ) -> boostNode.extension.type.Self:
+##     ) -> Self:
     def _load_template(self, template, string):
 ##
         '''
@@ -920,10 +875,9 @@ class Parser(
         if string:
             self.content = template
         else:
-            self.file = boostNode.extension.file.Handler(
-                location=template, must_exist=False)
+            self.file = FileHandler(location=template, must_exist=False)
             if not self.file:
-                self.file = boostNode.extension.file.Handler(
+                self.file = FileHandler(
                     location=template + '.tpl', must_exist=False)
             if not self.file:
                 raise __exception__(
@@ -936,11 +890,9 @@ class Parser(
         self.native_template_object.delimiter = self._left_code_delimiter
         return self
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
-##     def _run_template(
-##         self: boostNode.extension.type.Self, template_scope: builtins.dict
-##     ) -> boostNode.extension.type.Self:
+##     def _run_template(self: Self, template_scope: builtins.dict) -> Self:
     def _run_template(self, template_scope):
 ##
         '''
@@ -960,8 +912,9 @@ class Parser(
             line_number = self._get_exception_line(exception)
             rendered_content = ''
             if not builtins.hasattr(exception, 'has_template_info'):
-                rendered_content = '\nrendered content:\n\n%s\n' % \
-                    self.represent_rendered_content()
+                rendered_content = (
+                    '\nrendered content:\n-----------------\n\n%s\n' %
+                    self.represent_rendered_content())
 ## python3.3
 ##             raise __exception__(
 ##                 'Error with %s in include statement in line %s '
@@ -987,10 +940,10 @@ class Parser(
         sys.stdout.flush()
         return self
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def _handle_template_exception(
-##         self: boostNode.extension.type.Self, exception: builtins.Exception
+##         self: Self, exception: builtins.Exception
 ##     ) -> builtins.tuple:
     def _handle_template_exception(self, exception):
 ##
@@ -1002,9 +955,9 @@ class Parser(
         line_info = ''
         exception_message = '%s: %s' % (
             exception.__class__.__name__,
-            boostNode.extension.native.String(
-                exception
-            ).camel_case_capitalize().replace("'", '"').content)
+            String(exception).camel_case_capitalize().replace(
+                "'", '"'
+            ).content)
         line_number = self._get_exception_line(exception)
         if line_number:
             line_info = ' in line %d (line in compiled template: %d)' %\
@@ -1022,25 +975,21 @@ class Parser(
                 native_exception_description)
         return line_info, exception_message, native_exception_description
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
-##     def _determine_template_description(
-##         self: boostNode.extension.type.Self
-##     ) -> builtins.str:
+##     def _determine_template_description(self: Self) -> builtins.str:
     def _determine_template_description(self):
 ##
-        '''
-            Determines a useful description for current template.
-        '''
+        '''Determines a useful description for current template.'''
         if self.file:
             return '"%s"' % self.file.path
         return 'given template string'
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def _raise_template_exception(
-##         self: boostNode.extension.type.Self,
-##         line_info: builtins.str, exception_message: builtins.str,
+##         self: Self, line_info: builtins.str,
+##         exception_message: builtins.str,
 ##         native_exception_description: builtins.str,
 ##         native_exception: builtins.Exception
 ##     ) -> None:
@@ -1081,10 +1030,10 @@ class Parser(
 ## python3.3         raise exception from None
         raise exception
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def _get_exception_line(
-##         self: boostNode.extension.type.Self, exception: builtins.Exception
+##         self: Self, exception: builtins.Exception
 ##     ) -> builtins.tuple:
     def _get_exception_line(self, exception):
 ##
@@ -1109,10 +1058,10 @@ class Parser(
             return line_number - self._line_shifts[-1][1], line_number
         return line_number, line_number
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def _determine_exec_string_exception_line(
-##         self: boostNode.extension.type.Self, exception: builtins.Exception
+##         self: Self, exception: builtins.Exception
 ##     ) -> builtins.int:
     def _determine_exec_string_exception_line(self, exception):
 ##
@@ -1136,11 +1085,11 @@ class Parser(
 
     # NOTE: This method is heavily used during rendering. It should be as fast
     # as possible. So the JointPoint is deactivated.
-    # @boostNode.paradigm.aspectOrientation.JointPoint
+    # @JointPoint
 ## python3.3
 ##     def _print(
-##         self: boostNode.extension.type.Self, *arguments: builtins.object,
-##         indent=True, indent_space='', **keywords: builtins.object
+##         self: Self, *arguments: builtins.object, indent=True,
+##         indent_space='', **keywords: builtins.object
 ##     ) -> None:
     def _print(self, *arguments, **keywords):
 ##
@@ -1160,8 +1109,7 @@ class Parser(
         if self._pretty_indent:
 ## python3.3
 ##             pass
-            keywords_dictionary = boostNode.extension.native.Dictionary(
-                content=keywords)
+            keywords_dictionary = Dictionary(content=keywords)
             indent, keywords = keywords_dictionary.pop(
                 name='indent', default_value=True)
             indent_space, keywords = keywords_dictionary.pop(
@@ -1172,10 +1120,10 @@ class Parser(
                     If an indent level was given prepend given indent space to
                     each line.
                 '''
-                print_buffer = boostNode.extension.output.Buffer()
+                print_buffer = Buffer()
                 codewords = copy.deepcopy(keywords)
                 codewords.update({'buffer': print_buffer})
-                boostNode.extension.output.Print(*arguments, **codewords)
+                Print(*arguments, **codewords)
                 arguments = (indent_space + print_buffer.content.replace(
                     '\n', '\n' + indent_space),)
                 if print_buffer.content.endswith('\n'):
@@ -1187,11 +1135,10 @@ class Parser(
         return builtins.print(
             *arguments, file=self._output, end=keywords.get('end'))
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def _include(
-##         self: boostNode.extension.type.Self,
-##         template_file_path: builtins.str, scope={}, end='\n',
+##         self: Self, template_file_path: builtins.str, scope={}, end='\n',
 ##         indent=True, indent_space='', **keywords: builtins.object
 ##     ) -> None:
     def _include(
@@ -1217,11 +1164,10 @@ class Parser(
 
             # region callback
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def _render_code(
-##         self: boostNode.extension.type.Self,
-##         match: builtins.type(re.compile('').match(''))
+##         self: Self, match: builtins.type(re.compile('').match(''))
 ##     ) -> builtins.str:
     def _render_code(self, match):
 ##
@@ -1250,11 +1196,10 @@ class Parser(
 
                 # region helper
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def _render_empty_line(
-##         self: boostNode.extension.type.Self,
-##         match: builtins.type(re.compile('').match(''))
+##         self: Self, match: builtins.type(re.compile('').match(''))
 ##     ) -> builtins.str:
     def _render_empty_line(self, match):
 ##
@@ -1267,11 +1212,10 @@ class Parser(
             string=match.group('EMPTY_LINE'), end=''))
         return ''
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def _render_none_code_line(
-##         self: boostNode.extension.type.Self,
-##         match: builtins.type(re.compile('').match(''))
+##         self: Self, match: builtins.type(re.compile('').match(''))
 ##     ) -> builtins.str:
     def _render_none_code_line(self, match):
 ##
@@ -1294,11 +1238,10 @@ class Parser(
             string=match.group('none_code')[slice:],
             end=self._get_new_line())
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def _render_code_line(
-##         self: boostNode.extension.type.Self,
-##         match: builtins.type(re.compile('').match(''))
+##         self: Self, match: builtins.type(re.compile('').match(''))
 ##     ) -> builtins.str:
     def _render_code_line(self, match):
 ##
@@ -1316,11 +1259,10 @@ class Parser(
             code_line, was_new_line, match)
         return self._flush_empty_lines(indent) + indent + code_line
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def _save_output_method_indent_level(
-##         self: boostNode.extension.type.Self, code_line: builtins.str,
-##         was_new_line: builtins.bool,
+##         self: Self, code_line: builtins.str, was_new_line: builtins.bool,
 ##         match: builtins.type(re.compile('').match(''))
 ##     ) -> builtins.str:
     def _save_output_method_indent_level(
@@ -1343,10 +1285,10 @@ class Parser(
                 code_line, match, slice)
         return code_line
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def _handle_include_output_indent_level(
-##         self: boostNode.extension.type.Self, code_line: builtins.str,
+##         self: Self, code_line: builtins.str,
 ##         match: builtins.type(re.compile('').match('')), slice: builtins.int
 ##     ) -> builtins.str:
     def _handle_include_output_indent_level(self, code_line, match, slice):
@@ -1355,7 +1297,7 @@ class Parser(
             Returns a string representing from include function call in
             generated python code with their indent level given.
         '''
-        length_of_include_call = boostNode.extension.native.String(
+        length_of_include_call = String(
             code_line[builtins.len('include('):]
         ).find_python_code_end_bracket()
         slice_position = builtins.len('include(') + length_of_include_call
@@ -1373,10 +1315,10 @@ class Parser(
             "')" +
             code_line[builtins.len('include(') + length_of_include_call + 1:])
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def _handle_print_output_indent_level(
-##         self: boostNode.extension.type.Self, code_line: builtins.str,
+##         self: Self, code_line: builtins.str,
 ##         match: builtins.type(re.compile('').match('')), slice: builtins.int
 ##     ) -> builtins.str:
     def _handle_print_output_indent_level(self, code_line, match, slice):
@@ -1385,9 +1327,9 @@ class Parser(
             Returns a string representing from print function call in
             generated python code with their indent level given.
         '''
-        length_of_print_call = boostNode.extension.native.String(
-            code_line[builtins.len(
-                'print('):]).find_python_code_end_bracket()
+        length_of_print_call = String(
+            code_line[builtins.len('print('):]
+        ).find_python_code_end_bracket()
         if(code_line[builtins.len('print('):builtins.len(
            'print(') + length_of_print_call]):
             return (
@@ -1401,11 +1343,10 @@ class Parser(
             "')" +
             code_line[builtins.len('print(') + length_of_print_call + 1:])
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def _render_escaped_none_code_line(
-##         self: boostNode.extension.type.Self,
-##         match: builtins.type(re.compile('').match(''))
+##         self: Self, match: builtins.type(re.compile('').match(''))
 ##     ) -> builtins.str:
     def _render_escaped_none_code_line(self, match):
 ##
@@ -1430,11 +1371,10 @@ class Parser(
         return last_empty_lines + indent + self._render_none_code(
             string=content_before + self._left_code_delimiter, end='')
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def _render_placeholder(
-##         self: boostNode.extension.type.Self,
-##         match: builtins.type(re.compile('').match(''))
+##         self: Self, match: builtins.type(re.compile('').match(''))
 ##     ) -> builtins.str:
     def _render_placeholder(self, match):
 ##
@@ -1469,10 +1409,10 @@ class Parser(
                 match.group('placeholder').strip() + ")%s, end='')\n" %
                 ('+"\\n"' if self._get_new_line() else ''))
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def _flush_empty_lines(
-##         self: boostNode.extension.type.Self, indent: builtins.str
+##         self: Self, indent: builtins.str
 ##     ) -> builtins.str:
     def _flush_empty_lines(self, indent):
 ##
@@ -1486,11 +1426,9 @@ class Parser(
         self._empty_lines = []
         return result
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _get_new_line(self: boostNode.extension.type.Self) -> builtins.str:
+    @JointPoint
+## python3.3     def _get_new_line(self: Self) -> builtins.str:
     def _get_new_line(self):
-##
         '''
             Returns a new line string if necessary for the correct template
             compiling to native python code.
@@ -1500,11 +1438,11 @@ class Parser(
             return '\n'
         return ''
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def _get_code_indent(
-##         self: boostNode.extension.type.Self,
-##         current_indent: (builtins.type(None), builtins.str), mode='passiv'
+##         self: Self, current_indent: (builtins.type(None), builtins.str),
+##         mode='passiv'
 ##     ) -> builtins.str:
     def _get_code_indent(self, current_indent, mode='passiv'):
 ##
@@ -1541,11 +1479,10 @@ class Parser(
             self._code_dependend_indents.append(current_indent)
         return indent
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def _render_none_code(
-##         self: boostNode.extension.type.Self,
-##         string: builtins.str, end='\n'
+##         self: Self, string: builtins.str, end='\n'
 ##     ) -> builtins.str:
     def _render_none_code(self, string, end='\n'):
 ##
@@ -1586,8 +1523,11 @@ class Parser(
 '''
 __logger__ = __test_mode__ = __exception__ = __module_name__ = \
     __file_path__ = None
-'''Resolve cyclic dependency issues.'''
-boostNode.extension.dependent.Resolve(
-    name=__name__, frame=inspect.currentframe())
+'''
+    Extends this module with some magic environment variables to provide better
+    introspection support. A generic command line interface for some code
+    preprocessing tools is provided by default.
+'''
+Module.default(name=__name__, frame=inspect.currentframe())
 
 # endregion

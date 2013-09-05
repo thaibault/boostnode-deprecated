@@ -29,8 +29,6 @@ __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-## python3.3 import builtins
-import __builtin__ as builtins
 import inspect
 import os
 import sys
@@ -43,18 +41,12 @@ for number in (3, 4):
 if not sys.path[0]:
     sys.path[0] = os.getcwd()
 
+from boostNode import __get_all_modules__
+
 # endregion
 
 '''Determine all modules in this folder via introspection.'''
-__all__ = builtins.list(builtins.set(builtins.map(
-    lambda name: name[:name.rfind('.')],
-    builtins.filter(
-        lambda name: ((name.endswith('.py') or
-                      name.endswith('.pyc')) and
-                      not name.startswith('__init__.')),
-        os.listdir(
-            sys.path[0][:- 1 -builtins.len(os.path.basename(sys.path[0]))] if
-            os.path.isfile(sys.path[0]) else sys.path[0])))))
+__all__ = __get_all_modules__()
 
  # region footer
 
@@ -62,8 +54,7 @@ __all__ = builtins.list(builtins.set(builtins.map(
     Preset some variables given by introspection letting the linter know what
     globale variables are available.
 '''
-__logger__ = __test_mode__ = __exception__ = __module_name__ = \
-    __file_path__ = None
+__logger__ = __test_mode__ = __exception__ = __file_path__ = None
 if __name__ == '__main__':
     from boostNode.extension.system import CommandLine
     '''

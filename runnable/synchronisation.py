@@ -42,20 +42,22 @@ import sys
 for number in (3, 4):
     sys.path.append(os.path.abspath(sys.path[0] + number * ('..' + os.sep)))
 
-import boostNode.extension.file
-import boostNode.extension.output
-import boostNode.extension.system
+from boostNode.extension.file import Handler as FileHandler
+from boostNode.extension.native import Module
+from boostNode.extension.output import Logger
+from boostNode.extension.system import CommandLine, Platform, Runnable
+## python3.3 from boostNode.extension.type import Self, SelfClass
+pass
+from boostNode.paradigm.aspectOrientation import JointPoint
+from boostNode.paradigm.objectOrientation import Class
 
 # endregion
 
 
 # region classes
 
-class Reflector(
-    boostNode.paradigm.objectOrientation.Class,
-    boostNode.extension.system.Runnable
-):
-    '''Main class of the FileReflection application.'''
+class Reflector(Class, Runnable):
+    '''Main class of the file reflection application.'''
 
     # region constant properties
 
@@ -233,17 +235,15 @@ class Reflector(
 
             # region special
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def __repr__(self: boostNode.extension.type.Self) -> builtins.str:
+    @JointPoint
+## python3.3     def __repr__(self: Self) -> builtins.str:
     def __repr__(self):
-##
         '''
             Invokes if this object should describe itself by a string.
 
             Examples:
 
-            >>> boostNode.extension.file.Handler(
+            >>> FileHandler(
             ...     __test_folder__ + 's/A/B', must_exist=False
             ... ).make_directorys()
             True
@@ -277,7 +277,7 @@ class Reflector(
             ... ) # doctest: +ELLIPSIS
             '...s..."...t..."...ority locations "" and exclude locations "".'
         '''
-        limit = boostNode.extension.file.Handler.determine_size_from_string(
+        limit = FileHandler.determine_size_from_string(
             size_and_unit=self._given_limit)
         return ('Object of "{class_name}" with source path "{source_path}" '
                 'and target path "{target_path}". Limit is {limit} byte, '
@@ -302,12 +302,11 @@ class Reflector(
 
             # region boolean
 
-    @boostNode.paradigm.aspectOrientation.JointPoint(builtins.classmethod)
+    @JointPoint(builtins.classmethod)
 ## python3.3
 ##     def is_path_in_paths(
-##             cls: boostNode.extension.type.SelfClass,
-##             search: boostNode.extension.file.Handler,
-##             paths: collections.Iterable) -> builtins.bool:
+##         cls: SelfClass, search: FileHandler, paths: collections.Iterable
+##     ) -> builtins.bool:
     def is_path_in_paths(cls, search, paths):
 ##
         '''
@@ -316,7 +315,7 @@ class Reflector(
 
             Examples:
 
-            >>> file = boostNode.extension.file.Handler(
+            >>> file = FileHandler(
             ...     location=__test_folder__ + 'source5', must_exist=False)
             >>> file.make_directorys()
             True
@@ -330,9 +329,8 @@ class Reflector(
             False
         '''
         for path in paths:
-            if(boostNode.extension.file.Handler(
-                location=path, must_exist=False).path in search.path
-               ):
+            if(FileHandler(location=path, must_exist=False).path in
+               search.path):
                 return True
         return False
 
@@ -348,19 +346,15 @@ class Reflector(
 
             # region getter
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def get_status_in_percent(
-##         self: boostNode.extension.type.Self
-##     ) -> builtins.float:
+    @JointPoint
+## python3.3     def get_status_in_percent(self: Self) -> builtins.float:
     def get_status_in_percent(self):
-##
         '''
             Calculates the edited part of files in percent.
 
             Examples:
 
-            >>> source = boostNode.extension.file.Handler(
+            >>> source = FileHandler(
             ...     location=__test_folder__ + 'source6', make_directory=True)
             >>> reflector = Reflector(
             ...     source_location=__test_folder__ + 'source6',
@@ -391,47 +385,36 @@ class Reflector(
 
             # endregion
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def open(
-##         self: boostNode.extension.type.Self, files: collections.Iterable
-##     ) -> boostNode.extension.type.Self:
+    @JointPoint
+## python3.3     def open(self: Self, files: collections.Iterable) -> Self:
     def open(self, files):
-##
         '''
-            Opens the given files by using the
-            "boostNode.extension.system.Platform.open()" method. It can handle
-            symbolic and portable links.
+            Opens the given files by using the "Platform.open()" method. It can
+            handle symbolic and portable links.
         '''
         for file in files:
-            file = boostNode.extension.file.Handler(
-                location=file, must_exist=False)
+            file = FileHandler(location=file, must_exist=False)
             if file.is_portable_link():
-                referenced_file = boostNode.extension.file.Handler(
+                referenced_file = FileHandler(
                     location=file.read_portable_link(), must_exist=False)
                 if referenced_file:
-                    boostNode.extension.system.Platform.open(
-                        location=referenced_file)
+                    Platform.open(location=referenced_file)
                     return self
                 raise __exception__(
                     'The referenced object "%s" of portable symlink "%s" '
                     'isn\'t currently available.', referenced_file, file.path)
-            boostNode.extension.system.Platform.open(location=file)
+            Platform.open(location=file)
         return self
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def create(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
+    @JointPoint
+## python3.3     def create(self: Self) -> Self:
     def create(self):
-##
         '''
             Creates a new reflection cache of the given source object.
 
             Examples:
 
-            >>> boostNode.extension.file.Handler(
+            >>> FileHandler(
             ...     location=__test_folder__ + 'source', make_directory=True
             ... ) # doctest: +ELLIPSIS
             Object of "Handler" with path "...source..." (directory).
@@ -441,40 +424,40 @@ class Reflector(
             >>> repr(reflector.create()) # doctest: +ELLIPSIS
             '...source..." and target path "...target...". Limit...'
 
-            >>> boostNode.extension.file.Handler(
+            >>> FileHandler(
             ...     location=__test_folder__ + 'source/A/B/C', must_exist=False
             ... ).make_directorys()
             True
-            >>> boostNode.extension.file.Handler(
+            >>> FileHandler(
             ...     location=__test_folder__ + 'source/B/A/B/C',
             ...     must_exist=False
             ... ).make_directorys()
             True
-            >>> boostNode.extension.file.Handler(
+            >>> FileHandler(
             ...     location=__test_folder__ + 'source/B/B/C', must_exist=False
             ... ).make_directorys()
             True
-            >>> boostNode.extension.file.Handler(
+            >>> FileHandler(
             ...     location=__test_folder__ + 'source/A/a.txt',
             ...     must_exist=False
             ... ).content = 'hans'
-            >>> boostNode.extension.file.Handler(
+            >>> FileHandler(
             ...     location=__test_folder__ + 'source/A/b.txt',
             ...     must_exist=False
             ... ).content = 'hans'
-            >>> boostNode.extension.file.Handler(
+            >>> FileHandler(
             ...     location=__test_folder__ + 'source/A/B/C/a.txt',
             ...     must_exist=False
             ... ).content = 'hans'
-            >>> boostNode.extension.file.Handler(
+            >>> FileHandler(
             ...     location=__test_folder__ + 'source/B/B/C/a.txt',
             ...     must_exist=False
             ... ).content = 'hans'
-            >>> boostNode.extension.file.Handler(
+            >>> FileHandler(
             ...     location=__test_folder__ + 'source/B/A/B/c.txt',
             ...     must_exist=False
             ... ).content = 'hans'
-            >>> boostNode.extension.file.Handler(
+            >>> FileHandler(
             ...     location=__test_folder__ + 'source/B/A/B/C/big.txt',
             ...     must_exist=False
             ... ).content = 100 * '10bytes - '
@@ -484,39 +467,39 @@ class Reflector(
             ...     limit='20 byte')
             >>> repr(reflector.create()) # doctest: +ELLIPSIS
             '...Re...source..." and target path "...target...".'
-            >>> boostNode.extension.file.Handler(
-            ...     location=__test_folder__ + 'target/A/B/C').is_directory(
-            ...         allow_link=False)
+            >>> FileHandler(
+            ...     location=__test_folder__ + 'target/A/B/C'
+            ... ).is_directory(allow_link=False)
             True
-            >>> boostNode.extension.file.Handler(
-            ...     location=__test_folder__ + 'target/B/A/B/C').is_directory(
-            ...         allow_link=False)
+            >>> FileHandler(
+            ...     location=__test_folder__ + 'target/B/A/B/C'
+            ... ).is_directory(allow_link=False)
             True
-            >>> boostNode.extension.file.Handler(
-            ...     location=__test_folder__ + 'target/B/B/C').is_directory(
-            ...         allow_link=False)
+            >>> FileHandler(
+            ...     location=__test_folder__ + 'target/B/B/C'
+            ... ).is_directory(allow_link=False)
             True
-            >>> boostNode.extension.file.Handler(
-            ...     location=__test_folder__ + 'target/A/a.txt').is_file(
-            ...         allow_link=False)
+            >>> FileHandler(
+            ...     location=__test_folder__ + 'target/A/a.txt'
+            ... ).is_file(allow_link=False)
             True
-            >>> boostNode.extension.file.Handler(
-            ...     location=__test_folder__ + 'target/A/b.txt').is_file(
-            ...         allow_link=False)
+            >>> FileHandler(
+            ...     location=__test_folder__ + 'target/A/b.txt'
+            ... ).is_file(allow_link=False)
             True
-            >>> boostNode.extension.file.Handler(
-            ...     location=__test_folder__ + 'target/A/B/C/a.txt').is_file(
-            ...         allow_link=False)
+            >>> FileHandler(
+            ...     location=__test_folder__ + 'target/A/B/C/a.txt'
+            ... ).is_file(allow_link=False)
             True
-            >>> boostNode.extension.file.Handler(
-            ...     location=__test_folder__ + 'target/B/B/C/a.txt').is_file(
-            ...         allow_link=False)
+            >>> FileHandler(
+            ...     location=__test_folder__ + 'target/B/B/C/a.txt'
+            ... ).is_file(allow_link=False)
             True
-            >>> boostNode.extension.file.Handler(
-            ...     location=__test_folder__ + 'target/B/A/B/c.txt').is_file(
-            ...         allow_link=False)
+            >>> FileHandler(
+            ...     location=__test_folder__ + 'target/B/A/B/c.txt'
+            ... ).is_file(allow_link=False)
             True
-            >>> boostNode.extension.file.Handler(
+            >>> FileHandler(
             ...     location=__test_folder__ + 'target/B/A/B/C/big.txt'
             ... ).is_portable_link()
             True
@@ -528,50 +511,49 @@ class Reflector(
             ...     priority_locations=(__test_folder__ + 'source/B/A/B/C/',))
             >>> repr(reflector.create()) # doctest: +ELLIPSIS
             '...source...source..." and target path "...target...".'
-            >>> boostNode.extension.file.Handler(
-            ...     location=__test_folder__ + 'target/A/B/C').is_directory(
-            ...         allow_link=False)
+            >>> FileHandler(
+            ...     location=__test_folder__ + 'target/A/B/C'
+            ... ).is_directory(allow_link=False)
             True
-            >>> boostNode.extension.file.Handler(
-            ...     location=__test_folder__ + 'target/B/A/B/C').is_directory(
-            ...         allow_link=False)
+            >>> FileHandler(
+            ...     location=__test_folder__ + 'target/B/A/B/C'
+            ... ).is_directory(allow_link=False)
             True
-            >>> boostNode.extension.file.Handler(
-            ...     location=__test_folder__ + 'target/B/B/C').is_directory(
-            ...         allow_link=False)
+            >>> FileHandler(
+            ...     location=__test_folder__ + 'target/B/B/C'
+            ... ).is_directory(allow_link=False)
             True
-            >>> boostNode.extension.file.Handler(
-            ...     location=__test_folder__ + 'target/A/a.txt').is_file(
-            ...         allow_link=False)
+            >>> FileHandler(
+            ...     location=__test_folder__ + 'target/A/a.txt'
+            ... ).is_file(allow_link=False)
             True
-            >>> boostNode.extension.file.Handler(
-            ...     location=__test_folder__ + 'target/A/b.txt').is_file(
-            ...         allow_link=False)
+            >>> FileHandler(
+            ...     location=__test_folder__ + 'target/A/b.txt'
+            ... ).is_file(allow_link=False)
             True
-            >>> boostNode.extension.file.Handler(
-            ...     location=__test_folder__ + 'target/A/B/C/a.txt').is_file(
-            ...         allow_link=False)
+            >>> FileHandler(
+            ...     location=__test_folder__ + 'target/A/B/C/a.txt'
+            ... ).is_file(allow_link=False)
             True
-            >>> boostNode.extension.file.Handler(
-            ...     location=__test_folder__ + 'target/B/B/C/a.txt').is_file(
-            ...         allow_link=False)
+            >>> FileHandler(
+            ...     location=__test_folder__ + 'target/B/B/C/a.txt'
+            ... ).is_file(allow_link=False)
             True
-            >>> boostNode.extension.file.Handler(
+            >>> FileHandler(
             ...     location=__test_folder__ + 'target/B/A/B/c.txt'
             ... ).is_file(allow_link=False)
             True
-            >>> boostNode.extension.file.Handler(
+            >>> FileHandler(
             ...     location=__test_folder__ + 'target/B/A/B/C/big.txt'
             ... ).is_file(allow_link=False)
             True
 
-            >>> if boostNode.extension.system.Platform(
-            ...     ).operating_system != 'windows':
-            ...     created = boostNode.extension.file.Handler(
+            >>> if Platform().operating_system != 'windows':
+            ...     created = FileHandler(
             ...         location='.'
             ...     ).make_symbolic_link(
             ...         target=__test_folder__ + 'source/link', force=True)
-            ...     created = boostNode.extension.file.Handler(
+            ...     created = FileHandler(
             ...         location=__test_folder__ + 'source/B/A/B/C/big.txt'
             ...     ).make_symbolic_link(
             ...         target=__test_folder__ + 'source/big_link', force=True)
@@ -584,19 +566,17 @@ class Reflector(
             >>> repr(reflector.create()) # doctest: +ELLIPSIS
             'Object of "Reflector" with source path "...source..."...'
 
-            >>> if boostNode.extension.system.Platform(
-            ...     ).operating_system == 'windows':
+            >>> if Platform().operating_system == 'windows':
             ...     '...runnable...'
             ... else:
-            ...     boostNode.extension.file.Handler(
+            ...     FileHandler(
             ...         location=__test_folder__ + 'source/link'
             ...     ).read_symbolic_link() # doctest: +ELLIPSIS
             '...runnable...'
-            >>> if boostNode.extension.system.Platform(
-            ...     ).operating_system == 'windows':
+            >>> if Platform().operating_system == 'windows':
             ...     '...target...B...A...B...C...big.txt'
             ... else:
-            ...     boostNode.extension.file.Handler(
+            ...     FileHandler(
             ...         location=__test_folder__ + 'target/big_link'
             ...     ).read_symbolic_link() # doctest: +ELLIPSIS
             '...target...B...A...B...C...big.txt'
@@ -611,28 +591,24 @@ class Reflector(
         __logger__.info('Create reflection files.')
         return self._create_reflection_files()
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def synchronize_back(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
+    @JointPoint
+## python3.3     def synchronize_back(self: Self) -> Self:
     def synchronize_back(self):
-##
         '''
             Syncs the current cache location back to the source.
 
             Examples:
 
-            >>> boostNode.extension.file.Handler(
+            >>> FileHandler(
             ...     location=__test_folder__ + 'source2', make_directory=True
             ... ) # doctest: +ELLIPSIS
             Object of "Handler" with path "...source2..." (directory).
-            >>> boostNode.extension.file.Handler(
+            >>> FileHandler(
             ...     location=__test_folder__ + 'target2/new_folder',
             ...     must_exist=False
             ... ).make_directorys() # doctest: +ELLIPSIS
             True
-            >>> boostNode.extension.file.Handler(
+            >>> FileHandler(
             ...     location=__test_folder__ + 'target2/new_file.txt',
             ...     must_exist=False
             ... ).content = 'hans'
@@ -641,46 +617,44 @@ class Reflector(
             ...     target_location=__test_folder__ + 'target2')
             >>> repr(reflector.synchronize_back()) # doctest: +ELLIPSIS
             '...path "...source2..." and target path "...target2...'
-            >>> boostNode.extension.file.Handler(
+            >>> FileHandler(
             ...     location=__test_folder__ + 'source2/new_folder'
             ... ).is_directory(allow_link=False)
             True
-            >>> boostNode.extension.file.Handler(
+            >>> FileHandler(
             ...     location=__test_folder__ + 'source2/new_file.txt'
             ... ).is_file(allow_link=False)
             True
 
-            >>> len(boostNode.extension.file.Handler(
-            ...     location=__test_folder__ + 'source2')) > 0
+            >>> len(FileHandler(location=__test_folder__ + 'source2')) > 0
             True
             >>> reflector = Reflector(
             ...     source_location=__test_folder__ + 'source2',
             ...     target_location=__test_folder__ + 'target2')
             >>> repr(reflector.synchronize_back()) # doctest: +ELLIPSIS
             '...path "...source2..." and target path "...target2...'
-            >>> len(boostNode.extension.file.Handler(
-            ...     location=__test_folder__ + 'source2'))
+            >>> len(FileHandler(location=__test_folder__ + 'source2'))
             0
 
-            >>> boostNode.extension.file.Handler(
+            >>> FileHandler(
             ...     location=__test_folder__ + 'source3/A/B/C',
             ...     must_exist=False
             ... ).make_directorys()
             True
-            >>> boostNode.extension.file.Handler(
+            >>> FileHandler(
             ...     location=__test_folder__ + 'source3/B/A/B/C',
             ...     must_exist=False
             ... ).make_directorys()
             True
-            >>> file = boostNode.extension.file.Handler(
+            >>> file = FileHandler(
             ...     location=__test_folder__ + 'source3/A/B/C/test.txt',
             ...     must_exist=False)
             >>> file.content = ((int(file.BLOCK_SIZE_IN_BYTE) + 1) * 'A')
-            >>> boostNode.extension.file.Handler(
+            >>> FileHandler(
             ...     location=__test_folder__ + 'source3/A/delete_it.txt',
             ...     must_exist=False
             ... ).content = 'hans'
-            >>> source_ignore = boostNode.extension.file.Handler(
+            >>> source_ignore = FileHandler(
             ...     location=__test_folder__ + 'source3/ignore',
             ...     make_directory=True)
             >>> reflector = Reflector(
@@ -690,16 +664,16 @@ class Reflector(
             ...     limit='1 byte', use_native_symlinks=False)
             >>> repr(reflector.create()) # doctest: +ELLIPSIS
             '...source3...target...target3...Limit is 1.0 byte...'
-            >>> file = boostNode.extension.file.Handler(
+            >>> file = FileHandler(
             ...     location=__test_folder__ + 'target3/A/B/C/test.txt')
             >>> file.is_portable_link()
             True
             >>> file.path = __test_folder__ + 'target3/B/A/B/C/test.txt'
-            >>> boostNode.extension.file.Handler(
+            >>> FileHandler(
             ...     location=__test_folder__ + 'target3/A/delete_it.txt'
             ... ).remove_file()
             True
-            >>> target_ignore = boostNode.extension.file.Handler(
+            >>> target_ignore = FileHandler(
             ...     location=__test_folder__ + 'target3/ignore',
             ...     must_exist=False)
             >>> target_ignore.is_element()
@@ -714,11 +688,11 @@ class Reflector(
             ...     limit='1 byte', use_native_symlinks=True)
             >>> repr(reflector.synchronize_back()) # doctest: +ELLIPSIS
             '...source3...path "...target3...1.0 byte...ignore...".'
-            >>> file = boostNode.extension.file.Handler(
+            >>> file = FileHandler(
             ...     location=__test_folder__ + 'source3/B/A/B/C/test.txt')
             >>> file.content == ((int(file.BLOCK_SIZE_IN_BYTE) + 1) * 'A')
             True
-            >>> boostNode.extension.file.Handler(
+            >>> FileHandler(
             ...     location=__test_folder__ + 'source3/A/delete_it.txt',
             ...     must_exist=False
             ... ).is_element()
@@ -728,9 +702,7 @@ class Reflector(
             >>> source_ignore.is_element()
             True
         '''
-        if(boostNode.extension.system.Platform.check_process_lock(
-            description=__module_name__)
-           ):
+        if Platform.check_process_lock(description=__module_name__):
             __logger__.warning(
                 'The last synchronisation process was interrupted in an '
                 'unstable state. %s will finish last process so you can '
@@ -749,12 +721,10 @@ class Reflector(
             self._source_location.iterate_directory(
                 function=self._delete_source_file_not_existing_in_target,
                 recursive=True, recursive_in_link=False)
-            boostNode.extension.system.Platform.set_process_lock(
-                description=__module_name__)
+            Platform.set_process_lock(description=__module_name__)
         __logger__.info('Clear cache.')
         self._target_location.clear_directory()
-        boostNode.extension.system.Platform.clear_process_lock(
-            description=__module_name__)
+        Platform.clear_process_lock(description=__module_name__)
         return self
 
         # endregion
@@ -763,39 +733,32 @@ class Reflector(
 
             # region runnable implementation
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _run(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
+    @JointPoint
+## python3.3     def _run(self: Self) -> Self:
     def _run(self):
-##
         '''
-            Entry point for command line call of this progam.
+            Entry point for command line call of this program.
             Initializes a new instance of the option parser for the
             application interface.
         '''
-        self._command_line_arguments = \
-            boostNode.extension.system.CommandLine.argument_parser(
-                arguments=self.COMMAND_LINE_ARGUMENTS,
-                module_name=__name__,
-                scope={'arguments': self.COMMAND_LINE_ARGUMENTS, 'self': self})
+        self._command_line_arguments = CommandLine.argument_parser(
+            arguments=self.COMMAND_LINE_ARGUMENTS, module_name=__name__,
+            scope={'arguments': self.COMMAND_LINE_ARGUMENTS, 'self': self})
         if self._command_line_arguments.open:
             return self.open(self._command_line_arguments.open)
         return self._initialize(**self._command_line_arguments_to_dictionary(
             namespace=self._command_line_arguments))
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def _initialize(
-##         self: boostNode.extension.type.Self,
-##         source_location: (boostNode.extension.file.Handler, builtins.str),
+##         self: Self, source_location: (FileHandler, builtins.str),
 ##         target_location=None, limit='100 MB', priority_locations=(),
 ##         exclude_locations=(), target_rights=777, synchronize_back=False,
 ##         create=False, use_native_symlinks=False,
 ##         minimum_reflection_size_in_byte=100 * 10 ** 3,  # 100 Kilobyte
 ##         **keywords: builtins.object
-##     ) -> boostNode.extension.type.Self:
+##     ) -> Self:
     def _initialize(
         self, source_location, target_location=None, limit='100 MB',
         priority_locations=(), exclude_locations=(),
@@ -826,7 +789,7 @@ class Reflector(
             ...
             boostNode.extension.native.FileError: Invalid path "...
 
-            >>> boostNode.extension.file.Handler(
+            >>> FileHandler(
             ...     __test_folder__ + 's/A/B', must_exist=False
             ... ).make_directorys()
             True
@@ -888,14 +851,13 @@ class Reflector(
         self._synchronize_back = synchronize_back
         self._create = create
         self._minimum_reflection_size_in_byte = minimum_reflection_size_in_byte
-        self._source_location = boostNode.extension.file.Handler(
-            location=source_location)
-        self._target_location = boostNode.extension.file.Handler(
+        self._source_location = FileHandler(location=source_location)
+        self._target_location = FileHandler(
             location=target_location, make_directory=True,
             right=self._target_rights)
         self._given_limit = limit
-        self._limit = boostNode.extension.file.Handler\
-            .determine_size_from_string(size_and_unit=limit)
+        self._limit = FileHandler.determine_size_from_string(
+            size_and_unit=limit)
         self._priority_locations = builtins.list(builtins.set(
             priority_locations))
         self._exclude_locations = builtins.list(builtins.set(
@@ -911,13 +873,9 @@ class Reflector(
 
             # endregion
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _create_or_synchronize_back(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
+    @JointPoint
+## python3.3     def _create_or_synchronize_back(self: Self) -> Self:
     def _create_or_synchronize_back(self):
-##
         '''
             Synchronizes and/or creates a new reflection cache dependent on
             given command line arguments.
@@ -931,7 +889,7 @@ class Reflector(
             '''
             if(self._command_line_arguments and
                target_size < self._minimum_reflection_size_in_byte and
-               not boostNode.extension.system.CommandLine.boolean_input(
+               not CommandLine.boolean_input(
                    question='Reflection has only a size of %s. Do you want to '
                             'continue? {boolean_arguments}: ' %
                             self._target_location.human_readable_size)):
@@ -947,13 +905,9 @@ class Reflector(
                 status=__status__))
         return self
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _validate_inputs(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
+    @JointPoint
+## python3.3     def _validate_inputs(self: Self) -> Self:
     def _validate_inputs(self):
-##
         '''
             Validates the given parameters to the "self.__init__()" method.
             Checks if all paths makes sense and all inputs are in the right
@@ -972,13 +926,9 @@ class Reflector(
                 'like "770".', self._target_rights)
         return self._check_path_lists()
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _validate_paths(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
+    @JointPoint
+## python3.3     def _validate_paths(self: Self) -> Self:
     def _validate_paths(self):
-##
         '''
             Validates source and target (reflection) path.
         '''
@@ -996,13 +946,9 @@ class Reflector(
                 self._target_location.path)
         return self
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _check_path_lists(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
+    @JointPoint
+## python3.3     def _check_path_lists(self: Self) -> Self:
     def _check_path_lists(self):
-##
         '''
             Checks if all given paths lists are in locations which makes
             sense, to prevent user for failures.
@@ -1012,12 +958,11 @@ class Reflector(
         )._check_path_in_source(
             paths=self._exclude_locations, path_type='Exclude')
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def _check_path_in_source(
-##         self: boostNode.extension.type.Self, paths: collections.Iterable,
-##         path_type='Given'
-##     ) -> boostNode.extension.type.Self:
+##         self: Self, paths: collections.Iterable, path_type='Given'
+##     ) -> Self:
     def _check_path_in_source(self, paths, path_type='Given'):
 ##
         '''
@@ -1030,7 +975,7 @@ class Reflector(
 
             Examples:
 
-            >>> boostNode.extension.file.Handler(
+            >>> FileHandler(
             ...     location=__test_folder__ + 'source4/A/B/C',
             ...     must_exist=False
             ... ).make_directorys()
@@ -1053,7 +998,7 @@ class Reflector(
         '''
         paths = builtins.list(paths)
         for index, path in builtins.enumerate(paths):
-            path = boostNode.extension.file.Handler(location=path).path
+            path = FileHandler(location=path).path
             paths[index] = path
             if not self._source_location.path in path:
                 raise __exception__(
@@ -1062,13 +1007,9 @@ class Reflector(
                     self._source_location.path)
         return self
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _log_status(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
+    @JointPoint
+## python3.3     def _log_status(self: Self) -> Self:
     def _log_status(self):
-##
         '''
             Logs the initial status of the current Reflector instance.
             Output is written to standard output or output buffer.
@@ -1089,7 +1030,7 @@ class Reflector(
             'exclude paths: "{exclude_locations}"\n'
             'native symbolic links: "{native_symbolic_link_option}"\n'.format(
                 class_name=self.__class__.__name__,
-                log_level=boostNode.extension.output.Logger.default_level[0],
+                log_level=Logger.default_level[0],
                 source_path=self._source_location.path,
                 target_path=self._target_location.path,
                 rights=self._target_rights, limit=self._limit,
@@ -1101,13 +1042,9 @@ class Reflector(
 
             # region core concern
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
-## python3.3
-##     def _create_reflection_files(
-##         self: boostNode.extension.type.Self
-##     ) -> boostNode.extension.type.Self:
+    @JointPoint
+## python3.3     def _create_reflection_files(self: Self) -> Self:
     def _create_reflection_files(self):
-##
         '''
             Iterates throw all files which should be included in
             the reflection. They will be sorted by its file-size in
@@ -1120,9 +1057,9 @@ class Reflector(
         self._number_of_files = builtins.len(self._priority_files) +\
             builtins.len(self._files)
         for size, relative_path in self._priority_files + self._files:
-            if boostNode.extension.system.Platform.check_thread():
+            if Platform.check_thread():
                 return self
-            source = boostNode.extension.file.Handler(
+            source = FileHandler(
                 location=self._source_location.path + relative_path)
             self._edited_number_of_files += 1
             if(self._limit >= size or
@@ -1135,13 +1072,12 @@ class Reflector(
                 self._create_reflection_link(source, path=relative_path)
         return self
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def _copy_reflection_file(
-##         self: boostNode.extension.type.Self,
-##         source: boostNode.extension.file.Handler, path: builtins.str,
+##         self: Self, source: FileHandler, path: builtins.str,
 ##         size: builtins.float
-##     ) -> boostNode.extension.type.Self:
+##     ) -> Self:
     def _copy_reflection_file(self, source, path, size):
 ##
         '''
@@ -1167,12 +1103,11 @@ class Reflector(
         self._limit -= size
         return self
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def _create_reflection_link(
-##         self: boostNode.extension.type.Self,
-##         source: boostNode.extension.file.Handler, path: builtins.str
-##     ) -> boostNode.extension.type.Self:
+##         self: Self, source: FileHandler, path: builtins.str
+##     ) -> Self:
     def _create_reflection_link(self, source, path):
 ##
         '''
@@ -1195,11 +1130,10 @@ class Reflector(
             source.make_portable_link(target=self._target_location.path + path)
         return self
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def _relocate_moved_file(
-##         self: boostNode.extension.type.Self,
-##         file: boostNode.extension.file.Handler
+##         self: Self, file: FileHandler
 ##     ) -> builtins.bool:
     def _relocate_moved_file(self, file):
 ##
@@ -1216,7 +1150,7 @@ class Reflector(
             if(linked_path.path[:builtins.len(self._source_location.path)] ==
                 self._source_location.path
                ):
-                relocated = boostNode.extension.file.Handler(
+                relocated = FileHandler(
                     location=self._source_location.path + file.path[
                         builtins.len(self._target_location.path):],
                     must_exist=False)
@@ -1225,12 +1159,10 @@ class Reflector(
             return False
         return True
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def _relocate_missing_file(
-##         self: boostNode.extension.type.Self,
-##         relocated: boostNode.extension.file.Handler,
-##         linked_path: boostNode.extension.file.Handler
+##         self: Self, relocated: FileHandler, linked_path: FileHandler
 ##     ) -> builtins.bool:
     def _relocate_missing_file(self, relocated, linked_path):
 ##
@@ -1245,7 +1177,7 @@ class Reflector(
             Returns "True" if relocation where successful or "False"
             otherwise.
         '''
-        relocated_directory_path = boostNode.extension.file.Handler(
+        relocated_directory_path = FileHandler(
             location=relocated.directory_path, must_exist=False)
         if not relocated_directory_path.is_directory():
             __logger__.info(
@@ -1262,11 +1194,10 @@ class Reflector(
             linked_path.path)
         return True
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def _copy_cache_to_source(
-##         self: boostNode.extension.type.Self,
-##         file: boostNode.extension.file.Handler
+##         self: Self, file: FileHandler
 ##     ) -> builtins.bool:
     def _copy_cache_to_source(self, file):
 ##
@@ -1281,7 +1212,7 @@ class Reflector(
             search=file, paths=self._exclude_locations
         ):
             target_path_len = builtins.len(self._target_location.path)
-            source_file = boostNode.extension.file.Handler(
+            source_file = FileHandler(
                 location=self._source_location.path + file.path[
                     target_path_len:],
                 must_exist=False)
@@ -1303,12 +1234,10 @@ class Reflector(
                     right=self._target_rights)
             return True
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def _copy_link_in_cache_to_source(
-##         self: boostNode.extension.type.Self,
-##         source_file: boostNode.extension.file.Handler,
-##         file: boostNode.extension.file.Handler,
+##         self: Self, source_file: FileHandler, file: FileHandler,
 ##         target_path_len: builtins.int
 ##     ) -> builtins.bool:
     def _copy_link_in_cache_to_source(
@@ -1331,7 +1260,7 @@ class Reflector(
         '''
         link = file.read_symbolic_link(as_object=True)
         if link.path[:target_path_len] == self._target_location.path:
-            new_link = boostNode.extension.file.Handler(
+            new_link = FileHandler(
                 location=self._source_location.path + link.path[
                     target_path_len:],
                 must_exist=False)
@@ -1368,11 +1297,10 @@ class Reflector(
                 source_file.path, file.path)
         return True
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def _delete_source_file_not_existing_in_target(
-##         self: boostNode.extension.type.Self,
-##         file: boostNode.extension.file.Handler
+##         self: Self, file: FileHandler
 ##     ) -> builtins.bool:
     def _delete_source_file_not_existing_in_target(self, file):
 ##
@@ -1386,7 +1314,7 @@ class Reflector(
         if(not self.is_path_in_paths(
             search=file, paths=self._exclude_locations)
            ):
-            target = boostNode.extension.file.Handler(
+            target = FileHandler(
                 location=self._target_location.path +
                 file.path[builtins.len(self._source_location.path):],
                 must_exist=False)
@@ -1397,12 +1325,10 @@ class Reflector(
                 return file.remove_deep()
         return True
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def _create_reflection_structure(
-##         self: boostNode.extension.type.Self,
-##         file: boostNode.extension.file.Handler,
-##         target: boostNode.extension.file.Handler, priority=False
+##         self: Self, file: FileHandler, target: FileHandler, priority=False
 ##     ) -> builtins.bool:
     def _create_reflection_structure(
         self, file, target, priority=False
@@ -1424,19 +1350,17 @@ class Reflector(
            ):
             return self._handle_source_element(
                 source_file=file,
-                target_file=boostNode.extension.file.Handler(
+                target_file=FileHandler(
                     location=target.path + file.name, must_exist=False),
                 priority=(priority or self.is_path_in_paths(
                     search=file, paths=self._priority_locations)))
         __logger__.info('Ignore exclude location: "%s".', file.path)
         return True
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def _handle_source_element(
-##         self: boostNode.extension.type.Self,
-##         source_file: boostNode.extension.file.Handler,
-##         target_file: boostNode.extension.file.Handler,
+##         self: Self, source_file: FileHandler, target_file: FileHandler,
 ##         priority: builtins.bool
 ##     ) -> builtins.bool:
     def _handle_source_element(
@@ -1477,12 +1401,10 @@ class Reflector(
                     self._source_location.path):]))
         return True
 
-    @boostNode.paradigm.aspectOrientation.JointPoint
+    @JointPoint
 ## python3.3
 ##     def _handle_source_link(
-##         self: boostNode.extension.type.Self,
-##         source_file: boostNode.extension.file.Handler,
-##         target_file: boostNode.extension.file.Handler
+##         self: Self, source_file: FileHandler, target_file: FileHandler
 ##     ) -> builtins.bool:
     def _handle_source_link(self, source_file, target_file):
 ##
@@ -1505,7 +1427,7 @@ class Reflector(
                 Link refers to a location in source; it will be bend to its
                 corresponding location in target.
             '''
-            new_link = boostNode.extension.file.Handler(
+            new_link = FileHandler(
                 location=self._target_location.path + link.path[
                     source_path_len:],
                 must_exist=False)
@@ -1547,7 +1469,6 @@ __logger__ = __test_mode__ = __exception__ = __module_name__ = \
     introspection support. A generic command line interface for some code
     preprocessing tools is provided by default.
 '''
-boostNode.extension.native.Module.default(
-    name=__name__, frame=inspect.currentframe())
+Module.default(name=__name__, frame=inspect.currentframe())
 
 # endregion
