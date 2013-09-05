@@ -48,6 +48,7 @@ from boostNode.extension.native import Module
 from boostNode.extension.output import Logger, Print
 from boostNode.extension.system import CommandLine, Platform, Runnable
 ## python3.3 from boostNode.extension.type import Self
+pass
 from boostNode.paradigm.aspectOrientation import JointPoint
 from boostNode.paradigm.objectOrientation import Class
 from boostNode.runnable.template import Parser as TemplateParser
@@ -596,7 +597,7 @@ class Run(Class, Runnable):
     @JointPoint
 ## python3.3
 ##     def _run_command(
-##         self: self, command_name: builtins.str, command: builtins.str
+##         self: Self, command_name: builtins.str, command: builtins.str
 ##     ) -> Self:
     def _run_command(self, command_name, command):
 ##

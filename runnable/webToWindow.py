@@ -44,6 +44,8 @@ try:
     import webkit
 except builtins.ImportError:
     gtk = None
+    webkit = builtins.type('WebView', (builtins.object,), {
+        'WebView': None, 'WebFrame': None})
 try:
     import PyQt4.QtCore
     import PyQt4.QtWebKit
@@ -81,9 +83,7 @@ class Browser(Class, Runnable):
 
         # region public
 
-    '''
-        Holds all command line interface argument informations.
-    '''
+    '''Holds all command line interface argument informations.'''
     COMMAND_LINE_ARGUMENTS = (
         {'arguments': ('url',),
          'keywords': {
@@ -121,9 +121,7 @@ class Browser(Class, Runnable):
              'dest': 'fullscreen'}},
         {'arguments': ('-n', '--no-window-decoration'),
          'keywords': {
-             'action': {'execute': "'store_true' if "
-                                   '__initializer_default_value__ else '
-                                   "'store_false'"},
+             'action': 'store_true',
              'default': {'execute': '__initializer_default_value__'},
              'help': 'If set no window decoration (e.g. title bar) will be '
                      'shown.',
@@ -141,9 +139,7 @@ class Browser(Class, Runnable):
              'metavar': 'GUI_TOOLKIT'}},
         {'arguments': ('-b', '--no-progress-bar'),
          'keywords': {
-             'action': {'execute': "'store_true' if "
-                                   '__initializer_default_value__ else '
-                                   "'store_false'"},
+             'action': 'store_true',
              'default': {'execute': '__initializer_default_value__'},
              'help': 'If set no progress bar for showing website rendering '
                      'state is shown.',
@@ -180,9 +176,7 @@ class Browser(Class, Runnable):
 
     '''Dynamic runtime objects for constructing a simple web window.'''
     window = scroller = vbox = progress_bar = browser = None
-    '''
-        Saves all initialized instances of this class.
-    '''
+    '''Saves all initialized instances of this class.'''
     webview_instances = []
     '''Saves a cli-command for shutting down the server.'''
     stop_order = ''
@@ -210,7 +204,7 @@ class Browser(Class, Runnable):
     _default_title = ''
     '''
         This lock object handles to wait until all gtk windows are closed
-         before the program terminates.
+        before the program terminates.
     '''
     _close_gtk_windows_lock = None
 
@@ -252,9 +246,7 @@ class Browser(Class, Runnable):
     @JointPoint
 ## python3.3     def get_gui_toolkit(self: Self) -> builtins.str:
     def get_gui_toolkit(self):
-        '''
-            Determines available gui toolkit.
-        '''
+        '''Determines available gui toolkit.'''
         if not self._default_gui_toolkit:
             return 'undefined'
         elif self._default_gui_toolkit == 'default':
@@ -319,9 +311,7 @@ class Browser(Class, Runnable):
                     '''
                     self._close_gtk_windows_lock.acquire()
         __logger__.info('All "%s" windows closed.', self.gui_toolkit)
-        '''
-            Take this method type by the abstract class via introspection.
-        '''
+        '''Take this method type by the abstract class via introspection.'''
         return builtins.getattr(
             builtins.super(self.__class__, self), inspect.stack()[0][3]
         )(*arguments, reason=reason, **keywords)
@@ -336,8 +326,8 @@ class Browser(Class, Runnable):
 ## python3.3     def _run(self: Self) -> Self:
     def _run(self):
         '''
-            Entry point for command line call of this program.
-            Initializes all window and webkit components.
+            Entry point for command line call of this program. Initializes all
+            window and webkit components.
 
             Examples:
 
@@ -367,8 +357,8 @@ class Browser(Class, Runnable):
             default_title='No gui loaded.', stop_order='stop', **keywords):
 ##
         '''
-            Initializes a webview or tries to open a default browser if
-            no gui suitable gui toolkit is available.
+            Initializes a webview or tries to open a default browser if no gui
+            suitable gui toolkit is available.
         '''
         self.url = url
         self.stop_order = stop_order
@@ -406,9 +396,7 @@ class Browser(Class, Runnable):
     @JointPoint
 ## python3.3     def _initialize_default_browser(self: Self) -> Self:
     def _initialize_default_browser(self):
-        '''
-            Starts the default browser with currently stored url.
-        '''
+        '''Starts the default browser with currently stored url.'''
         self.browser = webbrowser
         self.browser.open(self._url)
         return self
@@ -416,9 +404,7 @@ class Browser(Class, Runnable):
     @JointPoint
 ## python3.3     def _initialize_qt_browser(self: Self) -> Self:
     def _initialize_qt_browser(self):
-        '''
-            Starts the qt webkit webview thread.
-        '''
+        '''Starts the qt webkit webview thread.'''
         self.window = PyQt4.QtGui.QApplication(sys.argv)
         self.browser = PyQt4.QtWebKit.QWebView()
         if self._no_window_decoration:
@@ -464,9 +450,7 @@ class Browser(Class, Runnable):
     @JointPoint
 ## python3.3     def _initialize_gtk_browser(self: Self) -> Self:
     def _initialize_gtk_browser(self):
-        '''
-            Sets various event-handlers for browser and window objects.
-        '''
+        '''Sets various event-handlers for browser and window objects.'''
         self.window = gtk.Window()
         self.vbox = gtk.VBox()
         self.scroller = gtk.ScrolledWindow()
@@ -571,9 +555,7 @@ class Browser(Class, Runnable):
 ##     ) -> Self:
     def _on_gtk_load_started(self, webview, frame):
 ##
-        '''
-            Triggers if browser starts to load a new web page.
-        '''
+        '''Triggers if browser starts to load a new web page.'''
         self.progress_bar.set_fraction(0 / 100.0)
         self.progress_bar.set_visible(True)
         return self
@@ -585,9 +567,7 @@ class Browser(Class, Runnable):
 ##     ) -> Self:
     def _on_qt_load_progress_changed(self, status):
 ##
-        '''
-            Triggers if the current web page load process was changed.
-        '''
+        '''Triggers if the current web page load process was changed.'''
         self.progress_bar.setValue(status)
         return self
 
@@ -598,9 +578,7 @@ class Browser(Class, Runnable):
 ##     ) -> Self:
     def _on_gtk_load_progress_changed(self, webview, amount):
 ##
-        '''
-            Triggers if the current web page load process was changed.
-        '''
+        '''Triggers if the current web page load process was changed.'''
         self.progress_bar.set_fraction(amount / 100.0)
         return self
 
@@ -609,9 +587,7 @@ class Browser(Class, Runnable):
 ##     def _on_qt_load_finished(self: Self, successful: builtins.bool) -> Self:
     def _on_qt_load_finished(self, successful):
 ##
-        '''
-            Triggers if a page load process has finished.
-        '''
+        '''Triggers if a page load process has finished.'''
         self.progress_bar.setVisible(False)
         return self
 
@@ -622,9 +598,7 @@ class Browser(Class, Runnable):
 ##     ) -> Self:
     def _on_gtk_load_finished(self, webview, frame):
 ##
-        '''
-            Triggers if a page load process has finished.
-        '''
+        '''Triggers if a page load process has finished.'''
         self.progress_bar.set_fraction(100.0 / 100.0)
         self.progress_bar.set_visible(False)
         return self
@@ -673,6 +647,8 @@ __logger__ = __test_mode__ = __exception__ = __module_name__ = \
     introspection support. A generic command line interface for some code
     preprocessing tools is provided by default.
 '''
-Module.default(name=__name__, frame=inspect.currentframe())
+Module.default(
+    name=__name__, frame=inspect.currentframe(),
+    default_caller=Browser.__name__)
 
 # endregion

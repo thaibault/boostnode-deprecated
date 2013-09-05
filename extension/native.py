@@ -10,8 +10,6 @@
 
 # region header
 
-# TODO check new branch coverage
-
 '''
     Extension is a high level interface for interaction with pythons native
     builtins.
@@ -1973,10 +1971,19 @@ class Module(Object):
 ##     def _get_module_file(
 ##         cls: SelfClass, frame: (builtins.type(None), types.FrameType),
 ##         module: (builtins.type(None), types.ModuleType)
-##     ) -> FileHandler:
+##     ) -> (Class, builtins.bool):
     def _get_module_file(cls, frame, module):
 ##
-        '''Determines the file of a given module or frame context.'''
+        '''
+            Determines the file of a given module or frame context.
+
+            Examples:
+
+            >>> Module._get_module_file(
+            ...     inspect.currentframe(), None
+            ... ) # doctest: +ELLIPSIS
+            Object of "Handler" with path "..." and initially given path "...
+        '''
         from boostNode.extension.file import Handler as FileHandler
         file = False
         if module:
@@ -1987,7 +1994,7 @@ class Module(Object):
             if frame is None:
                 frame = inspect.currentframe()
             '''
-                NOTE: "must_exist" is necessary for supporting freezed
+                NOTE: "must_exist" is necessary for supporting frozen
                 executables.
             '''
             file = FileHandler(
@@ -2000,8 +2007,8 @@ class Module(Object):
     @JointPoint(builtins.classmethod)
 ## python3.3
 ##     def _search_library_file(
-##         cls: SelfClass, location: builtins.object,
-##         context_path: builtins.str, only_source_files: builtins.bool
+##         cls: SelfClass, location: Class, context_path: builtins.str,
+##         only_source_files: builtins.bool
 ##     ) -> (builtins.str, builtins.bool):
     def _search_library_file(
         cls, location, context_path, only_source_files=False

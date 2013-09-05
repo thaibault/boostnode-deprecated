@@ -316,16 +316,13 @@ class Runnable(builtins.object):
 ##     ) -> None:
     def __init__(self, *arguments, **keywords):
 ##
-        '''
-            A generic initializer for Runnable class implementations.
-        '''
+        '''A generic initializer for Runnable class implementations.'''
         '''Make this properties instance attributes explicitly.'''
         self.stop_order = self.__class__.stop_order
         self.restart_order = self.__class__.restart_order
         self._given_order = self.__class__._given_order
         self._childrens_module = self.__class__._childrens_module
         self.__stop_lock = self.__class__.__stop_lock
-
         '''Attach this properties to child class.'''
         self.__class__._given_order = self._given_order
         self.__class__._childrens_module = self._childrens_module
@@ -1261,9 +1258,7 @@ class Platform(builtins.object):
         *arguments, **keywords
     ):
 ##
-        '''
-            Runs a list of command line commands as its own process.
-        '''
+        '''Runs a list of command line commands as its own process.'''
         result = {'standard_output': [], 'error_output': [], 'return_code': []}
         for sub_command in commands:
             sub_result = cls.run(

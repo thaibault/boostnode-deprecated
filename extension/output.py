@@ -399,8 +399,8 @@ class Print(Class):
 
     @JointPoint
 ## python3.3
-##     def __init__(self: Self, *output: builtins.object,
-##         **codewords: builtins.object
+##     def __init__(
+##         self: Self, *output: builtins.object, **codewords: builtins.object
 ##     ) -> None:
     def __init__(self, *output, **codewords):
 ##

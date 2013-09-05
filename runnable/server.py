@@ -2109,7 +2109,7 @@ class CGIHTTPRequestHandler(
         return self._run_requested_file()
 
     @JointPoint
-## python3.3     def _run_requested_file(self: Self) -> .Self:
+## python3.3     def _run_requested_file(self: Self) -> Self:
     def _run_requested_file(self):
         '''
             Runs a given external process in a subprocess. Output and errors

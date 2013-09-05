@@ -1508,8 +1508,9 @@ class Handler(Class):
         '''
 ## python3.3
 ##         pass
-        output_with_root_prefix, keywords = Dictionary(content=keywords).pop(
-            name='output_with_root_prefix')
+        output_with_root_prefix, keywords = Dictionary(
+            content=keywords
+        ).pop(name='output_with_root_prefix')
 ##
         if self._has_extension:
             return os.path.splitext(os.path.basename(
