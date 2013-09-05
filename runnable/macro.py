@@ -368,7 +368,7 @@ class Replace(Class, Runnable):
             ...
             boostNode.extension.native.FileError: Invalid path "...non_exist...
         '''
-        self._location = FileHandler(location)
+        self._location = FileHandler(location, encoding=self._encoding)
         self._first_line_regex_pattern = first_line_regex_pattern
         self._one_line_regex_pattern = one_line_regex_pattern
         self._more_line_regex_pattern = more_line_regex_pattern
@@ -658,25 +658,27 @@ class Replace(Class, Runnable):
     @JointPoint
 ## python3.3     def _convert_file_code(self: Self, file: FileHandler) -> Self:
     def _convert_file_code(self, file):
-        '''
-            Converts source code of given file to new version.
-        '''
+        '''Converts source code of given file to new version.'''
         old_file_content = file.content
 ## python3.3         with builtins.open(
         with codecs.open(
             file.path, mode='r', encoding=self._encoding
         ) as file_handler:
             try:
-                first_line = file_handler.readline()
+## python3.3
+##                 first_line = file_handler.readline()
+                first_line = file_handler.readline().encode(self._encoding)
+##
             except builtins.UnicodeDecodeError:
-                __logger__.warning('Can\'t decode file "%s".', file.path)
+                __logger__.warning(
+                    'Can\'t decode file "%s" with given encoding "%s".',
+                    file.path, self._encoding)
                 return self
             match = re.compile(self._first_line_regex_pattern).match(
                 first_line)
             if match is None:
                 __logger__.warning(
-                    '"%s" hasn\'t path to version in first line.',
-                    file.path)
+                    '"%s" hasn\'t path to version in first line.', file.path)
                 return self
             self._current_version = match.group('current_version')
             new_interpreter = match.group('constant_version_pattern').replace(
@@ -689,9 +691,16 @@ class Replace(Class, Runnable):
                     python bug. First call only reads a part of corresponding
                     file.
                 '''
-                file_content = file_handler.read() + file_handler.read()
+## python3.3
+##                 file_content = file_handler.read() + file_handler.read()
+                file_content = (
+                    file_handler.read() + file_handler.read()
+                ).encode(self._encoding)
+##
             except builtins.UnicodeDecodeError:
-                __logger__.warning('Can\'t decode file "%s".', file.path)
+                __logger__.warning(
+                    'Can\'t decode file "%s" with given encoding "%s".',
+                    file.path, self._encoding)
                 return self
         __logger__.info(
             'Convert "{path}" from "{current_version}" to '
@@ -708,10 +717,10 @@ class Replace(Class, Runnable):
                     self._replace_alternate_line, file_content)
             except builtins.UnicodeEncodeError as exception:
                 __logger__.warning(
-                    'Can\'t encode to file "%s". %s: %s', file.path,
+                    'Can\'t encode to file "%s" with given encoding "%s". '
+                    '%s: %s', file.path, self._encoding,
                     exception.__class__.__name__, builtins.str(exception))
                 file.content = old_file_content
-                raise
         return self
 
     @JointPoint
@@ -816,9 +825,7 @@ class Replace(Class, Runnable):
     @JointPoint
 ## python3.3     def _convert(self: Self) -> Self:
     def _convert(self):
-        '''
-            Triggers the conversion process.
-        '''
+        '''Triggers the conversion process.'''
         if not __test_mode__ and self._new_version:
             self._convert_path()
         return self

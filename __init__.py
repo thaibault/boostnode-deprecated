@@ -336,34 +336,18 @@ def __get_all_modules__(path=sys.path[0]):
 
 # endregion
 
-# region classes
-
-if not builtins.getattr(builtins, "WindowsError", None):
-    class WindowsError(builtins.OSError):
-        pass
-
-# endregion
-
 '''Don't generate cached byte code files for imported modules.'''
 sys.dont_write_bytecode = True
 '''Determine all modules in this folder via introspection.'''
 __all__ = __get_all_modules__()
-try:
-    from boostNode.aspect.signature import add_check as add_signature_check
-    from boostNode.extension.native import Module
-except WindowsError as exception:
-    logging.error(
-        "Running subprocesses on windows without being administrator isn't "
-        'possible. %s: %s', exception.__class__.__name__,
-        builtins.str(exception))
-    sys.exit(1)
-else:
-    '''
-        Add signature checking for all functions and methods with joint points
-        in this package.
-    '''
-    add_signature_check(point_cut='^%s\..*$' % Module.get_package_name(
-        frame=inspect.currentframe()))
+from boostNode.aspect.signature import add_check as add_signature_check
+from boostNode.extension.native import Module
+'''
+    Add signature checking for all functions and methods with joint points
+    in this package.
+'''
+add_signature_check(point_cut='^%s\..*$' % Module.get_package_name(
+    frame=inspect.currentframe()))
 
 # region footer
 
