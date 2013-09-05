@@ -526,8 +526,13 @@ class Runnable(builtins.object):
     def _handle_module_running(self, arguments, keywords, run):
 ##
         '''Handle the running interface for current module.'''
-        if not (self._childrens_module.__test_mode__ or run):
-            self.__class__.__termination_lock.acquire()
+        if not self._childrens_module.__test_mode__:
+            if not run:
+                self.__class__.__termination_lock.acquire()
+            '''
+                NOTE: We have to reassign signal handlers, because old handlers
+                are garbage collected after a soft restart.
+            '''
             signal_numbers = Platform.termination_signal_numbers
             for signal_number in signal_numbers:
                 signal.signal(signal_number, self.trigger_stop)

@@ -4566,7 +4566,7 @@ class Handler(Class):
 ## python3.3
 ##     def _determine_get_windows_disk_free_space_function(
 ##         self: Self
-##     ) -> (builtins.bool, builtins.int):
+##     ) -> ctypes._CFuncPtr:
     def _determine_get_windows_disk_free_space_function(self):
 ##
         '''
