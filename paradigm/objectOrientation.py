@@ -156,11 +156,8 @@ class Class(builtins.object):
 
             Examples:
 
-            >>> class Test(Class):
-            ...     def __init__(self):
-            ...         pass
-            >>> Test()
-            Object of "Test".
+            >>> str(Class())
+            'Class'
         '''
         return cls.__name__
 
@@ -196,10 +193,14 @@ class Class(builtins.object):
 
             >>> class TestA(Class):
             ...     _a = 'hans'
+            ...     _b = 5
             ...     def get_a(self):
             ...         return self._a
             >>> TestA().a
             'hans'
+            >>> TestA().b is None
+            True
+
             >>> class TestB(Class):
             ...     _a = ''
             ...     _b = ''
@@ -212,6 +213,8 @@ class Class(builtins.object):
             ...         return None
             >>> TestB().b
             'also hans'
+            >>> TestB().c is None
+            True
         '''
         if self.is_property(name='_' + name):
             if self.is_method(name='get_' + name):

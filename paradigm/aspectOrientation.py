@@ -191,9 +191,10 @@ class FunctionDecorator(builtins.object):
 
             Examples:
 
-            >>> fD = FunctionDecorator(FunctionDecorator.__repr__)
-            >>> fD.class_object = FunctionDecorator
-            >>> repr(fD) # doctest: +ELLIPSIS
+            >>> function_decorator = FunctionDecorator(
+            ...     FunctionDecorator.__repr__)
+            >>> function_decorator.class_object = FunctionDecorator
+            >>> repr(function_decorator) # doctest: +ELLIPSIS
             'Object of "FunctionDecorator" ... "__repr__" ... (NoneType).'
         '''
         if self.class_object:
@@ -223,9 +224,7 @@ class FunctionDecorator(builtins.object):
 ##     ) -> builtins.object:
     def __call__(self, *arguments, **keywords):
 ##
-        '''
-            This method is triggered if wrapped function was called.
-        '''
+        '''This method is triggered if wrapped function was called.'''
         if self.function and self.object is None and self.class_object is None:
             '''A standalone function was wrapped.'''
             return self.get_wrapper_function()(*arguments, **keywords)
@@ -245,8 +244,11 @@ class FunctionDecorator(builtins.object):
 
             Examples:
 
-            >>> fD = FunctionDecorator(FunctionDecorator.__get__)
-            >>> fD.__get__(fD) # doctest: +ELLIPSIS
+            >>> function_decorator = FunctionDecorator(
+            ...     FunctionDecorator.__get__)
+            >>> function_decorator.__get__(
+            ...     function_decorator
+            ... ) # doctest: +ELLIPSIS
             <...FunctionDecorator.__get__...>
         '''
         if self.object is not None:
@@ -333,6 +335,15 @@ class JointPointHandler(builtins.object):
 ##
         '''
             Saves function call properties.
+
+            Examples:
+
+            >>> class A:
+            ...     def a(self):
+            ...         pass
+
+            >>> JointPointHandler(A, A(), A.a, (), {}) # doctest: +ELLIPSIS
+            Object of "JointPointHandler" with class object "A", object "...".
         '''
         self.class_object = class_object
         self.object = object
@@ -372,9 +383,7 @@ class JointPointHandler(builtins.object):
 
 ## python3.3     def __repr__(self: Self) -> builtins.str:
     def __repr__(self):
-        '''
-            Represents the given function call properties.
-        '''
+        '''Represents the given function call properties.'''
         return ('Object of "{class_name}" with class object "{class_object}", '
                 'object "{object}", function "{function}", arguments '
                 '"{arguments}" and keywords "{keywords}".'.format(
@@ -393,6 +402,19 @@ class JointPointHandler(builtins.object):
         '''
             This method should be overwritten to provide the essential aspect
             for handled function call.
+
+            Examples:
+
+            >>> class A:
+            ...     def a(self):
+            ...         pass
+
+            >>> JointPointHandler(
+            ...     A, A(), A.a, (), {}
+            ... ).aspect() # doctest: +ELLIPSIS
+            Traceback (most recent call last):
+            ...
+            NotImplementedError: Method "aspect" wasn't implemented by "...".
         '''
         from boostNode.extension.native import Object
         raise Object.determine_abstract_method_exception(
@@ -429,6 +451,21 @@ class ReturnAspect(builtins.object):
     def __repr__(self):
         '''
             Represents the current handled function call.
+
+            Examples:
+
+            >>> class A:
+            ...     def a(self):
+            ...         pass
+            >>> return_aspect = ReturnAspect()
+            >>> return_aspect.class_object = A
+            >>> return_aspect.object = A()
+            >>> return_aspect.function = A.a
+            >>> return_aspect.arguments = ()
+            >>> return_aspect.keywords = {}
+
+            >>> repr(return_aspect) # doctest: +ELLIPSIS
+            'Object of "ReturnAspect" with class object "A", object "...'
         '''
         return ('Object of "{class_name}" with class object "{class_object}", '
                 'object "{object}", function "{function}", arguments '
@@ -480,6 +517,26 @@ class ReturnJointPoint(JointPointHandler, ReturnAspect):
 ##     ) -> None:
     def __init__(self, *arguments, **keywords):
 ##
+        '''
+            Initializes a joint point for saved function call.
+
+            Examples:
+
+
+            >>> class A:
+            ...     def a(self):
+            ...         pass
+
+            >>> ReturnJointPoint(
+            ...     A, A(), A.a, (), {}, return_value=None
+            ... ) # doctest: +ELLIPSIS
+            Object of "ReturnJointPoint" with class object "A", object "...".
+
+            >>> ReturnJointPoint(
+            ...     A, A(), A.a, (), {}, None
+            ... ) # doctest: +ELLIPSIS
+            Object of "ReturnJointPoint" with class object "A", object "...".
+        '''
         if keywords:
             self.return_value = keywords['return_value']
             del keywords['return_value']
@@ -634,6 +691,10 @@ class PointCut(ReturnAspect):
 ##     ) -> None:
     def __init__(self, class_object, object, function, arguments, keywords):
 ##
+        '''
+            Initializes a point cut object for implementing the aspect
+            orientated model.
+        '''
         self.class_object = class_object
         self.object = object
         self.function = function
@@ -652,8 +713,8 @@ class PointCut(ReturnAspect):
 ## python3.3         def call_handler(advice: builtins.dict) -> builtins.bool:
         def call_handler(advice):
             '''
-                Supports classes, simple functions or methods as triggered
-                call handler.
+                Supports classes, simple functions or methods as triggered call
+                handler.
             '''
             if 'call' == advice['event']:
                 result = advice['callback'](
@@ -749,6 +810,29 @@ class JointPoint(FunctionDecorator):
         >>> @JointPoint
         ... def test(a):
         ...     return a
+
+        >>> aspects_backup = ASPECTS
+
+        >>> def call_handler():
+        ...     return 'call'
+        >>> def return_handler():
+        ...     return 'return'
+        >>> ASPECTS = [{
+        ...     'advice': (
+        ...         {'callback': call_handler, 'event': 'call'},
+        ...         {'callback': return_handler, 'event': 'return'}),
+        ...     'point_cut': '^A.b$'}]
+
+        # TODO ASPECTS aren't given to JointPoint's scope!
+
+        >>> class A:
+        ...     @JointPoint
+        ...     def b(self):
+        ...         pass
+
+        >>> A().b()
+
+        >>> ASPECTS = aspects_backup
     '''
 
     # region dynamic methods
@@ -761,6 +845,7 @@ class JointPoint(FunctionDecorator):
 ##     ) -> (types.FunctionType, types.MethodType):
     def get_wrapper_function(self):
 ##
+        '''This methods returns the joint point's wrapped function.'''
         if sys.flags.optimize > 1:
             return self.function
 

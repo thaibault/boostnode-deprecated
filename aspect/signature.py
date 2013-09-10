@@ -59,10 +59,8 @@ from boostNode.paradigm.aspectOrientation import ASPECTS, FunctionDecorator, \
 # region functions
 
 @JointPoint
-## python3.3
-## def add_check(point_cut: builtins.str) -> builtins.list:
+## python3.3 def add_check(point_cut: builtins.str) -> builtins.list:
 def add_check(point_cut):
-##
     '''
         Adds signature checking in functions and methods for given point cuts.
 
