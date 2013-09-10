@@ -249,21 +249,16 @@ class Run(Class, Runnable):
 
             Examples:
 
-            >>> FileHandler(
-            ...     __test_folder__ + '__repr__.py', must_exist=False
-            ... ).content = '#!/usr/bin/env python'
-            >>> repr(Run(
-            ...     code_file_path=__test_folder__ + '__repr__.py')
-            ... ) # doctest: +ELLIPSIS
+            >>> file = FileHandler(
+            ...     __test_folder__ + '__repr__.py', must_exist=False)
+            >>> file.content = '#!/usr/bin/env python'
+            >>> repr(Run(code_file_path=file)) # doctest: +ELLIPSIS
             'Object of "Run" with detected path "...__repr__.py".'
         '''
-        if self._code_file:
-            return 'Object of "{class_name}" with detected path '\
-                   '"{path}".'.format(
-                       class_name=self.__class__.__name__,
-                       path=self._code_file.path)
-        return 'Object of "{class_name}" with no detected path.'.format(
-            class_name=self.__class__.__name__)
+        return 'Object of "{class_name}" with detected path '\
+               '"{path}".'.format(
+                   class_name=self.__class__.__name__,
+                   path=self._code_file.path)
 
             # endregion
 
