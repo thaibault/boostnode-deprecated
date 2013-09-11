@@ -461,13 +461,11 @@ class Runnable(builtins.object):
         force_stopping, keywords = keywords_dictionary.pop(
             name='force_stopping', default_value=False)
 ##
-        # TODO make clear if globals or dir should be used for childrens
-        # module.
         if(force_stopping or
-           not (('__test_mode__' in builtins.globals() and __test_mode__) or
-                ('__test_mode__' in self._childrens_module and
-                 self._childrens_module.__test_mode__) or
-                self is None) and
+           not (self is None or ('__test_mode__' in builtins.globals() and
+                                 __test_mode__) or
+                ('__test_mode__' in builtins.dir(self._childrens_module) and
+                 self._childrens_module.__test_mode__)) and
            self.__stop_lock.acquire(False)):
             reason = ''
             if self._given_order and self._given_order in (
