@@ -876,10 +876,10 @@ class Parser(Class, Runnable):
             self.content = template
         else:
             self.file = FileHandler(location=template, must_exist=False)
-            if not self.file:
+            if not self.file.is_file():
                 self.file = FileHandler(
                     location=template + '.tpl', must_exist=False)
-            if not self.file:
+            if not self.file.is_file():
                 raise __exception__(
                     'No suitable template found with given name "%s" in "%s".',
                     template, self.file.directory_path)

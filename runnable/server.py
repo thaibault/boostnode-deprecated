@@ -1414,10 +1414,9 @@ class CGIHTTPRequestHandler(
     def send_static_file_cache_header(self, timestamp):
 ##
         '''Response a static file-request header.'''
-        self.send_header('Cache-Control', 'public, max-age=99999999')
+        self.send_header('Cache-Control', 'public, max-age=0')
         self.send_header('Last-Modified', self.date_time_string(timestamp))
-        self.send_header('Expires', self.date_time_string(
-            timestamp + 99999999))
+        self.send_header('Expires', self.date_time_string(timestamp + 0))
         return self
 
     @JointPoint

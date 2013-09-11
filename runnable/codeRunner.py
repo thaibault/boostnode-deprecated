@@ -279,16 +279,17 @@ class Run(Class, Runnable):
 
             Examples:
 
-            >>> FileHandler(
-            ...     location=__test_folder__ + '_run', make_directory=True
-            ... ) # doctest: +ELLIPSIS
-            Object of "Handler" with path "..._run..." (directory).
-            >>> Run(
-            ...     code_file_path=__test_folder__ + '_run/'
-            ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
+            >>> sys_argv_backup = sys.argv
+            >>> sys.argv[1:] = ['--runner-meta-help']
+
+            >>> file = FileHandler(
+            ...     location=__test_folder__ + '_run', make_directory=True)
+            >>> Run.run(file) # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
             CodeRunnerError: No supported file path found for running.
+
+            >>> sys.argv = sys_argv_backup
         '''
         command_line_arguments = CommandLine.argument_parser(
             meta=True, arguments=self.COMMAND_LINE_ARGUMENTS,
