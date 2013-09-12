@@ -320,6 +320,10 @@ class Run(Class, Runnable):
         '''
         self._default_command_sequence = default_command_sequence
         self._code_file = self._determine_code_file(code_file_path)
+        if not self._code_file:
+            raise __exception__(
+                'No supported file found for running with given hint "%s".',
+                code_file_path)
         return self._run_code_file()
 
             # endregion
@@ -577,16 +581,21 @@ class Run(Class, Runnable):
 
             Examples:
 
-            TODO
-            #>>> Run()._search_supported_file_by_path(
-            #...     path=file.directory_path + file.basename
-            #... ) # doctest: +ELLIPSIS
+            >>> FileHandler(
+            ...     __test_folder__ +
+            ...     '_search_supported_file_by_directoryMain.py',
+            ...     must_exist=False
+            ... ).content = ' '
+            >>> Run()._search_supported_file_by_directory(
+            ...     FileHandler(__test_folder__), 'py'
+            ... ) # doctest: +ELLIPSIS
+            Object of "Handler" with path "..." and initially given path "...
         '''
         if location.is_directory():
             found_file = False
             for file in location:
                 if file.is_file() and file.extension == extension:
-                    if file.basename.endswith('Main'):
+                    if file.basename.lower().endswith('main'):
                         return file
                     found_file = file
             if found_file:
@@ -606,14 +615,24 @@ class Run(Class, Runnable):
 
             Examples:
 
-            >>> Run()._search_supported_file_in_current_working_directory(
+            >>> run = Run()
+            >>> supported_codes_backup = copy.copy(run.SUPPORTED_CODES)
+
+            >>> run._search_supported_file_in_current_working_directory(
             ...     ) # doctest: +ELLIPSIS
             Object of "Handler" with path "..." (file).
+
+            >>> run.SUPPORTED_CODES = {}
+            >>> run._search_supported_file_in_current_working_directory()
+            False
+
+            >>> run.SUPPORTED_CODES = supported_codes_backup
         '''
         for name, properties in self.SUPPORTED_CODES.items():
             for extension in properties['extensions']:
                 file = self._search_supported_file_by_directory(
                     location=FileHandler(), extension=extension)
+                '''NOTE: We should return positive results only.'''
                 if file:
                     return file
         return False
@@ -657,6 +676,21 @@ class Run(Class, Runnable):
         '''
             Generates logging output for wrapping around generated output by
             running code file.
+
+            Examples:
+
+            >>> log_level_backup = Logger.default_level
+            >>> Logger.change_all(level=('error',))
+            <class 'boostNode.extension.output.Logger'>
+
+            >>> Run()._log_command_run(
+            ...     'test', 'test', {
+            ...         'error_output': '', 'standard_output': '',
+            ...         'return_code': 0})
+            0
+
+            >>> Logger.change_all(level=log_level_backup)
+            <class 'boostNode.extension.output.Logger'>
         '''
         terminator_save = Logger.terminator
         Logger.change_all(terminator=('',))
@@ -689,7 +723,6 @@ class Run(Class, Runnable):
 ## python3.3     def _run_code_file(self: Self) -> Self:
     def _run_code_file(self):
         '''Runs all commands needed to run the current type of code.'''
-        self._validate_code_file()
         self._current_code = self._find_informations_by_extension(
             extension=self._code_file.extension, code_file=self._code_file)
         self._current_commands = \
@@ -701,19 +734,6 @@ class Run(Class, Runnable):
                 self._run_commands()
             finally:
                 self._tidy_up()
-        return self
-
-    @JointPoint
-## python3.3     def _validate_code_file(self: Self) -> Self:
-    def _validate_code_file(self):
-        '''Checks weather current code file is supported for running.'''
-        if not self._code_file:
-            raise __exception__(
-                'No supported file path found for running.')
-        if not self._code_file.is_file():
-            raise __exception__(
-                'No supported file like "%s" found for running.',
-                self._code_file.path)
         return self
 
     @JointPoint
