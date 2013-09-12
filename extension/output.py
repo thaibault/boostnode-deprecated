@@ -696,7 +696,7 @@ class Logger(Class):
             <class ...Logger...>
         '''
         cls._set_properties(level, buffer, terminator, format)
-        for index, logger in builtins.enumerate(cls.instances):
+        for logger in cls.instances:
 ## python3.3             new_handler = logger.handlers.copy()
             new_handler = copy.copy(logger.handlers)
             if buffer:

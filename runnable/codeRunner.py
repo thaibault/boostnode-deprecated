@@ -134,19 +134,19 @@ class Run(Class, Runnable):
         },
         'bash': {
             'commands': {
-                'run': '"<%code_file.path%>" <%arguments%>',
+                'run': '"<%code_file.path%>" <%arguments%>'
             },
             'extensions': ('bash',)
         },
         'shell': {
             'commands': {
-                'run': '"<%code_file.path%>" <%arguments%>',
+                'run': '"<%code_file.path%>" <%arguments%>'
             },
             'extensions': ('sh', 'shell')
         },
         'python': {
             'commands': {
-                'run': '"<%code_file.path%>" <%arguments%>',
+                'run': '"<%code_file.path%>" <%arguments%>'
             },
             'code_manager': {
                 'file_path': '__init__.<%code_file.extension%>',
@@ -189,7 +189,7 @@ class Run(Class, Runnable):
         'java': {
             'commands': {
                 'compile': 'javac "<%code_file.path%>"',
-                'run': 'java "<%code_file.basename%>" <%arguments%>',
+                'run': 'java "<%code_file.basename%>" <%arguments%>'
             },
             'extensions': ('java',),
             'delete_patterns': ('.*\.class$',)
@@ -271,7 +271,6 @@ class Run(Class, Runnable):
     @JointPoint
 ## python3.3     def _run(self: Self) -> Self:
     def _run(self):
-##
         '''
             Entry point for command line call of this program.
             Determines a meaningful file for running. Set the right code
@@ -280,11 +279,15 @@ class Run(Class, Runnable):
             Examples:
 
             >>> sys_argv_backup = sys.argv
-            >>> sys.argv[1:] = ['--runner-meta-help']
 
-            >>> file = FileHandler(
-            ...     location=__test_folder__ + '_run', make_directory=True)
-            >>> Run.run(file) # doctest: +IGNORE_EXCEPTION_DETAIL
+            >>> sys.argv[1:] = ['--runner-meta-help', '--log-level', 'info']
+            >>> run = Run.run() # doctest: +ELLIPSIS
+            usage:...
+
+            >>> empty_folder = FileHandler(
+            ...     __test_folder__ + '_run', make_directory=True)
+            >>> sys.argv[1:] = ['-f', empty_folder.path, '--log-level', 'info']
+            >>> run = Run.run() # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
             CodeRunnerError: No supported file path found for running.
@@ -332,17 +335,22 @@ class Run(Class, Runnable):
 
             >>> garbage = FileHandler(
             ...     __test_folder__ + 'temp_tidy_up', make_directory=True)
-            >>> FileHandler(
+            >>> file = FileHandler(
             ...     __test_folder__ + '_tidy_up_runnable.py',
-            ...     must_exist=False
-            ... ).content = '#!/usr/bin/env python'
-            >>> runner = Run(__test_folder__ + '_tidy_up_runnable.py')
-            >>> runner # doctest: +ELLIPSIS
+            ...     must_exist=False)
+            >>> file.content = '#!/usr/bin/env python'
+            >>> run = Run(file)
+            >>> run # doctest: +ELLIPSIS
             Object of "Run" with detected path "..._tidy_up_runnable.py".
-            >>> runner._tidy_up() # doctest: +ELLIPSIS
+
+            >>> run._tidy_up() # doctest: +ELLIPSIS
             Object of "Run" with detected path "..._tidy_up_runnable.py".
             >>> garbage.is_element()
             False
+
+            >>> del run._current_code['properties']['delete_patterns']
+            >>> run._tidy_up() # doctest: +ELLIPSIS
+            Object of "Run" with detected path "..._tidy_up_runnable.py".
         '''
         if 'delete_patterns' in self._current_code['properties']:
             __logger__.info(
@@ -365,26 +373,26 @@ class Run(Class, Runnable):
 
             >>> __test_buffer__.clear() # doctest: +ELLIPSIS
             '...'
-            >>> FileHandler(
-            ...     __test_folder__ + '_run_commands.py', must_exist=False
-            ... ).content = '#!/usr/bin/env python'
+            >>> FileHandler(__test_folder__).clear_directory()
+            True
+
+            >>> file = FileHandler(
+            ...     __test_folder__ + '_run_commands.py', must_exist=False)
+            >>> file.content = '#!/usr/bin/env python'
+            >>> file.change_right(700) # doctest: +ELLIPSIS
+            Object of "Handler" with path "..._run_commands.py" and initiall...
             >>> Run(
-            ...     code_file_path=__test_folder__ + '_run_commands.py'
+            ...     code_file_path=file
             ... )._run_commands() # doctest: +ELLIPSIS
             Object of "Run" with detected path "..._run_commands.py...".
+
             >>> __test_buffer__.content # doctest: +ELLIPSIS
             '...Detected "python"...No "compile" necessary...'
         '''
         for command_name in self._default_command_sequence:
             if command_name in self._current_commands:
-                if(builtins.isinstance(
-                   self._current_commands[command_name], builtins.tuple)):
-                    for sub_command in self._current_commands[command_name]:
-                        self._run_command(command_name, command=sub_command)
-                else:
-                    self._run_command(
-                        command_name,
-                        command=self._current_commands[command_name])
+                self._run_command(
+                    command_name, command=self._current_commands[command_name])
             else:
                 __logger__.info('No "%s" necessary.', command_name)
         return self
@@ -399,22 +407,25 @@ class Run(Class, Runnable):
 
             Examples:
 
-            >>> FileHandler(
+            >>> file = FileHandler(
             ...     __test_folder__ + '_check_code_manager.py',
-            ...     must_exist=False
-            ... ).content = '#!/usr/bin/env python'
+            ...     must_exist=False)
+            >>> file.content = '#!/usr/bin/env python'
             >>> FileHandler(
             ...     __test_folder__ + '__init__.py', must_exist=False
             ... ).content = '#!/usr/bin/env python'
-
-            >>> runner = Run(
-            ...     code_file_path=__test_folder__ + '_check_code_manager.py')
+            >>> run = Run(code_file_path=file)
             >>> __test_buffer__.clear() # doctest: +ELLIPSIS
             '...'
-            >>> runner._check_code_manager() # doctest: +ELLIPSIS
+
+            >>> run._check_code_manager() # doctest: +ELLIPSIS
             Object of "Run" with detected path "..._check_code_manager.py".
             >>> __test_buffer__.content # doctest: +ELLIPSIS
             '...Detected code manager "...__init__.py".\\n'
+
+            >>> del run._current_code['properties']['code_manager']
+            >>> run._check_code_manager() # doctest: +ELLIPSIS
+            Object of "Run" ...
         '''
         if 'code_manager' in self._current_code['properties']:
             file_path = self\
@@ -444,8 +455,18 @@ class Run(Class, Runnable):
 
             Examples:
 
-            >>> Run()._determine_code_file(path='') # doctest: +ELLIPSIS
+            >>> run = Run()
+
+            >>> run._determine_code_file(path='') # doctest: +ELLIPSIS
             Object of "Handler" with path "..." (file).
+
+            >>> run._command_line_arguments = ['--help']
+            >>> run._determine_code_file('not_existing')
+            False
+
+            >>> run._command_line_arguments = ['--help']
+            >>> run._determine_code_file('') # doctest: +ELLIPSIS
+            Object of "Handler" with path "..." and initially given path "...
         '''
         if path:
             if not self._command_line_arguments:
@@ -553,6 +574,13 @@ class Run(Class, Runnable):
 ##
         '''
             Searches in a directory for a suitable code file to run.
+
+            Examples:
+
+            TODO
+            #>>> Run()._search_supported_file_by_path(
+            #...     path=file.directory_path + file.basename
+            #... ) # doctest: +ELLIPSIS
         '''
         if location.is_directory():
             found_file = False
@@ -660,9 +688,7 @@ class Run(Class, Runnable):
     @JointPoint
 ## python3.3     def _run_code_file(self: Self) -> Self:
     def _run_code_file(self):
-        '''
-            Runs all commands needed to run the current type of code.
-        '''
+        '''Runs all commands needed to run the current type of code.'''
         self._validate_code_file()
         self._current_code = self._find_informations_by_extension(
             extension=self._code_file.extension, code_file=self._code_file)
@@ -680,9 +706,7 @@ class Run(Class, Runnable):
     @JointPoint
 ## python3.3     def _validate_code_file(self: Self) -> Self:
     def _validate_code_file(self):
-        '''
-            Checks weather current code file is supported for running.
-        '''
+        '''Checks weather current code file is supported for running.'''
         if not self._code_file:
             raise __exception__(
                 'No supported file path found for running.')

@@ -55,7 +55,7 @@ from boostNode.extension.file import Handler as FileHandler
 from boostNode.extension.native import Dictionary, Module, String
 from boostNode.extension.output import Buffer, Print
 from boostNode.extension.system import CommandLine, Runnable
-## python3.3 from boostNode.extension.type import Self
+## python3.3 from boostNode.extension.type import Self, SelfClass
 pass
 from boostNode.paradigm.aspectOrientation import JointPoint
 from boostNode.paradigm.objectOrientation import Class
@@ -67,9 +67,9 @@ from boostNode.paradigm.objectOrientation import Class
 
 class Parser(Class, Runnable):
     '''
-        This class can parse a string or file to interpret it as template
-        for replacing containing placeholder and rendering embedded python
-        script snippets.
+        This class can parse a string or file to interpret it as template for
+        replacing containing placeholder and rendering embedded python script
+        snippets.
     '''
 
     # region constant properties
@@ -269,16 +269,27 @@ class Parser(Class, Runnable):
         in templates.
     '''
     _indent = 0
-    _count_lines = 0
-    _count_no_lines = 0
-    _code_dependend_indents = []
+    '''Holds the number of lines in generated python code.'''
+    _number_of_generated_lines = 0
+    '''
+        Holds the number of lines which will be generated in python code but
+        doesn't occur in template code.
+    '''
+    _number_of_generated_phantom_lines = 0
+    '''
+        Saves the number of logical python code indents to distinguish between
+        style indents and logical indents.
+    '''
+    _code_dependent_indents = []
+    '''
+        Indicates if the parser should spent time on calculating the perfect
+        indention for each line.
+    '''
     _pretty_indent = False
     '''
-        A list of tuple holding the number of phantom lines till its
-        corresponding real line in source code.
-        That's necessary for mapping exception line in compiled template to
-        lines in source code template because the number of lines in source
-        code are more compact as in compiled pendant.
+        A list of tuples holding the number of generated python code lines and
+        the number of generated phantom python code lines which doesn't appear
+        in template source code.
     '''
     _line_shifts = []
     '''
@@ -292,6 +303,43 @@ class Parser(Class, Runnable):
     '''
     _current_rendered_content_line_number = 0
     _number_of_rendered_content_lines = 0
+
+        # endregion
+
+    # endregion
+
+    # region static methods
+
+        # region protected
+
+            # region helper
+
+    @JointPoint(builtins.classmethod)
+## python3.3
+##     def _render_none_code(
+##         cls: SelfClass, string: builtins.str, end='\n'
+##     ) -> builtins.str:
+    def _render_none_code(cls, string, end='\n'):
+##
+        '''Wraps a print function around plain text for compiling templates.'''
+        delimiters = ("'", '"', "'''", '"""')
+        counter = 0
+        delimiter = delimiters[0]
+        while delimiter in string:
+            counter += 1
+            delimiter = delimiters[counter]
+            if counter + 1 == builtins.len(delimiters):
+                string = string.replace('"""', '"\""')
+                break
+        if string.startswith(delimiter[0]):
+            string = '\\' + string
+        if string.endswith(delimiter[0]):
+            string = string[0:-1] + '\\' + string[-1]
+        return ("print(%s, end='')\n" % (
+            delimiter + string.replace('\n', '\\n') +
+            end.replace('\n', '\\n') + delimiter))
+
+            # endregion
 
         # endregion
 
@@ -353,9 +401,7 @@ class Parser(Class, Runnable):
     @JointPoint
 ## python3.3     def get_indent(self: Self) -> builtins.int:
     def get_indent(self):
-        '''
-            Returns a string of white spaces representing current context.
-        '''
+        '''Returns a string of white spaces representing current context.'''
         if not self._indent and self.content:
             self._indent = self._template_context_default_indent
             match = re.compile(
@@ -484,8 +530,8 @@ class Parser(Class, Runnable):
 ##             *arguments, **keywords))
         def substitute(match):
             '''
-                Substitution replacement for native pendant with no
-                exception raising.
+                Substitution replacement for native pendant with no exception
+                raising.
             '''
             if match.group('variable_name') in keywords:
                 return builtins.str(
@@ -538,8 +584,7 @@ class Parser(Class, Runnable):
 ##
         '''
             Renders the template. Searches for python code snippets and handles
-            correct indenting.
-            Wraps plain text with a print function.
+            correct indenting. Wraps plain text with a print function.
 
             Examples:
 
@@ -567,8 +612,8 @@ class Parser(Class, Runnable):
 ## python3.3     def represent_rendered_content(self: Self) -> builtins.str:
     def represent_rendered_content(self):
         '''
-            This method adds line numbers to rendered contend which is
-            visible if an template exception occurs in debug mode.
+            This method adds line numbers to rendered contend which is visible
+            if an template exception occurs in debug mode.
         '''
         self._number_of_rendered_content_lines = builtins.len(
             String(self.rendered_content).readlines())
@@ -580,10 +625,7 @@ class Parser(Class, Runnable):
 ##         ) -> builtins.str:
         def replace_rendered_content_line(match):
 ##
-            '''
-                Prepends a line numbers to each line of rendered python
-                code.
-            '''
+            '''Prepends a line numbers to each line of rendered python code.'''
             self._current_rendered_content_line_number += 1
             number_of_whitspaces = builtins.len(builtins.str(
                 self._number_of_rendered_content_lines)
@@ -607,9 +649,9 @@ class Parser(Class, Runnable):
 ## python3.3     def _run(self: Self) -> Self:
     def _run(self):
         '''
-            Entry point for command line call of this program.
-            Loads the given template. If it is given by the command line it
-            will be interpreted directly.
+            Entry point for command line call of this program. Loads the given
+            template. If it is given by the command line it will be interpreted
+            directly.
 
             Examples:
 
@@ -770,14 +812,16 @@ class Parser(Class, Runnable):
                 Line 11-12: None code
                 Line 13: Empty Line
         '''
-        '''Make needed runtime properties to instance properties.'''
+        '''Make needed to convert runtime properties to instance properties.'''
         self._new_line = self.__class__._new_line
         self._indent = self.__class__._indent
-        self._count_lines = self.__class__._count_lines
-        self._count_no_lines = self.__class__._count_no_lines
+        self._number_of_generated_lines = \
+            self.__class__._number_of_generated_lines
+        self._number_of_generated_phantom_lines = \
+            self.__class__._number_of_generated_phantom_lines
         self._current_rendered_content_line_number = \
             self.__class__._current_rendered_content_line_number
-        self._code_dependend_indents = self.__class__._code_dependend_indents
+        self._code_dependent_indents = self.__class__._code_dependent_indents
         self._line_shifts = self.__class__._line_shifts
         self._empty_lines = self.__class__._empty_lines
 
@@ -896,10 +940,9 @@ class Parser(Class, Runnable):
     def _run_template(self, template_scope):
 ##
         '''
-            Runs the compiled template in its given scope.
-            All error will be cached and error messages depending on source
-            template will be derived on produced exceptions based in the
-            compiled template.
+            Runs the compiled template in its given scope. All error will be
+            cached and error messages depending on source template will be
+            derived on produced exceptions based in the compiled template.
         '''
         template_scope.update({'__builtins__': self.builtins})
         try:
@@ -988,7 +1031,7 @@ class Parser(Class, Runnable):
     @JointPoint
 ## python3.3
 ##     def _raise_template_exception(
-##         self: Self, line_info: builtins.str,
+##         self: Self, line_info: builtins.str, 
 ##         exception_message: builtins.str,
 ##         native_exception_description: builtins.str,
 ##         native_exception: builtins.Exception
@@ -1038,24 +1081,31 @@ class Parser(Class, Runnable):
     def _get_exception_line(self, exception):
 ##
         '''
-            Determines the line where the given exception was raised.
-            If in the responsible line in compiled template was found, a tuple
-            with the resulting line in source template and compiled template
-            will be given back.
+            Determines the line where the given exception was raised. If in the
+            responsible line in compiled template was found, a tuple with the
+            resulting line in source template and compiled template will be
+            given back.
         '''
         '''
-            Search traceback for a context ran from "builtins.exec()" and begin
-            from the nearest context.
+            NOTE: A tuple with line matching (a, b) means that till python code
+            line a + b we have b number of lines which doesn't occur in source
+            code.
         '''
+        old_number_of_phantom_lines = 0
         line_number = self._determine_exec_string_exception_line(exception)
-        for line_shift in self._line_shifts:
-            line_number_in_python_code = line_shift[0] + line_shift[1]
-            if line_number == line_number_in_python_code:
-                return line_shift[0], line_number
-            if line_number < line_number_in_python_code:
-                return line_number - line_shift[1] + 1, line_number
+        for number_of_lines, number_of_phantom_lines in self._line_shifts:
+            line_number_in_python_code = number_of_lines + \
+                number_of_phantom_lines
+            if line_number <= line_number_in_python_code:
+                __logger__.debug('Grap line number by between range hit.')
+                return line_number - old_number_of_phantom_lines, line_number
+            old_number_of_phantom_lines = number_of_phantom_lines
         if line_number and self._line_shifts:
+            __logger__.debug('Grap line number by last mapping.')
             return line_number - self._line_shifts[-1][1], line_number
+        __logger__.debug(
+            'Get equal line number for compiled and source code version '
+            'by assuming there are no line shifts.')
         return line_number, line_number
 
     @JointPoint
@@ -1073,6 +1123,10 @@ class Parser(Class, Runnable):
 ##         exception_traceback = traceback.extract_tb(exception.__traceback__)
         exception_traceback = traceback.extract_tb(sys.exc_info()[2])
 ##
+        '''
+            Search traceback for a context ran from "builtins.exec()" and begin
+            from the nearest context.
+        '''
         exception_traceback.reverse()
         for context in exception_traceback:
             if context[0] == '<string>':
@@ -1171,9 +1225,7 @@ class Parser(Class, Runnable):
 ##     ) -> builtins.str:
     def _render_code(self, match):
 ##
-        '''
-            Helper method for rendering the source template file.
-        '''
+        '''Helper method for rendering the source template file.'''
         if match.group():
             '''
                 This has been sorted by their average frequency for improving
@@ -1196,6 +1248,81 @@ class Parser(Class, Runnable):
 
                 # region helper
 
+                    # region line renderer
+
+    @JointPoint
+## python3.3
+##     def _render_escaped_none_code_line(
+##         self: Self, match: builtins.type(re.compile('').match(''))
+##     ) -> builtins.str:
+    def _render_escaped_none_code_line(self, match):
+##
+        '''Handles escaped none code.'''
+        indent = self._get_code_indent(
+            current_indent=match.group('indent_escaped'), mode='passiv')
+        last_empty_lines = self._flush_empty_lines(indent)
+        was_new_line = self._new_line
+        if match.group('escaped_end'):
+            self._new_line = True
+            self._number_of_generated_lines += 1
+        else:
+            self._new_line = False
+            self._number_of_generated_phantom_lines += 1
+        slice = 0
+        if was_new_line:
+            slice = builtins.len(self._code_dependent_indents) * self.indent
+        content_before = match.group('before_escaped')[slice:]
+        return last_empty_lines + indent + self._render_none_code(
+            string=content_before + self._left_code_delimiter, end='')
+
+    @JointPoint
+## python3.3
+##     def _render_placeholder(
+##         self: Self, match: builtins.type(re.compile('').match(''))
+##     ) -> builtins.str:
+    def _render_placeholder(self, match):
+##
+        '''Handles placeholder.'''
+        indent = self._get_code_indent(
+            current_indent=match.group('indent_placeholder'), mode='passiv')
+        last_empty_lines = self._flush_empty_lines(indent)
+        was_new_line = self._new_line
+        '''
+            NOTE: We can have zero one or two phantom lines for one
+            placeholder.
+        '''
+        if match.group('before_placeholder'):
+            self._number_of_generated_phantom_lines += 1
+            self._line_shifts.append(
+                (self._number_of_generated_lines,
+                 self._number_of_generated_phantom_lines))
+        if match.group('placeholder_end'):
+            self._new_line = True
+            self._number_of_generated_lines += 1
+        else:
+            self._new_line = False
+            self._number_of_generated_phantom_lines += 1
+        before_placeholder = ''
+        if match.group('before_placeholder'):
+            '''
+                Only cut code dependent indents if placeholder is the first
+                statement in current line.
+            '''
+            slice = 0
+            if was_new_line:
+                slice = builtins.len(
+                    self._code_dependent_indents
+                ) * self.indent
+            before_placeholder = indent + self._render_none_code(
+                string=match.group('before_placeholder')[slice:], end='')
+        self._line_shifts.append(
+            (self._number_of_generated_lines,
+             self._number_of_generated_phantom_lines))
+        return (
+            last_empty_lines + before_placeholder + indent + 'print(str(' +
+            match.group('placeholder').strip() + ")%s, end='')\n" %
+            ('+"\\n"' if self._get_new_line() else ''))
+
     @JointPoint
 ## python3.3
 ##     def _render_empty_line(
@@ -1203,11 +1330,9 @@ class Parser(Class, Runnable):
 ##     ) -> builtins.str:
     def _render_empty_line(self, match):
 ##
-        '''
-            Handles empty lines.
-        '''
+        '''Handles empty lines.'''
         self._new_line = True
-        self._count_lines += 1
+        self._number_of_generated_lines += 1
         self._empty_lines.append(self._render_none_code(
             string=match.group('EMPTY_LINE'), end=''))
         return ''
@@ -1219,21 +1344,22 @@ class Parser(Class, Runnable):
 ##     ) -> builtins.str:
     def _render_none_code_line(self, match):
 ##
-        '''
-            Handles none code.
-        '''
+        '''Handles none code.'''
         indent = self._get_code_indent(
             current_indent=match.group('indent_none_code'), mode='passiv')
         last_empty_lines = self._flush_empty_lines(indent)
         was_new_line = self._new_line
-        self._new_line = False
         if match.group('none_code_end'):
             self._new_line = True
-            self._count_lines += 1
+            self._number_of_generated_lines += 1
+        else:
+            self._new_line = False
+            self._number_of_generated_phantom_lines += 1
         slice = 0
-        if was_new_line and self._code_dependend_indents:
+        if was_new_line and self._code_dependent_indents:
             slice = builtins.len(
-                self._code_dependend_indents) * self.indent
+                self._code_dependent_indents
+            ) * self.indent
         return last_empty_lines + indent + self._render_none_code(
             string=match.group('none_code')[slice:],
             end=self._get_new_line())
@@ -1248,7 +1374,7 @@ class Parser(Class, Runnable):
         '''Compiles a template python code line.'''
         was_new_line = self._new_line
         self._new_line = True
-        self._count_lines += 1
+        self._number_of_generated_lines += 1
         code_line = match.group('code').strip()
         mode = 'passiv'
         if code_line.endswith(':') and not code_line.startswith('#'):
@@ -1258,6 +1384,8 @@ class Parser(Class, Runnable):
         code_line = self._save_output_method_indent_level(
             code_line, was_new_line, match)
         return self._flush_empty_lines(indent) + indent + code_line
+
+                    # endregion
 
     @JointPoint
 ## python3.3
@@ -1276,7 +1404,7 @@ class Parser(Class, Runnable):
             slice = 0
             if was_new_line:
                 slice = builtins.len(
-                    self._code_dependend_indents
+                    self._code_dependent_indents
                 ) * self.indent
             if code_line.startswith('print('):
                 return self._handle_print_output_indent_level(
@@ -1324,8 +1452,8 @@ class Parser(Class, Runnable):
     def _handle_print_output_indent_level(self, code_line, match, slice):
 ##
         '''
-            Returns a string representing from print function call in
-            generated python code with their indent level given.
+            Returns a string representing from print function call in generated
+            python code with their indent level given.
         '''
         length_of_print_call = String(
             code_line[builtins.len('print('):]
@@ -1342,72 +1470,6 @@ class Parser(Class, Runnable):
             "print(indent_space='" + match.group('indent_code')[slice:] +
             "')" +
             code_line[builtins.len('print(') + length_of_print_call + 1:])
-
-    @JointPoint
-## python3.3
-##     def _render_escaped_none_code_line(
-##         self: Self, match: builtins.type(re.compile('').match(''))
-##     ) -> builtins.str:
-    def _render_escaped_none_code_line(self, match):
-##
-        '''
-            Handles escaped none code.
-        '''
-        indent = self._get_code_indent(
-            current_indent=match.group('indent_escaped'), mode='passiv')
-        last_empty_lines = self._flush_empty_lines(indent)
-        was_new_line = self._new_line
-        if match.group('escaped_end'):
-            self._new_line = True
-            self._count_lines += 1
-        else:
-            self._new_line = False
-            self._count_no_lines += 1
-            self._line_shifts.append((self._count_lines, self._count_no_lines))
-        slice = 0
-        if was_new_line:
-            slice = builtins.len(self._code_dependend_indents) * self.indent
-        content_before = match.group('before_escaped')[slice:]
-        return last_empty_lines + indent + self._render_none_code(
-            string=content_before + self._left_code_delimiter, end='')
-
-    @JointPoint
-## python3.3
-##     def _render_placeholder(
-##         self: Self, match: builtins.type(re.compile('').match(''))
-##     ) -> builtins.str:
-    def _render_placeholder(self, match):
-##
-        '''Handles placeholder.'''
-        indent = self._get_code_indent(
-            current_indent=match.group('indent_placeholder'), mode='passiv')
-        last_empty_lines = self._flush_empty_lines(indent)
-        if match.group('before_placeholder'):
-            self._count_no_lines += 1
-            self._line_shifts.append((self._count_lines, self._count_no_lines))
-        was_new_line = self._new_line
-        if match.group('placeholder_end'):
-            self._new_line = True
-            self._count_lines += 1
-        else:
-            self._new_line = False
-            self._count_no_lines += 1
-            self._line_shifts.append((self._count_lines, self._count_no_lines))
-        before_placeholder = ''
-        if match.group('before_placeholder'):
-            '''
-                Only cut code dependent indents if placeholder is
-                the first statement in current line.
-            '''
-            slice = 0
-            if was_new_line:
-                slice = builtins.len(
-                    self._code_dependend_indents) * self.indent
-            before_placeholder = indent + self._render_none_code(
-                string=match.group('before_placeholder')[slice:], end='')
-        return (last_empty_lines + before_placeholder + indent + 'print(str(' +
-                match.group('placeholder').strip() + ")%s, end='')\n" %
-                ('+"\\n"' if self._get_new_line() else ''))
 
     @JointPoint
 ## python3.3
@@ -1434,7 +1496,8 @@ class Parser(Class, Runnable):
             compiling to native python code.
         '''
         if(self._new_line and
-           self._count_lines != builtins.len(self.content.splitlines())):
+           self._number_of_generated_lines !=
+           builtins.len(self.content.splitlines())):
             return '\n'
         return ''
 
@@ -1459,53 +1522,25 @@ class Parser(Class, Runnable):
         if current_indent is None:
             current_indent = ''
         indent = ''
-        if self._code_dependend_indents:
+        if self._code_dependent_indents:
             if self._new_line:
                 slice = 0
-                indents = builtins.enumerate(self._code_dependend_indents)
-                for counter, dependend_indent in indents:
+                indents = builtins.enumerate(self._code_dependent_indents)
+                for counter, dependent_indent in indents:
                     if(builtins.len(current_indent) >
-                       builtins.len(dependend_indent)):
+                       builtins.len(dependent_indent)):
                         indent = (counter + 1) * ' '
                         slice = counter + 1
                 '''Close code indent blocks.'''
-                self._code_dependend_indents = \
-                    self._code_dependend_indents[:slice]
+                self._code_dependent_indents = \
+                    self._code_dependent_indents[:slice]
             else:
                 '''Prepend code dependent indent to get right context.'''
-                indent = builtins.len(self._code_dependend_indents) * ' '
+                indent = builtins.len(self._code_dependent_indents) * ' '
         if mode == 'activ':
             '''Expect a new dependent indented code block.'''
-            self._code_dependend_indents.append(current_indent)
+            self._code_dependent_indents.append(current_indent)
         return indent
-
-    @JointPoint
-## python3.3
-##     def _render_none_code(
-##         self: Self, string: builtins.str, end='\n'
-##     ) -> builtins.str:
-    def _render_none_code(self, string, end='\n'):
-##
-        '''
-            Wraps a print function around plain text for compiling
-            templates.
-        '''
-        delimiters = ("'", '"', "'''", '"""')
-        counter = 0
-        delimiter = delimiters[0]
-        while delimiter in string:
-            counter += 1
-            delimiter = delimiters[counter]
-            if counter + 1 == builtins.len(delimiters):
-                string = string.replace('"""', '"\""')
-                break
-        if string.startswith(delimiter[0]):
-            string = '\\' + string
-        if string.endswith(delimiter[0]):
-            string = string[0:-1] + '\\' + string[-1]
-        return ("print(%s, end='')\n" % (
-            delimiter + string.replace('\n', '\\n') +
-            end.replace('\n', '\\n') + delimiter))
 
                 # endregion
 
