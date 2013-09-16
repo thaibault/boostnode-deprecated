@@ -321,20 +321,48 @@ class Parser(Class, Runnable):
 ##     ) -> builtins.str:
     def _render_none_code(cls, string, end='\n'):
 ##
-        '''Wraps a print function around plain text for compiling templates.'''
-        delimiters = ("'", '"', "'''", '"""')
+        '''
+            Wraps a print function around plain text for compiling templates.
+
+            Examples:
+
+            >>> parser = Parser('', string=True)
+
+            >>> parser._render_none_code('hans')
+            "print('hans\\\\n', end='')\\n"
+
+            >>> parser._render_none_code("ha'ns")
+            'print("ha\\'ns\\\\n", end=\\'\\')\\n'
+
+            >>> parser._render_none_code("""h'a"ns""")
+            'print(\\'\\'\\'h\\'a"ns\\\\n\\'\\'\\', end=\\'\\')\\n'
+
+            >>> parser._render_none_code("""h'a"n'\''s""")
+            'print("""h\\'a"n\\'\\'\\'s\\\\n""", end=\\'\\')\\n'
+
+            >>> parser._render_none_code('h"a\\'\\'\\'\\'n"""s')
+            'print("""h"a\\'\\'\\'\\'n"\\\\""s\\\\n""", end=\\'\\')\\n'
+
+            >>> parser._render_none_code("""'a"b'""")
+            'print(\\'\\'\\'\\\\\\'a"b\\\\\\'\\\\n\\'\\'\\', end=\\'\\')\\n'
+        '''
+        delimiters = "'", '"', "'''", '"""'
         counter = 0
         delimiter = delimiters[0]
         while delimiter in string:
             counter += 1
             delimiter = delimiters[counter]
             if counter + 1 == builtins.len(delimiters):
-                string = string.replace('"""', '"\""')
+                string = string.replace('"""', '"\\""')
                 break
-        if string.startswith(delimiter[0]):
+        '''
+            Check if chosen delimiter collides with another delimiter like
+            """ + " at the string border.
+        '''
+        if string.startswith(delimiter[-1]):
             string = '\\' + string
-        if string.endswith(delimiter[0]):
-            string = string[0:-1] + '\\' + string[-1]
+        if string.endswith(delimiter[-1]):
+            string = string[:-1] + '\\' + string[-1]
         return ("print(%s, end='')\n" % (
             delimiter + string.replace('\n', '\\n') +
             end.replace('\n', '\\n') + delimiter))
@@ -401,13 +429,25 @@ class Parser(Class, Runnable):
     @JointPoint
 ## python3.3     def get_indent(self: Self) -> builtins.int:
     def get_indent(self):
-        '''Returns a string of white spaces representing current context.'''
+        '''
+            Returns a string of white spaces representing current context.
+
+            Examples:
+
+            >>> Parser('hans\\n<%__indent__ = 2\\npeter', string=True).indent
+            2
+
+            >>> Parser('hans\\n<% __indent__=8;peter', string=True).indent
+            8
+        '''
         if not self._indent and self.content:
             self._indent = self._template_context_default_indent
             match = re.compile(
-                '^<% *__indent__ *= *(?P<number_of_indents>[1-9][0-9]*)'
-                '(?:;|\n)?.*?$'
-            ).match(String(self.content).readline())
+                '^(.*\n)?%s *__indent__ *= *(?P<number_of_indents>[1-9][0-9]*)'
+                ' *(?:;+|\n).*$' %
+                String(self._left_code_delimiter).validate_regex().content,
+                re.DOTALL
+            ).match(self.content)
             if match:
                 self._indent = builtins.int(match.group('number_of_indents'))
         return self._indent
@@ -422,10 +462,15 @@ class Parser(Class, Runnable):
 
             Examples:
 
-            >>> template = Parser(
+            >>> parser = Parser(
             ...     'hans says\\n<% print("who is hans?")', string=True)
-            >>> template.render().output
+
+            >>> parser.render().output
             'hans says\\nwho is hans?\\n'
+
+            >>> parser._output = None
+            >>> parser.output
+            ''
         '''
         if self._output is None:
             self._output = Buffer()
@@ -614,6 +659,18 @@ class Parser(Class, Runnable):
         '''
             This method adds line numbers to rendered contend which is visible
             if an template exception occurs in debug mode.
+
+            Examples:
+
+            >>> Parser('', string=True).represent_rendered_content()
+            ''
+
+            >>> Parser('', string=True).render().represent_rendered_content()
+            ''
+
+            >>> Parser('hans', string=True).render(
+            ...     ).represent_rendered_content()
+            "1 | print('hans', end='')"
         '''
         self._number_of_rendered_content_lines = builtins.len(
             String(self.rendered_content).readlines())
@@ -634,8 +691,10 @@ class Parser(Class, Runnable):
             return number_of_whitspaces * ' ' + builtins.str(
                 self._current_rendered_content_line_number
             ) + ' | ' + match.group('line')
-        return re.compile('^(?P<line>.*)$', re.MULTILINE).sub(
-            replace_rendered_content_line, self.rendered_content)
+        if self._number_of_rendered_content_lines:
+            return re.compile('^(?P<line>.*)$', re.MULTILINE).sub(
+                replace_rendered_content_line, self.rendered_content)
+        return ''
 
             # endregion
 
@@ -1031,7 +1090,7 @@ class Parser(Class, Runnable):
     @JointPoint
 ## python3.3
 ##     def _raise_template_exception(
-##         self: Self, line_info: builtins.str, 
+##         self: Self, line_info: builtins.str,
 ##         exception_message: builtins.str,
 ##         native_exception_description: builtins.str,
 ##         native_exception: builtins.Exception

@@ -1658,6 +1658,7 @@ class CGIHTTPRequestHandler(
 ##     ) -> builtins.str:
     def _get_login_data(self, authentication_file):
 ##
+        '''Determines needed login data for current request.'''
         __logger__.info(
             'Use authentication file "%s".', authentication_file._path)
         match = re.compile(
