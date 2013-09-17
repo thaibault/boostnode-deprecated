@@ -669,8 +669,8 @@ class Parser(Class, Runnable):
             ''
 
             >>> Parser('hans', string=True).render(
-            ...     ).represent_rendered_content()
-            "1 | print('hans', end='')"
+            ...     ).represent_rendered_content() # doctest: +ELLIPSIS
+            "\\nrendered content:\\n----...-\\n\\n1 | print('hans', end='')\\n"
         '''
         self._number_of_rendered_content_lines = builtins.len(
             String(self.rendered_content).readlines())
@@ -692,8 +692,10 @@ class Parser(Class, Runnable):
                 self._current_rendered_content_line_number
             ) + ' | ' + match.group('line')
         if self._number_of_rendered_content_lines:
-            return re.compile('^(?P<line>.*)$', re.MULTILINE).sub(
-                replace_rendered_content_line, self.rendered_content)
+            return (
+                '\nrendered content:\n-----------------\n\n%s\n' % re.compile(
+                    '^(?P<line>.*)$', re.MULTILINE
+                ).sub(replace_rendered_content_line, self.rendered_content))
         return ''
 
             # endregion
@@ -723,7 +725,6 @@ class Parser(Class, Runnable):
             >>> sys.argv[1:] = ['repr(hans)', '--string', '--builtins', 'repr']
             >>> Parser.run()
             Object of "Parser" with template "repr(hans)".
-
 
             >>> sys.argv = sys_argv_backup
         '''
@@ -1045,6 +1046,65 @@ class Parser(Class, Runnable):
             Runs the compiled template in its given scope. All error will be
             cached and error messages depending on source template will be
             derived on produced exceptions based in the compiled template.
+
+            Examples:
+
+            >>> nested_nested_file = FileHandler(
+            ...     __test_folder__  + '_run_template_nested_nested',
+            ...     must_exist=False)
+            >>> nested_nested_file.content = '<% hans'
+            >>> nested_file = FileHandler(
+            ...     __test_folder__  + '_run_template_nested',
+            ...     must_exist=False)
+            >>> nested_file.content = (
+            ...     "<% include('" + nested_nested_file.name + "')")
+            >>> file = FileHandler(
+            ...     __test_folder__ + '_run_template', must_exist=False)
+
+            >>> file.content = "<% include('" + nested_nested_file.name + "')"
+            >>> Parser(file).render() # doctest: +IGNORE_EXCEPTION_DETAIL
+            Traceback (most recent call last):
+            ...
+            TemplateError: Error with "..._run_template" in include statemen...
+            TemplateError: Error with "..._run_template_nested_nested" in ...
+            NameError: Name "hans" is not defined
+            <BLANKLINE>
+            rendered content:
+            -----------------
+            <BLANKLINE>
+            1 | hans
+            <BLANKLINE>
+
+            >>> file.content = "<% include('" + nested_file.name + "')"
+            >>> Parser(file).render() # doctest: +IGNORE_EXCEPTION_DETAIL
+            Traceback (most recent call last):
+            ...
+            TemplateError: Error with "..._run_template" in include statemen...
+            TemplateError: Error with "..._run_template_nested" in line 1 ...
+            TemplateError: Error with "..._run_template_nested_nested" in ...
+            NameError: Name "hans" is not defined
+            <BLANKLINE>
+            rendered content:
+            -----------------
+            <BLANKLINE>
+            1 | hans
+            <BLANKLINE>
+
+
+            >>> Parser(
+            ...     "<% include('" + __test_folder__ +
+            ...     "_run_template_not_existing')",
+            ...     string=True
+            ... ).render() # doctest: +IGNORE_EXCEPTION_DETAIL
+            Traceback (most recent call last):
+            ...
+            TemplateError: Error with given template string in include ...
+            TemplateError: No suitable template found with given name "...
+            rendered content:
+            -----------------
+            <BLANKLINE>
+            1 | include('..._run_template_not_existing', indent_space='')
+            <BLANKLINE>
         '''
         template_scope.update({'__builtins__': self.builtins})
         try:
@@ -1054,27 +1114,33 @@ class Parser(Class, Runnable):
 ##
         except __exception__ as exception:
             '''Propagate nested template exceptions.'''
-            line_number = self._get_exception_line(exception)
+            '''
+                NOTE: We only want to show one rendered content representation.
+            '''
             rendered_content = ''
-            if not builtins.hasattr(exception, 'has_template_info'):
-                rendered_content = (
-                    '\nrendered content:\n-----------------\n\n%s\n' %
-                    self.represent_rendered_content())
+            if(__test_mode__ or sys.flags.debug or
+               __logger__.isEnabledFor(logging.DEBUG)) and not (
+                    builtins.hasattr(exception, 'rendered_content') and
+                    exception.rendered_content):
+                rendered_content = self.represent_rendered_content()
+            source_line, mapped_line = self._get_exception_line(exception)
 ## python3.3
-##             raise __exception__(
+##             exception = __exception__(
 ##                 'Error with %s in include statement in line %s '
-##                 '(line in compiled template: %s).\n%s: %s',
+##                 '(line in compiled template: %s).\n%s: %s%s',
 ##                 self._determine_template_description(),
-##                 line_number[0], line_number[1], __exception__.__name__,
-##                 builtins.str(exception)
-##             ) from None
-            raise __exception__(
+##                 source_line, mapped_line, __exception__.__name__,
+##                 builtins.str(exception), rendered_content)
+            exception = __exception__(
                 'Error with %s in include statement in line %s '
                 '(line in compiled template: %s).\n%s: %s%s',
                 self._determine_template_description(),
-                line_number[0], line_number[1], __exception__.__name__,
+                source_line, mapped_line, __exception__.__name__,
                 builtins.str(exception), rendered_content)
 ##
+            exception.rendered_content = rendered_content
+## python3.3             raise exception from None
+            raise exception
         except builtins.Exception as exception:
             line_info, exception_message, native_exception_description = \
                 self._handle_template_exception(exception)
@@ -1088,27 +1154,34 @@ class Parser(Class, Runnable):
     @JointPoint
 ## python3.3
 ##     def _handle_template_exception(
-##         self: Self, exception: builtins.Exception
+##         self: Self, exception: builtins.Exception,
+##         force_native_exception=False
 ##     ) -> builtins.tuple:
-    def _handle_template_exception(self, exception):
+    def _handle_template_exception(
+        self, exception, force_native_exception=False
+    ):
 ##
         '''
             If an exception is raising during running generated template
             (python) code this methods will handle it to map exception line
             number to template's source code line number.
+
+            Examples:
+
+            >>> parser = Parser('<% hans', string=True)
+            >>> parser._handle_template_exception(
+            ...     __exception__('test'), force_native_exception=True
+            ... ) # doctest: +ELLIPSIS
+            (...Native exception object:...)
         '''
-        line_info = ''
         exception_message = '%s: %s' % (
             exception.__class__.__name__,
             String(exception).camel_case_capitalize().replace(
                 "'", '"'
             ).content)
-        line_number = self._get_exception_line(exception)
-        if line_number:
-            line_info = ' in line %d (line in compiled template: %d)' %\
-                (line_number[0], line_number[1])
         native_exception_description = ''
-        if sys.flags.debug or __logger__.isEnabledFor(logging.DEBUG):
+        if(force_native_exception or sys.flags.debug or
+           __logger__.isEnabledFor(logging.DEBUG)):
             for property in builtins.dir(exception):
                 if not (property.startswith('__') and property.endswith('__')):
                     native_exception_description += \
@@ -1118,7 +1191,10 @@ class Parser(Class, Runnable):
             native_exception_description = (
                 '\n\nNative exception object:\n\n%s' %
                 native_exception_description)
-        return line_info, exception_message, native_exception_description
+        return(
+            (' in line %d (line in compiled template: %d)' %
+             self._get_exception_line(exception)), exception_message,
+            native_exception_description)
 
     @JointPoint
 ## python3.3
@@ -1136,21 +1212,34 @@ class Parser(Class, Runnable):
 ##         self: Self, line_info: builtins.str,
 ##         exception_message: builtins.str,
 ##         native_exception_description: builtins.str,
-##         native_exception: builtins.Exception
+##         native_exception: builtins.Exception, prevent_rendered_content=False
 ##     ) -> None:
     def _raise_template_exception(
         self, line_info, exception_message, native_exception_description,
-        native_exception
+        native_exception, prevent_rendered_content=False
     ):
 ##
         '''
             Performs a wrapper exception for exception raising in template
             context.
+
+            Examples:
+
+            >>> parser = Parser('<% hans', string=True)
+            >>> parser._raise_template_exception(
+            ...     '', '', '', builtins.IOError('test'), True
+            ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
+            Traceback (most recent call last):
+            ...
+            TemplateError: Error with given template string.
+            <BLANKLINE>
         '''
         rendered_content = ''
-        if sys.flags.debug or __logger__.isEnabledFor(logging.DEBUG):
-            rendered_content = '\nrendered content:\n\n%s\n' % \
-                self.represent_rendered_content()
+        if not prevent_rendered_content and (
+            __test_mode__ or sys.flags.debug or
+            __logger__.isEnabledFor(logging.DEBUG)
+        ):
+            rendered_content = self.represent_rendered_content()
 ## python3.3
 ##         exception = __exception__(
 ##             'Error with {template_description}{line_info}.\n'
@@ -1171,9 +1260,11 @@ class Parser(Class, Runnable):
                 native_exception_description=native_exception_description,
                 rendered_content=rendered_content))
 ##
-        exception.has_template_info = True
+        exception.rendered_content = rendered_content
 ## python3.3         raise exception from None
         raise exception
+
+    # TODO STAND
 
     @JointPoint
 ## python3.3
