@@ -339,7 +339,7 @@ class Runnable(builtins.object):
         this_module = inspect.getmodule(inspect.stack()[0][0])
         if(caller_module is this_module and
            self._childrens_module.__name__ == '__main__' and
-           not self._childrens_module.__test_mode__) or run:
+           not self._in_test_mode()) or run:
             self._initial_arguments = arguments
             self._initial_keywords = keywords
 
@@ -461,11 +461,7 @@ class Runnable(builtins.object):
         force_stopping, keywords = keywords_dictionary.pop(
             name='force_stopping', default_value=False)
 ##
-        if(force_stopping or
-           not (self is None or ('__test_mode__' in builtins.globals() and
-                                 __test_mode__) or
-                ('__test_mode__' in builtins.dir(self._childrens_module) and
-                 self._childrens_module.__test_mode__)) and
+        if(force_stopping or not (self is None or self._in_test_mode()) and
            self.__stop_lock.acquire(False)):
             reason = ''
             if self._given_order and self._given_order in (
@@ -479,6 +475,24 @@ class Runnable(builtins.object):
         # endregion
 
         # region protected
+
+    @JointPoint
+## python3.3     def _in_test_mode(self: Self) -> builtins.bool:
+    def _in_test_mode(self):
+        '''
+            Checks if this module is running in a testing context.
+
+            Examples:
+
+            >>> class A(Runnable):
+            ...     def _initialize(self):
+            ...         pass
+            >>> A()._in_test_mode()
+            True
+        '''
+        return (('__test_mode__' in builtins.globals() and __test_mode__) or
+               ('__test_mode__' in builtins.dir(self._childrens_module) and
+                self._childrens_module.__test_mode__))
 
     @JointPoint
 ## python3.3
@@ -529,7 +543,7 @@ class Runnable(builtins.object):
     def _handle_module_running(self, arguments, keywords, run):
 ##
         '''Handle the running interface for current module.'''
-        if not self._childrens_module.__test_mode__:
+        if not self._in_test_mode():
             if not run:
                 self.__class__.__termination_lock.acquire()
             '''
@@ -542,9 +556,8 @@ class Runnable(builtins.object):
         try:
             self._run(*arguments, **keywords)
         except builtins.Exception as exception:
-            if(self._childrens_module.__test_mode__ or
-               self._childrens_module.__logger__.isEnabledFor(logging.DEBUG) or
-               sys.flags.debug):
+            if(self._in_test_mode() or sys.flags.debug or
+               self._childrens_module.__logger__.isEnabledFor(logging.DEBUG)):
                 raise
             else:
                 __logger__.critical(
@@ -1857,7 +1870,7 @@ class CommandLine(builtins.object):
             >>> a = A(2) # doctest: +ELLIPSIS
             {...'__initializer_default_value__': ...}
         '''
-        scope['__initializer_default_value__'] = None
+        scope['__initializer_default_value__'] = ''
         if 'self' in scope:
             '''Unpack initializer method.'''
             initializer = scope['self']._initialize
@@ -1894,6 +1907,8 @@ class CommandLine(builtins.object):
                     scope['__initializer_default_value__'] = \
                         parameters[scope['__name__']]
 ##
+            if scope['__initializer_default_value__'] is None:
+                scope['__initializer_default_value__'] = ''
         return scope
 
     @JointPoint(builtins.classmethod)

@@ -575,8 +575,8 @@ class Parser(Class, Runnable):
 ##             *arguments, **keywords))
         def substitute(match):
             '''
-                Substitution replacement for native pendant with no exception
-                raising.
+                Substitution replacement for native pendant with no
+                exception raising.
             '''
             if match.group('variable_name') in keywords:
                 return builtins.str(
@@ -633,10 +633,10 @@ class Parser(Class, Runnable):
 
             Examples:
 
-            >>> tpl = Parser(
+            >>> parser = Parser(
             ...     'hans says\\n<% print("who the fu.. is hans?")',
             ...     string=True)
-            >>> tpl.render() # doctest: +ELLIPSIS
+            >>> parser.render() # doctest: +ELLIPSIS
             Object of "Parser" with template "hans says...who the fu.. is ha...
         '''
         self.rendered_content = re.compile(
@@ -714,15 +714,18 @@ class Parser(Class, Runnable):
 
             Examples:
 
-            >>> FileHandler(
-            ...     __test_folder__ + '_run', must_exist=False
-            ... ).content = 'hans <%placeholder%>'
-            >>> template = Parser(
-            ...     template=__test_folder__ + '_run')
-            >>> template.substitute(placeholder='also hans')
-            Object of "Parser" with template "hans <%placeholder%>".
-            >>> template.output
-            'hans also hans'
+            >>> sys_argv_backup = sys.argv
+
+            >>> sys.argv[1:] = ['hans', '--string']
+            >>> Parser.run()
+            Object of "Parser" with template "hans".
+
+            >>> sys.argv[1:] = ['repr(hans)', '--string', '--builtins', 'repr']
+            >>> Parser.run()
+            Object of "Parser" with template "repr(hans)".
+
+
+            >>> sys.argv = sys_argv_backup
         '''
         self._command_line_arguments = CommandLine.argument_parser(
             arguments=self.COMMAND_LINE_ARGUMENTS, module_name=__name__,
@@ -732,9 +735,9 @@ class Parser(Class, Runnable):
         if(initializer_arguments['builtins'] and
            builtins.isinstance(initializer_arguments['builtins'][0],
                                builtins.str)):
-            initializer_arguments['builtins'] = builtins.map(
+            initializer_arguments['builtins'] = builtins.tuple(builtins.map(
                 lambda builtin: builtins.eval(builtin),
-                initializer_arguments['builtins'])
+                initializer_arguments['builtins']))
         self._initialize(**initializer_arguments).render(
             **self._generate_scope_variables())
         Print(self.output)
@@ -870,6 +873,17 @@ class Parser(Class, Runnable):
                 Line 9-10: Code
                 Line 11-12: None code
                 Line 13: Empty Line
+
+            Examples:
+
+            >>> file = FileHandler(
+            ...     __test_folder__ + '_run', must_exist=False)
+            >>> file.content = 'hans <%placeholder%>'
+            >>> template = Parser(template=file)
+            >>> template.substitute(placeholder='also hans')
+            Object of "Parser" with template "hans <%placeholder%>".
+            >>> template.output
+            'hans also hans'
         '''
         '''Make needed to convert runtime properties to instance properties.'''
         self._new_line = self.__class__._new_line
@@ -933,11 +947,28 @@ class Parser(Class, Runnable):
             Examples:
 
             >>> import argparse
-            >>> tpl = Parser(template='hans', string=True)
-            >>> tpl._command_line_arguments = argparse.Namespace(
+
+            >>> parser = Parser(template='hans', string=True)
+            >>> parser._command_line_arguments = argparse.Namespace(
             ...     scope_variables=('hans=peter', 'peter=hans'))
-            >>> tpl._generate_scope_variables() # doctest: +ELLIPSIS
+            >>> parser._generate_scope_variables() # doctest: +ELLIPSIS
             {...'hans': 'peter'...}
+
+            >>> parser._command_line_arguments = argparse.Namespace(
+            ...     scope_variables=('a',))
+            >>> parser._generate_scope_variables(
+            ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
+            Traceback (most recent call last):
+            ...
+            TemplateError: Given placeholder value tuple "a" couldn't be ...
+
+            >>> parser._command_line_arguments = argparse.Namespace(
+            ...     scope_variables=('ab',))
+            >>> parser._generate_scope_variables(
+            ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
+            Traceback (most recent call last):
+            ...
+            TemplateError: Given placeholder value tuple "ab" couldn't be ...
         '''
         keywords = {}
         for variable in self._command_line_arguments.scope_variables:
@@ -970,10 +1001,22 @@ class Parser(Class, Runnable):
 
             Examples:
 
-            >>> tpl = Parser(
-            ...     template='hans', string=True)
-            >>> tpl._load_template(template=tpl.content, string=True)
+            >>> file = FileHandler(
+            ...     __test_folder__ + '_load_template.tpl', must_exist=False)
+            >>> file.content = 'hans'
+
+            >>> Parser(file).render().output
+            'hans'
+
+            >>> Parser(file.directory_path + file.basename)
             Object of "Parser" with template "hans".
+
+            >>> Parser(
+            ...     __test_folder__ + 'not_existing'
+            ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
+            Traceback (most recent call last):
+            ...
+            TemplateError: No suitable template found with given name "...".
         '''
         if string:
             self.content = template
@@ -1212,11 +1255,11 @@ class Parser(Class, Runnable):
 
             Examples:
 
-            >>> tpl = Parser(template='test', string=True)
-            >>> tpl._print('hans')
-            >>> tpl._print(' and klaus', end='\\n')
-            >>> tpl._print('fritz is also present.', end='')
-            >>> tpl.output
+            >>> parser = Parser(template='test', string=True)
+            >>> parser._print('hans')
+            >>> parser._print(' and klaus', end='\\n')
+            >>> parser._print('fritz is also present.', end='')
+            >>> parser.output
             'hans\\n and klaus\\nfritz is also present.'
         '''
         if self._pretty_indent:

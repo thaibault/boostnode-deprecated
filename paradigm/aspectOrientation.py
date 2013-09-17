@@ -342,7 +342,7 @@ class JointPointHandler(builtins.object):
             ...     def a(self):
             ...         pass
 
-            >>> JointPointHandler(A, A(), A.a, (), {}) # doctest: +ELLIPSIS
+            >>> JointPointHandler(A, A(), A().a, (), {}) # doctest: +ELLIPSIS
             Object of "JointPointHandler" with class object "A", object "...".
         '''
         self.class_object = class_object
@@ -410,7 +410,7 @@ class JointPointHandler(builtins.object):
             ...         pass
 
             >>> JointPointHandler(
-            ...     A, A(), A.a, (), {}
+            ...     A, A(), A().a, (), {}
             ... ).aspect() # doctest: +ELLIPSIS
             Traceback (most recent call last):
             ...
@@ -460,7 +460,7 @@ class ReturnAspect(builtins.object):
             >>> return_aspect = ReturnAspect()
             >>> return_aspect.class_object = A
             >>> return_aspect.object = A()
-            >>> return_aspect.function = A.a
+            >>> return_aspect.function = A().a
             >>> return_aspect.arguments = ()
             >>> return_aspect.keywords = {}
 
@@ -528,12 +528,12 @@ class ReturnJointPoint(JointPointHandler, ReturnAspect):
             ...         pass
 
             >>> ReturnJointPoint(
-            ...     A, A(), A.a, (), {}, return_value=None
+            ...     A, A(), A().a, (), {}, return_value=None
             ... ) # doctest: +ELLIPSIS
             Object of "ReturnJointPoint" with class object "A", object "...".
 
             >>> ReturnJointPoint(
-            ...     A, A(), A.a, (), {}, None
+            ...     A, A(), A().a, (), {}, None
             ... ) # doctest: +ELLIPSIS
             Object of "ReturnJointPoint" with class object "A", object "...".
         '''

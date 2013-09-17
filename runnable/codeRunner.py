@@ -306,11 +306,11 @@ class Run(Class, Runnable):
     @JointPoint
 ## python3.3
 ##     def _initialize(
-##         self: Self, code_file_path='',
+##         self: Self, code_file_path=None,
 ##         default_command_sequence=('compile', 'run', 'clean'), **keywords
 ##     ) -> Self:
     def _initialize(
-        self, code_file_path='',
+        self, code_file_path=None,
         default_command_sequence=('compile', 'run', 'clean'), **keywords
     ):
 ##
@@ -448,7 +448,7 @@ class Run(Class, Runnable):
     @JointPoint
 ## python3.3
 ##     def _determine_code_file(
-##         self: Self, path: builtins.str
+##         self: Self, path: (builtins.str, builtins.type(None), FileHandler)
 ##     ) -> (FileHandler, builtins.bool):
     def _determine_code_file(self, path):
 ##
