@@ -54,7 +54,8 @@ __all__ = __get_all_modules__()
     Preset some variables given by introspection letting the linter know what
     globale variables are available.
 '''
-__logger__ = __test_mode__ = __exception__ = __file_path__ = None
+__logger__ = __test_mode__ = __test_globals__ = __exception__ = \
+    __file_path__ = None
 if __name__ == '__main__':
     from boostNode.extension.system import CommandLine
     '''

@@ -315,8 +315,14 @@ class Browser(Class, Runnable):
     def stop(self, *arguments, **keywords):
 ##
         '''
-            Closes all created webviews. Note that in case of using the default
-            installed browser fall-back this instance couldn't be destroyed.
+            Closes all created web views. Note that in case of using the
+            default installed browser fall-back this instance couldn't be
+            destroyed.
+
+            Examples:
+
+            >>> Browser('google.de').stop() # doctest: +ELLIPSIS
+            Object of "Browser" with url "http://google.de" in 800 pixel...
         '''
 ## python3.3
 ##         pass
@@ -362,10 +368,14 @@ class Browser(Class, Runnable):
 
             Examples:
 
-            >>> Browser(
-            ...     url='http://www.google.com/', width_in_pixel=300,
-            ...     height_in_pixel=100) # doctest: +ELLIPSIS
-            Object of "Browser" with url "http://www.google.com/" in 300 pi...
+            >>> import copy
+            >>> sys_argv_backup = copy.copy(sys.argv)
+
+            >>> sys.argv[1:] = ['google.de']
+            >>> Browser.run() # doctest: +ELLIPSIS
+            Object of "Browser" with url "http://google.de" in 800 pixel...
+
+            >>> sys.argv = sys_argv_backup
         '''
         return self._initialize(**self._command_line_arguments_to_dictionary(
             namespace=CommandLine.argument_parser(
@@ -388,8 +398,15 @@ class Browser(Class, Runnable):
             default_title='No gui loaded.', stop_order='stop', **keywords):
 ##
         '''
-            Initializes a webview or tries to open a default browser if no gui
+            Initializes a web view or tries to open a default browser if no gui
             suitable gui toolkit is available.
+
+            Examples:
+
+            >>> Browser(
+            ...     url='http://www.google.com/', width_in_pixel=300,
+            ...     height_in_pixel=100) # doctest: +ELLIPSIS
+            Object of "Browser" with url "http://www.google.com/" in 300 pi...
         '''
         self.url = url
         self.stop_order = stop_order
@@ -532,6 +549,11 @@ class Browser(Class, Runnable):
             Checks if gtk should be closed after the last gtk main iteration.
             If we return a "False" this method will not be triggered in future.
             time.
+
+            Examples:
+
+            >>> Browser('google.de')._check_for_gtk_closing_flag()
+            True
         '''
         if self._gtk_close:
             gtk.main_quit()
@@ -671,8 +693,8 @@ class Browser(Class, Runnable):
     Preset some variables given by introspection letting the linter know what
     globale variables are available.
 '''
-__logger__ = __test_mode__ = __exception__ = __module_name__ = \
-    __file_path__ = None
+__logger__ = __test_mode__ = __test_globals__ = __exception__ = \
+    __module_name__ = __file_path__ = None
 '''
     Extends this module with some magic environment variables to provide better
     introspection support. A generic command line interface for some code

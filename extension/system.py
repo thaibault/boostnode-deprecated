@@ -2622,7 +2622,6 @@ class CommandLine(builtins.object):
     Preset some variables given by introspection letting the linter know what
     globale variables are available.
 '''
-# TODO append __test_globals__ to every module.
 __logger__ = __test_mode__ = __test_globals__ = __exception__ = \
     __module_name__ = __file_path__ = None
 '''
