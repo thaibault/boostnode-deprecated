@@ -462,18 +462,11 @@ class Parser(Class, Runnable):
 
             Examples:
 
-            >>> parser = Parser(
-            ...     'hans says\\n<% print("who is hans?")', string=True)
-
-            >>> parser.render().output
-            'hans says\\nwho is hans?\\n'
-
-            >>> parser._output = None
-            >>> parser.output
-            ''
+            >>> Parser(
+            ...     'klaus says\\n<% print("who is hans?")', string=True
+            ... ).render().output
+            'klaus says\\nwho is hans?\\n'
         '''
-        if self._output is None:
-            self._output = Buffer()
         return self._output.content
 
     @JointPoint
@@ -668,9 +661,9 @@ class Parser(Class, Runnable):
             >>> Parser('', string=True).render().represent_rendered_content()
             ''
 
-            >>> Parser('hans', string=True).render(
+            >>> Parser('klaus', string=True).render(
             ...     ).represent_rendered_content() # doctest: +ELLIPSIS
-            "\\nrendered content:\\n----...-\\n\\n1 | print('hans', end='')\\n"
+            "\\nrendered content:\\n---...-\\n\\n1 | print('klaus', end='')\\n"
         '''
         self._number_of_rendered_content_lines = builtins.len(
             String(self.rendered_content).readlines())
@@ -761,7 +754,7 @@ class Parser(Class, Runnable):
 ##                          '(?!{left_delimiter})'  # in two brackets
 ##                          '(?:.(?!{left_delimiter}))*?.?'  # in two brackets
 ##                          ')?{left_delimiter}{right_escaped}'  # in brackets
-##                          '(?P<escaped_end>\n?)'  # in brackets
+##                          '(?P<after_escaped>\n?)'  # in brackets
 ##                          ')|(?P<PLACEHOLDER>'
 ##                          '(?P<before_placeholder>'  # in brackets
 ##                          '(?P<indent_placeholder>[ \t]*)'  # in two brackets
@@ -771,7 +764,7 @@ class Parser(Class, Runnable):
 ##                          '(?P<placeholder>{placeholder})'  # in brackets
 ##                          '[ \t]*'  # in brackets
 ##                          '{right_delimiter}'  # in brackets
-##                          '(?P<placeholder_end>\n?)'  # in brackets
+##                          '(?P<after_placeholder>\n?)'  # in brackets
 ##                          ')|(?P<CODE>'
 ##                          '^(?P<indent_code>[ \t]*)'  # in brackets
 ##                          '{left_delimiter}'  # in brackets
@@ -782,7 +775,7 @@ class Parser(Class, Runnable):
 ##                          '[ \t]*'
 ##                          ').+'  # in two brackets
 ##                          ')'  # in brackets
-##                          '(?P<none_code_end>\n|$)'  # in brackets
+##                          '(?P<after_none_code>\n|$)'  # in brackets
 ##                          ')|(?P<EMPTY_LINE>^(?P<indent_line>[ \t]*)\n)',
 ##         command_line_placeholder_pattern='^(?P<variable_name>{placeholder})'
 ##                                          '(?P<separator>.)(?P<value>.+)$',
@@ -817,7 +810,7 @@ class Parser(Class, Runnable):
                          '(?!{left_delimiter})'  # in two brackets
                          '(?:.(?!{left_delimiter}))*?.?'  # in two brackets
                          ')?{left_delimiter}{right_escaped}'  # in brackets
-                         '(?P<escaped_end>\n?)'  # in brackets
+                         '(?P<after_escaped>\n?)'  # in brackets
                          ')|(?P<PLACEHOLDER>'
                          '(?P<before_placeholder>'  # in brackets
                          '(?P<indent_placeholder>[ \t]*)'  # in two brackets
@@ -827,7 +820,7 @@ class Parser(Class, Runnable):
                          '(?P<placeholder>{placeholder})'  # in brackets
                          '[ \t]*'  # in brackets
                          '{right_delimiter}'  # in brackets
-                         '(?P<placeholder_end>\n?)'  # in brackets
+                         '(?P<after_placeholder>\n?)'  # in brackets
                          ')|(?P<CODE>'
                          '^(?P<indent_code>[ \t]*)'  # in brackets
                          '{left_delimiter}'  # in brackets
@@ -838,7 +831,7 @@ class Parser(Class, Runnable):
                          '[ \t]*'
                          ').+'  # in two brackets
                          ')'  # in brackets
-                         '(?P<none_code_end>\n|$)'  # in brackets
+                         '(?P<after_none_code>\n|$)'  # in brackets
                          ')|(?P<EMPTY_LINE>^(?P<indent_line>[ \t]*)\n)',
         command_line_placeholder_pattern='^(?P<variable_name>{placeholder})'
                                          '(?P<separator>.)(?P<value>.+)$',
@@ -886,7 +879,7 @@ class Parser(Class, Runnable):
             >>> template.output
             'hans also hans'
         '''
-        '''Make needed to convert runtime properties to instance properties.'''
+        '''We needed to convert class properties to instance properties.'''
         self._new_line = self.__class__._new_line
         self._indent = self.__class__._indent
         self._number_of_generated_lines = \
@@ -897,7 +890,8 @@ class Parser(Class, Runnable):
             self.__class__._current_rendered_content_line_number
         self._code_dependent_indents = self.__class__._code_dependent_indents
         self._line_shifts = self.__class__._line_shifts
-        self._empty_lines = self.__class__._empty_lines
+        # TODO has to be reinitialized here. check if necessary in other cases.
+        self._empty_lines = []
 
         self.right_escaped = right_escaped
 
@@ -1227,7 +1221,7 @@ class Parser(Class, Runnable):
 
             >>> parser = Parser('<% hans', string=True)
             >>> parser._raise_template_exception(
-            ...     '', '', '', builtins.IOError('test'), True
+            ...     '', '', '', IOError('test'), True
             ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
@@ -1278,6 +1272,20 @@ class Parser(Class, Runnable):
             responsible line in compiled template was found, a tuple with the
             resulting line in source template and compiled template will be
             given back.
+
+            Examples:
+
+            >>> parser = Parser('', string=True)
+            >>> parser._line_shifts = [(10, 5)]
+            >>> parser._get_exception_line(IOError('test'))
+            (0, 0)
+
+            >>> parser = Parser('', string=True)
+            >>> parser._line_shifts = [(3, 0)]
+            >>> exception = IOError('test')
+            >>> exception.lineno = 4
+            >>> parser._get_exception_line(exception)
+            (4, 4)
         '''
         '''
             NOTE: A tuple with line matching (a, b) means that till python code
@@ -1346,12 +1354,18 @@ class Parser(Class, Runnable):
 
             Examples:
 
-            >>> parser = Parser(template='test', string=True)
+            >>> parser = Parser(
+            ...     template='test', string=True, pretty_indent=True)
+
             >>> parser._print('hans')
-            >>> parser._print(' and klaus', end='\\n')
+            >>> parser._print('and klaus', end='\\n', indent_space=' ')
             >>> parser._print('fritz is also present.', end='')
-            >>> parser.output
+            >>> parser._output.clear()
             'hans\\n and klaus\\nfritz is also present.'
+
+            >>> parser._print('hans', end='', indent_space='  ')
+            >>> parser.output
+            '  hans'
         '''
         if self._pretty_indent:
 ## python3.3
@@ -1418,24 +1432,74 @@ class Parser(Class, Runnable):
 ##     ) -> builtins.str:
     def _render_code(self, match):
 ##
-        '''Helper method for rendering the source template file.'''
-        if match.group():
-            '''
-                This has been sorted by their average frequency for improving
-                performance.
-            '''
-            if match.group('NONE_CODE'):
-                return self._render_none_code_line(match)
-            if match.group('PLACEHOLDER'):
-                return self._render_placeholder(match)
-            if match.group('EMPTY_LINE'):
-                return self._render_empty_line(match)
-            if match.group('CODE'):
-                return self._render_code_line(match)
-            if match.group('ESCAPED_DELIMITER'):
-                return self._render_escaped_none_code_line(match)
-        raise __exception__(
-            'Given template "%s" isn\'t valid formated.', self.content)
+        '''
+            Helper method for rendering the source template file.
+
+            Examples:
+
+            >>> Parser('<%hans%>', string=True).render(hans=5).output
+            '5'
+            >>> Parser('number:<%hans%>\\n', string=True).render(hans=5).output
+            'number:5'
+            >>> Parser('<%hans%>number:<%hans%>', string=True).render(
+            ...     hans=5
+            ... ).output
+            '5number:5'
+            >>> Parser(
+            ...     '<% if True:\\n    <%hans%><%hans%>', string=True
+            ... ).render(hans=5).output
+            '55'
+            >>> Parser('\\n\\n<%hans%>', string=True).render(hans=5).output
+            '\\n\\n5'
+
+            >>> Parser('<% print(hans)', string=True).render(hans=5).output
+            '5\\n'
+            >>> Parser(
+            ...     '<% include()', string=True
+            ... ).render().output # doctest: +IGNORE_EXCEPTION_DETAIL
+            Traceback (most recent call last):
+            ...
+            TemplateError: Error with given template string in line 1 (line ...
+            TypeError: _include() takes at least 2 arguments (2 given)
+            rendered content:
+            -----------------
+            <BLANKLINE>
+            1 | include(indent_space='')
+            <BLANKLINE>
+
+            >>> Parser('<% if True:\\n    hans', string=True).render(
+            ...     hans=5
+            ... ).output
+            'hans'
+            >>> Parser('<% print()', string=True).render().output
+            '\\n'
+
+            >>> Parser('<%% print(hans)', string=True).render().output
+            '<% print(hans)'
+            >>> Parser('<%%\\n', string=True).render().output
+            '<%'
+            >>> Parser('<%%<%%', string=True).render().output
+            '<%<%'
+            >>> Parser(' <%%', string=True).render().output
+            ' <%'
+
+            >>> Parser('\\n', string=True).render().output
+            ''
+        '''
+        '''
+            This has been sorted by their average frequency for improving
+            performance.
+        '''
+        if match.group('NONE_CODE'):
+            return self._render_none_code_line(match)
+        if match.group('PLACEHOLDER'):
+            return self._render_placeholder(match)
+        if match.group('EMPTY_LINE'):
+            return self._render_empty_line(match)
+        if match.group('CODE'):
+            return self._render_code_line(match)
+        # NOTE: Implicit case: if match.group('ESCAPED_DELIMITER'):
+        return self._render_escaped_none_code_line(match)
 
                 # endregion
 
@@ -1455,7 +1519,7 @@ class Parser(Class, Runnable):
             current_indent=match.group('indent_escaped'), mode='passiv')
         last_empty_lines = self._flush_empty_lines(indent)
         was_new_line = self._new_line
-        if match.group('escaped_end'):
+        if match.group('after_escaped'):
             self._new_line = True
             self._number_of_generated_lines += 1
         else:
@@ -1464,7 +1528,9 @@ class Parser(Class, Runnable):
         slice = 0
         if was_new_line:
             slice = builtins.len(self._code_dependent_indents) * self.indent
-        content_before = match.group('before_escaped')[slice:]
+        content_before = ''
+        if match.group('before_escaped'):
+            content_before = match.group('before_escaped')[slice:]
         return last_empty_lines + indent + self._render_none_code(
             string=content_before + self._left_code_delimiter, end='')
 
@@ -1489,7 +1555,7 @@ class Parser(Class, Runnable):
             self._line_shifts.append(
                 (self._number_of_generated_lines,
                  self._number_of_generated_phantom_lines))
-        if match.group('placeholder_end'):
+        if match.group('after_placeholder'):
             self._new_line = True
             self._number_of_generated_lines += 1
         else:
@@ -1542,7 +1608,7 @@ class Parser(Class, Runnable):
             current_indent=match.group('indent_none_code'), mode='passiv')
         last_empty_lines = self._flush_empty_lines(indent)
         was_new_line = self._new_line
-        if match.group('none_code_end'):
+        if match.group('after_none_code'):
             self._new_line = True
             self._number_of_generated_lines += 1
         else:
@@ -1590,15 +1656,11 @@ class Parser(Class, Runnable):
         self, code_line, was_new_line, match
     ):
 ##
-        '''
-            Gives all output methods found in template code their indent level.
-        '''
+        '''Gives indent level to all output methods found in template code.'''
         if code_line.startswith('print(') or code_line.startswith('include('):
-            slice = 0
-            if was_new_line:
-                slice = builtins.len(
-                    self._code_dependent_indents
-                ) * self.indent
+            slice = builtins.len(
+                self._code_dependent_indents
+            ) * self.indent
             if code_line.startswith('print('):
                 return self._handle_print_output_indent_level(
                     code_line, match, slice)
@@ -1623,18 +1685,14 @@ class Parser(Class, Runnable):
         ).find_python_code_end_bracket()
         slice_position = builtins.len('include(') + length_of_include_call
         if code_line[builtins.len('include('):slice_position]:
-            slice_position = builtins.len('include(') + \
-                length_of_include_call + 1
             return (
-                'include(' + code_line[builtins.len('include('):builtins.len(
-                    'include('
-                ) + length_of_include_call] + ", indent_space='" +
-                match.group('indent_code')[slice:] + "')" +
-                code_line[slice_position:])
+                'include(' +
+                code_line[builtins.len('include('):slice_position] +
+                ", indent_space='" + match.group('indent_code')[slice:] +
+                "')" + code_line[slice_position + 1:])
         return (
             "include(indent_space='" + match.group('indent_code')[slice:] +
-            "')" +
-            code_line[builtins.len('include(') + length_of_include_call + 1:])
+            "')" + code_line[slice_position + 1:])
 
     @JointPoint
 ## python3.3
@@ -1651,18 +1709,15 @@ class Parser(Class, Runnable):
         length_of_print_call = String(
             code_line[builtins.len('print('):]
         ).find_python_code_end_bracket()
-        if(code_line[builtins.len('print('):builtins.len(
-           'print(') + length_of_print_call]):
+        slice_position = builtins.len('print(') + length_of_print_call
+        if code_line[builtins.len('print('):slice_position]:
             return (
-                'print(' + code_line[builtins.len('print('):builtins.len(
-                    'print('
-                ) + length_of_print_call] + ", indent_space='" +
-                match.group('indent_code')[slice:] + "')" +
-                code_line[builtins.len('print(') + length_of_print_call + 1:])
+                'print(' + code_line[builtins.len('print('):slice_position] +
+                ", indent_space='" + match.group('indent_code')[slice:] +
+                "')" + code_line[slice_position + 1:])
         return (
             "print(indent_space='" + match.group('indent_code')[slice:] +
-            "')" +
-            code_line[builtins.len('print(') + length_of_print_call + 1:])
+            "')" + code_line[slice_position + 1:])
 
     @JointPoint
 ## python3.3
