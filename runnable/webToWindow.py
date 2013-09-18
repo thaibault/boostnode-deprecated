@@ -246,16 +246,47 @@ class Browser(Class, Runnable):
     @JointPoint
 ## python3.3     def get_gui_toolkit(self: Self) -> builtins.str:
     def get_gui_toolkit(self):
-        '''Determines available gui toolkit.'''
-        if not self._default_gui_toolkit:
-            return 'undefined'
-        elif self._default_gui_toolkit == 'default':
+        '''
+            Determines available gui toolkit.
+
+            Examples:
+
+            >>> __test_globals__['qt'] = __test_globals__['gtk'] = None
+
+            >>> Browser('google.de').gui_toolkit
+            'default'
+
+            >>> Browser(
+            ...     'google.de', default_gui_toolkit='gtk'
+            ... ).gui_toolkit
+            'default'
+
+            >>> __test_globals__['gtk'] = builtins.object()
+            >>> Browser(
+            ...     'google.de', default_gui_toolkit='qt'
+            ... ).gui_toolkit
+            'gtk'
+
+            >>> __test_globals__['qt'] = builtins.object()
+            >>> Browser(
+            ...     'google.de', default_gui_toolkit='qt'
+            ... ).gui_toolkit
+            'qt'
+
+            >>> Browser('google.de').gui_toolkit
+            'qt'
+
+            >>> __test_globals__['gtk'] = None
+            >>> Browser(
+            ...     'google.de', default_gui_toolkit='gtk'
+            ... ).gui_toolkit
+            'qt'
+        '''
+        if builtins.globals()[self._default_gui_toolkit] is not None:
             return self._default_gui_toolkit
-        elif builtins.globals()[self._default_gui_toolkit] is not None:
-            return self._default_gui_toolkit
-        elif qt:
+        elif qt is not None:
             return 'qt'
-        elif gtk:
+        elif gtk is not None:
             return 'gtk'
         return 'default'
 

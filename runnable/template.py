@@ -1258,8 +1258,6 @@ class Parser(Class, Runnable):
 ## python3.3         raise exception from None
         raise exception
 
-    # TODO STAND
-
     @JointPoint
 ## python3.3
 ##     def _get_exception_line(

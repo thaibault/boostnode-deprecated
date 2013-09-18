@@ -144,8 +144,7 @@ class FunctionDecorator(builtins.object):
 
             Examples:
 
-            >>> def a():
-            ...     pass
+            >>> def a(): pass
 
             >>> FunctionDecorator(a) # doctest: +ELLIPSIS
             Object of "FunctionDecorator" with called function "a", wrapped...
@@ -339,8 +338,7 @@ class JointPointHandler(builtins.object):
             Examples:
 
             >>> class A:
-            ...     def a(self):
-            ...         pass
+            ...     def a(self): pass
 
             >>> JointPointHandler(A, A(), A().a, (), {}) # doctest: +ELLIPSIS
             Object of "JointPointHandler" with class object "A", object "...".
@@ -406,8 +404,7 @@ class JointPointHandler(builtins.object):
             Examples:
 
             >>> class A:
-            ...     def a(self):
-            ...         pass
+            ...     def a(self): pass
 
             >>> JointPointHandler(
             ...     A, A(), A().a, (), {}
@@ -455,8 +452,7 @@ class ReturnAspect(builtins.object):
             Examples:
 
             >>> class A:
-            ...     def a(self):
-            ...         pass
+            ...     def a(self): pass
             >>> return_aspect = ReturnAspect()
             >>> return_aspect.class_object = A
             >>> return_aspect.object = A()
@@ -524,8 +520,7 @@ class ReturnJointPoint(JointPointHandler, ReturnAspect):
 
 
             >>> class A:
-            ...     def a(self):
-            ...         pass
+            ...     def a(self): pass
 
             >>> ReturnJointPoint(
             ...     A, A(), A().a, (), {}, return_value=None
@@ -598,8 +593,7 @@ class Argument(inspect.Parameter):
 
             Examples:
 
-            >>> def mocup(a: int):
-            ...     pass
+            >>> def mocup(a: int): pass
 
             >>> argument = Argument(
             ...     inspect.signature(mocup).parameters['a'], 5, mocup)
@@ -640,8 +634,7 @@ class Argument(inspect.Parameter):
 
             Examples:
 
-            >>> def mocup(a: str):
-            ...     pass
+            >>> def mocup(a: str): pass
 
             >>> Argument(
             ...     inspect.signature(mocup).parameters['a'], 5, mocup
@@ -720,9 +713,10 @@ class PointCut(ReturnAspect):
                 result = advice['callback'](
                     self.class_object, self.object, self.function,
                     self.arguments, self.keywords)
-                if not builtins.isinstance(
-                    advice['callback'], (types.FunctionType,
-                                         types.MethodType)):
+                if(builtins.hasattr(advice['callback'], 'aspect') and
+                   builtins.isinstance(
+                       builtins.getattr(advice['callback'], 'aspect'),
+                       types.MethodType)):
                     result = result.aspect()
                 return result is not False
             return True
@@ -749,9 +743,9 @@ class PointCut(ReturnAspect):
                     self.class_object, self.object,
                     self.function, self.arguments, self.keywords,
                     return_value)
-                if not builtins.isinstance(
-                    advice['callback'], (types.FunctionType,
-                                         types.MethodType)):
+                if(builtins.hasattr(advice['callback'], 'aspect') and
+                   builtins.isinstance(builtins.getattr(
+                       advice['callback'], 'aspect'), types.MethodType)):
                     self.return_value = self.return_value.aspect()
         self.return_value = return_value
         self._handle_aspects(handler=return_handler)
@@ -811,29 +805,83 @@ class JointPoint(FunctionDecorator):
         ... def test(a):
         ...     return a
 
-        >>> aspects_backup = ASPECTS
-
-        >>> def call_handler():
-        ...     return 'call'
-        >>> def return_handler():
-        ...     return 'return'
-        >>> ASPECTS = [{
+        >>> def call_handler(
+        ...     class_object, object, function, arguments, keywords
+        ... ):
+        ...     return True
+        >>> def return_handler(
+        ...     class_object, object, function, arguments, keywords,
+        ...     return_value
+        ... ):
+        ...     return 'wrapped_result'
+        >>> __test_globals__['ASPECTS'] = [{
         ...     'advice': (
         ...         {'callback': call_handler, 'event': 'call'},
         ...         {'callback': return_handler, 'event': 'return'}),
-        ...     'point_cut': '^A.b$'}]
-
-        # TODO ASPECTS aren't given to JointPoint's scope!
+        ...     'point_cut': '^.+\.((A\.b)|a)$'}]
 
         >>> class A:
         ...     @JointPoint
-        ...     def b(self):
-        ...         pass
+        ...     def b(self): pass
+        >>> A().b()
+        'wrapped_result'
+
+        >>> @JointPoint
+        ... def a():
+        ...     pass
+        >>> a()
+        'wrapped_result'
+
+        >>> @JointPoint
+        ... def b(): return 'not_wrapped'
+        >>> b()
+        'not_wrapped'
+
+        >>> def call_handler(
+        ...     class_object, object, function, arguments, keywords
+        ... ):
+        ...     return False
+        >>> __test_globals__['ASPECTS'][0]['advice'][0]['callback'] = (
+        ...     call_handler)
+        >>> @JointPoint
+        ... def a(): return 'wrapper_prevents_calling'
+        >>> a()
+
+        >>> def a(): pass
+        >>> def b(): pass
+        >>> b.__func__ = a
+        >>> a = JointPoint(b)
+        >>> a()
+
+        >>> a.skip = True
+        >>> a()
+
+        >>> class CallHandler(CallJointPoint):
+        ...     def aspect(self): return True
+        >>> class ReturnHandler(ReturnJointPoint):
+        ...     def aspect(self): return 'class_wrapped_result'
+        >>> __test_globals__['ASPECTS'][0]['advice'][0]['callback'] = (
+        ...     CallHandler)
+        >>> __test_globals__['ASPECTS'][0]['advice'][1]['callback'] = (
+        ...     ReturnHandler)
 
         >>> A().b()
-
-        >>> ASPECTS = aspects_backup
+        'class_wrapped_result'
     '''
+
+    # region dynamic properties
+
+        # region public
+
+    '''
+        If set to "True" function wrapping will be skipped and the original
+        function will be called.
+    '''
+    skip = False
+
+        # endregion
+
+    # endregion
 
     # region dynamic methods
 
@@ -846,14 +894,14 @@ class JointPoint(FunctionDecorator):
     def get_wrapper_function(self):
 ##
         '''This methods returns the joint point's wrapped function.'''
-        if sys.flags.optimize > 1:
+        if sys.flags.optimize > 1 or self.skip:
             return self.function
 
         @functools.wraps(self.function)
         def wrapper_function(*arguments, **keywords):
             '''Unpack wrapper methods.'''
             self.__func__ = self.function
-            while '__func__' in builtins.dir(self.__func__):
+            while builtins.hasattr(self.__func__, '__func__'):
                 self.__func__ = self.__func__.__func__
             arguments = self._determine_arguments(arguments)
             point_cut = PointCut(
