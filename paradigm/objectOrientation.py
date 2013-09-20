@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.3
 # -*- coding: utf-8 -*-
 
 # region vim modline
@@ -103,11 +103,12 @@ __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-## python3.3 import builtins
-import __builtin__ as builtins
+## python2.7 import __builtin__ as builtins
+import builtins
 import inspect
 import os
 import sys
+import types
 
 '''Make boostNode packages and modules importable via relative paths.'''
 for number in (3, 4):
@@ -118,8 +119,8 @@ for number in (3, 4):
 
 # region abstract classes
 
-## python3.3 class Class:
-class Class(builtins.object):
+## python2.7 class Class(builtins.object):
+class Class:
     '''
         The main class which is intended for passing on other class.
         It serves a scope for one application to minimize conflicts with other
@@ -133,8 +134,8 @@ class Class(builtins.object):
             # region special
 
     @builtins.classmethod
-## python3.3     def __repr__(cls: builtins.type) -> builtins.str:
-    def __repr__(cls):
+## python2.7     def __repr__(cls):
+    def __repr__(cls: builtins.type) -> builtins.str:
         '''
             Invokes if this object should describe itself by a string.
 
@@ -146,8 +147,8 @@ class Class(builtins.object):
         return 'Object of "%s".' % cls.__name__
 
     @builtins.classmethod
-## python3.3     def __str__(cls: builtins.type) -> builtins.str:
-    def __str__(cls):
+## python2.7     def __str__(cls):
+    def __str__(cls: builtins.type) -> builtins.str:
         '''
             Is triggered if the current object is tried to be converted into a
             string object.
@@ -163,6 +164,24 @@ class Class(builtins.object):
 
             # endregion
 
+            # region decorator
+
+    @builtins.classmethod
+## python2.7
+##     def pseudo_property(cls, function):
+    def pseudo_property(
+        cls: builtins.object, function: types.MethodType
+    ) -> types.MethodType:
+##
+        '''
+            Attaches a property to given function for indicating that given
+            function handles read access to corresponding property.
+        '''
+        function.is_pseudo_property = True
+        return function
+
+            # endregion
+
         # endregion
 
     # endregion
@@ -173,11 +192,11 @@ class Class(builtins.object):
 
             # region special
 
-## python3.3
-##     def __getattr__(
-##         self: builtins.object, name: builtins.str
-##     ) -> builtins.object:
-    def __getattr__(self, name):
+## python2.7
+##     def __getattr__(self, name):
+    def __getattr__(
+        self: builtins.object, name: builtins.str
+    ) -> builtins.object:
 ##
         '''
             Is triggered if a property was tried to be read but is
@@ -194,16 +213,21 @@ class Class(builtins.object):
             >>> class TestA(Class):
             ...     _a = 'hans'
             ...     _b = 5
+            ...     def __init__(self, c=2):
+            ...         self._c = c
             ...     def get_a(self):
             ...         return self._a
+            ...     def get_c(self):
+            ...         return 2 * self._c
             >>> TestA().a
             'hans'
             >>> TestA().b is None
             True
+            >>> TestA().c
+            4
 
             >>> class TestB(Class):
             ...     _a = ''
-            ...     _b = ''
             ...     def __init__(self):
             ...         self._a = 'hans'
             ...         self._b = 'also hans'
@@ -216,18 +240,23 @@ class Class(builtins.object):
             >>> TestB().c is None
             True
         '''
-        if self.is_property(name='_' + name):
-            if self.is_method(name='get_' + name):
-                return builtins.getattr(self, 'get_' + name)()
+        name = '_' + name
+        getter_name = 'get' + name
+        has_special_method = self.is_method(name=getter_name)
+        if(self.is_property(name) or has_special_method and
+           builtins.hasattr(
+               builtins.getattr(self, getter_name), 'is_pseudo_property')):
+            if has_special_method:
+                return builtins.getattr(self, getter_name)()
             elif self.is_method(name='get'):
-                return self.get(name='_' + name)
+                return self.get(name)
         return None
 
-## python3.3
-##     def __setattr__(
-##         self, name: builtins.str, value: builtins.object
-##     ) -> builtins.object:
-    def __setattr__(self, name, value):
+## python2.7
+##     def __setattr__(self, name, value):
+    def __setattr__(
+        self, name: builtins.str, value: builtins.object
+    ) -> builtins.object:
 ##
         '''
             Is triggered if a property was tried to overwrite but is
@@ -264,28 +293,25 @@ class Class(builtins.object):
             >>> test_b._a
             'hans and peter'
         '''
-        if self.is_property(name):
-            if not self._setattr_helper(name, value):
+        if not self._setattr_helper(name, value):
+            if name in self.__class__.__dict__:
+                builtins.setattr(self.__class__, name, value)
+            else:
                 self.__dict__[name] = value
-            return None
-        if self.is_property(name='_' + name):
-            self._setattr_helper(name, value)
-            return value
+        return value
 
             # endregion
 
             # region boolean
 
-## python3.3     def is_method(self, name: builtins.str) -> builtins.bool:
-    def is_method(self, name):
+## python2.7     def is_method(self, name):
+    def is_method(self, name: builtins.str) -> builtins.bool:
         '''
             Determines if the given class attribute is a callable method or
             something else.
 
             Returns "True" if the given attribute is a method or "False"
             otherwise.
-
-            "is_property()"
 
             Examples:
 
@@ -294,11 +320,14 @@ class Class(builtins.object):
             >>> Class().is_method('not existing')
             False
         '''
-        return (name in self.__class__.__dict__.keys() and
-                builtins.hasattr(self.__class__.__dict__[name], '__call__'))
+        return (
+            name in self.__class__.__dict__ and
+            builtins.callable(self.__class__.__dict__[name]) or
+            name in self.__dict__ and
+            builtins.callable(self.__dict__[name]))
 
-## python3.3     def is_property(self, name: builtins.str) -> builtins.bool:
-    def is_property(self, name):
+## python2.7     def is_property(self, name):
+    def is_property(self, name: builtins.str) -> builtins.bool:
         '''
             Determines if the given class attribute is a property or
             something else.
@@ -314,9 +343,11 @@ class Class(builtins.object):
             >>> Class().is_property('test')
             True
         '''
-        return (name in self.__class__.__dict__ and
-                not builtins.hasattr(
-                    self.__class__.__dict__[name], '__call__'))
+        return (
+            name in self.__class__.__dict__ and
+            not builtins.callable(self.__class__.__dict__[name]) or
+            name in self.__dict__ and
+            not builtins.callable(self.__dict__[name]))
 
             # endregion
 
@@ -324,11 +355,11 @@ class Class(builtins.object):
 
         # region protected
 
-## python3.3
-##     def _setattr_helper(
-##         self, name: builtins.str, value: builtins.object
-##     ) -> builtins.bool:
-    def _setattr_helper(self, name, value):
+## python2.7
+##     def _setattr_helper(self, name, value):
+    def _setattr_helper(
+        self, name: builtins.str, value: builtins.object
+    ) -> builtins.bool:
 ##
         '''
             Helper method for "self.__setattr__()". Does the actual overwrite
@@ -340,12 +371,13 @@ class Class(builtins.object):
             Returns "True" if the given property was successful overwritten or
             "False" otherwise.
         '''
-        setter_name = 'set_' + name
+        name = '_' + name
+        setter_name = 'set' + name
         if self.is_method(name=setter_name):
             builtins.getattr(self, setter_name)(value)
             return True
         elif self.is_method(name='set'):
-            self.set('_' + name, value)
+            self.set(name, value)
             return True
         return False
 
@@ -361,8 +393,8 @@ class Class(builtins.object):
     Preset some variables given by introspection letting the linter know what
     globale variables are available.
 '''
-__logger__ = __test_mode__ = __test_globals__ = __exception__ = \
-    __module_name__ = __file_path__ = None
+__logger__ = __exception__ = __module_name__ = __file_path__ = \
+    __test_mode__ = None
 '''
     Extends this module with some magic environment variables to provide better
     introspection support. A generic command line interface for some code

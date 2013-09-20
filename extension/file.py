@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.3
 # -*- coding: utf-8 -*-
 
 # region vim modline
@@ -31,11 +31,11 @@ __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-## python3.3 import builtins
-import __builtin__ as builtins
+## python2.7 import __builtin__ as builtins
+import builtins
 import ctypes
-## python3.3 import collections
-import codecs
+## python2.7 import codecs
+import collections
 import copy
 import inspect
 import mimetypes
@@ -44,18 +44,18 @@ import re
 import shutil
 import stat
 import sys
-## python3.3 import types
-pass
+## python2.7 pass
+import types
 
 '''Make boostNode packages and modules importable via relative paths.'''
 for number in (3, 4):
     sys.path.append(os.path.abspath(sys.path[0] + number * ('..' + os.sep)))
 
-## python3.3
-## from boostNode.extension.native import Object, String
-## from boostNode.extension.type import Self, SelfClass, SelfClassObject
-from boostNode.extension.native import Dictionary, Object, String
-from boostNode.extension.type import Self
+## python2.7
+## from boostNode.extension.native import Dictionary, Object, String
+## from boostNode.extension.type import Self
+from boostNode.extension.native import Object, String
+from boostNode.extension.type import Self, SelfClass, SelfClassObject
 ##
 from boostNode.paradigm.aspectOrientation import JointPoint
 from boostNode.paradigm.objectOrientation import Class
@@ -71,9 +71,7 @@ class Handler(Class):
         in an object oriented way.
     '''
 
-    # region constant properties
-
-        # region public
+    # region properties
 
     '''
         Pattern for supported formats to handle size of file system elements.
@@ -186,416 +184,11 @@ class Handler(Class):
     PORTABLE_MEDIA_LINK_PATTERN = (
         '[playlist]\n\nFile1=$path\nTitle1=$name\nLength1=$size\n\n$label '
         'portable link file')
-
-        # endregion
-
-    # endregion
-
-    # region dynamic properties
-
-        # region protected
-
     '''
         Defines a virtual root path for all methods. Through these class
         objects aren't locations except in "_root_path" available.
     '''
     _root_path = '/'
-    _root_path_initialized = False
-    '''Defines the encoding for writing and reading text-based files.'''
-    _encoding = ''
-    '''
-        This properties are generated at runtime on base of the two
-        class constants "PORTABLE_DEFAULT_LINK_PATTERN" and
-        "PORTABLE_MEDIA_LINK_PATTERN".
-    '''
-    _portable_link_pattern = ''
-    _portable_link_content = ''
-    _portable_regex_link_pattern = ''
-    '''Saves the initially given path without any transformations.'''
-    _initialized_path = ''
-    '''Indicates if current file object has an file extension.'''
-    _has_extension = True
-    '''Properties depending on the given file system object-/s.'''
-    _path = ''
-    _name = ''
-    _basename = ''
-    _extension = ''
-    _extension_suffix = ''
-    _directory_path = ''
-    _relative_path = ''
-    _content = ''
-    _size = 0
-    _dummy_size = 0
-    _human_readable_size = 0
-    _free_space = 0
-    _disk_used_space = 0
-    _timestamp = 0
-    _lines = 0
-    _mime_type = _type = None
-    _respect_root_path = True
-    _output_with_root_prefix = False
-    '''
-        Properties to realize an iteration over all elements in a given
-        directory.
-    '''
-    _current_element_index = 0
-    _next_element_index = 0
-
-        # endregion
-
-    # endregion
-
-    # region dynamic methods
-
-        # region public
-
-            # region special
-
-    @JointPoint
-## python3.3
-##     def __init__(
-##         self: Self, location=None, make_directory=False, must_exist=True,
-##         encoding='', respect_root_path=True, output_with_root_prefix=False,
-##         has_extension=True, *arguments: builtins.object,
-##         **keywords: builtins.object
-##     ) -> None:
-    def __init__(
-        self, location=None, make_directory=False, must_exist=True,
-        encoding='', respect_root_path=True, output_with_root_prefix=False,
-        has_extension=True, *arguments, **keywords
-    ):
-##
-        '''
-            Initialize a new instance of a given file system object by path.
-
-            "location" is path or "Handler" referencing to file object.
-            "make_directory" Make directory of path object if given location
-                             doesn't exists.
-            "right" Define rights for all created object with an "Handler"
-                    object.
-            "must_exist" Throws an exception if the given path doesn't exists
-                         if this argument is "True".
-            "encoding" Define encoding for reading and writing files.
-            "respect_root_path" Defines if a previous statically defined
-                                virtual root path should be considered.
-            "output_with_root_prefix" Defines if "get_path()" returns a path
-                                      with or without root path prefixed.
-
-            Examples:
-
-            >>> Handler(
-            ...     location=__test_folder__ + 'init_not_existing'
-            ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
-            Traceback (most recent call last):
-            ...
-            boostNode.extension.native.FileError: Invalid path...not_existin...
-
-            >>> handler = Handler(
-            ...     location=__test_folder__ + 'init_not_existing',
-            ...     make_directory=True)
-            >>> handler # doctest: +ELLIPSIS
-            Object of "Handler" with path "...init_not_existing..."...
-            >>> os.path.isdir(handler.path)
-            True
-
-            >>> Handler(
-            ...     location=__test_folder__ + 'init_not_existing2',
-            ...     must_exist=False) # doctest: +ELLIPSIS
-            Object of "Handler" with path "...init_not_existing2...(undefined).
-
-            >>> Handler(location=__file_path__).basename
-            'file'
-
-            >>> Handler(location='/not//real',
-            ...         must_exist=False).path # doctest: +ELLIPSIS
-            '...not...real'
-
-            >>> Handler(location=Handler()).path # doctest: +ELLIPSIS
-            '...boostNode...extension...'
-
-            >>> root_path_backup = Handler._root_path
-            >>> Handler._root_path = Handler(
-            ...     __test_folder__ + 'init_root_directory',
-            ...     make_directory=True
-            ... )._path
-
-            >>> location = Handler('/init_A', must_exist=False)
-            >>> location.path # doctest: +ELLIPSIS
-            '...init_A...'
-            >>> location._path # doctest: +ELLIPSIS
-            '...init_root_directory...init_A...'
-
-            >>> location = Handler(
-            ...     __test_folder__  + 'init_root_directory/' + 'init_A',
-            ...     must_exist=False, respect_root_path=False)
-            >>> location.path # doctest: +ELLIPSIS
-            '...init_A...'
-            >>> location._path # doctest: +ELLIPSIS
-            '...init_root_directory...init_A...'
-
-            >>> Handler(
-            ...     __test_folder__ + 'init_A', respect_root_path=False
-            ... ) # doctest: +ELLIPSIS +IGNORE_EXCEPTION_DETAIL
-            Traceback (most recent call last):
-            ...
-            boostNode.extension.native.FileError: Invalid path "...init_A" ...
-
-            >>> try:
-            ...     Handler(
-            ...         __test_folder__ + 'init_A', make_directory=True)
-            ... except:
-            ...     True
-            True
-
-            >>> Handler._root_path = root_path_backup
-        '''
-        if not encoding:
-            encoding = self.DEFAULT_ENCODING
-        self._encoding = encoding
-        self._respect_root_path = respect_root_path
-        self._output_with_root_prefix = output_with_root_prefix
-        self._initialized_path = self._initialize_location(location)
-        self._initialize_path()
-        self._prepend_root_path()
-        self._handle_path_existence(
-            location, make_directory, must_exist, arguments, keywords
-        )._initialize_platform_dependencies()
-        if(builtins.len(self.name) and not '.' in self.name[1:] or
-           self.is_directory()):
-            self._has_extension = False
-        else:
-            self._has_extension = has_extension
-
-    @JointPoint
-## python3.3     def __iter__(self: Self) -> types.GeneratorType:
-    def __iter__(self):
-        '''
-            Invokes if the current object is tried to iterate.
-
-            Examples:
-
-            >>> for file in Handler(location='.'):
-            ...     print('"' + str(file) + '"') # doctest: +ELLIPSIS
-            "...file.py..."
-        '''
-        return (element for element in self.list())
-
-    @JointPoint
-## python3.3     def __bool__(self: Self) -> builtins.bool:
-    def __nonzero__(self):
-        '''
-            Invokes when the object is tried to convert in a boolean value.
-
-            Examples:
-
-            >>> bool(Handler())
-            True
-
-            >>> bool(Handler(
-            ...     location=__test_folder__ + 'nonzero_not_existing_file',
-            ...     must_exist=False))
-            False
-
-            >>> bool(Handler(location=__file_path__))
-            True
-
-            >>> bool(Handler(location=__test_folder__))
-            True
-        '''
-        return self.is_element()
-
-    @JointPoint
-## python3.3
-##     def __eq__(self: Self, other: builtins.object) -> builtins.bool:
-    def __eq__(self, other):
-##
-        '''
-            Invokes if a comparison of two "Handler" objects is done.
-
-            Examples:
-
-            >>> Handler(
-            ...     location=__test_folder__ + 'eq_a/b', must_exist=False
-            ... ) == Handler(
-            ...     location=__test_folder__ + 'eq_a//b/', must_exist=False)
-            True
-
-            >>> Handler(
-            ...     location=__test_folder__ + 'eq_a/b', must_exist=False
-            ... ) == Handler(
-            ...     location=__test_folder__ + 'eq_a/b/c', must_exist=False)
-            False
-
-            >>> __test_folder__ + 'eq_a/b' == Handler(
-            ...     location=__test_folder__ + 'eq_a/b', must_exist=False)
-            False
-        '''
-        if builtins.isinstance(other, self.__class__):
-            return self._path == other._path
-        return False
-
-    @JointPoint
-## python3.3     def __hash__(self: Self) -> builtins.int:
-    def __hash__(self):
-        '''
-            Returns a hash value for current path as string.
-
-            Examples:
-
-            >>> isinstance(hash(Handler()), int)
-            True
-        '''
-        return builtins.hash(self._path)
-
-    @JointPoint
-## python3.3
-##     def __getitem__(self: Self, key: builtins.int) -> SelfClassObject:
-    def __getitem__(self, key):
-##
-        '''
-            Triggers if an element is tried to get with the "[]" operator.
-
-            Examples:
-
-            >>> Handler()[0] # doctest: +ELLIPSIS
-            Object of "Handler" with path "..." (...).
-        '''
-        return builtins.tuple(self.list())[key]
-
-    @JointPoint
-## python3.3
-##     def __delitem__(self: Self, key: builtins.int) -> builtins.bool:
-    def __delitem__(self, key):
-##
-        '''
-            Deletes the specified item from the file system.
-
-            Examples:
-
-            >>> directory = Handler(
-            ...     __test_folder__ + 'delitem', make_directory=True)
-            >>> file = Handler(directory.path + 'file', must_exist=False)
-            >>> file.content = ' '
-            >>> file.is_file()
-            True
-            >>> del directory[0]
-        '''
-        return self[key].remove_deep()
-
-    @JointPoint
-## python3.3
-##     def __contains__(
-##         self: Self, item: (SelfClassObject, builtins.str)
-##     ) -> builtins.bool:
-    def __contains__(self, item):
-##
-        '''
-            Is triggered if you want to determine if an object is in a
-            "Handler" object.
-
-            Examples:
-
-            >>> Handler(location=__file_path__) in Handler(location=Handler(
-            ...     location=__file_path__
-            ... ).directory_path)
-            True
-
-            >>> Handler(
-            ...     location=__test_folder__ + 'contains_not_existing.py',
-            ...     must_exist=False) in Handler()
-            False
-
-            >>> 'not_existing_file' in Handler()
-            False
-
-            >>> __file_path__ in Handler()
-            True
-        '''
-        if builtins.isinstance(item, self.__class__):
-            return item in self.list()
-        else:
-            for element in self:
-                if item in (element._path, element.relative_path):
-                    return True
-        return False
-
-    @JointPoint
-## python3.3     def __len__(self: Self) -> builtins.int:
-    def __len__(self):
-        '''
-            Is triggered if you use the pythons native "builtins.len()"
-            function on a "Handler" object.
-
-            Examples:
-
-            >>> len(Handler(
-            ...     location=__test_folder__ + 'len_not_existing_location',
-            ...     must_exist=False))
-            0
-
-            >>> len(Handler(location=__file_path__)) > 1
-            True
-
-            >>> len(Handler(Handler().directory_path)) > 1
-            True
-        '''
-        if self.is_directory():
-            '''
-                NOTE: We have to call "list()" explicit to avoid an endless
-                recursion.
-            '''
-            return builtins.len(builtins.list(self.list()))
-        elif self.is_file():
-            return builtins.int(self.size)
-        return 0
-
-    @JointPoint
-## python3.3     def __str__(self: Self) -> builtins.str:
-    def __str__(self):
-        '''
-            Is triggered if this object should be converted to string.
-
-            Examples:
-
-            >>> str(Handler(location=__file_path__)) # doctest: +ELLIPSIS
-            '...file.py'
-        '''
-        return self.path
-
-    @JointPoint
-## python3.3     def __repr__(self: Self) -> builtins.str:
-    def __repr__(self):
-        '''
-            Invokes if this object should describe itself by a string.
-
-            Examples:
-
-            >>> from boostNode.extension.system import Platform
-
-            >>> repr(Handler(location=__file_path__)) # doctest: +ELLIPSIS
-            'Object of "Handler" with path "...file.py" ... (file).'
-
-            >>> link = Handler(__test_folder__ + 'repr_link', must_exist=False)
-            >>> if Platform().operating_system == 'windows':
-            ...     repr(link)
-            ... else:
-            ...     created = Handler(
-            ...         location=__file_path__
-            ...     ).make_symbolic_link(link)
-            ...     repr(link) # doctest: +ELLIPSIS
-            'Object of "Handler" with path ...'
-        '''
-        type = self.type
-        if self.is_symbolic_link():
-            type = 'link to "{path}"'.format(path=self.read_symbolic_link())
-        return 'Object of "{class_name}" with path "{path}" and initially '\
-            'given path "{given_path}" ({type}).'.format(
-                class_name=self.__class__.__name__, path=self.path,
-                given_path=self._initialized_path, type=type)
-
-            # endregion
-
-        # endregion
 
     # endregion
 
@@ -606,11 +199,10 @@ class Handler(Class):
             # region getter
 
     @JointPoint(builtins.classmethod)
-## python3.3     def get_root(cls: SelfClass) -> SelfClassObject:
-    def get_root(cls):
-        '''
-            Returns a file object referencing to the virtual root path.
-        '''
+    @Class.pseudo_property
+## python2.7     def get_root(cls):
+    def get_root(cls: SelfClass) -> SelfClassObject:
+        '''Returns a file object referencing to the virtual root path.'''
         return cls(
             location=cls._root_path, respect_root_path=False,
             output_with_root_prefix=True)
@@ -620,44 +212,48 @@ class Handler(Class):
             # region setter
 
     @JointPoint(builtins.classmethod)
-## python3.3
-##     def set_root(
-##         cls: SelfClass, location: (SelfClassObject, builtins.str)
-##     ) -> SelfClass:
-    def set_root(cls, location):
+    @Class.pseudo_property
+## python2.7
+##     def set_root(cls, location, make_directory=False):
+    def set_root(
+        cls: SelfClass, location: (SelfClassObject, builtins.str),
+        make_directory=False
+    ) -> SelfClass:
 ##
         '''
             Normalizes root path.
 
             Examples:
 
-            >>> root_path_backup = Handler._root_path
+            >>> root_backup = Handler.get_root()
 
-            >>> handler = Handler(
-            ...     __test_folder__ + 'set_root', make_directory=True)
-            >>> Handler.set_root(location=handler) # doctest: +ELLIPSIS
+            >>> Handler.set_root(
+            ...     __test_folder_path__ + 'set_root', make_directory=True
+            ... ) # doctest: +ELLIPSIS
             <class '...Handler'>
             >>> Handler.get_root().path # doctest: +ELLIPSIS
             '...'
 
-            >>> Handler._root_path = root_path_backup
+            >>> Handler.set_root(root_backup) # doctest: +ELLIPSIS
+            <class '...Handler'>
         '''
         cls._root_path = cls(
-            location, respect_root_path=False, output_with_root_prefix=True
+            location, respect_root_path=False, output_with_root_prefix=True,
+            make_directory=make_directory
         ).path
         return cls
 
             # endregion
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python2.7
 ##     def convert_size_format(
-##         cls: SelfClass, size: (builtins.int, builtins.float), format='byte',
-##         decimal=None, formats=None
-##     ) -> builtins.float:
+##         cls, size, format='byte', decimal=None, formats=None
+##     ):
     def convert_size_format(
-        cls, size, format='byte', decimal=None, formats=None
-    ):
+        cls: SelfClass, size: (builtins.int, builtins.float), format='byte',
+        decimal=None, formats=None
+    ) -> builtins.float:
 ##
         '''
             Converts between file size formats.
@@ -698,14 +294,14 @@ class Handler(Class):
         return size
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python2.7
 ##     def determine_size_from_string(
-##         cls: SelfClass, size_and_unit: builtins.str, format='byte',
-##         decimal=None
-##     ) -> (builtins.float, builtins.bool):
+##         cls, size_and_unit, format='byte', decimal=None
+##     ):
     def determine_size_from_string(
-        cls, size_and_unit, format='byte', decimal=None
-    ):
+        cls: SelfClass, size_and_unit: builtins.str, format='byte',
+        decimal=None
+    ) -> (builtins.float, builtins.bool):
 ##
         '''
             Becomes a size with unit as string. And gives it as float or
@@ -737,35 +333,36 @@ class Handler(Class):
             return cls.convert_size_format(
                 size=cls.determine_byte_from_other(
                     size=builtins.float(match.group(1)),
-                    formats=cls.FORMATS,
                     given_format=match.group(2),
                     decimal=decimal),
                 format=format, decimal=decimal, formats=cls.FORMATS)
         return False
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python2.7
 ##     def determine_byte_from_other(
-##         cls: SelfClass, size: builtins.float, formats: builtins.dict,
-##         given_format='byte', decimal=None
-##     ) -> builtins.float:
+##         cls, size, formats=None, given_format='byte', decimal=None
+##     ):
     def determine_byte_from_other(
-        cls, size, formats, given_format='byte', decimal=None
-    ):
+        cls: SelfClass, size: builtins.float, formats=None,
+        given_format='byte', decimal=None
+    ) -> builtins.float:
 ##
         '''
             Converts a given size format to byte format.
 
             Examples:
 
-            >>> Handler.determine_byte_from_other(
-            ...     size=10.0, formats=Handler.FORMATS, given_format='MB')
+            >>> Handler.DECIMAL = False
+
+            >>> Handler.determine_byte_from_other(size=10.0, given_format='MB')
             10485760.0
 
-            >>> Handler.determine_byte_from_other(
-            ...     size=10.0, formats={})
+            >>> Handler.determine_byte_from_other(size=10.0, formats={})
             10.0
         '''
+        if formats is None:
+            formats = cls.FORMATS
         if decimal is None:
             decimal = cls.DECIMAL
         factor_type = 'decimal_factor' if decimal else 'binary_factor'
@@ -776,9 +373,9 @@ class Handler(Class):
         return size
 
     @JointPoint(builtins.classmethod)
-## python3.3
-##     def determine_regex_units(cls: SelfClass, formats=None) -> builtins.str:
-    def determine_regex_units(cls, formats=None):
+## python2.7
+##     def determine_regex_units(cls, formats=None):
+    def determine_regex_units(cls: SelfClass, formats=None) -> builtins.str:
 ##
         '''
             Returns a regular expression for validation if a given size format
@@ -805,11 +402,11 @@ class Handler(Class):
         return units
 
     @JointPoint(builtins.classmethod)
-## python3.3
-##     def determine_special_path_values(
-##         cls: SelfClass, operating_system=''
-##     ) -> builtins.tuple:
-    def determine_special_path_values(cls, operating_system=''):
+## python2.7
+##     def determine_special_path_values(cls, operating_system=''):
+    def determine_special_path_values(
+        cls: SelfClass, operating_system=''
+    ) -> builtins.tuple:
 ##
         '''
             Gives all platform dependent symbols for special file system
@@ -838,12 +435,12 @@ class Handler(Class):
         # region protected
 
     @JointPoint(builtins.classmethod)
-## python3.3
-##     def _sort_by_file_types(
-##         cls: SelfClass, files: collections.Iterable,
-##         recursive_in_link: builtins.bool
-##     ) -> builtins.list:
-    def _sort_by_file_types(cls, files, recursive_in_link):
+## python2.7
+##     def _sort_by_file_types(cls, files, recursive_in_link):
+    def _sort_by_file_types(
+        cls: SelfClass, files: collections.Iterable,
+        recursive_in_link: builtins.bool
+    ) -> builtins.list:
 ##
         '''
             Sorts the given list of files. Files come first and folders later.
@@ -852,7 +449,8 @@ class Handler(Class):
 
             >>> current_location = Handler()
             >>> temporary_file = Handler(
-            ...     __test_folder__ + '_sort_by_file_types', must_exist=False)
+            ...     __test_folder_path__ + '_sort_by_file_types',
+            ...     must_exist=False)
             >>> temporary_file.content = 'A'
             >>> [temporary_file,
             ...  current_location] == Handler._sort_by_file_types([
@@ -881,11 +479,382 @@ class Handler(Class):
 
         # region public
 
+            # region special
+
+    # TODO statrting point for using PropertyInitializer
+    @JointPoint
+## python2.7
+##     def __init__(
+##         self, location=None, make_directory=False, must_exist=True,
+##         encoding='', respect_root_path=True, output_with_root_prefix=False,
+##         has_extension=True, *arguments, **keywords
+##     ):
+    def __init__(
+        self: Self, location=None, make_directory=False, must_exist=True,
+        encoding='', respect_root_path=True, output_with_root_prefix=False,
+        has_extension=True, *arguments: builtins.object,
+        **keywords: builtins.object
+    ) -> None:
+##
+        '''
+            Initialize a new instance of a given file system object by path.
+
+            "location" is path or "Handler" referencing to file object.
+            "make_directory" Make directory of path object if given location
+                             doesn't exists.
+            "right" Define rights for all created object with an "Handler"
+                    object.
+            "must_exist" Throws an exception if the given path doesn't exists
+                         if this argument is "True".
+            "encoding" Define encoding for reading and writing files.
+            "respect_root_path" Defines if a previous statically defined
+                                virtual root path should be considered.
+            "output_with_root_prefix" Defines if "get_path()" returns a path
+                                      with or without root path prefixed.
+
+            Examples:
+
+            >>> root_backup = Handler.get_root()
+
+            >>> Handler(
+            ...     location=__test_folder_path__ + 'init_not_existing'
+            ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
+            Traceback (most recent call last):
+            ...
+            boostNode.extension.native.FileError: Invalid path...not_existin...
+
+            >>> handler = Handler(
+            ...     location=__test_folder_path__ + 'init_not_existing',
+            ...     make_directory=True)
+            >>> handler # doctest: +ELLIPSIS
+            Object of "Handler" with path "...init_not_existing..."...
+            >>> os.path.isdir(handler.path)
+            True
+
+            >>> Handler(
+            ...     location=__test_folder_path__ + 'init_not_existing2',
+            ...     must_exist=False
+            ... ) # doctest: +ELLIPSIS
+            Object of "Handler" with path "...init_not_existing2...(type: un...
+
+            >>> Handler(location=__file_path__).basename
+            'file'
+
+            >>> Handler(
+            ...     location='/not//real', must_exist=False
+            ... ).path # doctest: +ELLIPSIS
+            '...not...real'
+
+            >>> Handler(location=Handler()).path # doctest: +ELLIPSIS
+            '...boostNode...extension...'
+
+            >>> Handler.set_root(
+            ...     __test_folder_path__ + 'init_root_directory',
+            ...     make_directory=True
+            ... ) # doctest: +ELLIPSIS
+            <class '...Handler'>
+
+            >>> location = Handler('/init_A', must_exist=False)
+            >>> location.path # doctest: +ELLIPSIS
+            '...init_A...'
+            >>> location._path # doctest: +ELLIPSIS
+            '...init_root_directory...init_A...'
+
+            >>> location = Handler(
+            ...     __test_folder_path__  + 'init_root_directory/' + 'init_A',
+            ...     must_exist=False, respect_root_path=False)
+            >>> location.path # doctest: +ELLIPSIS
+            '...init_A...'
+            >>> location._path # doctest: +ELLIPSIS
+            '...init_root_directory...init_A...'
+
+            >>> Handler(
+            ...     __test_folder_path__ + 'init_A', respect_root_path=False
+            ... ) # doctest: +ELLIPSIS +IGNORE_EXCEPTION_DETAIL
+            Traceback (most recent call last):
+            ...
+            boostNode.extension.native.FileError: Invalid path "...init_A" ...
+
+            >>> try:
+            ...     Handler(
+            ...         __test_folder_path__ + 'init_A', make_directory=True)
+            ... except:
+            ...     True
+            True
+
+            >>> Handler.set_root(root_backup) # doctest: +ELLIPSIS
+            <class '...Handler'>
+        '''
+
+                # region properties
+
+        '''
+            Properties to realize an iteration over all elements in a given
+            directory.
+        '''
+        self._current_element_index = 0
+        self._next_element_index = 0
+        '''Defines the encoding for writing and reading text-based files.'''
+        if not encoding:
+            encoding = self.DEFAULT_ENCODING
+        self._encoding = encoding
+        self._respect_root_path = respect_root_path
+        self._output_with_root_prefix = output_with_root_prefix
+        '''Saves the initially given path without any transformations.'''
+        self._initialized_path = self._initialize_location(location)
+        self._initialize_path()
+        self._prepend_root_path()
+        self._handle_path_existence(
+            location, make_directory, must_exist, arguments, keywords
+        )._initialize_platform_dependencies()
+        '''Indicates if current file object has an file extension.'''
+        if(builtins.len(self.name) and not '.' in self.name[1:] or
+           self.is_directory()):
+            self._has_extension = False
+        else:
+            self._has_extension = has_extension
+
+                # endregion
+
+    @JointPoint
+## python2.7     def __iter__(self):
+    def __iter__(self: Self) -> types.GeneratorType:
+        '''
+            Invokes if the current object is tried to iterate.
+
+            Examples:
+
+            >>> for file in Handler(location='.'):
+            ...     print('"' + str(file) + '"') # doctest: +ELLIPSIS
+            "...file.py..."
+        '''
+        return (element for element in self.list())
+
+    @JointPoint
+## python2.7     def __nonzero__(self):
+    def __bool__(self: Self) -> builtins.bool:
+        '''
+            Invokes when the object is tried to convert in a boolean value.
+
+            Examples:
+
+            >>> bool(Handler())
+            True
+
+            >>> bool(Handler(
+            ...     location=__test_folder_path__ +
+            ...     'nonzero_not_existing_file',
+            ...     must_exist=False))
+            False
+
+            >>> bool(Handler(location=__file_path__))
+            True
+
+            >>> bool(Handler(location=__test_folder_path__))
+            True
+        '''
+        return self.is_element()
+
+    @JointPoint
+## python2.7
+##     def __eq__(self, other):
+    def __eq__(self: Self, other: builtins.object) -> builtins.bool:
+##
+        '''
+            Invokes if a comparison of two "Handler" objects is done.
+
+            Examples:
+
+            >>> Handler(
+            ...     location=__test_folder_path__ + 'eq_a/b', must_exist=False
+            ... ) == Handler(
+            ...     location=__test_folder_path__ + 'eq_a//b/',
+            ...     must_exist=False)
+            True
+
+            >>> Handler(
+            ...     location=__test_folder_path__ + 'eq_a/b', must_exist=False
+            ... ) == Handler(
+            ...     location=__test_folder_path__ + 'eq_a/b/c',
+            ...     must_exist=False)
+            False
+
+            >>> __test_folder_path__ + 'eq_a/b' == Handler(
+            ...     location=__test_folder_path__ + 'eq_a/b', must_exist=False)
+            False
+        '''
+        if builtins.isinstance(other, self.__class__):
+            return self._path == other._path
+        return False
+
+    @JointPoint
+## python2.7     def __hash__(self):
+    def __hash__(self: Self) -> builtins.int:
+        '''
+            Returns a hash value for current path as string.
+
+            Examples:
+
+            >>> isinstance(hash(Handler()), int)
+            True
+        '''
+        return builtins.hash(self._path)
+
+    @JointPoint
+## python2.7
+##     def __getitem__(self, key):
+    def __getitem__(self: Self, key: builtins.int) -> SelfClassObject:
+##
+        '''
+            Triggers if an element is tried to get with the "[]" operator.
+
+            Examples:
+
+            >>> Handler()[0] # doctest: +ELLIPSIS
+            Object of "Handler" with path "..." (...).
+        '''
+        return builtins.tuple(self.list())[key]
+
+    @JointPoint
+## python2.7
+##     def __delitem__(self, key):
+    def __delitem__(self: Self, key: builtins.int) -> builtins.bool:
+##
+        '''
+            Deletes the specified item from the file system.
+
+            Examples:
+
+            >>> directory = Handler(
+            ...     __test_folder_path__ + 'delitem', make_directory=True)
+            >>> file = Handler(directory.path + 'file', must_exist=False)
+            >>> file.content = ' '
+            >>> file.is_file()
+            True
+            >>> del directory[0]
+        '''
+        return self[key].remove_deep()
+
+    @JointPoint
+## python2.7
+##     def __contains__(self, item):
+    def __contains__(
+        self: Self, item: (SelfClassObject, builtins.str)
+    ) -> builtins.bool:
+##
+        '''
+            Is triggered if you want to determine if an object is in a
+            "Handler" object.
+
+            Examples:
+
+            >>> Handler(location=__file_path__) in Handler(location=Handler(
+            ...     location=__file_path__
+            ... ).directory_path)
+            True
+
+            >>> Handler(
+            ...     location=__test_folder_path__ + 'contains_not_existing.py',
+            ...     must_exist=False) in Handler()
+            False
+
+            >>> 'not_existing_file' in Handler()
+            False
+
+            >>> __file_path__ in Handler()
+            True
+        '''
+        if builtins.isinstance(item, self.__class__):
+            return item in self.list()
+        else:
+            for element in self:
+                if item in (element._path, element.relative_path):
+                    return True
+        return False
+
+    @JointPoint
+## python2.7     def __len__(self):
+    def __len__(self: Self) -> builtins.int:
+        '''
+            Is triggered if you use the pythons native "builtins.len()"
+            function on a "Handler" object.
+
+            Examples:
+
+            >>> len(Handler(
+            ...     location=__test_folder_path__ +
+            ...     'len_not_existing_location',
+            ...     must_exist=False))
+            0
+
+            >>> len(Handler(location=__file_path__)) > 1
+            True
+
+            >>> len(Handler(Handler().directory_path)) > 1
+            True
+        '''
+        if self.is_directory():
+            '''
+                NOTE: We have to call "list()" explicit to avoid an endless
+                recursion.
+            '''
+            return builtins.len(builtins.list(self.list()))
+        elif self.is_file():
+            return builtins.int(self.size)
+        return 0
+
+    @JointPoint
+## python2.7     def __str__(self):
+    def __str__(self: Self) -> builtins.str:
+        '''
+            Is triggered if this object should be converted to string.
+
+            Examples:
+
+            >>> str(Handler(location=__file_path__)) # doctest: +ELLIPSIS
+            '...file.py'
+        '''
+        return self.path
+
+    @JointPoint
+## python2.7     def __repr__(self):
+    def __repr__(self: Self) -> builtins.str:
+        '''
+            Invokes if this object should describe itself by a string.
+
+            Examples:
+
+            >>> from boostNode.extension.system import Platform
+
+            >>> repr(Handler(location=__file_path__)) # doctest: +ELLIPSIS
+            'Object of "Handler" with path "...file.py" ... (type: file).'
+
+            >>> link = Handler(
+            ...     __test_folder_path__ + 'repr_link', must_exist=False)
+            >>> if Platform().operating_system == 'windows':
+            ...     repr(link)
+            ... else:
+            ...     created = Handler(
+            ...         location=__file_path__
+            ...     ).make_symbolic_link(link)
+            ...     repr(link) # doctest: +ELLIPSIS
+            'Object of "Handler" with path ...'
+        '''
+        type = 'type: %s' % self.type
+        if self.is_symbolic_link():
+            type = 'link to "{path}"'.format(path=self.read_symbolic_link())
+        return 'Object of "{class_name}" with path "{path}" and initially '\
+            'given path "{given_path}" ({type}).'.format(
+                class_name=self.__class__.__name__, path=self.path,
+                given_path=self._initialized_path, type=type)
+
+            # endregion
+
             # region getter
 
     @JointPoint
-## python3.3     def get_encoding(self: Self) -> builtins.str:
-    def get_encoding(self):
+## python2.7     def get_encoding(self):
+    def get_encoding(self: Self) -> builtins.str:
         '''
             Returns encoding for current file handler. If no encoding was set
             "Handler.DEFAULT_ENCODING" is default.
@@ -898,7 +867,8 @@ class Handler(Class):
             >>> Handler().get_encoding()
             'utf_8'
 
-            >>> handler = Handler(__test_folder__ + 'test', must_exist=False)
+            >>> handler = Handler(
+            ...     __test_folder_path__ + 'test', must_exist=False)
             >>> handler.set_content(
             ...     'test', encoding='ascii'
             ... ) # doctest: +ELLIPSIS
@@ -908,9 +878,9 @@ class Handler(Class):
         '''
         return self._encoding
 
-    @JointPoint
-## python3.3     def get_extension(self: Self) -> builtins.str:
-    def get_extension(self):
+    @JointPoint(Class.pseudo_property)
+## python2.7     def get_extension(self):
+    def get_extension(self: Self) -> builtins.str:
         '''
             Returns the current file extension or an empty string if current
             file hasn't an extension separated by a dot, current handler
@@ -931,9 +901,9 @@ class Handler(Class):
             return self.name[builtins.len(self.basename) + 1:]
         return ''
 
-    @JointPoint
-## python3.3     def get_timestamp(self: Self) -> builtins.float:
-    def get_timestamp(self):
+    @JointPoint(Class.pseudo_property)
+## python2.7     def get_timestamp(self):
+    def get_timestamp(self: Self) -> builtins.float:
         '''
             Getter method for time of last modification of the
             file system object referenced by "Handler".
@@ -945,49 +915,47 @@ class Handler(Class):
         '''
         return os.stat(self._path).st_mtime
 
-    @JointPoint
-## python3.3     def get_lines(self: Self) -> builtins.int:
-    def get_lines(self):
+    @JointPoint(Class.pseudo_property)
+## python2.7     def get_lines(self):
+    def get_lines(self: Self) -> builtins.int:
         '''
             Returns the number of lines in the file content referenced by the
             "Handler" object.
 
             Examples:
 
-            >>> test = Handler(
-            ...     __test_folder__ + 'get_lines_test1', must_exist=False)
-            >>> test.content = 'a\\nb\\nc\\n'
-            >>> test.lines
+            >>> file = Handler(
+            ...     __test_folder_path__ + 'get_lines_test1', must_exist=False)
+
+            >>> file.content = 'a\\nb\\nc\\n'
+            >>> file.lines
             3
 
-            >>> test = Handler(
-            ...     __test_folder__ + 'get_lines_test2', must_exist=False)
-            >>> test.content = ' '
-            >>> test.lines
+            >>> file.content = ' '
+            >>> file.lines
             1
 
-            >>> test.content = ''
-            >>> test.lines
-            1
+            >>> file.content = ''
+            >>> file.lines
+            0
 
-            >>> test = Handler(
-            ...     __test_folder__ + 'get_lines_test3', must_exist=False)
-            >>> test.content = 'a\\nb\\nca\\nb\\nc'
-            >>> test.get_lines()
+            >>> file.content = 'a\\nb\\nca\\nb\\nc'
+            >>> file.get_lines()
             5
         '''
+        lines = 0
         with builtins.open(self._path, mode='r') as file:
             for line in file:
-                self._lines += 1
-        return self._lines
+                lines += 1
+        return lines
 
-    @JointPoint
-## python3.3
-##     def get_size(
-##         self: Self, limit=0, follow_link=True,
-##         *arguments: builtins.object, **keywords: builtins.object
-##     ) -> builtins.float:
-    def get_size(self, limit=0, follow_link=True, *arguments, **keywords):
+    @JointPoint(Class.pseudo_property)
+## python2.7
+##     def get_size(self, limit=0, follow_link=True, *arguments, **keywords):
+    def get_size(
+        self: Self, limit=0, follow_link=True,
+        *arguments: builtins.object, **keywords: builtins.object
+    ) -> builtins.float:
 ##
         '''
             Calculates the used space for this object by the first request of
@@ -1006,7 +974,7 @@ class Handler(Class):
             >>> from boostNode.extension.system import Platform
 
             >>> test_size = Handler(
-            ...     __test_folder__ + 'test_size', must_exist=False)
+            ...     __test_folder_path__ + 'test_size', must_exist=False)
             >>> test_size.content = ' '
             >>> test_size.size
             1.0
@@ -1054,7 +1022,7 @@ class Handler(Class):
             True
 
             >>> link = Handler(
-            ...     __test_folder__ + 'get_size_link', must_exist=False)
+            ...     __test_folder_path__ + 'get_size_link', must_exist=False)
             >>> if Platform().operating_system == 'windows':
             ...     True
             ... else:
@@ -1089,9 +1057,9 @@ class Handler(Class):
         return builtins.float(self.convert_size_format(
             size, *arguments, **keywords))
 
-    @JointPoint
-## python3.3     def get_dummy_size(self: Self, label='') -> builtins.int:
-    def get_dummy_size(self, label=''):
+    @JointPoint(Class.pseudo_property)
+## python2.7     def get_dummy_size(self, label=''):
+    def get_dummy_size(self: Self, label='') -> builtins.int:
         '''
             Calculates the potential dummy size for a portable link pointing
             to this object.
@@ -1116,14 +1084,13 @@ class Handler(Class):
             True
         '''
         if self.is_file():
-            self._dummy_size = builtins.len(
-                self.portable_link_content % label)
-        return self._dummy_size
+            return builtins.len(self.portable_link_content % label)
+        return 0
 
-    @JointPoint
-## python3.3
-##     def get_human_readable_size(self: Self, size=None) -> builtins.str:
-    def get_human_readable_size(self, size=None):
+    @JointPoint(Class.pseudo_property)
+## python2.7
+##     def get_human_readable_size(self, size=None):
+    def get_human_readable_size(self: Self, size=None) -> builtins.str:
 ##
         '''
             Represents a given file size in byte as human readable string.
@@ -1131,10 +1098,11 @@ class Handler(Class):
             Examples:
 
             >>> Handler.DECIMAL = False
+
             >>> a = Handler(
-            ...     __test_folder__ + 'get_human_readable_size_A',
+            ...     __test_folder_path__ + 'get_human_readable_size_A',
             ...     make_directory=True)
-            >>> b = Handler(__test_folder__ + 'get_human_readable_size_A')
+            >>> b = Handler(__test_folder_path__ + 'get_human_readable_size_A')
             >>> a.human_readable_size == str(b.get_size(format='kb')) + ' kb'
             True
 
@@ -1193,9 +1161,9 @@ class Handler(Class):
                 ) + ' ' + properties['notations'][0]
         return builtins.str(builtins.round(size, 2)) + ' byte'
 
-    @JointPoint
-## python3.3     def get_type(self: Self) -> builtins.str:
-    def get_type(self):
+    @JointPoint(Class.pseudo_property)
+## python2.7     def get_type(self):
+    def get_type(self: Self) -> builtins.str:
         '''
             Determines the type of the current object.
 
@@ -1210,7 +1178,7 @@ class Handler(Class):
             'directory'
 
             >>> test_type = Handler(
-            ...     __test_folder__ + 'get_type', must_exist=False)
+            ...     __test_folder_path__ + 'get_type', must_exist=False)
             >>> test_type.type
             'undefined'
 
@@ -1226,35 +1194,34 @@ class Handler(Class):
             ...     True
             ... else:
             ...     created = test_type.make_symbolic_link(
-            ...         __test_folder__ + 'get_type_link')
+            ...         __test_folder_path__ + 'get_type_link')
             ...     Handler(
-            ...         __test_folder__ + 'get_type_link'
+            ...         __test_folder_path__ + 'get_type_link'
             ...     ).type == 'symbolicLink'
             True
 
             >>> target = Handler(
-            ...     __test_folder__ + 'get_type_link', must_exist=False)
+            ...     __test_folder_path__ + 'get_type_link', must_exist=False)
             >>> test_type.make_portable_link(
-            ...     __test_folder__ + 'get_type_link', force=True)
+            ...     __test_folder_path__ + 'get_type_link', force=True)
             True
             >>> target.type
             'portableLink'
         '''
-        self._type = 'undefined'
         if self.is_portable_link():
-            self._type = 'portableLink'
-        elif self.is_symbolic_link():
-            self._type = 'symbolicLink'
-        elif self.is_directory():
-            self._type = 'directory'
-        elif self.is_file():
-            self._type = 'file'
-        return self._type
+            return 'portableLink'
+        if self.is_symbolic_link():
+            return 'symbolicLink'
+        if self.is_directory():
+            return 'directory'
+        if self.is_file():
+            return 'file'
+        return 'undefined'
 
-    @JointPoint
-## python3.3
-##     def get_mime_type(self: Self, default_type='text') -> builtins.str:
-    def get_mime_type(self, default_type='text'):
+    @JointPoint(Class.pseudo_property)
+## python2.7
+##     def get_mime_type(self, default_type='text'):
+    def get_mime_type(self: Self, default_type='text') -> builtins.str:
 ##
         '''
             Determines the mime-type of the current object.
@@ -1276,37 +1243,37 @@ class Handler(Class):
             ''
 
             >>> handler = Handler(
-            ...     location=__test_folder__ + 'get_mime_type.unknownType',
+            ...     location=__test_folder_path__ +
+            ...     'get_mime_type.unknownType',
             ...     must_exist=False)
             >>> handler.content = 'hans'
             >>> handler.mime_type # doctest: +ELLIPSIS
             'text/x-unknownType'
         '''
-        self._mime_type = mimetypes.guess_type(self._path)[0]
-        if not builtins.isinstance(self._mime_type, builtins.str):
-            if self.is_file():
-                subtype = 'plain'
-                if self.extension:
-                    subtype = 'x-' + self.extension
-                self._mime_type = default_type + '/' + subtype
-            else:
-                self._mime_type = ''
-        return self._mime_type
+        mime_type = mimetypes.guess_type(self._path)[0]
+        if builtins.isinstance(mime_type, builtins.str):
+            return mime_type
+        if self.is_file():
+            subtype = 'plain'
+            if self.extension:
+                subtype = 'x-' + self.extension
+            return default_type + '/' + subtype
+        return ''
 
     @JointPoint
-## python3.3
+## python2.7
 ##     def get_path(
-##         self: Self, location=None, respect_root_path=None,
+##         self, location=None, respect_root_path=None,
 ##         output_with_root_prefix=None
-##     ) -> builtins.str:
+##     ):
     def get_path(
-        self, location=None, respect_root_path=None,
+        self: Self, location=None, respect_root_path=None,
         output_with_root_prefix=None
-    ):
+    ) -> builtins.str:
 ##
         '''
-            Determines path of current "Handler" object
-            or returns the path of a given "Handler" instance.
+            Determines path of current "Handler" object or returns the path of
+            a given "Handler" instance.
 
             Examples:
 
@@ -1314,7 +1281,7 @@ class Handler(Class):
             '...file.py'
 
             >>> Handler(location=__file_path__).get_path(
-            ...     location=__test_folder__ + 'get_path/path/'
+            ...     location=__test_folder_path__ + 'get_path/path/'
             ... ) # doctest: +ELLIPSIS
             '...get_path...path...'
         '''
@@ -1326,26 +1293,27 @@ class Handler(Class):
                 self._path += os.sep
             '''
                 NOTE: If the given file isn't present the "_path" could be
-                smaller than the root path. So simply return the internal
-                path in this case.
+                smaller than the root path. So simply return the internal path
+                in this case.
             '''
             if(taken_output_with_root_prefix or
-               not (self and self._path.startswith(self._root_path))):
+               not (self and self._path.startswith(
+                    self.__class__._root_path))):
                 return self._path
             return self._path[builtins.len(
-                self._root_path
+                self.__class__._root_path
             ) - builtins.len(os.sep):]
         return self._get_path(
             location, respect_root_path,
             output_with_root_prefix=taken_output_with_root_prefix)
 
-    @JointPoint
-## python3.3
-##     def get_relative_path(
-##         self: Self, *arguments: builtins.object, context=None,
-##         **keywords: builtins.object
-##     ) -> builtins.str:
-    def get_relative_path(self, context=None, *arguments, **keywords):
+    @JointPoint(Class.pseudo_property)
+## python2.7
+##     def get_relative_path(self, context=None, *arguments, **keywords):
+    def get_relative_path(
+        self: Self, *arguments: builtins.object, context=None,
+        **keywords: builtins.object
+    ) -> builtins.str:
 ##
         '''
             Returns the relative path of current "Handler" object depending on
@@ -1384,17 +1352,19 @@ class Handler(Class):
                 location=context, must_exist=False)._path,
             **keywords)
 
-    @JointPoint
-## python3.3
-##     def get_directory_path(
-##         self: Self, output_with_root_prefix=None
-##     ) -> builtins.str:
-    def get_directory_path(self, output_with_root_prefix=None):
+    @JointPoint(Class.pseudo_property)
+## python2.7
+##     def get_directory_path(self, output_with_root_prefix=None):
+    def get_directory_path(
+        self: Self, output_with_root_prefix=None
+    ) -> builtins.str:
 ##
         '''
             Determines the current path of the Directory object without file.
 
             Examples:
+
+            >>> root_backup = Handler.get_root()
 
             >>> Handler(
             ...     location=__file_path__
@@ -1414,34 +1384,33 @@ class Handler(Class):
             >>> same
             True
 
-            >>> root_path_backup = Handler._root_path
-            >>> Handler.set_root(Handler(
-            ...     __file_path__
-            ... ).directory_path) # doctest: +ELLIPSIS
+            >>> Handler.set_root(__test_folder_path__) # doctest: +ELLIPSIS
             <class '...Handler'>
-            >>> Handler().directory_path == root_path_backup
+            >>> Handler('/')._path == __test_folder_path__
             True
-            >>> Handler._root_path = root_path_backup
+
+            >>> Handler.set_root(root_backup) # doctest: +ELLIPSIS
+            <class '...Handler'>
         '''
-        self._directory_path = self.get_path(
+        directory_path = self.get_path(
             output_with_root_prefix=output_with_root_prefix)
         subtrahend = builtins.len(self.get_name(
             output_with_root_prefix=output_with_root_prefix))
         if(self.is_directory() and
-           (builtins.len(self._directory_path) - builtins.len(os.sep)) > 0):
+           (builtins.len(directory_path) - builtins.len(os.sep)) > 0):
             subtrahend += builtins.len(os.sep)
         if subtrahend:
-            self._directory_path = self._directory_path[:-subtrahend]
-        return self._directory_path
+            return directory_path[:-subtrahend]
+        return directory_path
 
-    @JointPoint
-## python3.3
-##     def get_name(
-##         self: Self, *arguments: builtins.object,
-##         output_with_root_prefix=None, force_windows_behavior=False,
-##         **keywords: builtins.object
-##     ) -> builtins.str:
-    def get_name(self, *arguments, **keywords):
+    @JointPoint(Class.pseudo_property)
+## python2.7
+##     def get_name(self, *arguments, **keywords):
+    def get_name(
+        self: Self, *arguments: builtins.object,
+        output_with_root_prefix=None, force_windows_behavior=False,
+        **keywords: builtins.object
+    ) -> builtins.str:
 ##
         '''
             Determines the current file name without directory path.
@@ -1466,13 +1435,13 @@ class Handler(Class):
             'C:'
         '''
         from boostNode.extension.system import Platform
-## python3.3
-##         pass
-        keywords_dictionary = Dictionary(content=keywords)
-        output_with_root_prefix, keywords = keywords_dictionary.pop(
-            name='output_with_root_prefix')
-        force_windows_behavior, keywords = keywords_dictionary.pop(
-            name='force_windows_behavior', default_value=False)
+## python2.7
+##         keywords_dictionary = Dictionary(content=keywords)
+##         output_with_root_prefix, keywords = keywords_dictionary.pop(
+##             name='output_with_root_prefix')
+##         force_windows_behavior, keywords = keywords_dictionary.pop(
+##             name='force_windows_behavior', default_value=False)
+        pass
 ##
         path = self.get_path(output_with_root_prefix=output_with_root_prefix)
         if builtins.len(path) and path.endswith(os.sep):
@@ -1482,13 +1451,13 @@ class Handler(Class):
             return path
         return os.path.basename(path, *arguments, **keywords)
 
-    @JointPoint
-## python3.3
-##     def get_basename(
-##         self: Self, *arguments: builtins.object,
-##         output_with_root_prefix=None, **keywords: builtins.object
-##     ) -> builtins.str:
-    def get_basename(self, *arguments, **keywords):
+    @JointPoint(Class.pseudo_property)
+## python2.7
+##     def get_basename(self, *arguments, **keywords):
+    def get_basename(
+        self: Self, *arguments: builtins.object,
+        output_with_root_prefix=None, **keywords: builtins.object
+    ) -> builtins.str:
 ##
         '''
             Determines the current file name without directory path and file
@@ -1506,11 +1475,11 @@ class Handler(Class):
             >>> Handler().get_basename()
             'extension'
         '''
-## python3.3
-##         pass
-        output_with_root_prefix, keywords = Dictionary(
-            content=keywords
-        ).pop(name='output_with_root_prefix')
+## python2.7
+##         output_with_root_prefix, keywords = Dictionary(
+##             content=keywords
+##         ).pop(name='output_with_root_prefix')
+        pass
 ##
         if self._has_extension:
             return os.path.splitext(os.path.basename(
@@ -1520,9 +1489,9 @@ class Handler(Class):
             )[0]
         return self.name
 
-    @JointPoint
-## python3.3     def get_free_space(self: Self) -> builtins.int:
-    def get_free_space(self):
+    @JointPoint(Class.pseudo_property)
+## python2.7     def get_free_space(self):
+    def get_free_space(self: Self) -> builtins.int:
         '''
             Return free space of folder or drive (in bytes).
 
@@ -1547,22 +1516,20 @@ class Handler(Class):
         '''
         return self._get_platform_dependent_free_and_total_space()[0]
 
-    @JointPoint
-## python3.3     def get_disk_used_space(self: Self) -> builtins.int:
-    def get_disk_used_space(self):
-        '''
-            Determiens used space of current path containing disk.
-        '''
+    @JointPoint(Class.pseudo_property)
+## python2.7     def get_disk_used_space(self):
+    def get_disk_used_space(self: Self) -> builtins.int:
+        '''Determines used space of current path containing disk.'''
         disk_status = self._get_platform_dependent_free_and_total_space()
         return disk_status[1] - disk_status[0]
 
-    @JointPoint
-## python3.3
-##     def get_content(
-##         self: Self, mode='r', strict=False, *arguments: builtins.object,
-##         **keywords: builtins.object
-##     ) -> (builtins.str, builtins.bytes, types.GeneratorType):
-    def get_content(self, mode='r', strict=False, *arguments, **keywords):
+    @JointPoint(Class.pseudo_property)
+## python2.7
+##     def get_content(self, mode='r', strict=False, *arguments, **keywords):
+    def get_content(
+        self: Self, mode='r', strict=False, *arguments: builtins.object,
+        **keywords: builtins.object
+    ) -> (builtins.str, builtins.bytes, types.GeneratorType):
 ##
         '''
             Returns the file content of a text-file. Accepts all arguments
@@ -1591,7 +1558,7 @@ class Handler(Class):
             '#!/...python...'
 
             >>> handler = Handler(
-            ...     location=__test_folder__ + 'get_content_not_existing',
+            ...     location=__test_folder_path__ + 'get_content_not_existing',
             ...     must_exist=False)
 
             >>> handler.get_content(
@@ -1610,7 +1577,7 @@ class Handler(Class):
             <generator object list at 0x...>
 
             >>> handler = Handler(
-            ...     __test_folder__ + 'get_content', must_exist=False)
+            ...     __test_folder_path__ + 'get_content', must_exist=False)
 
             >>> handler.content = ' '
             >>> handler.get_content(mode='r+b') == b' '
@@ -1628,21 +1595,20 @@ class Handler(Class):
             >>> handler.content
             '  hans'
         '''
-        self._content = ''
         if self.is_file():
             if 'b' in mode:
                 with builtins.open(
                     self._path, mode, *arguments, **keywords
                 ) as file:
-                    self._content = file.read()
+                    return file.read()
             else:
                 if 'encoding' in keywords:
                     self._encoding = keywords['encoding']
                 else:
                     keywords['encoding'] = self._encoding
                 errors = 'strict' if strict else 'ignore'
-## python3.3
-##                 with builtins.open(
+## python2.7
+##                 with codecs.open(
 ##                     self._path, mode, *arguments, errors=errors, **keywords
 ##                 ) as file:
 ##                     '''
@@ -1650,8 +1616,10 @@ class Handler(Class):
 ##                         workaround for python bug when finishing
 ##                         reading file without end reached.
 ##                     '''
-##                     self._content = file.read() + file.read()
-                with codecs.open(
+##                     return builtins.str(
+##                         (file.read() + file.read()).encode(
+##                             encoding=self._encoding))
+                with builtins.open(
                     self._path, mode, *arguments, errors=errors, **keywords
                 ) as file:
                     '''
@@ -1659,25 +1627,22 @@ class Handler(Class):
                         workaround for python bug when finishing
                         reading file without end reached.
                     '''
-                    self._content = builtins.str(
-                        (file.read() + file.read()).encode(
-                            encoding=self._encoding))
+                    return file.read() + file.read()
 ##
-            return self._content
         elif self.is_directory():
             return self.list()
         if strict:
             raise __exception__(
                 'Could only get content of file or directory (not "%s").',
                 self.path)
-        return self._content
+        return ''
 
-    @JointPoint
-## python3.3
-##     def get_portable_link_pattern(
-##         self: Self, force_windows_behavior=False
-##     ) -> builtins.str:
-    def get_portable_link_pattern(self, force_windows_behavior=False):
+    @JointPoint(Class.pseudo_property)
+## python2.7
+##     def get_portable_link_pattern(self, force_windows_behavior=False):
+    def get_portable_link_pattern(
+        self: Self, force_windows_behavior=False
+    ) -> builtins.str:
 ##
         '''
             Determines the portable link file content pattern. With the
@@ -1698,7 +1663,7 @@ class Handler(Class):
             '...portable ...'
 
             >>> Handler(
-            ...     location=__test_folder__ +
+            ...     location=__test_folder_path__ +
             ...         'get_portable_link_pattern_media.mp3',
             ...     must_exist=False
             ... ).portable_link_pattern # doctest: +ELLIPSIS
@@ -1710,15 +1675,14 @@ class Handler(Class):
             pattern = self.PORTABLE_WINDOWS_DEFAULT_LINK_PATTERN
         if self.is_media():
             pattern = self.PORTABLE_MEDIA_LINK_PATTERN
-        self._portable_link_pattern = pattern.format(
+        return pattern.format(
             executable_path=os.path.abspath(sys.argv[0]),
             label='{label}', size='{size}', path='{path}')
-        return self._portable_link_pattern
 
-    @JointPoint
-## python3.3
-##     def get_portable_regex_link_pattern(self: Self) -> builtins.str:
-    def get_portable_regex_link_pattern(self):
+    @JointPoint(Class.pseudo_property)
+## python2.7
+##     def get_portable_regex_link_pattern(self):
+    def get_portable_regex_link_pattern(self: Self) -> builtins.str:
 ##
         '''
             Determines the portable regular expression link file content
@@ -1735,21 +1699,20 @@ class Handler(Class):
             ...     ) # doctest: +ELLIPSIS
             '...portable...'
         '''
-        self._portable_regex_link_pattern = String(
+        return String(
             self.portable_link_pattern
         ).validate_regex(exclude_symbols=('{', '}', '-')).content.format(
             size='(?P<size>[0-9]+)', label='(?P<label>.*?)',
             path='(?P<path>.*?)')
-        return self._portable_regex_link_pattern
 
-    @JointPoint
-## python3.3
+    @JointPoint(Class.pseudo_property)
+## python2.7
 ##     def get_portable_link_content(
-##         self: Self, label='%s', relative=None, target_path=''
-##     ) -> builtins.str:
+##         self, label='%s', relative=None, target_path=''
+##     ):
     def get_portable_link_content(
-        self, label='%s', relative=None, target_path=''
-    ):
+        self: Self, label='%s', relative=None, target_path=''
+    ) -> builtins.str:
 ##
         '''
             Returns the final portable link content depending on the current
@@ -1776,21 +1739,20 @@ class Handler(Class):
             ...     label='test-label (%s)') # doctest: +ELLIPSIS
             '...test-label (%s)...'
         '''
-        self._portable_link_content = self.portable_link_pattern.format(
+        return self.portable_link_pattern.format(
             label=label, size=builtins.int(self.size),
             path=self._determine_relative_path(
                 relative, target_path
             ).replace('%', '%%'),
             name=self.name.replace('%', '%%'))
-        return self._portable_link_content
 
-    @JointPoint
-## python3.3     def get_extension_suffix(self: Self) -> builtins.str:
-    def get_extension_suffix(self):
+    @JointPoint(Class.pseudo_property)
+## python2.7     def get_extension_suffix(self):
+    def get_extension_suffix(self: Self) -> builtins.str:
         '''
             Returns the extension of a file or directory (empty string).
             The difference to "self.get_extension()" is that the delimiter
-            point is added if neccessary.
+            point is added if necessary.
 
             Examples:
 
@@ -1801,18 +1763,18 @@ class Handler(Class):
             ''
 
             >>> handler = Handler(
-            ...     __test_folder__ + 'test.ext', must_exist=False)
+            ...     __test_folder_path__ + 'test.ext', must_exist=False)
             >>> handler.content = 'test'
             >>> handler.get_extension_suffix()
             '.ext'
 
             >>> Handler(
-            ...     __test_folder__ + 'test.ext', must_exist=False
+            ...     __test_folder_path__ + 'test.ext', must_exist=False
             ... ).extension_suffix
             '.ext'
 
             >>> Handler(
-            ...     __test_folder__ + 'test', must_exist=False
+            ...     __test_folder_path__ + 'test', must_exist=False
             ... ).extension_suffix
             ''
         '''
@@ -1822,13 +1784,50 @@ class Handler(Class):
 
             # region setter
 
+    @JointPoint(Class.pseudo_property)
+## python2.7
+##     def set_timestamp(self, *arguments, **keywords):
+    def set_timestamp(
+        self: Self, *arguments: builtins.object, **keywords: builtins.object
+    ) -> builtins.bool:
+##
+        '''
+            Sets the modification time of current file object to current time.
+            If it was permitted and successful "True" will be returned and
+            "False" otherwise.
+
+            Examples:
+
+            >>> import time
+            >>> directory = Handler(
+            ...     __test_folder_path__ + 'touch', make_directory=True)
+            >>> old_timestamp = directory.timestamp
+            >>> time.sleep(0.01)
+
+            >>> directory.timestamp = None
+            >>> old_timestamp != directory.timestamp # doctest: +SKIP
+            True
+
+            >>> directory.timestamp = 1330, 1332
+
+            >>> directory.set_timestamp(False)
+            False
+        '''
+        if not arguments:
+            arguments = (None,)
+        try:
+            os.utime(self._path, *arguments, **keywords)
+        except:
+            return False
+        return True
+
     @JointPoint
-## python3.3
-##     def set_encoding(
-##         self: Self, encoding: builtins.str, *arguments: builtins.object,
-##         **keywords: builtins.object
-##     ) -> Self:
-    def set_encoding(self, encoding, *arguments, **keywords):
+## python2.7
+##     def set_encoding(self, encoding, *arguments, **keywords):
+    def set_encoding(
+        self: Self, encoding: builtins.str, *arguments: builtins.object,
+        **keywords: builtins.object
+    ) -> Self:
 ##
         '''
             Set encoding for a text-base file if current instance refers to
@@ -1838,7 +1837,7 @@ class Handler(Class):
             Examples:
 
             >>> test_file = Handler(
-            ...     __test_folder__ + 'set_encoding_test_encoding',
+            ...     __test_folder_path__ + 'set_encoding_test_encoding',
             ...     must_exist=False)
             >>> test_file.content = 'hans and peter'
 
@@ -1850,13 +1849,13 @@ class Handler(Class):
         return self.set_content(
             content=self.content, encoding=encoding, *arguments, **keywords)
 
-    @JointPoint
-## python3.3
-##     def set_content(
-##         self: Self, content: (builtins.str, builtins.bytes), mode=None,
-##         *arguments: builtins.object, **keywords: builtins.object
-##     ) -> Self:
-    def set_content(self, content, mode=None, *arguments, **keywords):
+    @JointPoint(Class.pseudo_property)
+## python2.7
+##     def set_content(self, content, mode=None, *arguments, **keywords):
+    def set_content(
+        self: Self, content: (builtins.str, builtins.bytes), mode=None,
+        *arguments: builtins.object, **keywords: builtins.object
+    ) -> Self:
 ##
         '''
             Returns the file content of a text-file. Accepts all arguments
@@ -1869,7 +1868,8 @@ class Handler(Class):
             Examples:
 
             >>> handler = Handler(
-            ...     __test_folder__ + 'set_content_file', must_exist=False)
+            ...     __test_folder_path__ + 'set_content_file',
+            ...     must_exist=False)
             >>> handler.content = 'hans'
             >>> handler.content
             'hans'
@@ -1938,29 +1938,29 @@ class Handler(Class):
                 keywords['encoding'] = self._encoding
             else:
                 self._encoding = keywords['encoding']
-## python3.3
-##             with builtins.open(
+## python2.7
+##             with codecs.open(
 ##                 self._path, mode, *arguments, **keywords
 ##             ) as file_handler:
+##                 if not builtins.isinstance(content, builtins.unicode):
+##                     content = builtins.unicode(
+##                         content, String(content).encoding)
 ##                 file_handler.write(content)
-            with codecs.open(
+            with builtins.open(
                 self._path, mode, *arguments, **keywords
             ) as file_handler:
-                if not builtins.isinstance(content, builtins.unicode):
-                    content = builtins.unicode(
-                        content, String(content).encoding)
                 file_handler.write(content)
 ##
         return self
 
-    @JointPoint
-## python3.3
-##     def set_directory_path(
-##         self: Self, location: (SelfClassObject, builtins.str),
-##         *arguments: builtins.object, respect_root_path=None,
-##         **keywords: builtins.object
-##     ) -> builtins.bool:
-    def set_directory_path(self, location, *arguments, **keywords):
+    @JointPoint(Class.pseudo_property)
+## python2.7
+##     def set_directory_path(self, location, *arguments, **keywords):
+    def set_directory_path(
+        self: Self, location: (SelfClassObject, builtins.str),
+        *arguments: builtins.object, respect_root_path=None,
+        **keywords: builtins.object
+    ) -> builtins.bool:
 ##
         '''
             This function could be understand as wrapper method for "move()".
@@ -1968,11 +1968,11 @@ class Handler(Class):
             Examples:
 
             >>> handler = Handler(
-            ...     location=__test_folder__ + 'set_directory_path',
+            ...     location=__test_folder_path__ + 'set_directory_path',
             ...     make_directory=True)
 
             >>> handler.directory_path = (
-            ...     __test_folder__ + 'set_directory_path_edited')
+            ...     __test_folder_path__ + 'set_directory_path_edited')
             >>> handler.is_directory()
             True
             >>> handler.name
@@ -1981,7 +1981,7 @@ class Handler(Class):
             '...set_directory_path_edited...'
 
             >>> new_location = Handler(
-            ...     location=__test_folder__ + 'set_directory_path2',
+            ...     location=__test_folder_path__ + 'set_directory_path2',
             ...     must_exist=False)
             >>> handler.directory_path = new_location
             >>> handler.is_directory()
@@ -1994,7 +1994,7 @@ class Handler(Class):
             True
 
             >>> new_location = Handler(
-            ...     location=__test_folder__ + 'set_directory_path3',
+            ...     location=__test_folder_path__ + 'set_directory_path3',
             ...     must_exist=False)
             >>> handler.set_directory_path(new_location)
             True
@@ -2005,23 +2005,23 @@ class Handler(Class):
             >>> new_location.is_directory()
             True
         '''
-## python3.3
-##         pass
-        respect_root_path, keywords = Dictionary(content=keywords).pop(
-            name='respect_root_path')
+## python2.7
+##         respect_root_path, keywords = Dictionary(content=keywords).pop(
+##             name='respect_root_path')
+        pass
 ##
         return self.move(
             target=self.get_path(
                 location, respect_root_path
             ) + os.sep + self.name, *arguments, **keywords)
 
-    @JointPoint
-## python3.3
-##     def set_name(
-##         self: Self, name: builtins.str, *arguments: builtins.object,
-##         **keywords: builtins.object
-##     ) -> builtins.bool:
-    def set_name(self, name, *arguments, **keywords):
+    @JointPoint(Class.pseudo_property)
+## python2.7
+##     def set_name(self, name, *arguments, **keywords):
+    def set_name(
+        self: Self, name: builtins.str, *arguments: builtins.object,
+        **keywords: builtins.object
+    ) -> builtins.bool:
 ##
         '''
             This function could be understand as wrapper method for "move()".
@@ -2029,7 +2029,7 @@ class Handler(Class):
             Examples:
 
             >>> handler = Handler(
-            ...     __test_folder__ + 'set_name', make_directory=True)
+            ...     __test_folder_path__ + 'set_name', make_directory=True)
             >>> handler.name = 'set_name_edited'
             >>> handler.is_directory()
             True
@@ -2044,7 +2044,7 @@ class Handler(Class):
             'set_name_edited2'
 
             >>> handler = Handler(
-            ...     __test_folder__ + 'set_name.e', must_exist=False)
+            ...     __test_folder_path__ + 'set_name.e', must_exist=False)
             >>> handler.content = 'A'
             >>> handler.name = 'set_name.ext'
             >>> handler.is_file()
@@ -2057,13 +2057,13 @@ class Handler(Class):
         return self.move(
             target=self.directory_path + name, *arguments, **keywords)
 
-    @JointPoint
-## python3.3
-##     def set_basename(
-##         self: Self, basename: builtins.str, *arguments: builtins.object,
-##         **keywords: builtins.object
-##     ) -> builtins.bool:
-    def set_basename(self, basename, *arguments, **keywords):
+    @JointPoint(Class.pseudo_property)
+## python2.7
+##     def set_basename(self, basename, *arguments, **keywords):
+    def set_basename(
+        self: Self, basename: builtins.str, *arguments: builtins.object,
+        **keywords: builtins.object
+    ) -> builtins.bool:
 ##
         '''
             This function could be understand as wrapper method for
@@ -2072,20 +2072,22 @@ class Handler(Class):
             Examples:
 
             >>> handler = Handler(
-            ...     __test_folder__ + 'set_basename3', make_directory=True)
+            ...     __test_folder_path__ + 'set_basename3',
+            ...     make_directory=True)
             >>> handler.basename = 'set_basename_edited3'
             >>> handler.name
             'set_basename_edited3'
 
             >>> handler = Handler(
-            ...     __test_folder__ + 'set_basename4', make_directory=True)
+            ...     __test_folder_path__ + 'set_basename4',
+            ...     make_directory=True)
             >>> handler.set_basename('set_basename_edited4')
             True
             >>> handler.basename
             'set_basename_edited4'
 
             >>> handler = Handler(
-            ...     __test_folder__ + 'set_basename5.e', must_exist=False)
+            ...     __test_folder_path__ + 'set_basename5.e', must_exist=False)
             >>> handler.content = 'A'
             >>> handler.basename = 'set_basename_edited5'
             >>> handler.name
@@ -2096,12 +2098,13 @@ class Handler(Class):
         return self.set_name(
             name=basename + self.extension_suffix, *arguments, **keywords)
 
-## python3.3
-##     def set_extension(
-##         self: Self, extension: builtins.str, *arguments: builtins.object,
-##         **keywords: builtins.object
-##     ) -> builtins.bool:
-    def set_extension(self, extension, *arguments, **keywords):
+    @JointPoint(Class.pseudo_property)
+## python2.7
+##     def set_extension(self, extension, *arguments, **keywords):
+    def set_extension(
+        self: Self, extension: builtins.str, *arguments: builtins.object,
+        **keywords: builtins.object
+    ) -> builtins.bool:
 ##
         '''
             This function could be understand as wrapper method for
@@ -2110,7 +2113,8 @@ class Handler(Class):
             Examples:
 
             >>> handler = Handler(
-            ...     __test_folder__ + 'set_extension.ext', must_exist=False)
+            ...     __test_folder_path__ + 'set_extension.ext',
+            ...     must_exist=False)
             >>> handler.content = 'A'
             >>> handler.extension
             'ext'
@@ -2138,11 +2142,11 @@ class Handler(Class):
         return self.is_element()
 
     @JointPoint
-## python3.3
-##     def set_path(
-##         self: Self, *arguments: builtins.object, **keywords: builtins.object
-##     ) -> builtins.bool:
-    def set_path(self, *arguments, **keywords):
+## python2.7
+##     def set_path(self, *arguments, **keywords):
+    def set_path(
+        self: Self, *arguments: builtins.object, **keywords: builtins.object
+    ) -> builtins.bool:
 ##
         '''
             Serves as wrapper function for the "move" method.
@@ -2150,19 +2154,22 @@ class Handler(Class):
             Examples:
 
             >>> handler = Handler(
-            ...     location=__test_folder__ + 'set_path', make_directory=True)
-            >>> handler.path = __test_folder__ + 'set_path_moved'
+            ...     location=__test_folder_path__ + 'set_path',
+            ...     make_directory=True)
+            >>> handler.path = __test_folder_path__ + 'set_path_moved'
             >>> Handler(
-            ...     location=__test_folder__ + 'set_path_moved').is_directory()
+            ...     location=__test_folder_path__ + 'set_path_moved'
+            ... ).is_directory()
             True
 
             >>> handler = Handler(
-            ...     location=__test_folder__ + 'set_path2',
+            ...     location=__test_folder_path__ + 'set_path2',
             ...     make_directory=True)
-            >>> handler.set_path(target=__test_folder__ + 'set_path_moved2')
+            >>> handler.set_path(
+            ...     target=__test_folder_path__ + 'set_path_moved2')
             True
             >>> Handler(
-            ...     location=__test_folder__ + 'set_path_moved2'
+            ...     location=__test_folder_path__ + 'set_path_moved2'
             ... ).is_directory()
             True
         '''
@@ -2173,11 +2180,11 @@ class Handler(Class):
             # region boolean
 
     @JointPoint
-## python3.3
-##     def is_same_file(
-##         self: Self, other_location: SelfClassObject
-##     ) -> builtins.bool:
-    def is_same_file(self, other_location):
+## python2.7
+##     def is_same_file(self, other_location):
+    def is_same_file(
+        self: Self, other_location: SelfClassObject
+    ) -> builtins.bool:
 ##
         '''
             A simple replacement of the os.path.samefile() function not
@@ -2205,12 +2212,12 @@ class Handler(Class):
             return self == other_location
 
     @JointPoint
-## python3.3
-##     def is_directory(
-##         self: Self, allow_link=True, *arguments: builtins.object,
-##         **keywords: builtins.object
-##     ) -> builtins.bool:
-    def is_directory(self, allow_link=True, *arguments, **keywords):
+## python2.7
+##     def is_directory(self, allow_link=True, *arguments, **keywords):
+    def is_directory(
+        self: Self, allow_link=True, *arguments: builtins.object,
+        **keywords: builtins.object
+    ) -> builtins.bool:
 ##
         '''
             Implements the pythons native "os.path.isdir()" method in an
@@ -2235,12 +2242,12 @@ class Handler(Class):
             self.is_directory(allow_link=True, *arguments, **keywords)
 
     @JointPoint
-## python3.3
-##     def is_file(
-##         self: Self, allow_link=True, *arguments: builtins.object,
-##         **keywords: builtins.object
-##     ) -> builtins.bool:
-    def is_file(self, allow_link=True, *arguments, **keywords):
+## python2.7
+##     def is_file(self, allow_link=True, *arguments, **keywords):
+    def is_file(
+        self: Self, allow_link=True, *arguments: builtins.object,
+        **keywords: builtins.object
+    ) -> builtins.bool:
 ##
         '''
             Implements the pythons native "os.path.isfile()" method in an
@@ -2273,14 +2280,14 @@ class Handler(Class):
             self.is_file(allow_link=True, *arguments, **keywords))
 
     @JointPoint
-## python3.3
+## python2.7
 ##     def is_symbolic_link(
-##         self: Self, allow_portable_link=True, *arguments: builtins.object,
-##         **keywords: builtins.object
-##     ) -> builtins.bool:
+##         self, allow_portable_link=True, *arguments, **keywords
+##     ):
     def is_symbolic_link(
-        self, allow_portable_link=True, *arguments, **keywords
-    ):
+        self: Self, allow_portable_link=True, *arguments: builtins.object,
+        **keywords: builtins.object
+    ) -> builtins.bool:
 ##
         '''
             Implements the pythons native "os.path.islink()" method in an
@@ -2297,7 +2304,8 @@ class Handler(Class):
             >>> from boostNode.extension.system import Platform
 
             >>> target = Handler(
-            ...     __test_folder__ + 'is_symbolic_link', must_exist=False)
+            ...     __test_folder_path__ + 'is_symbolic_link',
+            ...     must_exist=False)
             >>> if Platform().operating_system == 'windows':
             ...     True
             ... else:
@@ -2308,19 +2316,20 @@ class Handler(Class):
             True
 
             >>> file = Handler(
-            ...     __test_folder__ + 'is_symbolic_link_not', must_exist=False)
+            ...     __test_folder_path__ + 'is_symbolic_link_not',
+            ...     must_exist=False)
             >>> file.content = ' '
             >>> file.is_symbolic_link()
             False
 
             >>> file = Handler(
-            ...     __test_folder__ + 'is_symbolic_link_not2',
+            ...     __test_folder_path__ + 'is_symbolic_link_not2',
             ...     make_directory=True)
             >>> file.is_symbolic_link()
             False
 
             >>> file = Handler(
-            ...     location=__test_folder__ + 'is_symbolic_link_not3',
+            ...     location=__test_folder_path__ + 'is_symbolic_link_not3',
             ...     must_exist=False)
             >>> Handler(location=__file_path__).make_portable_link(
             ...     target=file, force=True)
@@ -2336,16 +2345,17 @@ class Handler(Class):
         if self._path.endswith(os.sep):
             path = self._path[:-builtins.len(os.sep)]
         if allow_portable_link:
-            return self.is_symbolic_link(allow_portable_link=False) or\
-                self.is_portable_link()
+            return(
+                self.is_symbolic_link(allow_portable_link=False) or
+                self.is_portable_link())
         return os.path.islink(path, *arguments, **keywords)
 
     @JointPoint
-## python3.3
-##     def is_referenced_via_absolute_path(
-##         self: Self, location=None
-##     ) -> builtins.bool:
-    def is_referenced_via_absolute_path(self, location=None):
+## python2.7
+##     def is_referenced_via_absolute_path(self, location=None):
+    def is_referenced_via_absolute_path(
+        self: Self, location=None
+    ) -> builtins.bool:
 ##
         '''
             Determines if the given path is an absolute one.
@@ -2382,8 +2392,8 @@ class Handler(Class):
         return os.path.isabs(location)
 
     @JointPoint
-## python3.3     def is_media(self: Self) -> builtins.bool:
-    def is_media(self):
+## python2.7     def is_media(self):
+    def is_media(self: Self) -> builtins.bool:
         '''
             Determines if the current location referenced to a media file.
 
@@ -2399,7 +2409,7 @@ class Handler(Class):
             False
 
             >>> Handler(
-            ...     location=__test_folder__ + 'is_media_audio.mp3'
+            ...     location=__test_folder_path__ + 'is_media_audio.mp3'
             ... ).is_media() # doctest: +SKIP
             True
         '''
@@ -2409,8 +2419,8 @@ class Handler(Class):
         return False
 
     @JointPoint
-## python3.3     def is_portable_link(self: Self) -> builtins.bool:
-    def is_portable_link(self):
+## python2.7     def is_portable_link(self):
+    def is_portable_link(self: Self) -> builtins.bool:
         '''
             Checks if the current location points to a portable link.
 
@@ -2425,7 +2435,8 @@ class Handler(Class):
             False
 
             >>> handler = Handler(
-            ...     __test_folder__ + 'is_portable_link', must_exist=False)
+            ...     __test_folder_path__ + 'is_portable_link',
+            ...     must_exist=False)
             >>> if Platform().operating_system == 'windows':
             ...     False
             ... else:
@@ -2439,7 +2450,7 @@ class Handler(Class):
             False
 
             >>> Handler(
-            ...     __test_folder__ + 'is_portable_link_not_existing',
+            ...     __test_folder_path__ + 'is_portable_link_not_existing',
             ...     must_exist=False
             ... ).is_portable_link()
             False
@@ -2464,12 +2475,12 @@ class Handler(Class):
                 # Maximum label line length + Maximum name length.
                 120 + self.MAX_FILE_NAME_LENGTH)
             try:
-## python3.3
-##                 with builtins.open(
+## python2.7
+##                 with codecs.open(
 ##                     self._path, mode='r', encoding=self.DEFAULT_ENCODING,
 ##                     errors='strict'
 ##                 ) as file:
-                with codecs.open(
+                with builtins.open(
                     self._path, mode='r', encoding=self.DEFAULT_ENCODING,
                     errors='strict'
                 ) as file:
@@ -2487,8 +2498,8 @@ class Handler(Class):
         return False
 
     @JointPoint
-## python3.3     def is_element(self: Self) -> builtins.bool:
-    def is_element(self):
+## python2.7     def is_element(self):
+    def is_element(self: Self) -> builtins.bool:
         '''
             Determines if the current object path is a valid resource on the
             file system.
@@ -2505,7 +2516,7 @@ class Handler(Class):
             True
 
             >>> handler = Handler(
-            ...     location=__test_folder__ + 'is_element',
+            ...     location=__test_folder_path__ + 'is_element',
             ...     make_directory=True)
             >>> handler.is_element()
             True
@@ -2517,7 +2528,7 @@ class Handler(Class):
             False
 
             >>> Handler(
-            ...     __test_folder__ + 'is_element_not_existing',
+            ...     __test_folder_path__ + 'is_element_not_existing',
             ...     must_exist=False
             ... ).is_element()
             False
@@ -2525,8 +2536,8 @@ class Handler(Class):
         return os.path.exists(self._path) or self.is_symbolic_link()
 
     @JointPoint
-## python3.3     def is_device_file(self: Self) -> builtins.bool:
-    def is_device_file(self):
+## python2.7     def is_device_file(self):
+    def is_device_file(self: Self) -> builtins.bool:
         '''
             Determines if the current object path is a device file like a
             socket or pipe.
@@ -2543,13 +2554,13 @@ class Handler(Class):
             False
 
             >>> Handler(
-            ...     location=__test_folder__ + 'is_device_file',
+            ...     location=__test_folder_path__ + 'is_device_file',
             ...     make_directory=True
             ... ).is_device_file()
             False
 
             >>> Handler(
-            ...     __test_folder__ + 'is_device_file_not_existing',
+            ...     __test_folder_path__ + 'is_device_file_not_existing',
             ...     must_exist=False
             ... ).is_device_file()
             False
@@ -2560,17 +2571,17 @@ class Handler(Class):
             # endregion
 
     @JointPoint
-## python3.3
+## python2.7
 ##     def backup(
-##         self: Self, name_wrapper=(
-##             '<%file.basename%>_backup<%file.extension_suffix%>'),
+##         self,
+##         name_wrapper='<%file.basename%>_backup<%file.extension_suffix%>',
 ##         backup_if_exists=True, compare_content=True
-##     ) -> Self:
+##     ):
     def backup(
-        self,
-        name_wrapper='<%file.basename%>_backup<%file.extension_suffix%>',
+        self: Self, name_wrapper=(
+            '<%file.basename%>_backup<%file.extension_suffix%>'),
         backup_if_exists=True, compare_content=True
-    ):
+    ) -> Self:
 ##
         '''
             Creates a backup of current file object in same location.
@@ -2582,18 +2593,19 @@ class Handler(Class):
 
             Examples:
 
-            >>> handler = Handler(__test_folder__ + 'backup', must_exist=False)
+            >>> handler = Handler(
+            ...     __test_folder_path__ + 'backup', must_exist=False)
             >>> handler.content = ' '
             >>> template = '<%file.basename%>_b<%file.extension_suffix%>'
 
             >>> handler.backup(template) # doctest: +ELLIPSIS
             Object of "Handler" with path "...
-            >>> Handler(__test_folder__ + 'backup_b') # doctest: +ELLIPSIS
+            >>> Handler(__test_folder_path__ + 'backup_b') # doctest: +ELLIPSIS
             Object of "Handler" with path "...
 
             >>> handler.backup(template) # doctest: +ELLIPSIS
             Object of "Handler" with path "...
-            >>> Handler(__test_folder__ + 'backup_b_b').is_file()
+            >>> Handler(__test_folder_path__ + 'backup_b_b').is_file()
             True
 
             >>> handler.backup(
@@ -2601,7 +2613,7 @@ class Handler(Class):
             ... ) # doctest: +ELLIPSIS
             Object of "Handler" with path "...
             >>> Handler(
-            ...     __test_folder__ + 'backup_b_b_b', must_exist=False
+            ...     __test_folder_path__ + 'backup_b_b_b', must_exist=False
             ... ).is_file()
             False
 
@@ -2610,7 +2622,7 @@ class Handler(Class):
             ...     template, backup_if_exists=False
             ... ) # doctest: +ELLIPSIS
             Object of "Handler" with path "...
-            >>> Handler(__test_folder__ + 'backup_b_b_b').is_file()
+            >>> Handler(__test_folder_path__ + 'backup_b_b_b').is_file()
             True
 
             >>> handler.content = 'B'
@@ -2619,7 +2631,7 @@ class Handler(Class):
             ... ) # doctest: +ELLIPSIS
             Object of "Handler" with path "...
             >>> Handler(
-            ...     __test_folder__ + 'backup_b_b_b_b', must_exist=False
+            ...     __test_folder_path__ + 'backup_b_b_b_b', must_exist=False
             ... ).is_file()
             False
         '''
@@ -2638,11 +2650,11 @@ class Handler(Class):
             '''
             if not backup:
                 '''Check if a new created backup would be redundant.'''
-## python3.3
-##                 if(earlier_backup != self and not backup_if_exists and
+## python2.7
+##                 if(not (earlier_backup == self) and not backup_if_exists and
 ##                    (not compare_content or self.is_equivalent(
 ##                        other=earlier_backup))):
-                if(not (earlier_backup == self) and not backup_if_exists and
+                if(earlier_backup != self and not backup_if_exists and
                    (not compare_content or self.is_equivalent(
                        other=earlier_backup))):
 ##
@@ -2652,11 +2664,11 @@ class Handler(Class):
         return self
 
     @JointPoint
-## python3.3
-##     def is_equivalent(
-##         self: Self, other: (SelfClassObject, builtins.str)
-##     ) -> builtins.bool:
-    def is_equivalent(self, other):
+## python2.7
+##     def is_equivalent(self, other):
+    def is_equivalent(
+        self: Self, other: (SelfClassObject, builtins.str)
+    ) -> builtins.bool:
 ##
         '''
             Returns "True" if given file object contains likewise content as
@@ -2665,23 +2677,27 @@ class Handler(Class):
             Examples:
 
             >>> handler = Handler(
-            ...     __test_folder__ + 'is_equivalent', make_directory=True)
+            ...     __test_folder_path__ + 'is_equivalent',
+            ...     make_directory=True)
             >>> handler.is_equivalent(handler)
             True
 
-            >>> Handler(__test_folder__).is_equivalent(
-            ...     __test_folder__ + 'test')
+            >>> Handler(__test_folder_path__).is_equivalent(
+            ...     __test_folder_path__ + 'test')
             False
 
-            >>> Handler(__test_folder__).is_equivalent(
-            ...     Handler(__test_folder__ + 'test', make_directory=True))
+            >>> Handler(__test_folder_path__).is_equivalent(
+            ...     Handler(
+            ...         __test_folder_path__ + 'test', make_directory=True))
             False
 
-            >>> a = Handler(__test_folder__ + 'a', make_directory=True)
-            >>> b = Handler(__test_folder__ + 'b', make_directory=True)
-            >>> a_file = Handler(__test_folder__ + 'a/test', must_exist=False)
+            >>> a = Handler(__test_folder_path__ + 'a', make_directory=True)
+            >>> b = Handler(__test_folder_path__ + 'b', make_directory=True)
+            >>> a_file = Handler(
+            ...     __test_folder_path__ + 'a/test', must_exist=False)
             >>> a_file.content = 'hans'
-            >>> b_file = Handler(__test_folder__ + 'b/test', must_exist=False)
+            >>> b_file = Handler(
+            ...     __test_folder_path__ + 'b/test', must_exist=False)
             >>> b_file.content = 'hans'
 
             >>> a.is_equivalent(b)
@@ -2706,8 +2722,8 @@ class Handler(Class):
         return False
 
     @JointPoint
-## python3.3     def change_working_directory(self: Self) -> Self:
-    def change_working_directory(self):
+## python2.7     def change_working_directory(self):
+    def change_working_directory(self: Self) -> Self:
         '''
             Changes the current working directory to the instance saved
             location.
@@ -2719,9 +2735,9 @@ class Handler(Class):
             '...boostNode...extension'
 
             >>> test_folder = Handler(
-            ...     __test_folder__ + 'change', make_directory=True)
+            ...     __test_folder_path__ + 'change', make_directory=True)
             >>> test_folder.change_working_directory() # doctest: +ELLIPSIS
-            Object of "Handler" with path "...change..." (d...
+            Object of "Handler" with path "...change..." (type: directory)...
             >>> os.getcwd() # doctest: +ELLIPSIS
             '...change...'
             >>> test_folder.path[:-len(os.sep)] == os.getcwd()
@@ -2732,13 +2748,13 @@ class Handler(Class):
             >>> Handler(
             ...     current_working_directory
             ... ).change_working_directory() # doctest: +ELLIPSIS
-            Object of "Handler" with path "..." (directory).
+            Object of "Handler" with path "..." (type: directory).
 
             >>> undefined_object = Handler(
-            ...     __test_folder__ + 'change/a', must_exist=False)
+            ...     __test_folder_path__ + 'change/a', must_exist=False)
             >>> undefined_object.change_working_directory(
             ...     ) # doctest: +ELLIPSIS
-            Object of "Handler" with path "...change..." (u...
+            Object of "Handler" with path "...change..." (type: undefined)...
             >>> os.getcwd() # doctest: +ELLIPSIS
             '...change...'
             >>> undefined_object.directory_path[:-len(os.sep)] == os.getcwd()
@@ -2749,12 +2765,13 @@ class Handler(Class):
             >>> Handler(
             ...     current_working_directory
             ... ).change_working_directory() # doctest: +ELLIPSIS
-            Object of "Handler" with path "..." (directory).
+            Object of "Handler" with path "..." (type: directory).
 
-            >>> file = Handler(__test_folder__ + 'change/a', must_exist=False)
+            >>> file = Handler(
+            ...     __test_folder_path__ + 'change/a', must_exist=False)
             >>> file.content = ' '
             >>> file.change_working_directory() # doctest: +ELLIPSIS
-            Object of "Handler" with path "...change..." (f...
+            Object of "Handler" with path "...change..." (type: file)...
             >>> os.getcwd() # doctest: +ELLIPSIS
             '...change...'
             >>> file.directory_path[:-len(os.sep)] == os.getcwd()
@@ -2765,60 +2782,23 @@ class Handler(Class):
             >>> Handler(
             ...     current_working_directory
             ... ).change_working_directory() # doctest: +ELLIPSIS
-            Object of "Handler" with path "..." (directory).
+            Object of "Handler" with path "..." (type: directory).
         '''
         if self.is_directory():
             os.chdir(self._path)
         else:
-            self.directory_path
-            os.chdir(self._directory_path)
+            '''Take this method name via introspection.'''
+            builtins.getattr(
+                self.__class__(self.directory_path), inspect.stack()[0][3]
+            )()
         return self
 
     @JointPoint
-## python3.3
-##     def touch(
-##         self: Self, *arguments: builtins.object, **keywords: builtins.object
-##     ) -> builtins.bool:
-    def touch(self, *arguments, **keywords):
-##
-        '''
-            Sets the modification time of current file object to current time.
-            If it was permitted and successful "True" will be returned and
-            "False" otherwise.
-
-            Examples:
-
-            >>> import time
-            >>> directory = Handler(
-            ...     __test_folder__ + 'touch', make_directory=True)
-            >>> old_timestamp = directory.timestamp
-            >>> time.sleep(0.01)
-
-            >>> directory.touch()
-            True
-            >>> old_timestamp != directory.timestamp # doctest: +SKIP
-            True
-
-            >>> directory.touch((1330, 1332))
-            True
-
-            >>> directory.touch(False)
-            False
-        '''
-        if not arguments:
-            arguments = (None,)
-        try:
-            os.utime(self._path, *arguments, **keywords)
-        except:
-            return False
-        return True
-
-    @JointPoint
-## python3.3
-##     def list(
-##         self: Self, *arguments: builtins.object, **keywords: builtins.object
-##     ) -> types.GeneratorType:
-    def list(self, *arguments, **keywords):
+## python2.7
+##     def list(self, *arguments, **keywords):
+    def list(
+        self: Self, *arguments: builtins.object, **keywords: builtins.object
+    ) -> types.GeneratorType:
 ##
         '''
             Implements the pythons native "os.listdir()" method in an object
@@ -2841,7 +2821,8 @@ class Handler(Class):
             "...file.py..."
 
             >>> not_existing_file = Handler(
-            ...     __test_folder__ + 'list_not_existing', must_exist=False)
+            ...     __test_folder_path__ + 'list_not_existing',
+            ...     must_exist=False)
             >>> not_existing_file.list() # doctest: +ELLIPSIS
             <generator object list at ...>
             >>> len(not_existing_file)
@@ -2850,11 +2831,11 @@ class Handler(Class):
             []
 
             >>> not_accessible_file = Handler(
-            ...     __test_folder__ + 'list_not_accessible',
+            ...     __test_folder_path__ + 'list_not_accessible',
             ...     make_directory=True)
             >>> not_accessible_file.change_right(000) # doctest: +ELLIPSIS
             Object of "Handler" with path "...
-            >>> list(Handler(__test_folder__)) # doctest: +ELLIPSIS
+            >>> list(Handler(__test_folder_path__)) # doctest: +ELLIPSIS
             [...]
             >>> not_accessible_file.remove_directory()
             True
@@ -2862,7 +2843,7 @@ class Handler(Class):
             >>> not_accessible_file.content = ' '
             >>> not_accessible_file.change_right(000) # doctest: +ELLIPSIS
             Object of "Handler" with path "...
-            >>> list(Handler(__test_folder__)) # doctest: +ELLIPSIS
+            >>> list(Handler(__test_folder_path__)) # doctest: +ELLIPSIS
             [...]
             >>> not_accessible_file.remove_file()
             True
@@ -2896,11 +2877,11 @@ class Handler(Class):
                     pass
 
     @JointPoint
-## python3.3
-##     def remove_directory(
-##         self: Self, *arguments: builtins.object, **keywords: builtins.object
-##     ) -> builtins.bool:
-    def remove_directory(self, *arguments, **keywords):
+## python2.7
+##     def remove_directory(self, *arguments, **keywords):
+    def remove_directory(
+        self: Self, *arguments: builtins.object, **keywords: builtins.object
+    ) -> builtins.bool:
 ##
         '''
             Implements the pythons native "os.rmdir()" method in an object
@@ -2918,7 +2899,8 @@ class Handler(Class):
             >>> from boostNode.extension.system import Platform
 
             >>> handler = Handler(
-            ...     __test_folder__ + 'remove_directory', make_directory=True)
+            ...     __test_folder_path__ + 'remove_directory',
+            ...     make_directory=True)
 
             >>> handler.remove_directory()
             True
@@ -2972,13 +2954,13 @@ class Handler(Class):
         return False
 
     @JointPoint
-## python3.3
-##     def move(
-##         self: Self, target: (SelfClassObject, builtins.str),
-##         *arguments: builtins.object, respect_root_path=None,
-##         **keywords: builtins.object
-##     ) -> builtins.bool:
-    def move(self, target, *arguments, **keywords):
+## python2.7
+##     def move(self, target, *arguments, **keywords):
+    def move(
+        self: Self, target: (SelfClassObject, builtins.str),
+        *arguments: builtins.object, respect_root_path=None,
+        **keywords: builtins.object
+    ) -> builtins.bool:
 ##
         '''
             Implements the pythons native "shutil.move()" method in an object
@@ -2994,34 +2976,37 @@ class Handler(Class):
             Examples:
 
             >>> handler = Handler(
-            ...     location=__test_folder__ + 'move', make_directory=True)
+            ...     location=__test_folder_path__ + 'move',
+            ...     make_directory=True)
             >>> target = Handler(
-            ...     location=__test_folder__ + 'move2', must_exist=False)
+            ...     location=__test_folder_path__ + 'move2', must_exist=False)
             >>> handler.move(target)
             True
             >>> target.is_directory()
             True
 
             >>> handler = Handler(
-            ...     location=__test_folder__ + 'move_file', must_exist=False)
+            ...     location=__test_folder_path__ + 'move_file',
+            ...     must_exist=False)
             >>> handler.content = ' '
             >>> target = Handler(
-            ...     location=__test_folder__ + 'move_file2', must_exist=False)
+            ...     location=__test_folder_path__ + 'move_file2',
+            ...     must_exist=False)
             >>> handler.move(target)
             True
             >>> target.is_file()
             True
 
             >>> Handler(
-            ...     location=__test_folder__ + 'move_not_existing',
+            ...     location=__test_folder_path__ + 'move_not_existing',
             ...     must_exist=False
-            ... ).move(__test_folder__ + 'move_target_not_existing2')
+            ... ).move(__test_folder_path__ + 'move_target_not_existing2')
             False
         '''
-## python3.3
-##         pass
-        respect_root_path, keywords = Dictionary(content=keywords).pop(
-            name='respect_root_path')
+## python2.7
+##         respect_root_path, keywords = Dictionary(content=keywords).pop(
+##             name='respect_root_path')
+        pass
 ##
         target = self.get_path(
             location=target, respect_root_path=respect_root_path,
@@ -3031,11 +3016,11 @@ class Handler(Class):
         return self._set_path(path=target)
 
     @JointPoint
-## python3.3
-##     def remove_deep(
-##         self: Self, *arguments: builtins.object, **keywords: builtins.object
-##     ) -> builtins.bool:
-    def remove_deep(self, *arguments, **keywords):
+## python2.7
+##     def remove_deep(self, *arguments, **keywords):
+    def remove_deep(
+        self: Self, *arguments: builtins.object, **keywords: builtins.object
+    ) -> builtins.bool:
 ##
         '''
             Implements the pythons native "shutil.rmtree()" method in an object
@@ -3061,10 +3046,10 @@ class Handler(Class):
             >>> from boostNode.extension.system import Platform
 
             >>> root = Handler(
-            ...     location=__test_folder__ + 'remove_deep',
+            ...     location=__test_folder_path__ + 'remove_deep',
             ...     make_directory=True)
             >>> Handler(
-            ...     location=__test_folder__ + 'remove_deep/sub_dir',
+            ...     location=__test_folder_path__ + 'remove_deep/sub_dir',
             ...     make_directory=True) # doctest: +ELLIPSIS
             Object of "Handler" with path "...remove_deep...sub_dir..."...
             >>> root.remove_deep()
@@ -3106,12 +3091,12 @@ class Handler(Class):
         return self.remove_file()
 
     @JointPoint
-## python3.3
-##     def remove_file(
-##         self: Self, *arguments: builtins.object,
-##         force_windows_behavior=False, **keywords: builtins.object
-##     ) -> builtins.bool:
-    def remove_file(self, *arguments, **keywords):
+## python2.7
+##     def remove_file(self, *arguments, **keywords):
+    def remove_file(
+        self: Self, *arguments: builtins.object,
+        force_windows_behavior=False, **keywords: builtins.object
+    ) -> builtins.bool:
 ##
         '''
             Implements the pythons native "os.remove()" method in an object
@@ -3129,10 +3114,11 @@ class Handler(Class):
             >>> from boostNode.extension.system import Platform
 
             >>> Handler(location=__file_path__).copy(
-            ...     target=__test_folder__ + 'remove_file')
+            ...     target=__test_folder_path__ + 'remove_file')
             True
 
-            >>> handler = Handler(location=__test_folder__ + 'remove_file')
+            >>> handler = Handler(
+            ...     location=__test_folder_path__ + 'remove_file')
             >>> handler.is_file()
             True
 
@@ -3157,10 +3143,12 @@ class Handler(Class):
             False
 
             >>> source = Handler(
-            ...     __test_folder__ + 'remove_file_soft_link_windows_source',
+            ...     __test_folder_path__ +
+            ...     'remove_file_soft_link_windows_source',
             ...     make_directory=True)
             >>> target = Handler(
-            ...     __test_folder__ + 'remove_file_soft_link_windows_target',
+            ...     __test_folder_path__ +
+            ...     'remove_file_soft_link_windows_target',
             ...     must_exist=False)
             >>> if Platform().operating_system == 'windows':
             ...     False
@@ -3170,10 +3158,10 @@ class Handler(Class):
             False
         '''
         from boostNode.extension.system import Platform
-## python3.3
-##         pass
-        force_windows_behavior, keywords = Dictionary(content=keywords).pop(
-            name='force_windows_behavior', default_value=False)
+## python2.7
+##         force_windows_behavior, keywords = Dictionary(content=keywords).pop(
+##             name='force_windows_behavior', default_value=False)
+        pass
 ##
         if self.is_file():
             if(self.is_symbolic_link(allow_portable_link=False) and
@@ -3196,8 +3184,8 @@ class Handler(Class):
         return False
 
     @JointPoint
-## python3.3     def change_right(self: Self, right, octal=True) -> Self:
-    def change_right(self, right, octal=True):
+## python2.7     def change_right(self, right, octal=True):
+    def change_right(self: Self, right, octal=True) -> Self:
         '''
             Implements the pythons native "os.chmod()" method in an object
             oriented way.
@@ -3231,7 +3219,7 @@ class Handler(Class):
             Examples:
 
             >>> handler = Handler(
-            ...     __test_folder__ + 'change_right', must_exist=False)
+            ...     __test_folder_path__ + 'change_right', must_exist=False)
             >>> Handler(location=__file_path__).copy(target=handler)
             True
             >>> handler.change_right(right=766) # doctest: +ELLIPSIS
@@ -3243,7 +3231,7 @@ class Handler(Class):
             Object of "Handler" with path "...change_right...
 
             >>> handler = Handler(
-            ...     __test_folder__ + 'change_right_folder',
+            ...     __test_folder_path__ + 'change_right_folder',
             ...     make_directory=True)
             >>> handler.change_right(right=766) # doctest: +ELLIPSIS
             Object of "Handler" with path "...change_right_folder..." ...
@@ -3263,13 +3251,13 @@ class Handler(Class):
         return self
 
     @JointPoint
-## python3.3
-##     def copy(
-##         self: Self, target: (SelfClassObject, builtins.str),
-##         *arguments: builtins.object, right=None, octal=True,
-##         **keywords: builtins.object
-##     ) -> builtins.bool:
-    def copy(self, target, *arguments, **keywords):
+## python2.7
+##     def copy(self, target, *arguments, **keywords):
+    def copy(
+        self: Self, target: (SelfClassObject, builtins.str),
+        *arguments: builtins.object, right=None, octal=True,
+        **keywords: builtins.object
+    ) -> builtins.bool:
 ##
         '''
             Implements the pythons native "shutil.copy()" method in an object
@@ -3288,7 +3276,7 @@ class Handler(Class):
             Examples:
 
             >>> target = Handler(
-            ...     location=__test_folder__ + 'copy_file.py',
+            ...     location=__test_folder_path__ + 'copy_file.py',
             ...     must_exist=False)
             >>> Handler(location=__file_path__).copy(target)
             True
@@ -3296,24 +3284,26 @@ class Handler(Class):
             True
 
             >>> target = Handler(
-            ...     location=__test_folder__ + 'copy_directory2',
+            ...     location=__test_folder_path__ + 'copy_directory2',
             ...     must_exist=False)
             >>> Handler(
-            ...     __test_folder__ + 'copy_directory', make_directory=True
+            ...     __test_folder_path__ + 'copy_directory',
+            ...     make_directory=True
             ... ).copy(target)
             True
             >>> target.is_directory()
             True
 
-            >>> target.copy(__test_folder__ + 'copy_directory3', right=777)
+            >>> target.copy(
+            ...     __test_folder_path__ + 'copy_directory3', right=777)
             True
         '''
-## python3.3
-##         pass
-        default_keywords = Dictionary(content=keywords)
-        right, keywords = default_keywords.pop(name='right')
-        octal, keywords = default_keywords.pop(
-            name='octal', default_value=True)
+## python2.7
+##         default_keywords = Dictionary(content=keywords)
+##         right, keywords = default_keywords.pop(name='right')
+##         octal, keywords = default_keywords.pop(
+##             name='octal', default_value=True)
+        pass
 ##
         target = self.__class__(location=target, must_exist=False)
         if self.is_file():
@@ -3325,11 +3315,11 @@ class Handler(Class):
         return target.type == self.type
 
     @JointPoint
-## python3.3
-##     def make_new_directory(
-##         self: Self, wrapper_pattern='{file_name}_temp'
-##     ) -> SelfClassObject:
-    def make_new_directory(self, wrapper_pattern='{file_name}_temp'):
+## python2.7
+##     def make_new_directory(self, wrapper_pattern='{file_name}_temp'):
+    def make_new_directory(
+        self: Self, wrapper_pattern='{file_name}_temp'
+    ) -> SelfClassObject:
 ##
         '''
             Makes a new directory in each case. E.g. if current directory name
@@ -3340,7 +3330,8 @@ class Handler(Class):
             Examples:
 
             >>> handler = Handler(
-            ...     __test_folder__ + 'make_new_directory', must_exist=False)
+            ...     __test_folder_path__ + 'make_new_directory',
+            ...     must_exist=False)
 
             >>> handler.make_new_directory().path # doctest: +ELLIPSIS
             '...make_new_directory...'
@@ -3365,12 +3356,12 @@ class Handler(Class):
         return location
 
     @JointPoint
-## python3.3
-##     def make_directory(
-##         self: Self, *arguments: builtins.object, right=700, octal=True,
-##         **keywords: builtins.object
-##     ) -> builtins.bool:
-    def make_directory(self, *arguments, **keywords):
+## python2.7
+##     def make_directory(self, *arguments, **keywords):
+    def make_directory(
+        self: Self, *arguments: builtins.object, right=700, octal=True,
+        **keywords: builtins.object
+    ) -> builtins.bool:
 ##
         '''
             Implements the pythons native "os.mkdir()" method in an object
@@ -3388,7 +3379,7 @@ class Handler(Class):
             Examples:
 
             >>> handler = Handler(
-            ...     location=__test_folder__ + 'make_directory',
+            ...     location=__test_folder_path__ + 'make_directory',
             ...     must_exist=False)
 
             >>> handler.is_element()
@@ -3403,24 +3394,24 @@ class Handler(Class):
             >>> handler.make_directory(right=777)
             True
         '''
-## python3.3
-##         pass
-        default_keywords = Dictionary(content=keywords)
-        right, keywords = default_keywords.pop(
-            name='right', default_value=700)
-        octal, keywords = default_keywords.pop(
-            name='octal', default_value=True)
+## python2.7
+##         default_keywords = Dictionary(content=keywords)
+##         right, keywords = default_keywords.pop(
+##             name='right', default_value=700)
+##         octal, keywords = default_keywords.pop(
+##             name='octal', default_value=True)
+        pass
 ##
         os.mkdir(self._path, *arguments, **keywords)
         self.change_right(right, octal)
         return self.is_directory()
 
     @JointPoint
-## python3.3
-##     def make_symbolic_link(
-##         self: Self, *arguments: builtins.object, **keywords: builtins.object
-##     ) -> builtins.bool:
-    def make_symbolic_link(self, *arguments, **keywords):
+## python2.7
+##     def make_symbolic_link(self, *arguments, **keywords):
+    def make_symbolic_link(
+        self: Self, *arguments: builtins.object, **keywords: builtins.object
+    ) -> builtins.bool:
 ##
         '''
             Implements the pythons native "os.symlink()" method in an object
@@ -3467,13 +3458,13 @@ class Handler(Class):
             >>> from boostNode.extension.system import Platform
 
             >>> target = Handler(
-            ...     __test_folder__ + 'make_symbolic_link_target',
+            ...     __test_folder_path__ + 'make_symbolic_link_target',
             ...     must_exist=False)
             >>> if Platform().operating_system == 'windows':
             ...     True
             ... else:
             ...     created = Handler(
-            ...         location=__test_folder__ +
+            ...         location=__test_folder_path__ +
             ...             'make_symbolic_link_directory_source',
             ...         make_directory=True
             ...     ).make_symbolic_link(target, force=True)
@@ -3481,13 +3472,13 @@ class Handler(Class):
             True
 
             >>> target = Handler(
-            ...     __test_folder__ + 'make_symbolic_link_target',
+            ...     __test_folder_path__ + 'make_symbolic_link_target',
             ...     must_exist=False)
             >>> if Platform().operating_system == 'windows':
             ...     True
             ... else:
             ...     source = Handler(
-            ...         location=__test_folder__ +
+            ...         location=__test_folder_path__ +
             ...             'make_symbolic_link_file_source',
             ...         must_exist=False)
             ...     source.content = ' '
@@ -3498,11 +3489,11 @@ class Handler(Class):
         return self._make_link(*arguments, symbolic=True, **keywords)
 
     @JointPoint
-## python3.3
-##     def make_hardlink(
-##         self: Self, *arguments: builtins.object, **keywords: builtins.object
-##     ) -> builtins.bool:
-    def make_hardlink(self, *arguments, **keywords):
+## python2.7
+##     def make_hardlink(self, *arguments, **keywords):
+    def make_hardlink(
+        self: Self, *arguments: builtins.object, **keywords: builtins.object
+    ) -> builtins.bool:
 ##
         '''
             Implements the pythons native "os.link()" method in an object
@@ -3517,12 +3508,13 @@ class Handler(Class):
             >>> from boostNode.extension.system import Platform
 
             >>> target = Handler(
-            ...     __test_folder__ + 'make_hardlink_target', must_exist=False)
+            ...     __test_folder_path__ + 'make_hardlink_target',
+            ...     must_exist=False)
             >>> if Platform().operating_system == 'windows':
             ...     True
             ... else:
             ...     source = Handler(
-            ...         location=__test_folder__ + 'make_hardlink_source',
+            ...         location=__test_folder_path__ + 'make_hardlink_source',
             ...         must_exist=False)
             ...     source.content = ' '
             ...     created = source.make_hardlink(target, force=True)
@@ -3532,12 +3524,12 @@ class Handler(Class):
         return self._make_link(*arguments, symbolic=False, **keywords)
 
     @JointPoint
-## python3.3
-##     def read_symbolic_link(
-##         self: Self, as_object=False, *arguments: builtins.object,
-##         **keywords: builtins.object
-##     ) -> (builtins.str, SelfClassObject):
-    def read_symbolic_link(self, as_object=False, *arguments, **keywords):
+## python2.7
+##     def read_symbolic_link(self, as_object=False, *arguments, **keywords):
+    def read_symbolic_link(
+        self: Self, as_object=False, *arguments: builtins.object,
+        **keywords: builtins.object
+    ) -> (builtins.str, SelfClassObject):
 ##
         '''
             Implements the pythons native "os.readlink()" method in an object
@@ -3564,7 +3556,8 @@ class Handler(Class):
 
             >>> source = Handler(location=__file_path__)
             >>> target = Handler(
-            ...     __test_folder__ + 'read_symbolic_link', must_exist=False)
+            ...     __test_folder_path__ + 'read_symbolic_link',
+            ...     must_exist=False)
             >>> if Platform().operating_system == 'windows':
             ...     True
             ... else:
@@ -3602,7 +3595,9 @@ class Handler(Class):
             link = self.read_portable_link()
         if not link.endswith(os.sep) and os.path.isdir(link):
             link += os.sep
-        link = link[builtins.len(self._root_path) - builtins.len(os.sep):]
+        link = link[builtins.len(
+            self.__class__._root_path
+        ) - builtins.len(os.sep):]
         if as_object:
             if not self.is_referenced_via_absolute_path(location=link):
                 return self.__class__(
@@ -3611,15 +3606,15 @@ class Handler(Class):
         return link
 
     @JointPoint
-## python3.3
+## python2.7
 ##     def deep_copy(
-##         self: Self, target: (SelfClassObject, builtins.str),
-##         symbolic_links=True, *arguments: builtins.object,
-##         respect_root_path=None, **keywords: builtins.object
-##     ) -> Self:
+##         self, target, symbolic_links=True, *arguments, **keywords
+##     ):
     def deep_copy(
-        self, target, symbolic_links=True, *arguments, **keywords
-    ):
+        self: Self, target: (SelfClassObject, builtins.str),
+        symbolic_links=True, *arguments: builtins.object,
+        respect_root_path=None, **keywords: builtins.object
+    ) -> Self:
 ##
         '''
             Implements the pythons native "shutil.copytree()" method in an
@@ -3666,13 +3661,13 @@ class Handler(Class):
             Examples:
 
             >>> handler = Handler(
-            ...     location=__test_folder__ + 'deep_copy',
+            ...     location=__test_folder_path__ + 'deep_copy',
             ...     make_directory=True)
             >>> Handler(
             ...     location=handler.path + 'sub_dir',
             ...     make_directory=True
             ... ) # doctest: +ELLIPSIS
-            Object of "Handler" with path "...deep_copy...sub_di..." (d...
+            Object of "Handler" with path "...deep_copy...sub_di..." (type: ...
             >>> Handler(
             ...     location=handler.path + 'second_sub_dir',
             ...     make_directory=True
@@ -3680,18 +3675,18 @@ class Handler(Class):
             Object of "Handler" with path "...deep_copy...second_sub_di...
 
             >>> target = Handler(
-            ...     __test_folder__ + 'deep_copy_dir', must_exist=False)
+            ...     __test_folder_path__ + 'deep_copy_dir', must_exist=False)
             >>> handler.deep_copy(target) # doctest: +ELLIPSIS
-            Object of "Handler" with path "...deep_copy..." (directory).
+            Object of "Handler" with path "...deep_copy..." (type: directory).
             >>> Handler(location=target.path + 'sub_dir').is_directory()
             True
             >>> Handler(target.path + '/second_sub_dir').is_directory()
             True
         '''
-## python3.3
-##         pass
-        respect_root_path, keywords = Dictionary(content=keywords).pop(
-            name='respect_root_path')
+## python2.7
+##         respect_root_path, keywords = Dictionary(content=keywords).pop(
+##             name='respect_root_path')
+        pass
 ##
         shutil.copytree(
             src=self._path, dst=self.get_path(
@@ -3701,11 +3696,11 @@ class Handler(Class):
         return self
 
     @JointPoint
-## python3.3
-##     def make_directorys(
-##         self: Self, *arguments: builtins.object, **keywords: builtins.object
-##     ) -> builtins.bool:
-    def make_directorys(self, *arguments, **keywords):
+## python2.7
+##     def make_directorys(self, *arguments, **keywords):
+    def make_directorys(
+        self: Self, *arguments: builtins.object, **keywords: builtins.object
+    ) -> builtins.bool:
 ##
         '''
             Implements the pythons native "os.makedirs()" method in an object
@@ -3727,7 +3722,7 @@ class Handler(Class):
             Examples:
 
             >>> handler = Handler(
-            ...     location=__test_folder__ + 'dir/sub_dir/sub_sub_dir',
+            ...     location=__test_folder_path__ + 'dir/sub_dir/sub_sub_dir',
             ...     must_exist=False)
             >>> handler.make_directorys()
             True
@@ -3737,7 +3732,7 @@ class Handler(Class):
             True
 
             >>> handler = Handler(
-            ...     location=__test_folder__ + 'dir', must_exist=False)
+            ...     location=__test_folder_path__ + 'dir', must_exist=False)
             >>> handler.make_directorys()
             True
             >>> handler.path # doctest: +ELLIPSIS
@@ -3750,15 +3745,15 @@ class Handler(Class):
         return self.is_directory()
 
     @JointPoint
-## python3.3
+## python2.7
 ##     def make_portable_link(
-##         self: Self, target: (SelfClassObject, builtins.str),
-##         force=False, label='', *arguments: (builtins.object, builtins.type),
-##         **keywords: (builtins.object, builtins.type)
-##     ) -> builtins.bool:
+##         self, target, force=False, label='', *arguments, **keywords
+##     ):
     def make_portable_link(
-        self, target, force=False, label='', *arguments, **keywords
-    ):
+        self: Self, target: (SelfClassObject, builtins.str),
+        force=False, label='', *arguments: (builtins.object, builtins.type),
+        **keywords: (builtins.object, builtins.type)
+    ) -> builtins.bool:
 ##
         '''
             Creates a portable link on the current location referencing on the
@@ -3775,7 +3770,8 @@ class Handler(Class):
             Examples:
 
             >>> target = Handler(
-            ...     location=__test_folder__ + 'link.py', must_exist=False)
+            ...     location=__test_folder_path__ + 'link.py',
+            ...     must_exist=False)
             >>> Handler(location=__file_path__).make_portable_link(
             ...     target, force=True)
             True
@@ -3783,17 +3779,17 @@ class Handler(Class):
             '...portable...'
 
             >>> target = Handler(
-            ...     location=__test_folder__ + 'directory_link',
+            ...     location=__test_folder_path__ + 'directory_link',
             ...     must_exist=False)
             >>> Handler(
-            ...     __test_folder__ + 'directory', make_directory=True
+            ...     __test_folder_path__ + 'directory', make_directory=True
             ... ).make_portable_link(target, force=True)
             True
             >>> target.content # doctest: +ELLIPSIS
             '...portable...'
 
             >>> target = Handler(
-            ...     location=__test_folder__ + 'link', must_exist=False)
+            ...     location=__test_folder_path__ + 'link', must_exist=False)
             >>> Handler(location=__file_path__).make_portable_link(
             ...     target, force=True, label='hans')
             True
@@ -3810,11 +3806,11 @@ class Handler(Class):
         return target.is_portable_link()
 
     @JointPoint
-## python3.3
-##     def read_portable_link(
-##         self: Self, as_object=False
-##     ) -> (builtins.str, SelfClassObject):
-    def read_portable_link(self, as_object=False):
+## python2.7
+##     def read_portable_link(self, as_object=False):
+    def read_portable_link(
+        self: Self, as_object=False
+    ) -> (builtins.str, SelfClassObject):
 ##
         '''
             Reads the referenced path of a given portable link file.
@@ -3822,7 +3818,7 @@ class Handler(Class):
             Examples:
 
             >>> target = Handler(
-            ...     location=__test_folder__ + 'read_portable_link',
+            ...     location=__test_folder_path__ + 'read_portable_link',
             ...     must_exist=False)
 
             >>> handler = Handler(location=__file_path__).make_portable_link(
@@ -3834,7 +3830,7 @@ class Handler(Class):
             >>> target.remove_file()
             True
             >>> handler = Handler(
-            ...     __test_folder__ + 'read_portable_link_directory',
+            ...     __test_folder_path__ + 'read_portable_link_directory',
             ...     make_directory=True
             ... ).make_portable_link(target, force=True)
             >>> target.read_portable_link(as_object=True) # doctest: +ELLIPSIS
@@ -3850,15 +3846,17 @@ class Handler(Class):
             path = re.compile(self.portable_regex_link_pattern).match(
                 self.content.strip()
             ).group('path')
-            path = path[builtins.len(self._root_path) - builtins.len(os.sep):]
+            path = path[builtins.len(
+                self.__class__._root_path
+            ) - builtins.len(os.sep):]
             if as_object:
                 return self.__class__(location=path, must_exist=False)
             return path
         raise __exception__('"%s" isn\t a portable link.', self._path)
 
     @JointPoint
-## python3.3     def clear_directory(self: Self) -> builtins.bool:
-    def clear_directory(self):
+## python2.7     def clear_directory(self):
+    def clear_directory(self: Self) -> builtins.bool:
         '''
             Deletes the contents of the current directory location without
             deleting the current location itself.
@@ -3866,10 +3864,10 @@ class Handler(Class):
             Examples:
 
             >>> handler = Handler(
-            ...     location=__test_folder__ + 'dir', make_directory=True)
+            ...     location=__test_folder_path__ + 'dir', make_directory=True)
 
             >>> sub_handler = Handler(
-            ...     location=__test_folder__ + 'dir/sub_dir',
+            ...     location=__test_folder_path__ + 'dir/sub_dir',
             ...     make_directory=True)
             >>> handler.clear_directory()
             True
@@ -3887,19 +3885,19 @@ class Handler(Class):
         return False
 
     @JointPoint
-## python3.3
+## python2.7
 ##     def iterate_directory(
-##         self: Self,
-##         function: (builtins.str, types.FunctionType, types.MethodType,
-##                    JointPoint),
-##         recursive=False, recursive_in_link=True,
-##         deep_first=True, *arguments: builtins.object,
-##         **keywords: builtins.object
-##     ) -> builtins.bool:
+##         self, function, recursive=False, recursive_in_link=True,
+##         deep_first=True, *arguments, **keywords
+##     ):
     def iterate_directory(
-        self, function, recursive=False, recursive_in_link=True,
-        deep_first=True, *arguments, **keywords
-    ):
+        self: Self,
+        function: (builtins.str, types.FunctionType, types.MethodType,
+                   JointPoint),
+        recursive=False, recursive_in_link=True,
+        deep_first=True, *arguments: builtins.object,
+        **keywords: builtins.object
+    ) -> builtins.bool:
 ##
         '''
             Apply a given function or method to the current directory path.
@@ -3981,9 +3979,9 @@ class Handler(Class):
         return True
 
     @JointPoint
-## python3.3
-##     def delete_file_patterns(self: Self, *patterns: builtins.str) -> Self:
-    def delete_file_patterns(self, *patterns):
+## python2.7
+##     def delete_file_patterns(self, *patterns):
+    def delete_file_patterns(self: Self, *patterns: builtins.str) -> Self:
 ##
         '''
             Removes files with filenames matching the given patterns.
@@ -3992,22 +3990,22 @@ class Handler(Class):
             Examples:
 
             >>> handler = Handler(
-            ...     __test_folder__ + 'delete_file_patterns',
+            ...     __test_folder_path__ + 'delete_file_patterns',
             ...     make_directory=True)
             >>> a_a = Handler(
-            ...     __test_folder__ + 'delete_file_patterns/a.a',
+            ...     __test_folder_path__ + 'delete_file_patterns/a.a',
             ...     must_exist=False)
             >>> a_a.content = 'A'
             >>> a_b = Handler(
-            ...     __test_folder__ + 'delete_file_patterns/a.b',
+            ...     __test_folder_path__ + 'delete_file_patterns/a.b',
             ...     must_exist=False)
             >>> a_b.content = 'A'
             >>> b_b = Handler(
-            ...     __test_folder__ + 'delete_file_patterns/b.b',
+            ...     __test_folder_path__ + 'delete_file_patterns/b.b',
             ...     must_exist=False)
             >>> b_b.content = 'A'
             >>> a_c = Handler(
-            ...     __test_folder__ + 'delete_file_patterns/a.c',
+            ...     __test_folder_path__ + 'delete_file_patterns/a.c',
             ...     must_exist=False)
             >>> a_c.content = 'A'
             >>> handler.delete_file_patterns(
@@ -4032,12 +4030,12 @@ class Handler(Class):
 
         # region protected
 
-## python3.3
-##     def _prepare_content_status(
-##         self: Self, mode: builtins.str,
-##         content: (builtins.str, builtins.bytes)
-##     ) -> builtins.str:
-    def _prepare_content_status(self, mode, content):
+## python2.7
+##     def _prepare_content_status(self, mode, content):
+    def _prepare_content_status(
+        self: Self, mode: builtins.str,
+        content: (builtins.str, builtins.bytes)
+    ) -> builtins.str:
 ##
         '''Initializes a file for changing its content,'''
         if self.is_element() and not self.is_file():
@@ -4050,15 +4048,15 @@ class Handler(Class):
                 mode = 'w+b'
         return mode
 
-## python3.3
+## python2.7
 ##     def _get_path(
-##         self: Self, location: (SelfClassObject, builtins.str),
-##         respect_root_path: (builtins.bool, builtins.type(None)),
-##         output_with_root_prefix: (builtins.bool, builtins.type(None))
-##     ) -> builtins.str:
+##         self, location, respect_root_path, output_with_root_prefix
+##     ):
     def _get_path(
-        self, location, respect_root_path, output_with_root_prefix
-    ):
+        self: Self, location: (SelfClassObject, builtins.str),
+        respect_root_path: (builtins.bool, builtins.type(None)),
+        output_with_root_prefix: (builtins.bool, builtins.type(None))
+    ) -> builtins.str:
 ##
         '''
             This method is used as helper method for "get_path()".
@@ -4082,15 +4080,15 @@ class Handler(Class):
             output_with_root_prefix=output_with_root_prefix)
 
     @JointPoint
-## python3.3
+## python2.7
 ##     def _make_link(
-##         self: Self, target: (SelfClassObject, builtins.str),
-##         symbolic: builtins.bool, *arguments: builtins.object, force=False,
-##         relative=None, **keywords: builtins.object
-##     ) -> builtins.bool:
+##         self, target, symbolic, *arguments, **keywords
+##     ):
     def _make_link(
-        self, target, symbolic, *arguments, **keywords
-    ):
+        self: Self, target: (SelfClassObject, builtins.str),
+        symbolic: builtins.bool, *arguments: builtins.object, force=False,
+        relative=None, **keywords: builtins.object
+    ) -> builtins.bool:
 ##
         '''
             Makes hard or symbolic links and handles the optional force option.
@@ -4098,16 +4096,16 @@ class Handler(Class):
             Examples:
 
             >>> target = Handler(
-            ...     __test_folder__ + '_make_link', make_directory=True)
+            ...     __test_folder_path__ + '_make_link', make_directory=True)
             >>> Handler()._make_link(target, symbolic=True)
             False
         '''
-## python3.3
-##         pass
-        keywords_dictionary = Dictionary(content=keywords)
-        force, keywords = keywords_dictionary.pop(
-            name='force', default_value=False)
-        relative, keywords = keywords_dictionary.pop(name='relative')
+## python2.7
+##         keywords_dictionary = Dictionary(content=keywords)
+##         force, keywords = keywords_dictionary.pop(
+##             name='force', default_value=False)
+##         relative, keywords = keywords_dictionary.pop(name='relative')
+        pass
 ##
         target = self.__class__(location=target, must_exist=False)
         if force:
@@ -4123,11 +4121,11 @@ class Handler(Class):
             symbolic, target, relative, *arguments, **keywords)
 
     @JointPoint
-## python3.3
-##     def _is_equivalent_folder(
-##         self: Self, other: SelfClassObject, second_round=False
-##     ) -> builtins.bool:
-    def _is_equivalent_folder(self, other, second_round=False):
+## python2.7
+##     def _is_equivalent_folder(self, other, second_round=False):
+    def _is_equivalent_folder(
+        self: Self, other: SelfClassObject, second_round=False
+    ) -> builtins.bool:
 ##
         '''
             Returns "True" if given folder contains likewise content.
@@ -4136,7 +4134,7 @@ class Handler(Class):
             Examples:
 
             >>> target = Handler(
-            ...     __test_folder__ + '_is_equivalent_folder',
+            ...     __test_folder_path__ + '_is_equivalent_folder',
             ...      must_exist=False)
 
             >>> Handler().copy(target)
@@ -4170,14 +4168,14 @@ class Handler(Class):
             self, second_round=True)
 
     @JointPoint
-## python3.3     def _prepend_root_path(self: Self) -> builtins.str:
-    def _prepend_root_path(self):
+## python2.7     def _prepend_root_path(self):
+    def _prepend_root_path(self: Self) -> builtins.str:
         '''
             Prepends root path prefix to current file path.
 
             Examples:
 
-            >>> root_save = Handler.get_root()
+            >>> root_backup = Handler.get_root()
 
             >>> Handler.set_root(
             ...     location='/not/existing/'
@@ -4186,51 +4184,42 @@ class Handler(Class):
             ...
             boostNode.extension.native.FileError: Invalid path "..." ...
 
-            >>> Handler.set_root(location=root_save) # doctest: +ELLIPSIS
+            >>> Handler.set_root(root_backup) # doctest: +ELLIPSIS
             <class '...Handler'>
 
-            >>> handler = Handler()
-            >>> handler._prepend_root_path() # doctest: +ELLIPSIS
-            '...'
-
-            >>> handler._root_path_initialized = False
-            >>> handler._path = 'C:\\\\'
-            >>> handler._prepend_root_path() # doctest: +ELLIPSIS
+            >>> Handler()._prepend_root_path() # doctest: +ELLIPSIS
             '...'
         '''
         from boostNode.extension.system import Platform
-        if self._respect_root_path and not self._root_path_initialized:
-            self.set_root(location=self._root_path)
-            self._root_path_initialized = True
-            '''
-                Prepend root path to given path location, if it wasn't
-                given as location in root path.
-            '''
-            if((self._initialized_path.startswith(
-                    self._root_path[:-builtins.len(os.sep)]) or
-                not self._path.startswith(
-                    self._root_path[:-builtins.len(os.sep)])) and not
-                ('windows' == Platform().operating_system and
-                 re.compile('^[a-zA-Z]:\\.*').match(self._path) and
-                 self._root_path == os.sep)):
-                if self._path.startswith(os.sep):
-                    self._path = self._root_path[:-builtins.len(
-                        os.sep)] + self._path
-                else:
-                    self._path = self._root_path + self._path
+        '''
+            Prepend root path to given path location, if it wasn't given as
+            location in root path.
+        '''
+        if(self._respect_root_path and (self._initialized_path.startswith(
+                self.__class__._root_path[:-builtins.len(os.sep)]) or
+            not self._path.startswith(
+                self.__class__._root_path[:-builtins.len(os.sep)])) and not
+            ('windows' == Platform().operating_system and
+             re.compile('^[a-zA-Z]:\\.*').match(self._path) and
+             self.__class__._root_path == os.sep)):
+            if self._path.startswith(os.sep):
+                self._path = self.__class__._root_path[:-builtins.len(
+                    os.sep)] + self._path
+            else:
+                self._path = self.__class__._root_path + self._path
         return self._path
 
     @JointPoint
-## python3.3
+## python2.7
 ##     def _handle_path_existence(
-##         self: Self,
-##         location: (builtins.str, SelfClassObject, builtins.type(None)),
-##         make_directory: builtins.bool, must_exist: builtins.bool,
-##         arguments: builtins.tuple, keywords: builtins.dict
-##     ) -> Self:
+##         self, location, make_directory, must_exist, arguments, keywords
+##     ):
     def _handle_path_existence(
-        self, location, make_directory, must_exist, arguments, keywords
-    ):
+        self: Self,
+        location: (builtins.str, SelfClassObject, builtins.type(None)),
+        make_directory: builtins.bool, must_exist: builtins.bool,
+        arguments: builtins.tuple, keywords: builtins.dict
+    ) -> Self:
 ##
         '''
             Make initial existence like it was specified on initialisation.
@@ -4238,10 +4227,12 @@ class Handler(Class):
             Examples:
 
             >>> Handler(
-            ...     __test_folder__ + '_handle_path_existence_not_existing',
+            ...     __test_folder_path__ +
+            ...     '_handle_path_existence_not_existing',
             ...     must_exist=False
             ... )._handle_path_existence(Handler(
-            ...     __test_folder__ + '_handle_path_existence_not_existing',
+            ...     __test_folder_path__ +
+            ...     '_handle_path_existence_not_existing',
             ...      must_exist=False), False, True, (), {}
             ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
@@ -4261,8 +4252,8 @@ class Handler(Class):
         return self
 
     @JointPoint
-## python3.3     def _initialize_path(self: Self) -> builtins.str:
-    def _initialize_path(self):
+## python2.7     def _initialize_path(self):
+    def _initialize_path(self: Self) -> builtins.str:
         '''
             Normalizes reference to file object.
 
@@ -4293,12 +4284,12 @@ class Handler(Class):
         return self._path
 
     @JointPoint
-## python3.3
-##     def _initialize_location(
-##         self: Self,
-##         location: (SelfClassObject, builtins.str, builtins.type(None))
-##     ) -> builtins.str:
-    def _initialize_location(self, location):
+## python2.7
+##     def _initialize_location(self, location):
+    def _initialize_location(
+        self: Self,
+        location: (SelfClassObject, builtins.str, builtins.type(None))
+    ) -> builtins.str:
 ##
         '''
             Normalizes a given file object reference to "builtins.str".
@@ -4319,9 +4310,9 @@ class Handler(Class):
         return location
 
     @JointPoint
-## python3.3
-##     def _set_path(self: Self, path: builtins.str) -> builtins.bool:
-    def _set_path(self, path):
+## python2.7
+##     def _set_path(self, path):
+    def _set_path(self: Self, path: builtins.str) -> builtins.bool:
 ##
         '''
             Sets path for the currently used "Handler" object in an convinced
@@ -4336,7 +4327,7 @@ class Handler(Class):
             True
 
             >>> Handler()._set_path(
-            ...     path=__test_folder__ + 'set_path_not_existing_file')
+            ...     path=__test_folder_path__ + 'set_path_not_existing_file')
             False
 
             >>> handler = Handler()
@@ -4352,15 +4343,15 @@ class Handler(Class):
         return self.is_element()
 
     @JointPoint
-## python3.3
+## python2.7
 ##     def _make_forced_link(
-##         self: Self, symbolic: builtins.bool, target: SelfClassObject,
-##         relative: (builtins.object, builtins.type),
-##         *arguments: builtins.object, **keywords: builtins.object
-##     ) -> builtins.bool:
+##         self, symbolic, target, relative, *arguments, **keywords
+##     ):
     def _make_forced_link(
-        self, symbolic, target, relative, *arguments, **keywords
-    ):
+        self: Self, symbolic: builtins.bool, target: SelfClassObject,
+        relative: (builtins.object, builtins.type),
+        *arguments: builtins.object, **keywords: builtins.object
+    ) -> builtins.bool:
 ##
         '''
             Creates a symbolic link weather their exists already a file with
@@ -4381,23 +4372,24 @@ class Handler(Class):
             ...     True
             ... else:
             ...     Handler(
-            ...         __test_folder__ + '_make_forced_link_not_existing',
+            ...         __test_folder_path__ +
+            ...         '_make_forced_link_not_existing',
             ...         must_exist=False
             ...     )._make_forced_link(
             ...         True, Handler(
-            ...             __test_folder__ + '_make_forced_link_target',
+            ...             __test_folder_path__ + '_make_forced_link_target',
             ...             must_exist=False),
             ...         False)
             True
 
             >>> target = Handler(
-            ...     __test_folder__ + '_make_forced_link_target',
+            ...     __test_folder_path__ + '_make_forced_link_target',
             ...     make_directory=True)
             >>> if Platform().operating_system == 'windows':
             ...     True
             ... else:
             ...     Handler(
-            ...         __test_folder__ + '_make_forced_link_source',
+            ...         __test_folder_path__ + '_make_forced_link_source',
             ...         make_directory=True
             ...     )._make_forced_link(True ,target, False)
             True
@@ -4432,16 +4424,16 @@ class Handler(Class):
             # region handle platform dependencies
 
     @JointPoint
-## python3.3
+## python2.7
 ##     def _make_platform_dependent_link(
-##         self: Self, symbolic: builtins.bool, target: SelfClassObject,
-##         relative: (builtins.object, builtins.type),
-##         *arguments: builtins.object, force_windows_behavior=False,
-##         **keywords: builtins.object
-##     ) -> builtins.bool:
+##         self, symbolic, target, relative, *arguments, **keywords
+##     ):
     def _make_platform_dependent_link(
-        self, symbolic, target, relative, *arguments, **keywords
-    ):
+        self: Self, symbolic: builtins.bool, target: SelfClassObject,
+        relative: (builtins.object, builtins.type),
+        *arguments: builtins.object, force_windows_behavior=False,
+        **keywords: builtins.object
+    ) -> builtins.bool:
 ##
         '''
             Handles platform dependent stuff by creating a symbolic link.
@@ -4451,7 +4443,7 @@ class Handler(Class):
             >>> from boostNode.extension.system import Platform
 
             >>> handler = Handler(
-            ...     __test_folder__ + '_make_platform_dependent_link',
+            ...     __test_folder_path__ + '_make_platform_dependent_link',
             ...     must_exist=False)
 
             >>> if Platform().operating_system == 'windows':
@@ -4475,7 +4467,8 @@ class Handler(Class):
             True
 
             >>> handler = Handler(
-            ...     __test_folder__ + '_make_platform_dependent_link_windows',
+            ...     __test_folder_path__ +
+            ...     '_make_platform_dependent_link_windows',
             ...     must_exist=False)
             >>> if Platform().operating_system == 'windows':
             ...     True
@@ -4486,10 +4479,10 @@ class Handler(Class):
             True
         '''
         from boostNode.extension.system import Platform
-## python3.3
-##         pass
-        force_windows_behavior, keywords = Dictionary(content=keywords).pop(
-            name='force_windows_behavior', default_value=False)
+## python2.7
+##         force_windows_behavior, keywords = Dictionary(content=keywords).pop(
+##             name='force_windows_behavior', default_value=False)
+        pass
 ##
         target_path = target._path
         if target._path.endswith(os.sep):
@@ -4501,19 +4494,19 @@ class Handler(Class):
             try:
                 if(Platform().operating_system == 'windows' or
                    force_windows_behavior):
-## python3.3
-##                     os.symlink(
-##                         source_path, target_path,
-##                         target_is_directory=self.is_directory())
-                    create_symbolic_link = \
-                        ctypes.windll.kernel32.CreateSymbolicLinkW
-                    create_symbolic_link.argtypes = (
-                        ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_uint32)
-                    create_symbolic_link.restype = ctypes.c_ubyte
-                    if create_symbolic_link(
-                        target_path, source_path, self.is_directory()
-                    ) == 0:
-                        raise ctypes.WinError()
+## python2.7
+##                     create_symbolic_link = \
+##                         ctypes.windll.kernel32.CreateSymbolicLinkW
+##                     create_symbolic_link.argtypes = (
+##                         ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_uint32)
+##                     create_symbolic_link.restype = ctypes.c_ubyte
+##                     if create_symbolic_link(
+##                         target_path, source_path, self.is_directory()
+##                     ) == 0:
+##                         raise ctypes.WinError()
+                    os.symlink(
+                        source_path, target_path,
+                        target_is_directory=self.is_directory())
 ##
                 else:
                     os.symlink(source_path, target_path)
@@ -4525,12 +4518,12 @@ class Handler(Class):
         return target.is_file()
 
     @JointPoint
-## python3.3
-##     def _determine_relative_path(
-##         self: Self, relative: (builtins.object, builtins.type),
-##         target_path: builtins.str
-##     ) -> builtins.str:
-    def _determine_relative_path(self, relative, target_path):
+## python2.7
+##     def _determine_relative_path(self, relative, target_path):
+    def _determine_relative_path(
+        self: Self, relative: (builtins.object, builtins.type),
+        target_path: builtins.str
+    ) -> builtins.str:
 ##
         '''
             Determines relative path depending on given requirements defined by
@@ -4563,11 +4556,11 @@ class Handler(Class):
         return self._path
 
     @JointPoint
-## python3.3
-##     def _determine_get_windows_disk_free_space_function(
-##         self: Self
-##     ) -> ctypes._CFuncPtr:
-    def _determine_get_windows_disk_free_space_function(self):
+## python2.7
+##     def _determine_get_windows_disk_free_space_function(self):
+    def _determine_get_windows_disk_free_space_function(
+        self: Self
+    ) -> ctypes._CFuncPtr:
 ##
         '''
             Determines windows internal method to get disk free space.
@@ -4588,11 +4581,11 @@ class Handler(Class):
         return ctypes.windll.kernel32.GetDiskFreeSpaceExA
 
     @JointPoint
-## python3.3
-##     def _get_platform_dependent_free_and_total_space(
-##         self: Self
-##     ) -> (builtins.bool, builtins.tuple):
-    def _get_platform_dependent_free_and_total_space(self):
+## python2.7
+##     def _get_platform_dependent_free_and_total_space(self):
+    def _get_platform_dependent_free_and_total_space(
+        self: Self
+    ) -> (builtins.bool, builtins.tuple):
 ##
         '''
             Handles platform dependent stuff by determining free and total
@@ -4631,12 +4624,12 @@ class Handler(Class):
     @JointPoint
 # NOTE return type only available in unix like systems:
 # -> (posix.statvfs_result, builtins.type(None))
-## python3.3
+## python2.7
 ##     def _initialize_platform_dependencies(
-##         self: Self, force_macintosh_behavior=False
+##         self, force_macintosh_behavior=False
 ##     ):
     def _initialize_platform_dependencies(
-        self, force_macintosh_behavior=False
+        self: Self, force_macintosh_behavior=False
     ):
 ##
         '''
@@ -4661,7 +4654,7 @@ class Handler(Class):
             self.__class__.MAX_FILE_NAME_LENGTH = os_statvfs.f_namemax
             if(Platform().operating_system == 'macintosh' or
                force_macintosh_behavior):
-                self.DECIMAL = True
+                self.__class__.DECIMAL = True
         return os_statvfs
 
             # endregion
@@ -4678,8 +4671,8 @@ class Handler(Class):
     Preset some variables given by introspection letting the linter know what
     globale variables are available.
 '''
-__logger__ = __test_mode__ = __test_globals__ = __exception__ = \
-    __module_name__ = __file_path__ = None
+__logger__ = __exception__ = __module_name__ = __file_path__ = \
+    __test_mode__ = None
 '''
     Extends this module with some magic environment variables to provide better
     introspection support. A generic command line interface for some code

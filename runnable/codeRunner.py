@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.3
 # -*- coding: utf-8 -*-
 
 # region vim modline
@@ -28,10 +28,10 @@ __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-## python3.3
-## import builtins
-## import collections
-import __builtin__ as builtins
+## python2.7
+## import __builtin__ as builtins
+import builtins
+import collections
 ##
 import copy
 import inspect
@@ -47,8 +47,8 @@ from boostNode.extension.file import Handler as FileHandler
 from boostNode.extension.native import Module
 from boostNode.extension.output import Logger, Print
 from boostNode.extension.system import CommandLine, Platform, Runnable
-## python3.3 from boostNode.extension.type import Self
-pass
+## python2.7 pass
+from boostNode.extension.type import Self
 from boostNode.paradigm.aspectOrientation import JointPoint
 from boostNode.paradigm.objectOrientation import Class
 from boostNode.runnable.template import Parser as TemplateParser
@@ -64,13 +64,9 @@ class Run(Class, Runnable):
         support for compiling, running and cleaning after running.
     '''
 
-    # region constant properties
+    # region properties
 
-        # region public
-
-    '''
-        Holds all command line interface argument informations.
-    '''
+    '''Holds all command line interface argument informations.'''
     COMMAND_LINE_ARGUMENTS = (
         {'arguments': ('-f', '--code-file'),
          'keywords': {
@@ -196,43 +192,6 @@ class Run(Class, Runnable):
         }
     }
 
-        # endregion
-
-    # endregion
-
-    # region dynamic properties
-
-        # region public
-
-    '''
-        Holds the current code file and there potentially presented code
-        manager as file handler.
-    '''
-    code_manager_file = None
-
-        # endregion
-
-        # region protected
-
-    '''
-        Saves every properties for current code taken from
-        "SUPPORTED_CODES".
-    '''
-    _current_code = {}
-    '''Saves currently needed commands taken from "_current_code".'''
-    _current_commands = ()
-    '''
-        Saves given arguments which should be piped through the run command to
-        determined code file.
-    '''
-    _command_line_arguments = ()
-    '''Saves a default order of steps to deal with a code file.'''
-    _default_command_sequence = ()
-    '''Saves currently determined runnable code file object.'''
-    _code_file = None
-
-        # endregion
-
     # endregion
 
     # region dynamic methods
@@ -242,15 +201,15 @@ class Run(Class, Runnable):
             # region special
 
     @JointPoint
-## python3.3     def __repr__(self: Self) -> builtins.str:
-    def __repr__(self):
+## python2.7     def __repr__(self):
+    def __repr__(self: Self) -> builtins.str:
         '''
             Invokes if this object should describe itself by a string.
 
             Examples:
 
             >>> file = FileHandler(
-            ...     __test_folder__ + '__repr__.py', must_exist=False)
+            ...     __test_folder_path__ + '__repr__.py', must_exist=False)
             >>> file.content = '#!/usr/bin/env python'
             >>> repr(Run(code_file_path=file)) # doctest: +ELLIPSIS
             'Object of "Run" with detected path "...__repr__.py".'
@@ -269,8 +228,8 @@ class Run(Class, Runnable):
             # region runnable implementation
 
     @JointPoint
-## python3.3     def _run(self: Self) -> Self:
-    def _run(self):
+## python2.7     def _run(self):
+    def _run(self: Self) -> Self:
         '''
             Entry point for command line call of this program.
             Determines a meaningful file for running. Set the right code
@@ -285,7 +244,7 @@ class Run(Class, Runnable):
             usage:...
 
             >>> empty_folder = FileHandler(
-            ...     __test_folder__ + '_run', make_directory=True)
+            ...     __test_folder_path__ + '_run', make_directory=True)
             >>> sys.argv[1:] = ['-f', empty_folder.path, '--log-level', 'info']
             >>> run = Run.run() # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
@@ -304,22 +263,47 @@ class Run(Class, Runnable):
             namespace=command_line_arguments))
 
     @JointPoint
-## python3.3
+## python2.7
 ##     def _initialize(
-##         self: Self, code_file_path=None,
+##         self, code_file_path=None,
 ##         default_command_sequence=('compile', 'run', 'clean'), **keywords
-##     ) -> Self:
+##     ):
     def _initialize(
-        self, code_file_path=None,
+        self: Self, code_file_path=None,
         default_command_sequence=('compile', 'run', 'clean'), **keywords
-    ):
+    ) -> Self:
 ##
         '''
             Determines a code file to run and runs them in its own thread by
             piping all outputs through the command line interface.
         '''
+
+                # region properties
+
+        '''
+            Holds the current code file and there potentially presented code
+            manager as file handler.
+        '''
+        self.code_manager_file = None
+        '''
+            Saves every properties for current code taken from
+            "SUPPORTED_CODES".
+        '''
+        self._current_code = {}
+        '''Saves currently needed commands taken from "_current_code".'''
+        self._current_commands = ()
+        '''
+            Saves given arguments which should be piped through the run command
+            to determined code file.
+        '''
+        self._command_line_arguments = ()
+        '''Saves a default order of steps to deal with a code file.'''
         self._default_command_sequence = default_command_sequence
+        '''Saves currently determined runnable code file object.'''
         self._code_file = self._determine_code_file(code_file_path)
+
+                # endregion
+
         if not self._code_file:
             raise __exception__(
                 'No supported file found for running with given hint "%s".',
@@ -329,8 +313,8 @@ class Run(Class, Runnable):
             # endregion
 
     @JointPoint
-## python3.3     def _tidy_up(self: Self) -> Self:
-    def _tidy_up(self):
+## python2.7     def _tidy_up(self):
+    def _tidy_up(self: Self) -> Self:
         '''
             Tidies up the current working directory after running the given
             file.
@@ -338,9 +322,9 @@ class Run(Class, Runnable):
             Examples:
 
             >>> garbage = FileHandler(
-            ...     __test_folder__ + 'temp_tidy_up', make_directory=True)
+            ...     __test_folder_path__ + 'temp_tidy_up', make_directory=True)
             >>> file = FileHandler(
-            ...     __test_folder__ + '_tidy_up_runnable.py',
+            ...     __test_folder_path__ + '_tidy_up_runnable.py',
             ...     must_exist=False)
             >>> file.content = '#!/usr/bin/env python'
             >>> run = Run(file)
@@ -368,8 +352,8 @@ class Run(Class, Runnable):
         return self
 
     @JointPoint
-## python3.3     def _run_commands(self: Self) -> Self:
-    def _run_commands(self):
+## python2.7     def _run_commands(self):
+    def _run_commands(self: Self) -> Self:
         '''
             Run currently needed commands.
 
@@ -377,11 +361,12 @@ class Run(Class, Runnable):
 
             >>> __test_buffer__.clear() # doctest: +ELLIPSIS
             '...'
-            >>> FileHandler(__test_folder__).clear_directory()
+            >>> FileHandler(__test_folder_path__).clear_directory()
             True
 
             >>> file = FileHandler(
-            ...     __test_folder__ + '_run_commands.py', must_exist=False)
+            ...     __test_folder_path__ + '_run_commands.py',
+            ...     must_exist=False)
             >>> file.content = '#!/usr/bin/env python'
             >>> file.change_right(700) # doctest: +ELLIPSIS
             Object of "Handler" with path "..._run_commands.py" and initiall...
@@ -402,8 +387,8 @@ class Run(Class, Runnable):
         return self
 
     @JointPoint
-## python3.3     def _check_code_manager(self: Self) -> Self:
-    def _check_code_manager(self):
+## python2.7     def _check_code_manager(self):
+    def _check_code_manager(self: Self) -> Self:
         '''
             Checks if a code manager file exists for the current detected code
             file. For example it can find a makefile for a detected c++ source
@@ -412,11 +397,11 @@ class Run(Class, Runnable):
             Examples:
 
             >>> file = FileHandler(
-            ...     __test_folder__ + '_check_code_manager.py',
+            ...     __test_folder_path__ + '_check_code_manager.py',
             ...     must_exist=False)
             >>> file.content = '#!/usr/bin/env python'
             >>> FileHandler(
-            ...     __test_folder__ + '__init__.py', must_exist=False
+            ...     __test_folder_path__ + '__init__.py', must_exist=False
             ... ).content = '#!/usr/bin/env python'
             >>> run = Run(code_file_path=file)
             >>> __test_buffer__.clear() # doctest: +ELLIPSIS
@@ -446,11 +431,11 @@ class Run(Class, Runnable):
         return self
 
     @JointPoint
-## python3.3
-##     def _determine_code_file(
-##         self: Self, path: (builtins.str, builtins.type(None), FileHandler)
-##     ) -> (FileHandler, builtins.bool):
-    def _determine_code_file(self, path):
+## python2.7
+##     def _determine_code_file(self, path):
+    def _determine_code_file(
+        self: Self, path: (builtins.str, builtins.type(None), FileHandler)
+    ) -> (FileHandler, builtins.bool):
 ##
         '''
             Determines a code file which could make sense to run.
@@ -462,7 +447,7 @@ class Run(Class, Runnable):
             >>> run = Run()
 
             >>> run._determine_code_file(path='') # doctest: +ELLIPSIS
-            Object of "Handler" with path "..." (file).
+            Object of "Handler" with path "..." (type: file).
 
             >>> run._command_line_arguments = ['--help']
             >>> run._determine_code_file('not_existing')
@@ -487,11 +472,11 @@ class Run(Class, Runnable):
         return self._search_supported_file_in_current_working_directory()
 
     @JointPoint
-## python3.3
-##     def _find_informations_by_extension(
-##         self: Self, extension: builtins.str, code_file: FileHandler
-##     ) -> (builtins.dict, builtins.bool):
-    def _find_informations_by_extension(self, extension, code_file):
+## python2.7
+##     def _find_informations_by_extension(self, extension, code_file):
+    def _find_informations_by_extension(
+        self: Self, extension: builtins.str, code_file: FileHandler
+    ) -> (builtins.dict, builtins.bool):
 ##
         '''
             Tries to find the necessary informations for running code with
@@ -500,7 +485,8 @@ class Run(Class, Runnable):
             Examples:
 
             >>> code_file = FileHandler(
-            ...     __test_folder__ + '_find_informations_by_extension.py',
+            ...     __test_folder_path__ +
+            ...     '_find_informations_by_extension.py',
             ...     must_exist=False)
             >>> Run()._find_informations_by_extension(
             ...     extension='py', code_file=code_file
@@ -519,11 +505,11 @@ class Run(Class, Runnable):
         return False
 
     @JointPoint
-## python3.3
-##     def _search_supported_file_by_path(
-##         self: Self, path: builtins.str
-##     ) -> (FileHandler, builtins.bool):
-    def _search_supported_file_by_path(self, path):
+## python2.7
+##     def _search_supported_file_by_path(self, path):
+    def _search_supported_file_by_path(
+        self: Self, path: builtins.str
+    ) -> (FileHandler, builtins.bool):
 ##
         '''
             Tries to find a useful file in current working directory by trying
@@ -532,7 +518,7 @@ class Run(Class, Runnable):
             Examples:
 
             >>> file = FileHandler(
-            ...     __test_folder__ + '_search_supported_file_by_path.py',
+            ...     __test_folder_path__ + '_search_supported_file_by_path.py',
             ...     must_exist=False)
             >>> file.content = '#!/usr/bin/env python'
             >>> Run()._search_supported_file_by_path(
@@ -542,7 +528,7 @@ class Run(Class, Runnable):
 
             >>> Run()._search_supported_file_by_path(
             ...     path='') # doctest: +ELLIPSIS
-            Object of "Handler" with path "..." (file).
+            Object of "Handler" with path "..." (type: file).
 
             >>> Run()._search_supported_file_by_path('not_exists')
             False
@@ -558,9 +544,9 @@ class Run(Class, Runnable):
                         must_exist=False),
                     FileHandler(
                         location=location.path + extension, must_exist=False)):
-## python3.3
-##                     if code_file.is_file() and code_file != self_file:
-                    if code_file.is_file() and not (code_file == self_file):
+## python2.7
+##                     if code_file.is_file() and not (code_file == self_file):
+                    if code_file.is_file() and code_file != self_file:
 ##
                         return code_file
                 file = self._search_supported_file_by_directory(
@@ -570,11 +556,11 @@ class Run(Class, Runnable):
         return False
 
     @JointPoint
-## python3.3
-##     def _search_supported_file_by_directory(
-##         self: Self, location: FileHandler, extension: builtins.str,
-##     ) -> (FileHandler, builtins.bool):
-    def _search_supported_file_by_directory(self, location, extension):
+## python2.7
+##     def _search_supported_file_by_directory(self, location, extension):
+    def _search_supported_file_by_directory(
+        self: Self, location: FileHandler, extension: builtins.str,
+    ) -> (FileHandler, builtins.bool):
 ##
         '''
             Searches in a directory for a suitable code file to run.
@@ -582,12 +568,12 @@ class Run(Class, Runnable):
             Examples:
 
             >>> FileHandler(
-            ...     __test_folder__ +
+            ...     __test_folder_path__ +
             ...     '_search_supported_file_by_directoryMain.py',
             ...     must_exist=False
             ... ).content = ' '
             >>> Run()._search_supported_file_by_directory(
-            ...     FileHandler(__test_folder__), 'py'
+            ...     FileHandler(__test_folder_path__), 'py'
             ... ) # doctest: +ELLIPSIS
             Object of "Handler" with path "..." and initially given path "...
         '''
@@ -603,11 +589,11 @@ class Run(Class, Runnable):
         return False
 
     @JointPoint
-## python3.3
-##     def _search_supported_file_in_current_working_directory(
-##         self: Self
-##     ) -> (FileHandler, builtins.bool):
-    def _search_supported_file_in_current_working_directory(self):
+## python2.7
+##     def _search_supported_file_in_current_working_directory(self):
+    def _search_supported_file_in_current_working_directory(
+        self: Self
+    ) -> (FileHandler, builtins.bool):
 ##
         '''
             Tries to find a useful file in current working directory
@@ -620,7 +606,7 @@ class Run(Class, Runnable):
 
             >>> run._search_supported_file_in_current_working_directory(
             ...     ) # doctest: +ELLIPSIS
-            Object of "Handler" with path "..." (file).
+            Object of "Handler" with path "..." (type: file).
 
             >>> run.SUPPORTED_CODES = {}
             >>> run._search_supported_file_in_current_working_directory()
@@ -638,11 +624,11 @@ class Run(Class, Runnable):
         return False
 
     @JointPoint
-## python3.3
-##     def _run_command(
-##         self: Self, command_name: builtins.str, command: builtins.str
-##     ) -> Self:
-    def _run_command(self, command_name, command):
+## python2.7
+##     def _run_command(self, command_name, command):
+    def _run_command(
+        self: Self, command_name: builtins.str, command: builtins.str
+    ) -> Self:
 ##
         '''
             Runs the given command by printing out what is running by
@@ -666,12 +652,12 @@ class Run(Class, Runnable):
         return self
 
     @JointPoint
-## python3.3
-##     def _log_command_run(
-##         self: Self, command_name: builtins.str, command: builtins.str,
-##         result: builtins.dict
-##     ) -> builtins.int:
-    def _log_command_run(self, command_name, command, result):
+## python2.7
+##     def _log_command_run(self, command_name, command, result):
+    def _log_command_run(
+        self: Self, command_name: builtins.str, command: builtins.str,
+        result: builtins.dict
+    ) -> builtins.int:
 ##
         '''
             Generates logging output for wrapping around generated output by
@@ -694,23 +680,23 @@ class Run(Class, Runnable):
         '''
         terminator_save = Logger.terminator
         Logger.change_all(terminator=('',))
-## python3.3
-##         __logger__.info(
-##             '%s with "%s".\nstandard output:\n[',
-##             command_name.capitalize(), command.strip())
-##         Logger.flush()
-        if __logger__.isEnabledFor(logging.INFO):
-            Print(
-                '%s with "%s".\nstandard output:\n[' %
-                (command_name.capitalize(), command.strip()),
-                end='', flush=True)
+## python2.7
+##         if __logger__.isEnabledFor(logging.INFO):
+##             Print(
+##                 '%s with "%s".\nstandard output:\n[' %
+##                 (command_name.capitalize(), command.strip()),
+##                 end='', flush=True)
+        __logger__.info(
+            '%s with "%s".\nstandard output:\n[',
+            command_name.capitalize(), command.strip())
+        Logger.flush()
 ##
         Print(result['standard_output'], end='', flush=True)
-## python3.3
-##         __logger__.info(']\nerror output:\n[')
-##         Logger.flush()
-        if __logger__.isEnabledFor(logging.INFO):
-            Print(']\nerror output:\n[', end='', flush=True)
+## python2.7
+##         if __logger__.isEnabledFor(logging.INFO):
+##             Print(']\nerror output:\n[', end='', flush=True)
+        __logger__.info(']\nerror output:\n[')
+        Logger.flush()
 ##
         Logger.change_all(terminator=terminator_save)
         Print(result['error_output'], end='')
@@ -720,8 +706,8 @@ class Run(Class, Runnable):
         return result['return_code']
 
     @JointPoint
-## python3.3     def _run_code_file(self: Self) -> Self:
-    def _run_code_file(self):
+## python2.7     def _run_code_file(self):
+    def _run_code_file(self: Self) -> Self:
         '''Runs all commands needed to run the current type of code.'''
         self._current_code = self._find_informations_by_extension(
             extension=self._code_file.extension, code_file=self._code_file)
@@ -737,11 +723,11 @@ class Run(Class, Runnable):
         return self
 
     @JointPoint
-## python3.3
-##     def _render_properties(
-##         self: Self, properties: builtins.dict, code_file: FileHandler
-##     ) -> builtins.dict:
-    def _render_properties(self, properties, code_file):
+## python2.7
+##     def _render_properties(self, properties, code_file):
+    def _render_properties(
+        self: Self, properties: builtins.dict, code_file: FileHandler
+    ) -> builtins.dict:
 ##
         '''
             If a given code property is marked as executable respectively
@@ -750,7 +736,7 @@ class Run(Class, Runnable):
             Examples:
 
             >>> code_file = FileHandler(
-            ...     location=__test_folder__ + '_render_properties.cpp',
+            ...     location=__test_folder_path__ + '_render_properties.cpp',
             ...     must_exist=False)
 
             >>> Run()._render_properties({
@@ -796,8 +782,8 @@ class Run(Class, Runnable):
     Preset some variables given by introspection letting the linter know what
     globale variables are available.
 '''
-__logger__ = __test_mode__ = __test_globals__ = __exception__ = \
-    __module_name__ = __file_path__ = None
+__logger__ = __exception__ = __module_name__ = __file_path__ = \
+    __test_mode__ = None
 '''
     Extends this module with some magic environment variables to provide better
     introspection support. A generic command line interface for some code

@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.3
 # -*- coding: utf-8 -*-
 
 # region vim modline
@@ -29,7 +29,7 @@ License
 
     see http://creativecommons.org/licenses/by/3.0/deed.de
 
-Conventions (bcX := boostNode convention number X)
+Additional conventions beside pep8 (bcX := boostNode convention number X)
 
     - bc1 Capitalized variables are constant and shouldn't be mutable.
     - bc2 Properties with preceding underscores shouldn't be accessed from
@@ -41,47 +41,45 @@ Conventions (bcX := boostNode convention number X)
           camel-case class-names or underscore separated methods and property
           names.
     - bc5 Class-names have a leading upper case letter.
-    - bc6 Methods and functions are complete lower case.
+    - bc6 Methods and functions are complete lower case. Different word can be
+          concatenated via an underscore.
     - bc7 Do not use more chars then 79 in one line.
     - bc8 Use short and/or long description doc-strings for all definitions.
     - bc9 Write doctest for each unit it is possible and try to reach 100% path
           coverage.
-    - bc10 Every temporary generated file (e.g. for mockups) should have its
-           name prefixed with "temp_" to support automatic clean up after
-           running automated test cases.
-    - bc11 Sorting imports as following:
-               1. Import all standard modules and packages,
-               2. then all from third party,
-               3. now import your own modules or packages.
-               4. Sort import names alphabetically and separate the previous
-                  defined parts with blank lines.
-    - bc12 Import everything by its whole name and reference path and use it by
-           its full reference path (even builtin units).
-    - bc13 Don't use any abbreviations.
-    - bc14 Follow the pep8 standards.
-    - bc15 Try to use small cyclomatic complexity in all units.
-           (e.g. less than 20 or 30).
-    - bc16 Use the modules pattern described below.
-    - bc17 Use the area statement syntax to structure your code and make it
+    - bc10 Sorting imports as following:
+        1. Import all standard modules and packages,
+        2. then all from third party,
+        3. now import your own modules or packages.
+        4. Sort import names alphabetically and separate the previous
+          defined parts with blank lines.
+    - bc11 Use builtin names with the "builtins." prefix.
+    - bc12 Don't use any abbreviations.
+    - bc13 Use smaller or equal cyclomatic complexity to eight.
+    - bc14 Use the modules pattern described below.
+    - bc15 Use the area statement syntax to structure your code and make it
            possible to fold them in many IDE's
            (see Structure of meta documenting below).
            If you are forced to indent an area nearer to left border as in
            the logic of meta structuring use one "#" for each less of
            indention.
-    - bc18 If a module could offer a usable command line interface to provide
+    - bc16 If a module could offer a usable command line interface to provide
            their functionality directly for other programs
            (maybe not written in python) implement the "Runnable" interface
            from "boostNode.extension.system.Runnable".
-    - bc19 Make every script or package standalone runnable. That means you
+    - bc17 Make every script or package standalone runnable. That means you
            should use relative import references or append your own import path
            dynamically generated.
-    - bc20 Always think that code is more read than written.
-    - bc21 By choosing witch quotes to use follow this priority.
-               1. Single quote (')
-               2. Double quote (")
-               3. Triple single quote (''')
-               4. Triple double quote (three times ")
-    - bc22 Indent function parameter which doesn't match in one line like:
+    - bc18 Always think that code is more red than written.
+    - bc19 By choosing witch quotes to use follow this priority.
+        1. Single quote (')
+        2. Double quote (")
+        3. Triple single quote (''')
+        4. Triple double quote (three times ")
+    - bc20 Always access a static class property via the class reference like:
+        "self.__class__.static_property". Don't use any implicit references
+        like "self.static_property".
+    - bc21 Indent function parameter which doesn't match in one line like:
 
            function_name(
                parameter1, parameter2, parameter3,
@@ -105,7 +103,7 @@ Conventions (bcX := boostNode convention number X)
         function_name(
             parameter1, parameter2, parameter3).method_name()
 
-Structure of meta documenting classes. (see bc16 and bc17)
+Structure of meta documenting classes. (see bc14 and bc15)
 
     # region header
 
@@ -126,21 +124,30 @@ Structure of meta documenting classes. (see bc16 and bc17)
 
     # region abstract classes
 
-    class AA:
+    class A:
 
-        # region (Static|Dynamic) (properties|methods)
+        # region properties
 
-            # region (Public|Protected)
+        '''Description for public constant.'''
+        A = 4
+        '''Description for protected constant.'''
+        _B = 'example'
+        '''Description for private constant.'''
+        __B = 'private'
+        '''Description for public static property.'''
+        a = 2
+        '''Description for protected static property.'''
+        _b = 2
+        '''Description for private static property.'''
+        __b = 5
 
-                # region Property of method or property group
+        # endregion
 
-                    # region Subproperty of method or property group
+        # region static methods
+
+            # region public
 
         ...
-
-                    # endregion
-
-                # endregion
 
             #+ region compensate right indention
 
@@ -162,29 +169,46 @@ Structure of meta documenting classes. (see bc16 and bc17)
 
         # endregion
 
-    # endregion
+        # region dynamic methods
 
-    # region classes
+            # region public
 
-    class A:
+                # region special
 
-        # region (static|dynamic) (properties|methods)
+        def __init__(self):
 
-            # region (public|protected)
+                    # region properties
 
-                # region property of method or property group
-
-                    # region subproperty of method or property group
-
-        ...
+            '''Description for public dynamic property.'''
+            a = 5
+            '''Description for protected dynamic property.'''
+            _a = 4
+            '''Description for private dynamic property.'''
+            __b = 'privat'
 
                     # endregion
 
                 # endregion
 
+        ...
+
+            # endregion
+
+            # region protected
+
+        ...
+
             # endregion
 
         # endregion
+
+    # endregion
+
+    # region classes
+
+    class B:
+
+        ...
 
     # endregion
 
@@ -200,8 +224,8 @@ Structure of dependencies
     0.  builtins
     1.  boostNode.extension.type
     2.  boostNode.aspect.signature
-    3.  boostNode.paradigm.aspectOrientation
-    4.  boostNode.paradigm.objectOrientation
+    3.  boostNode.paradigm.objectOrientation
+    4.  boostNode.paradigm.aspectOrientation
     5.  boostNode.extension.native
     6.  boostNode.extension.file
     7.  boostNode.extension.output
@@ -257,7 +281,7 @@ Module pattern (see bc16)
 
     # region functions
 
-    def Main():
+    def main():
         builtins.print('Hello world!')
 
     # endregion
@@ -280,8 +304,8 @@ __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-## python3.3 import builtins
-import __builtin__ as builtins
+## python2.7 import __builtin__ as builtins
+import builtins
 import inspect
 import logging
 import os
@@ -295,8 +319,8 @@ sys.path.append(os.path.abspath(sys.path[0] + 2 * ('..' + os.sep)))
 # region functions
 
 
-## python3.3 def __get_all_modules__(path=sys.path[0]) -> builtins.list:
-def __get_all_modules__(path=sys.path[0]):
+## python2.7 def __get_all_modules__(path=sys.path[0]):
+def __get_all_modules__(path=sys.path[0]) -> builtins.list:
     '''
         This method provides a generic way to determine all modules in
         current package or folder. It is useful for "__init__.py" files.
@@ -309,21 +333,22 @@ def __get_all_modules__(path=sys.path[0]):
         >>> from boostNode.extension.file import Handler as FileHandler
 
         >>> location = FileHandler(
-        ...     __test_folder__ + '__get_all_modules__', make_directory=True)
+        ...     __test_folder_path__ + '__get_all_modules__',
+        ...     make_directory=True)
         >>> a = FileHandler(
         ...     location.path + 'a.py', must_exist=False)
         >>> a.content = ' '
         >>> FileHandler(
         ...     location.path + 'b.pyc', make_directory=True
         ... ) # doctest: +ELLIPSIS
-        Object of "Handler" with path "...__get_all_modu...b.pyc..." (dire...
+        Object of "Handler" with path "...__get_all_modu...b.pyc..." (type: ...
 
-        >>> __get_all_modules__(__test_folder__ + '__get_all_modules__')
+        >>> __get_all_modules__(__test_folder_path__ + '__get_all_modules__')
         ['a']
 
         >>> a.remove_file()
         True
-        >>> __get_all_modules__(__test_folder__ + '__get_all_modules__')
+        >>> __get_all_modules__(__test_folder_path__ + '__get_all_modules__')
         []
     '''
     if not (sys.path[0] or path):
@@ -379,8 +404,8 @@ except WindowsError as exception:
     Preset some variables given by introspection letting the linter know what
     globale variables are available.
 '''
-__logger__ = __test_mode__ = __test_globals__ = __exception__ = \
-    __file_path__ = None
+__logger__ = __exception__ = __module_name__ = __file_path__ = \
+    __test_mode__ = None
 '''
     Extends this module with some magic environment variables to provide better
     introspection support. A generic command line interface for some code

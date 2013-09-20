@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.3
 # -*- coding: utf-8 -*-
 
 # region vim modline
@@ -10,8 +10,8 @@
 
 # region header
 
-## python3.3 pass
-from __future__ import print_function
+## python2.7 from __future__ import print_function
+pass
 
 '''
     This module provides classes for dealing with python's way to transport
@@ -31,8 +31,8 @@ __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-## python3.3 import builtins
-import __builtin__ as builtins
+## python2.7 import __builtin__ as builtins
+import builtins
 import copy
 import inspect
 import logging
@@ -40,8 +40,8 @@ import multiprocessing
 import os
 import sys
 import threading
-## python3.3 import queue as native_queue
-import Queue as native_queue
+## python2.7 import Queue as native_queue
+import queue as native_queue
 
 '''Make boostNode packages and modules importable via relative paths.'''
 for number in (3, 4):
@@ -49,8 +49,8 @@ for number in (3, 4):
 
 from boostNode.extension.file import Handler as FileHandler
 from boostNode.extension.native import Module
-## python3.3 from boostNode.extension.type import Self, SelfClass
-pass
+## python2.7 pass
+from boostNode.extension.type import Self, SelfClass
 from boostNode.paradigm.aspectOrientation import JointPoint
 from boostNode.paradigm.objectOrientation import Class
 
@@ -66,40 +66,13 @@ class Buffer(Class, logging.StreamHandler):
 
         Examples:
 
-        >>> buffer = Buffer(file=__test_folder__ + 'Buffer')
+        >>> buffer = Buffer(file=__test_folder_path__ + 'Buffer')
         >>> buffer.clear() # doctest: +ELLIPSIS
         '...'
         >>> print('hans', file=buffer, end='+')
         >>> buffer.content
         'hans+'
     '''
-
-    # region dynamic properties
-
-        # region public
-
-    '''Saves the queue instance for writing content into.'''
-    queue = None
-    '''Saves the file handler instance for writing content into.'''
-    file = None
-    '''Saves the last written input.'''
-    last_written = ''
-
-        # endregion
-
-        # region protected
-
-    '''
-        A lock object to guarantee that no other thread read from buffer
-        during truncating or writing.
-    '''
-    _lock = None
-    '''Saves the current buffer content.'''
-    _content = ''
-
-        # endregion
-
-    # endregion
 
     # region dynamic methods
 
@@ -108,13 +81,13 @@ class Buffer(Class, logging.StreamHandler):
             # region special
 
     @JointPoint
-## python3.3
+## python2.7
 ##     def __init__(
-##         self: Self, file=None, queue=None, support_multiprocessing=False
-##     ) -> None:
+##         self, file=None, queue=None, support_multiprocessing=False
+##     ):
     def __init__(
-        self, file=None, queue=None, support_multiprocessing=False
-    ):
+        self: Self, file=None, queue=None, support_multiprocessing=False
+    ) -> None:
 ##
         '''
             Saves the file path in the current instance. If "file" is "None"
@@ -123,7 +96,7 @@ class Buffer(Class, logging.StreamHandler):
             Examples:
 
             >>> Buffer(
-            ...     file=__test_folder__ + '__init__'
+            ...     file=__test_folder_path__ + '__init__'
             ... ).file # doctest: +ELLIPSIS
             Object of "Handler" with path "...__init__" ...
 
@@ -132,12 +105,17 @@ class Buffer(Class, logging.StreamHandler):
             ... ).queue # doctest: +ELLIPSIS
             <multiprocessing.queues.Queue object at ...>
         '''
-        self._lock = threading.Lock()
+
+                # region properties
+
+        '''Saves the last written input.'''
+        self.last_written = ''
         if support_multiprocessing:
             self._lock = multiprocessing.Lock()
-        self.queue = self.file = None
-        self.last_written = ''
-        self._content = ''
+        '''Saves the file handler instance for writing content into.'''
+        self.file = None
+        '''Saves the queue instance for writing content into.'''
+        self.queue = None
         if queue is not None:
             self.queue = native_queue.Queue()
             if support_multiprocessing:
@@ -148,10 +126,19 @@ class Buffer(Class, logging.StreamHandler):
                 self.queue = queue
         elif file is not None:
             self.file = FileHandler(location=file, must_exist=False)
+        '''
+            A lock object to guarantee that no other thread read from buffer
+            during truncating or writing.
+        '''
+        self._lock = threading.Lock()
+        '''Saves the current buffer content.'''
+        self._content = ''
+
+                # endregion
 
     @JointPoint
-## python3.3     def __repr__(self: Self) -> builtins.str:
-    def __repr__(self):
+## python2.7     def __repr__(self):
+    def __repr__(self: Self) -> builtins.str:
         '''
             Invokes if this object should describe itself by a string.
 
@@ -160,9 +147,9 @@ class Buffer(Class, logging.StreamHandler):
             >>> repr(Buffer())
             'Object of "Buffer" (memory buffered) with content "".'
 
-            >>> buffer = Buffer(file=__test_folder__ + '__repr__')
+            >>> buffer = Buffer(file=__test_folder_path__ + '__repr__')
             >>> buffer.write('hans') # doctest: +ELLIPSIS
-            Object of "Buffer" (file buffered with "...__repr__" (file)."...
+            Object of "Buffer" (file buffered with "...__repr__" (type: file...
 
             >>> repr(Buffer(queue=True))
             'Object of "Buffer" (queue buffered) with content "".'
@@ -183,8 +170,8 @@ class Buffer(Class, logging.StreamHandler):
                    type_addition=type_addition, content=self.content)
 
     @JointPoint
-## python3.3     def __str__(self: Self) -> builtins.str:
-    def __str__(self):
+## python2.7     def __str__(self):
+    def __str__(self: Self) -> builtins.str:
         '''
             Invokes if this object is tried to interpreted as string.
 
@@ -196,8 +183,8 @@ class Buffer(Class, logging.StreamHandler):
         return self.content
 
     @JointPoint
-## python3.3     def __bool__(self: Self) -> builtins.bool:
-    def __nonzero__(self):
+## python2.7     def __nonzero__(self):
+    def __bool__(self: Self) -> builtins.bool:
         '''
             Invokes if this object is tried to interpreted as boolean.
 
@@ -218,8 +205,8 @@ class Buffer(Class, logging.StreamHandler):
         # region getter
 
     @JointPoint
-## python3.3     def get_content(self: Self) -> builtins.str:
-    def get_content(self):
+## python2.7     def get_content(self):
+    def get_content(self: Self) -> builtins.str:
         '''
             Getter for the current content.
 
@@ -247,8 +234,8 @@ class Buffer(Class, logging.StreamHandler):
         # endregion
 
     @JointPoint
-## python3.3     def write(self: Self, content: builtins.str) -> Self:
-    def write(self, content):
+## python2.7     def write(self, content):
+    def write(self: Self, content: builtins.str) -> Self:
         '''
             Writes content to the current output buffer file.
             If the current given file "Buffer.file"
@@ -256,7 +243,7 @@ class Buffer(Class, logging.StreamHandler):
 
             Examples:
 
-            >>> buffer = Buffer(file=__test_folder__ + 'write')
+            >>> buffer = Buffer(file=__test_folder_path__ + 'write')
             >>> buffer.clear() # doctest: +ELLIPSIS
             '...'
             >>> buffer.write('hans') # doctest: +ELLIPSIS
@@ -281,8 +268,8 @@ class Buffer(Class, logging.StreamHandler):
         return self
 
     @JointPoint
-## python3.3     def flush(self: Self) -> Self:
-    def flush(self):
+## python2.7     def flush(self):
+    def flush(self: Self) -> Self:
         '''
             Flush methods usually called to guarantee that all objects putted
             to "write()" are materialized on their provided media.
@@ -296,14 +283,14 @@ class Buffer(Class, logging.StreamHandler):
         return self
 
     @JointPoint
-## python3.3     def clear(self: Self, delete=True) -> builtins.str:
-    def clear(self, delete=True):
+## python2.7     def clear(self, delete=True):
+    def clear(self: Self, delete=True) -> builtins.str:
         '''
             Removes the current output buffer content.
 
             Examples:
 
-            >>> buffer = Buffer(file=__test_folder__ + 'clear')
+            >>> buffer = Buffer(file=__test_folder_path__ + 'clear')
 
             >>> buffer.clear() # doctest: +ELLIPSIS
             '...'
@@ -362,32 +349,19 @@ class Print(Class):
         function.
     '''
 
-    # region dynamic properties
+    # region properties
 
-        # region public
-
-    '''
-        Print this string before every first argument to every "put()"
-        call.
-    '''
+    '''Print this string before every first argument to every "put()" call.'''
     start = ''
-    '''
-        Print this string between every given element to one "put()" call.
-    '''
+    '''Print this string between every given element to one "put()" call.'''
     separator = ' '
-    '''
-        Print this string after every last argument to every "put()" call.
-    '''
+    '''Print this string after every last argument to every "put()" call.'''
     end = '\n'
-    '''Redirect print output to this buffer.'''
-    buffer = sys.stdout
     '''
         Redirect print output to this buffer if no buffer is defined for
         current instance.
     '''
     default_buffer = sys.stdout
-
-        # endregion
 
     # endregion
 
@@ -398,11 +372,11 @@ class Print(Class):
             # region special
 
     @JointPoint
-## python3.3
-##     def __init__(
-##         self: Self, *output: builtins.object, **codewords: builtins.object
-##     ) -> None:
-    def __init__(self, *output, **codewords):
+## python2.7
+##     def __init__(self, *output, **codewords):
+    def __init__(
+        self: Self, *output: builtins.object, **codewords: builtins.object
+    ) -> None:
 ##
         '''
             Writes something to the output buffer or prints to standard
@@ -453,10 +427,16 @@ class Print(Class):
         keywords = {'start': self.__class__.start,
                     'separator': self.__class__.separator,
                     'end': self.__class__.end,
-                    'buffer': self.__class__.default_buffer,
-                    'flush': False}
+                    'buffer': self.__class__.default_buffer, 'flush': False}
         keywords.update(codewords)
+
+                 # region properties
+
+        '''Redirect print output to this buffer.'''
         self.buffer = keywords['buffer']
+
+                 # endregion
+
         output = builtins.list(output)
         for index, out in builtins.enumerate(output):
             if builtins.isinstance(out, native_queue.Queue):
@@ -472,18 +452,18 @@ class Print(Class):
                 output[index] = builtins.str(keywords['separator']) +\
                     builtins.str(out)
         output = [keywords['start']] + output + [keywords['end']]
-## python3.3
-##         builtins.print(
-##             *output, sep='', end='', file=keywords['buffer'],
-##             flush=keywords['flush'])
-        builtins.print(*output, sep='', end='', file=keywords['buffer'])
-        if keywords['flush']:
-            sys.stdout.flush()
+## python2.7
+##         builtins.print(*output, sep='', end='', file=keywords['buffer'])
+##         if keywords['flush']:
+##             sys.stdout.flush()
+        builtins.print(
+            *output, sep='', end='', file=keywords['buffer'],
+            flush=keywords['flush'])
 ##
 
     @JointPoint
-## python3.3     def __str__(self: Self) -> builtins.str:
-    def __str__(self):
+## python2.7     def __str__(self):
+    def __str__(self: Self) -> builtins.str:
         '''
             Is triggered if this object should be converted to string.
 
@@ -502,8 +482,8 @@ class Print(Class):
         return ''
 
     @JointPoint
-## python3.3     def __repr__(self: Self) -> builtins.str:
-    def __repr__(self):
+## python2.7     def __repr__(self):
+    def __repr__(self: Self) -> builtins.str:
         '''
             Invokes if this object should describe itself by a string.
 
@@ -532,9 +512,7 @@ class Logger(Class):
         data structure.
     '''
 
-    # region dynamic properties
-
-        # region public
+    # region properties
 
     '''Defining all default components of the logger objects.'''
     default_level = 'critical',
@@ -542,8 +520,6 @@ class Logger(Class):
     terminator = '\n',
     buffer = sys.stdout,
     instances = []
-
-        # endregion
 
     # endregion
 
@@ -554,8 +530,8 @@ class Logger(Class):
             # region special
 
     @JointPoint(builtins.classmethod)
-## python3.3     def __str__(cls: SelfClass) -> builtins.str:
-    def __str__(cls):
+## python2.7     def __str__(cls):
+    def __str__(cls: SelfClass) -> builtins.str:
         '''
             Is triggered if a "Logger" object should be converted to string.
 
@@ -577,8 +553,8 @@ class Logger(Class):
         return result
 
     @JointPoint(builtins.classmethod)
-## python3.3     def __repr__(cls: SelfClass) -> builtins.str:
-    def __repr__(cls):
+## python2.7     def __repr__(cls):
+    def __repr__(cls: SelfClass) -> builtins.str:
         '''
             Invokes if this object should describe itself by a string.
 
@@ -618,8 +594,8 @@ class Logger(Class):
             # endregion
 
     @JointPoint(builtins.classmethod)
-## python3.3     def flush(cls: SelfClass) -> SelfClass:
-    def flush(cls):
+## python2.7     def flush(cls):
+    def flush(cls: SelfClass) -> SelfClass:
         '''
             Flushes all buffers in all logger handlers.
 
@@ -634,14 +610,14 @@ class Logger(Class):
         return cls
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python2.7
 ##     def get(
-##         cls: SelfClass, name=__name__, level=(), buffer=(), terminator=(),
-##         format=()
-##     ) -> logging.getLoggerClass():
+##         cls, name=__name__, level=(), buffer=(), terminator=(), format=()
+##     ):
     def get(
-        cls, name=__name__, level=(), buffer=(), terminator=(), format=()
-    ):
+        cls: SelfClass, name=__name__, level=(), buffer=(), terminator=(),
+        format=()
+    ) -> logging.getLoggerClass():
 ##
         '''
             Returns a new or existing instance of a logger with given
@@ -675,11 +651,11 @@ class Logger(Class):
         return cls.instances[-1]
 
     @JointPoint(builtins.classmethod)
-## python3.3
-##     def change_all(
-##         cls: SelfClass, level=(), buffer=(), terminator=(), format=()
-##     ) -> SelfClass:
-    def change_all(cls, level=(), buffer=(), terminator=(), format=()):
+## python2.7
+##     def change_all(cls, level=(), buffer=(), terminator=(), format=()):
+    def change_all(
+        cls: SelfClass, level=(), buffer=(), terminator=(), format=()
+    ) -> SelfClass:
 ##
         '''
             This method changes the given properties to all created logger
@@ -697,8 +673,8 @@ class Logger(Class):
         '''
         cls._set_properties(level, buffer, terminator, format)
         for logger in cls.instances:
-## python3.3             new_handler = logger.handlers.copy()
-            new_handler = copy.copy(logger.handlers)
+## python2.7             new_handler = copy.copy(logger.handlers)
+            new_handler = logger.handlers.copy()
             if buffer:
                 new_handler = []
                 for new_buffer in cls.buffer:
@@ -723,12 +699,12 @@ class Logger(Class):
         # region protected
 
     @JointPoint(builtins.classmethod)
-## python3.3
-##     def _set_properties(
-##         cls: SelfClass, level: builtins.tuple, buffer: builtins.tuple,
-##         terminator: builtins.tuple, format: builtins.tuple
-##     ) -> SelfClass:
-    def _set_properties(cls, level, buffer, terminator, format):
+## python2.7
+##     def _set_properties(cls, level, buffer, terminator, format):
+    def _set_properties(
+        cls: SelfClass, level: builtins.tuple, buffer: builtins.tuple,
+        terminator: builtins.tuple, format: builtins.tuple
+    ) -> SelfClass:
 ##
         '''
             This method sets the class properties.
@@ -752,13 +728,13 @@ class Logger(Class):
         return cls
 
     @JointPoint(builtins.classmethod)
-## python3.3
-##     def _generate_logger(
-##         cls: SelfClass, name: builtins.str, level: builtins.tuple,
-##         buffer: builtins.tuple, terminator: builtins.tuple,
-##         format: builtins.tuple
-##     ) -> logging.getLoggerClass():
-    def _generate_logger(cls, name, level, buffer, terminator, format):
+## python2.7
+##     def _generate_logger(cls, name, level, buffer, terminator, format):
+    def _generate_logger(
+        cls: SelfClass, name: builtins.str, level: builtins.tuple,
+        buffer: builtins.tuple, terminator: builtins.tuple,
+        format: builtins.tuple
+    ) -> logging.getLoggerClass():
 ##
         '''
             Creates a new logger instance by initializing all its components
@@ -783,6 +759,7 @@ class Logger(Class):
         for handler in logging.getLogger(name).handlers:
             logging.getLogger(name).removeHandler(handler)
         logger = logging.getLogger(name)
+        logger.propagate = False
         for _buffer, _terminator, _level, _format in builtins.zip(
             buffer, terminator, level, format
         ):
@@ -807,8 +784,8 @@ class Logger(Class):
     Preset some variables given by introspection letting the linter know what
     globale variables are available.
 '''
-__logger__ = __test_mode__ = __test_globals__ = __exception__ = \
-    __module_name__ = __file_path__ = None
+__logger__ = __exception__ = __module_name__ = __file_path__ = \
+    __test_mode__ = None
 '''
     Extends this module with some magic environment variables to provide better
     introspection support. A generic command line interface for some code

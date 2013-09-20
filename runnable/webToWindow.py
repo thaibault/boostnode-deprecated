@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.3
 # -*- coding: utf-8 -*-
 
 # region vim modline
@@ -27,15 +27,15 @@ __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-## python3.3 import builtins
-import __builtin__ as builtins
+## python2.7 import __builtin__ as builtins
+import builtins
 import inspect
 import os
 import re
 import sys
 import threading
-## python3.3 import types
-pass
+## python2.7 pass
+import types
 import webbrowser
 
 try:
@@ -61,8 +61,8 @@ for number in (3, 4):
 
 from boostNode.extension.native import Dictionary, Module
 from boostNode.extension.system import CommandLine, Runnable
-## python3.3 from boostNode.extension.type import Self
-pass
+## python2.7 pass
+from boostNode.extension.type import Self
 from boostNode.paradigm.aspectOrientation import JointPoint
 from boostNode.paradigm.objectOrientation import Class
 
@@ -79,9 +79,7 @@ class Browser(Class, Runnable):
         a real desktop application.
     '''
 
-    # region constant properties
-
-        # region public
+    # region properties
 
     '''Holds all command line interface argument informations.'''
     COMMAND_LINE_ARGUMENTS = (
@@ -165,50 +163,8 @@ class Browser(Class, Runnable):
                                  '__initializer_default_value__'},
              'dest': 'stop_order',
              'metavar': 'STRING'}})
-
-        # endregion
-
-    # endregion
-
-    # region dynamic properties
-
-        # region public
-
-    '''Dynamic runtime objects for constructing a simple web window.'''
-    window = scroller = vbox = progress_bar = browser = None
     '''Saves all initialized instances of this class.'''
     webview_instances = []
-    '''Saves a cli-command for shutting down the server.'''
-    stop_order = ''
-
-        # endregion
-
-        # region protected
-
-    '''If set gtk will be preferred to show webview otherwise qt.'''
-    _default_gui_toolkit = ''
-    '''Holds the current url location.'''
-    _url = ''
-    '''Defines dimensions of webview.'''
-    _width_in_pixel = 0
-    _height_in_pixel = 0
-    _fullscreen = False
-    _no_window_decoration = False
-    '''If setted "True" window will be closed on next gtk main iteration.'''
-    _gtk_close = False
-    '''Defines weather a progress bar for page loading should be shown.'''
-    _no_progress_bar = False
-    '''Defines which gui toolkit should be used.'''
-    _gui_toolkit = ''
-    '''Saves the default title if no title was set via markup.'''
-    _default_title = ''
-    '''
-        This lock object handles to wait until all gtk windows are closed
-        before the program terminates.
-    '''
-    _close_gtk_windows_lock = None
-
-        # endregion
 
     # endregion
 
@@ -219,8 +175,8 @@ class Browser(Class, Runnable):
             # region special
 
     @JointPoint
-## python3.3     def __repr__(self: Self) -> builtins.str:
-    def __repr__(self):
+## python2.7     def __repr__(self):
+    def __repr__(self: Self) -> builtins.str:
         '''
             Invokes if this object should describe itself by a string.
 
@@ -243,9 +199,9 @@ class Browser(Class, Runnable):
 
             # region getter
 
-    @JointPoint
-## python3.3     def get_gui_toolkit(self: Self) -> builtins.str:
-    def get_gui_toolkit(self):
+    @JointPoint(Class.pseudo_property)
+## python2.7     def get_gui_toolkit(self):
+    def get_gui_toolkit(self: Self) -> builtins.str:
         '''
             Determines available gui toolkit.
 
@@ -295,8 +251,8 @@ class Browser(Class, Runnable):
             # region setter
 
     @JointPoint
-## python3.3     def set_url(self: Self, url: builtins.str) -> builtins.str:
-    def set_url(self, url):
+## python2.7     def set_url(self, url):
+    def set_url(self: Self, url: builtins.str) -> builtins.str:
         '''Setter for current url.'''
         if re.compile('^[a-zA-Z]+://.*$').match(url):
             self._url = url
@@ -307,12 +263,12 @@ class Browser(Class, Runnable):
             # endregion
 
     @JointPoint
-## python3.3
-##     def stop(
-##         self: Self, *arguments: builtins.object, reason='',
-##         **keywords: builtins.object
-##     ) -> Self:
-    def stop(self, *arguments, **keywords):
+## python2.7
+##     def stop(self, *arguments, **keywords):
+    def stop(
+        self: Self, *arguments: builtins.object, reason='',
+        **keywords: builtins.object
+    ) -> Self:
 ##
         '''
             Closes all created web views. Note that in case of using the
@@ -324,10 +280,10 @@ class Browser(Class, Runnable):
             >>> Browser('google.de').stop() # doctest: +ELLIPSIS
             Object of "Browser" with url "http://google.de" in 800 pixel...
         '''
-## python3.3
-##         pass
-        reason, keywords = Dictionary(content=keywords).pop(
-            name='reason', default_value='')
+## python2.7
+##         reason, keywords = Dictionary(content=keywords).pop(
+##             name='reason', default_value='')
+        pass
 ##
         if self.window is not None:
             if self.gui_toolkit == 'qt':
@@ -360,8 +316,8 @@ class Browser(Class, Runnable):
             # region runnable implementation
 
     @JointPoint
-## python3.3     def _run(self: Self) -> Self:
-    def _run(self):
+## python2.7     def _run(self):
+    def _run(self: Self) -> Self:
         '''
             Entry point for command line call of this program. Initializes all
             window and webkit components.
@@ -383,19 +339,19 @@ class Browser(Class, Runnable):
                 arguments=self.COMMAND_LINE_ARGUMENTS)))
 
     @JointPoint
-## python3.3
+## python2.7
 ##     def _initialize(
-##         self: Self, url: builtins.str, width_in_pixel=800,
-##         height_in_pixel=600, fullscreen=False, no_window_decoration=False,
-##         default_gui_toolkit='qt', no_progress_bar=False,
-##         default_title='No gui loaded.', stop_order='stop',
-##         **keywords: builtins.object
-##     ) -> Self:
+##             self, url, width_in_pixel=800, height_in_pixel=600,
+##             fullscreen=False, no_window_decoration=False,
+##             default_gui_toolkit='qt', no_progress_bar=False,
+##             default_title='No gui loaded.', stop_order='stop', **keywords):
     def _initialize(
-            self, url, width_in_pixel=800, height_in_pixel=600,
-            fullscreen=False, no_window_decoration=False,
-            default_gui_toolkit='qt', no_progress_bar=False,
-            default_title='No gui loaded.', stop_order='stop', **keywords):
+        self: Self, url: builtins.str, width_in_pixel=800,
+        height_in_pixel=600, fullscreen=False, no_window_decoration=False,
+        default_gui_toolkit='qt', no_progress_bar=False,
+        default_title='No gui loaded.', stop_order='stop',
+        **keywords: builtins.object
+    ) -> Self:
 ##
         '''
             Initializes a web view or tries to open a default browser if no gui
@@ -408,30 +364,56 @@ class Browser(Class, Runnable):
             ...     height_in_pixel=100) # doctest: +ELLIPSIS
             Object of "Browser" with url "http://www.google.com/" in 300 pi...
         '''
+        self.__class__.webview_instances.append(self)
+
+                # region properties
+
+        '''Dynamic runtime objects for constructing a simple web window.'''
+        self.window = self.scroller = self.vbox = self.progress_bar = \
+            self.browser = None
+        '''Holds the current url location.'''
         self.url = url
         self.stop_order = stop_order
+        '''Saves a cli-command for shutting down the server.'''
+        self.stop_order = ''
+        '''
+            If setted "True" window will be closed on next gtk main iteration.
+        '''
+        self._gtk_close = False
+        '''Saves the default title if no title was set via markup.'''
+        self._default_title = default_title
+        '''Defines dimensions of webview.'''
         self._width_in_pixel = width_in_pixel
         self._height_in_pixel = height_in_pixel
+        '''Defines windows visual representation.'''
         self._fullscreen = fullscreen
         self._no_window_decoration = no_window_decoration
+        '''If set gtk will be preferred to show web view otherwise qt.'''
         self._default_gui_toolkit = default_gui_toolkit
+        '''Defines weather a progress bar for page loading should be shown.'''
         self._no_progress_bar = no_progress_bar
-        self.__class__.webview_instances.append(self)
         __logger__.info(
-            'Start webgui with gui toolkit "%s".', self.gui_toolkit)
+            'Start web gui with gui toolkit "%s".', self.gui_toolkit)
         if not __test_mode__:
+            '''
+                This lock object handles to wait until all gtk windows are
+                closed before the program terminates.
+            '''
             self._close_gtk_windows_lock = threading.Lock()
             self._close_gtk_windows_lock.acquire()
-## python3.3
-##             browser_thread = threading.Thread(
-##                 target=builtins.getattr(
-##                     self, '_initialize_%s_browser' % self.gui_toolkit),
-##                 daemon=True
-##             ).start()
-            browser_thread = threading.Thread(target=builtins.getattr(
-                self, '_initialize_%s_browser' % self.gui_toolkit))
-            browser_thread.daemon = True
-            browser_thread.start()
+
+                # endregion
+
+## python2.7
+##             browser_thread = threading.Thread(target=builtins.getattr(
+##                 self, '_initialize_%s_browser' % self.gui_toolkit))
+##             browser_thread.daemon = True
+##             browser_thread.start()
+            browser_thread = threading.Thread(
+                target=builtins.getattr(
+                    self, '_initialize_%s_browser' % self.gui_toolkit),
+                daemon=True
+            ).start()
 ##
             if self.stop_order:
                 self.wait_for_order()
@@ -439,19 +421,19 @@ class Browser(Class, Runnable):
 
             # endregion
 
-            # region native webview components
+            # region native web view components
 
     @JointPoint
-## python3.3     def _initialize_default_browser(self: Self) -> Self:
-    def _initialize_default_browser(self):
+## python2.7     def _initialize_default_browser(self):
+    def _initialize_default_browser(self: Self) -> Self:
         '''Starts the default browser with currently stored url.'''
         self.browser = webbrowser
         self.browser.open(self._url)
         return self
 
     @JointPoint
-## python3.3     def _initialize_qt_browser(self: Self) -> Self:
-    def _initialize_qt_browser(self):
+## python2.7     def _initialize_qt_browser(self):
+    def _initialize_qt_browser(self: Self) -> Self:
         '''Starts the qt webkit webview thread.'''
         self.window = PyQt4.QtGui.QApplication(sys.argv)
         self.browser = PyQt4.QtWebKit.QWebView()
@@ -470,8 +452,8 @@ class Browser(Class, Runnable):
         return self
 
     @JointPoint
-## python3.3     def _initialize_qt_progress_bar(self: Self) -> Self:
-    def _initialize_qt_progress_bar(self):
+## python2.7     def _initialize_qt_progress_bar(self):
+    def _initialize_qt_progress_bar(self: Self) -> Self:
         '''
             Initializes the progress bar for qt on bottom of the window for
             showing current state of website rendering.
@@ -496,8 +478,8 @@ class Browser(Class, Runnable):
         return self
 
     @JointPoint
-## python3.3     def _initialize_gtk_browser(self: Self) -> Self:
-    def _initialize_gtk_browser(self):
+## python2.7     def _initialize_gtk_browser(self):
+    def _initialize_gtk_browser(self: Self) -> Self:
         '''Sets various event-handlers for browser and window objects.'''
         self.window = gtk.Window()
         self.vbox = gtk.VBox()
@@ -527,8 +509,8 @@ class Browser(Class, Runnable):
         return self
 
     @JointPoint
-## python3.3     def _initialize_gtk_progress_bar(self: Self) -> Self:
-    def _initialize_gtk_progress_bar(self):
+## python2.7     def _initialize_gtk_progress_bar(self):
+    def _initialize_gtk_progress_bar(self: Self) -> Self:
         '''
             Initializes the progress bar for gtk on bottom of the window for
             showing current state of website rendering.
@@ -543,8 +525,8 @@ class Browser(Class, Runnable):
         return self
 
     @JointPoint
-## python3.3     def _check_for_gtk_closing_flag(self: Self) -> builtins.bool:
-    def _check_for_gtk_closing_flag(self):
+## python2.7     def _check_for_gtk_closing_flag(self):
+    def _check_for_gtk_closing_flag(self: Self) -> builtins.bool:
         '''
             Checks if gtk should be closed after the last gtk main iteration.
             If we return a "False" this method will not be triggered in future.
@@ -565,9 +547,9 @@ class Browser(Class, Runnable):
                     # region webkit event
 
     @JointPoint
-## python3.3
-##     def _on_qt_title_changed(self: Self, title: builtins.str) -> Self:
-    def _on_qt_title_changed(self, title):
+## python2.7
+##     def _on_qt_title_changed(self, title):
+    def _on_qt_title_changed(self: Self, title: builtins.str) -> Self:
 ##
         '''
             Triggers if the current title (normally defined in the web page's
@@ -577,12 +559,12 @@ class Browser(Class, Runnable):
         return self
 
     @JointPoint
-## python3.3
-##     def _on_gtk_title_changed(
-##         self: Self, webview: webkit.WebView, frame: webkit.WebFrame,
-##         title: builtins.str
-##     ) -> Self:
-    def _on_gtk_title_changed(self, webview, frame, title):
+## python2.7
+##     def _on_gtk_title_changed(self, webview, frame, title):
+    def _on_gtk_title_changed(
+        self: Self, webview: webkit.WebView, frame: webkit.WebFrame,
+        title: builtins.str
+    ) -> Self:
 ##
         '''
             Triggers if the current title (normally defined in the web page's
@@ -592,8 +574,8 @@ class Browser(Class, Runnable):
         return self
 
     @JointPoint
-## python3.3     def _on_qt_load_started(self: Self) -> Self:
-    def _on_qt_load_started(self):
+## python2.7     def _on_qt_load_started(self):
+    def _on_qt_load_started(self: Self) -> Self:
         '''
             Triggers if browser starts to load a new web page.
         '''
@@ -602,11 +584,11 @@ class Browser(Class, Runnable):
         return self
 
     @JointPoint
-## python3.3
-##     def _on_gtk_load_started(
-##         self: Self, webview: webkit.WebView, frame: webkit.WebFrame
-##     ) -> Self:
-    def _on_gtk_load_started(self, webview, frame):
+## python2.7
+##     def _on_gtk_load_started(self, webview, frame):
+    def _on_gtk_load_started(
+        self: Self, webview: webkit.WebView, frame: webkit.WebFrame
+    ) -> Self:
 ##
         '''Triggers if browser starts to load a new web page.'''
         self.progress_bar.set_fraction(0 / 100.0)
@@ -614,42 +596,42 @@ class Browser(Class, Runnable):
         return self
 
     @JointPoint
-## python3.3
-##     def _on_qt_load_progress_changed(
-##         self: Self, status: builtins.int
-##     ) -> Self:
-    def _on_qt_load_progress_changed(self, status):
+## python2.7
+##     def _on_qt_load_progress_changed(self, status):
+    def _on_qt_load_progress_changed(
+        self: Self, status: builtins.int
+    ) -> Self:
 ##
         '''Triggers if the current web page load process was changed.'''
         self.progress_bar.setValue(status)
         return self
 
     @JointPoint
-## python3.3
-##     def _on_gtk_load_progress_changed(
-##         self: Self, webview: webkit.WebView, amount: builtins.int
-##     ) -> Self:
-    def _on_gtk_load_progress_changed(self, webview, amount):
+## python2.7
+##     def _on_gtk_load_progress_changed(self, webview, amount):
+    def _on_gtk_load_progress_changed(
+        self: Self, webview: webkit.WebView, amount: builtins.int
+    ) -> Self:
 ##
         '''Triggers if the current web page load process was changed.'''
         self.progress_bar.set_fraction(amount / 100.0)
         return self
 
     @JointPoint
-## python3.3
-##     def _on_qt_load_finished(self: Self, successful: builtins.bool) -> Self:
-    def _on_qt_load_finished(self, successful):
+## python2.7
+##     def _on_qt_load_finished(self, successful):
+    def _on_qt_load_finished(self: Self, successful: builtins.bool) -> Self:
 ##
         '''Triggers if a page load process has finished.'''
         self.progress_bar.setVisible(False)
         return self
 
     @JointPoint
-## python3.3
-##     def _on_gtk_load_finished(
-##         self: Self, webview: webkit.WebView, frame: webkit.WebFrame
-##     ) -> Self:
-    def _on_gtk_load_finished(self, webview, frame):
+## python2.7
+##     def _on_gtk_load_finished(self, webview, frame):
+    def _on_gtk_load_finished(
+        self: Self, webview: webkit.WebView, frame: webkit.WebFrame
+    ) -> Self:
 ##
         '''Triggers if a page load process has finished.'''
         self.progress_bar.set_fraction(100.0 / 100.0)
@@ -663,8 +645,8 @@ class Browser(Class, Runnable):
             # endregion
 
     @JointPoint
-## python3.3     def _determine_gui_toolkits(self: Self) -> builtins.list:
-    def _determine_gui_toolkits(self):
+## python2.7     def _determine_gui_toolkits(self):
+    def _determine_gui_toolkits(self: Self) -> builtins.list:
         '''
             Determines all supported gui toolkits.
 
@@ -687,14 +669,14 @@ class Browser(Class, Runnable):
 
 # endregion
 
- # region footer
+# region footer
 
 '''
     Preset some variables given by introspection letting the linter know what
     globale variables are available.
 '''
-__logger__ = __test_mode__ = __test_globals__ = __exception__ = \
-    __module_name__ = __file_path__ = None
+__logger__ = __exception__ = __module_name__ = __file_path__ = \
+    __test_mode__ = None
 '''
     Extends this module with some magic environment variables to provide better
     introspection support. A generic command line interface for some code
