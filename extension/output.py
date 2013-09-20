@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.3
+#!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 
 # region vim modline
@@ -10,8 +10,8 @@
 
 # region header
 
-## python2.7 from __future__ import print_function
-pass
+## python3.3 pass
+from __future__ import print_function
 
 '''
     This module provides classes for dealing with python's way to transport
@@ -31,8 +31,8 @@ __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-## python2.7 import __builtin__ as builtins
-import builtins
+## python3.3 import builtins
+import __builtin__ as builtins
 import copy
 import inspect
 import logging
@@ -40,8 +40,8 @@ import multiprocessing
 import os
 import sys
 import threading
-## python2.7 import Queue as native_queue
-import queue as native_queue
+## python3.3 import queue as native_queue
+import Queue as native_queue
 
 '''Make boostNode packages and modules importable via relative paths.'''
 for number in (3, 4):
@@ -49,8 +49,8 @@ for number in (3, 4):
 
 from boostNode.extension.file import Handler as FileHandler
 from boostNode.extension.native import Module
-## python2.7 pass
-from boostNode.extension.type import Self, SelfClass
+## python3.3 from boostNode.extension.type import Self, SelfClass
+pass
 from boostNode.paradigm.aspectOrientation import JointPoint
 from boostNode.paradigm.objectOrientation import Class
 
@@ -81,13 +81,13 @@ class Buffer(Class, logging.StreamHandler):
             # region special
 
     @JointPoint
-## python2.7
+## python3.3
 ##     def __init__(
-##         self, file=None, queue=None, support_multiprocessing=False
-##     ):
+##         self: Self, file=None, queue=None, support_multiprocessing=False
+##     ) -> None:
     def __init__(
-        self: Self, file=None, queue=None, support_multiprocessing=False
-    ) -> None:
+        self, file=None, queue=None, support_multiprocessing=False
+    ):
 ##
         '''
             Saves the file path in the current instance. If "file" is "None"
@@ -137,8 +137,8 @@ class Buffer(Class, logging.StreamHandler):
                 # endregion
 
     @JointPoint
-## python2.7     def __repr__(self):
-    def __repr__(self: Self) -> builtins.str:
+## python3.3     def __repr__(self: Self) -> builtins.str:
+    def __repr__(self):
         '''
             Invokes if this object should describe itself by a string.
 
@@ -170,8 +170,8 @@ class Buffer(Class, logging.StreamHandler):
                    type_addition=type_addition, content=self.content)
 
     @JointPoint
-## python2.7     def __str__(self):
-    def __str__(self: Self) -> builtins.str:
+## python3.3     def __str__(self: Self) -> builtins.str:
+    def __str__(self):
         '''
             Invokes if this object is tried to interpreted as string.
 
@@ -183,8 +183,8 @@ class Buffer(Class, logging.StreamHandler):
         return self.content
 
     @JointPoint
-## python2.7     def __nonzero__(self):
-    def __bool__(self: Self) -> builtins.bool:
+## python3.3     def __bool__(self: Self) -> builtins.bool:
+    def __nonzero__(self):
         '''
             Invokes if this object is tried to interpreted as boolean.
 
@@ -205,8 +205,8 @@ class Buffer(Class, logging.StreamHandler):
         # region getter
 
     @JointPoint
-## python2.7     def get_content(self):
-    def get_content(self: Self) -> builtins.str:
+## python3.3     def get_content(self: Self) -> builtins.str:
+    def get_content(self):
         '''
             Getter for the current content.
 
@@ -234,8 +234,8 @@ class Buffer(Class, logging.StreamHandler):
         # endregion
 
     @JointPoint
-## python2.7     def write(self, content):
-    def write(self: Self, content: builtins.str) -> Self:
+## python3.3     def write(self: Self, content: builtins.str) -> Self:
+    def write(self, content):
         '''
             Writes content to the current output buffer file.
             If the current given file "Buffer.file"
@@ -268,8 +268,8 @@ class Buffer(Class, logging.StreamHandler):
         return self
 
     @JointPoint
-## python2.7     def flush(self):
-    def flush(self: Self) -> Self:
+## python3.3     def flush(self: Self) -> Self:
+    def flush(self):
         '''
             Flush methods usually called to guarantee that all objects putted
             to "write()" are materialized on their provided media.
@@ -283,8 +283,8 @@ class Buffer(Class, logging.StreamHandler):
         return self
 
     @JointPoint
-## python2.7     def clear(self, delete=True):
-    def clear(self: Self, delete=True) -> builtins.str:
+## python3.3     def clear(self: Self, delete=True) -> builtins.str:
+    def clear(self, delete=True):
         '''
             Removes the current output buffer content.
 
@@ -372,11 +372,11 @@ class Print(Class):
             # region special
 
     @JointPoint
-## python2.7
-##     def __init__(self, *output, **codewords):
-    def __init__(
-        self: Self, *output: builtins.object, **codewords: builtins.object
-    ) -> None:
+## python3.3
+##     def __init__(
+##         self: Self, *output: builtins.object, **codewords: builtins.object
+##     ) -> None:
+    def __init__(self, *output, **codewords):
 ##
         '''
             Writes something to the output buffer or prints to standard
@@ -452,18 +452,18 @@ class Print(Class):
                 output[index] = builtins.str(keywords['separator']) +\
                     builtins.str(out)
         output = [keywords['start']] + output + [keywords['end']]
-## python2.7
-##         builtins.print(*output, sep='', end='', file=keywords['buffer'])
-##         if keywords['flush']:
-##             sys.stdout.flush()
-        builtins.print(
-            *output, sep='', end='', file=keywords['buffer'],
-            flush=keywords['flush'])
+## python3.3
+##         builtins.print(
+##             *output, sep='', end='', file=keywords['buffer'],
+##             flush=keywords['flush'])
+        builtins.print(*output, sep='', end='', file=keywords['buffer'])
+        if keywords['flush']:
+            sys.stdout.flush()
 ##
 
     @JointPoint
-## python2.7     def __str__(self):
-    def __str__(self: Self) -> builtins.str:
+## python3.3     def __str__(self: Self) -> builtins.str:
+    def __str__(self):
         '''
             Is triggered if this object should be converted to string.
 
@@ -482,8 +482,8 @@ class Print(Class):
         return ''
 
     @JointPoint
-## python2.7     def __repr__(self):
-    def __repr__(self: Self) -> builtins.str:
+## python3.3     def __repr__(self: Self) -> builtins.str:
+    def __repr__(self):
         '''
             Invokes if this object should describe itself by a string.
 
@@ -530,8 +530,8 @@ class Logger(Class):
             # region special
 
     @JointPoint(builtins.classmethod)
-## python2.7     def __str__(cls):
-    def __str__(cls: SelfClass) -> builtins.str:
+## python3.3     def __str__(cls: SelfClass) -> builtins.str:
+    def __str__(cls):
         '''
             Is triggered if a "Logger" object should be converted to string.
 
@@ -553,8 +553,8 @@ class Logger(Class):
         return result
 
     @JointPoint(builtins.classmethod)
-## python2.7     def __repr__(cls):
-    def __repr__(cls: SelfClass) -> builtins.str:
+## python3.3     def __repr__(cls: SelfClass) -> builtins.str:
+    def __repr__(cls):
         '''
             Invokes if this object should describe itself by a string.
 
@@ -594,8 +594,8 @@ class Logger(Class):
             # endregion
 
     @JointPoint(builtins.classmethod)
-## python2.7     def flush(cls):
-    def flush(cls: SelfClass) -> SelfClass:
+## python3.3     def flush(cls: SelfClass) -> SelfClass:
+    def flush(cls):
         '''
             Flushes all buffers in all logger handlers.
 
@@ -610,14 +610,14 @@ class Logger(Class):
         return cls
 
     @JointPoint(builtins.classmethod)
-## python2.7
+## python3.3
 ##     def get(
-##         cls, name=__name__, level=(), buffer=(), terminator=(), format=()
-##     ):
+##         cls: SelfClass, name=__name__, level=(), buffer=(), terminator=(),
+##         format=()
+##     ) -> logging.getLoggerClass():
     def get(
-        cls: SelfClass, name=__name__, level=(), buffer=(), terminator=(),
-        format=()
-    ) -> logging.getLoggerClass():
+        cls, name=__name__, level=(), buffer=(), terminator=(), format=()
+    ):
 ##
         '''
             Returns a new or existing instance of a logger with given
@@ -651,11 +651,11 @@ class Logger(Class):
         return cls.instances[-1]
 
     @JointPoint(builtins.classmethod)
-## python2.7
-##     def change_all(cls, level=(), buffer=(), terminator=(), format=()):
-    def change_all(
-        cls: SelfClass, level=(), buffer=(), terminator=(), format=()
-    ) -> SelfClass:
+## python3.3
+##     def change_all(
+##         cls: SelfClass, level=(), buffer=(), terminator=(), format=()
+##     ) -> SelfClass:
+    def change_all(cls, level=(), buffer=(), terminator=(), format=()):
 ##
         '''
             This method changes the given properties to all created logger
@@ -673,8 +673,8 @@ class Logger(Class):
         '''
         cls._set_properties(level, buffer, terminator, format)
         for logger in cls.instances:
-## python2.7             new_handler = copy.copy(logger.handlers)
-            new_handler = logger.handlers.copy()
+## python3.3             new_handler = logger.handlers.copy()
+            new_handler = copy.copy(logger.handlers)
             if buffer:
                 new_handler = []
                 for new_buffer in cls.buffer:
@@ -699,12 +699,12 @@ class Logger(Class):
         # region protected
 
     @JointPoint(builtins.classmethod)
-## python2.7
-##     def _set_properties(cls, level, buffer, terminator, format):
-    def _set_properties(
-        cls: SelfClass, level: builtins.tuple, buffer: builtins.tuple,
-        terminator: builtins.tuple, format: builtins.tuple
-    ) -> SelfClass:
+## python3.3
+##     def _set_properties(
+##         cls: SelfClass, level: builtins.tuple, buffer: builtins.tuple,
+##         terminator: builtins.tuple, format: builtins.tuple
+##     ) -> SelfClass:
+    def _set_properties(cls, level, buffer, terminator, format):
 ##
         '''
             This method sets the class properties.
@@ -728,13 +728,13 @@ class Logger(Class):
         return cls
 
     @JointPoint(builtins.classmethod)
-## python2.7
-##     def _generate_logger(cls, name, level, buffer, terminator, format):
-    def _generate_logger(
-        cls: SelfClass, name: builtins.str, level: builtins.tuple,
-        buffer: builtins.tuple, terminator: builtins.tuple,
-        format: builtins.tuple
-    ) -> logging.getLoggerClass():
+## python3.3
+##     def _generate_logger(
+##         cls: SelfClass, name: builtins.str, level: builtins.tuple,
+##         buffer: builtins.tuple, terminator: builtins.tuple,
+##         format: builtins.tuple
+##     ) -> logging.getLoggerClass():
+    def _generate_logger(cls, name, level, buffer, terminator, format):
 ##
         '''
             Creates a new logger instance by initializing all its components

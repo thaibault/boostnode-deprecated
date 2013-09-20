@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.3
+#!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 
 # region vim modline
@@ -103,8 +103,8 @@ __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-## python2.7 import __builtin__ as builtins
-import builtins
+## python3.3 import builtins
+import __builtin__ as builtins
 import inspect
 import os
 import sys
@@ -119,8 +119,8 @@ for number in (3, 4):
 
 # region abstract classes
 
-## python2.7 class Class(builtins.object):
-class Class:
+## python3.3 class Class:
+class Class(builtins.object):
     '''
         The main class which is intended for passing on other class.
         It serves a scope for one application to minimize conflicts with other
@@ -134,8 +134,8 @@ class Class:
             # region special
 
     @builtins.classmethod
-## python2.7     def __repr__(cls):
-    def __repr__(cls: builtins.type) -> builtins.str:
+## python3.3     def __repr__(cls: builtins.type) -> builtins.str:
+    def __repr__(cls):
         '''
             Invokes if this object should describe itself by a string.
 
@@ -147,8 +147,8 @@ class Class:
         return 'Object of "%s".' % cls.__name__
 
     @builtins.classmethod
-## python2.7     def __str__(cls):
-    def __str__(cls: builtins.type) -> builtins.str:
+## python3.3     def __str__(cls: builtins.type) -> builtins.str:
+    def __str__(cls):
         '''
             Is triggered if the current object is tried to be converted into a
             string object.
@@ -167,11 +167,11 @@ class Class:
             # region decorator
 
     @builtins.classmethod
-## python2.7
-##     def pseudo_property(cls, function):
-    def pseudo_property(
-        cls: builtins.object, function: types.MethodType
-    ) -> types.MethodType:
+## python3.3
+##     def pseudo_property(
+##         cls: builtins.object, function: types.MethodType
+##     ) -> types.MethodType:
+    def pseudo_property(cls, function):
 ##
         '''
             Attaches a property to given function for indicating that given
@@ -192,11 +192,11 @@ class Class:
 
             # region special
 
-## python2.7
-##     def __getattr__(self, name):
-    def __getattr__(
-        self: builtins.object, name: builtins.str
-    ) -> builtins.object:
+## python3.3
+##     def __getattr__(
+##         self: builtins.object, name: builtins.str
+##     ) -> builtins.object:
+    def __getattr__(self, name):
 ##
         '''
             Is triggered if a property was tried to be read but is
@@ -252,11 +252,11 @@ class Class:
                 return self.get(name)
         return None
 
-## python2.7
-##     def __setattr__(self, name, value):
-    def __setattr__(
-        self, name: builtins.str, value: builtins.object
-    ) -> builtins.object:
+## python3.3
+##     def __setattr__(
+##         self, name: builtins.str, value: builtins.object
+##     ) -> builtins.object:
+    def __setattr__(self, name, value):
 ##
         '''
             Is triggered if a property was tried to overwrite but is
@@ -304,8 +304,8 @@ class Class:
 
             # region boolean
 
-## python2.7     def is_method(self, name):
-    def is_method(self, name: builtins.str) -> builtins.bool:
+## python3.3     def is_method(self, name: builtins.str) -> builtins.bool:
+    def is_method(self, name):
         '''
             Determines if the given class attribute is a callable method or
             something else.
@@ -326,8 +326,8 @@ class Class:
             name in self.__dict__ and
             builtins.callable(self.__dict__[name]))
 
-## python2.7     def is_property(self, name):
-    def is_property(self, name: builtins.str) -> builtins.bool:
+## python3.3     def is_property(self, name: builtins.str) -> builtins.bool:
+    def is_property(self, name):
         '''
             Determines if the given class attribute is a property or
             something else.
@@ -355,11 +355,11 @@ class Class:
 
         # region protected
 
-## python2.7
-##     def _setattr_helper(self, name, value):
-    def _setattr_helper(
-        self, name: builtins.str, value: builtins.object
-    ) -> builtins.bool:
+## python3.3
+##     def _setattr_helper(
+##         self, name: builtins.str, value: builtins.object
+##     ) -> builtins.bool:
+    def _setattr_helper(self, name, value):
 ##
         '''
             Helper method for "self.__setattr__()". Does the actual overwrite
