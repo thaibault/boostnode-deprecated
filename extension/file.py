@@ -73,9 +73,7 @@ class Handler(Class):
 
     # region properties
 
-    '''
-        Pattern for supported formats to handle size of file system elements.
-    '''
+    '''Pattern for supported formats to handle size of file system elements.'''
     REGEX_FORMAT = '^([0-9]+\.?[0-9]{{0,2}})\s*({units})$'
     '''Supported formats to handle the size of file.'''
     FORMATS = {'Byte': {'notations': ('byte', 'b'),
@@ -481,7 +479,6 @@ class Handler(Class):
 
             # region special
 
-    # TODO statrting point for using PropertyInitializer
     @JointPoint
 ## python3.3
 ##     def __init__(
@@ -655,7 +652,8 @@ class Handler(Class):
         '''
         return self.is_element()
 
-    @JointPoint
+    # TODO
+    #@JointPoint
 ## python3.3
 ##     def __eq__(self: Self, other: builtins.object) -> builtins.bool:
     def __eq__(self, other):
@@ -869,6 +867,8 @@ class Handler(Class):
 
             >>> handler = Handler(
             ...     __test_folder_path__ + 'test', must_exist=False)
+            >>> handler.remove_deep()
+            True
             >>> handler.set_content(
             ...     'test', encoding='ascii'
             ... ) # doctest: +ELLIPSIS
@@ -2663,7 +2663,7 @@ class Handler(Class):
                 break
         return self
 
-    @JointPoint
+    # TODO @JointPoint
 ## python3.3
 ##     def is_equivalent(
 ##         self: Self, other: (SelfClassObject, builtins.str)
@@ -2713,7 +2713,7 @@ class Handler(Class):
             >>> a_file.is_equivalent(a)
             False
         '''
-        other = self.__class__(location=other)
+        other = self.__class__(location=other, must_exist=False)
         if self.is_file() and other.is_file():
             return self.content == other.content
         elif(self.is_directory() and other.is_directory() and

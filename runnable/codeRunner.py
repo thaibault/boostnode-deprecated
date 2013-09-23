@@ -44,7 +44,7 @@ for number in (3, 4):
     sys.path.append(os.path.abspath(sys.path[0] + number * ('..' + os.sep)))
 
 from boostNode.extension.file import Handler as FileHandler
-from boostNode.extension.native import Module
+from boostNode.extension.native import Module, PropertyInitializer
 from boostNode.extension.output import Logger, Print
 from boostNode.extension.system import CommandLine, Platform, Runnable
 ## python3.3 from boostNode.extension.type import Self
@@ -262,7 +262,7 @@ class Run(Class, Runnable):
         return self._initialize(**self._command_line_arguments_to_dictionary(
             namespace=command_line_arguments))
 
-    @JointPoint
+    @JointPoint(PropertyInitializer)
 ## python3.3
 ##     def _initialize(
 ##         self: Self, code_file_path=None,
@@ -297,10 +297,8 @@ class Run(Class, Runnable):
             to determined code file.
         '''
         self._command_line_arguments = ()
-        '''Saves a default order of steps to deal with a code file.'''
-        self._default_command_sequence = default_command_sequence
         '''Saves currently determined runnable code file object.'''
-        self._code_file = self._determine_code_file(code_file_path)
+        self._code_file = self._determine_code_file(self.code_file_path)
 
                 # endregion
 
@@ -378,7 +376,7 @@ class Run(Class, Runnable):
             >>> __test_buffer__.content # doctest: +ELLIPSIS
             '...Detected "python"...No "compile" necessary...'
         '''
-        for command_name in self._default_command_sequence:
+        for command_name in self.default_command_sequence:
             if command_name in self._current_commands:
                 self._run_command(
                     command_name, command=self._current_commands[command_name])

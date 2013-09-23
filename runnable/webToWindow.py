@@ -59,7 +59,7 @@ else:
 for number in (3, 4):
     sys.path.append(os.path.abspath(sys.path[0] + number * ('..' + os.sep)))
 
-from boostNode.extension.native import Dictionary, Module
+from boostNode.extension.native import Dictionary, Module, PropertyInitializer
 from boostNode.extension.system import CommandLine, Runnable
 ## python3.3 from boostNode.extension.type import Self
 pass
@@ -74,22 +74,22 @@ from boostNode.paradigm.objectOrientation import Class
 class Browser(Class, Runnable):
     '''
         Provides a webkit browser without any browser typical visual
-        properties. Its only a very simple window for showing web pages.
-        The main goal is to make a web-interface look and behave like
-        a real desktop application.
+        properties. Its only a very simple window for showing web pages. The
+        main goal is to make a web-interface look and behave like a real
+        desktop application.
     '''
 
     # region properties
 
     '''Holds all command line interface argument informations.'''
     COMMAND_LINE_ARGUMENTS = (
-        {'arguments': ('url',),
+        {'arguments': ('_url',),
          'keywords': {
              'action': 'store',
              #'required': False,
              'help': 'Select an url to request and interpret with the '
                      'web browser.',
-             #'dest': 'url',
+             #'dest': '_url',
              'metavar': 'URL'}},
         {'arguments': ('-w', '--width'),
          'keywords': {
@@ -164,7 +164,7 @@ class Browser(Class, Runnable):
              'dest': 'stop_order',
              'metavar': 'STRING'}})
     '''Saves all initialized instances of this class.'''
-    webview_instances = []
+    instances = []
 
     # endregion
 
@@ -183,17 +183,18 @@ class Browser(Class, Runnable):
             Examples:
 
             >>> repr(Browser(
-            ...     url='http://www.google.de/', width_in_pixel=300,
+            ...     _url='http://www.google.de/', width_in_pixel=300,
             ...     height_in_pixel=100
             ... )) # doctest: +ELLIPSIS
             'Object of "Browser" with url "http://www.google... x 100 pixel...'
         '''
-        return('Object of "{class_name}" with url "{url}" in {width} pixel x '
-               '{height} pixel, stop order "{stop_order}" and gui toolkit '
-               '"{gui_toolkit}".'.format(
-                   class_name=self.__class__.__name__, url=self._url,
-                   width=self._width_in_pixel, height=self._height_in_pixel,
-                   stop_order=self.stop_order, gui_toolkit=self.gui_toolkit))
+        return(
+            'Object of "{class_name}" with url "{url}" in {width} pixel x '
+            '{height} pixel, stop order "{stop_order}" and gui toolkit '
+            '"{gui_toolkit}".'.format(
+                class_name=self.__class__.__name__, url=self._url,
+                width=self.width_in_pixel, height=self.height_in_pixel,
+                stop_order=self.stop_order, gui_toolkit=self.gui_toolkit))
 
             # endregion
 
@@ -238,8 +239,9 @@ class Browser(Class, Runnable):
             ... ).gui_toolkit
             'qt'
         '''
-        if builtins.globals()[self._default_gui_toolkit] is not None:
-            return self._default_gui_toolkit
+        if('default_gui_toolkit' in self.__dict__ and
+           builtins.globals()[self.default_gui_toolkit] is not None):
+            return self.default_gui_toolkit
         elif qt is not None:
             return 'qt'
         elif gtk is not None:
@@ -285,7 +287,7 @@ class Browser(Class, Runnable):
         reason, keywords = Dictionary(content=keywords).pop(
             name='reason', default_value='')
 ##
-        if self.window is not None:
+        if self.__dict__.get('window') is not None:
             if self.gui_toolkit == 'qt':
                 self.window.closeAllWindows()
                 if not (builtins.len(arguments) or reason):
@@ -338,17 +340,17 @@ class Browser(Class, Runnable):
                 module_name=__name__, scope={'self': self},
                 arguments=self.COMMAND_LINE_ARGUMENTS)))
 
-    @JointPoint
+    @JointPoint(PropertyInitializer)
 ## python3.3
 ##     def _initialize(
-##         self: Self, url: builtins.str, width_in_pixel=800,
+##         self: Self, _url: builtins.str, width_in_pixel=800,
 ##         height_in_pixel=600, fullscreen=False, no_window_decoration=False,
 ##         default_gui_toolkit='qt', no_progress_bar=False,
 ##         default_title='No gui loaded.', stop_order='stop',
 ##         **keywords: builtins.object
 ##     ) -> Self:
     def _initialize(
-            self, url, width_in_pixel=800, height_in_pixel=600,
+            self, _url, width_in_pixel=800, height_in_pixel=600,
             fullscreen=False, no_window_decoration=False,
             default_gui_toolkit='qt', no_progress_bar=False,
             default_title='No gui loaded.', stop_order='stop', **keywords):
@@ -360,38 +362,24 @@ class Browser(Class, Runnable):
             Examples:
 
             >>> Browser(
-            ...     url='http://www.google.com/', width_in_pixel=300,
-            ...     height_in_pixel=100) # doctest: +ELLIPSIS
+            ...     _url='http://www.google.com/', width_in_pixel=300,
+            ...     height_in_pixel=100
+            ... ) # doctest: +ELLIPSIS
             Object of "Browser" with url "http://www.google.com/" in 300 pi...
         '''
-        self.__class__.webview_instances.append(self)
+        self.__class__.instances.append(self)
 
                 # region properties
 
         '''Dynamic runtime objects for constructing a simple web window.'''
         self.window = self.scroller = self.vbox = self.progress_bar = \
             self.browser = None
-        '''Holds the current url location.'''
-        self.url = url
-        self.stop_order = stop_order
-        '''Saves a cli-command for shutting down the server.'''
-        self.stop_order = ''
+        '''Trigger setter for right url formatting.'''
+        self.url = self._url
         '''
             If setted "True" window will be closed on next gtk main iteration.
         '''
         self._gtk_close = False
-        '''Saves the default title if no title was set via markup.'''
-        self._default_title = default_title
-        '''Defines dimensions of webview.'''
-        self._width_in_pixel = width_in_pixel
-        self._height_in_pixel = height_in_pixel
-        '''Defines windows visual representation.'''
-        self._fullscreen = fullscreen
-        self._no_window_decoration = no_window_decoration
-        '''If set gtk will be preferred to show web view otherwise qt.'''
-        self._default_gui_toolkit = default_gui_toolkit
-        '''Defines weather a progress bar for page loading should be shown.'''
-        self._no_progress_bar = no_progress_bar
         __logger__.info(
             'Start web gui with gui toolkit "%s".', self.gui_toolkit)
         if not __test_mode__:
@@ -437,15 +425,15 @@ class Browser(Class, Runnable):
         '''Starts the qt webkit webview thread.'''
         self.window = PyQt4.QtGui.QApplication(sys.argv)
         self.browser = PyQt4.QtWebKit.QWebView()
-        if self._no_window_decoration:
+        if self.no_window_decoration:
             self.browser.setWindowFlags(PyQt4.QtCore.Qt.CustomizeWindowHint)
-        if self._fullscreen:
+        if self.fullscreen:
             self.browser.showFullScreen()
         self.browser.load(PyQt4.QtCore.QUrl(self._url))
         self.browser.show()
-        self.browser.setWindowTitle(self._default_title)
+        self.browser.setWindowTitle(self.default_title)
         self.browser.titleChanged.connect(self._on_qt_title_changed)
-        self.browser.resize(self._width_in_pixel, self._height_in_pixel)
+        self.browser.resize(self.width_in_pixel, self.height_in_pixel)
         self._initialize_qt_progress_bar().window.lastWindowClosed.connect(
             self.trigger_stop)
         self.window.exec_()
@@ -458,7 +446,7 @@ class Browser(Class, Runnable):
             Initializes the progress bar for qt on bottom of the window for
             showing current state of website rendering.
         '''
-        if not self._no_progress_bar:
+        if not self.no_progress_bar:
             self.progress_bar = PyQt4.QtGui.QProgressBar()
             self.progress_bar.setMinimum(1)
             self.progress_bar.setMaximum(100)
@@ -491,12 +479,12 @@ class Browser(Class, Runnable):
         self.browser.open(self._url)
         self.window.connect('delete_event', self.trigger_stop)
         self.window.add(self.vbox)
-        self.window.set_title(self._default_title)
+        self.window.set_title(self.default_title)
         self.window.resize(
-            width=self._width_in_pixel, height=self._height_in_pixel)
-        if self._fullscreen:
+            width=self.width_in_pixel, height=self.height_in_pixel)
+        if self.fullscreen:
             self.window.fullscreen()
-        if self._no_window_decoration:
+        if self.no_window_decoration:
             self.window.set_decorated(False)
         self.window.show_all()
         gtk.idle_add(self._check_for_gtk_closing_flag)
@@ -520,7 +508,7 @@ class Browser(Class, Runnable):
             'load-progress-changed', self._on_gtk_load_progress_changed)
         self.browser.connect('load-started', self._on_gtk_load_started)
         self.browser.connect('load-finished', self._on_gtk_load_finished)
-        if not self._no_progress_bar:
+        if not self.no_progress_bar:
             self.vbox.pack_start(self.progress_bar, False)
         return self
 

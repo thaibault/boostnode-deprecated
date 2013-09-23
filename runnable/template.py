@@ -52,7 +52,8 @@ for number in (3, 4):
     sys.path.append(os.path.abspath(sys.path[0] + number * ('..' + os.sep)))
 
 from boostNode.extension.file import Handler as FileHandler
-from boostNode.extension.native import Dictionary, Module, String
+from boostNode.extension.native import Dictionary, Module, \
+    PropertyInitializer, String
 from boostNode.extension.output import Buffer, Print
 from boostNode.extension.system import CommandLine, Runnable
 ## python3.3 from boostNode.extension.type import Self, SelfClass
@@ -196,7 +197,7 @@ class Parser(Class, Runnable):
              'required': {'execute': '__initializer_default_value__ is None'},
              'help': 'Defines which python native object should be available '
                      'in template scope.',
-             'dest': 'builtins',
+             'dest': 'builtin_names',
              'metavar': 'BUILTIN'}},
         {'arguments': ('-g', '--scope-variables'),
          'keywords': {
@@ -350,11 +351,11 @@ class Parser(Class, Runnable):
             8
         '''
         if not self._indent and self.content:
-            self._indent = self._template_context_default_indent
+            self._indent = self.template_context_default_indent
             match = re.compile(
                 '^(.*\n)?%s *__indent__ *= *(?P<number_of_indents>[1-9][0-9]*)'
                 ' *(?:;+|\n).*$' %
-                String(self._left_code_delimiter).validate_regex().content,
+                String(self.left_code_delimiter).validate_regex().content,
                 re.DOTALL
             ).match(self.content)
             if match:
@@ -484,10 +485,10 @@ class Parser(Class, Runnable):
                 return builtins.str(
                     keywords[match.group('variable_name')])
             return match.group(0)
-        self._output.write(re.compile(self._placeholder_pattern.format(
-            left_delimiter=self._left_code_delimiter,
-            right_delimiter=self._right_code_delimiter,
-            placeholder=self._placeholder_name_pattern)
+        self._output.write(re.compile(self.placeholder_pattern.format(
+            left_delimiter=self.left_code_delimiter,
+            right_delimiter=self.right_code_delimiter,
+            placeholder=self.placeholder_name_pattern)
         ).sub(substitute, self.content))
 ##
         return self
@@ -515,10 +516,10 @@ class Parser(Class, Runnable):
             >>> template.substitute_all(replacement='hans').output
             'test hans hans hans'
         '''
-        self._output.write(re.compile(self._placeholder_pattern.format(
-            left_delimiter=self._left_code_delimiter,
-            right_delimiter=self._right_code_delimiter,
-            placeholder=self._placeholder_name_pattern)
+        self._output.write(re.compile(self.placeholder_pattern.format(
+            left_delimiter=self.left_code_delimiter,
+            right_delimiter=self.right_code_delimiter,
+            placeholder=self.placeholder_name_pattern)
         ).sub(replacement, self.content))
         return self
 
@@ -542,14 +543,14 @@ class Parser(Class, Runnable):
             Object of "Parser" with template "hans says...who the fu.. is ha...
         '''
         self.rendered_content = re.compile(
-            self._template_pattern.format(
+            self.template_pattern.format(
                 left_delimiter=String(
-                    self._left_code_delimiter
+                    self.left_code_delimiter
                 ).validate_regex(),
                 right_delimiter=String(
-                    self._right_code_delimiter
+                    self.right_code_delimiter
                 ).validate_regex(),
-                placeholder=self._placeholder_name_pattern,
+                placeholder=self.placeholder_name_pattern,
                 right_escaped=self.right_escaped)
         ).sub(self._render_code, self.content).strip()
         mapping.update(keywords)
@@ -636,18 +637,19 @@ class Parser(Class, Runnable):
             scope={'self': self})
         initializer_arguments = self._command_line_arguments_to_dictionary(
             namespace=self._command_line_arguments)
-        if(initializer_arguments['builtins'] and
-           builtins.isinstance(initializer_arguments['builtins'][0],
+        if(initializer_arguments['builtin_names'] and
+           builtins.isinstance(initializer_arguments['builtin_names'][0],
                                builtins.str)):
-            initializer_arguments['builtins'] = builtins.tuple(builtins.map(
-                lambda builtin: builtins.eval(builtin),
-                initializer_arguments['builtins']))
+            initializer_arguments['builtin_names'] = builtins.tuple(
+                builtins.map(
+                    lambda builtin: builtins.eval(builtin),
+                    initializer_arguments['builtin_names']))
         self._initialize(**initializer_arguments).render(
             **self._generate_scope_variables())
         Print(self.output)
         return self
 
-    @JointPoint
+    @JointPoint(PropertyInitializer)
 ## python3.3
 ##     def _initialize(
 ##         self: Self, template: (builtins.str, FileHandler),
@@ -702,8 +704,8 @@ class Parser(Class, Runnable):
 ##         left_code_delimiter='<%', right_code_delimiter='%>',
 ##         right_escaped='%',  # For example: "<%%" evaluates to "<%"
 ##         template_context_default_indent=4,
-##         builtins=(builtins.all, builtins.filter, builtins.map,
-##                   builtins.enumerate, builtins.range, builtins.locals),
+##         builtin_names=(builtins.all, builtins.filter, builtins.map,
+##                        builtins.enumerate, builtins.range, builtins.locals),
 ##         pretty_indent=False, **keywords: builtins.object
 ##     ) -> Self:
     def _initialize(
@@ -758,17 +760,16 @@ class Parser(Class, Runnable):
         left_code_delimiter='<%', right_code_delimiter='%>',
         right_escaped='%',  # For example: "<%%" evaluates to "<%"
         template_context_default_indent=4,
-        builtins=(builtins.all, builtins.filter, builtins.map,
-                  builtins.enumerate, builtins.range, builtins.locals),
+        builtin_names=(builtins.all, builtins.filter, builtins.map,
+                       builtins.enumerate, builtins.range, builtins.locals),
         pretty_indent=False, **keywords
     ):
 ##
         '''
-            Initializes output buffer and template scope.
-            NOTE: "(?s...)" and "(?m...)" is equivalent for regular expression
-            flag "re.DOTALL" and "re.MULTILINE".
-            NOTE: This regular expression patterns assumes that the delimiter
-            has at least a length of two.
+            Initializes output buffer and template scope. NOTE: "(?s...)" and
+            "(?m...)" is equivalent for regular expression flag "re.DOTALL"
+            and "re.MULTILINE". NOTE: This regular expression patterns assumes
+            that the delimiter has at least a length of two.
 
             Documentation of template pattern:
 
@@ -800,10 +801,6 @@ class Parser(Class, Runnable):
         self.rendered_content = ''
         '''Template file handler.'''
         self.file = None
-        '''Saves previous initially defined escape symbols.'''
-        self.right_escaped = right_escaped
-        '''Defines which builtin variables should be available in templates.'''
-        self._builtins = {}
         '''Indicates if last rendered code snippet was a full line.'''
         self._new_line = True
         '''
@@ -841,36 +838,18 @@ class Parser(Class, Runnable):
         '''
         self._current_rendered_content_line_number = 0
         self._number_of_rendered_content_lines = 0
-        '''
-            Indicates if the parser should spent time on calculating the
-            perfect indention for each line.
-        '''
-        self._pretty_indent = pretty_indent
-        '''
-            Holds several static informations for template parsing at runtime.
-            In general it defines the syntax.
-        '''
-        self._placeholder_name_pattern = placeholder_name_pattern
-        self._command_line_placeholder_name_pattern = \
-            command_line_placeholder_name_pattern
-        self._left_code_delimiter = left_code_delimiter
-        self._right_code_delimiter = right_code_delimiter
-        self._placeholder_pattern = placeholder_pattern
-        self._template_context_default_indent = template_context_default_indent
-        self._template_pattern = template_pattern
-        '''
-            Defines how to parse placeholder meanings through the command line.
-        '''
-        self._command_line_placeholder_pattern = \
-            command_line_placeholder_pattern
-        '''Pythons native template object.'''
-        self._native_template_pattern = native_template_pattern
         '''Saves the output of running executed template.'''
         self._output = Buffer()
+        '''
+            Holds a mapping from available builtin names and their references
+            in template scope.
+        '''
+        self._builtins = {}
 
                 # endregion
 
-        return self._set_builtins(builtins)._load_template(template, string)
+        return self._set_builtins(self.builtin_names)._load_template(
+            template, string)
 
             # endregion
 
@@ -885,11 +864,6 @@ class Parser(Class, Runnable):
             Generates a dictionary representing the templates scope from given
             defined builtins.
         '''
-        '''
-            NOTE: Necessary to make "self._builtins" an instance
-            (not only class) variable.
-        '''
-        self._builtins = {}
         for builtin in builtins:
             self._builtins[builtin.__name__] = builtin
         return self
@@ -929,8 +903,8 @@ class Parser(Class, Runnable):
         '''
         keywords = {}
         for variable in self._command_line_arguments.scope_variables:
-            pattern = self._command_line_placeholder_pattern.format(
-                placeholder=self._command_line_placeholder_name_pattern)
+            pattern = self.command_line_placeholder_pattern.format(
+                placeholder=self.command_line_placeholder_name_pattern)
             match = re.compile(pattern).match(variable)
             if match:
                 keywords.update(
@@ -990,8 +964,8 @@ class Parser(Class, Runnable):
             self.content = self.file.content
         self.native_template_object = native_string.Template(self.content)
         self.native_template_object.pattern = re.compile(
-            self._native_template_pattern)
-        self.native_template_object.delimiter = self._left_code_delimiter
+            self.native_template_pattern)
+        self.native_template_object.delimiter = self.left_code_delimiter
         return self
 
     @JointPoint
@@ -1328,7 +1302,7 @@ class Parser(Class, Runnable):
             >>> parser.output
             '  hans'
         '''
-        if self._pretty_indent:
+        if self.pretty_indent:
 ## python3.3
 ##             pass
             keywords_dictionary = Dictionary(content=keywords)
@@ -1493,7 +1467,7 @@ class Parser(Class, Runnable):
         if match.group('before_escaped'):
             content_before = match.group('before_escaped')[slice:]
         return last_empty_lines + indent + self._render_none_code(
-            string=content_before + self._left_code_delimiter, end='')
+            string=content_before + self.left_code_delimiter, end='')
 
     @JointPoint
 ## python3.3

@@ -91,7 +91,7 @@ class FunctionDecorator(Class):
         This constant holds a list of python decorators which could be emulated
         by this function wrapper instances.
     '''
-    HANDABLE_DECORATORS = [builtins.classmethod, builtins.staticmethod]
+    MANAGEABLE_DECORATORS = [builtins.classmethod, builtins.staticmethod]
     '''This property hold a list of common python's native decorators.'''
     COMMON_DECORATORS = [
         builtins.property, builtins.super, atexit.register,
@@ -103,7 +103,7 @@ class FunctionDecorator(Class):
 
         # region public
 
-            # region special
+            # region  special
 
 ## python3.3
 ##     def __init__(
@@ -132,15 +132,32 @@ class FunctionDecorator(Class):
 
         '''Properties of function calls.'''
         self.class_object = self.object = self.function = self.return_value = \
-            None
+            self.wrapped_decorator = None
         '''Saves method types like static or class bounded.'''
-        self._method_type = None
-        if method in self.COMMON_DECORATORS + self.HANDABLE_DECORATORS:
-            self.function = function
-            self._method_type = method
-            if(self.function is not None and
-               self._method_type in self.COMMON_DECORATORS):
-                self.function = self._method_type(self.function)
+        self.method_type = None
+        '''
+            Determines if class or object references for a wrapped method are
+            already determined.
+        '''
+        self.arguments_determines = False
+        '''
+            NOTE: We can't use "self.__class__" because this points usually to
+            a subclass of this class.
+        '''
+        if(method in self.COMMON_DECORATORS + self.MANAGEABLE_DECORATORS or
+           builtins.isinstance(method, builtins.type) and
+           builtins.issubclass(method, FunctionDecorator)):
+            self._handle_given_decorator(function, method)
+        elif builtins.isinstance(method, FunctionDecorator):
+            '''
+                If we are wrapping a nested instance of this class we propagate
+                inspected informations to lower decorator.
+                This case is given if one instances of this class wraps another
+                one.
+            '''
+            self.wrapped_decorator = method
+            self.function = method.function
+            self.method_type = method.method_type
         elif(builtins.isinstance(
             method, (types.FunctionType, types.MethodType))
         ):
@@ -153,7 +170,8 @@ class FunctionDecorator(Class):
                     class_name=self.__class__.__name__,
                     common_methods='", "'.join(builtins.map(
                         lambda decorator: decorator.__name__,
-                        self.COMMON_DECORATORS + self.HANDABLE_DECORATORS)),
+                        self.COMMON_DECORATORS + self.MANAGEABLE_DECORATORS +
+                        [FunctionDecorator])),
                     function_type=types.FunctionType.__name__,
                     method_type=types.MethodType.__name__,
                     type=builtins.type(method).__name__,
@@ -209,7 +227,7 @@ class FunctionDecorator(Class):
             return self.get_wrapper_function()(*arguments, **keywords)
         '''A object bounded method was wrapped.'''
         return self.__class__(
-            method=self._method_type, function=arguments[0])
+            method=self.method_type, function=arguments[0])
 
 ## python3.3
 ##     def __get__(
@@ -230,14 +248,18 @@ class FunctionDecorator(Class):
             ... ) # doctest: +ELLIPSIS
             <...FunctionDecorator.__get__...>
         '''
+        if self.wrapped_decorator is not None:
+            self.function = builtins.getattr(
+                self.wrapped_decorator, inspect.stack()[0][3]
+            )(object, class_object)
         if self.object is not None:
             '''
                 Restore old information about given class to function
                 (method_type).
             '''
-            method_type = self._method_type
+            method_type = self.method_type
             self = self.__class__(self.function)
-            self._method_type = method_type
+            self.method_type = method_type
         self.class_object = class_object
         self.object = object
         if self.class_object is None:
@@ -263,16 +285,68 @@ class FunctionDecorator(Class):
         # region protected
 
 ## python3.3
+##     def _handle_given_decorator(
+##         self: Self, function: (types.FunctionType, types.MethodType),
+##         method: (builtins.object, builtins.type)
+##     ) -> Self:
+    def _handle_given_decorator(self, function, method):
+##
+        '''
+            Another decorator was given to this instance. This decorator should
+            additionally be used on given function.
+        '''
+        self.function = function
+        self.method_type = method
+        if self.function is not None:
+            if builtins.isinstance(self.function, FunctionDecorator):
+                '''
+                    If we are wrapping a nested instance of this class we
+                    propagate inspected informations to lower decorator. This
+                    case is given if one instances of this class wraps another
+                    one. The last wrapping instance additionally uses a common
+                    or manageable wrapper.
+                '''
+                self.wrapped_decorator = self.function
+                self.method_type = self.function.method_type
+                self.function = self.function.function
+            elif(builtins.isinstance(method, builtins.type) and
+                 builtins.issubclass(method, FunctionDecorator)):
+                '''
+                    If we are wrapping a nested instance of this class we
+                    propagate inspected informations to lower decorator. This
+                    case is given if one instances of this class wraps another
+                    one and the lower one is given via argument.
+                '''
+                self.wrapped_decorator = self.method_type(function)
+                self.method_type = self.wrapped_decorator.method_type
+                self.function = self.wrapped_decorator.function
+            elif self.method_type in self.COMMON_DECORATORS:
+                self.function = self.method_type(self.function)
+        return self
+
+## python3.3
 ##     def _determine_arguments(
 ##         self: Self, arguments: collections.Iterable
 ##     ) -> builtins.tuple:
     def _determine_arguments(self, arguments):
 ##
         '''Determine right set of arguments for different method types.'''
-        if self._method_type is builtins.classmethod:
+        '''Avoid to add object or class references twice.'''
+        # TODO workaround for argument forwarding.
+        """if not self.determined:
+            if self.method_type is builtins.classmethod:
+                arguments = [self.class_object] + builtins.list(arguments)
+            elif not (self.object is None or
+                      self.method_type is builtins.staticmethod):
+                arguments = [self.object] + builtins.list(arguments)
+        if self.wrapped_decorator is not None:
+            self.wrapped_decorator.determined = True"""
+        if(self.method_type is builtins.classmethod and
+           (not arguments or arguments[0] is not self.class_object)):
             arguments = [self.class_object] + builtins.list(arguments)
-        elif not (self.object is None or
-                  self._method_type is builtins.staticmethod):
+        elif(not (self.object is None or
+                  self.method_type is builtins.staticmethod) and
+             (not arguments or arguments[0] is not self.object)):
             arguments = [self.object] + builtins.list(arguments)
         return builtins.tuple(arguments)
 
@@ -691,7 +765,7 @@ class PointCut(ReturnAspect):
                 if(builtins.hasattr(advice['callback'], 'aspect') and
                    builtins.isinstance(
                        builtins.getattr(advice['callback'], 'aspect'),
-                       types.MethodType)):
+                       (types.MethodType, types.FunctionType))):
                     result = result.aspect()
                 return result is not False
             return True
@@ -738,23 +812,11 @@ class PointCut(ReturnAspect):
 ##
         '''Iterates through each aspect matching current function call.'''
         from boostNode.extension.native import Module
-        result = True
-        if not sys.flags.optimize and ASPECTS:
-            context_path = Module.get_context_path(path=inspect.getfile(
-                self.function))
-            if self.class_object:
-                context_path += '.' + self.class_object.__name__
-            context_path += '.' + self.function.__name__
-            result = self._run_advices(context_path, handler)
-        return result
-
-## python3.3
-##     def _run_advices(
-##         self: Self, context_path: builtins.str, handler: types.MethodType
-##     ) -> builtins.bool:
-    def _run_advices(self, context_path, handler):
-##
-        '''Runs all advices for given handler point cut handler.'''
+        context_path = Module.get_context_path(path=inspect.getfile(
+            self.function))
+        if self.class_object:
+            context_path += '.' + self.class_object.__name__
+        context_path += '.' + self.function.__name__
         result = True
         for aspect in ASPECTS:
             if(not 'point_cut' in aspect or
@@ -769,124 +831,120 @@ class PointCut(ReturnAspect):
     # endregion
 
 
-class JointPoint(FunctionDecorator):
-    '''
-        Implementation of joint point for the aspect orientated way.
-        Triggers every function call and look for aspects to wrap around.
+if sys.flags.optimize:
+## python3.3
+##     def JointPoint(
+##         function: (types.FunctionType, types.MethodType)
+##     ) -> (types.FunctionType, types.MethodType):
+    def JointPoint(function):
+##
+        '''
+            Dummy function for simply return given function to avoid
+            JointPoints in high performance mode.
+        '''
+        return function
+else:
+    class JointPoint(FunctionDecorator):
+        '''
+            Implementation of joint point for the aspect orientated way.
+            Triggers every function call and look for aspects to wrap around.
 
-        Examples:
+            Examples:
 
-        >>> @JointPoint
-        ... def test(a):
-        ...     return a
+            >>> @JointPoint
+            ... def test(a):
+            ...     return a
 
-        >>> def call_handler(
-        ...     class_object, object, function, arguments, keywords
-        ... ):
-        ...     return True
-        >>> def return_handler(
-        ...     class_object, object, function, arguments, keywords,
-        ...     return_value
-        ... ):
-        ...     return 'wrapped_result'
-        >>> __test_globals__['ASPECTS'] = [{
-        ...     'advice': (
-        ...         {'callback': call_handler, 'event': 'call'},
-        ...         {'callback': return_handler, 'event': 'return'}),
-        ...     'point_cut': '^.+\.((A\.b)|a)$'}]
+            >>> def call_handler(
+            ...     class_object, object, function, arguments, keywords
+            ... ): return True
+            >>> def return_handler(
+            ...     class_object, object, function, arguments, keywords,
+            ...     return_value
+            ... ): return 'wrapped_result'
+            >>> __test_globals__['ASPECTS'] = [{
+            ...     'advice': (
+            ...         {'callback': call_handler, 'event': 'call'},
+            ...         {'callback': return_handler, 'event': 'return'}),
+            ...     'point_cut': '^.+\.((A\.b)|a)$'}]
 
-        >>> class A:
-        ...     @JointPoint
-        ...     def b(self): pass
-        >>> A().b()
-        'wrapped_result'
+            >>> class A:
+            ...     @JointPoint
+            ...     def b(self): pass
+            >>> A().b()
+            'wrapped_result'
 
-        >>> @JointPoint
-        ... def a():
-        ...     pass
-        >>> a()
-        'wrapped_result'
+            >>> @JointPoint
+            ... def a():
+            ...     pass
+            >>> a()
+            'wrapped_result'
 
-        >>> @JointPoint
-        ... def b(): return 'not_wrapped'
-        >>> b()
-        'not_wrapped'
+            >>> @JointPoint
+            ... def b(): return 'not_wrapped'
+            >>> b()
+            'not_wrapped'
 
-        >>> def call_handler(
-        ...     class_object, object, function, arguments, keywords
-        ... ):
-        ...     return False
-        >>> __test_globals__['ASPECTS'][0]['advice'][0]['callback'] = (
-        ...     call_handler)
-        >>> @JointPoint
-        ... def a(): return 'wrapper_prevents_calling'
-        >>> a()
+            >>> def call_handler(
+            ...     class_object, object, function, arguments, keywords
+            ... ): return False
+            >>> __test_globals__['ASPECTS'][0]['advice'][0]['callback'] = (
+            ...     call_handler)
+            >>> @JointPoint
+            ... def a(): return 'wrapper_prevents_calling'
+            >>> a()
 
-        >>> def a(): pass
-        >>> def b(): pass
-        >>> b.__func__ = a
-        >>> a = JointPoint(b)
-        >>> a()
+            >>> def a(): pass
+            >>> def b(): pass
+            >>> b.__func__ = a
+            >>> a = JointPoint(b)
+            >>> a()
 
-        >>> JointPoint.skip = True
-        >>> a()
-        >>> JointPoint.skip = False
+            >>> class CallHandler(CallJointPoint):
+            ...     def aspect(self): return True
+            >>> class ReturnHandler(ReturnJointPoint):
+            ...     def aspect(self): return 'class_wrapped_result'
+            >>> __test_globals__['ASPECTS'][0]['advice'][0]['callback'] = (
+            ...     CallHandler)
+            >>> __test_globals__['ASPECTS'][0]['advice'][1]['callback'] = (
+            ...     ReturnHandler)
 
-        >>> class CallHandler(CallJointPoint):
-        ...     def aspect(self): return True
-        >>> class ReturnHandler(ReturnJointPoint):
-        ...     def aspect(self): return 'class_wrapped_result'
-        >>> __test_globals__['ASPECTS'][0]['advice'][0]['callback'] = (
-        ...     CallHandler)
-        >>> __test_globals__['ASPECTS'][0]['advice'][1]['callback'] = (
-        ...     ReturnHandler)
-
-        >>> A().b()
-        'class_wrapped_result'
-    '''
-
-    # region properties
-
-    '''If set to "True" all point cuts will be ignored.'''
-    skip = False
-
-    # endregion
+            >>> A().b()
+            'class_wrapped_result'
+        '''
 
     # region dynamic methods
 
         # region public
 
 ## python3.3
-##     def get_wrapper_function(
-##         self: Self
-##     ) -> (types.FunctionType, types.MethodType):
-    def get_wrapper_function(self):
+##         def get_wrapper_function(
+##             self: Self
+##         ) -> (types.FunctionType, types.MethodType):
+        def get_wrapper_function(self):
 ##
-        '''This methods returns the joint point's wrapped function.'''
-        if sys.flags.optimize > 1 or self.skip:
-            return self.function
-
-        @functools.wraps(self.function)
-        def wrapper_function(*arguments, **keywords):
-            '''
-                Wrapper function for doing the aspect orientated stuff before
-                and after a function call.
-            '''
-            '''Unpack wrapper methods.'''
-            self.__func__ = self.function
-            while builtins.hasattr(self.__func__, '__func__'):
-                self.__func__ = self.__func__.__func__
-            arguments = self._determine_arguments(arguments)
-            point_cut = PointCut(
-                self.class_object, self.object, function=self.__func__,
-                arguments=arguments, keywords=keywords)
-            if point_cut.handle_call():
-                self.return_value = point_cut.handle_return(
-                    return_value=self.function(*arguments, **keywords))
-            return self.return_value
-## python3.3         pass
-        wrapper_function.__wrapped__ = self.function
-        return wrapper_function
+            '''This methods returns the joint point's wrapped function.'''
+            @functools.wraps(self.function)
+            def wrapper_function(*arguments, **keywords):
+                '''
+                    Wrapper function for doing the aspect orientated stuff
+                    before and after a function call.
+                '''
+                '''Unpack wrapper methods.'''
+                self.__func__ = self.function
+                while builtins.hasattr(self.__func__, '__func__'):
+                    self.__func__ = self.__func__.__func__
+                arguments = self._determine_arguments(arguments)
+                point_cut = PointCut(
+                    self.class_object, self.object, function=self.__func__,
+                    arguments=arguments, keywords=keywords)
+                if point_cut.handle_call():
+                    self.return_value = point_cut.handle_return(
+                        return_value=self.function(*arguments, **keywords))
+                return self.return_value
+## python3.3             pass
+            wrapper_function.__wrapped__ = self.function
+            return wrapper_function
 
         # endregion
 

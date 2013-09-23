@@ -187,9 +187,7 @@ class CheckObject(builtins.object):
     @JointPoint
 ## python3.3     def __init__(self: Self) -> None:
     def __init__(self):
-        '''
-            If this method wasn't be overwritten an exception is raised.
-        '''
+        '''If this method wasn't be overwritten an exception is raised.'''
 
                 # region properties
 
@@ -215,8 +213,7 @@ class CheckObject(builtins.object):
 
             Examples:
 
-            >>> def test(self):
-            ...     pass
+            >>> def test(self): pass
             >>> class A(CheckObject):
             ...     def __init__(self):
             ...         getattr(
@@ -257,8 +254,7 @@ class CheckObject(builtins.object):
 
             Examples:
 
-            >>> def test():
-            ...     pass
+            >>> def test(): pass
             >>> class A(CheckObject):
             ...     def __init__(self):
             ...         getattr(
@@ -266,8 +262,7 @@ class CheckObject(builtins.object):
             ...         )()
             ...         self.function = test
             ...         self._method_type = staticmethod
-            ...     def test():
-            ...         pass
+            ...     def test(): pass
 
             >>> a = A()
 
@@ -370,8 +365,7 @@ class CheckObject(builtins.object):
 
             >>> class A(CheckObject): pass
             >>> class B:
-            ...     def b(self):
-            ...         pass
+            ...     def b(self): pass
 
             >>> A()._check_type(
             ...     builtins.type(None), int, 5
@@ -442,7 +436,7 @@ class CheckObject(builtins.object):
                 expected_type is given_type or
                 builtins.issubclass(given_type, expected_type)):
             if expected_type is Self:
-                self._handle_self(name, value)
+                self._handle_self(given_type, name, value)
             elif(expected_type is SelfClass or
                  expected_type is SelfClassObject):
                 self._handle_self_class(expected_type, given_type, name, value)
@@ -458,17 +452,17 @@ class CheckObject(builtins.object):
 
 ## python3.3
 ##     def _handle_self(
-##         self: Self, name: builtins.str, value: builtins.object
+##         self: Self, given_type: builtins.type, name: builtins.str,
+##         value: builtins.object
 ##     ) -> Self:
-    def _handle_self(self, name, value):
+    def _handle_self(self, given_type, name, value):
 ##
         '''
             Checks given argument value against the methods bounded object.
 
             Examples:
 
-            >>> def test():
-            ...     pass
+            >>> def test(): pass
             >>> class A(CheckObject):
             ...     def __init__(self):
             ...         getattr(
@@ -479,7 +473,7 @@ class CheckObject(builtins.object):
             >>> a = A()
 
             >>> a._handle_self(
-            ...     'argument_name', 'value'
+            ...     str, 'argument_name', 'value'
             ... ) # doctest: +ELLIPSIS +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
@@ -487,7 +481,7 @@ class CheckObject(builtins.object):
 
             >>> a.object = A()
             >>> a._handle_self(
-            ...     'argument_name', 'value'
+            ...     str, 'argument_name', 'value'
             ... ) # doctest: +ELLIPSIS +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
@@ -496,7 +490,7 @@ class CheckObject(builtins.object):
             >>> b = A()
             >>> a.object = b
             >>> a._handle_self(
-            ...     'argument_name', b
+            ...     A, 'argument_name', b
             ... ) # doctest: +ELLIPSIS +IGNORE_EXCEPTION_DETAIL
             Object of "A" with class object "None", object "Object...
         '''
@@ -509,10 +503,10 @@ class CheckObject(builtins.object):
         elif value is not self.object:
             raise __exception__(
                 '"{function_path}()" expects "{object} '
-                '(self)" for "{name}" but received "{value}".'.format(
+                '(self)" for "{name}" but "{type}" ({value}) received.'.format(
                     function_path=self.get_function_path(),
                     object=builtins.repr(self.object), name=name,
-                    value=builtins.repr(value)))
+                    type=given_type.__name__, value=builtins.repr(value)))
         return self
 
 ## python3.3
@@ -528,8 +522,7 @@ class CheckObject(builtins.object):
 
             Examples:
 
-            >>> def test():
-            ...     pass
+            >>> def test(): pass
             >>> class A(CheckObject):
             ...     def __init__(self):
             ...         getattr(
@@ -922,8 +915,7 @@ class Check(FunctionDecorator):
 ##
 ##         >>> class test:
 ##         ...     @Check
-##         ...     def method(self) -> Self:
-##         ...         return 5
+##         ...     def method(self) -> Self: return 5
 ##         >>> test().method() # doctest: +ELLIPSIS
 ##         Traceback (most recent call last):
 ##         ...
@@ -938,8 +930,7 @@ class Check(FunctionDecorator):
 ##
 ##         >>> class test:
 ##         ...     @Check
-##         ...     def method(self) -> Self:
-##         ...         return test()
+##         ...     def method(self) -> Self: return test()
 ##         >>> test().method() # doctest: +ELLIPSIS
 ##         Traceback (most recent call last):
 ##         ...
@@ -947,21 +938,17 @@ class Check(FunctionDecorator):
 ##
 ##         >>> class test:
 ##         ...     @Check
-##         ...     def m(self) -> SelfClassObject:
-##         ...         return test()
+##         ...     def m(self) -> SelfClassObject: return test()
 ##         >>> test().m() # doctest: +ELLIPSIS
 ##         <...test object at 0x...>
 ##
 ##         >>> class test:
 ##         ...     @Check
-##         ...     def method(self) -> Self:
-##         ...         return self
+##         ...     def method(self) -> Self: return self
 ##         >>> test().method() # doctest: +ELLIPSIS
 ##         <...test object at 0x...>
 ##     '''
-    '''
-       This class is needed to be compatiable with future implementations.
-    '''
+    '''This class is needed to be compatible with future implementations.'''
 ##
 
     # region dynamic methods
@@ -978,8 +965,7 @@ class Check(FunctionDecorator):
 ##
 ##             Examples:
 ##
-##             >>> def a(a: int):
-##             ...     return a
+##             >>> def a(a: int): return a
 ##             >>> Check(a).get_wrapper_function() # doctest: +ELLIPSIS
 ##             <function a at ...>
 ##
@@ -1018,8 +1004,7 @@ class Check(FunctionDecorator):
 
            Examples:
 
-           >>> def a(a):
-           ...     return a
+           >>> def a(a): return a
            >>> Check(a).get_wrapper_function() # doctest: +ELLIPSIS
            <function a at ...>
 
@@ -1068,10 +1053,9 @@ class CheckArguments(CallJointPoint, CheckObject):
     def _check_argument_cases(self, argument):
 ##
         '''
-            Handles the different possibilities an argument could be
-            specified. It could be specified by a given type, multiple
-            types, implicit type through an default value or an explicit
-            value.
+            Handles the different possibilities an argument could be specified.
+            It could be specified by a given type, multiple types, implicit
+            type through an default value or an explicit value.
         '''
         if builtins.isinstance(argument.annotation, builtins.type):
             return self._check_type(
@@ -1091,8 +1075,8 @@ class CheckArguments(CallJointPoint, CheckObject):
     def _check_argument(self, argument):
 ##
         '''
-            Checks an argument. No matter if argument was given by
-            its keyword or not.
+            Checks an argument. No matter if argument was given by its keyword
+            or not.
         '''
         if argument.default is inspect.Parameter.empty:
             if argument.annotation is not inspect.Parameter.empty:
@@ -1130,8 +1114,7 @@ class CheckReturnValue(ReturnJointPoint, CheckObject):
             Examples:
 
             >>> class A:
-            ...     def __init__(self):
-            ...         pass
+            ...     def __init__(self): pass
 
             >>> CheckReturnValue(
             ...     A, A(), A.__init__, (A(),), {}, return_value='hans'

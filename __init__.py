@@ -382,21 +382,22 @@ __all__ = __get_all_modules__()
     The function "__get_all_modules__()" has to be defined before importing any
     modules from this package.
 '''
-from boostNode.aspect.signature import add_check as add_signature_check
-from boostNode.extension.native import Module
-try:
-    '''
-        Add signature checking for all functions and methods with joint points
-        in this package.
-    '''
-    add_signature_check(point_cut='^%s\..*$' % Module.get_package_name(
-        frame=inspect.currentframe()))
-except WindowsError as exception:
-    logging.error(
-        "Running subprocesses on windows without being administrator isn't "
-        'possible. %s: %s', exception.__class__.__name__,
-        builtins.str(exception))
-    sys.exit(1)
+if __name__ != '__main__':
+    from boostNode.aspect.signature import add_check as add_signature_check
+    from boostNode.extension.native import Module
+    try:
+        '''
+            Add signature checking for all functions and methods with joint
+            points in this package.
+        '''
+        add_signature_check(point_cut='^%s\..*$' % Module.get_package_name(
+            frame=inspect.currentframe()))
+    except WindowsError as exception:
+        logging.error(
+            "Running subprocesses on windows without being administrator isn't"
+            ' possible. %s: %s', exception.__class__.__name__,
+            builtins.str(exception))
+        sys.exit(1)
 
 # region footer
 

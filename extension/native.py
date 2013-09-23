@@ -123,7 +123,7 @@ class Object(Class):
 
             # region special
 
-    @JointPoint
+    @JointPoint(PropertyInitializer)
 ## python3.3     def __init__(self: Self, object=None) -> None:
     def __init__(self, object=None):
         '''
@@ -131,14 +131,16 @@ class Object(Class):
 
             Examples:
 
-            >>> Object('hans') # doctest: +ELLIPSIS
+            >>> object = Object('hans')
+
+            >>> object
             Object of "str" ('hans').
+            >>> object.object
+            'hans'
         '''
 
                 # region properties
 
-        '''The object itself.'''
-        self.object = object
         '''Saves a copy of currently saved object.'''
         self._object_copy = {}
 
@@ -175,8 +177,7 @@ class Object(Class):
 
             Examples:
 
-            >>> class A:
-            ...     pass
+            >>> class A: pass
             >>> a = A()
             >>> a.string = 'hans'
             >>> object_copy = Object(a).copy()
@@ -185,8 +186,7 @@ class Object(Class):
             ...         print(value)
             hans
 
-            >>> class B:
-            ...     hans = 'A'
+            >>> class B: hans = 'A'
             >>> object = Object(B())
             >>> object_copy = object.copy()
             >>> object.object.hans = 'B'
@@ -214,8 +214,7 @@ class Object(Class):
 
             Examples:
 
-            >>> class A:
-            ...     pass
+            >>> class A: pass
             >>> A.string = 'hans'
             >>> object = Object(A)
             >>> object.copy()
@@ -305,8 +304,7 @@ class Object(Class):
             ...     def abstract_method(cls):
             ...         raise cls.determine_abstract_method_exception(
             ...             A.__name__)
-            >>> class B(A):
-            ...     pass
+            >>> class B(A): pass
             >>> B.abstract_method() # doctest: +ELLIPSIS
             Traceback (most recent call last):
             ...
@@ -317,8 +315,7 @@ class Object(Class):
             ...     def abstract_method(cls):
             ...         raise Object.determine_abstract_method_exception(
             ...             A.__name__, cls.__name__)
-            >>> class B(A):
-            ...     pass
+            >>> class B(A): pass
             >>> B.abstract_method() # doctest: +ELLIPSIS
             Traceback (most recent call last):
             ...
@@ -1745,9 +1742,8 @@ class Module(Object):
         '''
         callables = []
         for object_name in builtins.set(builtins.dir(scope)):
-            object = builtins.getattr(scope, object_name)
-            if builtins.isinstance(object, JointPoint):
-                object = object.function
+            object = cls._determine_object(object=builtins.getattr(
+                scope, object_name))
             if(builtins.callable(object) and
                not (object_name.startswith('__') and
                     object_name.endswith('__')) and
@@ -1968,6 +1964,19 @@ class Module(Object):
         # endregion
 
         # region protected
+
+    @JointPoint(builtins.classmethod)
+## python3.3
+##     def _determine_object(
+##         cls: SelfClass, object: (builtins.type, builtins.object)
+##     ) -> (builtins.object, builtins.type):
+    def _determine_object(cls, object):
+##
+        '''Determines a potentially wrapped object.'''
+        if(builtins.isinstance(JointPoint, builtins.type) and
+           builtins.isinstance(object, JointPoint)):
+            return object.function
+        return object
 
     @JointPoint(builtins.classmethod)
 ## python3.3

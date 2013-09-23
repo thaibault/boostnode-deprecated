@@ -46,6 +46,7 @@ import gzip
 import inspect
 ## python3.3 import io
 pass
+import _io
 import logging
 import multiprocessing
 import os
@@ -77,7 +78,8 @@ for number in (3, 4):
     sys.path.append(os.path.abspath(sys.path[0] + number * ('..' + os.sep)))
 
 from boostNode.extension.file import Handler as FileHandler
-from boostNode.extension.native import Dictionary, Module, Object, String
+from boostNode.extension.native import Dictionary, Module, Object, \
+    PropertyInitializer, String
 from boostNode.extension.output import Buffer, Print
 from boostNode.extension.system import CommandLine, Platform, Runnable
 ## python3.3 from boostNode.extension.type import Self
@@ -707,7 +709,7 @@ class Web(Class, Runnable):
         return self._initialize(**self._command_line_arguments_to_dictionary(
             namespace=command_line_arguments))
 
-    @JointPoint
+    @JointPoint(PropertyInitializer)
 ## python3.3
 ##     def _initialize(
 ##         self: Self, root='.', host_name='', port=0, default='',
@@ -767,95 +769,16 @@ class Web(Class, Runnable):
                 # region properties
 
         '''Indicates if new worker are currently allowed to spawn.'''
-        block_new_worker = False
-        '''
-            This attribute saves a shared data object. It will be given to all
-            sub workers which computes request results.
-        '''
-        shared_data = shared_data
-        '''
-            Saves informations how to define authentications in protected
-            directories.
-        '''
-        if public_key_file_path:
-            public_key_file = FileHandler(location=public_key_file_path)
-            if public_key_file.is_file():
-                self._public_key_file = public_key_file
-        self.authentication_handler = authentication_handler
-        self.authentication = authentication
-        self.authentication_file_name = authentication_file_name
-        self.authentication_file_content_pattern = \
-            authentication_file_content_pattern
+        self.block_new_worker = False
         '''Saves server runtime properties.'''
-        self.root = FileHandler(location=root)
-        self.host_name = host_name
-        self.port = port
+        self.root = FileHandler(location=self.root)
         self.thread_buffer = Buffer(queue=True)
-        '''
-            Saves used encoding for interpreting binary data like post or
-            authentication requests, decoding given url's or encoding
-            compressed gzip data for clients.
-        '''
-        self.encoding = encoding
-        '''Saves a default file if no explicit file was requested.'''
-        self.default = default
-        '''Saves a cli-command for shutting down the server.'''
-        self.stop_order = stop_order
-        '''
-            A list of regular expression pattern which every request have to
-            match.
-        '''
-        self.request_whitelist = request_whitelist
-        '''
-            A list of regular expression pattern which no request should match.
-        '''
-        self.request_blacklist = request_blacklist
-        '''
-            A list of regular expression pattern which indicates requests which
-            should guaranteed to be run in the same thread as the server
-            itself. This requests usually modifies shared memory.
-        '''
-        self.same_thread_request_whitelist = same_thread_request_whitelist
-        '''
-            Saves all mime-type pattern to interpret as files which shouldn't
-            be ran.
-        '''
-        self.static_mime_type_pattern = static_mime_type_pattern
-        '''
-            Saves all mime-type pattern to interpret as files which should be
-            ran. There standard output will be given back to request.
-        '''
-        self.dynamic_mime_type_pattern = dynamic_mime_type_pattern
-        '''
-            Saves all mime-type pattern which should be compressed before
-            sending via network.
-        '''
-        self.compressible_mime_type_pattern = compressible_mime_type_pattern
-        '''
-            Saves all file name pattern to be taken as fall-back if no explicit
-            file or module was requested.
-        '''
-        self.default_file_name_pattern = default_file_name_pattern
-        '''
-            Saves all module names to be taken as fall-back if no explicit file
-            or module was requested.
-        '''
-        self.default_module_names = default_module_names
-        '''Indicates if module loading via get query is enabled.'''
-        self.module_loading = module_loading
         '''Saves the number of running threads.'''
         self.number_of_running_threads = 0
         '''
             Saves the number of running process forked by this server instance.
         '''
         self.number_of_running_processes = 0
-        '''
-            Number of maximum forked processes. This should be less or equal to
-            the number of processors installed in your pc.
-            We will try to determine the number of processors. If this fails
-            "DEFAULT_NUMBER_OF_PROCESSES" will be applied.
-        '''
-        self.maximum_number_of_processes = maximum_number_of_processes
         if Platform.operating_system == 'windows':
             self.maximum_number_of_processes = 1
         elif not self.maximum_number_of_processes:
@@ -866,19 +789,14 @@ class Web(Class, Runnable):
                 self.maximum_number_of_processes = \
                     self.DEFAULT_NUMBER_OF_PROCESSES
         '''
-            This property saves the current request parameter delimiter. It
-            will be used to determine where the requested file name ends if get
-            parameter are given.
+            Saves informations how to define authentications in protected
+            directories.
         '''
-        self.request_parameter_delimiter = request_parameter_delimiter
-        '''
-            Defines the minimum file size till the server sends an octet-stream
-            header.
-        '''
-        self.file_size_stream_threshold_in_byte = \
-            file_size_stream_threshold_in_byte
-        '''Indicates if directory listing is allowed.'''
-        self.directory_listing = directory_listing
+        self._public_key_file = None
+        if public_key_file_path:
+            public_key_file = FileHandler(location=self.public_key_file_path)
+            if public_key_file.is_file():
+                self._public_key_file = public_key_file
 
                 # endregions
 
@@ -1455,7 +1373,7 @@ class CGIHTTPRequestHandler(
                 format += ' - forwarded host: {forwarded_host}'
             if forwarded_server:
                 format += ' - forwarded server: {forwarded_server}'
-        if builtins.len(self.server.web.instances) > 1:
+        if builtins.len(self.server.web.__class__.instances) > 1:
             format += ' (server port: {server_port})'
         request_description = message_or_error_code
         response_code = response_code_or_message
@@ -1788,7 +1706,7 @@ class CGIHTTPRequestHandler(
         return False
 
     @JointPoint
-## python3.3     def _create_environment_variables(self: Self) -> Self:
+## python3.3     def _create_environment_variables(self: Self) -> builtins.str:
     def _create_environment_variables(self):
         '''Creates all request specified environment-variables.'''
         self.request_uri = self.path
@@ -1825,9 +1743,7 @@ class CGIHTTPRequestHandler(
 ##     ) -> Self:
     def _set_dynamic_or_static_get(self, file_name):
 ##
-        '''
-            Makes a dynamic or static respond depending on incoming request.
-        '''
+        '''Makes a dynamic or static respond depending on incoming request.'''
         self.requested_file_name = file_name
         if self._is_dynamic():
             return self._dynamic_get()
@@ -1931,7 +1847,9 @@ class CGIHTTPRequestHandler(
 
     @JointPoint
 ## python3.3
-##     def _send_static_file(self: Self, output: (builtins.str,)) -> Self:
+##     def _send_static_file(
+##         self: Self, output: (builtins.str, _io.BufferedReader)
+##     ) -> Self:
     def _send_static_file(self, output):
 ##
         '''Sends given output to client.'''
@@ -1964,7 +1882,9 @@ class CGIHTTPRequestHandler(
 
     @JointPoint
 ## python3.3
-##     def _send_output(self: Self, output: (builtins.str,)) -> Self:
+##     def _send_output(
+##         self: Self, output: (builtins.str, _io.BufferedReader)
+##     ) -> Self:
     def _send_output(self, output):
 ##
         '''Sends the final given output to client.'''
@@ -1978,8 +1898,12 @@ class CGIHTTPRequestHandler(
         return self
 
     @JointPoint
-## python3.3     def _gzip(self: Self, content: builtins.str) -> builtins.str:
+## python3.3
+##     def _gzip(
+##         self: Self, content: (builtins.str, builtins.bytes)
+##     ) -> builtins.bytes:
     def _gzip(self, content):
+##
         '''Compresses the given content and returns the encoded result.'''
 ## python3.3         output = io.BytesIO()
         output = StringIO.StringIO()
@@ -2084,8 +2008,8 @@ class CGIHTTPRequestHandler(
 ## python3.3     def _run_requested_module(self: Self) -> Self:
     def _run_requested_module(self):
         '''
-            Imports and runs a given python module. Errors and output are
-            piped to requested client.
+            Imports and runs a given python module. Errors and output are piped
+            to requested client.
         '''
         '''Redirect output buffer.'''
         print_default_buffer_backup = Print.default_buffer
@@ -2145,8 +2069,8 @@ class CGIHTTPRequestHandler(
     def _handle_module_exception(self, requested_module, exception):
 ##
         '''
-            This method handles each exception raised by running a module
-            which was requested by client.
+            This method handles each exception raised by running a module which
+            was requested by client.
         '''
         if self.respond:
             if sys.flags.debug or __logger__.isEnabledFor(logging.DEBUG):

@@ -81,9 +81,7 @@ class Runnable(builtins.object):
         platform independent.
     '''
 
-    # region static properties
-
-        # region private
+    # region properties
 
     '''
         This lock is acquired at startup und will be released as soon the
@@ -91,9 +89,7 @@ class Runnable(builtins.object):
     '''
     __termination_lock = multiprocessing.Lock()
 
-        # endregion
-
-    # endregion'
+    # endregion
 
     # region static methods
 
@@ -110,8 +106,7 @@ class Runnable(builtins.object):
             Examples:
 
             >>> class A(Runnable):
-            ...     def _initialize(self):
-            ...         pass
+            ...     def _initialize(self): pass
 
             >>> repr(A()) # doctest: +ELLIPSIS
             'Object of "A" implementing a command line runnable interface t...'
@@ -140,15 +135,13 @@ class Runnable(builtins.object):
 
             >>> class A(Runnable):
             ...     @JointPoint
-            ...     def _run(self, a):
-            ...         Print(a)
+            ...     def _run(self, a): Print(a)
             >>> a = A.run('A')
             >>> __test_buffer__.content
             'A\\n'
 
             >>> class B(Runnable):
-            ...     def _run(self, a):
-            ...         Print(a)
+            ...     def _run(self, a): Print(a)
             >>> b = B.run('B')
             >>> __test_buffer__.content
             'A\\nB\\n'
@@ -171,8 +164,7 @@ class Runnable(builtins.object):
 
             Examples:
 
-            >>> class A(Runnable):
-            ...     pass
+            >>> class A(Runnable): pass
             >>> A.run() # doctest: +ELLIPSIS
             Traceback (most recent call last):
             ...
@@ -190,8 +182,7 @@ class Runnable(builtins.object):
 
             Examples:
 
-            >>> class A(Runnable):
-            ...     pass
+            >>> class A(Runnable): pass
             >>> A() # doctest: +ELLIPSIS
             Traceback (most recent call last):
             ...
@@ -242,8 +233,7 @@ class Runnable(builtins.object):
             Examples:
 
             >>> class A(Runnable):
-            ...     def _initialize(self):
-            ...         pass
+            ...     def _initialize(self): pass
             >>> class Namespace(argparse.Namespace):
             ...     a = 5
             ...     b = ['hans']
@@ -255,7 +245,7 @@ class Runnable(builtins.object):
         '''
         result = {}
         for name in builtins.dir(namespace):
-            if not name.startswith('_'):
+            if not name in builtins.dir(argparse.Namespace):
                 value = builtins.getattr(namespace, name)
                 if builtins.isinstance(value, builtins.list):
                     value = builtins.tuple(value)
@@ -298,11 +288,15 @@ class Runnable(builtins.object):
             This properties saves the initial given arguments to handle a
             reinitialisation by given restart order.
         '''
-        self._childrens_module = None
         self._initial_arguments = ()
         self._initial_keywords = {}
         '''This lock prevents form triggering the stop method twice.'''
-        self.__stop_lock = None
+        self.__stop_lock = multiprocessing.Lock()
+        '''
+            This property saves a reference to the concrete runnable
+            implementation.
+        '''
+        self._childrens_module = inspect.getmodule(self.__class__)
 
                 # endregion
 
@@ -311,8 +305,6 @@ class Runnable(builtins.object):
            self._get_potential_wrapped_method(self._run.__name__)):
             arguments = arguments[:-1]
             run = True
-        self.__stop_lock = multiprocessing.Lock()
-        self._childrens_module = inspect.getmodule(self.__class__)
         caller_module = inspect.getmodule(inspect.stack()[2][0])
         this_module = inspect.getmodule(inspect.stack()[0][0])
         if(caller_module is this_module and
@@ -320,7 +312,6 @@ class Runnable(builtins.object):
            not self._in_test_mode()) or run:
             self._initial_arguments = arguments
             self._initial_keywords = keywords
-
             self._handle_module_running(arguments, keywords, run)
         else:
             self._initialize(*arguments, **keywords)
@@ -331,8 +322,8 @@ class Runnable(builtins.object):
 ## python3.3     def wait_for_order(self: Self) -> Self:
     def wait_for_order(self):
         '''
-            Handler for waiting till a server stop order comes through
-            the command line interface.
+            Handler for waiting till a server stop order comes through the
+            command line interface.
         '''
         self._given_order = ''
         try:
@@ -379,8 +370,7 @@ class Runnable(builtins.object):
             Examples:
 
             >>> class A(Runnable):
-            ...     def _initialize(self):
-            ...         pass
+            ...     def _initialize(self): pass
 
             >>> A().stop() # doctest: +ELLIPSIS
             Object of "A" implementing a command line runnable interface to...
@@ -413,8 +403,7 @@ class Runnable(builtins.object):
             Examples:
 
             >>> class A(Runnable):
-            ...     def _initialize(self):
-            ...         pass
+            ...     def _initialize(self): pass
             >>> a = A()
 
             >>> a.trigger_stop() # doctest: +ELLIPSIS
@@ -463,8 +452,7 @@ class Runnable(builtins.object):
             Examples:
 
             >>> class A(Runnable):
-            ...     def _initialize(self):
-            ...         pass
+            ...     def _initialize(self): pass
             >>> A()._in_test_mode()
             True
         '''
@@ -1111,9 +1099,7 @@ class Platform(builtins.object):
     @JointPoint(builtins.classmethod)
 ## python3.3     def _initialize_process_lock(cls: SelfClass) -> SelfClass:
     def _initialize_process_lock(cls):
-        '''
-            Creates a unique temporary process lock file directory location.
-        '''
+        '''Creates a unique temporary process lock file directory location.'''
         if Platform.process_lock_directory is None:
             Platform.process_lock_directory = FileHandler(
                 location=tempfile.mkdtemp())
@@ -1126,9 +1112,7 @@ class Platform(builtins.object):
 ##     ) -> builtins.dict:
     def _log_command_result(cls, result):
 ##
-        '''
-            Logs the result of an invoked and given subprocess output.
-        '''
+        '''Logs the result of an invoked and given subprocess output.'''
         if builtins.isinstance(result['standard_output'], builtins.list):
             for index, standard_output in builtins.enumerate(
                 result['standard_output']
@@ -1522,10 +1506,8 @@ class CommandLine(builtins.object):
             {...'CommandLine.determine_wrapped_objects': <function ...>...}
 
             >>> @JointPoint
-            ... def a():
-            ...     pass
-            >>> class A:
-            ...     pass
+            ... def a(): pass
+            >>> class A: pass
             >>> A.a = a
             >>> CommandLine.determine_wrapped_objects(
             ...     A, only_module_level=False
@@ -1537,14 +1519,11 @@ class CommandLine(builtins.object):
             '''Exclude included objects.'''
             if not only_module_level or inspect.getmodule(object) is scope:
                 '''Iterate classes and functions.'''
-                if builtins.isinstance(object, JointPoint):
+                if(builtins.isinstance(JointPoint, builtins.type) and
+                   builtins.isinstance(object, JointPoint)):
                     objects[name] = object.function
-                if builtins.hasattr(object, '__dict__'):
-                    for sub_name, sub_object in object.__dict__.items():
-                        '''Iterate inner functions.'''
-                        if builtins.isinstance(sub_object, JointPoint):
-                            objects['%s.%s' % (name, sub_name)] = \
-                                sub_object.function
+                objects = cls._determine_nested_wrapped_objects(
+                    object, objects, name)
         return objects
 
     @JointPoint(builtins.classmethod)
@@ -1687,6 +1666,29 @@ class CommandLine(builtins.object):
         # endregion
 
         # region protected
+
+    # TODO
+    #@JointPoint(builtins.classmethod)
+    @builtins.classmethod
+## python3.3
+##     def _determine_nested_wrapped_objects(
+##         cls: SelfClass, object: (builtins.object, builtins.type),
+##         objects: builtins.dict, name: builtins.str
+##     ) -> builtins.dict:
+    def _determine_nested_wrapped_objects(cls, object, objects, name):
+##
+        '''
+            Determines nested wrapped objects and appends them to given list of
+            objects.
+        '''
+        if builtins.hasattr(object, '__dict__'):
+            for sub_name, sub_object in object.__dict__.items():
+                '''Iterate inner functions.'''
+                if(builtins.isinstance(JointPoint, builtins.type) and
+                   builtins.isinstance(sub_object, JointPoint)):
+                    objects['%s.%s' % (name, sub_name)] = \
+                        sub_object.function
+        return objects
 
     @JointPoint(builtins.classmethod)
 ## python3.3
@@ -1934,8 +1936,7 @@ class CommandLine(builtins.object):
             >>> sys_argv_backup = sys.argv
 
             >>> class Scope:
-            ...     def hans(self):
-            ...         return 'hans'
+            ...     def hans(self): return 'hans'
             >>> sys.argv = [sys.argv[0], 'hans', 'peter']
             >>> CommandLine._call_module_object(
             ...     {'scope': Scope()}, ('hans',), 'hans', (), {}
@@ -1967,8 +1968,7 @@ class CommandLine(builtins.object):
 
             >>> import types
 
-            >>> class A(types.ModuleType):
-            ...     pass
+            >>> class A(types.ModuleType): pass
 
             >>> CommandLine._determine_callable_objects(
             ...     {'scope': A('A'), 'name': 'A'}, None, True)
@@ -2024,8 +2024,7 @@ class CommandLine(builtins.object):
 
             Examples:
 
-            >>> class A(argparse.Namespace):
-            ...     commands = ()
+            >>> class A(argparse.Namespace): commands = ()
             >>> CommandLine._test_lint_document_modules(
             ...     False, A(), (), (), '', '', True, '', (),
             ...     '', inspect.currentframe(), ''

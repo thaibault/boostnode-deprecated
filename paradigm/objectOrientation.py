@@ -213,16 +213,15 @@ class Class(builtins.object):
             >>> class TestA(Class):
             ...     _a = 'hans'
             ...     _b = 5
-            ...     def __init__(self, c=2):
-            ...         self._c = c
-            ...     def get_a(self):
-            ...         return self._a
-            ...     def get_c(self):
-            ...         return 2 * self._c
+            ...     def __init__(self, c=2): self._c = c
+            ...     def get_a(self): return self._a
+            ...     def get_c(self): return 2 * self._c
             >>> TestA().a
             'hans'
-            >>> TestA().b is None
-            True
+            >>> TestA().b # doctest: +IGNORE_EXCEPTION_DETAIL
+            Traceback (most recent call last):
+            ...
+            boostNode.extension.native.ObjectOrientationError: Property "b" ...
             >>> TestA().c
             4
 
@@ -237,8 +236,10 @@ class Class(builtins.object):
             ...         return None
             >>> TestB().b
             'also hans'
-            >>> TestB().c is None
-            True
+            >>> TestB().c # doctest: +IGNORE_EXCEPTION_DETAIL
+            Traceback (most recent call last):
+            ...
+            boostNode.extension.native.ObjectOrientationError: Property "c"...
         '''
         name = '_' + name
         getter_name = 'get' + name
@@ -250,7 +251,9 @@ class Class(builtins.object):
                 return builtins.getattr(self, getter_name)()
             elif self.is_method(name='get'):
                 return self.get(name)
-        return None
+        raise __exception__(
+            'Property "%s" doesn\'t exist in given instance of "%s".',
+            name[1:], self.__class__.__name__)
 
 ## python3.3
 ##     def __setattr__(
