@@ -351,7 +351,7 @@ def __get_all_modules__(path=sys.path[0]):
         >>> __get_all_modules__(__test_folder_path__ + '__get_all_modules__')
         []
     '''
-    if not (sys.path[0] or path):
+    if not path:
         path = os.getcwd()
     return builtins.list(builtins.set(builtins.map(
         lambda name: name[:name.rfind('.')],

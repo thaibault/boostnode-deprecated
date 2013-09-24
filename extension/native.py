@@ -124,8 +124,14 @@ class Object(Class):
             # region special
 
     @JointPoint(PropertyInitializer)
-## python3.3     def __init__(self: Self, object=None) -> None:
-    def __init__(self, object=None):
+## python3.3
+##     def __init__(
+##         self: Self, content=None,
+##         *arguments: (builtins.object, builtins.type),
+##         **keywords: (builtins.object, builtins.type)
+##     ) -> None:
+    def __init__(self, content=None, *arguments, **keywords):
+##
         '''
             Generates a new high level wrapper around given object.
 
@@ -135,14 +141,14 @@ class Object(Class):
 
             >>> object
             Object of "str" ('hans').
-            >>> object.object
+            >>> object.content
             'hans'
         '''
 
                 # region properties
 
         '''Saves a copy of currently saved object.'''
-        self._object_copy = {}
+        self._content_copy = {}
 
                 # endregion
 
@@ -150,9 +156,9 @@ class Object(Class):
 ## python3.3     def __repr__(self: Self) -> builtins.str:
     def __repr__(self):
         '''Invokes if this object should describe itself by a string.'''
-        return 'Object of "{class_name}" ({object}).'.format(
-            class_name=self.object.__class__.__name__,
-            object=builtins.repr(self.object))
+        return 'Object of "{class_name}" ({content}).'.format(
+            class_name=self.content.__class__.__name__,
+            content=builtins.repr(self.content))
 
     @JointPoint
 ## python3.3     def __str__(self: Self) -> builtins.str:
@@ -165,7 +171,7 @@ class Object(Class):
             >>> str(Object(['hans']))
             "['hans']"
         '''
-        return builtins.str(self.object)
+        return builtins.str(self.content)
 
             # endregion
 
@@ -189,21 +195,21 @@ class Object(Class):
             >>> class B: hans = 'A'
             >>> object = Object(B())
             >>> object_copy = object.copy()
-            >>> object.object.hans = 'B'
-            >>> object.object.hans
+            >>> object.content.hans = 'B'
+            >>> object.content.hans
             'B'
             >>> object_copy['hans']
             'A'
         '''
-        self._object_copy = {}
-        for attribute_name in builtins.dir(self.object):
-            attribute = builtins.getattr(self.object, attribute_name)
+        self._content_copy = {}
+        for attribute_name in builtins.dir(self.content):
+            attribute = builtins.getattr(self.content, attribute_name)
             if not ((attribute_name.startswith('__') and
                      attribute_name.endswith('__')) or
                     builtins.callable(attribute)):
-                self._object_copy[attribute_name] = copy.copy(
-                    builtins.getattr(self.object, attribute_name))
-        return self._object_copy
+                self._content_copy[attribute_name] = copy.copy(
+                    builtins.getattr(self.content, attribute_name))
+        return self._content_copy
 
     @JointPoint
 ## python3.3     def restore(self: Self) -> (builtins.object, builtins.type):
@@ -230,15 +236,15 @@ class Object(Class):
             ...     __special__ = 'B'
             >>> object = Object(A())
             >>> object_copy = object.copy()
-            >>> object.object.hans = 'B'
-            >>> object.object.hans
+            >>> object.content.hans = 'B'
+            >>> object.content.hans
             'B'
             >>> object.restore().hans
             'A'
         '''
-        for attribute, value in self._object_copy.items():
-            builtins.setattr(self.object, attribute, value)
-        return self.object
+        for attribute, value in self._content_copy.items():
+            builtins.setattr(self.content, attribute, value)
+        return self.content
 
     @JointPoint
 ## python3.3     def is_binary(self: Self) -> builtins.bool:
@@ -266,14 +272,14 @@ class Object(Class):
         # NOTE: This is a dirty workaround to handle python2.7 lack of
         # differentiation between "string" and "bytes" objects.
 ## python3.3
-##         return builtins.isinstance(self.object, builtins.bytes)
-        object = self.object
-        if builtins.isinstance(self.object, builtins.unicode):
-            object = self.object.encode(encoding='utf_8')
+##         return builtins.isinstance(self.content, builtins.bytes)
+        content = self.content
+        if builtins.isinstance(self.content, builtins.unicode):
+            content = self.content.encode(encoding='utf_8')
         text_chars = ''.join(builtins.map(
             builtins.chr,
             builtins.range(7, 14) + [27] + builtins.range(0x20, 0x100)))
-        return builtins.bool(object.translate(None, text_chars))
+        return builtins.bool(content.translate(None, text_chars))
 ##
 
         # endregion
@@ -540,11 +546,6 @@ class String(Object, builtins.str):
         self.content = content
 
                 # endregion
-
-        '''Take this method type by the abstract class via introspection.'''
-        return builtins.getattr(
-            builtins.super(self.__class__, self), inspect.stack()[0][3]
-        )(self.content, *arguments, **keywords)
 
     @JointPoint
 ## python3.3     def __repr__(self: Self) -> builtins.str:

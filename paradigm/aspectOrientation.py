@@ -139,7 +139,7 @@ class FunctionDecorator(Class):
             Determines if class or object references for a wrapped method are
             already determined.
         '''
-        self.arguments_determines = False
+        self.arguments_determined = False
         '''
             NOTE: We can't use "self.__class__" because this points usually to
             a subclass of this class.
@@ -151,9 +151,8 @@ class FunctionDecorator(Class):
         elif builtins.isinstance(method, FunctionDecorator):
             '''
                 If we are wrapping a nested instance of this class we propagate
-                inspected informations to lower decorator.
-                This case is given if one instances of this class wraps another
-                one.
+                inspected informations to lower decorator. This case is given
+                if one instances of this class wraps another one.
             '''
             self.wrapped_decorator = method
             self.function = method.function
@@ -225,9 +224,8 @@ class FunctionDecorator(Class):
         if self.function and self.object is None and self.class_object is None:
             '''A standalone function was wrapped.'''
             return self.get_wrapper_function()(*arguments, **keywords)
-        '''A object bounded method was wrapped.'''
-        return self.__class__(
-            method=self.method_type, function=arguments[0])
+        '''An object bounded method was wrapped.'''
+        return self.__class__(function=arguments[0], method=self.method_type)
 
 ## python3.3
 ##     def __get__(
@@ -252,14 +250,6 @@ class FunctionDecorator(Class):
             self.function = builtins.getattr(
                 self.wrapped_decorator, inspect.stack()[0][3]
             )(object, class_object)
-        if self.object is not None:
-            '''
-                Restore old information about given class to function
-                (method_type).
-            '''
-            method_type = self.method_type
-            self = self.__class__(self.function)
-            self.method_type = method_type
         self.class_object = class_object
         self.object = object
         if self.class_object is None:
@@ -312,12 +302,12 @@ class FunctionDecorator(Class):
             elif(builtins.isinstance(method, builtins.type) and
                  builtins.issubclass(method, FunctionDecorator)):
                 '''
-                    If we are wrapping a nested instance of this class we
-                    propagate inspected informations to lower decorator. This
-                    case is given if one instances of this class wraps another
-                    one and the lower one is given via argument.
+                    If we are wrapping a nested class of this type we propagate
+                    inspected informations to lower decorator. This case is
+                    given if one instances of this class wraps another one and
+                    the lower one is given via argument.
                 '''
-                self.wrapped_decorator = self.method_type(function)
+                self.wrapped_decorator = self.method_type(method=self.function)
                 self.method_type = self.wrapped_decorator.method_type
                 self.function = self.wrapped_decorator.function
             elif self.method_type in self.COMMON_DECORATORS:
@@ -332,22 +322,14 @@ class FunctionDecorator(Class):
 ##
         '''Determine right set of arguments for different method types.'''
         '''Avoid to add object or class references twice.'''
-        # TODO workaround for argument forwarding.
-        """if not self.determined:
+        if not self.arguments_determined:
             if self.method_type is builtins.classmethod:
                 arguments = [self.class_object] + builtins.list(arguments)
             elif not (self.object is None or
                       self.method_type is builtins.staticmethod):
                 arguments = [self.object] + builtins.list(arguments)
         if self.wrapped_decorator is not None:
-            self.wrapped_decorator.determined = True"""
-        if(self.method_type is builtins.classmethod and
-           (not arguments or arguments[0] is not self.class_object)):
-            arguments = [self.class_object] + builtins.list(arguments)
-        elif(not (self.object is None or
-                  self.method_type is builtins.staticmethod) and
-             (not arguments or arguments[0] is not self.object)):
-            arguments = [self.object] + builtins.list(arguments)
+            self.wrapped_decorator.arguments_determined = True
         return builtins.tuple(arguments)
 
         # endregion

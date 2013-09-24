@@ -1667,9 +1667,7 @@ class CommandLine(builtins.object):
 
         # region protected
 
-    # TODO
-    #@JointPoint(builtins.classmethod)
-    @builtins.classmethod
+    @JointPoint(builtins.classmethod)
 ## python3.3
 ##     def _determine_nested_wrapped_objects(
 ##         cls: SelfClass, object: (builtins.object, builtins.type),

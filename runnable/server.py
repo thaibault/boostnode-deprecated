@@ -1163,7 +1163,7 @@ class CGIHTTPRequestHandler(
                 keep_blank_values=True)
 ##
             for name, value in self.post_dictionary.items():
-                if Object(object=value).is_binary():
+                if Object(content=value).is_binary():
                     self.post_dictionary[name] = {'content': value}
         return self.do_GET()
 
@@ -1248,14 +1248,19 @@ class CGIHTTPRequestHandler(
     @JointPoint
 ## python3.3
 ##     def send_static_file_cache_header(
-##         self: Self, timestamp: builtins.float
+##         self: Self, timestamp=time.time(),
+##         cache_control='public, max-age=0', expire_time_in_seconds=0
 ##     ) -> Self:
-    def send_static_file_cache_header(self, timestamp):
+    def send_static_file_cache_header(
+        self, timestamp=time.time(), cache_control='public, max-age=0',
+        expire_time_in_seconds=0
+    ):
 ##
         '''Response a static file-request header.'''
-        self.send_header('Cache-Control', 'public, max-age=0')
+        self.send_header('Cache-Control', cache_control)
         self.send_header('Last-Modified', self.date_time_string(timestamp))
-        self.send_header('Expires', self.date_time_string(timestamp + 0))
+        self.send_header('Expires', self.date_time_string(
+            timestamp + expire_time_in_seconds))
         return self
 
     @JointPoint

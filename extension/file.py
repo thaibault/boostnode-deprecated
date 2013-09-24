@@ -652,8 +652,7 @@ class Handler(Class):
         '''
         return self.is_element()
 
-    # TODO
-    #@JointPoint
+    @JointPoint
 ## python3.3
 ##     def __eq__(self: Self, other: builtins.object) -> builtins.bool:
     def __eq__(self, other):
@@ -866,13 +865,8 @@ class Handler(Class):
             'utf_8'
 
             >>> handler = Handler(
-            ...     __test_folder_path__ + 'test', must_exist=False)
-            >>> handler.remove_deep()
-            True
-            >>> handler.set_content(
-            ...     'test', encoding='ascii'
-            ... ) # doctest: +ELLIPSIS
-            Object of "Handler" ...
+            ...     __test_folder_path__ + 'get_encoding', must_exist=False
+            ... ).set_content('test', encoding='ascii') # doctest: +ELLIPSIS
             >>> handler.encoding
             'ascii'
         '''
@@ -2663,7 +2657,7 @@ class Handler(Class):
                 break
         return self
 
-    # TODO @JointPoint
+    @JointPoint
 ## python3.3
 ##     def is_equivalent(
 ##         self: Self, other: (SelfClassObject, builtins.str)
@@ -4044,7 +4038,7 @@ class Handler(Class):
                 '(%s).', self.path, self.type)
         if mode is None:
             mode = 'w'
-            if Object(object=content).is_binary():
+            if Object(content).is_binary():
                 mode = 'w+b'
         return mode
 
