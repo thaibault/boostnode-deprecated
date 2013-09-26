@@ -585,11 +585,11 @@ class Logger(Class):
             formatter_string += start + builtins.repr(
                 logger.handlers[0].formatter
             ) + end
-        return ('Object of "{class_name}" with logger "{handler}", formatter '
-                '"{formatter}" and buffer "{buffer}".'.format(
-                    class_name=cls.__name__, handler=handler_string,
-                    formatter=formatter_string,
-                    buffer=builtins.str(cls.buffer)))
+        return(
+            'Object of "{class_name}" with logger "{handler}", formatter '
+            '"{formatter}" and buffer "{buffer}".'.format(
+                class_name=cls.__name__, handler=handler_string,
+                formatter=formatter_string, buffer=builtins.str(cls.buffer)))
 
             # endregion
 

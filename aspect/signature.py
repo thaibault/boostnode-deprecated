@@ -166,7 +166,7 @@ class CheckObject(builtins.object):
             >>> CheckObject._is_right_type(list, collections.Iterable)
             True
         '''
-        return (
+        return(
             given_type is expected_type or
             builtins.issubclass(given_type, expected_type) and
             not (given_type is builtins.bool and
@@ -195,7 +195,7 @@ class CheckObject(builtins.object):
             Holds informations about the function and their bounding that is to
             be checked.
         '''
-        self.class_object = self.object = self.function = None
+        self.class_object = self.object = self.__func__ = None
         '''
             Saves informations in which way the give method is used. It could
             by something like "builtins.staticmethod" or
@@ -219,7 +219,7 @@ class CheckObject(builtins.object):
             ...         getattr(
             ...             super(self.__class__, self), inspect.stack()[0][3]
             ...         )()
-            ...         self.function = test
+            ...         self.__func__ = test
             ...         self._method_type = staticmethod
             >>> a = A()
 
@@ -233,14 +233,15 @@ class CheckObject(builtins.object):
         class_object_name = 'None'
         if self.class_object is not None:
             class_object_name = self.class_object.__name__
-        return ('Object of "{class_name}" with class object "'
-                '{class_object_name}", object "{object}", called function '
-                '"{function}" and method type "{method_type}".'.format(
-                    class_name=self.__class__.__name__,
-                    class_object_name=class_object_name,
-                    object=builtins.repr(self.object),
-                    function=builtins.str(self.function),
-                    method_type=builtins.str(self._method_type)))
+        return(
+            'Object of "{class_name}" with class object "{class_object_name}",'
+            ' object "{object}", called function "{function}" and method type '
+            '"{method_type}".'.format(
+                class_name=self.__class__.__name__,
+                class_object_name=class_object_name,
+                object=builtins.repr(self.object),
+                function=builtins.str(self.__func__),
+                method_type=builtins.str(self._method_type)))
 
             # endregion
 
@@ -260,7 +261,7 @@ class CheckObject(builtins.object):
             ...         getattr(
             ...             super(self.__class__, self), inspect.stack()[0][3]
             ...         )()
-            ...         self.function = test
+            ...         self.__func__ = test
             ...         self._method_type = staticmethod
             ...     def test(): pass
 
@@ -269,16 +270,16 @@ class CheckObject(builtins.object):
             >>> a.get_function_path()
             'test'
 
-            >>> a.function = A.test
+            >>> a.__func__ = A.test
             >>> a.class_object = A
             >>> a.get_function_path()
             'A.test'
         '''
 ## python3.3
-##         return self.function.__qualname__
+##         return self.__func__.__qualname__
         if self.class_object is not None:
-            return self.class_object.__name__ + '.' + self.function.__name__
-        return self.function.__name__
+            return self.class_object.__name__ + '.' + self.__func__.__name__
+        return self.__func__.__name__
 ##
 
             # endregion
@@ -309,7 +310,7 @@ class CheckObject(builtins.object):
             Object of "A" with class object "None", object "None", called ...
 
             >>> a = A()
-            >>> a.function = A._handle_multiple_types
+            >>> a.__func__ = A._handle_multiple_types
             >>> a._handle_multiple_types(
             ...     'hans', str, (bool, int)
             ... ) # doctest: +ELLIPSIS +IGNORE_EXCEPTION_DETAIL
@@ -381,14 +382,14 @@ class CheckObject(builtins.object):
             >>> b = B()
             >>> a.class_object = B
             >>> a.object = b
-            >>> a.function = B.b
+            >>> a.__func__ = B.b
             >>> a._check_type(Self, B, b) # doctest: +ELLIPSIS
             Object of "A" with class object "B", object "...
 
             >>> a = A()
             >>> a.class_object = B
             >>> a.object = B()
-            >>> a.function = B.b
+            >>> a.__func__ = B.b
             >>> a._check_type(
             ...     Self, B, B()
             ... ) # doctest: +ELLIPSIS +IGNORE_EXCEPTION_DETAIL
@@ -399,21 +400,21 @@ class CheckObject(builtins.object):
             >>> a = A()
             >>> a.class_object = B
             >>> a.object = B()
-            >>> a.function = B.b
+            >>> a.__func__ = B.b
             >>> a._check_type(SelfClass, B, B) # doctest: +ELLIPSIS
             Object of "A" with class object "B", object "...
 
             >>> a = A()
             >>> a.class_object = B
             >>> a.object = B()
-            >>> a.function = B.b
+            >>> a.__func__ = B.b
             >>> a._check_type(SelfClassObject, B, B()) # doctest: +ELLIPSIS
             Object of "A" with class object "B", object "...
 
             >>> a = A()
             >>> a.class_object = B
             >>> a.object = B()
-            >>> a.function = B.b
+            >>> a.__func__ = B.b
             >>> a._check_type(
             ...     SelfClassObject, int, 5
             ... ) # doctest: +ELLIPSIS +IGNORE_EXCEPTION_DETAIL
@@ -424,7 +425,7 @@ class CheckObject(builtins.object):
             >>> a = A()
             >>> a.class_object = B
             >>> a.object = B()
-            >>> a.function = B.b
+            >>> a.__func__ = B.b
             >>> a._check_type(
             ...     bool, int, 5
             ... ) # doctest: +ELLIPSIS +IGNORE_EXCEPTION_DETAIL
@@ -468,7 +469,7 @@ class CheckObject(builtins.object):
             ...         getattr(
             ...             super(self.__class__, self), inspect.stack()[0][3]
             ...         )()
-            ...         self.function = test
+            ...         self.__func__ = test
             ...         self._method_type = staticmethod
             >>> a = A()
 
@@ -528,7 +529,7 @@ class CheckObject(builtins.object):
             ...         getattr(
             ...             super(self.__class__, self), inspect.stack()[0][3]
             ...         )()
-            ...         self.function = test
+            ...         self.__func__ = test
             ...         self._method_type = staticmethod
             >>> a = A()
 
@@ -743,7 +744,7 @@ class CheckObject(builtins.object):
             Object of "A" with class object "None", object "None", ...
 
             >>> a = A()
-            >>> a.function = a._check_value
+            >>> a.__func__ = a._check_value
             >>> a._check_value(
             ...     5, 7
             ... ) # doctest: +ELLIPSIS +IGNORE_EXCEPTION_DETAIL
@@ -978,7 +979,7 @@ class Check(FunctionDecorator):
 ##             ...
 ##             boostNode.extension.native.SignatureError: "a()" expects inst...
 ##         '''
-##         @functools.wraps(self.function)
+##         @functools.wraps(self.__func__)
 ##         def wrapper_function(
 ##             *arguments: builtins.object, **keywords: builtins.object
 ##         ) -> builtins.object:
@@ -989,12 +990,12 @@ class Check(FunctionDecorator):
 ##             '''
 ##             arguments = self._determine_arguments(arguments)
 ##             CheckArguments(
-##                 self.class_object, self.object, self.function, arguments,
+##                 self.class_object, self.object, self.__func__, arguments,
 ##                 keywords
 ##             ).aspect()
-##             return_value = self.function(*arguments, **keywords)
+##             return_value = self.__func__(*arguments, **keywords)
 ##             return CheckReturnValue(
-##                 self.class_object, self.object, self.function, arguments,
+##                 self.class_object, self.object, self.__func__, arguments,
 ##                 keywords, return_value
 ##             ).aspect()
 ##         return wrapper_function
@@ -1011,7 +1012,7 @@ class Check(FunctionDecorator):
            >>> Check(a).get_wrapper_function()(5)
            5
         '''
-        return self.function
+        return self.__func__
 ##
 
         # endregion
@@ -1035,7 +1036,7 @@ class CheckArguments(CallJointPoint, CheckObject):
             This function could be used as decorator function or aspects to
             implement argument type check for each function call.
         '''
-        if builtins.hasattr(self.function, '__annotations__'):
+        if builtins.hasattr(self.__func__, '__annotations__'):
             '''
                 If there aren't any specifications (signature), the given
                 function could be given back unmodified.
@@ -1122,8 +1123,8 @@ class CheckReturnValue(ReturnJointPoint, CheckObject):
             'hans'
         '''
 ## python3.3
-##         if 'return' in self.function.__annotations__:
-##             expected_return = self.function.__annotations__['return']
+##         if 'return' in self.__func__.__annotations__:
+##             expected_return = self.__func__.__annotations__['return']
 ##             given_return_type = builtins.type(self.return_value)
 ##             if builtins.isinstance(expected_return, builtins.type):
 ##                 self._check_type(

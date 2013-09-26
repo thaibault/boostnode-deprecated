@@ -425,8 +425,8 @@ class Handler(Class):
         if not operating_system:
             operating_system = Platform().operating_system
         if operating_system == 'windows':
-            return ()
-        return ('~',)
+            return()
+        return '~',
 
         # endregion
 
@@ -625,7 +625,7 @@ class Handler(Class):
             ...     print('"' + str(file) + '"') # doctest: +ELLIPSIS
             "...file.py..."
         '''
-        return (element for element in self.list())
+        return(element for element in self.list())
 
     @JointPoint
 ## python3.3     def __bool__(self: Self) -> builtins.bool:
@@ -1380,7 +1380,7 @@ class Handler(Class):
 
             >>> Handler.set_root(__test_folder_path__) # doctest: +ELLIPSIS
             <class '...Handler'>
-            >>> Handler('/')._path == __test_folder_path__
+            >>> Handler('/').directory_path == os.sep
             True
 
             >>> Handler.set_root(root_backup) # doctest: +ELLIPSIS
@@ -1772,7 +1772,7 @@ class Handler(Class):
             ... ).extension_suffix
             ''
         '''
-        return (os.extsep + self.extension) if self._has_extension else ''
+        return(os.extsep + self.extension) if self._has_extension else ''
 
             # endregion
 
@@ -1806,6 +1806,9 @@ class Handler(Class):
 
             >>> directory.set_timestamp(False)
             False
+
+            >>> directory.set_timestamp()
+            True
         '''
         if not arguments:
             arguments = (None,)
@@ -3986,24 +3989,17 @@ class Handler(Class):
             >>> handler = Handler(
             ...     __test_folder_path__ + 'delete_file_patterns',
             ...     make_directory=True)
-            >>> a_a = Handler(
-            ...     __test_folder_path__ + 'delete_file_patterns/a.a',
-            ...     must_exist=False)
+            >>> a_a = Handler(handler.path + 'a.a', must_exist=False)
             >>> a_a.content = 'A'
-            >>> a_b = Handler(
-            ...     __test_folder_path__ + 'delete_file_patterns/a.b',
-            ...     must_exist=False)
+            >>> a_b = Handler(handler.path + 'a.b', must_exist=False)
             >>> a_b.content = 'A'
-            >>> b_b = Handler(
-            ...     __test_folder_path__ + 'delete_file_patterns/b.b',
-            ...     must_exist=False)
+            >>> b_b = Handler(handler.path + 'b.b', must_exist=False)
             >>> b_b.content = 'A'
-            >>> a_c = Handler(
-            ...     __test_folder_path__ + 'delete_file_patterns/a.c',
-            ...     must_exist=False)
+            >>> a_c = Handler(handler.path + 'a.c', must_exist=False)
             >>> a_c.content = 'A'
             >>> handler.delete_file_patterns(
-            ...     '.+\.b', 'a\.c') # doctest: +ELLIPSIS
+            ...     '.+\.b', 'a\.c'
+            ... ) # doctest: +ELLIPSIS
             Object of "Handler" with path "...delete_file_patterns..."...
             >>> a_a.is_file()
             True
@@ -4600,7 +4596,7 @@ class Handler(Class):
         os_statvfs = self._initialize_platform_dependencies()
         if os.path.isfile(self._path) or os.path.isdir(self._path):
             if not os_statvfs is None:
-                return (
+                return(
                     os_statvfs.f_bavail * self.BLOCK_SIZE_IN_BYTE,
                     os_statvfs.f_blocks * self.BLOCK_SIZE_IN_BYTE)
             if builtins.hasattr(ctypes, 'windll'):

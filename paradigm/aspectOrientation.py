@@ -103,7 +103,7 @@ class FunctionDecorator(Class):
 
         # region public
 
-            # region  special
+            # region special
 
 ## python3.3
 ##     def __init__(
@@ -120,18 +120,26 @@ class FunctionDecorator(Class):
             >>> def a(): pass
 
             >>> FunctionDecorator(a) # doctest: +ELLIPSIS
-            Object of "FunctionDecorator" with called function "a", wrapped...
+            Object of "FunctionDecorator" with wrapped function "a" and ...
 
             >>> FunctionDecorator(5) # doctest: +ELLIPSIS
             Traceback (most recent call last):
             ...
             TypeError: First ... but "int" (5) given.
+
+            >>> FunctionDecorator(FunctionDecorator(a)) # doctest: +ELLIPSIS
+            Object of "FunctionDecorator" with wrapped function "a" and ...
+
+            >>> FunctionDecorator(
+            ...     FunctionDecorator, FunctionDecorator(a)
+            ... ) # doctest: +ELLIPSIS
+            Object of "FunctionDecorator" with wrapped function "a" and ...
         '''
 
                 # region properties
 
         '''Properties of function calls.'''
-        self.class_object = self.object = self.function = self.return_value = \
+        self.class_object = self.object = self.return_value = \
             self.wrapped_decorator = None
         '''Saves method types like static or class bounded.'''
         self.method_type = None
@@ -140,6 +148,8 @@ class FunctionDecorator(Class):
             already determined.
         '''
         self.arguments_determined = False
+        '''Saves the wrapped function.'''
+        self.__func__ = None
         '''
             NOTE: We can't use "self.__class__" because this points usually to
             a subclass of this class.
@@ -155,17 +165,17 @@ class FunctionDecorator(Class):
                 if one instances of this class wraps another one.
             '''
             self.wrapped_decorator = method
-            self.function = method.function
+            self.__func__ = method.__func__
             self.method_type = method.method_type
         elif(builtins.isinstance(
             method, (types.FunctionType, types.MethodType))
         ):
-            self.function = method
+            self.__func__ = method
         else:
             raise builtins.TypeError(
                 'First argument for initializing "{class_name}" must be '
-                '"{common_methods}", "{function_type}" or '
-                '"{method_type}" but "{type}" ({value}) given.'.format(
+                '"{common_methods}", "{function_type}" or "{method_type}" but '
+                '"{type}" ({value}) given.'.format(
                     class_name=self.__class__.__name__,
                     common_methods='", "'.join(builtins.map(
                         lambda decorator: decorator.__name__,
@@ -175,8 +185,6 @@ class FunctionDecorator(Class):
                     method_type=types.MethodType.__name__,
                     type=builtins.type(method).__name__,
                     value=builtins.str(method)))
-        '''Necessary for providing python's native function properties.'''
-        self.__func__ = self.function
 
                 # endregion
 
@@ -192,27 +200,31 @@ class FunctionDecorator(Class):
             >>> function_decorator.class_object = FunctionDecorator
             >>> repr(function_decorator) # doctest: +ELLIPSIS
             'Object of "FunctionDecorator" ... "__repr__" ... (NoneType).'
+
+            >>> repr(FunctionDecorator(FunctionDecorator)) # doctest: +ELLIPSIS
+            'Object of "FunctionDecorator" with wrapped function "None" and...'
         '''
+        function_name = 'None'
+        if self.__func__ is not None:
+            function_name = self.__func__.__name__
         if self.class_object:
-            return ('Object of "{class_name}" with class object '
-                    '"{class_object}", object "{object}", called function '
-                    '"{function}", wrapped function "{wrapped_function}" '
-                    'and return value "{value}" ({type}).'.format(
-                        class_name=self.__class__.__name__,
-                        class_object=self.class_object.__name__,
-                        object=builtins.repr(self.object),
-                        function=self.function.__name__,
-                        wrapped_function=self.__func__.__name__,
-                        value=builtins.str(self.return_value),
-                        type=builtins.type(self.return_value).__name__))
-        return ('Object of "{class_name}" with called function '
-                '"{function}", wrapped function "{wrapped_function}" and '
+            return(
+                'Object of "{class_name}" with class object "{class_object}", '
+                'object "{object}", wrapped function "{wrapped_function}" and '
                 'return value "{value}" ({type}).'.format(
                     class_name=self.__class__.__name__,
-                    function=self.function.__name__,
-                    wrapped_function=self.__func__.__name__,
+                    class_object=self.class_object.__name__,
+                    object=builtins.repr(self.object),
+                    wrapped_function=function_name,
                     value=builtins.str(self.return_value),
                     type=builtins.type(self.return_value).__name__))
+        return(
+            'Object of "{class_name}" with wrapped function '
+            '"{wrapped_function}" and return value "{value}" ({type}).'.format(
+                class_name=self.__class__.__name__,
+                wrapped_function=function_name,
+                value=builtins.str(self.return_value),
+                type=builtins.type(self.return_value).__name__))
 
 ## python3.3
 ##     def __call__(
@@ -221,7 +233,8 @@ class FunctionDecorator(Class):
     def __call__(self, *arguments, **keywords):
 ##
         '''This method is triggered if wrapped function was called.'''
-        if self.function and self.object is None and self.class_object is None:
+        if(self.__func__ is not None and self.object is None and
+           self.class_object is None):
             '''A standalone function was wrapped.'''
             return self.get_wrapper_function()(*arguments, **keywords)
         '''An object bounded method was wrapped.'''
@@ -247,7 +260,7 @@ class FunctionDecorator(Class):
             <...FunctionDecorator.__get__...>
         '''
         if self.wrapped_decorator is not None:
-            self.function = builtins.getattr(
+            self.__func__ = builtins.getattr(
                 self.wrapped_decorator, inspect.stack()[0][3]
             )(object, class_object)
         self.class_object = class_object
@@ -268,7 +281,7 @@ class FunctionDecorator(Class):
             This method should usually be overridden. It serves the wrapper
             function to manipulate decorated function calls.
         '''
-        return self.function
+        return self.__func__
 
         # endregion
 
@@ -285,10 +298,10 @@ class FunctionDecorator(Class):
             Another decorator was given to this instance. This decorator should
             additionally be used on given function.
         '''
-        self.function = function
+        self.__func__ = function
         self.method_type = method
-        if self.function is not None:
-            if builtins.isinstance(self.function, FunctionDecorator):
+        if self.__func__ is not None:
+            if builtins.isinstance(self.__func__, FunctionDecorator):
                 '''
                     If we are wrapping a nested instance of this class we
                     propagate inspected informations to lower decorator. This
@@ -296,9 +309,9 @@ class FunctionDecorator(Class):
                     one. The last wrapping instance additionally uses a common
                     or manageable wrapper.
                 '''
-                self.wrapped_decorator = self.function
-                self.method_type = self.function.method_type
-                self.function = self.function.function
+                self.wrapped_decorator = self.__func__
+                self.method_type = self.__func__.method_type
+                self.__func__ = self.__func__.__func__
             elif(builtins.isinstance(method, builtins.type) and
                  builtins.issubclass(method, FunctionDecorator)):
                 '''
@@ -307,11 +320,11 @@ class FunctionDecorator(Class):
                     given if one instances of this class wraps another one and
                     the lower one is given via argument.
                 '''
-                self.wrapped_decorator = self.method_type(method=self.function)
+                self.wrapped_decorator = self.method_type(method=self.__func__)
                 self.method_type = self.wrapped_decorator.method_type
-                self.function = self.wrapped_decorator.function
+                self.__func__ = self.wrapped_decorator.__func__
             elif self.method_type in self.COMMON_DECORATORS:
-                self.function = self.method_type(self.function)
+                self.__func__ = self.method_type(self.__func__)
         return self
 
 ## python3.3
@@ -370,15 +383,15 @@ class JointPointHandler(Class):
 
         self.class_object = class_object
         self.object = object
-        self.function = function
+        self.__func__ = function
         self.arguments = arguments
         self.keywords = keywords
         self.argument_specifications = []
 ## python3.3
 ##         argument_specifications = inspect.signature(
-##             self.function
+##             self.__func__
 ##         ).parameters
-##         bound_arguments = inspect.signature(self.function).bind(
+##         bound_arguments = inspect.signature(self.__func__).bind(
 ##             *self.arguments, **self.keywords)
 ##         for name, value in bound_arguments.arguments.items():
 ##             if(argument_specifications[name].kind is
@@ -388,19 +401,19 @@ class JointPointHandler(Class):
 ##                 ):
 ##                     self.argument_specifications.append(Argument(
 ##                         parameter=argument_specifications[name],
-##                         value=positional_value, function=self.function,
+##                         value=positional_value, function=self.__func__,
 ##                         name=builtins.str(index + 1) + '. argument'))
 ##             elif(argument_specifications[name].kind is
 ##                  inspect.Parameter.VAR_KEYWORD):
 ##                 for keyword_name, keyword_value in value.items():
 ##                     self.argument_specifications.append(Argument(
 ##                         parameter=argument_specifications[name],
-##                         value=keyword_value, function=self.function,
+##                         value=keyword_value, function=self.__func__,
 ##                         name=keyword_name))
 ##             else:
 ##                 self.argument_specifications.append(Argument(
 ##                     parameter=argument_specifications[name],
-##                     value=value, function=self.function))
+##                     value=value, function=self.__func__))
         pass
 ##
 
@@ -409,15 +422,16 @@ class JointPointHandler(Class):
 ## python3.3     def __repr__(self: Self) -> builtins.str:
     def __repr__(self):
         '''Represents the given function call properties.'''
-        return ('Object of "{class_name}" with class object "{class_object}", '
-                'object "{object}", function "{function}", arguments '
-                '"{arguments}" and keywords "{keywords}".'.format(
-                    class_name=self.__class__.__name__,
-                    class_object=self.class_object.__name__,
-                    object=builtins.repr(self.object),
-                    function=self.function.__name__,
-                    arguments='", "'.join(self.arguments),
-                    keywords=builtins.str(self.keywords)))
+        return(
+            'Object of "{class_name}" with class object "{class_object}", '
+            'object "{object}", function "{function}", arguments "{arguments}"'
+            ' and keywords "{keywords}".'.format(
+                class_name=self.__class__.__name__,
+                class_object=self.class_object.__name__,
+                object=builtins.repr(self.object),
+                function=self.__func__.__name__,
+                arguments='", "'.join(self.arguments),
+                keywords=builtins.str(self.keywords)))
 
             # endregion
 
@@ -465,8 +479,8 @@ class ReturnAspect(Class):
 
                 # region properties
 
-        self.class_object = self.object = self.function = self.arguments = \
-            self.keywords = self.return_value = None
+        self.class_object = self.object = self.arguments = \
+            self.keywords = self.return_value= self.__func__ = None
 
                 # endregion
 
@@ -482,25 +496,26 @@ class ReturnAspect(Class):
             >>> return_aspect = ReturnAspect()
             >>> return_aspect.class_object = A
             >>> return_aspect.object = A()
-            >>> return_aspect.function = A().a
+            >>> return_aspect.__func__ = A().a
             >>> return_aspect.arguments = ()
             >>> return_aspect.keywords = {}
 
             >>> repr(return_aspect) # doctest: +ELLIPSIS
             'Object of "ReturnAspect" with class object "A", object "...'
         '''
-        return ('Object of "{class_name}" with class object "{class_object}", '
-                'object "{object}", function "{function}", arguments '
-                '"{arguments}", keywords "{keywords}" and return value '
-                '"{value}" ({type}).'.format(
-                    class_name=self.__class__.__name__,
-                    class_object=self.class_object.__name__,
-                    object=builtins.repr(self.object),
-                    function=self.function.__name__,
-                    arguments='", "'.join(self.arguments),
-                    keywords=builtins.str(self.keywords),
-                    value=builtins.str(self.return_value),
-                    type=builtins.str(builtins.type(self.return_value))))
+        return(
+            'Object of "{class_name}" with class object "{class_object}", '
+            'object "{object}", function "{function}", arguments '
+            '"{arguments}", keywords "{keywords}" and return value "{value}" '
+            '({type}).'.format(
+                class_name=self.__class__.__name__,
+                class_object=self.class_object.__name__,
+                object=builtins.repr(self.object),
+                function=self.__func__.__name__,
+                arguments='", "'.join(self.arguments),
+                keywords=builtins.str(self.keywords),
+                value=builtins.str(self.return_value),
+                type=builtins.str(builtins.type(self.return_value))))
 
             # endregion
 
@@ -623,7 +638,7 @@ class Argument(Class):
             5
             >>> argument.name
             'a'
-            >>> argument.function # doctest: +ELLIPSIS
+            >>> argument.__func__ # doctest: +ELLIPSIS
             <function mocup at ...>
 
             >>> Argument(
@@ -646,7 +661,7 @@ class Argument(Class):
         self.name = parameter.name
         if name is not None:
             self.name = name
-        self.function = function
+        self.__func__ = function
 
                 # endregion
 
@@ -667,9 +682,9 @@ class Argument(Class):
         default_value = 'default value "%s", ' % builtins.str(self.default)
         if self.default is inspect.Signature.empty:
             default_value = ''
-## python3.3         function_path = self.function.__qualname__
-        function_path = self.function.__name__
-        return (
+## python3.3         function_path = self.__func__.__qualname__
+        function_path = self.__func__.__name__
+        return(
             'Object of "{name}" ({kind}) bounded to "{function_path}" '
             'with name "{argument_name}", {default_value}annotation '
             '"{annotation}" and value "{value}".'
@@ -720,9 +735,9 @@ class PointCut(ReturnAspect):
 
         self.class_object = class_object
         self.object = object
-        self.function = function
         self.arguments = arguments
         self.keywords = keywords
+        self.__func__ = function
 
                 # endregion
 
@@ -742,7 +757,7 @@ class PointCut(ReturnAspect):
             '''
             if 'call' == advice['event']:
                 result = advice['callback'](
-                    self.class_object, self.object, self.function,
+                    self.class_object, self.object, self.__func__,
                     self.arguments, self.keywords)
                 if(builtins.hasattr(advice['callback'], 'aspect') and
                    builtins.isinstance(
@@ -772,7 +787,7 @@ class PointCut(ReturnAspect):
             if 'return' == advice['event']:
                 self.return_value = advice['callback'](
                     self.class_object, self.object,
-                    self.function, self.arguments, self.keywords,
+                    self.__func__, self.arguments, self.keywords,
                     return_value)
                 if(builtins.hasattr(advice['callback'], 'aspect') and
                    builtins.callable(
@@ -795,10 +810,10 @@ class PointCut(ReturnAspect):
         '''Iterates through each aspect matching current function call.'''
         from boostNode.extension.native import Module
         context_path = Module.get_context_path(path=inspect.getfile(
-            self.function))
+            self.__func__))
         if self.class_object:
             context_path += '.' + self.class_object.__name__
-        context_path += '.' + self.function.__name__
+        context_path += '.' + self.__func__.__name__
         result = True
         for aspect in ASPECTS:
             if(not 'point_cut' in aspect or
@@ -906,14 +921,13 @@ else:
         def get_wrapper_function(self):
 ##
             '''This methods returns the joint point's wrapped function.'''
-            @functools.wraps(self.function)
+            @functools.wraps(self.__func__)
             def wrapper_function(*arguments, **keywords):
                 '''
                     Wrapper function for doing the aspect orientated stuff
                     before and after a function call.
                 '''
                 '''Unpack wrapper methods.'''
-                self.__func__ = self.function
                 while builtins.hasattr(self.__func__, '__func__'):
                     self.__func__ = self.__func__.__func__
                 arguments = self._determine_arguments(arguments)
@@ -922,10 +936,10 @@ else:
                     arguments=arguments, keywords=keywords)
                 if point_cut.handle_call():
                     self.return_value = point_cut.handle_return(
-                        return_value=self.function(*arguments, **keywords))
+                        return_value=self.__func__(*arguments, **keywords))
                 return self.return_value
 ## python3.3             pass
-            wrapper_function.__wrapped__ = self.function
+            wrapper_function.__wrapped__ = self.__func__
             return wrapper_function
 
         # endregion

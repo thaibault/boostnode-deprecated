@@ -268,16 +268,16 @@ class Reflector(Class, Runnable):
         '''
         limit = FileHandler.determine_size_from_string(
             size_and_unit=self.given_limit)
-        return ('Object of "{class_name}" with source path "{source_path}" '
-                'and target path "{target_path}". Limit is {limit} byte, '
-                'priority locations "{priority_locations}" and exclude '
-                'locations "{exclude_locations}".'.format(
-                    class_name=self.__class__.__name__,
-                    source_path=self.source_location.path,
-                    target_path=self.target_location.path,
-                    limit=limit,
-                    priority_locations='", "'.join(self.priority_locations),
-                    exclude_locations='", "'.join(self.exclude_locations)))
+        return(
+            'Object of "{class_name}" with source path "{source_path}" and '
+            'target path "{target_path}". Limit is {limit} byte, priority '
+            'locations "{priority_locations}" and exclude locations '
+            '"{exclude_locations}".'.format(
+                class_name=self.__class__.__name__,
+                source_path=self.source_location.path,
+                target_path=self.target_location.path, limit=limit,
+                priority_locations='", "'.join(self.priority_locations),
+                exclude_locations='", "'.join(self.exclude_locations)))
 
             # endregion
 

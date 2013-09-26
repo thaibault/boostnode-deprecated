@@ -152,7 +152,7 @@ class Run(Class, Runnable):
                     'all': '__init__.<%code_file.extension%> all'
                 }
             },
-            'extensions': ('py', 'pyc', 'pyw'),
+            'extensions': ('py', 'pyc', 'pyw', 'pyo', 'pyd'),
             'delete_patterns': (
                 '.*\.py[cod]$', '^__pycache__$', '^temp_\.*')
         },
@@ -214,10 +214,10 @@ class Run(Class, Runnable):
             >>> repr(Run(code_file_path=file)) # doctest: +ELLIPSIS
             'Object of "Run" with detected path "...__repr__.py".'
         '''
-        return 'Object of "{class_name}" with detected path '\
-               '"{path}".'.format(
-                   class_name=self.__class__.__name__,
-                   path=self._code_file.path)
+        return(
+            'Object of "{class_name}" with detected path "{path}".'.format(
+                class_name=self.__class__.__name__,
+                path=self._code_file.path))
 
             # endregion
 
@@ -442,6 +442,7 @@ class Run(Class, Runnable):
 
             Examples:
 
+            >>> FileHandler('temp_run_main.py', must_exist=False).content = ' '
             >>> run = Run()
 
             >>> run._determine_code_file(path='') # doctest: +ELLIPSIS
@@ -486,12 +487,15 @@ class Run(Class, Runnable):
             ...     __test_folder_path__ +
             ...     '_find_informations_by_extension.py',
             ...     must_exist=False)
-            >>> Run()._find_informations_by_extension(
+            >>> FileHandler('temp_run_main.py', must_exist=False).content = ' '
+            >>> run = Run()
+
+            >>> run._find_informations_by_extension(
             ...     extension='py', code_file=code_file
             ... ) # doctest: +ELLIPSIS
             {...'type': 'python'...}
 
-            >>> Run()._find_informations_by_extension(
+            >>> run._find_informations_by_extension(
             ...     'not_existing', code_file)
             False
         '''
@@ -519,16 +523,20 @@ class Run(Class, Runnable):
             ...     __test_folder_path__ + '_search_supported_file_by_path.py',
             ...     must_exist=False)
             >>> file.content = '#!/usr/bin/env python'
-            >>> Run()._search_supported_file_by_path(
+            >>> FileHandler('temp_run_main.py', must_exist=False).content = ' '
+            >>> run = Run()
+
+            >>> run._search_supported_file_by_path(
             ...     path=file.directory_path + file.basename
             ... ) # doctest: +ELLIPSIS
             Object of "Handler" with pat..._search_supported_file_by_path.py...
 
-            >>> Run()._search_supported_file_by_path(
-            ...     path='') # doctest: +ELLIPSIS
+            >>> run._search_supported_file_by_path(
+            ...     path=''
+            ... ) # doctest: +ELLIPSIS
             Object of "Handler" with path "..." (type: file).
 
-            >>> Run()._search_supported_file_by_path('not_exists')
+            >>> run._search_supported_file_by_path('not_exists')
             False
         '''
         self_file = FileHandler(
@@ -565,11 +573,19 @@ class Run(Class, Runnable):
 
             Examples:
 
-            >>> FileHandler(
+            >>> file = FileHandler(
             ...     __test_folder_path__ +
             ...     '_search_supported_file_by_directoryMain.py',
-            ...     must_exist=False
-            ... ).content = ' '
+            ...     must_exist=False)
+            >>> file.content = ' '
+            >>> FileHandler('temp_run_main.py', must_exist=False).content = ' '
+
+            >>> Run()._search_supported_file_by_directory(
+            ...     FileHandler(__test_folder_path__), 'py'
+            ... ) # doctest: +ELLIPSIS
+            Object of "Handler" with path "..." and initially given path "...
+
+            >>> file.name = '_search_supported_file_by_directory.py'
             >>> Run()._search_supported_file_by_directory(
             ...     FileHandler(__test_folder_path__), 'py'
             ... ) # doctest: +ELLIPSIS
@@ -599,6 +615,7 @@ class Run(Class, Runnable):
 
             Examples:
 
+            >>> FileHandler('temp_run_main.py', must_exist=False).content = ' '
             >>> run = Run()
             >>> supported_codes_backup = copy.copy(run.SUPPORTED_CODES)
 
@@ -636,16 +653,26 @@ class Run(Class, Runnable):
 
             >>> __test_buffer__.clear() # doctest: +ELLIPSIS
             '...'
-            >>> Run()._run_command('list', 'ls') # doctest: +SKIP
+            >>> FileHandler('temp_run_main.py', must_exist=False).content = ' '
+            >>> run = Run()
+
+            >>> run._run_command('list', 'ls') # doctest: +SKIP
             Object of "Run" with detected path "...".
             >>> __test_buffer__.content # doctest: +SKIP
             'List with "ls". output [...codeRunner...]'
+
+            >>> run._run_command(
+            ...     'do nothing', 'not_existing'
+            ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
+            Traceback (most recent call last):
+            ...
+            SystemExit: 127
         '''
         return_code = self._log_command_run(
             command_name, command,
             result=Platform.run(
                 command=command.strip(), shell=True, error=False))
-        if return_code != 0 and not __test_mode__:
+        if return_code != 0:
             sys.exit(return_code)
         return self
 
@@ -666,6 +693,7 @@ class Run(Class, Runnable):
             >>> log_level_backup = Logger.default_level
             >>> Logger.change_all(level=('error',))
             <class 'boostNode.extension.output.Logger'>
+            >>> FileHandler('temp_run_main.py', must_exist=False).content = ' '
 
             >>> Run()._log_command_run(
             ...     'test', 'test', {
@@ -706,7 +734,25 @@ class Run(Class, Runnable):
     @JointPoint
 ## python3.3     def _run_code_file(self: Self) -> Self:
     def _run_code_file(self):
-        '''Runs all commands needed to run the current type of code.'''
+        '''
+            Runs all commands needed to run the current type of code.
+
+            Examples:
+
+            >>> FileHandler('temp_run_main.py', must_exist=False).content = ' '
+
+            >>> __test_globals__['__test_mode__'] = False
+            >>> Run()
+            Traceback (most recent call last):
+            ...
+            SystemExit: 126
+            >>> __test_globals__['__test_mode__'] = True
+
+            >>> run = Run('not_existing') # doctest: +IGNORE_EXCEPTION_DETAIL
+            Traceback (most recent call last):
+            ...
+            CodeRunnerError: No supported file found for running with given ...
+        '''
         self._current_code = self._find_informations_by_extension(
             extension=self._code_file.extension, code_file=self._code_file)
         self._current_commands = \
@@ -736,8 +782,10 @@ class Run(Class, Runnable):
             >>> code_file = FileHandler(
             ...     location=__test_folder_path__ + '_render_properties.cpp',
             ...     must_exist=False)
+            >>> FileHandler('temp_run_main.py', must_exist=False).content = ' '
+            >>> run = Run()
 
-            >>> Run()._render_properties({
+            >>> run._render_properties({
             ...     'commands': {
             ...         'compile': 'g++ "<%code_file.path%>"',
             ...         'run': '<%code_file.basename%>',
@@ -750,7 +798,7 @@ class Run(Class, Runnable):
             ... }, code_file) # doctest: +ELLIPSIS +SKIP
             {'commands': {'compile': 'g++ "...runner.cpp"', 'run': '...}
 
-            >>> Run()._render_properties({'hans': 'peter'}, code_file)
+            >>> run._render_properties({'hans': 'peter'}, code_file)
             {'hans': 'peter'}
         '''
         rendered_properties = copy.copy(properties)

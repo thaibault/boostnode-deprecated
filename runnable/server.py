@@ -632,15 +632,15 @@ class Web(Class, Runnable):
             >>> repr(Web()) # doctest: +ELLIPSIS
             'Object of "Web" with root path "...", port "0" and sto..."sto...'
         '''
-        return ('Object of "{class_name}" with root path "{path}", port '
-                '"{port}" and stop order "{stop_order}". Number of running '
-                'threads/processes: {number_of_running_threads}/'
-                '{number_of_running_processes}.'.format(
-                    class_name=self.__class__.__name__, path=self.root,
-                    port=self.port, stop_order=self.stop_order,
-                    number_of_running_threads=self.number_of_running_threads,
-                    number_of_running_processes=
-                    self.number_of_running_processes))
+        return(
+            'Object of "{class_name}" with root path "{path}", port "{port}" '
+            'and stop order "{stop_order}". Number of running '
+            'threads/processes: {number_of_running_threads}/'
+            '{number_of_running_processes}.'.format(
+                class_name=self.__class__.__name__, path=self.root,
+                port=self.port, stop_order=self.stop_order,
+                number_of_running_threads=self.number_of_running_threads,
+                number_of_running_processes=self.number_of_running_processes))
 
             # endregion
 
@@ -1430,10 +1430,11 @@ class CGIHTTPRequestHandler(
                     location=file_path, must_exist=False)
                 if authentication_file:
 ## python3.3
-##                     return (self.headers.get('authorization') ==
-##                             'Basic %s' % self._get_login_data(
-##                                 authentication_file))
-                    return (
+##                     return(
+##                         self.headers.get('authorization') ==
+##                         'Basic %s' % self._get_login_data(
+##                             authentication_file))
+                    return(
                         self.headers.getheader('authorization') ==
                         'Basic %s' % self._get_login_data(
                             authentication_file))

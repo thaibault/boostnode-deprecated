@@ -715,7 +715,7 @@ class Replace(Class, Runnable):
                 aren't matched in first run.
             '''
             try:
-                return (
+                return(
                     '\n{prefix} {current_version}\n{prefix} {current_text}\n'
                     '{alternate_text}{prefix}\n'.format(
                         prefix=match.group('prefix'),
@@ -757,7 +757,7 @@ class Replace(Class, Runnable):
             current_text = match.group('current_text')
             if current_text:
                 current_text = ' ' + current_text
-            return (
+            return(
                 '\n{prefix} {current_version}{current_text}\n{alternate_text}'
                 '\n'.format(
                     prefix=match.group('prefix'),

@@ -273,7 +273,7 @@ class Parser(Class, Runnable):
             string = '\\' + string
         if string.endswith(delimiter[-1]):
             string = string[:-1] + '\\' + string[-1]
-        return ("print(%s, end='')\n" % (
+        return("print(%s, end='')\n" % (
             delimiter + string.replace('\n', '\\n') +
             end.replace('\n', '\\n') + delimiter))
 
@@ -595,7 +595,7 @@ class Parser(Class, Runnable):
                 self._current_rendered_content_line_number
             ) + ' | ' + match.group('line')
         if self._number_of_rendered_content_lines:
-            return (
+            return(
                 '\nrendered content:\n-----------------\n\n%s\n' % re.compile(
                     '^(?P<line>.*)$', re.MULTILINE
                 ).sub(replace_rendered_content_line, self.rendered_content))
@@ -1386,6 +1386,19 @@ class Parser(Class, Runnable):
             '55'
             >>> Parser('\\n\\n<%hans%>', string=True).render(hans=5).output
             '\\n\\n5'
+            >>> Parser(
+            ...     '<% if True:\\n<%hans%>', string=True
+            ... ).render(hans=5).output # doctest: +IGNORE_EXCEPTION_DETAIL
+            Traceback (most recent call last):
+            ...
+            TemplateError: Error with given template string in line 2 (line ...
+            IndentationError: Expected an indented block (<string>, line 2)
+            rendered content:
+            -----------------
+            <BLANKLINE>
+            1 | if True:
+            2 | print(str(hans), end='')
+            <BLANKLINE>
 
             >>> Parser('<% print(hans)', string=True).render(hans=5).output
             '5\\n'
@@ -1512,7 +1525,7 @@ class Parser(Class, Runnable):
         self._line_shifts.append(
             (self._number_of_generated_lines,
              self._number_of_generated_phantom_lines))
-        return (
+        return(
             last_empty_lines + before_placeholder + indent + 'print(str(' +
             match.group('placeholder').strip() + ")%s, end='')\n" %
             ('+"\\n"' if self._get_new_line() else ''))
@@ -1620,12 +1633,12 @@ class Parser(Class, Runnable):
         ).find_python_code_end_bracket()
         slice_position = builtins.len('include(') + length_of_include_call
         if code_line[builtins.len('include('):slice_position]:
-            return (
+            return(
                 'include(' +
                 code_line[builtins.len('include('):slice_position] +
                 ", indent_space='" + match.group('indent_code')[slice:] +
                 "')" + code_line[slice_position + 1:])
-        return (
+        return(
             "include(indent_space='" + match.group('indent_code')[slice:] +
             "')" + code_line[slice_position + 1:])
 
@@ -1646,11 +1659,11 @@ class Parser(Class, Runnable):
         ).find_python_code_end_bracket()
         slice_position = builtins.len('print(') + length_of_print_call
         if code_line[builtins.len('print('):slice_position]:
-            return (
+            return(
                 'print(' + code_line[builtins.len('print('):slice_position] +
                 ", indent_space='" + match.group('indent_code')[slice:] +
                 "')" + code_line[slice_position + 1:])
-        return (
+        return(
             "print(indent_space='" + match.group('indent_code')[slice:] +
             "')" + code_line[slice_position + 1:])
 

@@ -90,23 +90,35 @@ class PropertyInitializer(FunctionDecorator):
 ##     ) -> (types.FunctionType, types.MethodType):
     def get_wrapper_function(self):
 ##
-        '''This methods returns the wrapped function.'''
-        @functools.wraps(self.function)
+        '''
+            This methods returns the wrapped function.
+
+            Examples:
+
+            >>> class A:
+            ...     def a(self): pass
+            ...     def __init__(self): pass
+            ...     __init__.__func__ = a
+            ...     __init__ = PropertyInitializer(__init__)
+
+            >>> A() # doctest: +ELLIPSIS
+            <__main__.A instance at ...>
+        '''
+        @functools.wraps(self.__func__)
         def wrapper_function(*arguments, **keywords):
             '''Wrapper function for initializing instance properties.'''
             '''Unpack wrapper methods.'''
-            self.__func__ = self.function
             while builtins.hasattr(self.__func__, '__func__'):
                 self.__func__ = self.__func__.__func__
             arguments = self._determine_arguments(arguments)
             for name, value in inspect.getcallargs(
-                self.function, *arguments, **keywords
+                self.__func__, *arguments, **keywords
             ).items():
                 if not name in self.EXCLUDED_ARGUMENT_NAMES:
                     self.object.__dict__[name] = value
-            return self.function(*arguments, **keywords)
+            return self.__func__(*arguments, **keywords)
 ## python3.3         pass
-        wrapper_function.__wrapped__ = self.function
+        wrapper_function.__wrapped__ = self.__func__
         return wrapper_function
 
         # endregion
@@ -325,7 +337,7 @@ class Object(Class):
             >>> B.abstract_method() # doctest: +ELLIPSIS
             Traceback (most recent call last):
             ...
-            NotImplementedError: Method "abstract_method" wasn't implemented...
+            NotImplementedError: Method "..." wasn't implemented...
         '''
         '''
             NOTE: fetch third frame "inspect.stack()[2]"
@@ -335,10 +347,11 @@ class Object(Class):
         '''
         if class_name is None:
             class_name = cls.__name__
+        stack_level = 1 if sys.flags.optimize else 2
         return builtins.NotImplementedError(
             'Method "{name}" wasn\'t implemented by "{class_name}" and is '
             'necessary for abstract class "{abstract_class}".'.format(
-                name=inspect.stack()[2][3], class_name=class_name,
+                name=inspect.stack()[stack_level][3], class_name=class_name,
                 abstract_class=abstract_class_name))
 
         # endregion
@@ -349,10 +362,10 @@ class Object(Class):
 class String(Object, builtins.str):
     '''
         The string class inherits besides the interface class all pythons
-        native string methods.
-        NOTE: This class has to implement inherited special methods like
-        "__str__()" and "__len__()" because they have to use the "content"
-        property which could be manipulated by not inherited methods.
+        native string methods. NOTE: This class has to implement inherited
+        special methods like "__str__()" and "__len__()" because they have to
+        use the "content" property which could be manipulated by not inherited
+        methods.
     '''
 
     # region properties
@@ -566,9 +579,8 @@ class String(Object, builtins.str):
     def __len__(self):
         '''
             Triggers if the pythons native "builtins.len()" function tries to
-            handle current instance.
-            Returns the number of symbols given in the current string
-            representation of this object.
+            handle current instance. Returns the number of symbols given in the
+            current string representation of this object.
 
             Examples:
 
@@ -601,8 +613,8 @@ class String(Object, builtins.str):
 ## python3.3     def __bool__(self: Self) -> builtins.bool:
     def __nonzero__(self):
         '''
-            Triggers if the current object should be interpreted as
-            a boolean value directly.
+            Triggers if the current object should be interpreted as a boolean
+            value directly.
 
             Examples:
 
@@ -1032,7 +1044,7 @@ class String(Object, builtins.str):
                 re.compile(builtins.str(search)),
                 inspect.stack()[0][3]
             )(builtins.str(replace), self.content, *arguments, **keywords)
-        return (self, number_of_replaces)
+        return self, number_of_replaces
 
     @JointPoint
 ## python3.3     def readline(self: Self) -> (SelfClassObject, builtins.bool):
@@ -1556,8 +1568,8 @@ class Module(Object):
     def get_package_name(cls, frame=inspect.currentframe(), path=False):
 ##
         '''
-            Determines package context of given frame. If current context
-            isn't in any package context an empty string is given back.
+            Determines package context of given frame. If current context isn't
+            in any package context an empty string is given back.
 
             Examples:
 
@@ -1574,7 +1586,8 @@ class Module(Object):
         '''
         from boostNode.extension.file import Handler as FileHandler
         '''
-            NOTE: "must_exist" is necessary for supporting frozen executables.
+            NOTE: "must_exist=False" is necessary for supporting frozen
+            executables.
         '''
         file = FileHandler(
             location=frame.f_code.co_filename, respect_root_path=True,
@@ -1976,7 +1989,7 @@ class Module(Object):
         '''Determines a potentially wrapped object.'''
         if(builtins.isinstance(JointPoint, builtins.type) and
            builtins.isinstance(object, JointPoint)):
-            return object.function
+            return object.__func__
         return object
 
     @JointPoint(builtins.classmethod)
@@ -2037,7 +2050,7 @@ class Module(Object):
             for sub_location in location:
                 if(sub_location.basename == sub_module and
                    not (only_source_files and
-                        sub_location.extension == 'pyc')):
+                        sub_location.extension in ('pyc', 'pyo', 'pyd'))):
                     found_last_sub_module = True
                     location = sub_location
                     break

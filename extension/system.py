@@ -66,7 +66,7 @@ from boostNode.extension.output import Buffer, Logger, Print
 ## from boostNode.extension.type import Self, SelfClass, SelfClassObject
 pass
 ##
-from boostNode.paradigm.aspectOrientation import JointPoint
+from boostNode.paradigm.aspectOrientation import FunctionDecorator, JointPoint
 
 # endregion
 
@@ -205,11 +205,11 @@ class Runnable(builtins.object):
 
             Examples:
 
-            >>> (Runnable._run.__wrapped__ ==
+            >>> sys.flags.optimize == 1 or (Runnable._run.__wrapped__ ==
             ...     Runnable._get_potential_wrapped_method('_run'))
             True
 
-            >>> (Runnable._run.__wrapped__ ==
+            >>> sys.flags.optimize == 1 or (Runnable._run.__wrapped__ ==
             ...     Runnable._get_potential_wrapped_method(
             ...         Runnable._run.__name__))
             True
@@ -456,9 +456,10 @@ class Runnable(builtins.object):
             >>> A()._in_test_mode()
             True
         '''
-        return (('__test_mode__' in builtins.globals() and __test_mode__) or
-               ('__test_mode__' in builtins.dir(self._childrens_module) and
-                self._childrens_module.__test_mode__))
+        return(
+            ('__test_mode__' in builtins.globals() and __test_mode__) or
+            ('__test_mode__' in builtins.dir(self._childrens_module) and
+             self._childrens_module.__test_mode__))
 
     @JointPoint
 ## python3.3
@@ -468,7 +469,26 @@ class Runnable(builtins.object):
 ##     ) -> Self:
     def _handle_given_order(self, arguments, exit, force_stopping):
 ##
-        '''Handles given order via command line standard input.'''
+        '''
+            Handles given order via command line standard input.
+
+            Examples:
+
+            >>> class A(Runnable):
+            ...     def _initialize(self): pass
+            >>> a = A()
+
+            >>> a._handle_given_order((), True, False)
+            Traceback (most recent call last):
+            ...
+            SystemExit
+
+            >>> a._given_order = a.restart_order
+            >>> a._handle_given_order((), True, False) # doctest: +ELLIPSIS
+            Traceback (most recent call last):
+            ...
+            NotImplementedError: Method "_run" wasn't implemented by "A" and...
+        '''
         if self._given_order == self.restart_order:
             __logger__.debug(
                 'Restart "%s" with arguments "%s" and keywords "%s".',
@@ -488,8 +508,31 @@ class Runnable(builtins.object):
 ##     ) -> SelfClass:
     def _terminate(cls, arguments, exit):
 ##
-        '''Termines current runnable and all child threads.'''
-        cls.__termination_lock.release()
+        '''
+            Termines current runnable and all child threads.
+
+            Examples:
+
+            >>> class A(Runnable):
+            ...     def _initialize(self): pass
+
+            >>> __test_globals__['__test_mode__'] = False
+            >>> A()._terminate((), True)
+            Traceback (most recent call last):
+            ...
+            ValueError: semaphore or lock released too many times
+            >>> __test_globals__['__test_mode__'] = True
+
+            >>> A()._terminate((signal.SIGINT,), True)
+            Traceback (most recent call last):
+            ...
+            SystemExit: 130
+
+            >>> A()._terminate((), False) # doctest: +ELLIPSIS
+            <class '...A'>
+        '''
+        if not __test_mode__:
+            cls.__termination_lock.release()
         if builtins.len(arguments) and arguments[0] == signal.SIGINT:
             sys.exit(130)
         elif exit:
@@ -508,7 +551,23 @@ class Runnable(builtins.object):
 ##     ) -> Self:
     def _handle_module_running(self, arguments, keywords, run):
 ##
-        '''Handle the running interface for current module.'''
+        '''
+            Handle the running interface for current module.
+
+            Examples:
+
+            >>> class A(Runnable):
+            ...     def _run(self): raise IOError('test')
+            ...     def _initialize(self): pass
+            >>> __test_globals__['__test_mode__'] = False
+
+            >>> A()._handle_module_running((), {}, False)
+            Traceback (most recent call last):
+            ...
+            SystemExit: 1
+
+            >>> __test_globals__['__test_mode__'] = True
+        '''
         if not self._in_test_mode():
             if not run:
                 self.__class__.__termination_lock.acquire()
@@ -1233,10 +1292,9 @@ class Platform(builtins.object):
                 command=sub_command, command_arguments=command_arguments,
                 secure=secure, error=error, shell=shell, *arguments,
                 **keywords)
-            if builtins.isinstance(sub_result, builtins.dict):
-                result['standard_output'].append(sub_result['standard_output'])
-                result['error_output'].append(sub_result['error_output'])
-                result['return_code'].append(sub_result['return_code'])
+            result['standard_output'].append(sub_result['standard_output'])
+            result['error_output'].append(sub_result['error_output'])
+            result['return_code'].append(sub_result['return_code'])
         return result
 
         # endregion
@@ -1341,6 +1399,8 @@ class CommandLine(builtins.object):
                       'package. (Command: \\"%s\\")" % '
                       '"\\", \\"".join(choices)'},
              'metavar': 'COMMAND'}},)
+    DEFAULT_TEMP_FILE_PATTERNS = (
+        '^temp_.+$', '^__pycache__$', '^.+\.pyc$', '^.+~$')
     '''Saves the newest command line argument parser instance.'''
     current_argument_parser = None
 
@@ -1500,28 +1560,28 @@ class CommandLine(builtins.object):
 
             >>> import boostNode.extension.system
 
-            >>> CommandLine.determine_wrapped_objects(
-            ...     boostNode.extension.system
-            ... ) # doctest: +ELLIPSIS
-            {...'CommandLine.determine_wrapped_objects': <function ...>...}
+            >>> sys.flags.optimize == 1 or (
+            ...     'CommandLine.determine_wrapped_objects' in
+            ...     CommandLine.determine_wrapped_objects(
+            ...         boostNode.extension.system))
+            True
 
             >>> @JointPoint
             ... def a(): pass
             >>> class A: pass
             >>> A.a = a
-            >>> CommandLine.determine_wrapped_objects(
-            ...     A, only_module_level=False
-            ... ) # doctest: +ELLIPSIS
-            {'a': <function a at ...>}
+            >>> sys.flags.optimize == 1 or (
+            ...     'a' in CommandLine.determine_wrapped_objects(
+            ...         A, only_module_level=False))
+            True
         '''
         objects = {}
         for name, object in scope.__dict__.items():
             '''Exclude included objects.'''
             if not only_module_level or inspect.getmodule(object) is scope:
                 '''Iterate classes and functions.'''
-                if(builtins.isinstance(JointPoint, builtins.type) and
-                   builtins.isinstance(object, JointPoint)):
-                    objects[name] = object.function
+                if builtins.isinstance(object, FunctionDecorator):
+                    objects[name] = object.__func__
                 objects = cls._determine_nested_wrapped_objects(
                     object, objects, name)
         return objects
@@ -1534,8 +1594,7 @@ class CommandLine(builtins.object):
 ##         linter='pep8 --repeat --ignore=E225,E701',
 ##         documenter='pydoc3.3', documenter_arguments=('-w',),
 ##         documentation_path='documentation', clear_old_documentation=True,
-##         documentation_file_extension='html', temp_file_patterns=(
-##             '^temp_.+$', '^__pycache__$', '^.+\.pyc$', '^.+~$'),
+##         documentation_file_extension='html', temp_file_patterns=None,
 ##         exclude_packages=()
 ##     ) -> (builtins.tuple, builtins.bool):
     def generic_package_interface(
@@ -1543,8 +1602,7 @@ class CommandLine(builtins.object):
         command_line_arguments=(), linter='pep8 --repeat --ignore=E225',
         documenter='pydoc2', documenter_arguments=('-w',),
         documentation_path='documentation', clear_old_documentation=True,
-        documentation_file_extension='html', temp_file_patterns=(
-            '^temp_.+$', '^__pycache__$', '^.+\.pyc$', '^.+~$'),
+        documentation_file_extension='html', temp_file_patterns=None,
         exclude_packages=()
     ):
 ##
@@ -1559,6 +1617,8 @@ class CommandLine(builtins.object):
             ...     name='not__main__', frame=inspect.currentframe())
             False
         '''
+        if temp_file_patterns is None:
+            temp_file_patterns = cls.DEFAULT_TEMP_FILE_PATTERNS
         if name == '__main__':
             all, arguments, current_working_directory_backup = \
                 cls._package_start_helper(name, frame, command_line_arguments)
@@ -1584,11 +1644,12 @@ class CommandLine(builtins.object):
     @JointPoint(builtins.classmethod)
 ## python3.3
 ##     def generic_module_interface(
-##         cls: SelfClass, module: builtins.dict, test=False,
-##         default_caller=None, caller_arguments=(), caller_keywords={}
+##         cls: SelfClass, module: builtins.dict,
+##         temp_file_patterns=None, test=False, default_caller=None,
+##         caller_arguments=(), caller_keywords={}
 ##     ) -> SelfClass:
     def generic_module_interface(
-        cls, module, test=False, default_caller=None,
+        cls, module, temp_file_patterns=None, test=False, default_caller=None,
         caller_arguments=(), caller_keywords={}
     ):
 ##
@@ -1596,6 +1657,8 @@ class CommandLine(builtins.object):
             Provides a generic command line interface for modules. Things like
             unit testing or calling objects in module are provided.
         '''
+        if temp_file_patterns is None:
+            temp_file_patterns = cls.DEFAULT_TEMP_FILE_PATTERNS
         if module['name'] == '__main__' or test:
             callable_objects, default_caller = cls._determine_callable_objects(
                 module, default_caller, test)
@@ -1607,7 +1670,9 @@ class CommandLine(builtins.object):
             if given_arguments.meta_help:
                 cls.current_argument_parser.print_help()
             elif given_arguments.verbose_test or given_arguments.test or test:
-                cls.test_module(module, verbose=given_arguments.verbose_test)
+                cls.test_module(
+                    module, temp_file_patterns,
+                    verbose=given_arguments.verbose_test)
             elif given_arguments.module_object is not False:
                 cls._call_module_object(
                     module, callable_objects,
@@ -1619,9 +1684,10 @@ class CommandLine(builtins.object):
     @JointPoint(builtins.classmethod)
 ## python3.3
 ##     def test_module(
-##         cls: SelfClass, module: builtins.dict, verbose=False
+##         cls: SelfClass, module: builtins.dict,
+##         temp_file_patterns: collections.Iterable, verbose=False
 ##     ) -> SelfClass:
-    def test_module(cls, module, verbose):
+    def test_module(cls, module, temp_file_patterns, verbose):
 ##
         '''Test a given module's doctests.'''
         test_folder = FileHandler(
@@ -1660,6 +1726,7 @@ class CommandLine(builtins.object):
         Platform.process_lock_directory = \
             platform_process_lock_directory_backup
         if not sys.flags.debug:
+            cls._clear_temp_files(temp_file_patterns)
             test_folder.remove_deep()
         return cls
 
@@ -1682,10 +1749,9 @@ class CommandLine(builtins.object):
         if builtins.hasattr(object, '__dict__'):
             for sub_name, sub_object in object.__dict__.items():
                 '''Iterate inner functions.'''
-                if(builtins.isinstance(JointPoint, builtins.type) and
-                   builtins.isinstance(sub_object, JointPoint)):
+                if builtins.isinstance(sub_object, FunctionDecorator):
                     objects['%s.%s' % (name, sub_name)] = \
-                        sub_object.function
+                        sub_object.__func__
         return objects
 
     @JointPoint(builtins.classmethod)
@@ -1821,6 +1887,13 @@ class CommandLine(builtins.object):
             ...             'self': self, '__name__': 'a'}))
             >>> a = A(2) # doctest: +ELLIPSIS
             {...'__initializer_default_value__': ...}
+
+            >>> class A(Runnable):
+            ...     def _initialize(self, b=None):
+            ...         print(CommandLine._handle_initializer_default_values({
+            ...             'self': self, '__name__': 'b'}))
+            >>> a = A() # doctest: +ELLIPSIS
+            {...'__initializer_default_value__': ...}
         '''
         scope['__initializer_default_value__'] = ''
         if 'self' in scope:
@@ -1847,15 +1920,16 @@ class CommandLine(builtins.object):
 ##                         parameters[scope['__name__']].default
             if inspect.getargspec(initializer).defaults:
                 parameters = builtins.dict(builtins.zip(
-                    inspect.getargspec(
-                        initializer
-                    ).args[builtins.len(
+                    inspect.getargspec(initializer).args[builtins.len(
                         inspect.getargspec(initializer).args
                     ) - builtins.len(inspect.getargspec(
                         initializer
-                    ).defaults):],
-                    inspect.getargspec(initializer).defaults))
+                    ).defaults):], inspect.getargspec(initializer).defaults))
                 if scope['__name__'] in parameters:
+                    '''
+                        Set default value to default value of specified
+                        parameter type.
+                    '''
                     scope['__initializer_default_value__'] = \
                         parameters[scope['__name__']]
 ##
@@ -1936,6 +2010,14 @@ class CommandLine(builtins.object):
             >>> class Scope:
             ...     def hans(self): return 'hans'
             >>> sys.argv = [sys.argv[0], 'hans', 'peter']
+            >>> CommandLine._call_module_object(
+            ...     {'scope': Scope()}, ('hans',), 'hans', (), {}
+            ... ) # doctest: +ELLIPSIS
+            <class ...CommandLine...>
+
+            >>> class Scope:
+            ...     def hans(self): return 'hans'
+            >>> sys.argv = [sys.argv[0]]
             >>> CommandLine._call_module_object(
             ...     {'scope': Scope()}, ('hans',), 'hans', (), {}
             ... ) # doctest: +ELLIPSIS
@@ -2282,10 +2364,10 @@ class CommandLine(builtins.object):
                 Module.get_context_path(path=inspect.getsourcefile(module)))
             sys.modules['__main__'] = module
             cls.generic_module_interface(
-                module={'scope': module, 'name': module_name}, test=True)
+                module={'scope': module, 'name': module_name},
+                temp_file_patterns=temp_file_patterns, test=True)
             sys.modules['__main__'] = main_module_reference_backup
             sys.argv = command_line_arguments_backup
-            cls._clear_temp_files(temp_file_patterns)
         return cls
 
     @JointPoint(builtins.classmethod)
@@ -2381,7 +2463,7 @@ class CommandLine(builtins.object):
             name, frame, command_line_arguments)
         current_working_directory_backup = os.getcwd()
         FileHandler(location=sys.argv[0]).change_working_directory()
-        return (
+        return(
             'all' in arguments.commands, arguments,
             current_working_directory_backup)
 
@@ -2420,18 +2502,18 @@ class CommandLine(builtins.object):
             Object of "Handler" with path "...
 
             >>> test_folder = FileHandler(
-            ...     'temp_test', make_directory=True)
+            ...     'temp_restore_current_directory', make_directory=True)
             >>> FileHandler(
-            ...     'temp_test/file', must_exist=False
+            ...     test_folder.path + 'file', must_exist=False
             ... ).content = 'hans'
             >>> __test_buffer__.clear() # doctest: +ELLIPSIS
             '...'
             >>> CommandLine._restore_current_directory(
-            ...     clear=True, temp_file_patterns=('temp_.*',)
+            ...     clear=True, temp_file_patterns=('^temp_.*$',)
             ... ) # doctest: +ELLIPSIS
             <class ...CommandLine...>
             >>> __test_buffer__.content # doctest: +ELLIPSIS
-            '...Delete temporary files in "..." which matches "temp_.*".\\n'
+            '...Delete temporary files in "..." which matches "...".\\n'
             >>> test_folder.is_element()
             False
 
@@ -2455,15 +2537,16 @@ class CommandLine(builtins.object):
         '''
             Clears all temporary files in current directory.
 
-            "temp_file_patterns" Defines wich file name machtes a temporary
+            "temp_file_patterns" Defines wich file name matches a temporary
                                  file.
         '''
-        directory = FileHandler()
+        current_working_directory = FileHandler()
         __logger__.info(
             'Delete temporary files in "{path}" which matches '
             '"{pattern}".'.format(
-                path=directory.path, pattern='", "'.join(temp_file_patterns)))
-        directory.delete_file_patterns(*temp_file_patterns)
+                path=current_working_directory.path, pattern='", "'.join(
+                    temp_file_patterns)))
+        current_working_directory.delete_file_patterns(*temp_file_patterns)
         return cls
 
     @JointPoint(builtins.classmethod)
