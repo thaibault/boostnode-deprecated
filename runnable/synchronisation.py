@@ -11,9 +11,8 @@
 # region header
 
 '''
-    is the main element of the "Reflector".
-    The Reflector's public methods implements the general features of the
-    whole application.
+    This module is the main element of the "Reflector". The Reflector's public
+    methods implements the general features of the whole application.
 '''
 '''
     For conventions see "boostNode/__init__.py" on
@@ -266,8 +265,6 @@ class Reflector(Class, Runnable):
             ... ) # doctest: +ELLIPSIS
             '...s..."...t..."...ority locations "" and exclude locations "".'
         '''
-        limit = FileHandler.determine_size_from_string(
-            size_and_unit=self.given_limit)
         return(
             'Object of "{class_name}" with source path "{source_path}" and '
             'target path "{target_path}". Limit is {limit} byte, priority '
@@ -275,7 +272,9 @@ class Reflector(Class, Runnable):
             '"{exclude_locations}".'.format(
                 class_name=self.__class__.__name__,
                 source_path=self.source_location.path,
-                target_path=self.target_location.path, limit=limit,
+                target_path=self.target_location.path,
+                limit=FileHandler.determine_size_from_string(
+                    size_and_unit=self.given_limit),
                 priority_locations='", "'.join(self.priority_locations),
                 exclude_locations='", "'.join(self.exclude_locations)))
 
@@ -660,8 +659,8 @@ class Reflector(Class, Runnable):
         if Platform.check_process_lock(description=__module_name__):
             __logger__.warning(
                 'The last synchronisation process was interrupted in an '
-                'unstable state. %s will finish last process so you can '
-                'repeat your intended job after this.',
+                'unstable state. %s will finish last process so you can repeat'
+                ' your intended job after this.',
                 __module_name__.capitalize())
         else:
             __logger__.info('Relocate moved files.')
@@ -692,9 +691,8 @@ class Reflector(Class, Runnable):
 ## python3.3     def _run(self: Self) -> Self:
     def _run(self):
         '''
-            Entry point for command line call of this program.
-            Initializes a new instance of the option parser for the
-            application interface.
+            Entry point for command line call of this program. Initializes a
+            new instance of the option parser for the application interface.
         '''
         '''Saves all given command line arguments.'''
         self._command_line_arguments = CommandLine.argument_parser(
@@ -896,9 +894,7 @@ class Reflector(Class, Runnable):
     @JointPoint
 ## python3.3     def _validate_paths(self: Self) -> Self:
     def _validate_paths(self):
-        '''
-            Validates source and target (reflection) path.
-        '''
+        '''Validates source and target (reflection) path.'''
         if not self.source_location.path:
             raise __exception__(
                 'Invalid source path "%s".', self.source_location.path)
@@ -917,8 +913,8 @@ class Reflector(Class, Runnable):
 ## python3.3     def _check_path_lists(self: Self) -> Self:
     def _check_path_lists(self):
         '''
-            Checks if all given paths lists are in locations which makes
-            sense, to prevent user for failures.
+            Checks if all given paths lists are in locations which makes sense,
+            to prevent user for failures.
         '''
         return self._check_path_in_source(
             paths=self.priority_locations, path_type='Priority'
@@ -933,8 +929,8 @@ class Reflector(Class, Runnable):
     def _check_path_in_source(self, paths, path_type='Given'):
 ##
         '''
-            Checks if the given paths are in source location. This method
-            uses serves as helper method for "self._check_path_lists()".
+            Checks if the given paths are in source location. This method uses
+            serves as helper method for "self._check_path_lists()".
 
             "path_type" is an optional string which describes the meaning of
                         the given paths. They are used for an exact user
@@ -978,8 +974,8 @@ class Reflector(Class, Runnable):
 ## python3.3     def _log_status(self: Self) -> Self:
     def _log_status(self):
         '''
-            Logs the initial status of the current Reflector instance.
-            Output is written to standard output or output buffer.
+            Logs the initial status of the current Reflector instance. Output
+            is written to standard output or output buffer.
         '''
         given_limit = ''
         if ('%s byte' % self.limit) != self.given_limit:
@@ -1013,11 +1009,11 @@ class Reflector(Class, Runnable):
 ## python3.3     def _create_reflection_files(self: Self) -> Self:
     def _create_reflection_files(self):
         '''
-            Iterates throw all files which should be included in
-            the reflection. They will be sorted by its file-size in
-            descending order. Small files will be preferred.
-            In that way the maximum number of files which fits to
-            the cache-limit will be copied in the reflection location.
+            Iterates throw all files which should be included in the
+            reflection. They will be sorted by its file-size in descending
+            order. Small files will be preferred. In that way the maximum
+            number of files which fits to the cache-limit will be copied in the
+            reflection location.
         '''
         self._priority_files.sort()
         self._files.sort()
@@ -1048,13 +1044,11 @@ class Reflector(Class, Runnable):
     def _copy_reflection_file(self, source, path, size):
 ##
         '''
-            Serves as helper method for "_create_reflection_files()".
-            Copies given files in source to its pendant in the reflection
-            area.
+            Serves as helper method for "_create_reflection_files()". Copies
+            given files in source to its pendant in the reflection area.
 
             "source" is a directory object with the file in source to copy.
-            "path" is the relative path to the new file in the reflection
-                   area.
+            "path" is the relative path to the new file in the reflection area.
             "size" is the given files size.
         '''
         __logger__.info(
@@ -1081,8 +1075,7 @@ class Reflector(Class, Runnable):
             Creates a link to the given source element in target.
 
             "source" is a handler object with the file in source to link.
-            "path" is the relative path to the new link in the reflection
-                   area.
+            "path" is the relative path to the new link in the reflection area.
         '''
         __logger__.info(
             'Creating link from "{source}" to "{target}". '
@@ -1105,9 +1098,9 @@ class Reflector(Class, Runnable):
     def _relocate_moved_file(self, file):
 ##
         '''
-            Determines if the given Handler object ("file") was
-            relocated since last cache creation. If "file" was relocated the
-            file will also be relocated in source.
+            Determines if the given Handler object ("file") was relocated since
+            last cache creation. If "file" was relocated the file will also be
+            relocated in source.
 
             Returns "True" if relocation where successful or "False"
             otherwise.
@@ -1134,9 +1127,8 @@ class Reflector(Class, Runnable):
     def _relocate_missing_file(self, relocated, linked_path):
 ##
         '''
-            Serves as helper method for "_relocate_moved_file()".
-            It relocates a file in the source, if it was relocated in the
-            reflection area.
+            Serves as helper method for "_relocate_moved_file()". It relocates
+            a file in the source, if it was relocated in the reflection area.
 
             "relocated" is a file which should be relocated.
             "linked_path" The new path for the given relocated file.
@@ -1172,8 +1164,7 @@ class Reflector(Class, Runnable):
             Copy a real (not dummy files or symbolic links) cache file to
             source.
 
-            Returns "True" if file-copy where successful or "False"
-            otherwise.
+            Returns "True" if file-copy where successful or "False" otherwise.
         '''
         if not self.is_path_in_paths(
             search=file, paths=self.exclude_locations
@@ -1222,8 +1213,8 @@ class Reflector(Class, Runnable):
             "target_path_len" Number of chars in the path to link file in
                               cache.
 
-            Returns "True" if all file-copies where successful or "False"
-            if something goes wrong or a symlink circle was broken.
+            Returns "True" if all file-copies where successful or "False" if
+            something goes wrong or a symbolic link circle was broken.
         '''
         link = file.read_symbolic_link(as_object=True)
         if link.path[:target_path_len] == self.target_location.path:
@@ -1381,11 +1372,10 @@ class Reflector(Class, Runnable):
             cache.
 
             "source_file" A file in the source area.
-            "target_file" The analogical location of "file" in the cache
-                              area.
+            "target_file" The analogical location of "file" in the cache area.
 
-            Returns "True" if file-link-operation where successful or
-            "False" otherwise.
+            Returns "True" if file-link-operation where successful or "False"
+            otherwise.
         '''
         source_path_len = builtins.len(self.source_location.path)
         link = source_file.read_symbolic_link(as_object=True)
@@ -1405,8 +1395,8 @@ class Reflector(Class, Runnable):
         elif(link.path[:builtins.len(self.target_location.path)] !=
              self.target_location.path):
             '''
-                Link doesn't refer to any location in source; it will be
-                leaved as same link.
+                Link doesn't refer to any location in source; it will be leaved
+                as same link.
             '''
             __logger__.info('Copy link "%s" as link.', source_file.path)
             return link.make_symbolic_link(target_file, force=True)

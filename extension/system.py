@@ -11,8 +11,8 @@
 # region header
 
 '''
-    This module provides classes for handling issues with the operating
-    system or command line.
+    This module provides classes for handling issues with the operating system
+    or command line.
 '''
 '''
     For conventions see "boostNode/__init__.py" on
@@ -347,8 +347,8 @@ class Runnable(builtins.object):
 ##
         except (builtins.IOError, builtins.EOFError):
             __logger__.info(
-                "We have lost standard input. stop order couldn't be "
-                'received. Use a termination signal instead.')
+                "We have lost standard input. stop order couldn't be received."
+                ' Use a termination signal instead.')
             try:
                 self.__class__.__termination_lock.acquire()
             except builtins.OSError:
@@ -780,8 +780,8 @@ class Platform(builtins.object):
             boot or not available if it should be shut down.
 
             Returns a tuple: first value indicates weather it was successful
-            and second is "True" if computer status was needed
-            to be changed and "False" otherwise.
+            and second is "True" if computer status was needed to be changed
+            and "False" otherwise.
         '''
         __logger__.info('Try to reach "%s". Please wait.', host)
         counter = 1
@@ -877,9 +877,9 @@ class Platform(builtins.object):
 ##
         '''
             Checks weather the current thread should be paused or terminated.
-            If thread should be terminated "True" will be given back.
-            In case of pausing the current thread stay in the current function
-            call still a continue event is triggered.
+            If thread should be terminated "True" will be given back. In case
+            of pausing the current thread stay in the current function call
+            still a continue event is triggered.
 
             Examples:
 
@@ -993,9 +993,8 @@ class Platform(builtins.object):
     def check_process_lock(cls, description=''):
 ##
         '''
-            Checks if a lock file with given description exists.
-            NOTE: Calling this function doesn't prevent you from race
-            conditions.
+            Checks if a lock file with given description exists. NOTE: Calling
+            this function doesn't prevent you from race conditions.
 
             Examples:
 
@@ -1043,9 +1042,9 @@ class Platform(builtins.object):
             "log" If "True" standard output will be logged with level "info"
                   and error output with level "warning".
             "no_blocking" If "True" resulting output won't be a string. You
-                          will get an python "IOBuffer" like object.
-                          NOTE: If Buffer is empty and you try to read from
-                          Buffer an exception will occur.
+                          will get an python "IOBuffer" like object. NOTE: If
+                          buffer is empty and you try to read from buffer an
+                          exception will occur.
 
             All following arguments are given through python's native
             "subprocess.Popen()" class initialisation.
@@ -1128,9 +1127,9 @@ class Platform(builtins.object):
             so the return value of the Python function is system-dependent.
             On Windows, the return value is that returned by the system shell
             after running command. The shell is given by the Windows
-            environment variable "COMSPEC": it is usually "cmd.exe",
-            which returns the exit status of the command run; on systems
-            using a non-native shell, consult your shell documentation.
+            environment variable "COMSPEC": it is usually "cmd.exe", which
+            returns the exit status of the command run; on systems using a
+            non-native shell, consult your shell documentation.
 
             Examples:
 
@@ -1318,7 +1317,7 @@ class CommandLine(builtins.object):
     EPILOG = 'powered by thaibault'
     '''Small overview about the right using of this program.'''
     USAGE = ('\n  %(prog)s [positional arguments] [optional arguments]\n\n'
-             '  Type "%(prog)s --help" for more informations.')
+             ' Type "%(prog)s --help" for more informations.')
     '''Set the global default value for arguments.'''
     ARGUMENT_DEFAULT = None
     '''The set of characters that prefix optional arguments.'''
@@ -1607,9 +1606,9 @@ class CommandLine(builtins.object):
     ):
 ##
         '''
-            Provides a command-line interface like a makefile.
-            Supported features are linting, generate documentation, testing and
-            removing temporary files.
+            Provides a command-line interface like a makefile. Supported
+            features are linting, generate documentation, testing and removing
+            temporary files.
 
             Examples:
 
@@ -1649,8 +1648,8 @@ class CommandLine(builtins.object):
 ##         caller_arguments=(), caller_keywords={}
 ##     ) -> SelfClass:
     def generic_module_interface(
-        cls, module, temp_file_patterns=None, test=False, default_caller=None,
-        caller_arguments=(), caller_keywords={}
+        cls, module, temp_file_patterns=None, test=False,
+        default_caller=None, caller_arguments=(), caller_keywords={}
     ):
 ##
         '''
@@ -2160,8 +2159,8 @@ class CommandLine(builtins.object):
     def _get_version(cls, version, module_name):
 ##
         '''
-            Generates a version string by for a given module name.
-            If "version" is not empty it will be given back untouched.
+            Generates a version string by for a given module name. If "version"
+            is not empty it will be given back untouched.
 
             Examples:
 
@@ -2189,8 +2188,8 @@ class CommandLine(builtins.object):
     def _get_description(cls, description, module_name, version):
 ##
         '''
-            Generates a description string for given module.
-            If description is not empty it will be given back untouched.
+            Generates a description string for given module. If description is
+            not empty it will be given back untouched.
 
             Examples:
 
@@ -2479,8 +2478,8 @@ class CommandLine(builtins.object):
     ):
 ##
         '''
-            Restores former directory state. This method deletes e.g.
-            temporary binary file and test files.
+            Restores former directory state. This method deletes e.g. temporary
+            binary file and test files.
 
             Examples:
 

@@ -12,10 +12,10 @@
 
 '''
     Extension is a high level interface for interaction with pythons native
-    builtins.
-    This class provides a full object oriented way to handle string objects.
-    Besides a number of new supported interactions with strings it offers all
-    core file system methods by the pythons native "builtins.str" object.
+    builtins. This class provides a full object oriented way to handle string
+    objects. Besides a number of new supported interactions with strings it
+    offers all core file system methods by the pythons native "builtins.str"
+    object.
 '''
 '''
     For conventions see "boostNode/__init__.py" on
@@ -102,7 +102,7 @@ class PropertyInitializer(FunctionDecorator):
             ...     __init__ = PropertyInitializer(__init__)
 
             >>> A() # doctest: +ELLIPSIS
-            <__main__.A instance at ...>
+            <__main__.A ... at ...>
         '''
         @functools.wraps(self.__func__)
         def wrapper_function(*arguments, **keywords):
@@ -771,8 +771,8 @@ class String(Object, builtins.str):
     def validate_format(self):
         '''
             Validates the current string for using in a string with placeholder
-            like "{name}". It will be escaped to not interpreted as
-            placeholder like "\{name\}".
+            like "{name}". It will be escaped to not interpreted as placeholder
+            like "\{name\}".
 
             Examples:
 
@@ -925,8 +925,8 @@ class String(Object, builtins.str):
 ##
         '''
             Implements the pythons native "re.sub()" method in an object
-            oriented way. This method serves additionally dictionaries
-            as "search" parameter for multiple replacements. If you use
+            oriented way. This method serves additionally dictionaries as
+            "search" parameter for multiple replacements. If you use
             dictionaries, the second parameter "replace" becomes useless.
 
             Return the string obtained by replacing the leftmost
@@ -935,9 +935,8 @@ class String(Object, builtins.str):
             returned unchanged. "replace" can be a string or a function;
 
             If "replace" is a string, any backslash escapes in it are
-            processed.
-            That means "\n" is converted to a single newline character,
-            "\r" is converted to a linefeed, and so forth. Unknown
+            processed. That means "\n" is converted to a single newline
+            character, "\r" is converted to a linefeed, and so forth. Unknown
             escapes such as "\j" are left alone. Backreferences, such as "\6",
             are replaced with the substring matched by group 6 in the pattern.
 
@@ -945,14 +944,14 @@ class String(Object, builtins.str):
             occurrence of pattern. The function takes a single match object
             argument, and returns the replacement string.
 
-            The pattern may be a string or an RE object.
-            The optional argument count is the maximum number of pattern
-            occurrences to be replaced; count must be a non-negative integer.
-            If omitted or zero, all occurrences will be replaced. Empty
-            matches for the pattern are replaced only when not adjacent to a
-            previous match, so sub('x*', '-', 'abc') returns '-a-b-c-'.
+            The pattern may be a string or an RE object. The optional argument
+            count is the maximum number of pattern occurrences to be replaced;
+            count must be a non-negative integer. If omitted or zero, all
+            occurrences will be replaced. Empty matches for the pattern are
+            replaced only when not adjacent to a previous match, so
+            sub('x*', '-', 'abc') returns '-a-b-c-'.
 
-            In addition to character escapes and backreferences as described
+            In addition to character escapes and back references as described
             above, "\g<name>" will use the substring matched by the group
             named name, as defined by the "(?P<name>...)" syntax. "\g<number>"
             uses the corresponding group number; "\g<2>" is therefore
@@ -1008,8 +1007,8 @@ class String(Object, builtins.str):
 ##
         '''
             Implements the pythons native "re.subn()" method in an object
-            oriented way. This method serves additionally dictionaries
-            as "search" parameter for multiple replacements. If you use
+            oriented way. This method serves additionally dictionaries as
+            "search" parameter for multiple replacements. If you use
             dictionaries, the second parameter "replace" becomes useless.
 
             Perform the same operation as "self.sub()", but returns a tuple:
@@ -1377,10 +1376,10 @@ class Dictionary(Object, builtins.dict):
     def pop(self, name, default_value=None):
 ##
         '''
-            Get a keyword element as it would be set by a default value.
-            If name is present in current saved dictionary its value will be
-            returned in a tuple with currently saved dictionary.
-            The corresponding data will be erased from dictionary.
+            Get a keyword element as it would be set by a default value. If
+            name is present in current saved dictionary its value will be
+            returned in a tuple with currently saved dictionary. The
+            corresponding data will be erased from dictionary.
 
             Examples:
 
@@ -1535,9 +1534,8 @@ class Module(Object):
 ##
         '''
             Returns name of the given context "frame". If no frame is defined
-            this module's context will be selected.
-            if "base" is set "True" the modules name is given back without any
-            file extension.
+            this module's context will be selected. If "base" is set "True" the
+            modules name is given back without any file extension.
 
             Examples:
 
@@ -1726,8 +1724,8 @@ class Module(Object):
     def get_defined_callables(cls, scope, only_module_level=True):
 ##
         '''
-            Takes a module and gives a list of objects explicit defined in
-            this module.
+            Takes a module and gives a list of objects explicit defined in this
+            module.
 
             Examples:
 
@@ -1784,9 +1782,8 @@ class Module(Object):
     ):
 ##
         '''
-            Runs a given program for every given module.
-            Returns false if no modules were found or given program isn't
-            installed.
+            Runs a given program for every given module. Returns "False" if no
+            modules were found or given program isn't installed.
 
             Examples:
 

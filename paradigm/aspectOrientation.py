@@ -56,8 +56,8 @@ pass
     # region public constants
 
 '''
-    Saves all aspects for cross cutting concerns for whole library and
-    program code that uses this feature.
+    Saves all aspects for cross cutting concerns for whole library and program
+    code that uses this feature.
 
     Examples:
 
@@ -837,7 +837,7 @@ if sys.flags.optimize:
 ##
         '''
             Dummy function for simply return given function to avoid
-            JointPoints in high performance mode.
+            joint points in high performance mode.
         '''
         return function
 else:

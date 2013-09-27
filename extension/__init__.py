@@ -12,8 +12,8 @@
 
 '''
     This package provides a number of extension by dealing with often used
-    things like underlying operating system, file objects, python modules,
-    or I/O operations.
+    things like underlying operating system, file objects, python modules, or
+    I/O operations.
 '''
 '''
     For conventions see "boostNode/__init__.py" on

@@ -11,11 +11,11 @@
 # region header
 
 '''
-    This module is a high level interface for interaction with
-    file systems. This class provides a full object oriented way to handle
-    file system objects. Besides a number of new supported interactions with
-    the file systems it offers all core file-system methods by the pythons
-    native "shutil" and "os" module as wrapper methods.
+    This module is a high level interface for interaction with file systems.
+    This class provides a full object oriented way to handle file system
+    objects. Besides a number of new supported interactions with the file
+    systems it offers all core file-system methods by the pythons native
+    "shutil" and "os" module as wrapper methods.
 '''
 '''
     For conventions see "boostNode/__init__.py" on
@@ -139,13 +139,13 @@ class Handler(Class):
     '''Defines the size of an empty folder, a symbolic link or empty file.'''
     BLOCK_SIZE_IN_BYTE = 4096
     '''
-        Defines the maximum number of chars containing in a file
-        (or directory) name.
+        Defines the maximum number of chars containing in a file (or directory)
+        name.
     '''
     MAX_FILE_NAME_LENGTH = 255
     '''
-        Defines the default format of current os for calculating with file
-        sizes.
+        Defines the default format of current operating system for calculating
+        with file sizes.
     '''
     DECIMAL = False
     '''Defines char set for handling text-based files internally.'''
@@ -158,11 +158,10 @@ class Handler(Class):
     MEDIA_MIME_TYPE_PATTERN = '^audio/.+', '^video/.+'
     '''
         This file pattern is used for all files which should easily open the
-        referenced file with a useful program.
-        You shouldn't use placeholder more than once.
-        Because portable-file-checks could be fail. For bash functionality you
-        can declare a bash variable and use how often you need.
-        Internal bash variable pattern: "$bash_variable".
+        referenced file with a useful program. You shouldn't use placeholder
+        more than once. Because portable-file-checks could be fail. For bash
+        functionality you can declare a bash variable and use how often you
+        need. Internal bash variable pattern: "$bash_variable".
     '''
     PORTABLE_DEFAULT_LINK_PATTERN = (
         "#!/bin/bash\n\n# {label} portable link file\n\nsize={size}\ntarget='"
@@ -175,9 +174,8 @@ class Handler(Class):
         This file pattern is used for all media files which should easily open
         the referenced media with a useful program on the one hand and behave
         like a real media file on the other hand (e.g. in drag and drop them
-        into a media player's gui).
-        Like in "PORTABLE_DEFAULT_LINK_PATTERN" you shouldn't use
-        placeholders twice.
+        into a media player's gui). Like in "PORTABLE_DEFAULT_LINK_PATTERN" you
+        shouldn't use placeholders twice.
     '''
     PORTABLE_MEDIA_LINK_PATTERN = (
         '[playlist]\n\nFile1=$path\nTitle1=$name\nLength1=$size\n\n$label '
@@ -877,8 +875,8 @@ class Handler(Class):
     def get_extension(self):
         '''
             Returns the current file extension or an empty string if current
-            file hasn't an extension separated by a dot, current handler
-            points to a none existing file object or a directory.
+            file hasn't an extension separated by a dot, current handler points
+            to a none existing file object or a directory.
 
             Examples:
 
@@ -899,8 +897,8 @@ class Handler(Class):
 ## python3.3     def get_timestamp(self: Self) -> builtins.float:
     def get_timestamp(self):
         '''
-            Getter method for time of last modification of the
-            file system object referenced by "Handler".
+            Getter method for time of last modification of the file system
+            object referenced by "Handler".
 
             Examples:
 
@@ -953,11 +951,9 @@ class Handler(Class):
 ##
         '''
             Calculates the used space for this object by the first request of
-            the property "size".
-            If the current handler points to none existing file on file system
-            zero will be returned.
-            This method has the additionally all parameters as
-            "self.convert_size_format()".
+            the property "size". If the current handler points to none existing
+            file on file system zero will be returned. This method has the
+            additionally all parameters as "self.convert_size_format()".
 
             "limit" Break and return current calculated size if limit is
                     reached or doesn't if limit is 0. Limit is interpreted in
@@ -1055,8 +1051,8 @@ class Handler(Class):
 ## python3.3     def get_dummy_size(self: Self, label='') -> builtins.int:
     def get_dummy_size(self, label=''):
         '''
-            Calculates the potential dummy size for a portable link pointing
-            to this object.
+            Calculates the potential dummy size for a portable link pointing to
+            this object.
 
             "label" is the actual used label for marking the text based
                     portable link files.
@@ -1407,9 +1403,8 @@ class Handler(Class):
     def get_name(self, *arguments, **keywords):
 ##
         '''
-            Determines the current file name without directory path.
-            Same possible parameters as native python method
-            "os.path.name()".
+            Determines the current file name without directory path. Same
+            possible parameters as native python method "os.path.name()".
 
             Examples:
 
@@ -1527,11 +1522,11 @@ class Handler(Class):
 ##
         '''
             Returns the file content of a text-file. Accepts all arguments
-            python's native "builtins.open()" or "codecs.open()" accepts.
-            If current file doesn't exists an empty string will be returned.
-            Note that this method shouldn't be used for binary files.
-            If current handler points to an directory containing files will be
-            returned as list.
+            python's native "builtins.open()" or "codecs.open()" accepts. If
+            current file doesn't exists an empty string will be returned. Note
+            that this method shouldn't be used for binary files. If current
+            handler points to an directory containing files will be returned as
+            list.
 
             Examples:
 
@@ -1639,8 +1634,8 @@ class Handler(Class):
     def get_portable_link_pattern(self, force_windows_behavior=False):
 ##
         '''
-            Determines the portable link file content pattern. With the
-            file-independent placeholder "executable_path" replaced.
+            Determines the portable link file content pattern. With the file
+            independent placeholder "executable_path" replaced.
 
             Examples:
 
@@ -1744,9 +1739,9 @@ class Handler(Class):
 ## python3.3     def get_extension_suffix(self: Self) -> builtins.str:
     def get_extension_suffix(self):
         '''
-            Returns the extension of a file or directory (empty string).
-            The difference to "self.get_extension()" is that the delimiter
-            point is added if necessary.
+            Returns the extension of a file or directory (empty string). The
+            difference to "self.get_extension()" is that the delimiter point is
+            added if necessary.
 
             Examples:
 
@@ -1828,8 +1823,7 @@ class Handler(Class):
 ##
         '''
             Set encoding for a text-base file if current instance refers to
-            one.
-            This method serves as wrapper method for "set_content()".
+            one. This method serves as wrapper method for "set_content()".
 
             Examples:
 
@@ -1856,11 +1850,11 @@ class Handler(Class):
 ##
         '''
             Returns the file content of a text-file. Accepts all arguments
-            python's native "builtins.open()" or "codecs.open()" accepts.
-            If current file doesn't exists an empty string will be returned.
-            Note that this method shouldn't be used for binary files.
-            If current handler points to an directory containing files will be
-            returned as list.
+            python's native "builtins.open()" or "codecs.open()" accepts. If
+            current file doesn't exists an empty string will be returned. Note
+            that this method shouldn't be used for binary files. If current
+            handler points to an directory containing files will be returned as
+            list.
 
             Examples:
 
@@ -2185,7 +2179,7 @@ class Handler(Class):
 ##
         '''
             A simple replacement of the os.path.samefile() function not
-            existing on the Windows platform.
+            existing on the windows platform.
 
             Examples:
 
@@ -2217,8 +2211,8 @@ class Handler(Class):
     def is_directory(self, allow_link=True, *arguments, **keywords):
 ##
         '''
-            Implements the pythons native "os.path.isdir()" method in an
-            object oriented way and adds the "link" parameter.
+            Implements the pythons native "os.path.isdir()" method in an object
+            oriented way and adds the "link" parameter.
 
             "link" triggers if symbolic links to directories also evaluates to
             "True".
@@ -2884,12 +2878,12 @@ class Handler(Class):
             Implements the pythons native "os.rmdir()" method in an object
             oriented way.
 
-            Remove (delete) the directory path. Works only if the directory
-            is empty, otherwise, "OSError" is raised. To remove whole
-            directory trees, "remove_deep" or "shutil.rmtree" can be used.
+            Remove (delete) the directory path. Works only if the directory is
+            empty, otherwise, "OSError" is raised. To remove whole directory
+            trees, "remove_deep" or "shutil.rmtree" can be used.
 
             Returns "True" if deleting was successful or no file exists and
-            "False"otherwise.
+            "False" otherwise.
 
             Examples:
 
@@ -2963,8 +2957,8 @@ class Handler(Class):
             Implements the pythons native "shutil.move()" method in an object
             oriented way.
 
-            Recursively move a file or directory to another location.
-            If the destination is on the current file system, then simply use
+            Recursively move a file or directory to another location. If the
+            destination is on the current file system, then simply use
             "rename". Otherwise, copy current path (with pythons native
             "shutil.copy2" method) to the target and then remove current path.
 
@@ -3027,16 +3021,16 @@ class Handler(Class):
             location (but not a symbolic link). If "ignore_errors" is true,
             errors resulting from failed removals will be ignored; if false or
             omitted, such errors are handled by calling a handler specified by
-            "onerror" or, if that is omitted, they raise an exception.
-            If "onerror" is provided, it must be a callable that accepts three
+            "onerror" or, if that is omitted, they raise an exception. If
+            "onerror" is provided, it must be a callable that accepts three
             parameters: "function", "path", and "excinfo". The first parameter,
             function, is the function which raised the exception; it will be
             one of pythons native methods: "os.path.islink()", "os.listdir",
             "os.remove" or "os.rmdir". The second parameter "path" will be the
             path name passed to function. The third parameter "excinfo" will
             be the exception information returned by pythons native
-            "sys.exc_info()" method.
-            Exceptions raised by "onerror" will not be caught.
+            "sys.exc_info()" method. Exceptions raised by "onerror" will not be
+            caught.
 
             Examples:
 
@@ -3099,7 +3093,7 @@ class Handler(Class):
             Implements the pythons native "os.remove()" method in an object
             oriented way.
 
-            Remove (delete) the file path. This is the same function as
+            Remove (delete) the file path. Thiis is the same function as
             pythons native "os.remove"; the unlink name is its traditional Unix
             name.
 
@@ -3261,8 +3255,8 @@ class Handler(Class):
             orientated way.
 
             Copy the current file to the file or directory "target". If current
-            location is a directory, a file with the same name is created
-            (or overwritten) in the directory specified. Permission bits are
+            location is a directory, a file with the same name is created (or
+            overwritten) in the directory specified. Permission bits are
             copied.
 
             "target" Path or "Handler" object pointing to target destination.
@@ -3321,8 +3315,8 @@ class Handler(Class):
         '''
             Makes a new directory in each case. E.g. if current directory name
             already exists. The given wrapper pattern is used as long resulting
-            name is unique. The handler which creates the folder will be
-            given back.
+            name is unique. The handler which creates the folder will be given
+            back.
 
             Examples:
 
@@ -3364,9 +3358,9 @@ class Handler(Class):
             Implements the pythons native "os.mkdir()" method in an object
             oriented way.
 
-            Create a directory named path with numeric mode. The default
-            mode is "700" (octal). If the directory already exists, "OSError"
-            is raised.
+            Create a directory named path with numeric mode. The default mode
+            is "700" (octal). If the directory already exists, "OSError" is
+            raised.
 
             "right" is new the right for the current object's path location.
 
@@ -3414,30 +3408,28 @@ class Handler(Class):
             Implements the pythons native "os.symlink()" method in an object
             oriented way. The optional parameter "force" is added.
 
-            Create a symbolic link pointing to current location named by
-            given "target" variable.
-            On Windows, symbolic link version takes an additional optional
-            parameter, target_is_directory, which defaults to "False".
-            On Windows, a symbolic link represents a file or a directory, and
-            does not morph to the target dynamically. For this reason, when
-            creating a symbolic link on Windows, if the target is not already
-            present, the symbolic link will default to being a file symbolic
-            link. If "target_is_directory" is set to "True", the symbolic link
-            will be created as a directory symbolic link. This parameter is
-            ignored if the target exists (and the symbolic link is created
-            with the same type as the target).
-            Symbolic link support was introduced in Windows 6.0 (Vista).
-            The native python "os.symlink()" method will raise a
-            "NotImplementedError" on Windows versions earlier than 6.0.
+            Create a symbolic link pointing to current location named by given
+            "target" variable. On windows, symbolic link version takes an
+            additional optional parameter, target_is_directory, which defaults
+            to "False". On windows, a symbolic link represents a file or a
+            directory, and does not morph to the target dynamically. For this
+            reason, when creating a symbolic link on Windows, if the target is
+            not already present, the symbolic link will default to being a file
+            symbolic link. If "target_is_directory" is set to "True", the
+            symbolic link will be created as a directory symbolic link. This
+            parameter is ignored if the target exists (and the symbolic link is
+            created with the same type as the target). Symbolic link support
+            was introduced in Windows 6.0 (Vista). The native python
+            "os.symlink()" method will raise a "NotImplementedError" on Windows
+            versions earlier than 6.0.
 
             Note: The "CreateSymbolicLinkPrivilege" is required in order to
             successfully create symbolic links. This privilege is not typically
             granted to regular users but is available to accounts which can
             escalate privileges to the administrator level. Either obtaining
             the privilege or running your application as an administrator are
-            ways to successfully create symbolic links.
-            OSError is raised when the function is called by an unprivileged
-            user.
+            ways to successfully create symbolic links. OSError is raised when
+            the function is called by an unprivileged user.
 
             "force" triggers if symbolic links with not existing referenced
                     files should be made. If target exists it will be
@@ -3496,9 +3488,9 @@ class Handler(Class):
             Implements the pythons native "os.link()" method in an object
             oriented way. The optional parameter "force" is added.
 
-            "force" triggers if hard links with not existing referenced
-                    files should be made. If target exists it will be
-                    overwritten if set to "True".
+            "force" triggers if hard links with not existing referenced files
+                    should be made. If target exists it will be overwritten if
+                    set to "True".
 
             Examples:
 
@@ -3537,13 +3529,13 @@ class Handler(Class):
             points. The result may be either an absolute or relative pathname;
             if it is relative, it may be converted to an absolute pathname
             using pythons native "os.path.join" method as
-            "os.path.join(os.path.dirname(path), result)".
-            If the path is a string object, the result will also be a string
-            object, and the call may raise an "UnicodeDecodeError". If the
-            path is a bytes object, the result will be a bytes object.
-            You can use the optional "as_object" parameter for getting a
-            Handler object. This is very useful if you don't know if the
-            resulting path is either a relative or an absolute one.
+            "os.path.join(os.path.dirname(path), result)". If the path is a
+            string object, the result will also be a string object, and the
+            call may raise an "UnicodeDecodeError". If the path is a bytes
+            object, the result will be a bytes object. You can use the optional
+            "as_object" parameter for getting a Handler object. This is very
+            useful if you don't know if the resulting path is either a relative
+            or an absolute one.
 
             Returns the path referenced by the link file.
 
@@ -3623,34 +3615,33 @@ class Handler(Class):
             missing parent directories. Permissions and times of directories
             are copied with pythons native method "shutil.copystat",
             individual files are copied using pythons native "shutil.copy2()"
-            method. If given parameter "symbolic_links" is "True",
-            symbolic links in the source tree are represented as symbolic
-            links in the new tree; if false, the contents of the linked files
-            are copied to the new tree. When "symbolic_links" is "False", e.g.
-            if the file pointed by the symbolic link doesn't exist, a exception
-            will be added in the list of errors raised in a error exception at
-            the end of the copy process.
-            You can set the optional "ignore_dangling_symlinks" flag to "True"
-            if you want to silence this exception. Notice that this option has
-            no effect on platforms that don't support pythons native
-            "os.symlink" method.
-            If ignore is given, it must be a callable that will recieve as its
-            arguments the directory being visited by pythons native method
-            "shutil.copytree", and a list of its contents, as returned by
-            pythons "os.listdir" method. Since "shutil.copytree" is called
-            recursively, the ignore callable will be called once for each
-            directory that is copied. The callable must return a sequence of
-            directory and file names relative to the current directory
-            (i.e. a subset of the items in its second argument); these names
-            will then be ignored in the copy process. Pythons native method
-            "shutil.ignore_patterns()" can be used to create such a callable
-            that ignores names based on glob-style patterns.
-            If exception(s) occur, an error is raised with a list of reasons.
-            If parameter "copy_function" is given, it must be a callable that
-            will be used to copy each file. It will be called with the source
-            path and the target path as arguments. By default, pythons native
-            "shutil.copy2()" is used, but any function that supports the same
-            signature (like pythons "shutil.copy()") can be used.
+            method. If given parameter "symbolic_links" is "True", symbolic
+            links in the source tree are represented as symbolic links in the
+            new tree; if false, the contents of the linked files are copied to
+            the new tree. When "symbolic_links" is "False", e.g. if the file
+            pointed by the symbolic link doesn't exist, a exception will be
+            added in the list of errors raised in a error exception at the end
+            of the copy process. You can set the optional
+            "ignore_dangling_symlinks" flag to "True" if you want to silence
+            this exception. Notice that this option has no effect on platforms
+            that don't support pythons native "os.symlink" method. If ignore is
+            given, it must be a callable that will receive as its arguments the
+            directory being visited by pythons native method "shutil.copytree",
+            and a list of its contents, as returned by pythons "os.listdir"
+            method. Since "shutil.copytree" is called recursively, the ignore
+            callable will be called once for each directory that is copied. The
+            callable must return a sequence of directory and file names
+            relative to the current directory (i.e. a subset of the items in
+            its second argument); these names will then be ignored in the copy
+            process. Pythons native method "shutil.ignore_patterns()" can be
+            used to create such a callable that ignores names based on
+            glob-style patterns. If exception(s) occur, an error is raised with
+            a list of reasons. If parameter "copy_function" is given, it must
+            be a callable that will be used to copy each file. It will be
+            called with the source path and the target path as arguments. By
+            default, pythons native "shutil.copy2()" is used, but any function
+            that supports the same signature (like pythons "shutil.copy()") can
+            be used.
 
             "target" is path or "Handler" object pointing to target
                      destination.
@@ -3706,15 +3697,14 @@ class Handler(Class):
             Recursive directory creation function. Like pythons native
             "os.mkdir()" method, but creates all intermediate-level
             directories needed to contain the leaf directory. If the target
-            directory with the same mode as specified already exists, raises
-            an "OSError" exception if given parameter "exist_ok" is "False",
+            directory with the same mode as specified already exists, raises an
+            "OSError" exception if given parameter "exist_ok" is "False",
             otherwise no exception is raised. If the directory cannot be
-            created in other cases, raises an "OSError" exception.
-            The default mode is "0o770" (octal). On some systems, "mode" is
-            ignored. Where it is used, the current "umask" value is first
-            masked out.
-            Note "make_directorys()" will become confused if the path elements
-            to create include parent directory.
+            created in other cases, raises an "OSError" exception. The default
+            mode is "0o770" (octal). On some systems, "mode" is ignored. Where
+            it is used, the current "umask" value is first masked out. Note
+            "make_directorys()" will become confused if the path elements to
+            create include parent directory.
 
             Examples:
 
@@ -3758,8 +3748,8 @@ class Handler(Class):
 
             "target" is path or "Handler" object pointing to target
                      destination.
-            "force" means to trigger if a file on the target location should
-                    be overwritten.
+            "force" means to trigger if a file on the target location should be
+                    overwritten.
             "label" is a useful label to distinguish portable linked files
                     from other text-based files. Default is setted to the
                     current class description.
@@ -3897,23 +3887,23 @@ class Handler(Class):
     ):
 ##
         '''
-            Apply a given function or method to the current directory path.
-            If the optional parameter "recursive" is set to "True" the given
+            Apply a given function or method to the current directory path. If
+            the optional parameter "recursive" is set to "True" the given
             function is applied to to all subdirectories of the current path.
             If the given parameter "function" is a string, a new instance of
-            "Directory" will be created for each object.
-            If "function" represents a local method the current scope will be
-            accessible in the given method.
+            "Directory" will be created for each object. If "function"
+            represents a local method the current scope will be accessible in
+            the given method.
 
             If "function" is a string, a new instance is created otherwise not.
 
             Returns "False" if any call of "function" returns "False" or
             current thread was terminated and "True" otherwise.
 
-            If function call returns "False" further iterations in
-            current dimension will be stopped. If function's return value is
-            "None", current file object is a directory and recursion is
-            enabled the iteration will not enter current directory.
+            If function call returns "False" further iterations in current
+            dimension will be stopped. If function's return value is "None",
+            current file object is a directory and recursion is enabled the
+            iteration will not enter current directory.
 
             Examples:
 
@@ -3981,8 +3971,8 @@ class Handler(Class):
     def delete_file_patterns(self, *patterns):
 ##
         '''
-            Removes files with filenames matching the given patterns.
-            This method search recursively for matching file names.
+            Removes files with filenames matching the given patterns. This
+            method search recursively for matching file names.
 
             Examples:
 
@@ -4049,8 +4039,8 @@ class Handler(Class):
     ):
 ##
         '''
-            This method is used as helper method for "get_path()".
-            It deals the case where an explicit location was given.
+            This method is used as helper method for "get_path()". It deals the
+            case where an explicit location was given.
 
             Examples:
 
@@ -4118,8 +4108,8 @@ class Handler(Class):
     def _is_equivalent_folder(self, other, second_round=False):
 ##
         '''
-            Returns "True" if given folder contains likewise content.
-            Serves as helper method.
+            Returns "True" if given folder contains likewise content. Serves as
+            helper method.
 
             Examples:
 
@@ -4282,8 +4272,8 @@ class Handler(Class):
     def _initialize_location(self, location):
 ##
         '''
-            Normalizes a given file object reference to "builtins.str".
-            If "None" is given current directory path is returned.
+            Normalizes a given file object reference to "builtins.str". If
+            "None" is given current directory path is returned.
 
             Examples:
 
@@ -4623,7 +4613,7 @@ class Handler(Class):
     ):
 ##
         '''
-            Handles platform specified stuff like determining inode size.
+            Handles platform specified stuff like determining i-Node size.
 
             Examples:
 

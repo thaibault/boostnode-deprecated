@@ -231,9 +231,9 @@ class Run(Class, Runnable):
 ## python3.3     def _run(self: Self) -> Self:
     def _run(self):
         '''
-            Entry point for command line call of this program.
-            Determines a meaningful file for running. Set the right code
-            dependent commands and finally executes them.
+            Entry point for command line call of this program. Determines a
+            meaningful file for running. Set the right code dependent commands
+            and finally executes them.
 
             Examples:
 
@@ -436,9 +436,9 @@ class Run(Class, Runnable):
     def _determine_code_file(self, path):
 ##
         '''
-            Determines a code file which could make sense to run.
-            It could depend on inputs which where made to this class.
-            Searches in the current working directory.
+            Determines a code file which could make sense to run. It could
+            depend on inputs which where made to this class. Searches in the
+            current working directory.
 
             Examples:
 
@@ -610,8 +610,8 @@ class Run(Class, Runnable):
     def _search_supported_file_in_current_working_directory(self):
 ##
         '''
-            Tries to find a useful file in current working directory
-            with a supported extension.
+            Tries to find a useful file in current working directory with a
+            supported extension.
 
             Examples:
 

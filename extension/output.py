@@ -237,9 +237,8 @@ class Buffer(Class, logging.StreamHandler):
 ## python3.3     def write(self: Self, content: builtins.str) -> Self:
     def write(self, content):
         '''
-            Writes content to the current output buffer file.
-            If the current given file "Buffer.file"
-            doesn't exists it will be created.
+            Writes content to the current output buffer file. If the current
+            given file "Buffer.file" doesn't exists it will be created.
 
             Examples:
 
@@ -272,8 +271,8 @@ class Buffer(Class, logging.StreamHandler):
     def flush(self):
         '''
             Flush methods usually called to guarantee that all objects putted
-            to "write()" are materialized on their provided media.
-            This implementation exists only for compatibility reasons.
+            to "write()" are materialized on their provided media. This
+            implementation exists only for compatibility reasons.
 
             Examples:
 
@@ -507,9 +506,8 @@ class Print(Class):
 
 class Logger(Class):
     '''
-        This class provides handling with all components dealing with
-        logger object. It stores all logger components in a single
-        data structure.
+        This class provides handling with all components dealing with logger
+        object. It stores all logger components in a single data structure.
     '''
 
     # region properties
@@ -621,8 +619,8 @@ class Logger(Class):
 ##
         '''
             Returns a new or existing instance of a logger with given
-            properties. If a logger was already registered under given name
-            the existing instance is given back and a new instance otherwise.
+            properties. If a logger was already registered under given name the
+            existing instance is given back and a new instance otherwise.
 
             Examples:
 

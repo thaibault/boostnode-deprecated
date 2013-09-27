@@ -11,8 +11,7 @@
 # region header
 
 '''
-    This module provides classes to handle text-based files and string
-    parsing.
+    This module provides classes to handle text-based files and string parsing.
 '''
 
 ## python3.3 pass
@@ -321,9 +320,8 @@ class Parser(Class, Runnable):
     def __len__(self):
         '''
             Triggers if the pythons native "builtins.len()" function tries to
-            handle current instance.
-            Returns the number of symbols given in the current string
-            representation of this object.
+            handle current instance. Returns the number of symbols given in the
+            current string representation of this object.
 
             Examples:
 
@@ -1706,14 +1704,14 @@ class Parser(Class, Runnable):
     def _get_code_indent(self, current_indent, mode='passiv'):
 ##
         '''
-            Returns the right indent in code as string depending on the
-            current indention level and context.
+            Returns the right indent in code as string depending on the current
+            indention level and context.
 
             "mode" can have three different states.
                 passiv: This mode describes the ability to close or continue
                         the current context by their level of indention.
-                activ: Means a new code depending context is open.
-                       The following code is depended on this line.
+                activ: Means a new code depending context is open. The
+                       following code is depended on this line.
         '''
         if current_indent is None:
             current_indent = ''

@@ -12,10 +12,9 @@
 
 '''
     This module provides an interpreter to run a simple macro language written
-    in text-files.
-    Converts special commented version depending code snippets in given
-    location to another given version. This code transformation can always be
-    made in both directions.
+    in text-files. Converts special commented version depending code snippets
+    in given location to another given version. This code transformation can
+    always be made in both directions.
 '''
 '''
     For conventions see "boostNode/__init__.py" on
@@ -321,9 +320,8 @@ class Replace(Class, Runnable):
     ):
 ##
         '''
-            Triggers the conversion process with given arguments.
-            NOTE: "(?s...)" is equivalent to regular expression flag
-            "re.DOTALL".
+            Triggers the conversion process with given arguments. NOTE:
+            "(?s...)" is equivalent to regular expression flag "re.DOTALL".
             NOTE: That alternate version in one line regular expression
             pattern could be empty.
 
@@ -710,9 +708,9 @@ class Replace(Class, Runnable):
         '''
         if match.group('alternate_version') == self._new_version:
             '''
-                "str.replace()" has to run over "current_text" twice.
-                Two consecutive lines with whitespace at the end of line
-                aren't matched in first run.
+                "str.replace()" has to run over "current_text" twice. Two
+                consecutive lines with whitespace at the end of line aren't
+                matched in first run.
             '''
             try:
                 return(

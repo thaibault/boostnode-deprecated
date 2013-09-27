@@ -702,9 +702,7 @@ class CheckObject(builtins.object):
 ##     ) -> builtins.str:
     def _join_distinct_types(self, types, meta_type):
 ##
-        '''
-            Joins a given list of objects to a single human readable string.
-        '''
+        '''Joins a given list of objects to a single human readable string.'''
         result = ''
         for type in types:
             if type is Self:
@@ -733,8 +731,8 @@ class CheckObject(builtins.object):
     def _check_value(self, expected_value, value, name='return value'):
 ##
         '''
-            Checks if the given argument value is equal the specified
-            argument value.
+            Checks if the given argument value is equal the specified argument
+            value.
 
             Examples:
 
@@ -773,11 +771,11 @@ class CheckObject(builtins.object):
 class Check(FunctionDecorator):
 ## python3.3
 ##     '''
-##         This function provides function and method signature checking.
-##         An exception is raised on invalid signature implementation.
+##         This function provides function and method signature checking. An
+##         exception is raised on invalid signature implementation.
 ##
-##         There are several possibilities to specify a given argument or
-##         the return value:
+##         There are several possibilities to specify a given argument or the
+##         return value:
 ##
 ##         1. Specify a type.
 ##         2. Specify a number of types via a tuple.

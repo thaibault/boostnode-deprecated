@@ -11,8 +11,8 @@
 # region header
 
 '''
-    Offers a higher level for common tasks. Most of the modules are written
-    on top of python's native implementations.
+    Offers a higher level for common tasks. Most of the modules are written on
+    top of python's native implementations.
 '''
 
     # region package description
@@ -322,8 +322,8 @@ sys.path.append(os.path.abspath(sys.path[0] + 2 * ('..' + os.sep)))
 ## python3.3 def __get_all_modules__(path=sys.path[0]) -> builtins.list:
 def __get_all_modules__(path=sys.path[0]):
     '''
-        This method provides a generic way to determine all modules in
-        current package or folder. It is useful for "__init__.py" files.
+        This method provides a generic way to determine all modules in current
+        package or folder. It is useful for "__init__.py" files.
 
         Examples:
 

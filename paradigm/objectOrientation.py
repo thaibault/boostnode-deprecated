@@ -11,8 +11,8 @@
 # region header
 
 '''
-    This module implements features like getter and setter methods
-    for implementing object orientated code.
+    This module implements features like getter and setter methods for
+    implementing object orientated code.
 '''
 '''
     For conventions see "boostNode/__init__.py" on
@@ -27,18 +27,17 @@
 
     Getter and setter
 
-    If you let transmit your class from the "Class" class you can use a
-    getter or setter method for every property you need. A user of your class
-    doesn't have to know which property has its own getter/setter, an
-    universal getter/setter or nothing of them. A user can always try to access
-    any property defined with an underscore at the beginning of the class with
-    no underscore. If it's necessary to use a function to get or set the
-    property it will be executed, otherwise not.
-    If no explicit or general getter/setter is provided, the property still
-    takes inaccessible. Properties which should be accessible and doesn't need
-    any getter or setter method can be implemented without any underscore.
-    Doing that way saves your application performance because no needless
-    function calls are done.
+    If you let transmit your class from the "Class" class you can use a getter
+    or setter method for every property you need. A user of your class doesn't
+    have to know which property has its own getter/setter, an universal
+    getter/setter or nothing of them. A user can always try to access any
+    property defined with an underscore at the beginning of the class with no
+    underscore. If it's necessary to use a function to get or set the property
+    it will be executed, otherwise not. If no explicit or general getter/setter
+    is provided, the property still takes inaccessible. Properties which should
+    be accessible and doesn't need any getter or setter method can be
+    implemented without any underscore. Doing that way saves your application
+    performance because no needless function calls are done.
 
     Getter/setter examples:
 
@@ -122,9 +121,9 @@ for number in (3, 4):
 ## python3.3 class Class:
 class Class(builtins.object):
     '''
-        The main class which is intended for passing on other class.
-        It serves a scope for one application to minimize conflicts with other
-        classes in the global scope.
+        The main class which is intended for passing on other class. It serves
+        a scope for one application to minimize conflicts with other classes in
+        the global scope.
     '''
 
     # region static methods
@@ -204,9 +203,9 @@ class Class(builtins.object):
 
             "name" is the inaccessible property name.
 
-            Should return the current value of the given
-            property name depends on its getter method.
-            Returns "None" if no getter method is accessible.
+            Should return the current value of the given property name depends
+            on its getter method. Returns "None" if no getter method is
+            accessible.
 
             Examples:
 
@@ -268,9 +267,8 @@ class Class(builtins.object):
             "name" is the inaccessible property name.
             "value" is the new value for the given property name.
 
-            Returns the new value of the given property name
-            depending on the presence of setter method
-            otherwise "None" is returned.
+            Returns the new value of the given property name depending on the
+            presence of setter method otherwise "None" is returned.
 
             Examples:
 
