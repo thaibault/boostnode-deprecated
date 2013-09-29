@@ -333,7 +333,7 @@ def __get_all_modules__(path=sys.path[0]):
         >>> from boostNode.extension.file import Handler as FileHandler
 
         >>> location = FileHandler(
-        ...     __test_folder_path__ + '__get_all_modules__',
+        ...     __test_folder__.path + '__get_all_modules__',
         ...     make_directory=True)
         >>> a = FileHandler(
         ...     location.path + 'a.py', must_exist=False)
@@ -343,12 +343,12 @@ def __get_all_modules__(path=sys.path[0]):
         ... ) # doctest: +ELLIPSIS
         Object of "Handler" with path "...__get_all_modu...b.pyc..." (type: ...
 
-        >>> __get_all_modules__(__test_folder_path__ + '__get_all_modules__')
+        >>> __get_all_modules__(__test_folder__.path + '__get_all_modules__')
         ['a']
 
         >>> a.remove_file()
         True
-        >>> __get_all_modules__(__test_folder_path__ + '__get_all_modules__')
+        >>> __get_all_modules__(__test_folder__.path + '__get_all_modules__')
         []
     '''
     if not path:

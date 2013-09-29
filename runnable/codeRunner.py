@@ -209,7 +209,7 @@ class Run(Class, Runnable):
             Examples:
 
             >>> file = FileHandler(
-            ...     __test_folder_path__ + '__repr__.py', must_exist=False)
+            ...     __test_folder__.path + '__repr__.py', must_exist=False)
             >>> file.content = '#!/usr/bin/env python'
             >>> repr(Run(code_file_path=file)) # doctest: +ELLIPSIS
             'Object of "Run" with detected path "...__repr__.py".'
@@ -244,7 +244,7 @@ class Run(Class, Runnable):
             usage:...
 
             >>> empty_folder = FileHandler(
-            ...     __test_folder_path__ + '_run', make_directory=True)
+            ...     __test_folder__.path + '_run', make_directory=True)
             >>> sys.argv[1:] = ['-f', empty_folder.path, '--log-level', 'info']
             >>> run = Run.run() # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
@@ -320,9 +320,9 @@ class Run(Class, Runnable):
             Examples:
 
             >>> garbage = FileHandler(
-            ...     __test_folder_path__ + 'temp_tidy_up', make_directory=True)
+            ...     __test_folder__.path + 'temp_tidy_up', make_directory=True)
             >>> file = FileHandler(
-            ...     __test_folder_path__ + '_tidy_up_runnable.py',
+            ...     __test_folder__.path + '_tidy_up_runnable.py',
             ...     must_exist=False)
             >>> file.content = '#!/usr/bin/env python'
             >>> run = Run(file)
@@ -359,11 +359,11 @@ class Run(Class, Runnable):
 
             >>> __test_buffer__.clear() # doctest: +ELLIPSIS
             '...'
-            >>> FileHandler(__test_folder_path__).clear_directory()
+            >>> FileHandler(__test_folder__.path).clear_directory()
             True
 
             >>> file = FileHandler(
-            ...     __test_folder_path__ + '_run_commands.py',
+            ...     __test_folder__.path + '_run_commands.py',
             ...     must_exist=False)
             >>> file.content = '#!/usr/bin/env python'
             >>> file.change_right(700) # doctest: +ELLIPSIS
@@ -395,11 +395,11 @@ class Run(Class, Runnable):
             Examples:
 
             >>> file = FileHandler(
-            ...     __test_folder_path__ + '_check_code_manager.py',
+            ...     __test_folder__.path + '_check_code_manager.py',
             ...     must_exist=False)
             >>> file.content = '#!/usr/bin/env python'
             >>> FileHandler(
-            ...     __test_folder_path__ + '__init__.py', must_exist=False
+            ...     __test_folder__.path + '__init__.py', must_exist=False
             ... ).content = '#!/usr/bin/env python'
             >>> run = Run(code_file_path=file)
             >>> __test_buffer__.clear() # doctest: +ELLIPSIS
@@ -484,7 +484,7 @@ class Run(Class, Runnable):
             Examples:
 
             >>> code_file = FileHandler(
-            ...     __test_folder_path__ +
+            ...     __test_folder__.path +
             ...     '_find_informations_by_extension.py',
             ...     must_exist=False)
             >>> FileHandler('temp_run_main.py', must_exist=False).content = ' '
@@ -520,7 +520,7 @@ class Run(Class, Runnable):
             Examples:
 
             >>> file = FileHandler(
-            ...     __test_folder_path__ + '_search_supported_file_by_path.py',
+            ...     __test_folder__.path + '_search_supported_file_by_path.py',
             ...     must_exist=False)
             >>> file.content = '#!/usr/bin/env python'
             >>> FileHandler('temp_run_main.py', must_exist=False).content = ' '
@@ -574,20 +574,20 @@ class Run(Class, Runnable):
             Examples:
 
             >>> file = FileHandler(
-            ...     __test_folder_path__ +
+            ...     __test_folder__.path +
             ...     '_search_supported_file_by_directoryMain.py',
             ...     must_exist=False)
             >>> file.content = ' '
             >>> FileHandler('temp_run_main.py', must_exist=False).content = ' '
 
             >>> Run()._search_supported_file_by_directory(
-            ...     FileHandler(__test_folder_path__), 'py'
+            ...     FileHandler(__test_folder__.path), 'py'
             ... ) # doctest: +ELLIPSIS
             Object of "Handler" with path "..." and initially given path "...
 
             >>> file.name = '_search_supported_file_by_directory.py'
             >>> Run()._search_supported_file_by_directory(
-            ...     FileHandler(__test_folder_path__), 'py'
+            ...     FileHandler(__test_folder__.path), 'py'
             ... ) # doctest: +ELLIPSIS
             Object of "Handler" with path "..." and initially given path "...
         '''
@@ -780,7 +780,7 @@ class Run(Class, Runnable):
             Examples:
 
             >>> code_file = FileHandler(
-            ...     location=__test_folder_path__ + '_render_properties.cpp',
+            ...     location=__test_folder__.path + '_render_properties.cpp',
             ...     must_exist=False)
             >>> FileHandler('temp_run_main.py', must_exist=False).content = ' '
             >>> run = Run()

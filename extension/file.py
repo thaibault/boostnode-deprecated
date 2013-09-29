@@ -224,7 +224,7 @@ class Handler(Class):
             >>> root_backup = Handler.get_root()
 
             >>> Handler.set_root(
-            ...     __test_folder_path__ + 'set_root', make_directory=True
+            ...     __test_folder__.path + 'set_root', make_directory=True
             ... ) # doctest: +ELLIPSIS
             <class '...Handler'>
             >>> Handler.get_root().path # doctest: +ELLIPSIS
@@ -445,7 +445,7 @@ class Handler(Class):
 
             >>> current_location = Handler()
             >>> temporary_file = Handler(
-            ...     __test_folder_path__ + '_sort_by_file_types',
+            ...     __test_folder__.path + '_sort_by_file_types',
             ...     must_exist=False)
             >>> temporary_file.content = 'A'
             >>> [temporary_file,
@@ -512,14 +512,14 @@ class Handler(Class):
             >>> root_backup = Handler.get_root()
 
             >>> Handler(
-            ...     location=__test_folder_path__ + 'init_not_existing'
+            ...     location=__test_folder__.path + 'init_not_existing'
             ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
             boostNode.extension.native.FileError: Invalid path...not_existin...
 
             >>> handler = Handler(
-            ...     location=__test_folder_path__ + 'init_not_existing',
+            ...     location=__test_folder__.path + 'init_not_existing',
             ...     make_directory=True)
             >>> handler # doctest: +ELLIPSIS
             Object of "Handler" with path "...init_not_existing..."...
@@ -527,7 +527,7 @@ class Handler(Class):
             True
 
             >>> Handler(
-            ...     location=__test_folder_path__ + 'init_not_existing2',
+            ...     location=__test_folder__.path + 'init_not_existing2',
             ...     must_exist=False
             ... ) # doctest: +ELLIPSIS
             Object of "Handler" with path "...init_not_existing2...(type: un...
@@ -544,7 +544,7 @@ class Handler(Class):
             '...boostNode...extension...'
 
             >>> Handler.set_root(
-            ...     __test_folder_path__ + 'init_root_directory',
+            ...     __test_folder__.path + 'init_root_directory',
             ...     make_directory=True
             ... ) # doctest: +ELLIPSIS
             <class '...Handler'>
@@ -556,7 +556,7 @@ class Handler(Class):
             '...init_root_directory...init_A...'
 
             >>> location = Handler(
-            ...     __test_folder_path__  + 'init_root_directory/' + 'init_A',
+            ...     __test_folder__.path  + 'init_root_directory/' + 'init_A',
             ...     must_exist=False, respect_root_path=False)
             >>> location.path # doctest: +ELLIPSIS
             '...init_A...'
@@ -564,7 +564,7 @@ class Handler(Class):
             '...init_root_directory...init_A...'
 
             >>> Handler(
-            ...     __test_folder_path__ + 'init_A', respect_root_path=False
+            ...     __test_folder__.path + 'init_A', respect_root_path=False
             ... ) # doctest: +ELLIPSIS +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
@@ -572,7 +572,7 @@ class Handler(Class):
 
             >>> try:
             ...     Handler(
-            ...         __test_folder_path__ + 'init_A', make_directory=True)
+            ...         __test_folder__.path + 'init_A', make_directory=True)
             ... except:
             ...     True
             True
@@ -637,7 +637,7 @@ class Handler(Class):
             True
 
             >>> bool(Handler(
-            ...     location=__test_folder_path__ +
+            ...     location=__test_folder__.path +
             ...     'nonzero_not_existing_file',
             ...     must_exist=False))
             False
@@ -645,7 +645,7 @@ class Handler(Class):
             >>> bool(Handler(location=__file_path__))
             True
 
-            >>> bool(Handler(location=__test_folder_path__))
+            >>> bool(__test_folder__)
             True
         '''
         return self.is_element()
@@ -661,21 +661,21 @@ class Handler(Class):
             Examples:
 
             >>> Handler(
-            ...     location=__test_folder_path__ + 'eq_a/b', must_exist=False
+            ...     location=__test_folder__.path + 'eq_a/b', must_exist=False
             ... ) == Handler(
-            ...     location=__test_folder_path__ + 'eq_a//b/',
+            ...     location=__test_folder__.path + 'eq_a//b/',
             ...     must_exist=False)
             True
 
             >>> Handler(
-            ...     location=__test_folder_path__ + 'eq_a/b', must_exist=False
+            ...     location=__test_folder__.path + 'eq_a/b', must_exist=False
             ... ) == Handler(
-            ...     location=__test_folder_path__ + 'eq_a/b/c',
+            ...     location=__test_folder__.path + 'eq_a/b/c',
             ...     must_exist=False)
             False
 
-            >>> __test_folder_path__ + 'eq_a/b' == Handler(
-            ...     location=__test_folder_path__ + 'eq_a/b', must_exist=False)
+            >>> __test_folder__.path + 'eq_a/b' == Handler(
+            ...     location=__test_folder__.path + 'eq_a/b', must_exist=False)
             False
         '''
         if builtins.isinstance(other, self.__class__):
@@ -721,7 +721,7 @@ class Handler(Class):
             Examples:
 
             >>> directory = Handler(
-            ...     __test_folder_path__ + 'delitem', make_directory=True)
+            ...     __test_folder__.path + 'delitem', make_directory=True)
             >>> file = Handler(directory.path + 'file', must_exist=False)
             >>> file.content = ' '
             >>> file.is_file()
@@ -749,7 +749,7 @@ class Handler(Class):
             True
 
             >>> Handler(
-            ...     location=__test_folder_path__ + 'contains_not_existing.py',
+            ...     location=__test_folder__.path + 'contains_not_existing.py',
             ...     must_exist=False) in Handler()
             False
 
@@ -777,7 +777,7 @@ class Handler(Class):
             Examples:
 
             >>> len(Handler(
-            ...     location=__test_folder_path__ +
+            ...     location=__test_folder__.path +
             ...     'len_not_existing_location',
             ...     must_exist=False))
             0
@@ -825,7 +825,7 @@ class Handler(Class):
             'Object of "Handler" with path "...file.py" ... (type: file).'
 
             >>> link = Handler(
-            ...     __test_folder_path__ + 'repr_link', must_exist=False)
+            ...     __test_folder__.path + 'repr_link', must_exist=False)
             >>> if Platform().operating_system == 'windows':
             ...     repr(link)
             ... else:
@@ -863,7 +863,7 @@ class Handler(Class):
             'utf_8'
 
             >>> handler = Handler(
-            ...     __test_folder_path__ + 'get_encoding', must_exist=False
+            ...     __test_folder__.path + 'get_encoding', must_exist=False
             ... ).set_content('test', encoding='ascii') # doctest: +ELLIPSIS
             >>> handler.encoding
             'ascii'
@@ -917,7 +917,7 @@ class Handler(Class):
             Examples:
 
             >>> file = Handler(
-            ...     __test_folder_path__ + 'get_lines_test1', must_exist=False)
+            ...     __test_folder__.path + 'get_lines_test1', must_exist=False)
 
             >>> file.content = 'a\\nb\\nc\\n'
             >>> file.lines
@@ -964,7 +964,7 @@ class Handler(Class):
             >>> from boostNode.extension.system import Platform
 
             >>> test_size = Handler(
-            ...     __test_folder_path__ + 'test_size', must_exist=False)
+            ...     __test_folder__.path + 'test_size', must_exist=False)
             >>> test_size.content = ' '
             >>> test_size.size
             1.0
@@ -1012,7 +1012,7 @@ class Handler(Class):
             True
 
             >>> link = Handler(
-            ...     __test_folder_path__ + 'get_size_link', must_exist=False)
+            ...     __test_folder__.path + 'get_size_link', must_exist=False)
             >>> if Platform().operating_system == 'windows':
             ...     True
             ... else:
@@ -1090,9 +1090,9 @@ class Handler(Class):
             >>> Handler.DECIMAL = False
 
             >>> a = Handler(
-            ...     __test_folder_path__ + 'get_human_readable_size_A',
+            ...     __test_folder__.path + 'get_human_readable_size_A',
             ...     make_directory=True)
-            >>> b = Handler(__test_folder_path__ + 'get_human_readable_size_A')
+            >>> b = Handler(__test_folder__.path + 'get_human_readable_size_A')
             >>> a.human_readable_size == str(b.get_size(format='kb')) + ' kb'
             True
 
@@ -1168,7 +1168,7 @@ class Handler(Class):
             'directory'
 
             >>> test_type = Handler(
-            ...     __test_folder_path__ + 'get_type', must_exist=False)
+            ...     __test_folder__.path + 'get_type', must_exist=False)
             >>> test_type.type
             'undefined'
 
@@ -1184,16 +1184,16 @@ class Handler(Class):
             ...     True
             ... else:
             ...     created = test_type.make_symbolic_link(
-            ...         __test_folder_path__ + 'get_type_link')
+            ...         __test_folder__.path + 'get_type_link')
             ...     Handler(
-            ...         __test_folder_path__ + 'get_type_link'
+            ...         __test_folder__.path + 'get_type_link'
             ...     ).type == 'symbolicLink'
             True
 
             >>> target = Handler(
-            ...     __test_folder_path__ + 'get_type_link', must_exist=False)
+            ...     __test_folder__.path + 'get_type_link', must_exist=False)
             >>> test_type.make_portable_link(
-            ...     __test_folder_path__ + 'get_type_link', force=True)
+            ...     __test_folder__.path + 'get_type_link', force=True)
             True
             >>> target.type
             'portableLink'
@@ -1233,7 +1233,7 @@ class Handler(Class):
             ''
 
             >>> handler = Handler(
-            ...     location=__test_folder_path__ +
+            ...     location=__test_folder__.path +
             ...     'get_mime_type.unknownType',
             ...     must_exist=False)
             >>> handler.content = 'hans'
@@ -1271,7 +1271,7 @@ class Handler(Class):
             '...file.py'
 
             >>> Handler(location=__file_path__).get_path(
-            ...     location=__test_folder_path__ + 'get_path/path/'
+            ...     location=__test_folder__.path + 'get_path/path/'
             ... ) # doctest: +ELLIPSIS
             '...get_path...path...'
         '''
@@ -1374,7 +1374,7 @@ class Handler(Class):
             >>> same
             True
 
-            >>> Handler.set_root(__test_folder_path__) # doctest: +ELLIPSIS
+            >>> Handler.set_root(__test_folder__.path) # doctest: +ELLIPSIS
             <class '...Handler'>
             >>> Handler('/').directory_path == os.sep
             True
@@ -1547,7 +1547,7 @@ class Handler(Class):
             '#!/...python...'
 
             >>> handler = Handler(
-            ...     location=__test_folder_path__ + 'get_content_not_existing',
+            ...     location=__test_folder__.path + 'get_content_not_existing',
             ...     must_exist=False)
 
             >>> handler.get_content(
@@ -1566,7 +1566,7 @@ class Handler(Class):
             <generator object list at 0x...>
 
             >>> handler = Handler(
-            ...     __test_folder_path__ + 'get_content', must_exist=False)
+            ...     __test_folder__.path + 'get_content', must_exist=False)
 
             >>> handler.content = ' '
             >>> handler.get_content(mode='r+b') == b' '
@@ -1652,7 +1652,7 @@ class Handler(Class):
             '...portable ...'
 
             >>> Handler(
-            ...     location=__test_folder_path__ +
+            ...     location=__test_folder__.path +
             ...         'get_portable_link_pattern_media.mp3',
             ...     must_exist=False
             ... ).portable_link_pattern # doctest: +ELLIPSIS
@@ -1752,18 +1752,18 @@ class Handler(Class):
             ''
 
             >>> handler = Handler(
-            ...     __test_folder_path__ + 'test.ext', must_exist=False)
+            ...     __test_folder__.path + 'test.ext', must_exist=False)
             >>> handler.content = 'test'
             >>> handler.get_extension_suffix()
             '.ext'
 
             >>> Handler(
-            ...     __test_folder_path__ + 'test.ext', must_exist=False
+            ...     __test_folder__.path + 'test.ext', must_exist=False
             ... ).extension_suffix
             '.ext'
 
             >>> Handler(
-            ...     __test_folder_path__ + 'test', must_exist=False
+            ...     __test_folder__.path + 'test', must_exist=False
             ... ).extension_suffix
             ''
         '''
@@ -1789,7 +1789,7 @@ class Handler(Class):
 
             >>> import time
             >>> directory = Handler(
-            ...     __test_folder_path__ + 'touch', make_directory=True)
+            ...     __test_folder__.path + 'touch', make_directory=True)
             >>> old_timestamp = directory.timestamp
             >>> time.sleep(0.01)
 
@@ -1828,7 +1828,7 @@ class Handler(Class):
             Examples:
 
             >>> test_file = Handler(
-            ...     __test_folder_path__ + 'set_encoding_test_encoding',
+            ...     __test_folder__.path + 'set_encoding_test_encoding',
             ...     must_exist=False)
             >>> test_file.content = 'hans and peter'
 
@@ -1859,7 +1859,7 @@ class Handler(Class):
             Examples:
 
             >>> handler = Handler(
-            ...     __test_folder_path__ + 'set_content_file',
+            ...     __test_folder__.path + 'set_content_file',
             ...     must_exist=False)
             >>> handler.content = 'hans'
             >>> handler.content
@@ -1959,11 +1959,11 @@ class Handler(Class):
             Examples:
 
             >>> handler = Handler(
-            ...     location=__test_folder_path__ + 'set_directory_path',
+            ...     location=__test_folder__.path + 'set_directory_path',
             ...     make_directory=True)
 
             >>> handler.directory_path = (
-            ...     __test_folder_path__ + 'set_directory_path_edited')
+            ...     __test_folder__.path + 'set_directory_path_edited')
             >>> handler.is_directory()
             True
             >>> handler.name
@@ -1972,7 +1972,7 @@ class Handler(Class):
             '...set_directory_path_edited...'
 
             >>> new_location = Handler(
-            ...     location=__test_folder_path__ + 'set_directory_path2',
+            ...     location=__test_folder__.path + 'set_directory_path2',
             ...     must_exist=False)
             >>> handler.directory_path = new_location
             >>> handler.is_directory()
@@ -1985,7 +1985,7 @@ class Handler(Class):
             True
 
             >>> new_location = Handler(
-            ...     location=__test_folder_path__ + 'set_directory_path3',
+            ...     location=__test_folder__.path + 'set_directory_path3',
             ...     must_exist=False)
             >>> handler.set_directory_path(new_location)
             True
@@ -2020,7 +2020,7 @@ class Handler(Class):
             Examples:
 
             >>> handler = Handler(
-            ...     __test_folder_path__ + 'set_name', make_directory=True)
+            ...     __test_folder__.path + 'set_name', make_directory=True)
             >>> handler.name = 'set_name_edited'
             >>> handler.is_directory()
             True
@@ -2035,7 +2035,7 @@ class Handler(Class):
             'set_name_edited2'
 
             >>> handler = Handler(
-            ...     __test_folder_path__ + 'set_name.e', must_exist=False)
+            ...     __test_folder__.path + 'set_name.e', must_exist=False)
             >>> handler.content = 'A'
             >>> handler.name = 'set_name.ext'
             >>> handler.is_file()
@@ -2063,14 +2063,14 @@ class Handler(Class):
             Examples:
 
             >>> handler = Handler(
-            ...     __test_folder_path__ + 'set_basename3',
+            ...     __test_folder__.path + 'set_basename3',
             ...     make_directory=True)
             >>> handler.basename = 'set_basename_edited3'
             >>> handler.name
             'set_basename_edited3'
 
             >>> handler = Handler(
-            ...     __test_folder_path__ + 'set_basename4',
+            ...     __test_folder__.path + 'set_basename4',
             ...     make_directory=True)
             >>> handler.set_basename('set_basename_edited4')
             True
@@ -2078,7 +2078,7 @@ class Handler(Class):
             'set_basename_edited4'
 
             >>> handler = Handler(
-            ...     __test_folder_path__ + 'set_basename5.e', must_exist=False)
+            ...     __test_folder__.path + 'set_basename5.e', must_exist=False)
             >>> handler.content = 'A'
             >>> handler.basename = 'set_basename_edited5'
             >>> handler.name
@@ -2104,7 +2104,7 @@ class Handler(Class):
             Examples:
 
             >>> handler = Handler(
-            ...     __test_folder_path__ + 'set_extension.ext',
+            ...     __test_folder__.path + 'set_extension.ext',
             ...     must_exist=False)
             >>> handler.content = 'A'
             >>> handler.extension
@@ -2145,22 +2145,22 @@ class Handler(Class):
             Examples:
 
             >>> handler = Handler(
-            ...     location=__test_folder_path__ + 'set_path',
+            ...     location=__test_folder__.path + 'set_path',
             ...     make_directory=True)
-            >>> handler.path = __test_folder_path__ + 'set_path_moved'
+            >>> handler.path = __test_folder__.path + 'set_path_moved'
             >>> Handler(
-            ...     location=__test_folder_path__ + 'set_path_moved'
+            ...     location=__test_folder__.path + 'set_path_moved'
             ... ).is_directory()
             True
 
             >>> handler = Handler(
-            ...     location=__test_folder_path__ + 'set_path2',
+            ...     location=__test_folder__.path + 'set_path2',
             ...     make_directory=True)
             >>> handler.set_path(
-            ...     target=__test_folder_path__ + 'set_path_moved2')
+            ...     target=__test_folder__.path + 'set_path_moved2')
             True
             >>> Handler(
-            ...     location=__test_folder_path__ + 'set_path_moved2'
+            ...     location=__test_folder__.path + 'set_path_moved2'
             ... ).is_directory()
             True
         '''
@@ -2295,7 +2295,7 @@ class Handler(Class):
             >>> from boostNode.extension.system import Platform
 
             >>> target = Handler(
-            ...     __test_folder_path__ + 'is_symbolic_link',
+            ...     __test_folder__.path + 'is_symbolic_link',
             ...     must_exist=False)
             >>> if Platform().operating_system == 'windows':
             ...     True
@@ -2307,20 +2307,20 @@ class Handler(Class):
             True
 
             >>> file = Handler(
-            ...     __test_folder_path__ + 'is_symbolic_link_not',
+            ...     __test_folder__.path + 'is_symbolic_link_not',
             ...     must_exist=False)
             >>> file.content = ' '
             >>> file.is_symbolic_link()
             False
 
             >>> file = Handler(
-            ...     __test_folder_path__ + 'is_symbolic_link_not2',
+            ...     __test_folder__.path + 'is_symbolic_link_not2',
             ...     make_directory=True)
             >>> file.is_symbolic_link()
             False
 
             >>> file = Handler(
-            ...     location=__test_folder_path__ + 'is_symbolic_link_not3',
+            ...     location=__test_folder__.path + 'is_symbolic_link_not3',
             ...     must_exist=False)
             >>> Handler(location=__file_path__).make_portable_link(
             ...     target=file, force=True)
@@ -2400,7 +2400,7 @@ class Handler(Class):
             False
 
             >>> Handler(
-            ...     location=__test_folder_path__ + 'is_media_audio.mp3'
+            ...     location=__test_folder__.path + 'is_media_audio.mp3'
             ... ).is_media() # doctest: +SKIP
             True
         '''
@@ -2426,7 +2426,7 @@ class Handler(Class):
             False
 
             >>> handler = Handler(
-            ...     __test_folder_path__ + 'is_portable_link',
+            ...     __test_folder__.path + 'is_portable_link',
             ...     must_exist=False)
             >>> if Platform().operating_system == 'windows':
             ...     False
@@ -2441,7 +2441,7 @@ class Handler(Class):
             False
 
             >>> Handler(
-            ...     __test_folder_path__ + 'is_portable_link_not_existing',
+            ...     __test_folder__.path + 'is_portable_link_not_existing',
             ...     must_exist=False
             ... ).is_portable_link()
             False
@@ -2507,7 +2507,7 @@ class Handler(Class):
             True
 
             >>> handler = Handler(
-            ...     location=__test_folder_path__ + 'is_element',
+            ...     location=__test_folder__.path + 'is_element',
             ...     make_directory=True)
             >>> handler.is_element()
             True
@@ -2519,7 +2519,7 @@ class Handler(Class):
             False
 
             >>> Handler(
-            ...     __test_folder_path__ + 'is_element_not_existing',
+            ...     __test_folder__.path + 'is_element_not_existing',
             ...     must_exist=False
             ... ).is_element()
             False
@@ -2545,13 +2545,13 @@ class Handler(Class):
             False
 
             >>> Handler(
-            ...     location=__test_folder_path__ + 'is_device_file',
+            ...     location=__test_folder__.path + 'is_device_file',
             ...     make_directory=True
             ... ).is_device_file()
             False
 
             >>> Handler(
-            ...     __test_folder_path__ + 'is_device_file_not_existing',
+            ...     __test_folder__.path + 'is_device_file_not_existing',
             ...     must_exist=False
             ... ).is_device_file()
             False
@@ -2585,18 +2585,18 @@ class Handler(Class):
             Examples:
 
             >>> handler = Handler(
-            ...     __test_folder_path__ + 'backup', must_exist=False)
+            ...     __test_folder__.path + 'backup', must_exist=False)
             >>> handler.content = ' '
             >>> template = '<%file.basename%>_b<%file.extension_suffix%>'
 
             >>> handler.backup(template) # doctest: +ELLIPSIS
             Object of "Handler" with path "...
-            >>> Handler(__test_folder_path__ + 'backup_b') # doctest: +ELLIPSIS
+            >>> Handler(__test_folder__.path + 'backup_b') # doctest: +ELLIPSIS
             Object of "Handler" with path "...
 
             >>> handler.backup(template) # doctest: +ELLIPSIS
             Object of "Handler" with path "...
-            >>> Handler(__test_folder_path__ + 'backup_b_b').is_file()
+            >>> Handler(__test_folder__.path + 'backup_b_b').is_file()
             True
 
             >>> handler.backup(
@@ -2604,7 +2604,7 @@ class Handler(Class):
             ... ) # doctest: +ELLIPSIS
             Object of "Handler" with path "...
             >>> Handler(
-            ...     __test_folder_path__ + 'backup_b_b_b', must_exist=False
+            ...     __test_folder__.path + 'backup_b_b_b', must_exist=False
             ... ).is_file()
             False
 
@@ -2613,7 +2613,7 @@ class Handler(Class):
             ...     template, backup_if_exists=False
             ... ) # doctest: +ELLIPSIS
             Object of "Handler" with path "...
-            >>> Handler(__test_folder_path__ + 'backup_b_b_b').is_file()
+            >>> Handler(__test_folder__.path + 'backup_b_b_b').is_file()
             True
 
             >>> handler.content = 'B'
@@ -2622,7 +2622,7 @@ class Handler(Class):
             ... ) # doctest: +ELLIPSIS
             Object of "Handler" with path "...
             >>> Handler(
-            ...     __test_folder_path__ + 'backup_b_b_b_b', must_exist=False
+            ...     __test_folder__.path + 'backup_b_b_b_b', must_exist=False
             ... ).is_file()
             False
         '''
@@ -2668,27 +2668,25 @@ class Handler(Class):
             Examples:
 
             >>> handler = Handler(
-            ...     __test_folder_path__ + 'is_equivalent',
+            ...     __test_folder__.path + 'is_equivalent',
             ...     make_directory=True)
             >>> handler.is_equivalent(handler)
             True
 
-            >>> Handler(__test_folder_path__).is_equivalent(
-            ...     __test_folder_path__ + 'test')
+            >>> __test_folder__.is_equivalent(__test_folder__.path + 'test')
             False
 
-            >>> Handler(__test_folder_path__).is_equivalent(
-            ...     Handler(
-            ...         __test_folder_path__ + 'test', make_directory=True))
+            >>> __test_folder__.is_equivalent(Handler(
+            ...     __test_folder__.path + 'test', make_directory=True))
             False
 
-            >>> a = Handler(__test_folder_path__ + 'a', make_directory=True)
-            >>> b = Handler(__test_folder_path__ + 'b', make_directory=True)
+            >>> a = Handler(__test_folder__.path + 'a', make_directory=True)
+            >>> b = Handler(__test_folder__.path + 'b', make_directory=True)
             >>> a_file = Handler(
-            ...     __test_folder_path__ + 'a/test', must_exist=False)
+            ...     __test_folder__.path + 'a/test', must_exist=False)
             >>> a_file.content = 'hans'
             >>> b_file = Handler(
-            ...     __test_folder_path__ + 'b/test', must_exist=False)
+            ...     __test_folder__.path + 'b/test', must_exist=False)
             >>> b_file.content = 'hans'
 
             >>> a.is_equivalent(b)
@@ -2726,7 +2724,7 @@ class Handler(Class):
             '...boostNode...extension'
 
             >>> test_folder = Handler(
-            ...     __test_folder_path__ + 'change', make_directory=True)
+            ...     __test_folder__.path + 'change', make_directory=True)
             >>> test_folder.change_working_directory() # doctest: +ELLIPSIS
             Object of "Handler" with path "...change..." (type: directory)...
             >>> os.getcwd() # doctest: +ELLIPSIS
@@ -2742,7 +2740,7 @@ class Handler(Class):
             Object of "Handler" with path "..." (type: directory).
 
             >>> undefined_object = Handler(
-            ...     __test_folder_path__ + 'change/a', must_exist=False)
+            ...     __test_folder__.path + 'change/a', must_exist=False)
             >>> undefined_object.change_working_directory(
             ...     ) # doctest: +ELLIPSIS
             Object of "Handler" with path "...change..." (type: undefined)...
@@ -2759,7 +2757,7 @@ class Handler(Class):
             Object of "Handler" with path "..." (type: directory).
 
             >>> file = Handler(
-            ...     __test_folder_path__ + 'change/a', must_exist=False)
+            ...     __test_folder__.path + 'change/a', must_exist=False)
             >>> file.content = ' '
             >>> file.change_working_directory() # doctest: +ELLIPSIS
             Object of "Handler" with path "...change..." (type: file)...
@@ -2812,7 +2810,7 @@ class Handler(Class):
             "...file.py..."
 
             >>> not_existing_file = Handler(
-            ...     __test_folder_path__ + 'list_not_existing',
+            ...     __test_folder__.path + 'list_not_existing',
             ...     must_exist=False)
             >>> not_existing_file.list() # doctest: +ELLIPSIS
             <generator object list at ...>
@@ -2822,11 +2820,11 @@ class Handler(Class):
             []
 
             >>> not_accessible_file = Handler(
-            ...     __test_folder_path__ + 'list_not_accessible',
+            ...     __test_folder__.path + 'list_not_accessible',
             ...     make_directory=True)
             >>> not_accessible_file.change_right(000) # doctest: +ELLIPSIS
             Object of "Handler" with path "...
-            >>> list(Handler(__test_folder_path__)) # doctest: +ELLIPSIS
+            >>> list(__test_folder__) # doctest: +ELLIPSIS
             [...]
             >>> not_accessible_file.remove_directory()
             True
@@ -2834,7 +2832,7 @@ class Handler(Class):
             >>> not_accessible_file.content = ' '
             >>> not_accessible_file.change_right(000) # doctest: +ELLIPSIS
             Object of "Handler" with path "...
-            >>> list(Handler(__test_folder_path__)) # doctest: +ELLIPSIS
+            >>> list(__test_folder__) # doctest: +ELLIPSIS
             [...]
             >>> not_accessible_file.remove_file()
             True
@@ -2890,7 +2888,7 @@ class Handler(Class):
             >>> from boostNode.extension.system import Platform
 
             >>> handler = Handler(
-            ...     __test_folder_path__ + 'remove_directory',
+            ...     __test_folder__.path + 'remove_directory',
             ...     make_directory=True)
 
             >>> handler.remove_directory()
@@ -2967,21 +2965,21 @@ class Handler(Class):
             Examples:
 
             >>> handler = Handler(
-            ...     location=__test_folder_path__ + 'move',
+            ...     location=__test_folder__.path + 'move',
             ...     make_directory=True)
             >>> target = Handler(
-            ...     location=__test_folder_path__ + 'move2', must_exist=False)
+            ...     location=__test_folder__.path + 'move2', must_exist=False)
             >>> handler.move(target)
             True
             >>> target.is_directory()
             True
 
             >>> handler = Handler(
-            ...     location=__test_folder_path__ + 'move_file',
+            ...     location=__test_folder__.path + 'move_file',
             ...     must_exist=False)
             >>> handler.content = ' '
             >>> target = Handler(
-            ...     location=__test_folder_path__ + 'move_file2',
+            ...     location=__test_folder__.path + 'move_file2',
             ...     must_exist=False)
             >>> handler.move(target)
             True
@@ -2989,9 +2987,9 @@ class Handler(Class):
             True
 
             >>> Handler(
-            ...     location=__test_folder_path__ + 'move_not_existing',
+            ...     location=__test_folder__.path + 'move_not_existing',
             ...     must_exist=False
-            ... ).move(__test_folder_path__ + 'move_target_not_existing2')
+            ... ).move(__test_folder__.path + 'move_target_not_existing2')
             False
         '''
 ## python3.3
@@ -3037,10 +3035,10 @@ class Handler(Class):
             >>> from boostNode.extension.system import Platform
 
             >>> root = Handler(
-            ...     location=__test_folder_path__ + 'remove_deep',
+            ...     location=__test_folder__.path + 'remove_deep',
             ...     make_directory=True)
             >>> Handler(
-            ...     location=__test_folder_path__ + 'remove_deep/sub_dir',
+            ...     location=__test_folder__.path + 'remove_deep/sub_dir',
             ...     make_directory=True) # doctest: +ELLIPSIS
             Object of "Handler" with path "...remove_deep...sub_dir..."...
             >>> root.remove_deep()
@@ -3105,11 +3103,11 @@ class Handler(Class):
             >>> from boostNode.extension.system import Platform
 
             >>> Handler(location=__file_path__).copy(
-            ...     target=__test_folder_path__ + 'remove_file')
+            ...     target=__test_folder__.path + 'remove_file')
             True
 
             >>> handler = Handler(
-            ...     location=__test_folder_path__ + 'remove_file')
+            ...     location=__test_folder__.path + 'remove_file')
             >>> handler.is_file()
             True
 
@@ -3134,11 +3132,11 @@ class Handler(Class):
             False
 
             >>> source = Handler(
-            ...     __test_folder_path__ +
+            ...     __test_folder__.path +
             ...     'remove_file_soft_link_windows_source',
             ...     make_directory=True)
             >>> target = Handler(
-            ...     __test_folder_path__ +
+            ...     __test_folder__.path +
             ...     'remove_file_soft_link_windows_target',
             ...     must_exist=False)
             >>> if Platform().operating_system == 'windows':
@@ -3210,7 +3208,7 @@ class Handler(Class):
             Examples:
 
             >>> handler = Handler(
-            ...     __test_folder_path__ + 'change_right', must_exist=False)
+            ...     __test_folder__.path + 'change_right', must_exist=False)
             >>> Handler(location=__file_path__).copy(target=handler)
             True
             >>> handler.change_right(right=766) # doctest: +ELLIPSIS
@@ -3222,7 +3220,7 @@ class Handler(Class):
             Object of "Handler" with path "...change_right...
 
             >>> handler = Handler(
-            ...     __test_folder_path__ + 'change_right_folder',
+            ...     __test_folder__.path + 'change_right_folder',
             ...     make_directory=True)
             >>> handler.change_right(right=766) # doctest: +ELLIPSIS
             Object of "Handler" with path "...change_right_folder..." ...
@@ -3267,7 +3265,7 @@ class Handler(Class):
             Examples:
 
             >>> target = Handler(
-            ...     location=__test_folder_path__ + 'copy_file.py',
+            ...     location=__test_folder__.path + 'copy_file.py',
             ...     must_exist=False)
             >>> Handler(location=__file_path__).copy(target)
             True
@@ -3275,10 +3273,10 @@ class Handler(Class):
             True
 
             >>> target = Handler(
-            ...     location=__test_folder_path__ + 'copy_directory2',
+            ...     location=__test_folder__.path + 'copy_directory2',
             ...     must_exist=False)
             >>> Handler(
-            ...     __test_folder_path__ + 'copy_directory',
+            ...     __test_folder__.path + 'copy_directory',
             ...     make_directory=True
             ... ).copy(target)
             True
@@ -3286,7 +3284,7 @@ class Handler(Class):
             True
 
             >>> target.copy(
-            ...     __test_folder_path__ + 'copy_directory3', right=777)
+            ...     __test_folder__.path + 'copy_directory3', right=777)
             True
         '''
 ## python3.3
@@ -3321,7 +3319,7 @@ class Handler(Class):
             Examples:
 
             >>> handler = Handler(
-            ...     __test_folder_path__ + 'make_new_directory',
+            ...     __test_folder__.path + 'make_new_directory',
             ...     must_exist=False)
 
             >>> handler.make_new_directory().path # doctest: +ELLIPSIS
@@ -3370,7 +3368,7 @@ class Handler(Class):
             Examples:
 
             >>> handler = Handler(
-            ...     location=__test_folder_path__ + 'make_directory',
+            ...     location=__test_folder__.path + 'make_directory',
             ...     must_exist=False)
 
             >>> handler.is_element()
@@ -3447,13 +3445,13 @@ class Handler(Class):
             >>> from boostNode.extension.system import Platform
 
             >>> target = Handler(
-            ...     __test_folder_path__ + 'make_symbolic_link_target',
+            ...     __test_folder__.path + 'make_symbolic_link_target',
             ...     must_exist=False)
             >>> if Platform().operating_system == 'windows':
             ...     True
             ... else:
             ...     created = Handler(
-            ...         location=__test_folder_path__ +
+            ...         location=__test_folder__.path +
             ...             'make_symbolic_link_directory_source',
             ...         make_directory=True
             ...     ).make_symbolic_link(target, force=True)
@@ -3461,13 +3459,13 @@ class Handler(Class):
             True
 
             >>> target = Handler(
-            ...     __test_folder_path__ + 'make_symbolic_link_target',
+            ...     __test_folder__.path + 'make_symbolic_link_target',
             ...     must_exist=False)
             >>> if Platform().operating_system == 'windows':
             ...     True
             ... else:
             ...     source = Handler(
-            ...         location=__test_folder_path__ +
+            ...         location=__test_folder__.path +
             ...             'make_symbolic_link_file_source',
             ...         must_exist=False)
             ...     source.content = ' '
@@ -3497,13 +3495,13 @@ class Handler(Class):
             >>> from boostNode.extension.system import Platform
 
             >>> target = Handler(
-            ...     __test_folder_path__ + 'make_hardlink_target',
+            ...     __test_folder__.path + 'make_hardlink_target',
             ...     must_exist=False)
             >>> if Platform().operating_system == 'windows':
             ...     True
             ... else:
             ...     source = Handler(
-            ...         location=__test_folder_path__ + 'make_hardlink_source',
+            ...         location=__test_folder__.path + 'make_hardlink_source',
             ...         must_exist=False)
             ...     source.content = ' '
             ...     created = source.make_hardlink(target, force=True)
@@ -3545,7 +3543,7 @@ class Handler(Class):
 
             >>> source = Handler(location=__file_path__)
             >>> target = Handler(
-            ...     __test_folder_path__ + 'read_symbolic_link',
+            ...     __test_folder__.path + 'read_symbolic_link',
             ...     must_exist=False)
             >>> if Platform().operating_system == 'windows':
             ...     True
@@ -3649,7 +3647,7 @@ class Handler(Class):
             Examples:
 
             >>> handler = Handler(
-            ...     location=__test_folder_path__ + 'deep_copy',
+            ...     location=__test_folder__.path + 'deep_copy',
             ...     make_directory=True)
             >>> Handler(
             ...     location=handler.path + 'sub_dir',
@@ -3663,7 +3661,7 @@ class Handler(Class):
             Object of "Handler" with path "...deep_copy...second_sub_di...
 
             >>> target = Handler(
-            ...     __test_folder_path__ + 'deep_copy_dir', must_exist=False)
+            ...     __test_folder__.path + 'deep_copy_dir', must_exist=False)
             >>> handler.deep_copy(target) # doctest: +ELLIPSIS
             Object of "Handler" with path "...deep_copy..." (type: directory).
             >>> Handler(location=target.path + 'sub_dir').is_directory()
@@ -3709,7 +3707,7 @@ class Handler(Class):
             Examples:
 
             >>> handler = Handler(
-            ...     location=__test_folder_path__ + 'dir/sub_dir/sub_sub_dir',
+            ...     location=__test_folder__.path + 'dir/sub_dir/sub_sub_dir',
             ...     must_exist=False)
             >>> handler.make_directorys()
             True
@@ -3719,7 +3717,7 @@ class Handler(Class):
             True
 
             >>> handler = Handler(
-            ...     location=__test_folder_path__ + 'dir', must_exist=False)
+            ...     location=__test_folder__.path + 'dir', must_exist=False)
             >>> handler.make_directorys()
             True
             >>> handler.path # doctest: +ELLIPSIS
@@ -3757,7 +3755,7 @@ class Handler(Class):
             Examples:
 
             >>> target = Handler(
-            ...     location=__test_folder_path__ + 'link.py',
+            ...     location=__test_folder__.path + 'link.py',
             ...     must_exist=False)
             >>> Handler(location=__file_path__).make_portable_link(
             ...     target, force=True)
@@ -3766,17 +3764,17 @@ class Handler(Class):
             '...portable...'
 
             >>> target = Handler(
-            ...     location=__test_folder_path__ + 'directory_link',
+            ...     location=__test_folder__.path + 'directory_link',
             ...     must_exist=False)
             >>> Handler(
-            ...     __test_folder_path__ + 'directory', make_directory=True
+            ...     __test_folder__.path + 'directory', make_directory=True
             ... ).make_portable_link(target, force=True)
             True
             >>> target.content # doctest: +ELLIPSIS
             '...portable...'
 
             >>> target = Handler(
-            ...     location=__test_folder_path__ + 'link', must_exist=False)
+            ...     location=__test_folder__.path + 'link', must_exist=False)
             >>> Handler(location=__file_path__).make_portable_link(
             ...     target, force=True, label='hans')
             True
@@ -3805,7 +3803,7 @@ class Handler(Class):
             Examples:
 
             >>> target = Handler(
-            ...     location=__test_folder_path__ + 'read_portable_link',
+            ...     location=__test_folder__.path + 'read_portable_link',
             ...     must_exist=False)
 
             >>> handler = Handler(location=__file_path__).make_portable_link(
@@ -3817,7 +3815,7 @@ class Handler(Class):
             >>> target.remove_file()
             True
             >>> handler = Handler(
-            ...     __test_folder_path__ + 'read_portable_link_directory',
+            ...     __test_folder__.path + 'read_portable_link_directory',
             ...     make_directory=True
             ... ).make_portable_link(target, force=True)
             >>> target.read_portable_link(as_object=True) # doctest: +ELLIPSIS
@@ -3851,10 +3849,10 @@ class Handler(Class):
             Examples:
 
             >>> handler = Handler(
-            ...     location=__test_folder_path__ + 'dir', make_directory=True)
+            ...     location=__test_folder__.path + 'dir', make_directory=True)
 
             >>> sub_handler = Handler(
-            ...     location=__test_folder_path__ + 'dir/sub_dir',
+            ...     location=__test_folder__.path + 'dir/sub_dir',
             ...     make_directory=True)
             >>> handler.clear_directory()
             True
@@ -3977,7 +3975,7 @@ class Handler(Class):
             Examples:
 
             >>> handler = Handler(
-            ...     __test_folder_path__ + 'delete_file_patterns',
+            ...     __test_folder__.path + 'delete_file_patterns',
             ...     make_directory=True)
             >>> a_a = Handler(handler.path + 'a.a', must_exist=False)
             >>> a_a.content = 'A'
@@ -4076,7 +4074,7 @@ class Handler(Class):
             Examples:
 
             >>> target = Handler(
-            ...     __test_folder_path__ + '_make_link', make_directory=True)
+            ...     __test_folder__.path + '_make_link', make_directory=True)
             >>> Handler()._make_link(target, symbolic=True)
             False
         '''
@@ -4114,7 +4112,7 @@ class Handler(Class):
             Examples:
 
             >>> target = Handler(
-            ...     __test_folder_path__ + '_is_equivalent_folder',
+            ...     __test_folder__.path + '_is_equivalent_folder',
             ...      must_exist=False)
 
             >>> Handler().copy(target)
@@ -4207,11 +4205,11 @@ class Handler(Class):
             Examples:
 
             >>> Handler(
-            ...     __test_folder_path__ +
+            ...     __test_folder__.path +
             ...     '_handle_path_existence_not_existing',
             ...     must_exist=False
             ... )._handle_path_existence(Handler(
-            ...     __test_folder_path__ +
+            ...     __test_folder__.path +
             ...     '_handle_path_existence_not_existing',
             ...      must_exist=False), False, True, (), {}
             ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
@@ -4307,7 +4305,7 @@ class Handler(Class):
             True
 
             >>> Handler()._set_path(
-            ...     path=__test_folder_path__ + 'set_path_not_existing_file')
+            ...     path=__test_folder__.path + 'set_path_not_existing_file')
             False
 
             >>> handler = Handler()
@@ -4352,24 +4350,24 @@ class Handler(Class):
             ...     True
             ... else:
             ...     Handler(
-            ...         __test_folder_path__ +
+            ...         __test_folder__.path +
             ...         '_make_forced_link_not_existing',
             ...         must_exist=False
             ...     )._make_forced_link(
             ...         True, Handler(
-            ...             __test_folder_path__ + '_make_forced_link_target',
+            ...             __test_folder__.path + '_make_forced_link_target',
             ...             must_exist=False),
             ...         False)
             True
 
             >>> target = Handler(
-            ...     __test_folder_path__ + '_make_forced_link_target',
+            ...     __test_folder__.path + '_make_forced_link_target',
             ...     make_directory=True)
             >>> if Platform().operating_system == 'windows':
             ...     True
             ... else:
             ...     Handler(
-            ...         __test_folder_path__ + '_make_forced_link_source',
+            ...         __test_folder__.path + '_make_forced_link_source',
             ...         make_directory=True
             ...     )._make_forced_link(True ,target, False)
             True
@@ -4423,7 +4421,7 @@ class Handler(Class):
             >>> from boostNode.extension.system import Platform
 
             >>> handler = Handler(
-            ...     __test_folder_path__ + '_make_platform_dependent_link',
+            ...     __test_folder__.path + '_make_platform_dependent_link',
             ...     must_exist=False)
 
             >>> if Platform().operating_system == 'windows':
@@ -4447,7 +4445,7 @@ class Handler(Class):
             True
 
             >>> handler = Handler(
-            ...     __test_folder_path__ +
+            ...     __test_folder__.path +
             ...     '_make_platform_dependent_link_windows',
             ...     must_exist=False)
             >>> if Platform().operating_system == 'windows':

@@ -710,8 +710,13 @@ class Web(Class, Runnable):
 
             Examples:
 
+            >>> sys_argv_backup = copy.copy(sys.argv)
+            >>> sys.argv = sys.argv[:1]
+
             >>> Web.run() # doctest: +ELLIPSIS
             Object of "Web" with root path "...", port "0" and stop order ...
+
+            >>> sys.argv = sys_argv_backup
         '''
         command_line_arguments = CommandLine.argument_parser(
             arguments=self.COMMAND_LINE_ARGUMENTS,
@@ -782,14 +787,14 @@ class Web(Class, Runnable):
             Object of "Web" with root path "...", port "0" and stop order ...
 
             >>> public_key_file = FileHandler(
-            ...     __test_folder_path__ + '_initialize_public_key_file',
+            ...     __test_folder__.path + '_initialize_public_key_file',
             ...     must_exist=False)
             >>> public_key_file.content = ' '
             >>> Web(public_key_file=public_key_file) # doctest: +ELLIPSIS
             Object of "Web" with root path "...", port "0" and stop order ...
 
             >>> Web(
-            ...     public_key_file=__test_folder_path__
+            ...     public_key_file=__test_folder__.path
             ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
@@ -1131,7 +1136,7 @@ class CGIHTTPRequestHandler(
             >>> handler.path = '/'
             >>> handler.server = Class()
             >>> handler.server.web = Web(
-            ...     __test_folder_path__, request_whitelist=('^/?$',))
+            ...     __test_folder__, request_whitelist=('^/?$',))
 
             >>> handler.do_GET() # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "/" and param...
@@ -1144,9 +1149,14 @@ class CGIHTTPRequestHandler(
             >>> handler.server.web.authentication = True
             >>> handler.server.web.authentication_handler = (
             ...     lambda authorization_header, request_uri: False)
-            >>> handler.headers = handler.MessageClass(
-            ...     String('key: value'), seekable=False)
-
+            >>> ## python2.7
+            >>> if sys.version_info.major < 3:
+            ...     handler.headers = handler.MessageClass(
+            ...         String('key: value'), seekable=False)
+            ... else:
+            ...     handler.headers = handler.MessageClass()
+            ...     handler.headers.add_header('key', 'value')
+            >>> ##
             >>> handler.do_GET() # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "" and parame...
 
@@ -1158,7 +1168,7 @@ class CGIHTTPRequestHandler(
             Object of "CGIHTTPRequestHandler" with request uri "/not_existin...
 
             >>> file = FileHandler(
-            ...     __test_folder_path__ + 'do_GET', must_exist=False)
+            ...     __test_folder__ + 'do_GET', must_exist=False)
             >>> file.content = ' '
             >>> handler.path = '/' + file.name
             >>> handler.server.web.request_whitelist = '^/%s$' % file.name,
@@ -1221,6 +1231,7 @@ class CGIHTTPRequestHandler(
             >>> sys_argv_backup = copy.copy(sys.argv)
             >>> handler = CGIHTTPRequestHandler()
             >>> handler.request_parameter_delimiter = '?'
+            >>> sys.argv = sys.argv[:1]
 
             >>> handler.parse_url()
             (None, {})
@@ -1493,24 +1504,40 @@ class CGIHTTPRequestHandler(
             >>> handler.log_message('', 404, '') # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "" and parame...
 
-            >>> handler.log_message(404, '', '') # doctest: +ELLIPSIS
+            >>> handler.log_message('', '', 404) # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "" and parame...
 
-            >>> handler.headers = handler.MessageClass(
-            ...     String('key: value'), seekable=False)
-            >>> handler.log_message(404, '', '') # doctest: +ELLIPSIS
+            >>> ## python2.7
+            >>> if sys.version_info.major < 3:
+            ...     handler.headers = handler.MessageClass(
+            ...         String('key: value'), seekable=False)
+            ... else:
+            ...     handler.headers = handler.MessageClass()
+            ...     handler.headers.add_header('key', 'value')
+            >>> ##
+            >>> handler.log_message('', '', 404) # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "" and parame...
 
-            >>> handler.headers = handler.MessageClass(String(
-            ...     'X-Forwarded-For: 192.168.0.1\\n'
-            ...     'X-Forwarded-Host: 192.168.0.1\\n'
-            ...     'X-Forwarded-Server: 192.168.0.1'), seekable=False)
+            >>> ## python2.7
+            >>> if sys.version_info.major < 3:
+            ...     handler.headers = handler.MessageClass(String(
+            ...         'X-Forwarded-For: 192.168.0.1\\n'
+            ...         'X-Forwarded-Host: 192.168.0.1\\n'
+            ...         'X-Forwarded-Server: 192.168.0.1'), seekable=False)
+            ... else:
+            ...     handler.headers = handler.MessageClass()
+            ...     handler.headers.add_header(
+            ...         'X-Forwarded-For', '192.168.0.1')
+            ...     handler.headers.add_header(
+            ...         'X-Forwarded-Host', '192.168.0.1')
+            ...     handler.headers.add_header(
+            ...         'X-Forwarded-Server', '192.168.0.1')
             >>> __test_buffer__.clear() # doctest: +ELLIPSIS
             '...'
-            >>> handler.log_message(404, '', '') # doctest: +ELLIPSIS
+            >>> handler.log_message('', '', 404) # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "" and parame...
             >>> __test_buffer__.content # doctest: +ELLIPSIS
-            '...192.168.0.1:80  ->  - forwarded for: 192.168.0.1 - forwarded...
+            '...192.168.0.1:80  -> 404 - forwarded for: 192.168.0.1 - forwar...
         '''
         format = (
             '{client_ip}:{client_port} {request_description} -> '
@@ -1574,7 +1601,22 @@ class CGIHTTPRequestHandler(
     @JointPoint
 ## python3.3     def _is_authenticated(self: Self) -> builtins.bool:
     def _is_authenticated(self):
-        '''Determines weather current request is authenticated.'''
+        '''
+            Determines weather current request is authenticated.
+
+            Examples:
+
+            >>> handler = CGIHTTPRequestHandler()
+            >>> handler.server = Class()
+            >>> handler.server.web = Web()
+
+            >>> handler._authentication_location = __test_folder__
+            >>> handler._is_authenticated()
+
+            >>> handler.server.web.authentication = False
+            >>> handler._is_authenticated()
+            True
+        '''
         if self.server.web.authentication:
             while self.server.web.authentication_file_name:
                 file_path = (
@@ -1593,7 +1635,7 @@ class CGIHTTPRequestHandler(
                         'Basic %s' % self._get_login_data(
                             authentication_file))
 ##
-                if self._authentication_location != self.server.web.root:
+                if self._authentication_location == self.server.web.root:
                     break
                 self._authentication_location = FileHandler(
                     location=self._authentication_location.directory_path)
@@ -1605,7 +1647,8 @@ class CGIHTTPRequestHandler(
             return builtins.bool(
                 self.server.web.authentication_handler is None or
                 self.server.web.authentication_handler(
-                    self.headers.getheader('authorization'), self.request_uri))
+                    self.headers.getheader('authorization'),
+                    self.request_uri))
 ##
         return True
 

@@ -66,7 +66,7 @@ class Buffer(Class, logging.StreamHandler):
 
         Examples:
 
-        >>> buffer = Buffer(file=__test_folder_path__ + 'Buffer')
+        >>> buffer = Buffer(file=__test_folder__.path + 'Buffer')
         >>> buffer.clear() # doctest: +ELLIPSIS
         '...'
         >>> print('hans', file=buffer, end='+')
@@ -96,7 +96,7 @@ class Buffer(Class, logging.StreamHandler):
             Examples:
 
             >>> Buffer(
-            ...     file=__test_folder_path__ + '__init__'
+            ...     file=__test_folder__.path + '__init__'
             ... ).file # doctest: +ELLIPSIS
             Object of "Handler" with path "...__init__" ...
 
@@ -147,7 +147,7 @@ class Buffer(Class, logging.StreamHandler):
             >>> repr(Buffer())
             'Object of "Buffer" (memory buffered) with content "".'
 
-            >>> buffer = Buffer(file=__test_folder_path__ + '__repr__')
+            >>> buffer = Buffer(file=__test_folder__.path + '__repr__')
             >>> buffer.write('hans') # doctest: +ELLIPSIS
             Object of "Buffer" (file buffered with "...__repr__" (type: file...
 
@@ -242,7 +242,7 @@ class Buffer(Class, logging.StreamHandler):
 
             Examples:
 
-            >>> buffer = Buffer(file=__test_folder_path__ + 'write')
+            >>> buffer = Buffer(file=__test_folder__.path + 'write')
             >>> buffer.clear() # doctest: +ELLIPSIS
             '...'
             >>> buffer.write('hans') # doctest: +ELLIPSIS
@@ -289,7 +289,7 @@ class Buffer(Class, logging.StreamHandler):
 
             Examples:
 
-            >>> buffer = Buffer(file=__test_folder_path__ + 'clear')
+            >>> buffer = Buffer(file=__test_folder__.path + 'clear')
 
             >>> buffer.clear() # doctest: +ELLIPSIS
             '...'

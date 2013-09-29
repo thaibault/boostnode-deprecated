@@ -216,12 +216,12 @@ class Replace(Class, Runnable):
             'python...'
 
             >>> FileHandler(
-            ...     location=__test_folder_path__ + 'set_new_version',
+            ...     location=__test_folder__.path + 'set_new_version',
             ...     must_exist=False
             ... ).content = ('#!/usr/bin/env version\\n\\n## '
             ...              'alternate_version hans\\npeter\\n')
             >>> replace = Replace(
-            ...     location=__test_folder_path__ + 'set_new_version'
+            ...     location=__test_folder__.path + 'set_new_version'
             ... )._convert_path()
             >>> replace.new_version = '__determine_useful__'
             >>> replace._new_version
@@ -394,7 +394,7 @@ class Replace(Class, Runnable):
             Examples:
 
             >>> file = FileHandler(
-            ...     location=__test_folder_path__ +
+            ...     location=__test_folder__.path +
             ...     '_determine_useful_version_in_location/sub',
             ...     must_exist=False)
             >>> file.make_directorys()
@@ -431,7 +431,7 @@ class Replace(Class, Runnable):
             Examples:
 
             >>> file = FileHandler(
-            ...     __test_folder_path__ + '_determine_useful_version_in_file',
+            ...     __test_folder__.path + '_determine_useful_version_in_file',
             ...     must_exist=False)
             >>> file.content = 'hans\\n## new_version peter\\nklaus\\n'
 
@@ -506,32 +506,32 @@ class Replace(Class, Runnable):
             "file" - the file to be converted.
 
             >>> FileHandler(
-            ...     location=__test_folder_path__ + '_convert_file',
+            ...     location=__test_folder__.path + '_convert_file',
             ...     must_exist=False
             ... ).content = 'hans'
             >>> Replace(
-            ...     location=__test_folder_path__ + '_convert_file',
+            ...     location=__test_folder__.path + '_convert_file',
             ...     _new_version='python3.3'
             ... )._convert_path(
             ... ) # doctest: +ELLIPSIS
             Object of "Replace" with file "..._convert_file" to convert to ...
 
             >>> file = FileHandler(
-            ...     location=__test_folder_path__ + '_convert_file',
+            ...     location=__test_folder__.path + '_convert_file',
             ...     must_exist=False)
             >>> file.content = ('#!/usr/bin/python3.3\\n'
             ...                 '\\n'
             ...                 '## python2.7 hans\\n'
             ...                'AB\\n')
             >>> interpreter = Replace(
-            ...     location=__test_folder_path__ + '_convert_file',
+            ...     location=__test_folder__.path + '_convert_file',
             ...     _new_version='python2.7'
             ... )._convert_path()
             >>> file.content
             '#!/usr/bin/python2.7\\n\\n## python3.3 AB\\nhans\\n'
 
             >>> file = FileHandler(
-            ...     location=__test_folder_path__ + '_convert_file',
+            ...     location=__test_folder__.path + '_convert_file',
             ...     must_exist=False)
             >>> file.content = ('#!/bin/python3.3\\n'
             ...                 '\\n'
@@ -542,14 +542,14 @@ class Replace(Class, Runnable):
             ...                 'D\\n'
             ...                 '##\\n')
             >>> interpreter = Replace(
-            ...     location=__test_folder_path__ + '_convert_file',
+            ...     location=__test_folder__.path + '_convert_file',
             ...     _new_version='python2.7'
             ... )._convert_path()
             >>> file.content
             '#!/bin/python2.7\\n\\n## python3.3\\n## C\\n## D\\nA\\nB\\n##\\n'
 
             >>> file = FileHandler(
-            ...     location=__test_folder_path__ + '_convert_file',
+            ...     location=__test_folder__.path + '_convert_file',
             ...     must_exist=False)
             >>> file.content = ('#!/bin/python2.7\\n'
             ...                 '\\n'
@@ -559,14 +559,14 @@ class Replace(Class, Runnable):
             ...                 '#\\n'
             ...                 '##\\n')
             >>> interpreter = Replace(
-            ...     location=__test_folder_path__ + '_convert_file',
+            ...     location=__test_folder__.path + '_convert_file',
             ...     _new_version='python3.3'
             ... )._convert_path()
             >>> file.content
             '#!/bin/python3.3\\n\\n## python2.7\\n## B\\n## #\\nA\\n##\\n'
 
             >>> file = FileHandler(
-            ...     location=__test_folder_path__ + '_convert_file',
+            ...     location=__test_folder__.path + '_convert_file',
             ...     must_exist=False)
             >>> file.content = ('#!/bin/python3.3\\n'
             ...                 '\\n'
@@ -577,14 +577,14 @@ class Replace(Class, Runnable):
             ...                 'B\\n'
             ...                 '##\\n')
             >>> interpreter = Replace(
-            ...     location=__test_folder_path__ + '_convert_file',
+            ...     location=__test_folder__.path + '_convert_file',
             ...     _new_version='python3.3'
             ... )._convert_path()
             >>> file.content
             '#!/bin/python3.3\\n\\n## python2.7\\n## A\\n##\\n## B\\nB\\n##\\n'
 
             >>> file = FileHandler(
-            ...     location=__test_folder_path__ + '_convert_file',
+            ...     location=__test_folder__.path + '_convert_file',
             ...     must_exist=False)
             >>> file.content = ('#!/bin/python2.7\\n'
             ...                 '\\n'
@@ -595,21 +595,21 @@ class Replace(Class, Runnable):
             ...                 'C\\n'
             ...                 '##\\n')
             >>> interpreter = Replace(
-            ...     location=__test_folder_path__ + '_convert_file',
+            ...     location=__test_folder__.path + '_convert_file',
             ...     _new_version='python3.3'
             ... )._convert_path()
             >>> file.content
             '#!/bin/python3.3\\n\\n## python2.7\\n## B\\n##\\n## C\\nA\\n##\\n'
 
             >>> file = FileHandler(
-            ...     location=__test_folder_path__ + '_convert_file',
+            ...     location=__test_folder__.path + '_convert_file',
             ...     must_exist=False)
             >>> file.content = ('#!/bin/python2.7\\n'
             ...                 '\\n'
             ...                 '## python3.3\\n'
             ...                 'A\\n')
             >>> interpreter = Replace(
-            ...     location=__test_folder_path__ + '_convert_file',
+            ...     location=__test_folder__.path + '_convert_file',
             ...     _new_version='python3.3'
             ... )._convert_path()
             >>> file.content

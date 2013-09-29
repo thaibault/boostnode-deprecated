@@ -1689,9 +1689,8 @@ class CommandLine(builtins.object):
     def test_module(cls, module, temp_file_patterns, verbose):
 ##
         '''Test a given module's doctests.'''
-        test_folder = FileHandler(
+        module['scope'].__test_folder__ = FileHandler(
             location=tempfile.mkdtemp(suffix=module['scope'].__name__))
-        module['scope'].__test_folder_path__ = test_folder.path
         module['scope'].__test__ = cls.determine_wrapped_objects(
             scope=module['scope'])
         module['scope'].__name__ = '__main__'
@@ -1923,7 +1922,8 @@ class CommandLine(builtins.object):
                         inspect.getargspec(initializer).args
                     ) - builtins.len(inspect.getargspec(
                         initializer
-                    ).defaults):], inspect.getargspec(initializer).defaults))
+                    ).defaults):],
+                    inspect.getargspec(initializer).defaults))
                 if scope['__name__'] in parameters:
                     '''
                         Set default value to default value of specified
@@ -2232,7 +2232,7 @@ class CommandLine(builtins.object):
             Examples:
 
             >>> CommandLine._put_documentations_together(
-            ...     __test_folder_path__, inspect.currentframe(), os.getcwd(),
+            ...     __test_folder__.path, inspect.currentframe(), os.getcwd(),
             ...     'not_existing'
             ... ) # doctest: +ELLIPSIS
             <class ...CommandLine...>
@@ -2281,12 +2281,12 @@ class CommandLine(builtins.object):
             Examples:
 
             >>> CommandLine._document_modules(
-            ...     __test_folder_path__, True, (), '', (), 'not_existing'
+            ...     __test_folder__.path, True, (), '', (), 'not_existing'
             ... ) # doctest: +ELLIPSIS
             <class ...CommandLine...>
 
             >>> CommandLine._document_modules(
-            ...     __test_folder_path__, False, (), '', (), 'not_existing'
+            ...     __test_folder__.path, False, (), '', (), 'not_existing'
             ... ) # doctest: +ELLIPSIS
             <class ...CommandLine...>
         '''
@@ -2492,7 +2492,7 @@ class CommandLine(builtins.object):
 
             >>> CommandLine._restore_current_directory(
             ...     clear=False, temp_file_patterns=(),
-            ...     current_directory=__test_folder_path__
+            ...     current_directory=__test_folder__.path
             ... ) # doctest: +ELLIPSIS
             <class ...CommandLine...>
 
@@ -2562,7 +2562,7 @@ class CommandLine(builtins.object):
             Examples:
 
             >>> CommandLine._get_packages(
-            ...     __test_folder_path__, inspect.currentframe())
+            ...     __test_folder__, inspect.currentframe())
             []
         '''
         if(os.getcwd() == current_working_directory_backup or
