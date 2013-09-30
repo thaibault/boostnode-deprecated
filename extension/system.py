@@ -2562,7 +2562,7 @@ class CommandLine(builtins.object):
             Examples:
 
             >>> CommandLine._get_packages(
-            ...     __test_folder__, inspect.currentframe())
+            ...     __test_folder__.path, inspect.currentframe())
             []
         '''
         if(os.getcwd() == current_working_directory_backup or
