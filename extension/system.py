@@ -1704,7 +1704,7 @@ class CommandLine(builtins.object):
         log_level_backup = Logger.default_level
         logger_buffer_backup = Logger.buffer
         '''Set test environment.'''
-        Platform.process_lock_directory = test_folder
+        Platform.process_lock_directory = module['scope'].__test_folder__
         Print.default_buffer = module['scope'].__test_buffer__
         Logger.change_all(
             level=('info',), buffer=(module['scope'].__test_buffer__,))
@@ -1725,7 +1725,7 @@ class CommandLine(builtins.object):
             platform_process_lock_directory_backup
         if not sys.flags.debug:
             cls._clear_temp_files(temp_file_patterns)
-            test_folder.remove_deep()
+            module['scope'].__test_folder__.remove_deep()
         return cls
 
         # endregion

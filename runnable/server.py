@@ -727,7 +727,7 @@ class Web(Class, Runnable):
     @JointPoint(PropertyInitializer)
 ## python3.3
 ##     def _initialize(
-##         self: Self, root='.', host_name='', port=0, default='',
+##         self: Self, root=None, host_name='', port=0, default='',
 ##         public_key_file=None, stop_order='stop', encoding='utf_8',
 ##         request_whitelist=('/.*',), request_blacklist=(),
 ##         same_thread_request_whitelist=(),
@@ -751,7 +751,7 @@ class Web(Class, Runnable):
 ##         directory_listing=True, **keywords: builtins.object
 ##     ) -> Self:
     def _initialize(
-        self, root='.', host_name='', port=0, default='',
+        self, root=None, host_name='', port=0, default='',
         public_key_file=None, stop_order='stop', encoding='utf_8',
         request_whitelist=('/.*',), request_blacklist=(),
         same_thread_request_whitelist=(),
@@ -1168,7 +1168,7 @@ class CGIHTTPRequestHandler(
             Object of "CGIHTTPRequestHandler" with request uri "/not_existin...
 
             >>> file = FileHandler(
-            ...     __test_folder__ + 'do_GET', must_exist=False)
+            ...     __test_folder__.path + 'do_GET', must_exist=False)
             >>> file.content = ' '
             >>> handler.path = '/' + file.name
             >>> handler.server.web.request_whitelist = '^/%s$' % file.name,
@@ -1608,10 +1608,44 @@ class CGIHTTPRequestHandler(
 
             >>> handler = CGIHTTPRequestHandler()
             >>> handler.server = Class()
-            >>> handler.server.web = Web()
+            >>> handler.server.web = Web(__test_folder__)
 
             >>> handler._authentication_location = __test_folder__
             >>> handler._is_authenticated()
+            True
+
+            >>> file = FileHandler(
+            ...     __test_folder__.path + '_is_authenticated',
+            ...     make_directory=True)
+            >>> handler.path = '/' + file.name
+            >>> handler._create_environment_variables()
+            '_is_authenticated'
+            >>> handler._is_authenticated()
+            True
+
+            >>> FileHandler(
+            ...     file.path + '.htpasswd', must_exist=False
+            ... ).content = 'login:password'
+            >>> handler = CGIHTTPRequestHandler()
+            >>> handler.server = Class()
+            >>> handler.server.web = Web(__test_folder__)
+            >>> handler.path = '/' + file.name
+            >>> handler._create_environment_variables()
+            '_is_authenticated'
+            >>> ## python2.7
+            >>> if sys.version_info.major < 3:
+            ...     handler.headers = handler.MessageClass(
+            ...         String('key: value'), seekable=False)
+            ... else:
+            ...     handler.headers = handler.MessageClass()
+            ...     handler.headers.add_header('key', 'value')
+            >>> ##
+            >>> handler._is_authenticated()
+            False
+
+            >>> handler.server.web.authentication_file_name = ''
+            >>> handler._is_authenticated()
+            True
 
             >>> handler.server.web.authentication = False
             >>> handler._is_authenticated()
@@ -1651,6 +1685,8 @@ class CGIHTTPRequestHandler(
                     self.request_uri))
 ##
         return True
+
+    # TODO Stand
 
     @JointPoint
 ## python3.3     def _is_valid_reference(self: Self) -> builtins.bool:

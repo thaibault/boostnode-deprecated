@@ -564,9 +564,7 @@ class Browser(Class, Runnable):
     @JointPoint
 ## python3.3     def _on_qt_load_started(self: Self) -> Self:
     def _on_qt_load_started(self):
-        '''
-            Triggers if browser starts to load a new web page.
-        '''
+        '''Triggers if browser starts to load a new web page.'''
         self.progress_bar.text = ''
         self.progress_bar.setVisible(True)
         return self

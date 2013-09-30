@@ -480,7 +480,7 @@ class ReturnAspect(Class):
                 # region properties
 
         self.class_object = self.object = self.arguments = \
-            self.keywords = self.return_value= self.__func__ = None
+            self.keywords = self.return_value = self.__func__ = None
 
                 # endregion
 
@@ -726,10 +726,17 @@ class PointCut(ReturnAspect):
             Initializes a point cut object for implementing the aspect
             orientated model.
         '''
-        '''Take this method via introspection from super classes.'''
-        builtins.getattr(
-            builtins.super(self.__class__, self), inspect.stack()[0][3]
-        )()
+        '''
+            NOTE: Taking this method via introspection from super classes is
+            too expensive in the highly used area.
+
+            Elegant but expensive version:
+
+            builtins.getattr(
+                builtins.super(self.__class__, self), inspect.stack()[0][3]
+            )()
+        '''
+        ReturnAspect.__init__(self)
 
                 # region properties
 
