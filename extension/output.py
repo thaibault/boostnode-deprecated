@@ -125,7 +125,7 @@ class Buffer(Class, logging.StreamHandler):
                builtins.isinstance(queue, multiprocessing.queues.Queue)):
                 self.queue = queue
         elif file is not None:
-            self.file = FileHandler(location=file, must_exist=False)
+            self.file = FileHandler(location=file)
         '''
             A lock object to guarantee that no other thread read from buffer
             during truncating or writing.

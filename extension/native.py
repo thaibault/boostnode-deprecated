@@ -1588,8 +1588,7 @@ class Module(Object):
             executables.
         '''
         file = FileHandler(
-            location=frame.f_code.co_filename, respect_root_path=True,
-            must_exist=False)
+            location=frame.f_code.co_filename, respect_root_path=True)
         if cls.is_package(path=file.directory_path) or not file:
             if not file:
                 file = FileHandler(
@@ -1631,8 +1630,7 @@ class Module(Object):
         if context_path:
             for search_path in sys.path:
                 location = FileHandler(
-                    location=search_path, must_exist=False,
-                    respect_root_path=False)
+                    location=search_path, respect_root_path=False)
                 if location.is_directory():
                     location = cls._search_library_file(
                         location, context_path, only_source_files)
@@ -1810,7 +1808,7 @@ class Module(Object):
         from boostNode.extension.system import Platform
         results = []
         for module in modules:
-            module_file = FileHandler(location=module + '.' + extension)
+            module_file = FileHandler(location=module + os.extsep + extension)
             results.append(Platform.run(
                 command=program,
                 command_arguments=builtins.list(
@@ -2011,7 +2009,7 @@ class Module(Object):
         file = False
         if module:
             file = FileHandler(
-                location=inspect.getsourcefile(module), must_exist=False,
+                location=inspect.getsourcefile(module),
                 respect_root_path=False)
         if not file:
             if frame is None:
@@ -2021,12 +2019,10 @@ class Module(Object):
                 executables.
             '''
             file = FileHandler(
-                location=frame.f_code.co_filename, respect_root_path=False,
-                must_exist=False)
+                location=frame.f_code.co_filename, respect_root_path=False)
         if not file:
             file = FileHandler(
-                location=sys.argv[0], respect_root_path=False,
-                must_exist=False)
+                location=sys.argv[0], respect_root_path=False)
         return file
 
     @JointPoint(builtins.classmethod)

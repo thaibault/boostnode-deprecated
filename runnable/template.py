@@ -779,8 +779,7 @@ class Parser(Class, Runnable):
 
             Examples:
 
-            >>> file = FileHandler(
-            ...     __test_folder__.path + '_run', must_exist=False)
+            >>> file = FileHandler(__test_folder__.path + '_run')
             >>> file.content = 'hans <%placeholder%>'
             >>> template = Parser(template=file)
             >>> template.substitute(placeholder='also hans')
@@ -931,8 +930,7 @@ class Parser(Class, Runnable):
             Examples:
 
             >>> file = FileHandler(
-            ...     __test_folder__.path + '_load_template.tpl',
-            ...     must_exist=False)
+            ...     __test_folder__.path + '_load_template.tpl')
             >>> file.content = 'hans'
 
             >>> Parser(file).render().output
@@ -951,10 +949,9 @@ class Parser(Class, Runnable):
         if string:
             self.content = template
         else:
-            self.file = FileHandler(location=template, must_exist=False)
+            self.file = FileHandler(location=template)
             if not self.file.is_file():
-                self.file = FileHandler(
-                    location=template + '.tpl', must_exist=False)
+                self.file = FileHandler(location=template + '.tpl')
             if not self.file.is_file():
                 raise __exception__(
                     'No suitable template found with given name "%s" in "%s".',
@@ -979,16 +976,13 @@ class Parser(Class, Runnable):
             Examples:
 
             >>> nested_nested_file = FileHandler(
-            ...     __test_folder__.path  + '_run_template_nested_nested',
-            ...     must_exist=False)
+            ...     __test_folder__.path  + '_run_template_nested_nested')
             >>> nested_nested_file.content = '<% hans'
             >>> nested_file = FileHandler(
-            ...     __test_folder__.path  + '_run_template_nested',
-            ...     must_exist=False)
+            ...     __test_folder__.path  + '_run_template_nested')
             >>> nested_file.content = (
             ...     "<% include('" + nested_nested_file.name + "')")
-            >>> file = FileHandler(
-            ...     __test_folder__.path + '_run_template', must_exist=False)
+            >>> file = FileHandler(__test_folder__.path + '_run_template')
 
             >>> file.content = "<% include('" + nested_nested_file.name + "')"
             >>> Parser(file).render() # doctest: +IGNORE_EXCEPTION_DETAIL

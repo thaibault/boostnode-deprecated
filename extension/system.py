@@ -924,8 +924,7 @@ class Platform(builtins.object):
             Examples:
 
             >>> lock_file = FileHandler(
-            ...     Platform.process_lock_directory.path + 'set_process_lock',
-            ...     must_exist=False)
+            ...     Platform.process_lock_directory.path + 'set_process_lock')
             >>> lock_file.is_file()
             False
             >>> Platform.set_process_lock('set_process')
@@ -947,8 +946,7 @@ class Platform(builtins.object):
         '''
         lock_file = FileHandler(
             location=cls._initialize_process_lock(
-            ).process_lock_directory.path + description + '_lock',
-            must_exist=False)
+            ).process_lock_directory.path + description + '_lock')
         if lock_file:
             return False
         lock_file.content = ' '
@@ -966,8 +964,7 @@ class Platform(builtins.object):
 
             >>> file = FileHandler(
             ...     Platform.process_lock_directory.path +
-            ...     'clear_process_lock',
-            ...     must_exist=False)
+            ...     'clear_process_lock')
             >>> file.content = ' '
             >>> Platform.clear_process_lock('clear_process')
             True
@@ -983,8 +980,7 @@ class Platform(builtins.object):
         '''
         return FileHandler(
             location=cls._initialize_process_lock(
-            ).process_lock_directory.path + description + '_lock',
-            must_exist=False
+            ).process_lock_directory.path + description + '_lock'
         ).remove_file()
 
     @JointPoint(builtins.classmethod)
@@ -1007,8 +1003,7 @@ class Platform(builtins.object):
         '''
         return FileHandler(
             location=cls._initialize_process_lock(
-            ).process_lock_directory.path + description + '_lock',
-            must_exist=False
+            ).process_lock_directory.path + description + '_lock'
         ).is_file()
 
     @JointPoint(builtins.classmethod)
@@ -1137,7 +1132,7 @@ class Platform(builtins.object):
 
             >>> Platform.open(FileHandler('/path/to/file')) # doctest: +SKIP
         '''
-        file = FileHandler(location)
+        file = FileHandler(location, must_exist=True)
         if builtins.hasattr(os, 'startfile'):
             return os.startfile(file)
         shell_file = String(file._path).validate_shell()
@@ -1689,13 +1684,22 @@ class CommandLine(builtins.object):
     def test_module(cls, module, temp_file_patterns, verbose):
 ##
         '''Test a given module's doctests.'''
+        global FileHandler, Buffer
+        context_path = Module.get_context_path(__file_path__)
+        if(Module.get_context_path(module['scope'].__file_path__).startswith(
+            context_path[:context_path.rfind('.')]
+        ) and module['scope'].__name__ == '__main__'):
+            if 'Handler' in module['scope'].__dict__:
+                FileHandler = module['scope'].__dict__[FileHandler.__name__]
+            elif 'Buffer' in module['scope'].__dict__:
+                Buffer = module['scope'].__dict__[Buffer.__name__]
         module['scope'].__test_folder__ = FileHandler(
             location=tempfile.mkdtemp(suffix=module['scope'].__name__))
+        module['scope'].__test_buffer__ = Buffer()
         module['scope'].__test__ = cls.determine_wrapped_objects(
             scope=module['scope'])
         module['scope'].__name__ = '__main__'
         module['scope'].__test_mode__ = True
-        module['scope'].__test_buffer__ = Buffer()
         module['scope'].__test_globals__ = module['scope'].__dict__
         '''Backup old runtime environment.'''
         platform_process_lock_directory_backup = \
@@ -2247,7 +2251,7 @@ class CommandLine(builtins.object):
             current_working_directory_backup, frame
         ):
             package_documentation = FileHandler(
-                location=package.path + documentation_path, must_exist=False)
+                location=package.path + documentation_path)
             if package_documentation:
                 for file in package_documentation:
                     if file.extension == documentation_file_extension:
@@ -2502,9 +2506,7 @@ class CommandLine(builtins.object):
 
             >>> test_folder = FileHandler(
             ...     'temp_restore_current_directory', make_directory=True)
-            >>> FileHandler(
-            ...     test_folder.path + 'file', must_exist=False
-            ... ).content = 'hans'
+            >>> FileHandler(test_folder.path + 'file').content = 'hans'
             >>> __test_buffer__.clear() # doctest: +ELLIPSIS
             '...'
             >>> CommandLine._restore_current_directory(
@@ -2567,20 +2569,21 @@ class CommandLine(builtins.object):
         '''
         if(os.getcwd() == current_working_directory_backup or
            FileHandler(
-               location=frame.f_code.co_filename, must_exist=False
+               location=frame.f_code.co_filename
            ).is_referenced_via_absolute_path()):
             current_working_directory_backup = ''
         else:
             current_working_directory_backup += os.sep
         init_file = FileHandler(
             location=current_working_directory_backup +
-            frame.f_code.co_filename, respect_root_path=False,
-            must_exist=False)
+            frame.f_code.co_filename, respect_root_path=False)
         packages = []
-        for file in FileHandler(location=init_file.directory_path):
+        for file in FileHandler(
+            location=init_file.directory_path, must_exist=True
+        ):
             if Module.is_package(path=file.path):
                 packages.append((file, FileHandler(
-                    location=file.path + init_file.name, must_exist=False)))
+                    location=file.path + init_file.name)))
         return packages
 
     @JointPoint(builtins.classmethod)

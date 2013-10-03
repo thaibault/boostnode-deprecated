@@ -787,8 +787,7 @@ class Web(Class, Runnable):
             Object of "Web" with root path "...", port "0" and stop order ...
 
             >>> public_key_file = FileHandler(
-            ...     __test_folder__.path + '_initialize_public_key_file',
-            ...     must_exist=False)
+            ...     __test_folder__.path + '_initialize_public_key_file')
             >>> public_key_file.content = ' '
             >>> Web(public_key_file=public_key_file) # doctest: +ELLIPSIS
             Object of "Web" with root path "...", port "0" and stop order ...
@@ -1167,8 +1166,7 @@ class CGIHTTPRequestHandler(
             >>> handler.do_GET() # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "/not_existin...
 
-            >>> file = FileHandler(
-            ...     __test_folder__.path + 'do_GET', must_exist=False)
+            >>> file = FileHandler(__test_folder__.path + 'do_GET')
             >>> file.content = ' '
             >>> handler.path = '/' + file.name
             >>> handler.server.web.request_whitelist = '^/%s$' % file.name,
@@ -1623,9 +1621,7 @@ class CGIHTTPRequestHandler(
             >>> handler._is_authenticated()
             True
 
-            >>> FileHandler(
-            ...     file.path + '.htpasswd', must_exist=False
-            ... ).content = 'login:password'
+            >>> FileHandler(file.path + '.htpasswd').content = 'login:password'
             >>> handler = CGIHTTPRequestHandler()
             >>> handler.server = Class()
             >>> handler.server.web = Web(__test_folder__)
@@ -1656,8 +1652,7 @@ class CGIHTTPRequestHandler(
                 file_path = (
                     self._authentication_location.path +
                     self.server.web.authentication_file_name)
-                authentication_file = FileHandler(
-                    location=file_path, must_exist=False)
+                authentication_file = FileHandler(location=file_path)
                 if authentication_file:
 ## python3.3
 ##                     return(
@@ -1686,14 +1681,42 @@ class CGIHTTPRequestHandler(
 ##
         return True
 
-    # TODO Stand
-
     @JointPoint
 ## python3.3     def _is_valid_reference(self: Self) -> builtins.bool:
     def _is_valid_reference(self):
         '''
             Checks weather the requested is one of a python module-, static- or
             dynamic file request. Returns "True" if so and "False" otherwise.
+
+            Examples:
+
+            >>> handler = CGIHTTPRequestHandler()
+            >>> handler.server = Class()
+            >>> handler.server.web = Web(__test_folder__)
+
+            >>> handler.requested_file = FileHandler(
+            ...     __test_folder__.path + '_is_valid_reference')
+            >>> handler.path = handler.requested_file.name
+            >>> handler._is_valid_reference()
+            False
+
+            >>> handler.requested_file.make_directory()
+            True
+            >>> handler._is_valid_reference()
+            True
+
+            >>> handler.requested_file = FileHandler(
+            ...     handler.requested_file.path +
+            ...     handler.server.web.authentication_file_name)
+            >>> handler.requested_file.content = 'hans:hans'
+            >>> handler._is_valid_reference()
+            False
+
+            >>> handler.requested_file = None
+            >>> handler.server.web.module_loading = True
+            >>> handler.path = 'doctest'
+            >>> handler._is_valid_reference()
+            True
         '''
         if self.requested_file:
             patterns = self.server.web.dynamic_mime_type_pattern + \
@@ -1722,9 +1745,7 @@ class CGIHTTPRequestHandler(
         '''
         return builtins.bool(self.load_module or self._check_pattern(
             self.server.web.dynamic_mime_type_pattern,
-            FileHandler(
-                location=self.server.web.root.path + self.requested_file_name
-            ).mime_type))
+            self.requested_file.mime_type))
 
             # endregion
 
@@ -1804,13 +1825,40 @@ class CGIHTTPRequestHandler(
         '''
             Determines all needed environment variables needed to determine
             given post data with cgi module.
+
+            Examples:
+
+            >>> handler = CGIHTTPRequestHandler()
+            >>> handler.server = Class()
+            >>> handler.server.web = Web(__test_folder__)
+            >>> ## python2.7
+            >>> if sys.version_info.major < 3:
+            ...     handler.headers = handler.MessageClass(
+            ...         String('Content-Type: text/plain'), seekable=False)
+            ... else:
+            ...     handler.headers = handler.MessageClass()
+            ...     handler.headers.add_header('Content-Type', 'text/plain')
+            >>> ##
+            >>> handler.command = ''
+
+            >>> handler._determine_environment_variables() # doctest: +ELLIPSIS
+            {'...': '...'}
+
+            >>> ## python2.7
+            >>> if sys.version_info.major < 3:
+            ...     handler.headers = handler.MessageClass(
+            ...         String(
+            ...             'accept: text/plain\\nContent-Type: text/plain'
+            ...         ), seekable=False)
+            ... else:
+            ...     handler.headers.add_header('accept: text/plain')
+            >>> ##
+            >>> handler._determine_environment_variables() # doctest: +ELLIPSIS
+            {'...': '...'}
         '''
         accept = []
         for line in self.headers.getallmatchingheaders('accept'):
-            if line[:1] in "\t\n\r ":
-                accept.append(line.strip())
-            else:
-                accept = accept + line[7:].split(',')
+            accept = accept + line[7:].split(',')
         variables = copy.deepcopy(os.environ)
 ## python3.3         content_type = self.headers.get_content_type()
         content_type = self.headers.getheader('content-type')
@@ -1863,15 +1911,48 @@ class CGIHTTPRequestHandler(
 
     @JointPoint
 ## python3.3
-##     def _send_no_file_error(self: Self, valid_request=True) -> Self:
-    def _send_no_file_error(self, valid_request=True):
+##     def _send_no_file_error(
+##         self: Self, valid_request=True, debug=False
+##     ) -> Self:
+    def _send_no_file_error(self, valid_request=True, debug=False):
 ##
         '''
             Generates a http-404-error if no useful file was found for
             responding.
+
+            Examples:
+
+            >>> handler = CGIHTTPRequestHandler()
+            >>> handler.server = Class()
+            >>> handler.server.web = Web(__test_folder__)
+
+            >>> handler.path = '/'
+            >>> handler.requested_file = __test_folder__
+            >>> handler._send_no_file_error(debug=True) # doctest: +ELLIPSIS
+            Object of "CGIHTTPRequestHandler" with request uri "" and parame...
+
+            >>> handler.server.web.module_loading = ''
+            >>> handler._send_no_file_error(debug=True) # doctest: +ELLIPSIS
+            Object of "CGIHTTPRequestHandler" with request uri "" and parame...
+
+            >>> handler.server.web.module_loading = True
+            >>> handler._send_no_file_error(debug=True) # doctest: +ELLIPSIS
+            Object of "CGIHTTPRequestHandler" with request uri "" and parame...
+
+            >>> handler.path = ''
+            >>> handler._send_no_file_error(debug=True) # doctest: +ELLIPSIS
+            Object of "CGIHTTPRequestHandler" with request uri "" and parame...
+
+            >>> handler.requested_file = FileHandler(
+            ...     __test_folder__.path + '_send_no_file_error')
+            >>> handler.requested_file.content = ''
+            >>> handler._send_no_file_error(
+            ...     False, debug=True
+            ... ) # doctest: +ELLIPSIS
+            Object of "CGIHTTPRequestHandler" with request uri "" and parame...
         '''
         error_message = 'Requested file not found'
-        if __logger__.isEnabledFor(logging.DEBUG) or sys.flags.debug:
+        if __logger__.isEnabledFor(logging.DEBUG) or sys.flags.debug or debug:
             error_message = (
                 'Eather none of the following default module names "%s" nor '
                 'none of the following default file name pattern "%s" found' %
@@ -1894,8 +1975,7 @@ class CGIHTTPRequestHandler(
                 error_message = (
                     'No accessible file "%s" found' %
                     FileHandler(
-                        location=self.server.web.root.path + self.path,
-                        must_exist=False
+                        location=self.server.web.root.path + self.path
                     )._path)
             if not valid_request:
                 error_message = (
@@ -1967,7 +2047,7 @@ class CGIHTTPRequestHandler(
                 self.path = ''
             self.parameter = match.group('parameter')
         self.requested_file = FileHandler(
-            location=self.server.web.root.path + self.path, must_exist=False)
+            location=self.server.web.root.path + self.path)
         self._authentication_location = self.server.web.root
         if self.requested_file:
             self._authentication_location = self.requested_file
@@ -1975,6 +2055,8 @@ class CGIHTTPRequestHandler(
                 self._authentication_location = FileHandler(
                     location=self.requested_file.directory_path)
         return self.path
+
+# TODO STAND
 
     @JointPoint
 ## python3.3
@@ -2055,8 +2137,7 @@ class CGIHTTPRequestHandler(
             __logger__.info(
                 'Determine "%s" as default module.', self.server.web.default)
         self.requested_file = FileHandler(
-            location=self.server.web.root.path + self.server.web.default,
-            must_exist=False)
+            location=self.server.web.root.path + self.server.web.default)
         if self.requested_file:
             __logger__.info(
                 'Determine "%s" as default file.', self.server.web.default)

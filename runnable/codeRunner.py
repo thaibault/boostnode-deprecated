@@ -208,8 +208,7 @@ class Run(Class, Runnable):
 
             Examples:
 
-            >>> file = FileHandler(
-            ...     __test_folder__.path + '__repr__.py', must_exist=False)
+            >>> file = FileHandler(__test_folder__.path + '__repr__.py')
             >>> file.content = '#!/usr/bin/env python'
             >>> repr(Run(code_file_path=file)) # doctest: +ELLIPSIS
             'Object of "Run" with detected path "...__repr__.py".'
@@ -322,8 +321,7 @@ class Run(Class, Runnable):
             >>> garbage = FileHandler(
             ...     __test_folder__.path + 'temp_tidy_up', make_directory=True)
             >>> file = FileHandler(
-            ...     __test_folder__.path + '_tidy_up_runnable.py',
-            ...     must_exist=False)
+            ...     __test_folder__.path + '_tidy_up_runnable.py')
             >>> file.content = '#!/usr/bin/env python'
             >>> run = Run(file)
             >>> run # doctest: +ELLIPSIS
@@ -359,12 +357,10 @@ class Run(Class, Runnable):
 
             >>> __test_buffer__.clear() # doctest: +ELLIPSIS
             '...'
-            >>> FileHandler(__test_folder__.path).clear_directory()
+            >>> __test_folder__.clear_directory()
             True
 
-            >>> file = FileHandler(
-            ...     __test_folder__.path + '_run_commands.py',
-            ...     must_exist=False)
+            >>> file = FileHandler(__test_folder__.path + '_run_commands.py')
             >>> file.content = '#!/usr/bin/env python'
             >>> file.change_right(700) # doctest: +ELLIPSIS
             Object of "Handler" with path "..._run_commands.py" and initiall...
@@ -395,11 +391,10 @@ class Run(Class, Runnable):
             Examples:
 
             >>> file = FileHandler(
-            ...     __test_folder__.path + '_check_code_manager.py',
-            ...     must_exist=False)
+            ...     __test_folder__.path + '_check_code_manager.py')
             >>> file.content = '#!/usr/bin/env python'
             >>> FileHandler(
-            ...     __test_folder__.path + '__init__.py', must_exist=False
+            ...     __test_folder__.path + '__init__.py'
             ... ).content = '#!/usr/bin/env python'
             >>> run = Run(code_file_path=file)
             >>> __test_buffer__.clear() # doctest: +ELLIPSIS
@@ -418,8 +413,7 @@ class Run(Class, Runnable):
             file_path = self\
                 ._current_code['properties']['code_manager']['file_path']
             self.code_manager_file = FileHandler(
-                location=self._code_file.directory_path + file_path,
-                must_exist=False)
+                location=self._code_file.directory_path + file_path)
             if self.code_manager_file:
                 self._current_commands.update(
                     self._current_code['properties']['code_manager'][
@@ -442,7 +436,7 @@ class Run(Class, Runnable):
 
             Examples:
 
-            >>> FileHandler('temp_run_main.py', must_exist=False).content = ' '
+            >>> FileHandler('temp_run_main.py').content = ' '
             >>> run = Run()
 
             >>> run._determine_code_file(path='') # doctest: +ELLIPSIS
@@ -459,7 +453,7 @@ class Run(Class, Runnable):
         if path:
             if not self._command_line_arguments:
                 self._command_line_arguments = sys.argv[2:]
-            code_file = FileHandler(location=path, must_exist=False)
+            code_file = FileHandler(location=path)
             if not (code_file.is_file() and
                     self._find_informations_by_extension(
                         extension=code_file.extension, code_file=code_file)):
@@ -485,9 +479,8 @@ class Run(Class, Runnable):
 
             >>> code_file = FileHandler(
             ...     __test_folder__.path +
-            ...     '_find_informations_by_extension.py',
-            ...     must_exist=False)
-            >>> FileHandler('temp_run_main.py', must_exist=False).content = ' '
+            ...     '_find_informations_by_extension.py')
+            >>> FileHandler('temp_run_main.py').content = ' '
             >>> run = Run()
 
             >>> run._find_informations_by_extension(
@@ -520,10 +513,9 @@ class Run(Class, Runnable):
             Examples:
 
             >>> file = FileHandler(
-            ...     __test_folder__.path + '_search_supported_file_by_path.py',
-            ...     must_exist=False)
+            ...     __test_folder__.path + '_search_supported_file_by_path.py')
             >>> file.content = '#!/usr/bin/env python'
-            >>> FileHandler('temp_run_main.py', must_exist=False).content = ' '
+            >>> FileHandler('temp_run_main.py').content = ' '
             >>> run = Run()
 
             >>> run._search_supported_file_by_path(
@@ -542,14 +534,13 @@ class Run(Class, Runnable):
         self_file = FileHandler(
             location=inspect.currentframe().f_code.co_filename,
             respect_root_path=False)
-        location = FileHandler(location=path, must_exist=False)
+        location = FileHandler(location=path)
         for name, properties in self.SUPPORTED_CODES.items():
             for extension in properties['extensions']:
                 for code_file in (FileHandler(
-                        location=location.path + '.' + extension,
-                        must_exist=False),
-                    FileHandler(
-                        location=location.path + extension, must_exist=False)):
+                        location=location.path + '.' + extension),
+                    FileHandler(location=location.path + extension)
+                ):
 ## python3.3
 ##                     if code_file.is_file() and code_file != self_file:
                     if code_file.is_file() and not (code_file == self_file):
@@ -575,10 +566,9 @@ class Run(Class, Runnable):
 
             >>> file = FileHandler(
             ...     __test_folder__.path +
-            ...     '_search_supported_file_by_directoryMain.py',
-            ...     must_exist=False)
+            ...     '_search_supported_file_by_directoryMain.py')
             >>> file.content = ' '
-            >>> FileHandler('temp_run_main.py', must_exist=False).content = ' '
+            >>> FileHandler('temp_run_main.py').content = ' '
 
             >>> Run()._search_supported_file_by_directory(
             ...     FileHandler(__test_folder__.path), 'py'
@@ -615,7 +605,7 @@ class Run(Class, Runnable):
 
             Examples:
 
-            >>> FileHandler('temp_run_main.py', must_exist=False).content = ' '
+            >>> FileHandler('temp_run_main.py').content = ' '
             >>> run = Run()
             >>> supported_codes_backup = copy.copy(run.SUPPORTED_CODES)
 
@@ -653,7 +643,7 @@ class Run(Class, Runnable):
 
             >>> __test_buffer__.clear() # doctest: +ELLIPSIS
             '...'
-            >>> FileHandler('temp_run_main.py', must_exist=False).content = ' '
+            >>> FileHandler('temp_run_main.py').content = ' '
             >>> run = Run()
 
             >>> run._run_command('list', 'ls') # doctest: +SKIP
@@ -693,7 +683,7 @@ class Run(Class, Runnable):
             >>> log_level_backup = Logger.default_level
             >>> Logger.change_all(level=('error',))
             <class 'boostNode.extension.output.Logger'>
-            >>> FileHandler('temp_run_main.py', must_exist=False).content = ' '
+            >>> FileHandler('temp_run_main.py').content = ' '
 
             >>> Run()._log_command_run(
             ...     'test', 'test', {
@@ -739,7 +729,7 @@ class Run(Class, Runnable):
 
             Examples:
 
-            >>> FileHandler('temp_run_main.py', must_exist=False).content = ' '
+            >>> FileHandler('temp_run_main.py').content = ' '
 
             >>> __test_globals__['__test_mode__'] = False
             >>> Run()
@@ -780,9 +770,8 @@ class Run(Class, Runnable):
             Examples:
 
             >>> code_file = FileHandler(
-            ...     location=__test_folder__.path + '_render_properties.cpp',
-            ...     must_exist=False)
-            >>> FileHandler('temp_run_main.py', must_exist=False).content = ' '
+            ...     location=__test_folder__.path + '_render_properties.cpp')
+            >>> FileHandler('temp_run_main.py').content = ' '
             >>> run = Run()
 
             >>> run._render_properties({

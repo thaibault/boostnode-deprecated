@@ -191,9 +191,7 @@ class Reflector(Class, Runnable):
 
             Examples:
 
-            >>> file = FileHandler(
-            ...     location=__test_folder__.path + 'source5',
-            ...     must_exist=False)
+            >>> file = FileHandler(location=__test_folder__.path + 'source5')
             >>> file.make_directorys()
             True
 
@@ -206,7 +204,7 @@ class Reflector(Class, Runnable):
             False
         '''
         for path in paths:
-            if(FileHandler(location=path, must_exist=False).path in
+            if(FileHandler(location=path).path in
                search.path):
                 return True
         return False
@@ -232,7 +230,7 @@ class Reflector(Class, Runnable):
             Examples:
 
             >>> FileHandler(
-            ...     __test_folder__.path + 's/A/B', must_exist=False
+            ...     __test_folder__.path + 's/A/B'
             ... ).make_directorys()
             True
 
@@ -330,10 +328,10 @@ class Reflector(Class, Runnable):
             handle symbolic and portable links.
         '''
         for file in files:
-            file = FileHandler(location=file, must_exist=False)
+            file = FileHandler(location=file)
             if file.is_portable_link():
                 referenced_file = FileHandler(
-                    location=file.read_portable_link(), must_exist=False)
+                    location=file.read_portable_link())
                 if referenced_file:
                     Platform.open(location=referenced_file)
                     return self
@@ -363,43 +361,34 @@ class Reflector(Class, Runnable):
             '...source..." and target path "...target...". Limit...'
 
             >>> FileHandler(
-            ...     location=__test_folder__.path + 'source/A/B/C',
-            ...     must_exist=False
+            ...     location=__test_folder__.path + 'source/A/B/C'
             ... ).make_directorys()
             True
             >>> FileHandler(
-            ...     location=__test_folder__.path + 'source/B/A/B/C',
-            ...     must_exist=False
+            ...     location=__test_folder__.path + 'source/B/A/B/C'
             ... ).make_directorys()
             True
             >>> FileHandler(
-            ...     location=__test_folder__.path + 'source/B/B/C',
-            ...     must_exist=False
+            ...     location=__test_folder__.path + 'source/B/B/C'
             ... ).make_directorys()
             True
             >>> FileHandler(
-            ...     location=__test_folder__.path + 'source/A/a.txt',
-            ...     must_exist=False
+            ...     location=__test_folder__.path + 'source/A/a.txt'
             ... ).content = 'hans'
             >>> FileHandler(
-            ...     location=__test_folder__.path + 'source/A/b.txt',
-            ...     must_exist=False
+            ...     location=__test_folder__.path + 'source/A/b.txt'
             ... ).content = 'hans'
             >>> FileHandler(
-            ...     location=__test_folder__.path + 'source/A/B/C/a.txt',
-            ...     must_exist=False
+            ...     location=__test_folder__.path + 'source/A/B/C/a.txt'
             ... ).content = 'hans'
             >>> FileHandler(
-            ...     location=__test_folder__.path + 'source/B/B/C/a.txt',
-            ...     must_exist=False
+            ...     location=__test_folder__.path + 'source/B/B/C/a.txt'
             ... ).content = 'hans'
             >>> FileHandler(
-            ...     location=__test_folder__.path + 'source/B/A/B/c.txt',
-            ...     must_exist=False
+            ...     location=__test_folder__.path + 'source/B/A/B/c.txt'
             ... ).content = 'hans'
             >>> FileHandler(
-            ...     location=__test_folder__.path + 'source/B/A/B/C/big.txt',
-            ...     must_exist=False
+            ...     location=__test_folder__.path + 'source/B/A/B/C/big.txt'
             ... ).content = 100 * '10bytes - '
             >>> reflector = Reflector(
             ...     source_location=__test_folder__.path + 'source',
@@ -550,13 +539,11 @@ class Reflector(Class, Runnable):
             ... ) # doctest: +ELLIPSIS
             Object of "Handler" with path "...source2..." (type: directory).
             >>> FileHandler(
-            ...     location=__test_folder__.path + 'target2/new_folder',
-            ...     must_exist=False
+            ...     location=__test_folder__.path + 'target2/new_folder'
             ... ).make_directorys() # doctest: +ELLIPSIS
             True
             >>> FileHandler(
-            ...     location=__test_folder__.path + 'target2/new_file.txt',
-            ...     must_exist=False
+            ...     location=__test_folder__.path + 'target2/new_file.txt'
             ... ).content = 'hans'
             >>> reflector = Reflector(
             ...     source_location=__test_folder__.path + 'source2',
@@ -587,22 +574,18 @@ class Reflector(Class, Runnable):
             0
 
             >>> FileHandler(
-            ...     location=__test_folder__.path + 'source3/A/B/C',
-            ...     must_exist=False
+            ...     location=__test_folder__.path + 'source3/A/B/C'
             ... ).make_directorys()
             True
             >>> FileHandler(
-            ...     location=__test_folder__.path + 'source3/B/A/B/C',
-            ...     must_exist=False
+            ...     location=__test_folder__.path + 'source3/B/A/B/C'
             ... ).make_directorys()
             True
             >>> file = FileHandler(
-            ...     location=__test_folder__.path + 'source3/A/B/C/test.txt',
-            ...     must_exist=False)
+            ...     location=__test_folder__.path + 'source3/A/B/C/test.txt')
             >>> file.content = ((int(file.BLOCK_SIZE_IN_BYTE) + 1) * 'A')
             >>> FileHandler(
-            ...     location=__test_folder__.path + 'source3/A/delete_it.txt',
-            ...     must_exist=False
+            ...     location=__test_folder__.path + 'source3/A/delete_it.txt'
             ... ).content = 'hans'
             >>> source_ignore = FileHandler(
             ...     location=__test_folder__.path + 'source3/ignore',
@@ -625,8 +608,7 @@ class Reflector(Class, Runnable):
             ... ).remove_file()
             True
             >>> target_ignore = FileHandler(
-            ...     location=__test_folder__.path + 'target3/ignore',
-            ...     must_exist=False)
+            ...     location=__test_folder__.path + 'target3/ignore')
             >>> target_ignore.is_element()
             False
             >>> target_ignore.make_directory()
@@ -647,8 +629,7 @@ class Reflector(Class, Runnable):
             >>> file.content == ((int(file.BLOCK_SIZE_IN_BYTE) + 1) * 'A')
             True
             >>> FileHandler(
-            ...     location=__test_folder__.path + 'source3/A/delete_it.txt',
-            ...     must_exist=False
+            ...     location=__test_folder__.path + 'source3/A/delete_it.txt'
             ... ).is_element()
             False
             >>> target_ignore.is_element()
@@ -743,9 +724,7 @@ class Reflector(Class, Runnable):
             ...
             boostNode.extension.native.FileError: Invalid path "...
 
-            >>> FileHandler(
-            ...     __test_folder__.path + 's/A/B', must_exist=False
-            ... ).make_directorys()
+            >>> FileHandler(__test_folder__.path + 's/A/B').make_directorys()
             True
 
             >>> Reflector(
@@ -817,7 +796,8 @@ class Reflector(Class, Runnable):
         self._files = []
         self._priority_files = []
         '''Defines source and target objects for there locations.'''
-        self.source_location = FileHandler(location=self.source_location)
+        self.source_location = FileHandler(
+            location=self.source_location, must_exist=True)
         self.target_location = FileHandler(
             location=self.target_location, make_directory=True,
             right=self.target_rights)
@@ -939,8 +919,7 @@ class Reflector(Class, Runnable):
             Examples:
 
             >>> FileHandler(
-            ...     location=__test_folder__.path + 'source4/A/B/C',
-            ...     must_exist=False
+            ...     location=__test_folder__.path + 'source4/A/B/C'
             ... ).make_directorys()
             True
             >>> reflector = Reflector(
@@ -961,7 +940,7 @@ class Reflector(Class, Runnable):
         '''
         paths = builtins.list(paths)
         for index, path in builtins.enumerate(paths):
-            path = FileHandler(location=path).path
+            path = FileHandler(location=path, must_exist=True).path
             paths[index] = path
             if not self.source_location.path in path:
                 raise __exception__(
@@ -1023,7 +1002,8 @@ class Reflector(Class, Runnable):
             if Platform.check_thread():
                 return self
             source = FileHandler(
-                location=self.source_location.path + relative_path)
+                location=self.source_location.path + relative_path,
+                must_exist=True)
             self._edited_number_of_files += 1
             if(self.limit >= size or
                size <= source.dummy_size and not self.use_native_symlinks or
@@ -1112,8 +1092,7 @@ class Reflector(Class, Runnable):
                ):
                 relocated = FileHandler(
                     location=self.source_location.path + file.path[
-                        builtins.len(self.target_location.path):],
-                    must_exist=False)
+                        builtins.len(self.target_location.path):])
                 if not relocated.is_file():
                     return self._relocate_missing_file(relocated, linked_path)
             return False
@@ -1137,7 +1116,7 @@ class Reflector(Class, Runnable):
             otherwise.
         '''
         relocated_directory_path = FileHandler(
-            location=relocated.directory_path, must_exist=False)
+            location=relocated.directory_path)
         if not relocated_directory_path.is_directory():
             __logger__.info(
                 'Create directory path "%s" for relocation of "%s".',
@@ -1172,8 +1151,7 @@ class Reflector(Class, Runnable):
             target_path_len = builtins.len(self.target_location.path)
             source_file = FileHandler(
                 location=self.source_location.path + file.path[
-                    target_path_len:],
-                must_exist=False)
+                    target_path_len:])
             if file.is_symbolic_link():
                 return self._copy_link_in_cache_to_source(
                     source_file, file, target_path_len)
@@ -1220,8 +1198,7 @@ class Reflector(Class, Runnable):
         if link.path[:target_path_len] == self.target_location.path:
             new_link = FileHandler(
                 location=self.source_location.path + link.path[
-                    target_path_len:],
-                must_exist=False)
+                    target_path_len:])
 ## python3.3
 ##             if(not source_file.is_symbolic_link() or
 ##                 source_file.read_symbolic_link(as_object=True) != new_link
@@ -1274,8 +1251,7 @@ class Reflector(Class, Runnable):
            ):
             target = FileHandler(
                 location=self.target_location.path +
-                file.path[builtins.len(self.source_location.path):],
-                must_exist=False)
+                file.path[builtins.len(self.source_location.path):])
             if(file.is_directory() and not target.is_directory() or
                 file.is_file() and not target.is_file()
                ):
@@ -1308,8 +1284,7 @@ class Reflector(Class, Runnable):
            ):
             return self._handle_source_element(
                 source_file=file,
-                target_file=FileHandler(
-                    location=target.path + file.name, must_exist=False),
+                target_file=FileHandler(location=target.path + file.name),
                 priority=(priority or self.is_path_in_paths(
                     search=file, paths=self.priority_locations)))
         __logger__.info('Ignore exclude location: "%s".', file.path)
@@ -1386,8 +1361,7 @@ class Reflector(Class, Runnable):
             '''
             new_link = FileHandler(
                 location=self.target_location.path + link.path[
-                    source_path_len:],
-                must_exist=False)
+                    source_path_len:])
             __logger__.info(
                 'Link "%s" to "%s".', target_file.path, new_link.path)
             return new_link.make_symbolic_link(

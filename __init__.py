@@ -335,8 +335,7 @@ def __get_all_modules__(path=sys.path[0]):
         >>> location = FileHandler(
         ...     __test_folder__.path + '__get_all_modules__',
         ...     make_directory=True)
-        >>> a = FileHandler(
-        ...     location.path + 'a.py', must_exist=False)
+        >>> a = FileHandler(location.path + 'a.py')
         >>> a.content = ' '
         >>> FileHandler(
         ...     location.path + 'b.pyc', make_directory=True
