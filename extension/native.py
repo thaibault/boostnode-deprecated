@@ -1492,7 +1492,7 @@ class Module(Object):
     @Class.pseudo_property
 ## python3.3
 ##     def get_context_path(
-##         cls: SelfClass, frame=inspect.currentframe(), path=None
+##         cls: SelfClass, path=None, frame=inspect.currentframe(),
 ##     ) -> builtins.str:
     def get_context_path(cls, path=None, frame=inspect.currentframe()):
 ##

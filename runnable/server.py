@@ -530,10 +530,10 @@ class Web(Class, Runnable):
              'action': 'store_true',
              'default': False,
              'required': False,
-             'help': 'Enables module loading via get query. '
-                     'Enabling this feature can slow down your request '
-                     'performance extremely. Note that self module loading '
-                     'via "__main__" is independently possible.',
+             'help': 'Enables module loading via get query. Enabling this '
+                     'feature can slow down your request performance '
+                     'extremely. Note that self module loading via "__main__" '
+                     'is independently possible.',
              'dest': 'module_loading'}},
         {'arguments': ('-z', '--disable-directory-listing'),
          'keywords': {
@@ -1841,7 +1841,9 @@ class CGIHTTPRequestHandler(
             >>> ##
             >>> handler.command = ''
 
-            >>> handler._determine_environment_variables() # doctest: +ELLIPSIS
+            >>> dict(
+            ...     handler._determine_environment_variables()
+            ... ) # doctest: +ELLIPSIS
             {'...': '...'}
 
             >>> ## python2.7
@@ -1851,9 +1853,11 @@ class CGIHTTPRequestHandler(
             ...             'accept: text/plain\\nContent-Type: text/plain'
             ...         ), seekable=False)
             ... else:
-            ...     handler.headers.add_header('accept: text/plain')
+            ...     handler.headers.add_header('accept', 'text/plain')
             >>> ##
-            >>> handler._determine_environment_variables() # doctest: +ELLIPSIS
+            >>> dict(
+            ...     handler._determine_environment_variables()
+            ... ) # doctest: +ELLIPSIS
             {'...': '...'}
         '''
         accept = []
@@ -2056,8 +2060,6 @@ class CGIHTTPRequestHandler(
                     location=self.requested_file.directory_path)
         return self.path
 
-# TODO STAND
-
     @JointPoint
 ## python3.3
 ##     def _set_dynamic_or_static_get(
@@ -2065,7 +2067,19 @@ class CGIHTTPRequestHandler(
 ##     ) -> Self:
     def _set_dynamic_or_static_get(self, file_name):
 ##
-        '''Makes a dynamic or static respond depending on incoming request.'''
+        '''
+            Makes a dynamic or static respond depending on incoming request.
+
+            Examples:
+
+            >>> handler = CGIHTTPRequestHandler()
+            >>> handler.server = Class()
+            >>> handler.server.web = Web(__test_folder__)
+
+            >>> handler.load_module = True
+            >>> handler._set_dynamic_or_static_get('test') # doctest: +ELLIPSIS
+            Object of "CGIHTTPRequestHandler" with request uri "" and parame...
+        '''
         self.requested_file_name = file_name
         if self._is_dynamic():
             return self._dynamic_get()
@@ -2077,27 +2091,68 @@ class CGIHTTPRequestHandler(
         '''
             Handles every request which doesn't takes a file or python module
             with.
+
+            Examples:
+
+            >>> handler = CGIHTTPRequestHandler()
+            >>> handler.server = Class()
+            >>> handler.server.web = Web(__test_folder__)
+
+            >>> handler.requested_file = FileHandler(
+            ...     __test_folder__.path + 'index.py')
+            >>> handler.requested_file.content = ''
+            >>> handler._default_get()
+            True
+
+            >>> handler.server.web.directory_listing = False
+            >>> handler.requested_file.remove_file()
+            True
+            >>> handler._default_get()
+            False
+
+            >>> handler.server.web.default = 'doctest'
+            >>> handler._default_get()
+            True
+
+            >>> handler.server.web.default = ''
+            >>> handler.server.web.default_module_names = 'doctest',
+            >>> handler.server.web.module_loading = True
+            >>> handler._default_get()
+            True
         '''
         if self.server.web.default:
             self._handle_given_default_get()
             return True
-        if self.server.web.module_loading and self._default_get_module():
+        if(self.server.web.module_loading and
+           self._is_default_module_requested()):
             return True
-        for file_name_pattern in self.server.web.default_file_name_pattern:
-            for file in self.server.web.root:
-                if self._check_pattern((file_name_pattern,), file.name):
-                    self.requested_file = file
-                    self._set_dynamic_or_static_get(file_name=file.name)
-                    return True
+        for file in self.server.web.root:
+            if self._check_pattern(
+                self.server.web.default_file_name_pattern, file.name
+            ):
+                self.requested_file = file
+                self._set_dynamic_or_static_get(file_name=file.name)
+                return True
         if self.server.web.directory_listing:
             self._static_get()
             return True
         return False
 
     @JointPoint
-## python3.3     def _default_get_module(self: Self) -> builtins.bool:
-    def _default_get_module(self):
-        '''Handle if possible a default module request.'''
+## python3.3     def _is_default_module_requested(self: Self) -> builtins.bool:
+    def _is_default_module_requested(self):
+        '''
+            Handle a default module request if possible.
+
+            Examples:
+
+            >>> handler = CGIHTTPRequestHandler()
+            >>> handler.server = Class()
+            >>> handler.server.web = Web(__test_folder__)
+
+            >>> handler._is_default_module_requested()
+            False
+        '''
         for module_name in self.server.web.default_module_names:
             if((self.server.web.module_loading is True or
                 module_name == self.server.web.module_loading) and
@@ -2115,6 +2170,28 @@ class CGIHTTPRequestHandler(
         '''
             Handles requests which wants the current defaults modules
             (initially called module) run for a server thread.
+
+            Examples:
+
+            >>> test_globals_backup = __test_globals__['__name__']
+
+            >>> handler = CGIHTTPRequestHandler()
+            >>> handler.server = Class()
+            >>> handler.server.web = Web(__test_folder__)
+
+            >>> handler._handle_default_modules_get('not_existing')
+            False
+
+            >>> handler._handle_default_modules_get('__main__')
+            False
+
+            >>> __test_globals__['__name__'] = __module_name__
+            >>> handler._handle_default_modules_get(
+            ...     '__main__'
+            ... ) # doctest: +ELLIPSIS
+            Object of "CGIHTTPRequestHandler" with request uri "" and param...
+
+            >>> __test_globals__['__name__'] = test_globals_backup
         '''
         if module_name == '__main__':
             if __name__ != '__main__':
@@ -2128,10 +2205,34 @@ class CGIHTTPRequestHandler(
     @JointPoint
 ## python3.3     def _handle_given_default_get(self: Self) -> Self:
     def _handle_given_default_get(self):
-        '''Handles request with no explicit file or module to run.'''
-        if((self.server.web.dynamic_module_loading is True or
-            self.server.web.dynamic_module_loading ==
-            self.server.web.default) and
+        '''
+            Handles request with no explicit file or module to run.
+
+            Examples:
+
+            >>> handler = CGIHTTPRequestHandler()
+            >>> handler.server = Class()
+            >>> handler.server.web = Web(__test_folder__)
+            >>> handler.path = '/'
+
+            >>> __test_buffer__.clear() # doctest: +ELLIPSIS
+            '...'
+            >>> handler._handle_given_default_get() # doctest: +ELLIPSIS
+            Object of "CGIHTTPRequestHandler" with request uri "" and parame...
+            >>> __test_buffer__.content # doctest: +ELLIPSIS
+            '...Determine "" as default file...'
+
+            >>> __test_buffer__.clear() # doctest: +ELLIPSIS
+            '...'
+            >>> handler.server.web.module_loading = True
+            >>> handler.server.web.default = 'doctest'
+            >>> handler._handle_given_default_get() # doctest: +ELLIPSIS
+            Object of "CGIHTTPRequestHandler" with request uri "" and parame...
+            >>> __test_buffer__.content # doctest: +ELLIPSIS
+            '...Determine "doctest" as default module...'
+        '''
+        if((self.server.web.module_loading is True or
+            self.server.web.module_loading == self.server.web.default) and
            Module.get_file_path(context_path=self.server.web.default)):
             self.load_module = True
             __logger__.info(
@@ -2147,7 +2248,33 @@ class CGIHTTPRequestHandler(
     @JointPoint
 ## python3.3     def _static_get(self: Self) -> Self:
     def _static_get(self):
-        '''Handles a static file-request.'''
+        '''
+            Handles a static file-request.
+
+            Examples:
+
+            >>> handler = CGIHTTPRequestHandler()
+            >>> handler.server = Class()
+            >>> handler.server.web = Web(__test_folder__)
+            >>> handler.requested_file = FileHandler(
+            ...     __test_folder__.path + '_static_get')
+            >>> handler.requested_file.content = ''
+            >>> ## python2.7
+            >>> if sys.version_info.major < 3:
+            ...     handler.headers = handler.MessageClass(
+            ...         String(
+            ...             'If-Modified-Since: %s' % handler.date_time_string(
+            ...                 int(handler.requested_file.timestamp))
+            ...         ), seekable=False)
+            ... else:
+            ...     handler.headers.add_header(
+            ...         'If-Modified-Since', handler.date_time_string(
+            ...             int(handler.requested_file.timestamp)))
+            >>> ##
+
+            >>> handler._static_get() # doctest: +ELLIPSIS
+            Object of "CGIHTTPRequestHandler" with request uri "" and parame...
+        '''
         if self.requested_file.is_directory():
             return self.list_directory()
         try:
@@ -2298,8 +2425,9 @@ class CGIHTTPRequestHandler(
                 exception.__class__.__name__, builtins.str(exception))
         self.server.web.number_of_running_threads -= 1
         size = builtins.len(output)
-        errors = errors.decode(
-            encoding=String(errors).encoding, errors='strict')
+        if not builtins.isinstance(errors, builtins.str):
+            errors = errors.decode(
+                encoding=String(errors).encoding, errors='strict')
         if self.respond:
             if errors:
                 program_description = ''
