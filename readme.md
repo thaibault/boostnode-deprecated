@@ -30,7 +30,8 @@ Features
 * Smart, very secure and multiprocessing web-server supporting gzip, htaccess,
   ssl file parsing, directory listing, thread-based and process-based
   cgi-script handling. Can run every executable script as cgi-script out of the
-  box (see runnable/server.py).
+  box. You don't need any sockets like FastCGI or WebSocket
+  (see runnable/server.py).
 * Macro processor for text based files (see runnable/macro.py).
 * File synchronisation (see runnable/synchronisation.py).
 * Many extended language feature like signature checking, joint points for
@@ -44,12 +45,11 @@ Features
 * Highlevel code file handling (see runnable/codeRunner.py). Run every
   source code without manually compiling code.
 * Template engine with embedded python code in any text based file supporting
-  every python syntax and additionally file-include as indention-control
+  every python syntax and additional file-include statement
   (see runnable/template.py).
-* Finer grained import mechanism support (see extension/dependent.py).
 * Full featured global logging mechanism handling (see extension/system.py)
 * Very generic full featured command line argument parsing interface written
-  on top of python's native "ArgumenParser"-modul
+  on top of python's native "ArgumentParser" modul
   (see extension/system.py and extension/output.py).
 
 Usage
