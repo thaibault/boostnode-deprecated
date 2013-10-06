@@ -580,7 +580,7 @@ class Runnable(builtins.object):
                 signal.signal(signal_number, self.trigger_stop)
         try:
             self._run(*arguments, **keywords)
-        except builtins.Exception as exception:
+        except builtins.BaseException as exception:
             if(self._in_test_mode() or sys.flags.debug or
                self._childrens_module.__logger__.isEnabledFor(logging.DEBUG)):
                 raise
@@ -592,6 +592,9 @@ class Runnable(builtins.object):
                         exception_name=exception.__class__.__name__,
                         exception_message=builtins.str(exception),
                         program_file_path=sys.argv[0]))
+                # TODO check addional branch
+                if 'code' in exception.__dict__:
+                    sys.exit(exception.code)
                 sys.exit(1)
         finally:
             '''
@@ -1980,7 +1983,7 @@ class CommandLine(builtins.object):
                     argument['keywords'][keyword] = cls\
                         ._render_command_line_argument(
                             argument=value, scope=scope)
-                except builtins.Exception as exception:
+                except builtins.BaseException as exception:
                     raise __exception__(
                         'During rendering argument "%s". Error "%s" occurs '
                         'for "%s".', builtins.str(argument['keywords']),

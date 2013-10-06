@@ -1881,6 +1881,7 @@ class Module(Object):
         if(not builtins.hasattr(module, '__module_name__') or
            module.__module_name__ is None):
             module.__module_name__ = cls.get_name(frame, module)
+        # TODO super möglich?
         module.__exception__ = builtins.type(
             String(module.__module_name__).camel_case_capitalize().content +
             'Error', (builtins.Exception,),

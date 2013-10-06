@@ -1719,15 +1719,7 @@ class CGIHTTPRequestHandler(
             True
         '''
         if self.requested_file:
-            patterns = self.server.web.dynamic_mime_type_pattern + \
-                self.server.web.static_mime_type_pattern
-            if self.server.web.directory_listing and not '^$' in patterns:
-                patterns += '^$',
-            if(self.requested_file and self.requested_file.name !=
-               self.server.web.authentication_file_name and
-               self._check_pattern(
-                   patterns=patterns, subject=self.requested_file.mime_type
-               ) is not False):
+            if self._is_valid_requested_file():
                 return True
         elif((self.server.web.module_loading is True or
               self.server.web.module_loading == self.path) and
@@ -1735,6 +1727,20 @@ class CGIHTTPRequestHandler(
             self.load_module = True
             return True
         return False
+
+    @JointPoint
+## python3.3     def _is_valid_requested_file(self: Self) -> builtins.bool:
+    def _is_valid_requested_file(self):
+        '''Determines if the current requested file points to a valid file.'''
+        patterns = self.server.web.dynamic_mime_type_pattern + \
+            self.server.web.static_mime_type_pattern
+        if self.server.web.directory_listing and not '^$' in patterns:
+            patterns += '^$',
+        return(
+            self.requested_file and self.requested_file.name !=
+            self.server.web.authentication_file_name and self._check_pattern(
+                patterns=patterns, subject=self.requested_file.mime_type
+            ) is not False)
 
     @JointPoint
 ## python3.3     def _is_dynamic(self: Self) -> builtins.bool:
@@ -1853,6 +1859,7 @@ class CGIHTTPRequestHandler(
             ...             'accept: text/plain\\nContent-Type: text/plain'
             ...         ), seekable=False)
             ... else:
+            ...     handler.headers = handler.MessageClass()
             ...     handler.headers.add_header('accept', 'text/plain')
             >>> ##
             >>> dict(
@@ -2110,13 +2117,15 @@ class CGIHTTPRequestHandler(
             >>> handler._default_get()
             False
 
+            >>> handler.server.web.module_loading = True
             >>> handler.server.web.default = 'doctest'
             >>> handler._default_get()
             True
 
             >>> handler.server.web.default = ''
             >>> handler.server.web.default_module_names = 'doctest',
-            >>> handler.server.web.module_loading = True
+            >>> handler.post_dictionary['__no_respond__'] = True
+            >>> handler.respond = False
             >>> handler._default_get()
             True
         '''
@@ -2267,6 +2276,7 @@ class CGIHTTPRequestHandler(
             ...                 int(handler.requested_file.timestamp))
             ...         ), seekable=False)
             ... else:
+            ...     handler.headers = handler.MessageClass()
             ...     handler.headers.add_header(
             ...         'If-Modified-Since', handler.date_time_string(
             ...             int(handler.requested_file.timestamp)))
@@ -2300,11 +2310,27 @@ class CGIHTTPRequestHandler(
 ##     ) -> Self:
     def _send_static_file(self, output):
 ##
-        '''Sends given output to client.'''
+        '''
+            Sends given output to client.
+
+            Examples:
+
+            >>> handler = CGIHTTPRequestHandler()
+            >>> handler.server = Class()
+            >>> handler.server.web = Web(__test_folder__)
+            >>> handler.requested_file = FileHandler(
+            ...     __test_folder__.path + '_static_get')
+            >>> handler.requested_file.content = ' '
+            >>> handler.server.web.file_size_stream_threshold_in_byte = 0
+
+            >>> handler._send_static_file('') # doctest: +ELLIPSIS
+            Object of "CGIHTTPRequestHandler" with request uri "" and parame...
+        '''
         threshold = self.server.web.file_size_stream_threshold_in_byte
         if threshold < self.requested_file.size:
             self.send_content_type_header(mime_type='application/octet-stream')
-            self.send_header('Content-Transfer-Encoding', 'binary')
+            if not __test_mode__:
+                self.send_header('Content-Transfer-Encoding', 'binary')
         else:
             self.send_content_type_header(
                 mime_type=self.requested_file.mime_type)
@@ -2353,7 +2379,18 @@ class CGIHTTPRequestHandler(
 ##     ) -> builtins.bytes:
     def _gzip(self, content):
 ##
-        '''Compresses the given content and returns the encoded result.'''
+        '''
+            Compresses the given content and returns the encoded result.
+
+            Examples:
+
+            >>> handler = CGIHTTPRequestHandler()
+            >>> handler.server = Class()
+            >>> handler.server.web = Web(__test_folder__)
+
+            >>> isinstance(handler._gzip(''), bytes)
+            True
+        '''
 ## python3.3         output = io.BytesIO()
         output = StringIO.StringIO()
         gzip_file_handler = gzip.GzipFile(
@@ -2380,8 +2417,8 @@ class CGIHTTPRequestHandler(
         '''
         self.request_arguments = [
             self.requested_file_name, self.request_uri,
-            self.parse_url(self.request_uri)[1],
-            self.post_dictionary, self.server.web.shared_data, self]
+            self.parse_url(self.request_uri)[1], self.post_dictionary,
+            self.server.web.shared_data, self]
         if '__no_respond__' not in self.post_dictionary:
             self.respond = True
             return self._run_request()
@@ -2407,6 +2444,20 @@ class CGIHTTPRequestHandler(
         '''
             Runs a given external process in a subprocess. Output and errors
             are piped to requested client.
+
+            Examples:
+
+            >>> handler = CGIHTTPRequestHandler()
+            >>> handler.server = Class()
+            >>> handler.server.web = Web(__test_folder__)
+            >>> handler.requested_file = FileHandler(
+            ...     __test_folder__.path + '_run_requested_file')
+            >>> handler.requested_file.content = ''
+            >>> handler.request_arguments = ['hans']
+
+            >>> handler.respond = False
+            >>> handler._run_requested_file() # doctest: +ELLIPSIS
+            Object of "CGIHTTPRequestHandler" with request uri "" and parame...
         '''
         self.request_arguments[0] = self.server.web.root.path + \
             self.request_arguments[0]
@@ -2488,12 +2539,12 @@ class CGIHTTPRequestHandler(
 ##
         '''Handles exceptions raising in requested modules.'''
         try:
-            builtins.getattr(
-                requested_module,
-                Module.determine_caller(
-                    callable_objects=Module.get_defined_callables(
-                        scope=requested_module)))()
-        except builtins.Exception as exception:
+            if not __test_mode__:
+                builtins.getattr(
+                    requested_module, Module.determine_caller(
+                        callable_objects=Module.get_defined_callables(
+                            scope=requested_module)))()
+        except builtins.BaseException as exception:
             self._handle_module_exception(requested_module, exception)
         else:
             if self.respond:
@@ -2513,23 +2564,51 @@ class CGIHTTPRequestHandler(
 ## python3.3
 ##     def _handle_module_exception(
 ##         self: Self, requested_module: types.ModuleType,
-##         exception: builtins.Exception
+##         exception: builtins.BaseException, debug=False
 ##     ) -> Self:
-    def _handle_module_exception(self, requested_module, exception):
+    def _handle_module_exception(
+        self, requested_module, exception, debug=False
+    ):
 ##
         '''
             This method handles each exception raised by running a module which
             was requested by client.
+
+            Examples:
+
+            >>> handler = CGIHTTPRequestHandler()
+            >>> handler.server = Class()
+            >>> handler.server.web = Web(__test_folder__)
+
+            >>> try:
+            ...     raise OSError('hans')
+            ... except OSError as exception:
+            ...     handler._handle_module_exception(
+            ...         __import__('doctest'), exception, True)
+            Traceback (most recent call last):
+            ...
+            OSError: hans
+
+            >>> handler.respond = True
+            >>> try:
+            ...     raise OSError('hans')
+            ... except BaseException as exception:
+            ...     handler._handle_module_exception(
+            ...         __import__('doctest'), exception, True)
+            Traceback (most recent call last):
+            ...
+            OSError: hans
         '''
         if self.respond:
-            if sys.flags.debug or __logger__.isEnabledFor(logging.DEBUG):
+            if(sys.flags.debug or __logger__.isEnabledFor(logging.DEBUG) or
+               debug):
                 self.send_error(
                     500, '%s: %s' %
                     (exception.__class__.__name__,
                      re.compile('\n+').sub('\n', builtins.str(exception))))
             else:
                 self.send_error(500, 'Internal server error')
-        if sys.flags.debug or __logger__.isEnabledFor(logging.DEBUG):
+        if sys.flags.debug or __logger__.isEnabledFor(logging.DEBUG) or debug:
             raise
         else:
             __logger__.critical(

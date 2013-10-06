@@ -1064,7 +1064,7 @@ class Parser(Class, Runnable):
             exception.rendered_content = rendered_content
 ## python3.3             raise exception from None
             raise exception
-        except builtins.Exception as exception:
+        except builtins.BaseException as exception:
             line_info, exception_message, native_exception_description = \
                 self._handle_template_exception(exception)
             self._raise_template_exception(
@@ -1077,7 +1077,7 @@ class Parser(Class, Runnable):
     @JointPoint
 ## python3.3
 ##     def _handle_template_exception(
-##         self: Self, exception: builtins.Exception,
+##         self: Self, exception: builtins.BaseException,
 ##         force_native_exception=False
 ##     ) -> builtins.tuple:
     def _handle_template_exception(
@@ -1135,7 +1135,8 @@ class Parser(Class, Runnable):
 ##         self: Self, line_info: builtins.str,
 ##         exception_message: builtins.str,
 ##         native_exception_description: builtins.str,
-##         native_exception: builtins.Exception, prevent_rendered_content=False
+##         native_exception: builtins.BaseException,
+##         prevent_rendered_content=False
 ##     ) -> None:
     def _raise_template_exception(
         self, line_info, exception_message, native_exception_description,
@@ -1190,7 +1191,7 @@ class Parser(Class, Runnable):
     @JointPoint
 ## python3.3
 ##     def _get_exception_line(
-##         self: Self, exception: builtins.Exception
+##         self: Self, exception: builtins.BaseException
 ##     ) -> builtins.tuple:
     def _get_exception_line(self, exception):
 ##
@@ -1239,7 +1240,7 @@ class Parser(Class, Runnable):
     @JointPoint
 ## python3.3
 ##     def _determine_exec_string_exception_line(
-##         self: Self, exception: builtins.Exception
+##         self: Self, exception: builtins.BaseException
 ##     ) -> builtins.int:
     def _determine_exec_string_exception_line(self, exception):
 ##
