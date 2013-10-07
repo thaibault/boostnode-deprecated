@@ -180,10 +180,10 @@ class Reflector(Class, Runnable):
 
     @JointPoint(builtins.classmethod)
 ## python3.3
-##     def is_path_in_paths(
+##     def is_location_in_paths(
 ##         cls: SelfClass, search: FileHandler, paths: collections.Iterable
 ##     ) -> builtins.bool:
-    def is_path_in_paths(cls, search, paths):
+    def is_location_in_paths(cls, search, paths):
 ##
         '''
             Checks if a given path represented in a given list of paths or it's
@@ -195,21 +195,63 @@ class Reflector(Class, Runnable):
             >>> file.make_directorys()
             True
 
-            >>> Reflector.is_path_in_paths(
+            >>> Reflector.is_location_in_paths(
             ...     search=file, paths=[__test_folder__.path + 'source5'])
             True
 
-            >>> Reflector.is_path_in_paths(
+            >>> Reflector.is_location_in_paths(
             ...     search=file, paths=[__test_folder__.path + 'target5'])
             False
         '''
         for path in paths:
-            if(FileHandler(location=path).path in
-               search.path):
+            if search.path.startswith(FileHandler(location=path).path):
                 return True
         return False
 
             # endregion
+
+    @JointPoint(builtins.classmethod)
+## python3.3
+##     def open(cls: SelfClass, files: collections.Iterable) -> SelfClass:
+    def open(cls, files):
+##
+        '''
+            Opens the given files by using the "Platform.open()" method. It can
+            handle symbolic and portable links.
+
+            Examples:
+
+            >>> Reflector.open(()) # doctest: +ELLIPSIS
+            <class '....Reflector'>
+
+            >>> source = FileHandler(
+            ...     __test_folder__.path + 'open_link_source',
+            ...     make_directory=True)
+            >>> target = FileHandler(__test_folder__.path + 'open_link_target')
+            >>> source.make_portable_link(target)
+            True
+            >>> source.remove_directory()
+            True
+
+            >>> Reflector.open((target,)) # doctest: +IGNORE_EXCEPTION_DETAIL
+            Traceback (most recent call last):
+            ...
+            SynchronisationError: The referenced file "...open_link_source" ...
+        '''
+        for file in files:
+            file = FileHandler(location=file)
+            if file.is_portable_link():
+                referenced_file = FileHandler(
+                    location=file.read_portable_link())
+                if referenced_file:
+                    file = referenced_file
+                else:
+                    raise __exception__(
+                        'The referenced file "%s" of portable symlink "%s" '
+                        'isn\'t currently available.', referenced_file.path,
+                        file.path)
+            Platform.open(location=file)
+        return cls
 
         # endregion
 
@@ -319,27 +361,6 @@ class Reflector(Class, Runnable):
              builtins.float(self._number_of_files)) * 100, 2)
 
             # endregion
-
-    @JointPoint
-## python3.3     def open(self: Self, files: collections.Iterable) -> Self:
-    def open(self, files):
-        '''
-            Opens the given files by using the "Platform.open()" method. It can
-            handle symbolic and portable links.
-        '''
-        for file in files:
-            file = FileHandler(location=file)
-            if file.is_portable_link():
-                referenced_file = FileHandler(
-                    location=file.read_portable_link())
-                if referenced_file:
-                    Platform.open(location=referenced_file)
-                    return self
-                raise __exception__(
-                    'The referenced object "%s" of portable symlink "%s" '
-                    'isn\'t currently available.', referenced_file, file.path)
-            Platform.open(location=file)
-        return self
 
     @JointPoint
 ## python3.3     def create_cache(self: Self) -> Self:
@@ -636,6 +657,19 @@ class Reflector(Class, Runnable):
             False
             >>> source_ignore.is_element()
             True
+
+            >>> Platform.set_process_lock(__module_name__)
+            True
+            >>> reflector = Reflector(
+            ...     source_location=__test_folder__.path + 'source3',
+            ...     target_location=__test_folder__.path + 'target3',
+            ...     exclude_locations=(
+            ...         __test_folder__.path + 'source3/ignore',),
+            ...     limit='1 byte', use_native_symlinks=True)
+            >>> repr(
+            ...     reflector.synchronize_back_to_source()
+            ... ) # doctest: +ELLIPSIS
+            '...source3...path "...target3...1.0 byte...ignore...".'
         '''
         if Platform.check_process_lock(description=__module_name__):
             __logger__.warning(
@@ -674,6 +708,33 @@ class Reflector(Class, Runnable):
         '''
             Entry point for command line call of this program. Initializes a
             new instance of the option parser for the application interface.
+
+            Examples:
+
+            >>> import copy
+            >>> sys_argv_backup = copy.copy(sys.argv)
+            >>> sys.argv[1:] = [__test_folder__.path, __test_folder__.path]
+
+            >>> Reflector.run() # doctest: +IGNORE_EXCEPTION_DETAIL
+            Traceback (most recent call last):
+            ...
+            SynchronisationError: Source path "..." and reflection path "...
+
+            >>> source = FileHandler(
+            ...     __test_folder__.path + 'open_link_source',
+            ...     make_directory=True)
+            >>> target = FileHandler(__test_folder__.path + 'open_link_target')
+            >>> source.make_portable_link(target)
+            True
+            >>> source.remove_directory()
+            True
+            >>> sys.argv[1:] = ['--open', target.path]
+            >>> Reflector.run() # doctest: +IGNORE_EXCEPTION_DETAIL
+            Traceback (most recent call last):
+            ...
+            SynchronisationError: The referenced file "...open_link_source" ...
+
+            >>> sys.argv = sys_argv_backup
         '''
         '''Saves all given command line arguments.'''
         self._command_line_arguments = CommandLine.argument_parser(
@@ -813,41 +874,55 @@ class Reflector(Class, Runnable):
 
         self._validate_inputs()._log_status()
         if not __test_mode__:
-            self._create_or_synchronize_back()
+            if self.synchronize_back:
+                self._synchronize_back()
+            else:
+                self.create_cache()
+        __logger__.info(
+            '{program} {version} {status} finished successful.'.format(
+                program=__module_name__, version=__version__,
+                status=__status__))
         return self
 
             # endregion
 
     @JointPoint
-## python3.3     def _create_or_synchronize_back(self: Self) -> Self:
-    def _create_or_synchronize_back(self):
+## python3.3     def _synchronize_back(self: Self) -> Self:
+    def _synchronize_back(self):
         '''
             Synchronizes and/or creates a new reflection cache dependent on
             given command line arguments.
+
+            Examples:
+
+            >>> reflector = Reflector(
+            ...     source_location=__test_folder__.path + 's',
+            ...     target_location=__test_folder__.path + 't')
+            >>> reflector._command_line_arguments = False
+
+            >>> reflector._synchronize_back() # doctest: +ELLIPSIS
+            Object of "Reflector" with source path "..." and target path "...
+
+            >>> reflector.create = True
+            >>> reflector._synchronize_back() # doctest: +ELLIPSIS
+            Object of "Reflector" with source path "..." and target path "...
         '''
-        if self.synchronize_back:
-            target_size = self.target_location.get_size(
-                limit=self.minimum_reflection_size_in_byte)
-            '''
-                Check only for minimum reflection size if process was invoked
-                via command line.
-            '''
-            if(self._command_line_arguments and
-               target_size < self.minimum_reflection_size_in_byte and
-               not CommandLine.boolean_input(
-                   question='Reflection has only a size of %s. Do you want to '
-                            'continue? {boolean_arguments}: ' %
-                            self.target_location.human_readable_size)):
-                return self
-            self.synchronize_back_to_source()
-            if self.create:
-                self.create_cache()
-        else:
+        target_size = self.target_location.get_size(
+            limit=self.minimum_reflection_size_in_byte)
+        '''
+            Check only for minimum reflection size if process was invoked
+            via command line.
+        '''
+        if(self._command_line_arguments and
+           target_size < self.minimum_reflection_size_in_byte and
+           not CommandLine.boolean_input(
+               question='Reflection has only a size of %s. Do you want to '
+                        'continue? {boolean_arguments}: ' %
+                        self.target_location.human_readable_size)):
+            return self
+        self.synchronize_back_to_source()
+        if self.create:
             self.create_cache()
-        __logger__.info(
-            '{program} {version} {status} finished successful.'.format(
-                program=__module_name__, version=__version__,
-                status=__status__))
         return self
 
     @JointPoint
@@ -858,7 +933,12 @@ class Reflector(Class, Runnable):
             Checks if all paths makes sense and all inputs are in the right
             format.
         '''
-        self._validate_paths()
+        if(self.target_location.path.startswith(self.source_location.path) or
+           self.source_location.path.startswith(self.target_location.path)):
+            raise __exception__(
+                'Source path "%s" and reflection path "%s" have to be in '
+                'different locations.', self.source_location.path,
+                self.target_location.path)
         if self.limit is False or self.limit < 0:
             raise __exception__('Invalid cache-limit.')
         elif(not (builtins.isinstance(
@@ -870,24 +950,6 @@ class Reflector(Class, Runnable):
                 'Reflection-rights "%s" aren\'t written in a convenient way '
                 'like "770".', self.target_rights)
         return self._check_path_lists()
-
-    @JointPoint
-## python3.3     def _validate_paths(self: Self) -> Self:
-    def _validate_paths(self):
-        '''Validates source and target (reflection) path.'''
-        if not self.source_location.path:
-            raise __exception__(
-                'Invalid source path "%s".', self.source_location.path)
-        elif not self.target_location.path:
-            raise __exception__(
-                'Invalid target path "%s".', self._target.path)
-        elif(self.source_location.path in self.target_location.path or
-             self.target_location.path in self.source_location.path):
-            raise __exception__(
-                'Source path "%s" and reflection path "%s" have to be in '
-                'different locations.', self.source_location.path,
-                self.target_location.path)
-        return self
 
     @JointPoint
 ## python3.3     def _check_path_lists(self: Self) -> Self:
@@ -955,9 +1017,27 @@ class Reflector(Class, Runnable):
         '''
             Logs the initial status of the current Reflector instance. Output
             is written to standard output or output buffer.
+
+            Examples:
+
+            >>> source = FileHandler(
+            ...     __test_folder__.path + '_log_status_source',
+            ...     make_directory=True)
+            >>> target = FileHandler(
+            ...     __test_folder__.path + '_log_status_target',
+            ...     make_directory=True)
+            >>> __test_buffer__.clear() # doctest: +ELLIPSIS
+            '...'
+
+            >>> Reflector(
+            ...     source, target, limit='1 byte'
+            ... )._log_status() # doctest: +ELLIPSIS
+            Object of "Reflector" with source path "..._log_status_source...
+            >>> __test_buffer__.content # doctest: +ELLIPSIS
+            '...Initialize Reflector with logging level...limit: 1 byte\\n...'
         '''
         given_limit = ''
-        if ('%s byte' % self.limit) != self.given_limit:
+        if ('%d byte' % builtins.int(self.limit)) != self.given_limit:
             given_limit = ' ("%s")' % self.given_limit
         native_symbolic_link_option = 'disabled'
         if self.use_native_symlinks:
@@ -975,7 +1055,7 @@ class Reflector(Class, Runnable):
                 log_level=Logger.default_level[0],
                 source_path=self.source_location.path,
                 target_path=self.target_location.path,
-                rights=self.target_rights, limit=self.limit,
+                rights=self.target_rights, limit=builtins.int(self.limit),
                 given_limit=given_limit,
                 priority_locations='", "'.join(self.priority_locations),
                 exclude_locations='", "'.join(self.exclude_locations),
@@ -993,6 +1073,24 @@ class Reflector(Class, Runnable):
             order. Small files will be preferred. In that way the maximum
             number of files which fits to the cache-limit will be copied in the
             reflection location.
+
+            Examples:
+
+            >>> source = FileHandler(
+            ...     __test_folder__.path + '_create_reflection_files_source',
+            ...     make_directory=True)
+            >>> file = FileHandler(source.path + 'test_file')
+            >>> file.content = ' '
+            >>> target = FileHandler(
+            ...     __test_folder__.path + '_create_reflection_files_target',
+            ...     make_directory=True)
+
+            >>> Platform.terminate_thread = True
+            >>> reflector = Reflector(source, target)
+            >>> reflector._files = [(0, file.path)]
+            >>> reflector._create_reflection_files() # doctest: +ELLIPSIS
+            Object of "Reflector" with source path "...
+            >>> Platform.terminate_thread = False
         '''
         self._priority_files.sort()
         self._files.sort()
@@ -1084,52 +1182,96 @@ class Reflector(Class, Runnable):
 
             Returns "True" if relocation where successful or "False"
             otherwise.
+
+            Examples:
+
+            >>> source = FileHandler(
+            ...     __test_folder__.path + '_relocate_moved_file_source',
+            ...     make_directory=True)
+            >>> target = FileHandler(
+            ...     __test_folder__.path + '_relocate_moved_file_target',
+            ...     make_directory=True)
+            >>> reflector = Reflector(source, target)
+
+            >>> link = FileHandler(source.path + 'link')
+            >>> FileHandler(source.path + '../').make_portable_link(link)
+            True
+            >>> reflector._relocate_moved_file(link)
+            False
+
+            >>> link = FileHandler(source.path + 'link')
+            >>> source.make_portable_link(link)
+            True
+            >>> reflector._relocate_moved_file(link)
+            False
         '''
         if file.is_symbolic_link():
-            linked_path = file.read_symbolic_link(as_object=True)
-            if(linked_path.path[:builtins.len(self.source_location.path)] ==
+            linked_file = file.read_symbolic_link(as_object=True)
+            if(linked_file.path[:builtins.len(self.source_location.path)] ==
                 self.source_location.path
                ):
                 relocated = FileHandler(
                     location=self.source_location.path + file.path[
                         builtins.len(self.target_location.path):])
                 if not relocated.is_file():
-                    return self._relocate_missing_file(relocated, linked_path)
+                    return self._relocate_missing_file(relocated, linked_file)
             return False
         return True
 
     @JointPoint
 ## python3.3
 ##     def _relocate_missing_file(
-##         self: Self, relocated: FileHandler, linked_path: FileHandler
+##         self: Self, relocated_file: FileHandler, linked_file: FileHandler
 ##     ) -> builtins.bool:
-    def _relocate_missing_file(self, relocated, linked_path):
+    def _relocate_missing_file(self, relocated_file, linked_file):
 ##
         '''
             Serves as helper method for "_relocate_moved_file()". It relocates
             a file in the source, if it was relocated in the reflection area.
 
-            "relocated" is a file which should be relocated.
-            "linked_path" The new path for the given relocated file.
+            "relocated_filen" is a file which should be relocated.
+            "linked_file" The new file for the given relocated file.
 
             Returns "True" if relocation where successful or "False"
             otherwise.
+
+            Examples:
+
+            >>> source = FileHandler(
+            ...     __test_folder__.path + '_relocate_missing_file_source',
+            ...     make_directory=True)
+            >>> target = FileHandler(
+            ...     __test_folder__.path + '_relocate_missing_file_target',
+            ...     make_directory=True)
+            >>> reflector = Reflector(source, target)
+
+            >>> relocated_file = FileHandler(source.path + 'relocated_file')
+            >>> linked_file = FileHandler(source.path + 'linked_file')
+            >>> reflector._relocate_missing_file(
+            ...     relocated_file, linked_file)
+            True
+
+            >>> source.remove_deep()
+            True
+            >>> reflector._relocate_missing_file(relocated_file, linked_file)
+            True
         '''
-        relocated_directory_path = FileHandler(
-            location=relocated.directory_path)
-        if not relocated_directory_path.is_directory():
+        relocated_directory = FileHandler(
+            location=relocated_file.directory_path)
+        if not relocated_directory.is_directory():
             __logger__.info(
                 'Create directory path "%s" for relocation of "%s".',
-                relocated_directory_path.path, linked_path.path)
-            relocated_directory_path.make_directorys()
-        if linked_path:
+                relocated_directory.path, linked_file.path)
+            relocated_directory.make_directorys()
+        if linked_file:
             __logger__.info(
-                'Relocate "%s" to "%s".', linked_path.path, relocated.path)
-            return linked_path.move(target=relocated.path)
+                'Relocate "%s" to "%s".', linked_file.path,
+                relocated_file.path)
+            return linked_file.move(target=relocated_file.path)
         __logger__.warning(
             'Inconsistent reflection "%s". Do not manipulate your source or '
             'create links from source to reflection manually!',
-            linked_path.path)
+            linked_file.path)
         return True
 
     @JointPoint
@@ -1144,8 +1286,31 @@ class Reflector(Class, Runnable):
             source.
 
             Returns "True" if file-copy where successful or "False" otherwise.
+
+            Examples:
+
+            >>> source = FileHandler(
+            ...     __test_folder__.path + '_copy_cache_to_source_source',
+            ...     make_directory=True)
+            >>> target = FileHandler(
+            ...     __test_folder__.path + '_copy_cache_to_source_target',
+            ...     make_directory=True)
+            >>> reflector = Reflector(
+            ...     source, target, exclude_locations=(source.path,))
+            >>> source_file = FileHandler(source.path + 'excluded_file')
+            >>> target_file = FileHandler(target.path + 'excluded_file')
+
+            >>> reflector._copy_cache_to_source(source_file)
+            False
+
+            >>> reflector.exclude_locations = []
+            >>> target_file.make_directory()
+            True
+            >>> source_file.content = ''
+            >>> reflector._copy_cache_to_source(target_file)
+            True
         '''
-        if not self.is_path_in_paths(
+        if not self.is_location_in_paths(
             search=file, paths=self.exclude_locations
         ):
             target_path_len = builtins.len(self.target_location.path)
@@ -1165,10 +1330,11 @@ class Reflector(Class, Runnable):
                     'Copying directory "%s" to "%s".', file.path,
                     source_file.path)
                 if source_file.is_file():
-                    source_file.unlink()
+                    source_file.remove_file()
                 return source_file.make_directory(
                     right=self.target_rights)
             return True
+        return False
 
     @JointPoint
 ## python3.3
@@ -1193,6 +1359,24 @@ class Reflector(Class, Runnable):
 
             Returns "True" if all file-copies where successful or "False" if
             something goes wrong or a symbolic link circle was broken.
+
+            Examples:
+
+            >>> source = FileHandler(
+            ...     __test_folder__.path +
+            ...     '_copy_link_in_cache_to_source_source',
+            ...     make_directory=True)
+            >>> target = FileHandler(
+            ...     __test_folder__.path +
+            ...     '_copy_link_in_cache_to_source_target',
+            ...     make_directory=True)
+            >>> reflector = Reflector(source, target)
+            >>> source_file = FileHandler(source.path + 'file')
+            >>> target_file = FileHandler(target.path + 'file')
+
+            # TODO
+            >>> reflector._copy_cache_to_source(source_file)
+            True
         '''
         link = file.read_symbolic_link(as_object=True)
         if link.path[:target_path_len] == self.target_location.path:
@@ -1246,7 +1430,7 @@ class Reflector(Class, Runnable):
             Returns "True" if file-deletion where successful or "False"
             otherwise.
         '''
-        if(not self.is_path_in_paths(
+        if(not self.is_location_in_paths(
             search=file, paths=self.exclude_locations)
            ):
             target = FileHandler(
@@ -1279,13 +1463,13 @@ class Reflector(Class, Runnable):
             Returns "True" if file-operation where successful or "False"
             otherwise.
         '''
-        if(not self.is_path_in_paths(
+        if(not self.is_location_in_paths(
             search=file, paths=self.exclude_locations)
            ):
             return self._handle_source_element(
                 source_file=file,
                 target_file=FileHandler(location=target.path + file.name),
-                priority=(priority or self.is_path_in_paths(
+                priority=(priority or self.is_location_in_paths(
                     search=file, paths=self.priority_locations)))
         __logger__.info('Ignore exclude location: "%s".', file.path)
         return True

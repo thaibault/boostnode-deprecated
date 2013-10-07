@@ -570,8 +570,6 @@ class Handler(Class):
 
             >>> Handler.set_root(root_backup) # doctest: +ELLIPSIS
             <class '...Handler'>
-
-            # TODO recheck all branches
         '''
 
                 # region properties

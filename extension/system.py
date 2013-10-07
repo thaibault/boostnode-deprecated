@@ -566,6 +566,14 @@ class Runnable(builtins.object):
             ...
             SystemExit: 1
 
+            >>> class A(Runnable):
+            ...     def _run(self): sys.exit(2)
+            ...     def _initialize(self): pass
+            >>> A()._handle_module_running((), {}, False)
+            Traceback (most recent call last):
+            ...
+            SystemExit: 2
+
             >>> __test_globals__['__test_mode__'] = True
         '''
         if not self._in_test_mode():
@@ -592,8 +600,7 @@ class Runnable(builtins.object):
                         exception_name=exception.__class__.__name__,
                         exception_message=builtins.str(exception),
                         program_file_path=sys.argv[0]))
-                # TODO check addional branch
-                if 'code' in exception.__dict__:
+                if builtins.hasattr(exception, 'code'):
                     sys.exit(exception.code)
                 sys.exit(1)
         finally:
@@ -1110,11 +1117,13 @@ class Platform(builtins.object):
             cls._log_command_result(result)
         return result
 
-    @JointPoint
+    @JointPoint(builtins.classmethod)
     # NOTE: "location" can't get file handler signature type. It isn't loaded
     # yet.
-## python3.3     def open(cls: SelfClass, location) -> builtins.dict:
+## python3.3
+##     def open(cls: SelfClass, location: builtins.object) -> builtins.dict:
     def open(cls, location):
+##
         '''
             Opens the current file with its default user preference
             application.
