@@ -987,7 +987,7 @@ class Platform(builtins.object):
             ).process_lock_directory.path + description + '_lock')
         if lock_file:
             return False
-        lock_file.content = ' '
+        lock_file.content = ''
         return True
 
     @JointPoint(builtins.classmethod)
@@ -1003,7 +1003,7 @@ class Platform(builtins.object):
             >>> file = FileHandler(
             ...     Platform.process_lock_directory.path +
             ...     'clear_process_lock')
-            >>> file.content = ' '
+            >>> file.content = ''
             >>> Platform.clear_process_lock('clear_process')
             True
             >>> file.is_file()
@@ -2553,7 +2553,7 @@ class CommandLine(builtins.object):
             ...     clear=True, temp_file_patterns=('^temp_.*$',)
             ... ) # doctest: +ELLIPSIS
             <class ...CommandLine...>
-            >>> __test_buffer__.content # doctest: +ELLIPSIS
+            >>> __test_buffer__.clear() # doctest: +ELLIPSIS
             '...Delete temporary files in "..." which matches "...".\\n'
             >>> test_folder.is_element()
             False

@@ -633,7 +633,7 @@ class Logger(Class):
             >>> __test_buffer__.clear() # doctest: +ELLIPSIS
             '...'
             >>> logger_a.critical('Log some information.')
-            >>> __test_buffer__.content # doctest: +ELLIPSIS
+            >>> __test_buffer__.clear() # doctest: +ELLIPSIS
             '... - test - CRITICAL - Log some information.\\n'
         '''
         for logger in cls.instances:

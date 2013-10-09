@@ -1033,7 +1033,7 @@ class Reflector(Class, Runnable):
             ...     source, target, limit='1 byte'
             ... )._log_status() # doctest: +ELLIPSIS
             Object of "Reflector" with source path "..._log_status_source...
-            >>> __test_buffer__.content # doctest: +ELLIPSIS
+            >>> __test_buffer__.clear() # doctest: +ELLIPSIS
             '...Initialize Reflector with logging level...limit: 1 byte\\n...'
         '''
         given_limit = ''
@@ -1080,7 +1080,7 @@ class Reflector(Class, Runnable):
             ...     __test_folder__.path + '_create_reflection_files_source',
             ...     make_directory=True)
             >>> file = FileHandler(source.path + 'test_file')
-            >>> file.content = ' '
+            >>> file.content = ''
             >>> target = FileHandler(
             ...     __test_folder__.path + '_create_reflection_files_target',
             ...     make_directory=True)

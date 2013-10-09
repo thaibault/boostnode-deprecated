@@ -711,7 +711,7 @@ class Handler(Class):
             >>> directory = Handler(
             ...     __test_folder__.path + '__delitem__', make_directory=True)
             >>> file = Handler(directory.path + 'file')
-            >>> file.content = ' '
+            >>> file.content = ''
             >>> file.is_file()
             True
             >>> del directory[0]
@@ -1514,7 +1514,8 @@ class Handler(Class):
 
             >>> handler = Handler(location=__file_path__)
             >>> handler.get_content(
-            ...     mode='r', encoding='utf_8') # doctest: +ELLIPSIS
+            ...     mode='r', encoding='utf_8'
+            ... ) # doctest: +ELLIPSIS
             '#!/...python...'
 
             >>> handler._encoding
@@ -1545,8 +1546,8 @@ class Handler(Class):
 
             >>> handler = Handler(__test_folder__.path + 'get_content')
 
-            >>> handler.content = ' '
-            >>> handler.get_content(mode='r+b') == b' '
+            >>> handler.content = ''
+            >>> handler.get_content(mode='r+b') == b''
             True
 
             >>> handler.content = ' äüöß hans'
@@ -1578,18 +1579,18 @@ class Handler(Class):
 ##                     self._path, mode, *arguments, errors=errors, **keywords
 ##                 ) as file:
 ##                     '''
-##                         NOTE: Double call of "read()" is a
-##                         workaround for python bug when finishing
-##                         reading file without end reached.
+##                         NOTE: Double call of "read()" is a workaround for
+##                         python bug when finishing reading file without end
+##                         reached.
 ##                     '''
 ##                     return file.read() + file.read()
                 with codecs.open(
                     self._path, mode, *arguments, errors=errors, **keywords
                 ) as file:
                     '''
-                        NOTE: Double call of "read()" is a
-                        workaround for python bug when finishing
-                        reading file without end reached.
+                        NOTE: Double call of "read()" is a workaround for
+                        python bug when finishing reading file without end
+                        reached.
                     '''
                     return builtins.str(
                         (file.read() + file.read()).encode(
@@ -1876,12 +1877,11 @@ class Handler(Class):
 
             >>> ## python2.7
             >>> if sys.version_info.major < 3:
-            ...     handler.set_content(str(chr(1))) # doctest: +ELLIPSIS
+            ...     handler.content = str(chr(1))
             ... else:
-            ...     handler.set_content(
-            ...         bytes(chr(1), handler.DEFAULT_ENCODING)
+            ...     handler.content = bytes(
+            ...         chr(1), handler.DEFAULT_ENCODING
             ...     ) # doctest: +ELLIPSIS
-            Object of "Handler" with path "..." ...
             >>> ##
         '''
         mode = self._prepare_content_status(mode, content)
@@ -2267,7 +2267,7 @@ class Handler(Class):
             True
 
             >>> file = Handler(__test_folder__.path + 'is_symbolic_link_not')
-            >>> file.content = ' '
+            >>> file.content = ''
             >>> file.is_symbolic_link()
             False
 
@@ -2537,7 +2537,7 @@ class Handler(Class):
             Examples:
 
             >>> handler = Handler(__test_folder__.path + 'backup')
-            >>> handler.content = ' '
+            >>> handler.content = ''
             >>> template = '<%file.basename%>_b<%file.extension_suffix%>'
 
             >>> handler.backup(template) # doctest: +ELLIPSIS
@@ -2700,7 +2700,7 @@ class Handler(Class):
             Object of "Handler" with path "..." (type: directory).
 
             >>> file = Handler(__test_folder__.path + 'change/a')
-            >>> file.content = ' '
+            >>> file.content = ''
             >>> file.change_working_directory() # doctest: +ELLIPSIS
             Object of "Handler" with path "...change..." (type: file)...
             >>> os.getcwd() # doctest: +ELLIPSIS
@@ -2770,7 +2770,7 @@ class Handler(Class):
             >>> not_accessible_file.remove_directory()
             True
 
-            >>> not_accessible_file.content = ' '
+            >>> not_accessible_file.content = ''
             >>> not_accessible_file.change_right(000) # doctest: +ELLIPSIS
             Object of "Handler" with path "...
             >>> list(__test_folder__) # doctest: +ELLIPSIS
@@ -2837,7 +2837,7 @@ class Handler(Class):
             >>> handler.remove_directory()
             False
 
-            >>> handler.content = ' '
+            >>> handler.content = ''
             >>> handler.remove_directory()
             False
             >>> handler.remove_file()
@@ -2870,14 +2870,14 @@ class Handler(Class):
         if self.is_directory():
             try:
                 os.rmdir(self._path, *arguments, **keywords)
-## python3.3             except builtins.PermissionError:
+## python3.3             except (builtins.PermissionError, builtins.OSError):
             except builtins.OSError:
                 try:
                     self.change_right(
                         right=os.stat(self._path).st_mode | stat.S_IWRITE,
                         octal=False)
                     os.rmdir(self._path, *arguments, **keywords)
-## python3.3                 except builtins.PermissionError:
+## python3.3                 except (builtins.PermissionError, builtins.OSError):
                 except builtins.OSError:
                     return False
                 else:
@@ -2919,7 +2919,7 @@ class Handler(Class):
 
             >>> handler = Handler(
             ...     location=__test_folder__.path + 'move_file')
-            >>> handler.content = ' '
+            >>> handler.content = ''
             >>> target = Handler(
             ...     location=__test_folder__.path + 'move_file2')
             >>> handler.move(target)
@@ -2989,7 +2989,7 @@ class Handler(Class):
             >>> root.remove_deep()
             False
 
-            >>> root.content = ' '
+            >>> root.content = ''
             >>> root.remove_deep()
             True
 
@@ -3066,7 +3066,7 @@ class Handler(Class):
             >>> handler.make_directory()
             True
             >>> file = Handler(handler.path + 'file')
-            >>> file.content = ' '
+            >>> file.content = ''
             >>> file.change_right(000) # doctest: +ELLIPSIS
             Object of "Handler" with path "...
             >>> file.remove_file()
@@ -3416,7 +3416,7 @@ class Handler(Class):
             ...     source = Handler(
             ...         location=__test_folder__.path +
             ...             'make_symbolic_link_file_source')
-            ...     source.content = ' '
+            ...     source.content = ''
             ...     created = source.make_symbolic_link(target, force=True)
             ...     target.is_symbolic_link()
             True
@@ -3449,7 +3449,7 @@ class Handler(Class):
             ... else:
             ...     source = Handler(
             ...         location=__test_folder__.path + 'make_hardlink_source')
-            ...     source.content = ' '
+            ...     source.content = ''
             ...     created = source.make_hardlink(target, force=True)
             ...     target.is_file()
             True
@@ -4059,7 +4059,7 @@ class Handler(Class):
             True
             >>> Handler().copy(target)
             True
-            >>> target[0].content = ' '
+            >>> target[0].content = ''
             >>> Handler()._is_equivalent_folder(target)
             False
         '''

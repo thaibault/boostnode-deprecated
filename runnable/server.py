@@ -788,7 +788,7 @@ class Web(Class, Runnable):
 
             >>> public_key_file = FileHandler(
             ...     __test_folder__.path + '_initialize_public_key_file')
-            >>> public_key_file.content = ' '
+            >>> public_key_file.content = ''
             >>> Web(public_key_file=public_key_file) # doctest: +ELLIPSIS
             Object of "Web" with root path "...", port "0" and stop order ...
 
@@ -1167,7 +1167,7 @@ class CGIHTTPRequestHandler(
             Object of "CGIHTTPRequestHandler" with request uri "/not_existin...
 
             >>> file = FileHandler(__test_folder__.path + 'do_GET')
-            >>> file.content = ' '
+            >>> file.content = ''
             >>> handler.path = '/' + file.name
             >>> handler.server.web.request_whitelist = '^/%s$' % file.name,
             >>> handler.do_GET() # doctest: +ELLIPSIS
@@ -1253,7 +1253,7 @@ class CGIHTTPRequestHandler(
             '...'
             >>> handler.parse_url() # doctest: +ELLIPSIS
             (ParseResult(...'hans=peter&s'...})
-            >>> __test_buffer__.content # doctest: +ELLIPSIS
+            >>> __test_buffer__.clear() # doctest: +ELLIPSIS
             '... "?hans=peter&s" is not a valid get query string.\\n'
 
             >>> sys.argv = sys_argv_backup
@@ -1495,7 +1495,7 @@ class CGIHTTPRequestHandler(
             '...'
             >>> handler.log_message('', 404, '') # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "" and parame...
-            >>> __test_buffer__.content # doctest: +ELLIPSIS
+            >>> __test_buffer__.clear() # doctest: +ELLIPSIS
             '...404...'
 
             >>> handler.server.web.__class__.instances = [handler.server.web]
@@ -1534,7 +1534,7 @@ class CGIHTTPRequestHandler(
             '...'
             >>> handler.log_message('', '', 404) # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "" and parame...
-            >>> __test_buffer__.content # doctest: +ELLIPSIS
+            >>> __test_buffer__.clear() # doctest: +ELLIPSIS
             '...192.168.0.1:80  -> 404 - forwarded for: 192.168.0.1 - forwar...
         '''
         format = (
@@ -2228,16 +2228,14 @@ class CGIHTTPRequestHandler(
             '...'
             >>> handler._handle_given_default_get() # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "" and parame...
-            >>> __test_buffer__.content # doctest: +ELLIPSIS
+            >>> __test_buffer__.clear() # doctest: +ELLIPSIS
             '...Determine "" as default file...'
 
-            >>> __test_buffer__.clear() # doctest: +ELLIPSIS
-            '...'
             >>> handler.server.web.module_loading = True
             >>> handler.server.web.default = 'doctest'
             >>> handler._handle_given_default_get() # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "" and parame...
-            >>> __test_buffer__.content # doctest: +ELLIPSIS
+            >>> __test_buffer__.clear() # doctest: +ELLIPSIS
             '...Determine "doctest" as default module...'
         '''
         if((self.server.web.module_loading is True or
@@ -2320,7 +2318,7 @@ class CGIHTTPRequestHandler(
             >>> handler.server.web = Web(__test_folder__)
             >>> handler.requested_file = FileHandler(
             ...     __test_folder__.path + '_static_get')
-            >>> handler.requested_file.content = ' '
+            >>> handler.requested_file.content = ''
             >>> handler.server.web.file_size_stream_threshold_in_byte = 0
 
             >>> handler._send_static_file('') # doctest: +ELLIPSIS

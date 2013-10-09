@@ -369,7 +369,7 @@ class Run(Class, Runnable):
             ... )._run_commands() # doctest: +ELLIPSIS
             Object of "Run" with detected path "..._run_commands.py...".
 
-            >>> __test_buffer__.content # doctest: +ELLIPSIS
+            >>> __test_buffer__.clear() # doctest: +ELLIPSIS
             '...Detected "python"...No "compile" necessary...'
         '''
         for command_name in self.default_command_sequence:
@@ -402,7 +402,7 @@ class Run(Class, Runnable):
 
             >>> run._check_code_manager() # doctest: +ELLIPSIS
             Object of "Run" with detected path "..._check_code_manager.py".
-            >>> __test_buffer__.content # doctest: +ELLIPSIS
+            >>> __test_buffer__.clear() # doctest: +ELLIPSIS
             '...Detected code manager "...__init__.py".\\n'
 
             >>> del run._current_code['properties']['code_manager']
@@ -436,7 +436,7 @@ class Run(Class, Runnable):
 
             Examples:
 
-            >>> FileHandler('temp_run_main.py').content = ' '
+            >>> FileHandler('temp_determine_code_file_main.py').content = ''
             >>> run = Run()
 
             >>> run._determine_code_file(path='') # doctest: +ELLIPSIS
@@ -480,7 +480,9 @@ class Run(Class, Runnable):
             >>> code_file = FileHandler(
             ...     __test_folder__.path +
             ...     '_find_informations_by_extension.py')
-            >>> FileHandler('temp_run_main.py').content = ' '
+            >>> FileHandler(
+            ...     'temp_find_informations_by_extension_main.py'
+            ... ).content = ''
             >>> run = Run()
 
             >>> run._find_informations_by_extension(
@@ -515,7 +517,9 @@ class Run(Class, Runnable):
             >>> file = FileHandler(
             ...     __test_folder__.path + '_search_supported_file_by_path.py')
             >>> file.content = '#!/usr/bin/env python'
-            >>> FileHandler('temp_run_main.py').content = ' '
+            >>> FileHandler(
+            ...     'temp_search_supported_file_by_path_main.py'
+            ... ).content = ''
             >>> run = Run()
 
             >>> run._search_supported_file_by_path(
@@ -567,8 +571,10 @@ class Run(Class, Runnable):
             >>> file = FileHandler(
             ...     __test_folder__.path +
             ...     '_search_supported_file_by_directoryMain.py')
-            >>> file.content = ' '
-            >>> FileHandler('temp_run_main.py').content = ' '
+            >>> file.content = ''
+            >>> FileHandler(
+            ...     'temp_search_supported_file_by_directory_main.py'
+            ... ).content = ''
 
             >>> Run()._search_supported_file_by_directory(
             ...     FileHandler(__test_folder__.path), 'py'
@@ -605,7 +611,10 @@ class Run(Class, Runnable):
 
             Examples:
 
-            >>> FileHandler('temp_run_main.py').content = ' '
+            >>> FileHandler(
+            ...     'temp_search_supported_file_in_current_working_directory_'
+            ...     'main.py'
+            ... ).content = ''
             >>> run = Run()
             >>> supported_codes_backup = copy.copy(run.SUPPORTED_CODES)
 
@@ -643,12 +652,12 @@ class Run(Class, Runnable):
 
             >>> __test_buffer__.clear() # doctest: +ELLIPSIS
             '...'
-            >>> FileHandler('temp_run_main.py').content = ' '
+            >>> FileHandler('temp_run_command_main.py').content = ''
             >>> run = Run()
 
             >>> run._run_command('list', 'ls') # doctest: +SKIP
             Object of "Run" with detected path "...".
-            >>> __test_buffer__.content # doctest: +SKIP
+            >>> __test_buffer__.clear() # doctest: +SKIP
             'List with "ls". output [...codeRunner...]'
 
             >>> run._run_command(
@@ -683,7 +692,7 @@ class Run(Class, Runnable):
             >>> log_level_backup = Logger.default_level
             >>> Logger.change_all(level=('error',))
             <class 'boostNode.extension.output.Logger'>
-            >>> FileHandler('temp_run_main.py').content = ' '
+            >>> FileHandler('temp_log_command_run_main.py').content = ''
 
             >>> Run()._log_command_run(
             ...     'test', 'test', {
@@ -729,7 +738,7 @@ class Run(Class, Runnable):
 
             Examples:
 
-            >>> FileHandler('temp_run_main.py').content = ' '
+            >>> FileHandler('temp_run_code_file_main.py').content = ''
 
             >>> __test_globals__['__test_mode__'] = False
             >>> Run()
@@ -771,7 +780,7 @@ class Run(Class, Runnable):
 
             >>> code_file = FileHandler(
             ...     location=__test_folder__.path + '_render_properties.cpp')
-            >>> FileHandler('temp_run_main.py').content = ' '
+            >>> FileHandler('temp_render_properties_main.py').content = ''
             >>> run = Run()
 
             >>> run._render_properties({
