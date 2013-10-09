@@ -537,8 +537,8 @@ class Runnable(builtins.object):
             sys.exit(130)
         elif exit:
             '''
-                NOTE: "sys.exit()" has to be called to terminate all
-                child threads.
+                NOTE: "sys.exit()" has to be called to terminate all child
+                threads.
             '''
             sys.exit()
         return cls
@@ -589,20 +589,7 @@ class Runnable(builtins.object):
         try:
             self._run(*arguments, **keywords)
         except builtins.BaseException as exception:
-            if(self._in_test_mode() or sys.flags.debug or
-               self._childrens_module.__logger__.isEnabledFor(logging.DEBUG)):
-                raise
-            else:
-                __logger__.critical(
-                    '{exception_name}: {exception_message}\nType "'
-                    '{program_file_path} --help" for additional '
-                    'informations.'.format(
-                        exception_name=exception.__class__.__name__,
-                        exception_message=builtins.str(exception),
-                        program_file_path=sys.argv[0]))
-                if builtins.hasattr(exception, 'code'):
-                    sys.exit(exception.code)
-                sys.exit(1)
+            self._handle_module_exception(exception)
         finally:
             '''
                 NOTE: we have to let the exception stop all contexts to make
@@ -611,6 +598,47 @@ class Runnable(builtins.object):
             '''
             self.trigger_stop(exit=False)
         return self
+
+    @JointPoint
+## python3.3
+##     def _handle_module_exception(
+##         self: Self, exception: builtins.BaseException
+##     ) -> None:
+    def _handle_module_exception(self, exception):
+##
+        '''
+            Handles exceptions during module running.
+
+            Examples:
+
+            >>> class A(Runnable):
+            ...     def _run(self): raise IOError('test')
+            ...     def _initialize(self): pass
+            >>> class E(Exception):
+            ...     code = 130
+
+            >>> A()._handle_module_exception(E())
+            Traceback (most recent call last):
+            ...
+            SystemExit: 130
+        '''
+        if builtins.hasattr(exception, 'code') and exception.code == 130:
+            sys.exit(exception.code)
+        elif(self._in_test_mode() or sys.flags.debug or
+             self._childrens_module.__logger__.isEnabledFor(logging.DEBUG)
+             ):
+            raise
+        else:
+            __logger__.critical(
+                '{exception_name}: {exception_message}\nType "'
+                '{program_file_path} --help" for additional '
+                'informations.'.format(
+                    exception_name=exception.__class__.__name__,
+                    exception_message=builtins.str(exception),
+                    program_file_path=sys.argv[0]))
+            if builtins.hasattr(exception, 'code'):
+                sys.exit(exception.code)
+            sys.exit(1)
 
         # endregion
 
