@@ -2870,11 +2870,15 @@ class Handler(Class):
         if self.is_directory():
             try:
                 os.rmdir(self._path, *arguments, **keywords)
-            except:
+## python3.3             except builtins.PermissionError:
+            except builtins.OSError:
                 try:
-                    self.change_right(right=stat.S_IWRITE, octal=False)
+                    self.change_right(
+                        right=os.stat(self._path).st_mode | stat.S_IWRITE,
+                        octal=False)
                     os.rmdir(self._path, *arguments, **keywords)
-                except:
+## python3.3                 except builtins.PermissionError:
+                except builtins.OSError:
                     return False
                 else:
                     return True
@@ -3003,11 +3007,15 @@ class Handler(Class):
         if self.is_directory(allow_link=False):
             try:
                 shutil.rmtree(self._path, *arguments, **keywords)
-            except:
+## python3.3             except builtins.PermissionError:
+            except builtins.OSError:
                 try:
-                    self.change_right(right=stat.S_IWRITE, octal=False)
+                    self.change_right(
+                        right=os.stat(self._path).st_mode | stat.S_IWRITE,
+                        octal=False)
                     shutil.rmtree(self._path, *arguments, **keywords)
-                except:
+## python3.3                 except builtins.PermissionError:
+                except builtins.OSError:
                     return False
                 else:
                     return True
@@ -3095,11 +3103,15 @@ class Handler(Class):
                 return self.remove_directory()
             try:
                 os.remove(self._path, *arguments, **keywords)
-            except:
+## python3.3             except builtins.PermissionError:
+            except builtins.OSError:
                 try:
-                    self.change_right(right=stat.S_IWRITE, octal=False)
+                    self.change_right(
+                        right=os.stat(self._path).st_mode | stat.S_IWRITE,
+                        octal=False)
                     os.remove(self._path, *arguments, **keywords)
-                except:
+## python3.3                 except builtins.PermissionError:
+                except builtins.OSError:
                     return False
                 else:
                     return True
@@ -3170,7 +3182,8 @@ class Handler(Class):
             os.chmod(self._path, right)
         if self.is_directory():
             '''Take this method name via introspection.'''
-            self.iterate_directory(function=inspect.stack()[0][3], right=right)
+            self.iterate_directory(
+                function=inspect.stack()[0][3], right=right, octal=octal)
         return self
 
     @JointPoint

@@ -1375,7 +1375,7 @@ class Reflector(Class, Runnable):
             >>> target_file = FileHandler(target.path + 'file')
 
             # TODO
-            >>> reflector._copy_cache_to_source(source_file)
+            >>> reflector._copy_link_cache_to_source(source_file)
             True
         '''
         link = file.read_symbolic_link(as_object=True)
