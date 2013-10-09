@@ -1339,11 +1339,11 @@ class Reflector(Class, Runnable):
     @JointPoint
 ## python3.3
 ##     def _copy_link_in_cache_to_source(
-##         self: Self, source_file: FileHandler, file: FileHandler,
+##         self: Self, source_file: FileHandler, link_file: FileHandler,
 ##         target_path_len: builtins.int
 ##     ) -> builtins.bool:
     def _copy_link_in_cache_to_source(
-        self, source_file, file, target_path_len
+        self, source_file, link_file, target_path_len
     ):
 ##
         '''
@@ -1352,8 +1352,8 @@ class Reflector(Class, Runnable):
 
             "source_file" The source location where the given reflection file
                           will be located. It's the analogical location to the
-                          given file location.
-            "file" The link-file in the reflection area.
+                          given file in reflection location.
+            "link_file" The linked file in the reflection area.
             "target_path_len" Number of chars in the path to link file in
                               cache.
 
@@ -1372,24 +1372,65 @@ class Reflector(Class, Runnable):
             ...     make_directory=True)
             >>> reflector = Reflector(source, target)
             >>> source_file = FileHandler(source.path + 'file')
-            >>> target_file = FileHandler(target.path + 'file')
-
-            # TODO
-            >>> reflector._copy_link_cache_to_source(source_file)
+            >>> source_file.content = ''
+            >>> source_link = FileHandler(source.path + 'link')
+            >>> source_file.make_portable_link(source_link)
             True
+            >>> target_file = FileHandler(target.path + 'file')
+            >>> target_file.content = ''
+            >>> target_link = FileHandler(target.path + 'link')
+            >>> target_file.make_portable_link(target_link)
+            True
+            >>> __test_buffer__.clear() # doctest: +ELLIPSIS
+            '...'
+
+            >>> reflector._copy_link_in_cache_to_source(
+            ...     source_link, target_link, len(target.path))
+            True
+            >>> __test_buffer__.clear() # doctest: +ELLIPSIS
+            '...Leave "...link" unchanged because it is already pointing to...'
+
+            >>> __test_buffer__.clear() # doctest: +ELLIPSIS
+            '...'
+            >>> source_link.content = ''
+            >>> reflector._copy_link_in_cache_to_source(
+            ...     source_link, target_link, len(target.path))
+            True
+            >>> __test_buffer__.clear() # doctest: +ELLIPSIS
+            '...Link "...link" to "...file"...'
+
+            >>> __test_folder__.make_portable_link(target_link)
+            True
+            >>> reflector._copy_link_in_cache_to_source(
+            ...     source_link, target_link, len(target.path))
+            True
+            >>> __test_buffer__.clear() # doctest: +ELLIPSIS
+            '...Copy link "...link" as link...'
+
+            >>> __test_folder__.make_portable_link(source_link, force=True)
+            True
+            >>> reflector._copy_link_in_cache_to_source(
+            ...     source_link, target_link, len(target.path))
+            True
+            >>> __test_buffer__.clear() # doctest: +ELLIPSIS
+            '...Leave "...link" unchanged because "...link" is pointing to ...'
         '''
-        link = file.read_symbolic_link(as_object=True)
-        if link.path[:target_path_len] == self.target_location.path:
+        linked_target = link_file.read_symbolic_link(as_object=True)
+        if linked_target.path[:target_path_len] == self.target_location.path:
+            '''Given link points to a location in reflection area.'''
+            '''
+                Represents the corresponding link from reflection area in
+                source area.
+            '''
             new_link = FileHandler(
-                location=self.source_location.path + link.path[
+                location=self.source_location.path + linked_target.path[
                     target_path_len:])
 ## python3.3
 ##             if(not source_file.is_symbolic_link() or
-##                 source_file.read_symbolic_link(as_object=True) != new_link
+##                source_file.read_symbolic_link(as_object=True) != new_link
 ##                ):
-            if(not source_file.is_symbolic_link() or
-                not (source_file.read_symbolic_link(
-                     as_object=True) == new_link)
+            if(not source_file.is_symbolic_link() or not (
+                source_file.read_symbolic_link(as_object=True) == new_link)
                ):
 ##
                 __logger__.info(
@@ -1397,23 +1438,29 @@ class Reflector(Class, Runnable):
                 return new_link.make_symbolic_link(
                     target=source_file, force=True)
             __logger__.info(
-                'Leave "%s" unchanged because it is pointing to corresponding'
-                ' file in source as "%s" in target.', source_file.path,
-                file.path)
-        elif(link.path[:builtins.len(self.source_location.path)] !=
+                'Leave "%s" unchanged because it is already pointing to '
+                'corresponding file in source as "%s" in target.',
+                source_file.path, link_file.path)
+        elif(linked_target.path[:builtins.len(self.source_location.path)] !=
              self.source_location.path):
+            '''Given link doesn't point to a location in source location.'''
 ## python3.3
 ##             if(not source_file.is_symbolic_link() or
 ##                source_file.read_symbolic_link(as_object=True) !=
-##                file.read_symbolic_link(as_object=True)):
+##                link_file.read_symbolic_link(as_object=True)):
             if not (source_file.read_symbolic_link(as_object=True) ==
-                    file.read_symbolic_link(as_object=True)):
+                    link_file.read_symbolic_link(as_object=True)):
 ##
-                __logger__.info('Copy link "%s" as link.', file.path)
-                return link.make_symbolic_link(source_file, force=True)
+                '''
+                    Given link in reflection doesn't point to the same file as
+                    corresponding file in source.
+                '''
+                __logger__.info('Copy link "%s" as link.', link_file.path)
+                return linked_target.make_symbolic_link(
+                    source_file, force=True)
             __logger__.info(
                 'Leave "%s" unchanged because "%s" is pointing to same file.',
-                source_file.path, file.path)
+                source_file.path, link_file.path)
         return True
 
     @JointPoint
@@ -1535,6 +1582,30 @@ class Reflector(Class, Runnable):
 
             Returns "True" if file-link-operation where successful or "False"
             otherwise.
+
+            Examples:
+
+            >>> source = FileHandler(
+            ...     __test_folder__.path +
+            ...     '_copy_link_in_cache_to_source_source',
+            ...     make_directory=True)
+            >>> target = FileHandler(
+            ...     __test_folder__.path +
+            ...     '_copy_link_in_cache_to_source_target',
+            ...     make_directory=True)
+            >>> reflector = Reflector(source, target)
+            >>> source_link = FileHandler(source.path + 'link')
+            >>> target_file = FileHandler(target.path + 'file')
+            >>> target_file.content = ''
+            >>> target_file.make_portable_link(source_link)
+            True
+            >>> __test_buffer__.clear() # doctest: +ELLIPSIS
+            '...'
+
+            >>> reflector._handle_source_link(source_link, target_file)
+            True
+            >>> __test_buffer__.clear() # doctest: +ELLIPSIS
+            '...Link "...link" refers to reflection location. It will be ...'
         '''
         source_path_len = builtins.len(self.source_location.path)
         link = source_file.read_symbolic_link(as_object=True)
@@ -1550,18 +1621,19 @@ class Reflector(Class, Runnable):
                 'Link "%s" to "%s".', target_file.path, new_link.path)
             return new_link.make_symbolic_link(
                 target=target_file, force=True)
-        elif(link.path[:builtins.len(self.target_location.path)] !=
+        elif(link.path[:builtins.len(self.target_location.path)] ==
              self.target_location.path):
-            '''
-                Link doesn't refer to any location in source; it will be leaved
-                as same link.
-            '''
-            __logger__.info('Copy link "%s" as link.', source_file.path)
-            return link.make_symbolic_link(target_file, force=True)
-        __logger__.warning(
-            'Link "%s" refers to reflection location. It will be ignored and '
-            'deleted on next synchronisation.', source_file.path)
-        return True
+            __logger__.warning(
+                'Link "%s" refers to reflection location. It will be ignored '
+                'and deleted on next synchronisation.', source_file.path)
+            return True
+        '''
+            Link doesn't refer to any location in source; it will be leaved as
+            same link.
+        '''
+        __logger__.info('Copy link "%s" as link.', source_file.path)
+        return link.make_symbolic_link(target_file, force=True)
+
 
             # endregion
 

@@ -3102,6 +3102,8 @@ class Handler(Class):
                    force_windows_behavior)):
                 return self.remove_directory()
             try:
+                if self._path.endswith(os.sep):
+                    self._path = self._path[:-builtins.len(os.sep)]
                 os.remove(self._path, *arguments, **keywords)
 ## python3.3             except builtins.PermissionError:
             except builtins.OSError:
@@ -3120,8 +3122,14 @@ class Handler(Class):
         return False
 
     @JointPoint
-## python3.3     def change_right(self: Self, right, octal=True) -> Self:
-    def change_right(self, right, octal=True):
+## python3.3
+##     def change_right(
+##         self: Self, right, octal=True, recursive=False, allow_link=True
+##     ) -> Self:
+    def change_right(
+        self, right, octal=True, recursive=False, allow_link=True
+    ):
+##
         '''
             Implements the pythons native "os.chmod()" method in an object
             oriented way.
@@ -3161,7 +3169,7 @@ class Handler(Class):
             Object of "Handler" with path "...change_right...
 
             >>> handler.change_right(
-            ...     stat.S_IWUSR | stat.S_IXUSR, octal=False
+            ...     stat.S_IWUSR | stat.S_IXUSR, octal=False, recursive=True
             ... ) # doctest: +ELLIPSIS
             Object of "Handler" with path "...change_right...
 
@@ -3172,7 +3180,7 @@ class Handler(Class):
             Object of "Handler" with path "...change_right_folder..." ...
 
             >>> handler.change_right(
-            ...     stat.S_IWRITE | stat.S_IREAD, octal=False
+            ...     stat.S_IWRITE | stat.S_IREAD, octal=False, recursive=True
             ... ) # doctest: +ELLIPSIS
             Object of "Handler" with path "...change_right...
         '''
@@ -3180,10 +3188,11 @@ class Handler(Class):
             os.chmod(self._path, builtins.eval('0o%d' % right))
         else:
             os.chmod(self._path, right)
-        if self.is_directory():
+        if self.is_directory(allow_link) and recursive:
             '''Take this method name via introspection.'''
             self.iterate_directory(
-                function=inspect.stack()[0][3], right=right, octal=octal)
+                function=inspect.stack()[0][3], right=right, octal=octal,
+                recursive=recursive, allow_link=allow_link)
         return self
 
     @JointPoint
@@ -3764,7 +3773,7 @@ class Handler(Class):
             if as_object:
                 return self.__class__(location=path)
             return path
-        raise __exception__('"%s" isn\t a portable link.', self._path)
+        raise __exception__('"%s" isn\'t a portable link.', self._path)
 
     @JointPoint
 ## python3.3     def clear_directory(self: Self) -> builtins.bool:
@@ -4287,11 +4296,12 @@ class Handler(Class):
             ...     Handler(
             ...         __test_folder__.path + '_make_forced_link_source',
             ...         make_directory=True
-            ...     )._make_forced_link(True ,target, False)
+            ...     )._make_forced_link(True, target, False)
             True
         '''
         if self == target:
-            raise __exception__('It isn\'t possible to link to itself.')
+            raise __exception__(
+                'It isn\'t possible to link to itself ("%s").', self.path)
         if target:
             if not target.remove_deep():
                 return False
