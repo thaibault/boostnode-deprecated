@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.3
 # -*- coding: utf-8 -*-
 
 # region vim modline
@@ -30,11 +30,11 @@ __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-## python3.3
-## import builtins
-## import collections
-import __builtin__ as builtins
-import codecs
+## python2.7
+## import __builtin__ as builtins
+## import codecs
+import builtins
+import collections
 ##
 import inspect
 import os
@@ -48,14 +48,13 @@ for number in (3, 4):
 from boostNode.extension.file import Handler as FileHandler
 from boostNode.extension.native import Module, PropertyInitializer
 from boostNode.extension.system import CommandLine, Runnable
-## python3.3 from boostNode.extension.type import Self
-pass
+## python2.7 pass
+from boostNode.extension.type import Self
 from boostNode.paradigm.aspectOrientation import JointPoint
 from boostNode.paradigm.objectOrientation import Class
 
 # endregion
 
-# TODO check all branches
 
 # region classes
 
@@ -107,8 +106,11 @@ class Replace(Class, Runnable):
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},
              'required': {'execute': '__initializer_default_value__ is None'},
-             'help': 'If setted only files with given extension will be '
-                     'parsed.',
+             'help': {
+                 'execute': "'If setted only files with given extension will "
+                            '''be parsed (default: "%s").' % '''
+                            "__initializer_default_value__.replace('%', "
+                            "'%%')"},
              'dest': 'extension',
              'metavar': 'FILE_EXTENSION'}},
         {'arguments': ('-a', '--exclude-locations'),
@@ -130,8 +132,11 @@ class Replace(Class, Runnable):
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},
              'required': {'execute': '__initializer_default_value__ is None'},
-             'help': 'Defines line to determine current version of file to '
-                     'parse.',
+             'help': {
+                 'execute': "'Defines line pattern to determine current "
+                            '''version of file to parse (default: "%s").' %'''
+                            "__initializer_default_value__.replace('%', "
+                            "'%%')"},
              'dest': 'first_line_regex_pattern',
              'metavar': 'REGEX'}},
         {'arguments': ('-o', '--one-line-regex-pattern'),
@@ -140,8 +145,11 @@ class Replace(Class, Runnable):
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},
              'required': {'execute': '__initializer_default_value__ is None'},
-             'help': 'Defines line to determine current version of file to '
-                     'parse.',
+             'help': {
+                 'execute': "'Defines line to determine current version of "
+                            '''file to parse (default: "%s").' % '''
+                            "__initializer_default_value__.replace('%', "
+                            "'%%')"},
              'dest': 'one_line_regex_pattern',
              'metavar': 'REGEX'}},
         {'arguments': ('-r', '--more-line-regex-pattern'),
@@ -150,8 +158,11 @@ class Replace(Class, Runnable):
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},
              'required': {'execute': '__initializer_default_value__ is None'},
-             'help': 'Defines line to determine current version of file to '
-                     'parse.',
+             'help': {
+                 'execute': "'Defines line to determine current version of "
+                            '''file to parse (default: "%s").' % '''
+                            "__initializer_default_value__.replace('%', "
+                            "'%%')"},
              'dest': 'more_line_regex_pattern',
              'metavar': 'REGEX'}},
         {'arguments': ('-g', '--encoding'),
@@ -160,7 +171,10 @@ class Replace(Class, Runnable):
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},
              'required': {'execute': '__initializer_default_value__ is None'},
-             'help': 'Define which encoding should be used.',
+             'help': {
+                 'execute': "'Define which encoding should be used (default: "
+                            '''"%s").' % __initializer_default_value__.'''
+                            "replace('%', '%%')"},
              'dest': 'encoding',
              'metavar': 'ENCODING'}})
 
@@ -173,8 +187,8 @@ class Replace(Class, Runnable):
             # region special
 
     @JointPoint
-## python3.3     def __repr__(self: Self) -> builtins.str:
-    def __repr__(self):
+## python2.7     def __repr__(self):
+    def __repr__(self: Self) -> builtins.str:
         '''
             Invokes if this object should describe itself by a string.
 
@@ -197,9 +211,9 @@ class Replace(Class, Runnable):
             # region setter
 
     @JointPoint
-## python3.3
-##     def set_new_version(self: Self, version: builtins.str) -> builtins.str:
-    def set_new_version(self, version):
+## python2.7
+##     def set_new_version(self, version):
+    def set_new_version(self: Self, version: builtins.str) -> builtins.str:
 ##
         '''
             Checks if an explicit new version was given or a useful should be
@@ -244,11 +258,11 @@ class Replace(Class, Runnable):
         return self._new_version
 
     @JointPoint
-## python3.3
-##     def set_exclude_locations(
-##         self: Self, paths: collections.Iterable
-##     ) -> builtins.list:
-    def set_exclude_locations(self, paths):
+## python2.7
+##     def set_exclude_locations(self, paths):
+    def set_exclude_locations(
+        self: Self, paths: collections.Iterable
+    ) -> builtins.list:
 ##
         '''
             Converts all paths setted to "_exclude_locations" via string to
@@ -279,8 +293,8 @@ class Replace(Class, Runnable):
             # region runnable implementation
 
     @JointPoint
-## python3.3     def _run(self: Self) -> Self:
-    def _run(self):
+## python2.7     def _run(self):
+    def _run(self: Self) -> Self:
         '''
             Entry point for command line call of this program. Validates the
             given input. Gives usage info or raises exception if the given
@@ -288,8 +302,14 @@ class Replace(Class, Runnable):
 
             Examples:
 
+            >>> import copy
+            >>> sys_argv_backup = copy.copy(sys.argv)
+
+            >>> sys.argv[1:] = []
             >>> Replace(location=__file_path__).run() # doctest: +ELLIPSIS
             Object of "Replace" with directory "..." to convert to "python...".
+
+            >>> sys.arv = sys_argv_backup
         '''
         command_line_arguments = CommandLine.argument_parser(
             arguments=self.COMMAND_LINE_ARGUMENTS,
@@ -299,39 +319,41 @@ class Replace(Class, Runnable):
             namespace=command_line_arguments))
 
     @JointPoint(PropertyInitializer)
-## python3.3
+## python2.7
 ##     def _initialize(
-##         self: Self, location=None, skip_self_file=False, extension='',
+##         self, location=None, skip_self_file=False, extension='',
 ##         first_line_regex_pattern='(?P<constant_version_pattern>^#!.*?'
 ##                                  '(?P<current_version>[a-zA-Z0-9\.]+))\n',
 ##         one_line_regex_pattern='\n(?P<prefix>##) '
 ##                                '(?P<alternate_version>[^\n ]+) ?'
 ##                                '(?P<alternate_text>.*)\n'
-##                                '(?P<current_text>.*)(?:\n|\Z)',
+##                                '(?P<current_text>.*)\n',
 ##         more_line_regex_pattern='(?s)\n(?P<prefix>##) '
 ##                                 '(?P<alternate_version>[^ ]+)\n'
 ##                                 '(?P<alternate_text>'
-##                                 '(?:(?:## .*?\n)|(?:##\n))+'  # in brackets
+##                                 '(?:(?:## .*?\n)|(?:##\n))+'  # in brackets.
 ##                                 ')(?P<current_text>.*?\n)##(?:\n|\Z)',
-##         encoding='utf_8', dry=False, _exclude_locations=(),
-##         _new_version='__determine_useful__', **keywords: builtins.object
-##     ) -> Self:
+##         encoding=FileHandler.DEFAULT_ENCODING, dry=False,
+##         _exclude_locations=(), _new_version='__determine_useful__',
+##         **keywords
+##     ):
     def _initialize(
-        self, location=None, skip_self_file=False, extension='',
+        self: Self, location=None, skip_self_file=False, extension='',
         first_line_regex_pattern='(?P<constant_version_pattern>^#!.*?'
                                  '(?P<current_version>[a-zA-Z0-9\.]+))\n',
         one_line_regex_pattern='\n(?P<prefix>##) '
                                '(?P<alternate_version>[^\n ]+) ?'
                                '(?P<alternate_text>.*)\n'
-                               '(?P<current_text>.*)\n',
+                               '(?P<current_text>.*)(?:\n|\Z)',
         more_line_regex_pattern='(?s)\n(?P<prefix>##) '
                                 '(?P<alternate_version>[^ ]+)\n'
                                 '(?P<alternate_text>'
-                                '(?:(?:## .*?\n)|(?:##\n))+'  # in brackets.
+                                '(?:(?:## .*?\n)|(?:##\n))+'  # in brackets
                                 ')(?P<current_text>.*?\n)##(?:\n|\Z)',
-        encoding='utf_8', dry=False, _exclude_locations=(),
-        _new_version='__determine_useful__', **keywords
-    ):
+        encoding=FileHandler.DEFAULT_ENCODING, dry=False,
+        _exclude_locations=(), _new_version='__determine_useful__',
+        **keywords: builtins.object
+    ) -> Self:
 ##
         '''
             Triggers the conversion process with given arguments. NOTE:
@@ -374,11 +396,11 @@ class Replace(Class, Runnable):
             # region boolean
 
     @JointPoint
-## python3.3
-##     def _in_exclude_location(
-##         self: Self, location: FileHandler
-##     ) -> builtins.bool:
-    def _in_exclude_location(self, location):
+## python2.7
+##     def _in_exclude_location(self, location):
+    def _in_exclude_location(
+        self: Self, location: FileHandler
+    ) -> builtins.bool:
 ##
         '''
             Returns "True" if given location is in one of initially defined
@@ -409,11 +431,11 @@ class Replace(Class, Runnable):
             # region core concern
 
     @JointPoint
-## python3.3
-##     def _determine_useful_version_in_location(
-##         self: Self, location: FileHandler
-##     ) -> builtins.str:
-    def _determine_useful_version_in_location(self, location):
+## python2.7
+##     def _determine_useful_version_in_location(self, location):
+    def _determine_useful_version_in_location(
+        self: Self, location: FileHandler
+    ) -> builtins.str:
 ##
         '''
             Determines a useful version for replacing if nothing explicit was
@@ -449,11 +471,11 @@ class Replace(Class, Runnable):
         return ''
 
     @JointPoint
-## python3.3
-##     def _determine_useful_version_in_file(
-##         self: Self, file: FileHandler
-##     ) -> builtins.str:
-    def _determine_useful_version_in_file(self, file):
+## python2.7
+##     def _determine_useful_version_in_file(self, file):
+    def _determine_useful_version_in_file(
+        self: Self, file: FileHandler
+    ) -> builtins.str:
 ##
         '''
             Searches for first version replacement in macro language as good
@@ -482,8 +504,8 @@ class Replace(Class, Runnable):
         return ''
 
     @JointPoint
-## python3.3     def _convert_path(self: Self) -> Self:
-    def _convert_path(self):
+## python2.7     def _convert_path(self):
+    def _convert_path(self: Self) -> Self:
         '''
             Converts the given path to the specified format.
 
@@ -592,9 +614,9 @@ class Replace(Class, Runnable):
         return self
 
     @JointPoint
-## python3.3
-##     def _convert_directory(self: Self, directory: FileHandler) -> Self:
-    def _convert_directory(self, directory):
+## python2.7
+##     def _convert_directory(self, directory):
+    def _convert_directory(self: Self, directory: FileHandler) -> Self:
 ##
         '''
             Walks through a whole directory and its substructure to convert its
@@ -634,8 +656,8 @@ class Replace(Class, Runnable):
         return self
 
     @JointPoint
-## python3.3     def _convert_file(self: Self, file: FileHandler) -> Self:
-    def _convert_file(self, file):
+## python2.7     def _convert_file(self, file):
+    def _convert_file(self: Self, file: FileHandler) -> Self:
         '''
             Opens a given file and parses its content and convert it through
             different versions of code snippets.
@@ -652,18 +674,18 @@ class Replace(Class, Runnable):
         return self
 
     @JointPoint
-## python3.3     def _convert_file_code(self: Self, file: FileHandler) -> Self:
-    def _convert_file_code(self, file):
+## python2.7     def _convert_file_code(self, file):
+    def _convert_file_code(self: Self, file: FileHandler) -> Self:
         '''Converts source code of given file to new version.'''
         old_file_content = file.content
-## python3.3         with builtins.open(
-        with codecs.open(
+## python2.7         with codecs.open(
+        with builtins.open(
             file.path, mode='r', encoding=self.encoding
         ) as file_handler:
             try:
-## python3.3
-##                 first_line = file_handler.readline()
-                first_line = file_handler.readline().encode(self.encoding)
+## python2.7
+##                 first_line = file_handler.readline().encode(self.encoding)
+                first_line = file_handler.readline()
 ##
             except builtins.UnicodeDecodeError:
                 __logger__.warning(
@@ -687,11 +709,11 @@ class Replace(Class, Runnable):
                     python bug. First call only reads a part of corresponding
                     file.
                 '''
-## python3.3
-##                 file_content = file_handler.read() + file_handler.read()
-                file_content = (
-                    file_handler.read() + file_handler.read()
-                ).encode(self.encoding)
+## python2.7
+##                 file_content = (
+##                     file_handler.read() + file_handler.read()
+##                 ).encode(self.encoding)
+                file_content = file_handler.read() + file_handler.read()
 ##
             except builtins.UnicodeDecodeError:
                 __logger__.warning(
@@ -720,11 +742,11 @@ class Replace(Class, Runnable):
         return self
 
     @JointPoint
-## python3.3
-##     def _replace_alternate_lines(
-##         self: Self, match: type(re.compile('').match(''))
-##     ) -> builtins.str:
-    def _replace_alternate_lines(self, match):
+## python2.7
+##     def _replace_alternate_lines(self, match):
+    def _replace_alternate_lines(
+        self: Self, match: type(re.compile('').match(''))
+    ) -> builtins.str:
 ##
         '''
             Replaces various numbers of code lines with its corresponding code
@@ -761,11 +783,11 @@ class Replace(Class, Runnable):
         return match.group()
 
     @JointPoint
-## python3.3
-##     def _replace_alternate_line(
-##         self: Self, match: type(re.compile('').match(''))
-##     ) -> builtins.str:
-    def _replace_alternate_line(self, match):
+## python2.7
+##     def _replace_alternate_line(self, match):
+    def _replace_alternate_line(
+        self: Self, match: type(re.compile('').match(''))
+    ) -> builtins.str:
 ##
         '''
             Replaces one code line with its corresponding code line in another
@@ -789,11 +811,11 @@ class Replace(Class, Runnable):
         return match.group()
 
     @JointPoint
-## python3.3
-##     def _determine_useful_version_in_location_helper(
-##         self: Self, location: FileHandler
-##     ) -> builtins.str:
-    def _determine_useful_version_in_location_helper(self, location):
+## python2.7
+##     def _determine_useful_version_in_location_helper(self, location):
+    def _determine_useful_version_in_location_helper(
+        self: Self, location: FileHandler
+    ) -> builtins.str:
 ##
         '''
             Searches in files in given locations the first occurrences of a
@@ -816,8 +838,8 @@ class Replace(Class, Runnable):
         return ''
 
     @JointPoint
-## python3.3     def _convert(self: Self) -> Self:
-    def _convert(self):
+## python2.7     def _convert(self):
+    def _convert(self: Self) -> Self:
         '''Triggers the conversion process.'''
         if not __test_mode__ and self._new_version:
             self._convert_path()
