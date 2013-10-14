@@ -1360,7 +1360,6 @@ class Reflector(Class, Runnable):
             source_file = FileHandler(
                 location=self.source_location.path + file.path[
                     target_path_length:])
-            # TODO recheck runnables in both python versions
             if file.is_symbolic_link():
                 return self._copy_link_in_cache_to_source(
                     source_file, link_file=file,
