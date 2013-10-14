@@ -26,20 +26,33 @@ And will always try to use every new cutting edge python features!
 Features
 --------
 
+* Very high code quality
+    * 100% platform independent reachable branch coverage tested!
+    * Each unit(function) has a cyclomatic complexity less than 8!
+    * Every function, class, module, package has a short straight
+      documentation.
+* Always compatible
+    * Always compatible to newest stable python release with newest features
+      included.
+    * Always compatible to last major stable python release. You can switch
+      between both versions via the embedded macro languages
+      (see runnabel/macro.py).
 * Platform independent web-based gui-toolkit (see runnable/webToWindow.py).
 * Smart, very secure and multiprocessing web-server supporting gzip, htaccess,
   ssl file parsing, directory listing, thread-based and process-based
   cgi-script handling. Can run every executable script as cgi-script out of the
   box. You don't need any sockets like FastCGI or WebSocket
   (see runnable/server.py).
-* Macro processor for text based files (see runnable/macro.py).
-* File synchronisation (see runnable/synchronisation.py).
+* Macro processor for maintaining multiple versions of text based files in one
+  place (see runnable/macro.py).
+* File synchronisation and reflection via native and platform independent
+  symbolic file linking (see runnable/synchronisation.py).
 * Many extended language feature like signature checking, joint points for
-  aspect orientated programming automatic getter or setter generation.
+  aspect orientated programming, automatic getter or setter generation.
   (see aspect/signature, paradigm/aspectOrientation.py or
   paradigm/objectOrientation.py).
 * Many additional introspection features and native type extensions
-  (see extension/native.py).
+  (see extension/native.py and extension/type.py).
 * Very high-level file abstraction layer with sandboxing support, and backup
   mechanisms (see extension/file.py).
 * Highlevel code file handling (see runnable/codeRunner.py). Run every
@@ -49,8 +62,9 @@ Features
   (see runnable/template.py).
 * Full featured global logging mechanism handling (see extension/system.py)
 * Very generic full featured command line argument parsing interface written
-  on top of python's native "ArgumentParser" modul
+  on top of python's native "ArgumentParser" module
   (see extension/system.py and extension/output.py).
+* Many tools to bring the dry concept to the highest possible level.
 
 Usage
 -----
