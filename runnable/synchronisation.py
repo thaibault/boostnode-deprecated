@@ -723,16 +723,15 @@ class Reflector(Class, Runnable):
             >>> import copy
             >>> sys_argv_backup = copy.copy(sys.argv)
             >>> sys.argv[1:] = [__test_folder__.path, __test_folder__.path]
+            >>> source = FileHandler(
+            ...     __test_folder__.path + '_run_source', make_directory=True)
+            >>> target = FileHandler(__test_folder__.path + '_run_target')
 
             >>> Reflector.run() # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
             SynchronisationError: Source path "..." and reflection path "...
 
-            >>> source = FileHandler(
-            ...     __test_folder__.path + 'open_link_source',
-            ...     make_directory=True)
-            >>> target = FileHandler(__test_folder__.path + 'open_link_target')
             >>> source.make_portable_link(target)
             True
             >>> source.remove_directory()
@@ -741,7 +740,7 @@ class Reflector(Class, Runnable):
             >>> Reflector.run() # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
-            SynchronisationError: The referenced file "...open_link_source" ...
+            SynchronisationError: The referenced file "..._run_source" ...
 
             >>> sys.argv = sys_argv_backup
         '''
@@ -850,6 +849,21 @@ class Reflector(Class, Runnable):
             Traceback (most recent call last):
             ...
             boostNode.extension.native.SynchronisationError: ...have to be in
+
+            >>> __test_globals__['__test_mode__'] = False
+            >>> Reflector(
+            ...     source_location=__test_folder__.path + 's',
+            ...     target_location=__test_folder__.path + 't'
+            ... ) # doctest: +ELLIPSIS
+            Object of "Reflector" with source path "...s..." and target path...
+
+            >>> Reflector(
+            ...     source_location=__test_folder__.path + 's',
+            ...     target_location=__test_folder__.path + 't',
+            ...     synchronize_back=True, minimum_reflection_size_in_byte=0
+            ... ) # doctest: +ELLIPSIS
+            Object of "Reflector" with source path "...s..." and target path...
+            >>> __test_globals__['__test_mode__'] = True
         '''
 
                 # region properties
@@ -906,7 +920,8 @@ class Reflector(Class, Runnable):
 
             >>> reflector = Reflector(
             ...     source_location=__test_folder__.path + 's',
-            ...     target_location=__test_folder__.path + 't')
+            ...     target_location=__test_folder__.path + 't',
+            ...     minimum_reflection_size_in_byte=0)
             >>> reflector._command_line_arguments = False
 
             >>> reflector._synchronize_back() # doctest: +ELLIPSIS
@@ -916,18 +931,17 @@ class Reflector(Class, Runnable):
             >>> reflector._synchronize_back() # doctest: +ELLIPSIS
             Object of "Reflector" with source path "..." and target path "...
         '''
-        target_size = self.target_location.get_size(
-            limit=self.minimum_reflection_size_in_byte)
         '''
             Check only for minimum reflection size if process was invoked
             via command line.
         '''
-        if(self._command_line_arguments and
-           target_size < self.minimum_reflection_size_in_byte and
-           not CommandLine.boolean_input(
-               question='Reflection has only a size of %s. Do you want to '
-                        'continue? {boolean_arguments}: ' %
-                        self.target_location.human_readable_size)):
+        if(self.target_location.get_size(
+            limit=self.minimum_reflection_size_in_byte
+        ) < self.minimum_reflection_size_in_byte and
+            not CommandLine.boolean_input(
+                question='Reflection has only a size of %s. Do you want to '
+                         'continue? {boolean_arguments}: ' %
+                         self.target_location.human_readable_size)):
             return self
         self.synchronize_back_to_source()
         if self.create:
@@ -1342,13 +1356,15 @@ class Reflector(Class, Runnable):
         if not self.is_location_in_paths(
             search=file, paths=self.exclude_locations
         ):
-            target_path_len = builtins.len(self.target_location.path)
+            target_path_length = builtins.len(self.target_location.path)
             source_file = FileHandler(
                 location=self.source_location.path + file.path[
-                    target_path_len:])
+                    target_path_length:])
+            # TODO recheck runnables in both python versions
             if file.is_symbolic_link():
                 return self._copy_link_in_cache_to_source(
-                    source_file, file, target_path_len)
+                    source_file, link_file=file,
+                    target_path_length=target_path_length)
             if file.is_file():
                 __logger__.info(
                     'Copying file "%s" to "%s".', file.path, source_file.path)
@@ -1369,10 +1385,10 @@ class Reflector(Class, Runnable):
 ## python3.3
 ##     def _copy_link_in_cache_to_source(
 ##         self: Self, source_file: FileHandler, link_file: FileHandler,
-##         target_path_len: builtins.int
+##         target_path_length: builtins.int
 ##     ) -> builtins.bool:
     def _copy_link_in_cache_to_source(
-        self, source_file, link_file, target_path_len
+        self, source_file, link_file, target_path_length
     ):
 ##
         '''
@@ -1383,8 +1399,8 @@ class Reflector(Class, Runnable):
                           will be located. It's the analogical location to the
                           given file in reflection location.
             "link_file" The linked file in the reflection area.
-            "target_path_len" Number of chars in the path to link file in
-                              cache.
+            "target_path_length" Number of chars in the path to link file in
+                                 cache.
 
             Returns "True" if all file-copies where successful or "False" if
             something goes wrong or a symbolic link circle was broken.
@@ -1419,8 +1435,6 @@ class Reflector(Class, Runnable):
             >>> __test_buffer__.clear() # doctest: +ELLIPSIS
             '...Leave "...link" unchanged because it is already pointing to...'
 
-            >>> __test_buffer__.clear() # doctest: +ELLIPSIS
-            '...'
             >>> source_link.content = ''
             >>> reflector._copy_link_in_cache_to_source(
             ...     source_link, target_link, len(target.path))
@@ -1428,6 +1442,22 @@ class Reflector(Class, Runnable):
             >>> __test_buffer__.clear() # doctest: +ELLIPSIS
             '...Link "...link" to "...file"...'
 
+            >>> source_link.content = ''
+            >>> target_link.remove_file()
+            True
+            >>> if Platform().operating_system == 'windows':
+            ...     target_file.make_portable_link(target_link)
+            ... else:
+            ...     target_file.make_symbolic_link(target_link)
+            True
+            >>> reflector._copy_link_in_cache_to_source(
+            ...     source_link, target_link, len(target.path))
+            True
+            >>> __test_buffer__.clear() # doctest: +ELLIPSIS
+            '...Link "...link" to "...file"...'
+
+            >>> target_link.remove_file()
+            True
             >>> __test_folder__.make_portable_link(target_link)
             True
             >>> reflector._copy_link_in_cache_to_source(
@@ -1436,16 +1466,32 @@ class Reflector(Class, Runnable):
             >>> __test_buffer__.clear() # doctest: +ELLIPSIS
             '...Copy link "...link" as link...'
 
+            >>> source_file.make_portable_link(source_link)
+            True
+            >>> target_link.remove_file()
+            True
+            >>> if Platform().operating_system == 'windows':
+            ...     __test_folder__.make_portable_link(target_link)
+            ... else:
+            ...     __test_folder__.make_symbolic_link(target_link)
+            True
+            >>> reflector._copy_link_in_cache_to_source(
+            ...     source_link, target_link, len(target.path))
+            True
+            >>> __test_buffer__.clear() # doctest: +ELLIPSIS
+            '...Copy link "...link..." as link...'
+
             >>> __test_folder__.make_portable_link(source_link, force=True)
             True
             >>> reflector._copy_link_in_cache_to_source(
             ...     source_link, target_link, len(target.path))
             True
             >>> __test_buffer__.clear() # doctest: +ELLIPSIS
-            '...Leave "...link" unchanged because "...link" is pointing to ...'
+            '...Leave "...link" unchanged because "...link..." is pointing ...'
         '''
         linked_target = link_file.read_symbolic_link(as_object=True)
-        if linked_target.path[:target_path_len] == self.target_location.path:
+        if(linked_target.path[:target_path_length] ==
+           self.target_location.path):
             '''Given link points to a location in reflection area.'''
             '''
                 Represents the corresponding link from reflection area in
@@ -1453,7 +1499,7 @@ class Reflector(Class, Runnable):
             '''
             new_link = FileHandler(
                 location=self.source_location.path + linked_target.path[
-                    target_path_len:])
+                    target_path_length:])
 ## python3.3
 ##             if(not source_file.is_symbolic_link() or
 ##                source_file.read_symbolic_link(as_object=True) != new_link
@@ -1464,6 +1510,9 @@ class Reflector(Class, Runnable):
 ##
                 __logger__.info(
                     'Link "%s" to "%s".', source_file.path, new_link.path)
+                if link_file.is_portable_link():
+                    return new_link.make_portable_link(
+                        target=source_file, force=True)
                 return new_link.make_symbolic_link(
                     target=source_file, force=True)
             __logger__.info(
@@ -1485,8 +1534,11 @@ class Reflector(Class, Runnable):
                     corresponding file in source.
                 '''
                 __logger__.info('Copy link "%s" as link.', link_file.path)
+                if link_file.is_portable_link():
+                    return linked_target.make_portable_link(
+                        target=source_file, force=True)
                 return linked_target.make_symbolic_link(
-                    source_file, force=True)
+                    target=source_file, force=True)
             __logger__.info(
                 'Leave "%s" unchanged because "%s" is pointing to same file.',
                 source_file.path, link_file.path)

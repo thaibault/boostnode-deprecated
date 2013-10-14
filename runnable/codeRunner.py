@@ -743,10 +743,10 @@ class Run(Class, Runnable):
             >>> FileHandler('temp_run_code_file_main.py').content = ''
 
             >>> __test_globals__['__test_mode__'] = False
-            >>> Run()
+            >>> Run() # doctest: +ELLIPSIS
             Traceback (most recent call last):
             ...
-            SystemExit: 126
+            SystemExit: ...
             >>> __test_globals__['__test_mode__'] = True
 
             >>> run = Run('not_existing') # doctest: +IGNORE_EXCEPTION_DETAIL

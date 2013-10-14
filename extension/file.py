@@ -4061,6 +4061,7 @@ class Handler(Class):
             True
             >>> Handler().copy(target)
             True
+            >>> del target[0]
             >>> target[0].content = ''
             >>> Handler()._is_equivalent_folder(target)
             False
