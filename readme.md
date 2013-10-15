@@ -16,6 +16,12 @@ License
 
 endregion -->
 
+Inhalt
+======
+
+<!--Place for automatic generated table of contents.-->
+[TOC]
+
 boostNode
 =========
 
