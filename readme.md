@@ -28,6 +28,7 @@ Features
 
 * Very high code quality
     * 100% platform independent reachable branch coverage tested!
+    * Signature based type checking in development mode
     * Each unit(function) has a cyclomatic complexity less than 8!
     * Every function, class, module, package has a short straight
       documentation.
