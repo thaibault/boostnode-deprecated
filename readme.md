@@ -80,7 +80,16 @@ Copy this folder to your projects directory and write something like:
 
     #!/usr/bin/env python
 
-    import boostNode.extension.native
+    from boostNode.extension.file import Handler as FileHandler
+    from boostNode.extension.native import Dictionary, Module, \
+        PropertyInitializer, String
+    from boostNode.extension.output import Buffer, Print
+    from boostNode.extension.system import CommandLine, Runnable
+    ## python3.3 from boostNode.extension.type import Self, SelfClass
+    pass
+    from boostNode.paradigm.aspectOrientation import JointPoint
+    from boostNode.paradigm.objectOrientation import Class
+
     # some stuff using imported boostNode components...
 
 For advanced usage see the recommended module pattern described in
