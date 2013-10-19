@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.3
 # -*- coding: utf-8 -*-
 
 # region vim modline
@@ -29,10 +29,10 @@ __status__ = 'stable'
 __version__ = '1.0'
 
 import atexit
-## python3.3
-## import builtins
-## import collections
-import __builtin__ as builtins
+## python2.7
+## import __builtin__ as builtins
+import builtins
+import collections
 ##
 import functools
 import inspect
@@ -46,8 +46,8 @@ for number in (3, 4):
     sys.path.append(os.path.abspath(sys.path[0] + number * ('..' + os.sep)))
 
 from boostNode.paradigm.objectOrientation import Class
-## python3.3 from boostNode.extension.type import Self, SelfClass
-pass
+## python2.7 pass
+from boostNode.extension.type import Self, SelfClass
 
 # endregion
 
@@ -105,12 +105,12 @@ class FunctionDecorator(Class):
 
             # region special
 
-## python3.3
-##     def __init__(
-##         self: Self, method: (types.FunctionType, types.MethodType),
-##         function=None
-##     ) -> None:
-    def __init__(self, method, function=None):
+## python2.7
+##     def __init__(self, method, function=None):
+    def __init__(
+        self: Self, method: (types.FunctionType, types.MethodType),
+        function=None
+    ) -> None:
 ##
         '''
             Collects informations about wrapped method.
@@ -188,8 +188,8 @@ class FunctionDecorator(Class):
 
                 # endregion
 
-## python3.3     def __repr__(self: Self) -> builtins.str:
-    def __repr__(self):
+## python2.7     def __repr__(self):
+    def __repr__(self: Self) -> builtins.str:
         '''
             Describes current function wrapper.
 
@@ -226,11 +226,11 @@ class FunctionDecorator(Class):
                 value=builtins.str(self.return_value),
                 type=builtins.type(self.return_value).__name__))
 
-## python3.3
-##     def __call__(
-##         self: Self, *arguments: builtins.object, **keywords: builtins.object
-##     ) -> builtins.object:
-    def __call__(self, *arguments, **keywords):
+## python2.7
+##     def __call__(self, *arguments, **keywords):
+    def __call__(
+        self: Self, *arguments: builtins.object, **keywords: builtins.object
+    ) -> builtins.object:
 ##
         '''This method is triggered if wrapped function was called.'''
         if(self.__func__ is not None and self.object is None and
@@ -240,11 +240,11 @@ class FunctionDecorator(Class):
         '''An object bounded method was wrapped.'''
         return self.__class__(function=arguments[0], method=self.method_type)
 
-## python3.3
-##     def __get__(
-##         self: Self, object: builtins.object, class_object=None
-##     ) -> (types.FunctionType, types.MethodType):
-    def __get__(self, object, class_object=None):
+## python2.7
+##     def __get__(self, object, class_object=None):
+    def __get__(
+        self: Self, object: builtins.object, class_object=None
+    ) -> (types.FunctionType, types.MethodType):
 ##
         '''
             Triggers when wrapped function should be graped from instance.
@@ -286,11 +286,11 @@ class FunctionDecorator(Class):
 
             # endregion
 
-## python3.3
-##     def get_wrapper_function(
-##         self: Self
-##     ) -> (types.FunctionType, types.MethodType):
-    def get_wrapper_function(self):
+## python2.7
+##     def get_wrapper_function(self):
+    def get_wrapper_function(
+        self: Self
+    ) -> (types.FunctionType, types.MethodType):
 ##
         '''
             This method should usually be overridden. It serves the wrapper
@@ -302,12 +302,12 @@ class FunctionDecorator(Class):
 
         # region protected
 
-## python3.3
-##     def _handle_given_decorator(
-##         self: Self, function: (types.FunctionType, types.MethodType),
-##         method: (builtins.object, builtins.type)
-##     ) -> Self:
-    def _handle_given_decorator(self, function, method):
+## python2.7
+##     def _handle_given_decorator(self, function, method):
+    def _handle_given_decorator(
+        self: Self, function: (types.FunctionType, types.MethodType),
+        method: (builtins.object, builtins.type)
+    ) -> Self:
 ##
         '''
             Another decorator was given to this instance. This decorator should
@@ -342,11 +342,11 @@ class FunctionDecorator(Class):
                 self.__func__ = self.method_type(self.__func__)
         return self
 
-## python3.3
-##     def _determine_arguments(
-##         self: Self, arguments: collections.Iterable
-##     ) -> builtins.tuple:
-    def _determine_arguments(self, arguments):
+## python2.7
+##     def _determine_arguments(self, arguments):
+    def _determine_arguments(
+        self: Self, arguments: collections.Iterable
+    ) -> builtins.tuple:
 ##
         '''Determine right set of arguments for different method types.'''
         '''Avoid to add object or class references twice.'''
@@ -374,13 +374,13 @@ class JointPointHandler(Class):
 
             # region special
 
-## python3.3
-##     def __init__(
-##         self: Self, class_object: builtins.type, object: builtins.object,
-##         function: (types.FunctionType, types.MethodType),
-##         arguments: collections.Iterable, keywords: builtins.dict
-##     ) -> None:
-    def __init__(self, class_object, object, function, arguments, keywords):
+## python2.7
+##     def __init__(self, class_object, object, function, arguments, keywords):
+    def __init__(
+        self: Self, class_object: builtins.type, object: builtins.object,
+        function: (types.FunctionType, types.MethodType),
+        arguments: collections.Iterable, keywords: builtins.dict
+    ) -> None:
 ##
         '''
             Saves function call properties.
@@ -402,40 +402,40 @@ class JointPointHandler(Class):
         self.arguments = arguments
         self.keywords = keywords
         self.argument_specifications = []
-## python3.3
-##         argument_specifications = inspect.signature(
-##             self.__func__
-##         ).parameters
-##         bound_arguments = inspect.signature(self.__func__).bind(
-##             *self.arguments, **self.keywords)
-##         for name, value in bound_arguments.arguments.items():
-##             if(argument_specifications[name].kind is
-##                inspect.Parameter.VAR_POSITIONAL):
-##                 for index, positional_value in builtins.enumerate(
-##                     value
-##                 ):
-##                     self.argument_specifications.append(Argument(
-##                         parameter=argument_specifications[name],
-##                         value=positional_value, function=self.__func__,
-##                         name=builtins.str(index + 1) + '. argument'))
-##             elif(argument_specifications[name].kind is
-##                  inspect.Parameter.VAR_KEYWORD):
-##                 for keyword_name, keyword_value in value.items():
-##                     self.argument_specifications.append(Argument(
-##                         parameter=argument_specifications[name],
-##                         value=keyword_value, function=self.__func__,
-##                         name=keyword_name))
-##             else:
-##                 self.argument_specifications.append(Argument(
-##                     parameter=argument_specifications[name],
-##                     value=value, function=self.__func__))
-        pass
+## python2.7
+##         pass
+        argument_specifications = inspect.signature(
+            self.__func__
+        ).parameters
+        bound_arguments = inspect.signature(self.__func__).bind(
+            *self.arguments, **self.keywords)
+        for name, value in bound_arguments.arguments.items():
+            if(argument_specifications[name].kind is
+               inspect.Parameter.VAR_POSITIONAL):
+                for index, positional_value in builtins.enumerate(
+                    value
+                ):
+                    self.argument_specifications.append(Argument(
+                        parameter=argument_specifications[name],
+                        value=positional_value, function=self.__func__,
+                        name=builtins.str(index + 1) + '. argument'))
+            elif(argument_specifications[name].kind is
+                 inspect.Parameter.VAR_KEYWORD):
+                for keyword_name, keyword_value in value.items():
+                    self.argument_specifications.append(Argument(
+                        parameter=argument_specifications[name],
+                        value=keyword_value, function=self.__func__,
+                        name=keyword_name))
+            else:
+                self.argument_specifications.append(Argument(
+                    parameter=argument_specifications[name],
+                    value=value, function=self.__func__))
 ##
 
                 # endregion
 
-## python3.3     def __repr__(self: Self) -> builtins.str:
-    def __repr__(self):
+## python2.7     def __repr__(self):
+    def __repr__(self: Self) -> builtins.str:
         '''Represents the given function call properties.'''
         return(
             'Object of "{class_name}" with class object "{class_object}", '
@@ -451,8 +451,8 @@ class JointPointHandler(Class):
             # endregion
 
     @classmethod
-## python3.3     def aspect(cls: SelfClass) -> None:
-    def aspect(cls):
+## python2.7     def aspect(cls):
+    def aspect(cls: SelfClass) -> None:
         '''
             This method should be overwritten to provide the essential aspect
             for handled function call.
@@ -488,8 +488,8 @@ class ReturnAspect(Class):
 
             # region special
 
-## python3.3     def __init__(self: Self) -> None:
-    def __init__(self):
+## python2.7     def __init__(self):
+    def __init__(self: Self) -> None:
         '''Initializes instance properties.'''
 
                 # region properties
@@ -499,8 +499,8 @@ class ReturnAspect(Class):
 
                 # endregion
 
-## python3.3     def __repr__(self: Self) -> builtins.str:
-    def __repr__(self):
+## python2.7     def __repr__(self):
+    def __repr__(self: Self) -> builtins.str:
         '''
             Represents the current handled function call.
 
@@ -553,11 +553,11 @@ class ReturnJointPoint(JointPointHandler, ReturnAspect):
 
             # region special
 
-## python3.3
-##     def __init__(
-##         self: Self, *arguments: builtins.object, **keywords: builtins.object
-##     ) -> None:
-    def __init__(self, *arguments, **keywords):
+## python2.7
+##     def __init__(self, *arguments, **keywords):
+    def __init__(
+        self: Self, *arguments: builtins.object, **keywords: builtins.object
+    ) -> None:
 ##
         '''
             Initializes a joint point for saved function call.
@@ -610,8 +610,8 @@ class ReturnJointPoint(JointPointHandler, ReturnAspect):
 
 # region classes
 
-## python3.3 pass
-"""
+## python2.7 """
+pass
 
 
 class Argument(Class):
@@ -623,14 +623,14 @@ class Argument(Class):
 
             # region special
 
-## python3.3
-##     def __init__(
-##         self: Self, parameter: inspect.Parameter,
-##         value: (builtins.object, builtins.type),
-##         function: (types.MethodType, types.FunctionType),
-##         name=None
-##     ) -> None:
-    def __init__(self, parameter, value, function, name=None):
+## python2.7
+##     def __init__(self, parameter, value, function, name=None):
+    def __init__(
+        self: Self, parameter: inspect.Parameter,
+        value: (builtins.object, builtins.type),
+        function: (types.MethodType, types.FunctionType),
+        name=None
+    ) -> None:
 ##
         '''
             Collects information about argument.
@@ -680,8 +680,8 @@ class Argument(Class):
 
                 # endregion
 
-## python3.3     def __repr__(self: Self) -> builtins.str:
-    def __repr__(self):
+## python2.7     def __repr__(self):
+    def __repr__(self: Self) -> builtins.str:
         '''
             Represents current instance as string.
 
@@ -697,8 +697,8 @@ class Argument(Class):
         default_value = 'default value "%s", ' % builtins.str(self.default)
         if self.default is inspect.Signature.empty:
             default_value = ''
-## python3.3         function_path = self.__func__.__qualname__
-        function_path = self.__func__.__name__
+## python2.7         function_path = self.__func__.__name__
+        function_path = self.__func__.__qualname__
         return(
             'Object of "{name}" ({kind}) bounded to "{function_path}" '
             'with name "{argument_name}", {default_value}annotation '
@@ -716,8 +716,8 @@ class Argument(Class):
 
     # endregion
 
-## python3.3 pass
-"""
+## python2.7 """
+pass
 
 
 class PointCut(ReturnAspect):
@@ -729,13 +729,13 @@ class PointCut(ReturnAspect):
 
             # region special
 
-## python3.3
-##     def __init__(
-##         self: Self, class_object: builtins.type, object: builtins.object,
-##         function: (types.FunctionType, types.MethodType),
-##         arguments: collections.Iterable, keywords: builtins.dict
-##     ) -> None:
-    def __init__(self, class_object, object, function, arguments, keywords):
+## python2.7
+##     def __init__(self, class_object, object, function, arguments, keywords):
+    def __init__(
+        self: Self, class_object: builtins.type, object: builtins.object,
+        function: (types.FunctionType, types.MethodType),
+        arguments: collections.Iterable, keywords: builtins.dict
+    ) -> None:
 ##
         '''
             Initializes a point cut object for implementing the aspect
@@ -765,14 +765,14 @@ class PointCut(ReturnAspect):
 
             # endregion
 
-## python3.3     def handle_call(self: Self) -> builtins.bool:
-    def handle_call(self):
+## python2.7     def handle_call(self):
+    def handle_call(self: Self) -> builtins.bool:
         '''
             Implementation of point cut for the aspect orientated way. Filters
             all functions calls and run given advice on given event.
         '''
-## python3.3         def call_handler(advice: builtins.dict) -> builtins.bool:
-        def call_handler(advice):
+## python2.7         def call_handler(advice):
+        def call_handler(advice: builtins.dict) -> builtins.bool:
             '''
                 Supports classes, simple functions or methods as triggered call
                 handler.
@@ -790,18 +790,18 @@ class PointCut(ReturnAspect):
             return True
         return self._handle_aspects(handler=call_handler)
 
-## python3.3
-##     def handle_return(
-##         self: Self, return_value: builtins.object
-##     ) -> builtins.object:
-    def handle_return(self, return_value):
+## python2.7
+##     def handle_return(self, return_value):
+    def handle_return(
+        self: Self, return_value: builtins.object
+    ) -> builtins.object:
 ##
         '''
             Implementation of point cut for the aspect orientated way. Filters
             all functions calls and run given advice on given event.
         '''
-## python3.3         def return_handler(advice: builtins.dict) -> None:
-        def return_handler(advice):
+## python2.7         def return_handler(advice):
+        def return_handler(advice: builtins.dict) -> None:
             '''
                 Supports classes, simple functions or methods as triggered
                 return handler.
@@ -823,11 +823,11 @@ class PointCut(ReturnAspect):
 
         # region protected
 
-## python3.3
-##     def _handle_aspects(
-##         self: Self, handler: types.MethodType
-##     ) -> builtins.bool:
-    def _handle_aspects(self, handler):
+## python2.7
+##     def _handle_aspects(self, handler):
+    def _handle_aspects(
+        self: Self, handler: types.MethodType
+    ) -> builtins.bool:
 ##
         '''Iterates through each aspect matching current function call.'''
         from boostNode.extension.native import Module
@@ -851,11 +851,11 @@ class PointCut(ReturnAspect):
 
 
 if sys.flags.optimize:
-## python3.3
-##     def JointPoint(
-##         function: (types.FunctionType, types.MethodType)
-##     ) -> (types.FunctionType, types.MethodType):
-    def JointPoint(function):
+## python2.7
+##     def JointPoint(function):
+    def JointPoint(
+        function: (types.FunctionType, types.MethodType)
+    ) -> (types.FunctionType, types.MethodType):
 ##
         '''
             Dummy function for simply return given function to avoid
@@ -938,11 +938,11 @@ else:
 
             # region getter
 
-## python3.3
-##         def get_wrapper_function(
-##             self: Self
-##         ) -> (types.FunctionType, types.MethodType):
-        def get_wrapper_function(self):
+## python2.7
+##         def get_wrapper_function(self):
+        def get_wrapper_function(
+            self: Self
+        ) -> (types.FunctionType, types.MethodType):
 ##
             '''This methods returns the joint point's wrapped function.'''
             @functools.wraps(self.__func__)
@@ -962,8 +962,8 @@ else:
                     self.return_value = point_cut.handle_return(
                         return_value=self.__func__(*arguments, **keywords))
                 return self.return_value
-## python3.3             pass
-            wrapper_function.__wrapped__ = self.__func__
+## python2.7             wrapper_function.__wrapped__ = self.__func__
+            pass
             return wrapper_function
 
             # endregion
