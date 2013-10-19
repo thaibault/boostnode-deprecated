@@ -45,6 +45,8 @@ import re
 import string as native_string
 import sys
 import traceback
+## python3.3 import urllib.request
+import urllib
 
 '''Make boostNode packages and modules importable via relative paths.'''
 for number in (3, 4):
@@ -444,11 +446,20 @@ class Parser(Class, Runnable):
             >>> template.builtins # doctest: +ELLIPSIS
             {...'print': ..._print...}
         '''
+## python3.3
+##         self._builtins.update({
+##             '__indent__': self.indent, 'FileHandler': FileHandler,
+##             'print': self._print, 'include': self._include,
+##             'str': builtins.str, 'len': builtins.len, 'json': json,
+##             'path_name_to_url': urllib.request.pathname2url, 'False': False,
+##             'True': True, 'locals': builtins.locals})
         self._builtins.update({
             '__indent__': self.indent, 'FileHandler': FileHandler,
             'print': self._print, 'include': self._include,
             'str': builtins.str, 'len': builtins.len, 'json': json,
-            'False': False, 'True': True, 'locals': builtins.locals})
+            'path_name_to_url': urllib.pathname2url, 'False': False,
+            'True': True, 'locals': builtins.locals})
+##
         return self._builtins
 
             # endregion
