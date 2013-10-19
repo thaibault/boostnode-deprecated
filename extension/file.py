@@ -505,6 +505,7 @@ class Handler(Class):
                                 virtual root path should be considered.
             "output_with_root_prefix" Defines if "get_path()" returns a path
                                       with or without root path prefixed.
+            TODO check arguments everywhere     
 
             Examples:
 
@@ -4217,7 +4218,10 @@ class Handler(Class):
         if location is None:
             location = os.curdir
         elif builtins.isinstance(location, self.__class__):
-            location = location._path
+            if self._respect_root_path:
+            	location = location.path
+            else:
+                location = location._path
         return location
 
     @JointPoint

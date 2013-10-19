@@ -1009,8 +1009,8 @@ class Parser(Class, Runnable):
                     location=template + '.tpl', encoding=self.file_encoding)
             if not self.file.is_file():
                 raise __exception__(
-                    'No suitable template found with given name "%s" in "%s".',
-                    template, self.file.directory_path)
+                    'No suitable template found with given name "%s" in '
+		    '"%s".', template, self.file.directory_path)
             self.content = self.file.content
         self.native_template_object = native_string.Template(self.content)
         self.native_template_object.pattern = re.compile(
