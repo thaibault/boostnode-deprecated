@@ -452,13 +452,15 @@ class Parser(Class, Runnable):
 ##             'print': self._print, 'include': self._include,
 ##             'str': builtins.str, 'len': builtins.len, 'json': json,
 ##             'path_name_to_url': urllib.request.pathname2url, 'False': False,
-##             'True': True, 'locals': builtins.locals})
+##             'True': True, 'locals': builtins.locals,
+##             'sorted': builtins.sorted})
         self._builtins.update({
             '__indent__': self.indent, 'FileHandler': FileHandler,
             'print': self._print, 'include': self._include,
             'str': builtins.str, 'len': builtins.len, 'json': json,
             'path_name_to_url': urllib.pathname2url, 'False': False,
-            'True': True, 'locals': builtins.locals})
+            'True': True, 'locals': builtins.locals,
+            'sorted': builtins.sorted})
 ##
         return self._builtins
 
