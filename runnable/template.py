@@ -1656,6 +1656,9 @@ class Parser(Class, Runnable):
         self._new_line = True
         self._number_of_generated_lines += 1
         code_line = match.group('code').strip()
+        '''Support alternate "end" keyword to finish a code block.'''
+        if code_line == 'end':
+            code_line = 'pass'
         mode = 'passiv'
         if code_line.endswith(':') and not code_line.startswith('#'):
             mode = 'activ'
