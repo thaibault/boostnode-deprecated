@@ -2014,10 +2014,6 @@ class Module(Object):
         if not file:
             if frame is None:
                 frame = inspect.currentframe()
-            '''
-                NOTE: "must_exist" is necessary for supporting frozen
-                executables.
-            '''
             file = FileHandler(
                 location=frame.f_code.co_filename, respect_root_path=False)
         if not file:
