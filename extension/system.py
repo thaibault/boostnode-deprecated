@@ -1770,23 +1770,7 @@ class CommandLine(builtins.object):
     def test_module(cls, module, temp_file_patterns, verbose):
 ##
         '''Test a given module's doctests.'''
-        global FileHandler, Buffer
-        context_path = Module.get_context_path(__file_path__)
-        if(Module.get_context_path(module['scope'].__file_path__).startswith(
-            context_path[:context_path.rfind('.')]
-        ) and module['scope'].__name__ == '__main__'):
-            if 'Handler' in module['scope'].__dict__:
-                FileHandler = module['scope'].__dict__[FileHandler.__name__]
-            elif 'Buffer' in module['scope'].__dict__:
-                Buffer = module['scope'].__dict__[Buffer.__name__]
-        module['scope'].__test_folder__ = FileHandler(
-            location=tempfile.mkdtemp(suffix=module['scope'].__name__))
-        module['scope'].__test_buffer__ = Buffer()
-        module['scope'].__test__ = cls.determine_wrapped_objects(
-            scope=module['scope'])
-        module['scope'].__name__ = '__main__'
-        module['scope'].__test_mode__ = True
-        module['scope'].__test_globals__ = module['scope'].__dict__
+        module = cls._extend_module_for_testing(module)
         '''Backup old runtime environment.'''
         platform_process_lock_directory_backup = \
             Platform.process_lock_directory
@@ -1821,6 +1805,38 @@ class CommandLine(builtins.object):
         # endregion
 
         # region protected
+
+    @JointPoint(builtins.classmethod)
+## python3.3
+##     def _extend_module_for_testing(
+##         cls: SelfClass, module: builtins.dict
+##     ) -> builtins.dict:
+    def _extend_module_for_testing(cls, module):
+##
+        '''Extend given module with some globals usable for testing.'''
+        global FileHandler, Buffer
+        context_path = Module.get_context_path(__file_path__)
+        '''
+            NOTE: The identical module could be loaded under different relative
+            context paths. So we have to make sure that testing critical
+            objects are instances from the identical class.
+        '''
+        if Module.get_context_path(module['scope'].__file_path__).startswith(
+            context_path[:context_path.rfind('.')]
+        ):
+            if FileHandler.__name__ in module['scope'].__dict__:
+                FileHandler = module['scope'].__dict__[FileHandler.__name__]
+            elif Buffer.__name__ in module['scope'].__dict__:
+                Buffer = module['scope'].__dict__[Buffer.__name__]
+        module['scope'].__test_folder__ = FileHandler(
+            location=tempfile.mkdtemp(suffix=module['scope'].__name__))
+        module['scope'].__test_buffer__ = Buffer()
+        module['scope'].__test__ = cls.determine_wrapped_objects(
+            scope=module['scope'])
+        module['scope'].__name__ = '__main__'
+        module['scope'].__test_mode__ = True
+        module['scope'].__test_globals__ = module['scope'].__dict__
+        return module
 
     @JointPoint(builtins.classmethod)
 ## python3.3
@@ -2164,10 +2180,6 @@ class CommandLine(builtins.object):
                 raise __exception__(message)
         return callable_objects, default_caller
 
-        # endregion
-
-        # region protected
-
     @JointPoint(builtins.classmethod)
 ## python3.3
 ##     def _test_lint_document_modules(
@@ -2454,7 +2466,7 @@ class CommandLine(builtins.object):
                 Module.get_context_path(path=inspect.getsourcefile(module)))
             sys.modules['__main__'] = module
             cls.generic_module_interface(
-                module={'scope': module, 'name': module_name},
+                module=Module.extend(name=module_name, module=module),
                 temp_file_patterns=temp_file_patterns, test=True)
             sys.modules['__main__'] = main_module_reference_backup
             sys.argv = command_line_arguments_backup
