@@ -2517,14 +2517,12 @@ class Handler(Class):
 ##     def backup(
 ##         self: Self, name_wrapper=(
 ##             '<%file.basename%>_backup<%file.extension_suffix%>'),
-##         backup_if_exists=True, backup_if_backup_exists=True,
-##         compare_content=True
+##         backup_if_exists=True, compare_content=True
 ##     ) -> Self:
     def backup(
         self,
         name_wrapper='<%file.basename%>_backup<%file.extension_suffix%>',
-        backup_if_exists=True, backup_if_backup_exists=True,
-        compare_content=True
+        backup_if_exists=True, compare_content=True
     ):
 ##
         '''
@@ -2534,17 +2532,8 @@ class Handler(Class):
             "backup_if_exists" indicates if a backup should be make even if
                                there is already a file object with given backup
                                name and content (if "compare_content" is set).
-                               Note if this option is "False"
-                               "backup_if_backup_exists" is also set to "False"
-                               and "compare_content" implies to "True".
-            "backup_if_backup_exists" indicates if a backup should be make even
-                                      if there is already a backup file object
-                                      with given backup name and content (if
-                                      "compare_content" is set).
 
             Examples:
-
-            # TODO check additional branch
 
             >>> handler = Handler(__test_folder__.path + 'backup')
             >>> handler.content = ''
@@ -2552,8 +2541,8 @@ class Handler(Class):
 
             >>> handler.backup(template) # doctest: +ELLIPSIS
             Object of "Handler" with path "...
-            >>> Handler(__test_folder__.path + 'backup_b') # doctest: +ELLIPSIS
-            Object of "Handler" with path "...
+            >>> Handler(__test_folder__.path + 'backup_b').is_file()
+            True
 
             >>> handler.backup(template) # doctest: +ELLIPSIS
             Object of "Handler" with path "...
@@ -2561,7 +2550,7 @@ class Handler(Class):
             True
 
             >>> handler.backup(
-            ...     template, backup_if_backup_exists=False
+            ...     template, backup_if_exists=False
             ... ) # doctest: +ELLIPSIS
             Object of "Handler" with path "...
             >>> Handler(__test_folder__.path + 'backup_b_b_b').is_file()
@@ -2569,7 +2558,7 @@ class Handler(Class):
 
             >>> handler.content = 'A'
             >>> handler.backup(
-            ...     template, backup_if_backup_exists=False
+            ...     template, backup_if_exists=False
             ... ) # doctest: +ELLIPSIS
             Object of "Handler" with path "...
             >>> Handler(__test_folder__.path + 'backup_b_b_b').is_file()
@@ -2577,8 +2566,7 @@ class Handler(Class):
 
             >>> handler.content = 'B'
             >>> handler.backup(
-            ...     template, backup_if_backup_exists=False,
-                    compare_content=False
+            ...     template, backup_if_exists=False, compare_content=False
             ... ) # doctest: +ELLIPSIS
             Object of "Handler" with path "...
             >>> Handler(__test_folder__.path + 'backup_b_b_b_b').is_file()
@@ -2586,9 +2574,6 @@ class Handler(Class):
         '''
         from boostNode.runnable.template import Parser as TemplateParser
 
-        if not backup_if_exists:
-            backup_if_backup_exists = False
-            compare_content = True
         backup = self
         while True:
             earlier_backup = backup
@@ -2601,11 +2586,14 @@ class Handler(Class):
             '''
             if not backup:
                 '''Check if a new created backup would be redundant.'''
-                if((not (earlier_backup is self) or
-                    backup_if_exists is False
-                   ) and backup_if_backup_exists is False and
+## python3.3
+##                 if(earlier_backup != self and not backup_if_exists and
+##                    (not compare_content or self.is_equivalent(
+##                        other=earlier_backup))):
+                if(not (earlier_backup == self) and not backup_if_exists and
                    (not compare_content or self.is_equivalent(
                        other=earlier_backup))):
+##
                     return self
                 self.copy(target=backup)
                 break
