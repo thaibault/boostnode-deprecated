@@ -42,9 +42,11 @@ import copy
 ##
 import gzip
 import inspect
-## python3.3 import io
+## python3.3
+## import _io
+## import io
 pass
-import _io
+##
 import logging
 import multiprocessing
 import os
@@ -58,7 +60,7 @@ import socket
 import subprocess
 import sys
 ## python3.3
-## import io
+## pass
 import SocketServer
 import StringIO
 ##
@@ -2467,7 +2469,7 @@ class CGIHTTPRequestHandler(
                 self.send_header('Content-Transfer-Encoding', 'binary')
         else:
             self.send_content_type_header(
-                mime_type=self.requested_file.mime_type)
+                mime_type=self.requested_file.get_mime_type(web=True))
         self.send_static_file_cache_header(
             timestamp=self.requested_file.timestamp)
         self.send_content_length_header(

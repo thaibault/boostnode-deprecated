@@ -1260,16 +1260,20 @@ class Handler(Class):
 
     @JointPoint(Class.pseudo_property)
 ## python3.3
-##     def get_mime_type(self: Self, default_type='text') -> builtins.str:
-    def get_mime_type(self, default_type='text'):
+##     def get_mime_type(
+##         self: Self, default_type='text', web=False
+##     ) -> builtins.str:
+    def get_mime_type(self, default_type='text', web=False):
 ##
         '''
             Determines the mime-type of the current object.
             Returns the current object mime-type. The format is
             "type/subtype".
 
-            "default_type" - Defines the returned fallback mimetype if it
+            "default_type" - Defines the returned fallback mime type if it
                              couldn't be determined.
+            "web"          - If web is set to "True" fallback mime type is
+                             "application/octet-stream".
 
             Examples:
 
@@ -1287,13 +1291,18 @@ class Handler(Class):
             >>> handler = Handler(
             ...     location=__test_folder__.path +
             ...     'get_mime_type.unknownType')
-            >>> handler.content = 'hans'
-            >>> handler.mime_type # doctest: +ELLIPSIS
+            >>> handler.content = ''
+            >>> handler.mime_type
             'text/x-unknownType'
+
+            >>> handler.get_mime_type(web=True)
+            'application/octet-stream'
         '''
         mime_type = mimetypes.guess_type(self._path)[0]
         if builtins.isinstance(mime_type, builtins.str):
             return mime_type
+        if web:
+            return 'application/octet-stream'
         if self.is_file():
             subtype = 'plain'
             if self.extension:
