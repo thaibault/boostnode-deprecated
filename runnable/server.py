@@ -698,6 +698,9 @@ class Web(Class, Runnable):
         '''
             Waits for running workers and shuts the server down.
 
+            Arguments and keywords are forwarded to
+            "boostNode.extension.system.Run.stop()".
+
             Examples:
 
             >>> web = Web()
@@ -772,6 +775,8 @@ class Web(Class, Runnable):
             module_name=__name__, scope={'self': self})
         return self._initialize(**self._command_line_arguments_to_dictionary(
             namespace=command_line_arguments))
+
+    # TODO
 
     @JointPoint(PropertyInitializer)
 ## python3.3

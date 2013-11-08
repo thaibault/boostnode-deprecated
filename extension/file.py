@@ -219,6 +219,12 @@ class Handler(Class):
         '''
             Normalizes root path.
 
+            "location"       - Location to set for new sandbox path.
+            "make_directory" - If set to "True" given location will be created
+                               if not exists.
+
+            Returns current class.
+
             Examples:
 
             >>> root_backup = Handler.get_root()
@@ -254,9 +260,13 @@ class Handler(Class):
         '''
             Converts between file size formats.
 
-            "format" determines the returning file size unit.
-            "decimal" determines if the decimal or binary interpretation
-                      should be used.
+            "format"  - Determines the returning file size unit.
+            "decimal" - Determines if the decimal or binary interpretation
+                        should be used.
+            "formats" - If provided this formats will be used instead of
+                        "cls.FORMATS".
+
+            Returns computed size.
 
             Examples:
 
@@ -304,6 +314,13 @@ class Handler(Class):
             "False" (if given string hasn't match any number with a useful
             measure) back.
 
+            "size_and_unit" - Given size with unit as string.
+            "format"        - Format to returns.
+            "decimal"       - Indicates weather decimal computation should be
+                              used.
+
+            Returns size if determined otherwise "False".
+
             Examples:
 
             >>> Handler.determine_size_from_string(size_and_unit='10 MB')
@@ -347,6 +364,13 @@ class Handler(Class):
         '''
             Converts a given size format to byte format.
 
+            "size"         - Size to convert.
+            "given_format" - Input format.
+            "decimal"      - Indicates weather decimal or binary computation
+                             should be used.
+
+            Returns computed size.
+
             Examples:
 
             >>> Handler.DECIMAL = False
@@ -378,6 +402,8 @@ class Handler(Class):
             is valid. The pattern is created depending on the given size
             formats as dictionary.
 
+            "formats" - Formats to use. Defaults to "cls.FORMATS".
+
             Examples:
 
             >>> Handler.determine_regex_units(
@@ -407,6 +433,9 @@ class Handler(Class):
         '''
             Gives all platform dependent symbols for special file system
             locations.
+
+            "operating_system" - If not provided operating system will be
+                                 determined.
 
             Examples:
 
@@ -493,20 +522,24 @@ class Handler(Class):
         '''
             Initialize a new instance of a given file system object by path.
 
-            "location" is path or "Handler" referencing to file object.
-            "make_directory" Make directory of path object if given location
-                             doesn't exists.
-            "right" Define rights for all created object with an "Handler"
-                    object.
-            "must_exist" Throws an exception if the given path doesn't exists
-                         if this argument is "True".
+            "location"                - is path or "Handler" referencing to
+                                        file object.
+            "make_directory"          - Make directory of path object if given
+                                        location doesn't exists.
+            "must_exist"              - Throws an exception if the given path
+                                        doesn't exists if this argument is
+                                        "True".
             "encoding" Define encoding for reading and writing files.
-            "respect_root_path" Defines if a previous statically defined
-                                virtual root path should be considered.
-            "output_with_root_prefix" Defines if "get_path()" returns a path
-                                      with or without root path prefixed.
+            "respect_root_path"       - Defines if a previous statically
+                                        defined virtual root path should be
+                                        considered.
+            "output_with_root_prefix" - Defines if "get_path()" returns a path
+                                        with or without root path prefixed.
+            "has_extension"           - Defines weater path interpretation
+                                        should assume a file extension.
 
-            TODO check arguments everywhere
+            Every additional argument or keyword will be forwarded to the
+            "make_directory()" method if "make_directory" is set to "True".
 
             Examples:
 
@@ -610,6 +643,8 @@ class Handler(Class):
         '''
             Invokes if the current object is tried to iterate.
 
+            Returns an iterator object.
+
             Examples:
 
             >>> for file in Handler(location='.'):
@@ -649,6 +684,11 @@ class Handler(Class):
 ##
         '''
             Invokes if a comparison of two "Handler" objects is done.
+
+            "other" - Another file handler or file path to be checked again
+                      current file object.
+
+            Returns the boolean result.
 
             Examples:
 
@@ -693,6 +733,11 @@ class Handler(Class):
         '''
             Triggers if an element is tried to get with the "[]" operator.
 
+            "key" - Defines which object in current directory should be
+                    returned.
+
+            Returns the requested file object.
+
             Examples:
 
             >>> Handler()[0] # doctest: +ELLIPSIS
@@ -707,6 +752,9 @@ class Handler(Class):
 ##
         '''
             Deletes the specified item from the file system.
+
+            "key" - Defines which object in current directory should be
+                    deleted.
 
             Examples:
 
@@ -730,6 +778,11 @@ class Handler(Class):
         '''
             Is triggered if you want to determine if an object is in a
             "Handler" object.
+
+            "item" - Checks if given file object or file path is present in
+                     current directory.
+
+            Returns the boolean result.
 
             Examples:
 
@@ -764,6 +817,9 @@ class Handler(Class):
             Is triggered if you use the pythons native "builtins.len()"
             function on a "Handler" object.
 
+            Returns the number of objects in current directory or size of
+            currently pointing to file.
+
             Examples:
 
             >>> len(Handler(
@@ -793,6 +849,8 @@ class Handler(Class):
         '''
             Is triggered if this object should be converted to string.
 
+            Returns the computed string version.
+
             Examples:
 
             >>> str(Handler(location=__file_path__)) # doctest: +ELLIPSIS
@@ -805,6 +863,8 @@ class Handler(Class):
     def __repr__(self):
         '''
             Invokes if this object should describe itself by a string.
+
+            Returns the computed string.
 
             Examples:
 
@@ -943,9 +1003,14 @@ class Handler(Class):
             file on file system zero will be returned. This method has the
             additionally all parameters as "self.convert_size_format()".
 
-            "limit" Break and return current calculated size if limit is
-                    reached or doesn't if limit is 0. Limit is interpreted in
-                    bytes.
+            "limit"       - Break and return current calculated size if limit
+                            is reached or doesn't if limit is 0. Limit is
+                            interpreted in bytes.
+            "follow_link" - Indicates weather to walk into links to aggregate
+                            size.
+
+            Each additional argument or keyword will be forwarded to the
+            "self.convert_size_format()" method.
 
             Examples:
 
@@ -1040,8 +1105,8 @@ class Handler(Class):
             Calculates the potential dummy size for a portable link pointing to
             this object.
 
-            "label" is the actual used label for marking the text based
-                    portable link files.
+            "label" - is the actual used label for marking the text based
+                      portable link files.
 
             Examples:
 
@@ -1068,6 +1133,9 @@ class Handler(Class):
 ##
         '''
             Represents a given file size in byte as human readable string.
+
+            "size" - If a size is given size of current file object will be
+                     ignored and that size will be used.
 
             Examples:
 
@@ -1197,9 +1265,11 @@ class Handler(Class):
 ##
         '''
             Determines the mime-type of the current object.
-
             Returns the current object mime-type. The format is
             "type/subtype".
+
+            "default_type" - Defines the returned fallback mimetype if it
+                             couldn't be determined.
 
             Examples:
 
@@ -1246,6 +1316,14 @@ class Handler(Class):
             Determines path of current "Handler" object or returns the path of
             a given "Handler" instance.
 
+            "location"                - If a handle object is provided the
+                                        saved path will be given back.
+            "respect_root_path"       - Indicates weather we check the sandbox
+                                        feature for this request.
+            "output_with_root_prefix" - Indicates weather we should prefix the
+                                        resulting path with the path to
+                                        sandbox.
+
             Examples:
 
             >>> Handler(location=__file_path__).path # doctest: +ELLIPSIS
@@ -1290,6 +1368,13 @@ class Handler(Class):
             Returns the relative path of current "Handler" object depending on
             the current location.
 
+            "context" - If provided the relative path will be determined
+                        relative to this context. If nothing or "None" is given
+                        current directory will be used.
+
+            Additional arguments or keywords will be forwarded to
+            "os.path.relpath()".
+
             Examples:
 
             >>> Handler(
@@ -1332,6 +1417,9 @@ class Handler(Class):
 ##
         '''
             Determines the current path of the Directory object without file.
+
+            "output_with_root_prefix" - Indicates weather the path to sandbox
+                                        should set as prefix.
 
             Examples:
 
@@ -1387,6 +1475,14 @@ class Handler(Class):
             Determines the current file name without directory path. Same
             possible parameters as native python method "os.path.name()".
 
+            "output_with_root_prefix" - Indicates if determined name should
+                                        be stripped from a path prefixed with
+                                        path to current sandbox.
+            "force_windows_behavior"  - If set to "True" windows behavior will
+                                        be forced.
+
+            Returns the determined file object name.
+
             Examples:
 
             >>> Handler(location=__file_path__).name
@@ -1432,6 +1528,13 @@ class Handler(Class):
         '''
             Determines the current file name without directory path and file
             extension. Same possible parameters as native python method
+            "os.path.name()".
+
+            "output_with_root_prefix" - Indicates if determined name should
+                                        be stripped from a path prefixed with
+                                        path to current sandbox.
+
+            Additional arguments and keywords will be forwarded to
             "os.path.name()".
 
             Examples:
@@ -1508,6 +1611,13 @@ class Handler(Class):
             that this method shouldn't be used for binary files. If current
             handler points to an directory containing files will be returned as
             list.
+
+            "mode"   - Mode for opening current file (if not pointing to a
+                       directory).
+            "strict" - Indicates weather encoding should through an exception.
+
+            Every additional argument or keyword will be forwarded to
+            "builtins.open()".
 
             Examples:
 
@@ -1595,9 +1705,8 @@ class Handler(Class):
                         python bug when finishing reading file without end
                         reached.
                     '''
-                    return builtins.str(
-                        (file.read() + file.read()).encode(
-                            encoding=self.DEFAULT_ENCODING))
+                    return builtins.str((file.read() + file.read()).encode(
+                        encoding=self.DEFAULT_ENCODING))
 ##
         elif self.is_directory():
             return self.list()
@@ -1617,6 +1726,10 @@ class Handler(Class):
         '''
             Determines the portable link file content pattern. With the file
             independent placeholder "executable_path" replaced.
+
+            "force_windows_behavior" - If set to "True" this method will force
+                                       windows behavior on none windows
+                                       operating systems.
 
             Examples:
 
@@ -1687,17 +1800,18 @@ class Handler(Class):
             Returns the final portable link content depending on the current
             file referenced by "self.path".
 
-            "label" Label for better distinction with other text-based
-                    files.
-            "relative" triggers if target should be referenced via relative
-                       path. If "True" relative path will be determined from
-                       current working directory, if a path or Handler object
-                       is provided this location will be used as context to
-                       determine relative path, if "Self" is provided target
-                       location will be used as context and if "False"
-                       (default) path will be referenced absolute.
-            "target_path" this method is only needed if relative is setted to
-                          "Self".
+            "label"       - Label for better distinction with other text-based
+                            files.
+            "relative"    - triggers if target should be referenced V
+                            relative path. If "True" relative path will be
+                            determined from current working directory, if a
+                            path or Handler object is provided this location
+                            will be used as context to determine relative path,
+                            if "Self" is provided target location will be used
+                            as context and if "False" (default) path will be
+                            referenced absolute.
+            "target_path" - this method is only needed if relative is setted to
+                            "Self".
 
             Examples:
 
@@ -1760,6 +1874,8 @@ class Handler(Class):
             If it was permitted and successful "True" will be returned and
             "False" otherwise.
 
+            Additional arguments or keywords will be forwarded to "os.utime()".
+
             Examples:
 
             >>> import time
@@ -1800,6 +1916,11 @@ class Handler(Class):
             Set encoding for a text-base file if current instance refers to
             one. This method serves as wrapper method for "set_content()".
 
+            "encoding" - Encoding description.
+
+            Additional arguments and keywords will be forwarded to
+            "self.set_content()".
+
             Examples:
 
             >>> test_file = Handler(
@@ -1829,6 +1950,12 @@ class Handler(Class):
             that this method shouldn't be used for binary files. If current
             handler points to an directory containing files will be returned as
             list.
+
+            "content" - Content to write in current file.
+            "mode"    - File mode used for writing in file.
+
+            Additional arguments and keywords are forwarded to
+            "builtins.open()".
 
             Examples:
 
@@ -1926,6 +2053,10 @@ class Handler(Class):
         '''
             This function could be understand as wrapper method for "move()".
 
+            "location" - New directory location for current file object.
+
+            Additional arguments and keywords are forwarded to "self.move()".
+
             Examples:
 
             >>> handler = Handler(
@@ -1985,6 +2116,10 @@ class Handler(Class):
         '''
             This function could be understand as wrapper method for "move()".
 
+            "name" - New name for current file object.
+
+            Additional arguments and keywords are forwarded to "self.move()".
+
             Examples:
 
             >>> handler = Handler(
@@ -2027,6 +2162,11 @@ class Handler(Class):
             This function could be understand as wrapper method for
             "set_name()".
 
+            "basename" - New basename.
+
+            Additional arguments and keywords are forwarded to
+            "self.set_name()".
+
             Examples:
 
             >>> handler = Handler(
@@ -2067,6 +2207,10 @@ class Handler(Class):
             This function could be understand as wrapper method for
             "set_name()".
 
+            "extension" - New file extension.
+
+            Additional arguments and keywords are forwarded to "self.name()".
+
             Examples:
 
             >>> handler = Handler(__test_folder__.path + 'set_extension.ext')
@@ -2105,6 +2249,8 @@ class Handler(Class):
 ##
         '''
             Serves as wrapper function for the "move" method.
+
+            Additional arguments and keywords are forwarded to "self.move()".
 
             Examples:
 
@@ -2528,10 +2674,11 @@ class Handler(Class):
         '''
             Creates a backup of current file object in same location.
 
-            "name_wrapper" a template formating the backup file name.
-            "backup_if_exists" indicates if a backup should be make even if
-                               there is already a file object with given backup
-                               name and content (if "compare_content" is set).
+            "name_wrapper"     - A template formating the backup file name.
+            "backup_if_exists" - Indicates if a backup should be make even if
+                                 there is already a file object with given
+                                 backup name and content (if "compare_content"
+                                 is set).
 
             Examples:
 
@@ -2610,6 +2757,8 @@ class Handler(Class):
             Returns "True" if given file object contains likewise content as
             current file object.
 
+            "other" - The file object to compare.
+
             Examples:
 
             >>> handler = Handler(
@@ -2659,6 +2808,8 @@ class Handler(Class):
         '''
             Changes the current working directory to the instance saved
             location.
+
+            Returns the current instance.
 
             Examples:
 
@@ -2739,6 +2890,8 @@ class Handler(Class):
             It does not include the special entries '.' and '..' even if they
             are present in the directory.
 
+            Additional arguments and keywords are forwarded to "os.listdir()".
+
             Examples:
 
             >>> from boostNode.extension.system import Platform
@@ -2816,11 +2969,13 @@ class Handler(Class):
             oriented way.
 
             Remove (delete) the directory path. Works only if the directory is
-            empty, otherwise, "OSError" is raised. To remove whole directory
-            trees, "remove_deep" or "shutil.rmtree" can be used.
+            empty, otherwise, "builtins.OSError" is raised. To remove whole
+            directory trees, "remove_deep" or "shutil.rmtree()" can be used.
 
             Returns "True" if deleting was successful or no file exists and
             "False" otherwise.
+
+            Additional arguments or keywords a forwarded to "os.rmdir()".
 
             Examples:
 
@@ -2902,10 +3057,12 @@ class Handler(Class):
 
             Recursively move a file or directory to another location. If the
             destination is on the current file system, then simply use
-            "rename". Otherwise, copy current path (with pythons native
-            "shutil.copy2" method) to the target and then remove current path.
+            "rename". Otherwise, copy current path (with "self.copy()" method)
+            to the target and then remove current path.
 
-            "target" Path or "Handler" object pointing to target destination.
+            "target" - Path or "Handler" object pointing to target destination.
+
+            Additional arguments or keywords a forwarded to "shutil.move()".
 
             Examples:
 
@@ -2970,6 +3127,10 @@ class Handler(Class):
             be the exception information returned by pythons native
             "sys.exc_info()" method. Exceptions raised by "onerror" will not be
             caught.
+
+            Additional arguments or keywords a forwarded to "shutil.rmtree()".
+
+            Returns "True" if remove was successful and "False" otherwise.
 
             Examples:
 
@@ -3036,9 +3197,15 @@ class Handler(Class):
             Implements the pythons native "os.remove()" method in an object
             oriented way.
 
-            Remove (delete) the file path. Thiis is the same function as
-            pythons native "os.remove"; the unlink name is its traditional Unix
-            name.
+            Remove (delete) the file path. This is the same function as
+            pythons native "os.remove()"; the unlink name is its traditional
+            Unix name.
+
+            "force_windows_behavior" - Indicates weather windows behavior
+                                       should be used on other operating
+                                       systems than windows.
+
+            Additional arguments or keywords a forwarded to "os.remove()".
 
             Returns "True" if file was deleted successfully and "False"
             otherwise.
@@ -3158,7 +3325,14 @@ class Handler(Class):
             stat.S_IWOTH
             stat.S_IXOTH
 
-            "right" is the new right for the current object's path location.
+            "right"      - Is the new right for the current object's path
+                           location.
+            "octal"      - Indicates weather we provide an octal number or a
+                           constant combination from "stat.*".
+            "recursive"  - Indicates weather rights should be set recursively.
+            "allow_link" - Indicates weather links should be followed.
+
+            Returns the current instance.
 
             Examples:
 
@@ -3205,15 +3379,17 @@ class Handler(Class):
     def copy(self, target, *arguments, **keywords):
 ##
         '''
-            Implements the pythons native "shutil.copy()" method in an object
-            orientated way.
+            Implements the pythons native "shutil.copy2()" method and
+            "shutil.copytree()" in an object orientated way.
 
             Copy the current file to the file or directory "target". If current
             location is a directory, a file with the same name is created (or
             overwritten) in the directory specified. Permission bits are
             copied.
 
-            "target" Path or "Handler" object pointing to target destination.
+            "target" - Path or "Handler" object pointing to target destination.
+
+            Additional arguments or keywords a forwarded to "shutil.copy2()".
 
             Returns "True" if the copy process was successful or "False"
             otherwise.
@@ -3270,6 +3446,14 @@ class Handler(Class):
             name is unique. The handler which creates the folder will be given
             back.
 
+            "wrapper_pattern" - A template describing how the current object
+                                should be renamed if current file object
+                                already exists. The template has the current
+                                file name as placeholder (usable with
+                                {file_name}).
+
+            Returns the new created file object.
+
             Examples:
 
             >>> handler = Handler(__test_folder__.path + 'make_new_directory')
@@ -3309,10 +3493,14 @@ class Handler(Class):
             oriented way.
 
             Create a directory named path with numeric mode. The default mode
-            is "700" (octal). If the directory already exists, "OSError" is
-            raised.
+            is "700" (octal). If the directory already exists,
+            "builtins.OSError" is raised.
 
-            "right" is new the right for the current object's path location.
+            "right" - is new the right for the current object's path location.
+            "octal" - Indicates weather given right should be interpreted as
+                      octal number.
+
+            Additional arguments or keywords are forwarded to "os.mkdir()".
 
             Returns "True" if the creation process was successful or "False"
             otherwise.
@@ -3369,27 +3557,29 @@ class Handler(Class):
             parameter is ignored if the target exists (and the symbolic link is
             created with the same type as the target). Symbolic link support
             was introduced in Windows 6.0 (Vista). The native python
-            "os.symlink()" method will raise a "NotImplementedError" on Windows
-            versions earlier than 6.0.
+            "os.symlink()" method will raise a "builtins.NotImplementedError"
+            on Windows versions earlier than 6.0.
 
             Note: The "CreateSymbolicLinkPrivilege" is required in order to
             successfully create symbolic links. This privilege is not typically
             granted to regular users but is available to accounts which can
             escalate privileges to the administrator level. Either obtaining
             the privilege or running your application as an administrator are
-            ways to successfully create symbolic links. OSError is raised when
-            the function is called by an unprivileged user.
+            ways to successfully create symbolic links. "builtins.OSError" is
+            raised when the function is called by an unprivileged user.
 
-            "force" triggers if symbolic links with not existing referenced
-                    files should be made. If target exists it will be
-                    overwritten if set to "True".
-            "relative" triggers if target should be referenced via relative
-                       path. If "True" relative path will be determined from
-                       current working directory, if a path or Handler object
-                       is provided this location will be used as context to
-                       determine relative path, if "Self" is provided target
-                       location will be used as context and if "False"
-                       (default) path will be referenced absolute.
+            "force"    - triggers if symbolic links with not existing
+                         referenced files should be made. If target exists it
+                         will be overwritten if set to "True".
+            "relative" - triggers if target should be referenced via relative
+                         path. If "True" relative path will be determined from
+                         current working directory, if a path or Handler object
+                         is provided this location will be used as context to
+                         determine relative path, if "Self" is provided target
+                         location will be used as context and if "False"
+                         (default) path will be referenced absolute.
+
+            Returns "True" if creation was successful and "False" otherwise.
 
             Examples:
 
@@ -3434,9 +3624,11 @@ class Handler(Class):
             Implements the pythons native "os.link()" method in an object
             oriented way. The optional parameter "force" is added.
 
-            "force" triggers if hard links with not existing referenced files
-                    should be made. If target exists it will be overwritten if
-                    set to "True".
+            "force" - Indicates if hard links with not existing referenced
+                      files should be made. If target exists it will be
+                      overwritten if set to "True".
+
+            Returns "True" if creation was successful and "False" otherwise.
 
             Examples:
 
@@ -3466,20 +3658,23 @@ class Handler(Class):
 ##
         '''
             Implements the pythons native "os.readlink()" method in an object
-            oriented way. Additionall support for portable text-based
+            oriented way. Additional support for portable text-based
             link-files is added.
 
             Return a string representing the path to which the symbolic link
             points. The result may be either an absolute or relative pathname;
             if it is relative, it may be converted to an absolute pathname
-            using pythons native "os.path.join" method as
+            using pythons native "os.path.join()" method as
             "os.path.join(os.path.dirname(path), result)". If the path is a
             string object, the result will also be a string object, and the
-            call may raise an "UnicodeDecodeError". If the path is a bytes
-            object, the result will be a bytes object. You can use the optional
-            "as_object" parameter for getting a Handler object. This is very
-            useful if you don't know if the resulting path is either a relative
-            or an absolute one.
+            call may raise an "builtins.UnicodeDecodeError". If the path is a
+            bytes object, the result will be a bytes object. You can use the
+            optional "as_object" parameter for getting a Handler object. This
+            is very useful if you don't know if the resulting path is either a
+            relative or an absolute one.
+
+            Additional arguments and keywords will be forwarded to
+            "os.readlink()"..
 
             Returns the path referenced by the link file.
 
@@ -3552,7 +3747,7 @@ class Handler(Class):
             location. The destination directory, named by given parameter
             "target", must not already exist; it will be created as well as
             missing parent directories. Permissions and times of directories
-            are copied with pythons native method "shutil.copystat",
+            are copied with pythons native method "shutil.copystat()",
             individual files are copied using pythons native "shutil.copy2()"
             method. If given parameter "symbolic_links" is "True", symbolic
             links in the source tree are represented as symbolic links in the
@@ -3563,7 +3758,7 @@ class Handler(Class):
             of the copy process. You can set the optional
             "ignore_dangling_symlinks" flag to "True" if you want to silence
             this exception. Notice that this option has no effect on platforms
-            that don't support pythons native "os.symlink" method. If ignore is
+            that don't support pythons native "os.symlink()" method. If ignore is
             given, it must be a callable that will receive as its arguments the
             directory being visited by pythons native method "shutil.copytree",
             and a list of its contents, as returned by pythons "os.listdir"
@@ -3582,8 +3777,11 @@ class Handler(Class):
             that supports the same signature (like pythons "shutil.copy()") can
             be used.
 
-            "target" is path or "Handler" object pointing to target
-                     destination.
+            "target"         - Target location for coping current file object.
+            "symbolic_links" - Indicates weather symbolic links should be
+                               followed.
+
+            Returns the current instance.
 
             Examples:
 
@@ -3623,10 +3821,10 @@ class Handler(Class):
 
     @JointPoint
 ## python3.3
-##     def make_directorys(
+##     def make_directoriess(
 ##         self: Self, *arguments: builtins.object, **keywords: builtins.object
 ##     ) -> builtins.bool:
-    def make_directorys(self, *arguments, **keywords):
+    def make_directoriess(self, *arguments, **keywords):
 ##
         '''
             Implements the pythons native "os.makedirs()" method in an object
@@ -3636,19 +3834,21 @@ class Handler(Class):
             "os.mkdir()" method, but creates all intermediate-level
             directories needed to contain the leaf directory. If the target
             directory with the same mode as specified already exists, raises an
-            "OSError" exception if given parameter "exist_ok" is "False",
-            otherwise no exception is raised. If the directory cannot be
-            created in other cases, raises an "OSError" exception. The default
-            mode is "0o770" (octal). On some systems, "mode" is ignored. Where
-            it is used, the current "umask" value is first masked out. Note
-            "make_directorys()" will become confused if the path elements to
-            create include parent directory.
+            "builtins.OSError" exception if given parameter "exist_ok" is
+            "False", otherwise no exception is raised. If the directory cannot
+            be created in other cases, raises an "builtins.OSError" exception.
+            The default mode is "0o770" (octal). On some systems, "mode" is
+            ignored. Where it is used, the current "umask" value is first
+            masked out. Note "make_directories()" will become confused if the
+            path elements to create include parent directory.
+
+            Additional arguments and keywords are forwarded to "os.makedirs()".
 
             Examples:
 
             >>> handler = Handler(
             ...     location=__test_folder__.path + 'dir/sub_dir/sub_sub_dir')
-            >>> handler.make_directorys()
+            >>> handler.make_directories()
             True
             >>> handler.path # doctest: +ELLIPSIS
             '...dir...sub_dir...sub_sub_dir...'
@@ -3656,7 +3856,7 @@ class Handler(Class):
             True
 
             >>> handler = Handler(location=__test_folder__.path + 'dir')
-            >>> handler.make_directorys()
+            >>> handler.make_directories()
             True
             >>> handler.path # doctest: +ELLIPSIS
             '...dir...'
@@ -3682,13 +3882,15 @@ class Handler(Class):
             Creates a portable link on the current location referencing on the
             given path ("target").
 
-            "target" is path or "Handler" object pointing to target
-                     destination.
-            "force" means to trigger if a file on the target location should be
-                    overwritten.
-            "label" is a useful label to distinguish portable linked files
-                    from other text-based files. Default is setted to the
-                    current class description.
+            "target" - A path or file object interpreted as target location.
+            "force"  - Means to trigger if a file on the target location should
+                       be overwritten.
+            "label"  - Is a useful label to distinguish portable linked files
+                       from other text-based files. Default is setted to the
+                       current class description.
+
+            Additional arguments and keywords are forwarded to
+             "self.get_portable_link_content()".
 
             Examples:
 
@@ -3735,6 +3937,9 @@ class Handler(Class):
         '''
             Reads the referenced path of a given portable link file.
 
+            "as_object" - Indicates weather the resulting file should be
+                          returned as string or file handler.
+
             Examples:
 
             >>> target = Handler(
@@ -3779,6 +3984,8 @@ class Handler(Class):
         '''
             Deletes the contents of the current directory location without
             deleting the current location itself.
+
+            Returns "True" if deletion was successful or "False" otherwise.
 
             Examples:
 
@@ -3827,7 +4034,16 @@ class Handler(Class):
             represents a local method the current scope will be accessible in
             the given method.
 
-            If "function" is a string, a new instance is created otherwise not.
+            "function"          - If is a string, a new instance is created
+                                  otherwise not.
+            "recursive"         - Indicates weather iteration should be
+                                  recursive.
+            "recursive_in_link" - Indicates weather links should be followed.
+            "deep_first"        - Indicates weather breath first or deep first
+                                  recursive tree traversal should be used.
+
+            Additional arguments of keywords will be forwarded to given
+            function.
 
             Returns "False" if any call of "function" returns "False" or
             current thread was terminated and "True" otherwise.
@@ -3906,6 +4122,8 @@ class Handler(Class):
             Removes files with filenames matching the given patterns. This
             method search recursively for matching file names.
 
+            Each argument will be interpreted as file name pattern to delete.
+
             Examples:
 
             >>> handler = Handler(
@@ -3919,10 +4137,12 @@ class Handler(Class):
             >>> b_b.content = 'A'
             >>> a_c = Handler(handler.path + 'a.c')
             >>> a_c.content = 'A'
+
             >>> handler.delete_file_patterns(
             ...     '.+\.b', 'a\.c'
             ... ) # doctest: +ELLIPSIS
             Object of "Handler" with path "...delete_file_patterns..."...
+
             >>> a_a.is_file()
             True
             >>> a_b.is_file()
@@ -4333,7 +4553,7 @@ class Handler(Class):
                 path_object = self.__class__(location=path)
                 if not path_object:
                     break
-            self.make_directorys()
+            self.make_directories()
             successfull = self._make_platform_dependent_link(
                 symbolic, target, relative, *arguments, **keywords)
             '''Delete everything we temporary created before.'''

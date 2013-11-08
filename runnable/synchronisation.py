@@ -201,7 +201,7 @@ class Reflector(Class, Runnable):
             Examples:
 
             >>> file = FileHandler(location=__test_folder__.path + 'source5')
-            >>> file.make_directorys()
+            >>> file.make_directories()
             True
 
             >>> Reflector.is_location_in_paths(
@@ -282,7 +282,7 @@ class Reflector(Class, Runnable):
 
             >>> FileHandler(
             ...     __test_folder__.path + 's/A/B'
-            ... ).make_directorys()
+            ... ).make_directories()
             True
 
             >>> repr(Reflector(
@@ -392,15 +392,15 @@ class Reflector(Class, Runnable):
 
             >>> FileHandler(
             ...     location=__test_folder__.path + 'source/A/B/C'
-            ... ).make_directorys()
+            ... ).make_directories()
             True
             >>> FileHandler(
             ...     location=__test_folder__.path + 'source/B/A/B/C'
-            ... ).make_directorys()
+            ... ).make_directories()
             True
             >>> FileHandler(
             ...     location=__test_folder__.path + 'source/B/B/C'
-            ... ).make_directorys()
+            ... ).make_directories()
             True
             >>> FileHandler(
             ...     location=__test_folder__.path + 'source/A/a.txt'
@@ -570,7 +570,7 @@ class Reflector(Class, Runnable):
             Object of "Handler" with path "...source2..." (type: directory).
             >>> FileHandler(
             ...     location=__test_folder__.path + 'target2/new_folder'
-            ... ).make_directorys() # doctest: +ELLIPSIS
+            ... ).make_directories() # doctest: +ELLIPSIS
             True
             >>> FileHandler(
             ...     location=__test_folder__.path + 'target2/new_file.txt'
@@ -605,11 +605,11 @@ class Reflector(Class, Runnable):
 
             >>> FileHandler(
             ...     location=__test_folder__.path + 'source3/A/B/C'
-            ... ).make_directorys()
+            ... ).make_directories()
             True
             >>> FileHandler(
             ...     location=__test_folder__.path + 'source3/B/A/B/C'
-            ... ).make_directorys()
+            ... ).make_directories()
             True
             >>> file = FileHandler(
             ...     location=__test_folder__.path + 'source3/A/B/C/test.txt')
@@ -793,7 +793,7 @@ class Reflector(Class, Runnable):
             ...
             boostNode.extension.native.FileError: Invalid path "...
 
-            >>> FileHandler(__test_folder__.path + 's/A/B').make_directorys()
+            >>> FileHandler(__test_folder__.path + 's/A/B').make_directories()
             True
 
             >>> Reflector(
@@ -1005,7 +1005,7 @@ class Reflector(Class, Runnable):
 
             >>> FileHandler(
             ...     location=__test_folder__.path + 'source4/A/B/C'
-            ... ).make_directorys()
+            ... ).make_directories()
             True
             >>> reflector = Reflector(
             ...     source_location=__test_folder__.path + 'source4/A',
@@ -1305,7 +1305,7 @@ class Reflector(Class, Runnable):
             __logger__.info(
                 'Create directory path "%s" for relocation of "%s".',
                 relocated_directory.path, linked_file.path)
-            relocated_directory.make_directorys()
+            relocated_directory.make_directories()
         if linked_file:
             __logger__.info(
                 'Relocate "%s" to "%s".', linked_file.path,

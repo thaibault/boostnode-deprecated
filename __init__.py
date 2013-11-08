@@ -325,6 +325,8 @@ def __get_all_modules__(path=sys.path[0]):
         This method provides a generic way to determine all modules in current
         package or folder. It is useful for "__init__.py" files.
 
+        "path" - Current working directory.
+
         Examples:
 
         >>> __get_all_modules__() # doctest: +ELLIPSIS
