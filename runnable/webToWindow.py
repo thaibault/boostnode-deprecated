@@ -193,6 +193,7 @@ class Browser(Class, Runnable):
     def __repr__(self):
         '''
             Invokes if this object should describe itself by a string.
+            Returns the computed self describing string.
 
             Examples:
 
@@ -269,7 +270,11 @@ class Browser(Class, Runnable):
     @JointPoint
 ## python3.3     def set_url(self: Self, url: builtins.str) -> builtins.str:
     def set_url(self, url):
-        '''Setter for current url.'''
+        '''
+            Setter for current url.
+
+            "url" - URL to set.
+        '''
         if re.compile('^[a-zA-Z]+://.*$').match(url):
             self._url = url
         else:
@@ -372,6 +377,21 @@ class Browser(Class, Runnable):
         '''
             Initializes a web view or tries to open a default browser if no gui
             suitable gui toolkit is available.
+
+            "_url"                 - URL to open in webview.
+            "width_in_pixel"       - Width of opening browser window.
+            "height_in_pixel"      - Height of opening browser window.
+            "fullscreen"           - Indicates weather windows should start in
+                                     fullscreen mode.
+            "no_window_decoration" - If set to "True" no windows decoration
+                                     will be provided.
+            "default_gui_toolkit"  - Toolkit to use if more than one is
+                                     available.
+            "no_progress_bar"      - If set to "True" progress bar for loading
+                                     web pages will be omitted.
+            "default_title"        - Default window title to show in window
+                                     decoration.
+            "stop_order"           - Standard in command to close window.
 
             Examples:
 

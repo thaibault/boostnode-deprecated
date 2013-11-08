@@ -388,8 +388,6 @@ class Replace(Class, Runnable):
             "_exclude_locations"       - Locations to exclude.
             "_new_version"             - Version description to convert to.
 
-            Returns the current instance.
-
             Examples:
 
             >>> Replace(

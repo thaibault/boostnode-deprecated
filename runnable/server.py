@@ -1361,8 +1361,13 @@ class CGIHTTPRequestHandler(
 ## python3.3     def parse_url(self: Self, url=None) -> builtins.tuple:
     def parse_url(self, url=None):
         '''
-            This static method provides an easy way to split a http
-            request-string into its components.
+            This method provides an easy way to split a http request string
+            into its components.
+
+            "url" - URL to parse.
+
+            Returns a tuple containing of the parse object and a dictionary
+            containing get parameter.
 
             >>> sys_argv_backup = copy.copy(sys.argv)
             >>> handler = CGIHTTPRequestHandler()
@@ -1457,7 +1462,11 @@ class CGIHTTPRequestHandler(
 ##     ) -> Self:
     def send_error(self, code, *arguments, **keywords):
 ##
-        '''Send the given error to client if no response code was sent yet.'''
+        '''
+            Send the given error to client if no response code was sent yet.
+
+            "code" - Error code to send.
+        '''
         if not (self.response_sent or __test_mode__):
             self.send_response(code)
             self.content_type_sent = self.content_length_sent = True
@@ -1518,7 +1527,14 @@ class CGIHTTPRequestHandler(
         expire_time_in_seconds=0
     ):
 ##
-        '''Response a static file-request header.'''
+        '''
+            Response a static file-request header.
+
+            "timestamp"              - Timestamp to use as last modified time.
+            "cache_control"          - Cache control header string.
+            "expire_time_in_seconds" - Additional time to current timestamp
+                                       for expires header.
+        '''
         if not __test_mode__:
             self.send_header('Cache-Control', cache_control)
             self.send_header('Last-Modified', self.date_time_string(timestamp))
@@ -1534,7 +1550,16 @@ class CGIHTTPRequestHandler(
 ##     ) -> Self:
     def send_content_type_header(self, *arguments, **keywords):
 ##
-        '''Sends a content type header to client if not sent yet.'''
+        '''
+            Sends a content type header to client if not sent yet.
+
+            "mime_type"     - Mime type to send to client.
+            "encoding"      - Encoding description to send to client.
+            "response_code" - HTTP Response code to send.
+
+            Additional arguments and keywords will be forwarded to
+            "self.send_header()" method.
+        '''
 ## python3.3
 ##         pass
         default_keywords = Dictionary(content=keywords)
@@ -1561,16 +1586,24 @@ class CGIHTTPRequestHandler(
 ##     ) -> Self:
     def send_content_length_header(self, size, *arguments, **keywords):
 ##
-        '''Sends the content length header to client if not sent yet.'''
+        '''
+            Sends the content length header to client if not sent yet.
+
+            "size"           - Content length to send.
+            "dynamic_output" - Indicates weather output should be forced to
+                               compressed because it is simply a computed
+                               string.
+            "encoding"       - Encoding to compress current output.
+        '''
 ## python3.3
 ##         pass
         default_keywords = Dictionary(content=keywords)
+        dynamic_output, keywords = default_keywords.pop(
+            name='dynamic_output', default_value='')
         encoding, keywords = default_keywords.pop(
             name='encoding', default_value='UTF-8')
         response_code, keywords = default_keywords.pop(
             name='response_code', default_value=200)
-        dynamic_output, keywords = default_keywords.pop(
-            name='dynamic_output', default_value='')
 ##
         if not (self.content_length_sent or __test_mode__):
             self.send_response(response_code).content_length_sent = True
@@ -1621,6 +1654,17 @@ class CGIHTTPRequestHandler(
         '''
             Wrapper method for all logging output coming through the server
             thread.
+
+            "format"                   - Logging format. Allowed placeholder
+                                         are: "client_ip", "client_port",
+                                         "request_description",
+                                         "response_code", "forwarded_ip",
+                                         "forwarded_host", "forwarded_server",
+                                         "forwarded_server" and "server_port".
+            "message_or_error_code"    - Logging message or resulting HTTP
+                                         code.
+            "response_code_or_message" - Resulting HTTP code or response
+                                         message.
 
             Examples:
 

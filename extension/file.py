@@ -2818,8 +2818,6 @@ class Handler(Class):
             Changes the current working directory to the instance saved
             location.
 
-            Returns the current instance.
-
             Examples:
 
             >>> current_working_directory = os.getcwd()
@@ -3341,8 +3339,6 @@ class Handler(Class):
             "recursive"  - Indicates weather rights should be set recursively.
             "allow_link" - Indicates weather links should be followed.
 
-            Returns the current instance.
-
             Examples:
 
             >>> handler = Handler(__test_folder__.path + 'change_right')
@@ -3789,8 +3785,6 @@ class Handler(Class):
             "target"         - Target location for coping current file object.
             "symbolic_links" - Indicates weather symbolic links should be
                                followed.
-
-            Returns the current instance.
 
             Examples:
 
