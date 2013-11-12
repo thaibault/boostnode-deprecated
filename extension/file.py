@@ -3763,24 +3763,24 @@ class Handler(Class):
             of the copy process. You can set the optional
             "ignore_dangling_symlinks" flag to "True" if you want to silence
             this exception. Notice that this option has no effect on platforms
-            that don't support pythons native "os.symlink()" method. If ignore is
-            given, it must be a callable that will receive as its arguments the
-            directory being visited by pythons native method "shutil.copytree",
-            and a list of its contents, as returned by pythons "os.listdir"
-            method. Since "shutil.copytree" is called recursively, the ignore
-            callable will be called once for each directory that is copied. The
-            callable must return a sequence of directory and file names
-            relative to the current directory (i.e. a subset of the items in
-            its second argument); these names will then be ignored in the copy
-            process. Pythons native method "shutil.ignore_patterns()" can be
-            used to create such a callable that ignores names based on
-            glob-style patterns. If exception(s) occur, an error is raised with
-            a list of reasons. If parameter "copy_function" is given, it must
-            be a callable that will be used to copy each file. It will be
-            called with the source path and the target path as arguments. By
-            default, pythons native "shutil.copy2()" is used, but any function
-            that supports the same signature (like pythons "shutil.copy()") can
-            be used.
+            that don't support pythons native "os.symlink()" method. If ignore
+            is given, it must be a callable that will receive as its arguments
+            the directory being visited by pythons native method
+            "shutil.copytree", and a list of its contents, as returned by
+            pythons "os.listdir" method. Since "shutil.copytree" is called
+            recursively, the ignore callable will be called once for each
+            directory that is copied. The callable must return a sequence of
+            directory and file names relative to the current directory (i.e. a
+            subset of the items in its second argument); these names will then
+            be ignored in the copy process. Pythons native method
+            "shutil.ignore_patterns()" can be used to create such a callable
+            that ignores names based on glob-style patterns. If exception(s)
+            occur, an error is raised with a list of reasons. If parameter
+            "copy_function" is given, it must be a callable that will be used
+            to copy each file. It will be called with the source path and the
+            target path as arguments. By default, pythons native
+            "shutil.copy2()" is used, but any function that supports the
+            ame signature (like pythons "shutil.copy()") can be used.
 
             "target"         - Target location for coping current file object.
             "symbolic_links" - Indicates weather symbolic links should be
@@ -3824,10 +3824,10 @@ class Handler(Class):
 
     @JointPoint
 ## python3.3
-##     def make_directoriess(
+##     def make_directories(
 ##         self: Self, *arguments: builtins.object, **keywords: builtins.object
 ##     ) -> builtins.bool:
-    def make_directoriess(self, *arguments, **keywords):
+    def make_directories(self, *arguments, **keywords):
 ##
         '''
             Implements the pythons native "os.makedirs()" method in an object

@@ -1539,6 +1539,9 @@ class Module(Object):
 
             Examples:
 
+            >>> Module().name
+            'native'
+
             >>> Module.get_name(extension=True)
             'native.py'
 
@@ -1571,7 +1574,7 @@ class Module(Object):
 
             Examples:
 
-            >>> Module.get_package_name()
+            >>> Module().package_name
             'extension'
 
             >>> Module.get_package_name(path=True) # doctest: +ELLIPSIS

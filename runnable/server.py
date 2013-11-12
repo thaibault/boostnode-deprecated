@@ -1024,7 +1024,7 @@ class Web(Class, Runnable):
             determineIPSocket.close()
         __logger__.info(
             'Web server is starting %sand listens at port "%d" and webroot '
-            '"%s". Currently reachable ip is "%s". Maximum parallel process '
+            '"%s". Currently reachable ip is "%s". Maximum parallel processes '
             'is limited to %d.', (
                 'a secure connection with public key "%s" ' %
                 self.public_key_file._path

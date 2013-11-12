@@ -195,8 +195,14 @@ class Reflector(Class, Runnable):
     def is_location_in_paths(cls, search, paths):
 ##
         '''
-            Checks if a given path represented in a given list of paths or it's
+            Checks if a given path exists in a given list of paths or it's
             substructure.
+
+            "search" - A file path or file handler object to search for.
+            "paths"  - A list if paths or file handlers to search in.
+
+            Returns "True" if searched file is presented in given list of file
+            locations and "False" otherwise.
 
             Examples:
 
@@ -213,7 +219,9 @@ class Reflector(Class, Runnable):
             False
         '''
         for path in paths:
-            if search.path.startswith(FileHandler(location=path).path):
+            if FileHandler(search).path.startswith(
+                FileHandler(location=path).path
+            ):
                 return True
         return False
 
@@ -227,6 +235,9 @@ class Reflector(Class, Runnable):
         '''
             Opens the given files by using the "Platform.open()" method. It can
             handle symbolic and portable links.
+
+            "files" - A list if file paths or file objects to open with a
+                      usable installed application.
 
             Examples:
 
@@ -335,7 +346,8 @@ class Reflector(Class, Runnable):
 ## python3.3     def get_status_in_percent(self: Self) -> builtins.float:
     def get_status_in_percent(self):
         '''
-            Calculates the edited part of files in percent.
+            Calculates the edited part of files in percent and returns the
+            result.
 
             Examples:
 
@@ -774,6 +786,28 @@ class Reflector(Class, Runnable):
 ##
         '''
             Initializes a new object of a given synchronisation process.
+
+            "source_location"                 - Source location to reflect.
+            "target_location"                 - Target location where the
+                                                reflection should be saved.
+            "limit"                           - Limit of summarized file size.
+            "priority_locations"              - Location to prefer if limit
+                                                doesn't suffices.
+            "exclude_locations"               - Locations to ignore during
+                                                reflection creation.
+            "target_rights"                   - Rights used to create
+                                                reflection files.
+            "synchronize_back"                - Indicates weather to
+                                                synchronize a reflection back.
+            "create"                          - Indicates weather to create a
+                                                new reflection.
+            "use_native_symlinks"             - Indicates weather to use native
+                                                system symbolic links or
+                                                portable links.
+            "minimum_reflection_size_in_byte" - Minimum reflection size to
+                                                check before synchronizing
+                                                back. This is only used as
+                                                sanity check.
 
             Examples:
 

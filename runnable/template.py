@@ -479,6 +479,9 @@ class Parser(Class, Runnable):
             Wrapper method for pythons native "string.Template.substitute()"
             method.
 
+            Arguments and keywords are forwarded to pythons native
+            "string.Template.substitute()" method.
+
             Examples:
 
             >>> template = Parser(
@@ -515,6 +518,9 @@ class Parser(Class, Runnable):
 ##
         '''
             Wrapper method for pythons native
+            "string.Template.safe_substitute()" method.
+
+            Arguments and keywords are forwarded to pythons native
             "string.Template.safe_substitute()" method.
 
             Examples:
@@ -567,6 +573,8 @@ class Parser(Class, Runnable):
             Substitutes every placeholder in template with a given replacement
             string.
 
+            "replacement" - String to replace with every placeholder.
+
             Examples:
 
             >>> template = Parser(
@@ -597,6 +605,11 @@ class Parser(Class, Runnable):
             Renders the template. Searches for python code snippets and handles
             correct indenting. Wraps plain text with a print function.
 
+            "mapping" - A dictionary containing a mapping from placeholder name
+                        to value.
+
+            Additional keywords are used as additional mapping tuples.
+
             Examples:
 
             >>> parser = Parser(
@@ -624,7 +637,8 @@ class Parser(Class, Runnable):
     def represent_rendered_content(self):
         '''
             This method adds line numbers to rendered contend which is visible
-            if an template exception occurs in debug mode.
+            if an template exception occurs in debug mode. Code representation
+            is returned as string.
 
             Examples:
 
@@ -648,7 +662,10 @@ class Parser(Class, Runnable):
 ##         ) -> builtins.str:
         def replace_rendered_content_line(match):
 ##
-            '''Prepends a line numbers to each line of rendered python code.'''
+            '''
+                Prepends a line numbers to given line matching object of
+                rendered python code.
+            '''
             self._current_rendered_content_line_number += 1
             number_of_whitspaces = builtins.len(builtins.str(
                 self._number_of_rendered_content_lines)
@@ -720,6 +737,8 @@ class Parser(Class, Runnable):
 ##         placeholder_name_pattern='[a-zA-Z0-9_\[\]\'"\.()\\\\,\-+ :/={}]+',
 ##         command_line_placeholder_name_pattern='(?s)'
 ##                                               '[a-zA-Z0-9_\[\]\.(),\-+]+',
+##         command_line_placeholder_pattern='^(?P<variable_name>{placeholder})'
+##                                          '(?P<separator>.)(?P<value>.+)$',
 ##         placeholder_pattern='{left_delimiter}[ \t]*'
 ##                             '(?P<variable_name>{placeholder})'
 ##                             '[ \t]*{right_delimiter}',
@@ -752,8 +771,6 @@ class Parser(Class, Runnable):
 ##                          ')'  # in brackets
 ##                          '(?P<after_none_code>\n|$)'  # in brackets
 ##                          ')|(?P<EMPTY_LINE>^(?P<indent_line>[ \t]*)\n)',
-##         command_line_placeholder_pattern='^(?P<variable_name>{placeholder})'
-##                                          '(?P<separator>.)(?P<value>.+)$',
 ##         native_template_pattern='<%[ \t]*(?:'
 ##                                 '(?P<escaped>%)|'  # in brackets
 ##                                 '(?:(?P<named>[a-zA-Z0-9_]+)'  # in brackets
@@ -777,6 +794,8 @@ class Parser(Class, Runnable):
         placeholder_name_pattern='[a-zA-Z0-9_\[\]\'"\.()\\\\,\-+ :/={}]+',
         command_line_placeholder_name_pattern='(?s)'
                                               '[a-zA-Z0-9_\[\]\.(),\-+]+',
+        command_line_placeholder_pattern='^(?P<variable_name>{placeholder})'
+                                         '(?P<separator>.)(?P<value>.+)$',
         placeholder_pattern='{left_delimiter}[ \t]*'
                             '(?P<variable_name>{placeholder})[ \t]'
                             '*{right_delimiter}',
@@ -809,8 +828,6 @@ class Parser(Class, Runnable):
                          ')'  # in brackets
                          '(?P<after_none_code>\n|$)'  # in brackets
                          ')|(?P<EMPTY_LINE>^(?P<indent_line>[ \t]*)\n)',
-        command_line_placeholder_pattern='^(?P<variable_name>{placeholder})'
-                                         '(?P<separator>.)(?P<value>.+)$',
         native_template_pattern='<%[ \t]*(?:'
                                 '(?P<escaped>%)|'  # in brackets
                                 '(?:(?P<named>[a-zA-Z0-9_]+)'  # in brackets
@@ -835,13 +852,53 @@ class Parser(Class, Runnable):
             and "re.MULTILINE". NOTE: This regular expression patterns assumes
             that the delimiter has at least a length of two.
 
-            Documentation of template pattern:
-
-                Line 1-3: Escaped None code
-                Line 4-8: Placeholder
-                Line 9-10: Code
-                Line 11-12: None code
-                Line 13: Empty Line
+            "template"                              - A template string, path
+                                                      to template file or file
+                                                      object pointing to a
+                                                      template file.
+            "string"                                - Indicates weather
+                                                      "template" is a template
+                                                      string or file path.
+            "file_encoding"                         - Encoding used for reading
+                                                      template file and writing
+                                                      rendered output.
+            "placeholder_name_pattern"              - Regular expression
+                                                      pattern to specify a
+                                                      placeholder name format.
+            "command_line_placeholder_name_pattern" - Regular expression to
+                                                      specify a placeholder
+                                                      name given via command
+                                                      line interface.
+            "command_line_placeholder_pattern"      - Regular expression
+                                                      pattern to identify a
+                                                      placeholder value tuple
+                                                      in command line
+                                                      interface.
+            "placeholder_pattern"                   - Pattern to specify a
+                                                      placeholder in template
+                                                      string.
+            "template_pattern"                      - Regular expression to
+                                                      identify each template
+                                                      identify syntax.
+            "native_template_pattern"               - Regular expression
+                                                      pattern to used for
+                                                      pythons native template
+                                                      engine.
+            "left_code_delimiter"                   - Left code delimiter to
+                                                      identify a code starting
+                                                      point of a code line.
+            "right_escaped"                         - Escape symbol to mask a
+                                                      delimiter symbol.
+            "template_context_default_indent"       - Expected indention used
+                                                      for interpreting code
+                                                      blocks.
+            "builtin_names"                         - A tuple of function and
+                                                      variables available in
+                                                      template engine.
+            "pretty_indent"                         - Indicates if we should
+                                                      spend time on rendering
+                                                      pretty indented code in
+                                                      each case.
 
             Examples:
 

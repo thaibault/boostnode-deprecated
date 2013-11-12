@@ -61,7 +61,7 @@ for number in (3, 4):
 
 from boostNode.extension.native import Dictionary, Module, PropertyInitializer
 from boostNode.extension.system import CommandLine, Runnable
-## python3.3 from boostNode.extension.type import Self
+## python3.3 from boostNode.extension.type import Self, SelfClass
 pass
 from boostNode.paradigm.aspectOrientation import JointPoint
 from boostNode.paradigm.objectOrientation import Class
@@ -135,13 +135,14 @@ class Browser(Class, Runnable):
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': builtins.str,
-             'choices': {'execute': 'self._determine_gui_toolkits()'},
+             'choices': {'execute': 'self.available_gui_toolkits'},
              'required': {'execute': '__initializer_default_value__ is None'},
              'help': {
-                 'execute': "'Defines default toolkit. Others will only run as"
-                            ''' fallback (default: "%s").' % '''
-                            "__initializer_default_value__.replace('%', "
-                            "'%%')"},
+                 'execute': "'Defines default toolkit (one of \"%s\"). Others "
+                            'will only run as fallback (default: "%s").\' % '
+                            "('\", \"'.join(self.available_gui_toolkits), "
+                            "__initializer_default_value__.replace('%', '%%')"
+                            ", )"},
              'dest': 'default_gui_toolkit',
              'metavar': 'GUI_TOOLKIT'}},
         {'arguments': ('-b', '--no-progress-bar'),
@@ -179,6 +180,42 @@ class Browser(Class, Runnable):
              'metavar': 'STRING'}})
     '''Saves all initialized instances of this class.'''
     instances = []
+
+    # endregion
+
+    # region static methods
+
+        # region public
+
+            # region getter
+
+    @JointPoint(builtins.classmethod)
+    @Class.pseudo_property
+## python3.3
+##     def get_available_gui_toolkits(cls: SelfClass) -> builtins.tuple:
+    def get_available_gui_toolkits(cls):
+##
+        '''
+            Determines available gui toolkits.
+
+            Examples:
+
+            >>> __test_globals__['qt'] = __test_globals__['gtk'] = None
+
+            >>> Browser('google.de').available_gui_toolkits
+            ('default',)
+        '''
+        toolkits = []
+        for toolkit in builtins.globals():
+            if(builtins.globals()[toolkit] is not None and
+               '_initialize_%s_browser' % toolkit in cls.__dict__):
+                toolkits.append(toolkit)
+        toolkits.append('default')
+        return builtins.tuple(toolkits)
+
+            # endregion
+
+        # endregion
 
     # endregion
 
@@ -254,14 +291,9 @@ class Browser(Class, Runnable):
             ... ).gui_toolkit
             'qt'
         '''
-        if('default_gui_toolkit' in self.__dict__ and
-           builtins.globals()[self.default_gui_toolkit] is not None):
+        if self.default_gui_toolkit in self.available_gui_toolkits:
             return self.default_gui_toolkit
-        elif qt is not None:
-            return 'qt'
-        elif gtk is not None:
-            return 'gtk'
-        return 'default'
+        return self.available_gui_toolkits[0]
 
             # endregion
 
@@ -324,7 +356,8 @@ class Browser(Class, Runnable):
                         until gtk has finished it's closing procedures.
                     '''
                     self._close_gtk_windows_lock.acquire()
-        __logger__.info('All "%s" windows closed.', self.gui_toolkit)
+        if 'gui_toolkit' in self.__dict__:
+            __logger__.info('All "%s" windows closed.', self.gui_toolkit)
         '''Take this method type by the abstract class via introspection.'''
         return builtins.getattr(
             builtins.super(self.__class__, self), inspect.stack()[0][3]
@@ -663,25 +696,6 @@ class Browser(Class, Runnable):
                 # endregion
 
             # endregion
-
-    @JointPoint
-## python3.3     def _determine_gui_toolkits(self: Self) -> builtins.list:
-    def _determine_gui_toolkits(self):
-        '''
-            Determines all supported gui toolkits.
-
-            Examples:
-
-            >>> Browser('www.google.de')._determine_gui_toolkits()
-            ['default', 'gtk', 'qt']
-        '''
-        toolkits = []
-        for attribute in builtins.dir(self):
-            match = re.compile('^_initialize_(?P<name>[a-z]+)_browser$').match(
-                attribute)
-            if match:
-                toolkits.append(match.group('name'))
-        return toolkits
 
         # endregion
 

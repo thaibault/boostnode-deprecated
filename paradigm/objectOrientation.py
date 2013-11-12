@@ -176,7 +176,7 @@ class Class(builtins.object):
             Attaches a property to given function for indicating that given
             function handles read access to corresponding property.
         '''
-        function.is_pseudo_property = True
+        function.pseudo_property = True
         return function
 
             # endregion
@@ -242,12 +242,13 @@ class Class(builtins.object):
         '''
         name = '_' + name
         getter_name = 'get' + name
-        has_special_method = self.is_method(name=getter_name)
-        if(self.is_property(name) or has_special_method and
-           builtins.hasattr(
-               builtins.getattr(self, getter_name), 'is_pseudo_property')):
-            if has_special_method:
-                return builtins.getattr(self, getter_name)()
+        special_method = None
+        if self.is_method(name=getter_name):
+            special_method = builtins.getattr(self, getter_name)
+        if(self.is_property(name) or special_method is not None and
+           builtins.hasattr(special_method, 'pseudo_property')):
+            if special_method is not None:
+                return special_method()
             elif self.is_method(name='get'):
                 return self.get(name)
         raise builtins.AttributeError(
@@ -321,11 +322,16 @@ class Class(builtins.object):
             >>> Class().is_method('not existing')
             False
         '''
+## python3.3         def callable(object: builtins.object) -> builtins.bool:
+        def callable(object):
+            return(
+                builtins.callable(object) or
+                builtins.isinstance(object, builtins.classmethod) or
+                builtins.isinstance(object, builtins.staticmethod))
         return (
             name in self.__class__.__dict__ and
-            builtins.callable(self.__class__.__dict__[name]) or
-            name in self.__dict__ and
-            builtins.callable(self.__dict__[name]))
+            callable(self.__class__.__dict__[name]) or
+            name in self.__dict__ and callable(self.__dict__[name]))
 
 ## python3.3     def is_property(self, name: builtins.str) -> builtins.bool:
     def is_property(self, name):
@@ -344,7 +350,7 @@ class Class(builtins.object):
             >>> Class().is_property('test')
             True
         '''
-        return (
+        return(
             name in self.__class__.__dict__ and
             not builtins.callable(self.__class__.__dict__[name]) or
             name in self.__dict__ and

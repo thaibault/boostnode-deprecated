@@ -2079,15 +2079,9 @@ class CommandLine(builtins.object):
             argument['keywords'] = cls._render_command_line_argument(
                 argument=argument['keywords'], scope=scope)
             for keyword, value in argument['keywords'].items():
-                try:
-                    argument['keywords'][keyword] = cls\
-                        ._render_command_line_argument(
-                            argument=value, scope=scope)
-                except builtins.BaseException as exception:
-                    raise __exception__(
-                        'During rendering argument "%s". Error "%s" occurs '
-                        'for "%s".', builtins.str(argument['keywords']),
-                        builtins.str(exception), keyword)
+                argument['keywords'][keyword] = cls\
+                    ._render_command_line_argument(
+                        argument=value, scope=scope, keyword=keyword)
             cls.current_argument_parser.add_argument(
                 *argument['arguments'], **argument['keywords'])
         return cls
@@ -2718,11 +2712,10 @@ class CommandLine(builtins.object):
     @JointPoint(builtins.classmethod)
 ## python3.3
 ##     def _render_command_line_argument(
-##         cls: SelfClass, argument: builtins.object, scope={}
+##         cls: SelfClass, argument: builtins.object, scope: builtins.dict,
+##         keyword={}
 ##     ) -> builtins.object:
-    def _render_command_line_argument(
-        cls, argument, scope={}
-    ):
+    def _render_command_line_argument(cls, argument, scope, keyword={}):
 ##
         '''
             If a given argument property is marked as executable respectively
@@ -2731,15 +2724,22 @@ class CommandLine(builtins.object):
             Examples:
 
             >>> CommandLine._render_command_line_argument(
-            ...     argument={'execute': 'value'}, scope={'value': 'hans'})
+            ...     {'execute': 'value'}, {'value': 'hans'})
             'hans'
 
-            >>> CommandLine._render_command_line_argument(argument='peter')
+            >>> CommandLine._render_command_line_argument('peter', {})
             'peter'
         '''
         if(builtins.isinstance(argument, builtins.dict) and
            'execute' in argument):
-            return builtins.eval(argument['execute'], scope)
+            try:
+                return builtins.eval(argument['execute'], scope)
+            except builtins.BaseException as exception:
+                raise __exception__(
+                    'During rendering argument "%s". Error "%s" occurs for '
+                    '"%s".', builtins.str(argument['execute']), builtins.str(
+                        exception),
+                    keyword)
         return argument
 
         # endregion
