@@ -16,8 +16,8 @@ License
 
 endregion -->
 
-boostNode
----------
+Use case<!--deDE:Einsatz--><!--frFR:Utilisier-->
+------------------------------------------------
 
 boostNode is a high level python library.
 This library supports python2.7+ and python3.3+ environments.
