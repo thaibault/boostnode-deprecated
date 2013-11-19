@@ -795,7 +795,7 @@ class Parser(Class, Runnable):
         command_line_placeholder_name_pattern='(?s)'
                                               '[a-zA-Z0-9_\[\]\.(),\-+]+',
         command_line_placeholder_pattern='^(?P<variable_name>{placeholder})'
-                                         '(?P<separator>.)(?P<value>.+)$',
+                                         '(?P<separator>.)(?P<value>.*)$',
         placeholder_pattern='{left_delimiter}[ \t]*'
                             '(?P<variable_name>{placeholder})[ \t]'
                             '*{right_delimiter}',
@@ -1017,9 +1017,7 @@ class Parser(Class, Runnable):
             ...     scope_variables=('ab',))
             >>> parser._generate_scope_variables(
             ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
-            Traceback (most recent call last):
-            ...
-            TemplateError: Given placeholder value tuple "ab" couldn't be ...
+            {'a': ''}
         '''
         keywords = {}
         for variable in self._command_line_arguments.scope_variables:
