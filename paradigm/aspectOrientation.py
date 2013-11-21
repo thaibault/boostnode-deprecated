@@ -115,6 +115,13 @@ class FunctionDecorator(Class):
         '''
             Collects informations about wrapped method.
 
+            "method"   - The wrapped function.
+            "function" - If not "None" this contains the real function and
+                         "method" contains a special type of function (like
+                         "builtins.classmethod" or "builtins.staticmethod").
+                         In this case the method type influences the behavior
+                         during calling the real function.
+
             Examples:
 
             >>> def a(): pass
@@ -232,7 +239,12 @@ class FunctionDecorator(Class):
 ##     ) -> builtins.object:
     def __call__(self, *arguments, **keywords):
 ##
-        '''This method is triggered if wrapped function was called.'''
+        '''
+            This method is triggered if wrapped function was called.
+
+            All arguments and keywords are forwarded to function wrapped by
+            the current instance.
+        '''
         if(self.__func__ is not None and self.object is None and
            self.class_object is None):
             '''A standalone function was wrapped.'''
@@ -249,6 +261,9 @@ class FunctionDecorator(Class):
         '''
             Triggers when wrapped function should be graped from instance.
             Saves bounded object instance and class.
+
+            "object"       - Contains the function bounded instance.
+            "class_object" - Contains the function bounded class.
 
             Examples:
 
@@ -384,6 +399,13 @@ class JointPointHandler(Class):
 ##
         '''
             Saves function call properties.
+
+            # TODO STand
+            "class_object" -
+            "object"       -
+            "function"     -
+            "arguments"    -
+            "keywords"     -
 
             Examples:
 
