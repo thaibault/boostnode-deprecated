@@ -19,17 +19,18 @@ endregion -->
 Use case<!--deDE:Einsatz--><!--frFR:Utilisier-->
 ------------------------------------------------
 
-boostNode is a high level python library.
-This library supports python2.7+ and python3.3+ environments.
-And will always try to use every new cutting edge python features!
+boostNode is a high level python library. This library supports python2.7+ and
+python3.3+ environments. And will always try to use every new cutting edge
+python features!
 
-Inhalt
-------
+Content<!--deDE:Inhalt-->
+-------------------------
 
 <!--Place for automatic generated table of contents.-->
 [TOC]
 
-### Features
+Features
+--------
 
 * Very high code quality
     * 100% platform independent reachable branch coverage tested!
@@ -72,7 +73,8 @@ Inhalt
   (see extension/system.py and extension/output.py).
 * Many tools to bring the dry concept to the highest possible level.
 
-### Usage
+Usage<!--deDE:Verwendung-->
+---------------------------
 
 Copy this folder to your projects directory and write something like:
 
@@ -126,10 +128,12 @@ Follow one of the two following syntax examples:
 
 Have Fun with boostNode!
 
-### Copyright
+Copyright
+---------
 
 see header in ./\_\_init\_\_.py
 
-### License
+License<!--deDE:Lizenz-->
+-------------------------
 
 see header in ./\_\_init\_\_.py
