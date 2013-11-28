@@ -8,6 +8,7 @@
 
 # endregion
 
+
 # region header
 
 '''Provides server and request handler classes.'''
@@ -2466,6 +2467,19 @@ class CGIHTTPRequestHandler(
             Object of "CGIHTTPRequestHandler" with request uri "" and parame...
         '''
         if self.requested_file.is_directory():
+            '''
+                If a directory was requested and no trailing slash where given
+                a 301 redirect will be returned to same request with trailing
+                slash.
+            '''
+            if not re.compile(
+                '/(%s.*)?$' % self.server.web.request_parameter_delimiter
+            ).search(self.request_uri):
+                self.send_response(301)
+                self.send_header('Location', re.compile(
+                    '((%s.*)?)$' % self.server.web.request_parameter_delimiter
+                ).sub('/\\1', self.request_uri))
+                return self
             return self.list_directory()
         try:
             file_handler = builtins.open(self.requested_file._path, mode='rb')
