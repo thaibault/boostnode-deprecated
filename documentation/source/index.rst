@@ -58,3 +58,18 @@ Contents:
     boostNode.%s.%s
     boostNode.%s.%s
     boostNode.%s.%s
+
+    boostNode.%s.%s
+    boostNode.%s.%s
+    boostNode.%s.%s
+    boostNode.%s.%s
+    boostNode.%s.%s
+    boostNode.%s.%s
+    boostNode.%s.%s
+    boostNode.%s.%s
+    boostNode.%s.%s
+    boostNode.%s.%s
+    boostNode.%s.%s
+    boostNode.%s.%s
+    boostNode.%s.%s
+    boostNode.%s.%s
