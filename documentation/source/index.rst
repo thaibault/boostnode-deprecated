@@ -12,7 +12,7 @@ Contents:
    :maxdepth: 10
 
 .. automodule:: boostNode.extension.native
-:members:
+    :members:
 
 Indices and tables
 ==================
