@@ -1,2 +1,5 @@
 # Vim temporary file
 *.swp
+
+# Generated documentations
+documentation/build
