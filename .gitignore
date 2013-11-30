@@ -1,5 +1,8 @@
 # Vim temporary file
 *.swp
 
+# Generated runtime bytecode files.
+*.py[cod]
+
 # Generated documentations
 documentation/build
