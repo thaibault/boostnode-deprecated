@@ -14,5 +14,17 @@ Contents:
 .. toctree::
     :maxdepth: 10
 
-    boostNode.%s.%s
-    boostNode.%s.%s
+    boostNode.aspect.signature
+    boostNode.extension.output
+    boostNode.extension.type
+    boostNode.extension.system
+    boostNode.extension.file
+    boostNode.extension.native
+    boostNode.paradigm.objectOrientation
+    boostNode.paradigm.aspectOrientation
+    boostNode.runnable.codeRunner
+    boostNode.runnable.synchronisation
+    boostNode.runnable.macro
+    boostNode.runnable.server
+    boostNode.runnable.template
+    boostNode.runnable.webToWindow
