@@ -9,7 +9,7 @@ Welcome to boostNode's documentation!
 Contents:
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 10
 
 .. automodule:: boostNode.extension.native
    :members:
