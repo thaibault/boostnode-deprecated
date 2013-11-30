@@ -13,6 +13,18 @@ Contents:
 
 .. toctree::
     :maxdepth: 10
-    
-    boostNode.aspect.signature
-    boostNode.extension.output
+
+    boostNode.%s.%s
+    boostNode.%s.%s
+    boostNode.%s.%s
+    boostNode.%s.%s
+    boostNode.%s.%s
+    boostNode.%s.%s
+    boostNode.%s.%s
+    boostNode.%s.%s
+    boostNode.%s.%s
+    boostNode.%s.%s
+    boostNode.%s.%s
+    boostNode.%s.%s
+    boostNode.%s.%s
+    boostNode.%s.%s
