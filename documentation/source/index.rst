@@ -4,7 +4,6 @@ Indices and tables
 ==================
 
 .. _Project Page: http://thaibault.github.io/boostNode
-:ref:`search`
 
 Contents
 --------
