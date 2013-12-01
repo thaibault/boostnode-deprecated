@@ -1,15 +1,13 @@
 .. boostNode documentation master file
 
-Welcome to boostNode's documentation!
-=====================================
-
 Indices and tables
 ==================
 
-* :ref:`genindex`
+* .. Project page: http://thaibault.github.io/boostNode
 * :ref:`search`
 
-Contents:
+Contents
+--------
 
 .. toctree::
     :maxdepth: 10
