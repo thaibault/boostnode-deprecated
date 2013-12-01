@@ -1,6 +1,9 @@
 .. boostNode documentation master file
 
-`_Project Page <http://thaibault.github.io/boostNode>`_
+boostNode
+=========
+
+`Project Page <http://thaibault.github.io/boostNode>`_
 
 Contents
 --------
