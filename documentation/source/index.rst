@@ -3,7 +3,7 @@
 Indices and tables
 ==================
 
-- `Project page<http://thaibault.github.io/boostNode>`_
+.. _Project Page: http://thaibault.github.io/boostNode
 - :ref:`search`
 
 Contents
