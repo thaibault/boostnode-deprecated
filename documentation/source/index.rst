@@ -3,8 +3,8 @@
 Indices and tables
 ==================
 
-* .. Project page: http://thaibault.github.io/boostNode
-* :ref:`search`
+- `Project page<http://thaibault.github.io/boostNode>`_
+- :ref:`search`
 
 Contents
 --------
