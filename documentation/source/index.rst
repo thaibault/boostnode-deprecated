@@ -1,9 +1,6 @@
 .. boostNode documentation master file
 
-Indices and tables
-==================
-
-.. _Project Page: http://thaibault.github.io/boostNode
+`_Project Page <http://thaibault.github.io/boostNode>`_
 
 Contents
 --------
