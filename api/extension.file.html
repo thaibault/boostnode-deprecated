@@ -226,12 +226,11 @@ stat.S_IRWXO
 stat.S_IROTH
 stat.S_IWOTH
 stat.S_IXOTH</p>
-<p>&#8220;right&#8221;      - Is the new right for the current object&#8217;s path                            location.
-&#8220;octal&#8221;      - Indicates weather we provide an octal number or a</p>
-<blockquote>
-<div>constant combination from &#8220;stat.*&#8221;.</div></blockquote>
-<p>&#8220;recursive&#8221;  - Indicates weather rights should be set recursively.
-&#8220;allow_link&#8221; - Indicates weather links should be followed.</p>
+<p>TODO handle line breaks everwhere like here.</p>
+<p>&#8220;right&#8221;      - Is the new right for the current object&#8217;s path                            location.</p>
+<p>&#8220;octal&#8221;      - Indicates weather we provide an octal number or a                            constant combination from &#8220;stat.*&#8221;.</p>
+<p>&#8220;recursive&#8221;  - Indicates weather rights should be set recursively.</p>
+<p>&#8220;allow_link&#8221; - Indicates weather links should be followed.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span> <span class="o">=</span> <span class="n">Handler</span><span class="p">(</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;change_right&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Handler</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="n">__file_path__</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">handler</span><span class="p">)</span>
