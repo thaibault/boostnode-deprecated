@@ -56,8 +56,27 @@
             
   <div class="section" id="module-boostNode.paradigm.aspectOrientation">
 <span id="boostnode-paradigm-aspectorientation"></span><h1>boostNode.paradigm.aspectOrientation<a class="headerlink" href="#module-boostNode.paradigm.aspectOrientation" title="Permalink to this headline">¶</a></h1>
-<p>This module implements features like joint points, point cuts and advices
-for implementing aspect orientated code.</p>
+<p>This module implements features like joint points, point cuts and advices     for implementing aspect orientated code.</p>
+<dl class="data">
+<dt id="boostNode.paradigm.aspectOrientation.ASPECTS">
+<tt class="descclassname">boostNode.paradigm.aspectOrientation.</tt><tt class="descname">ASPECTS</tt><em class="property"> = []</em><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.ASPECTS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves all aspects for cross cutting concerns for whole library and program code that uses this feature.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ASPECTS</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="p">{</span><span class="s">&#39;advice&#39;</span><span class="p">:</span> <span class="p">({</span><span class="s">&#39;callback&#39;</span><span class="p">:</span> <span class="n">check_arguments</span><span class="p">,</span>
+<span class="gp">... </span>                 <span class="s">&#39;event&#39;</span><span class="p">:</span> <span class="s">&#39;call&#39;</span><span class="p">},</span>
+<span class="gp">... </span>                <span class="p">{</span><span class="s">&#39;callback&#39;</span><span class="p">:</span> <span class="n">check_return_value</span><span class="p">,</span>
+<span class="gp">... </span>                 <span class="s">&#39;event&#39;</span><span class="p">:</span> <span class="s">&#39;return&#39;</span><span class="p">}),</span>
+<span class="gp">... </span>     <span class="s">&#39;point_cut&#39;</span><span class="p">:</span> <span class="s">&#39;^library\..+$&#39;</span><span class="p">},</span>
+<span class="gp">... </span>    <span class="p">{</span><span class="s">&#39;advice&#39;</span><span class="p">:</span> <span class="p">({</span><span class="s">&#39;callback&#39;</span><span class="p">:</span> <span class="n">log_call</span><span class="p">,</span>
+<span class="gp">... </span>                 <span class="s">&#39;event&#39;</span><span class="p">:</span> <span class="s">&#39;call&#39;</span><span class="p">},</span>
+<span class="gp">... </span>                <span class="p">{</span><span class="s">&#39;callback&#39;</span><span class="p">:</span> <span class="n">log_return</span><span class="p">,</span>
+<span class="gp">... </span>                 <span class="s">&#39;event&#39;</span><span class="p">:</span> <span class="s">&#39;return&#39;</span><span class="p">}),</span>
+<span class="gp">... </span>     <span class="s">&#39;point_cut&#39;</span><span class="p">:</span> <span class="s">&#39;^.+$&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+</dd></dl>
+
 <dl class="class">
 <dt id="boostNode.paradigm.aspectOrientation.CallJointPoint">
 <em class="property">class </em><tt class="descclassname">boostNode.paradigm.aspectOrientation.</tt><tt class="descname">CallJointPoint</tt><big>(</big><em>class_object</em>, <em>object</em>, <em>function</em>, <em>arguments</em>, <em>keywords</em><big>)</big><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.CallJointPoint" title="Permalink to this definition">¶</a></dt>
@@ -73,8 +92,7 @@ for implementing aspect orientated code.</p>
 <dl class="attribute">
 <dt id="boostNode.paradigm.aspectOrientation.JointPoint">
 <tt class="descclassname">boostNode.paradigm.aspectOrientation.</tt><tt class="descname">JointPoint</tt><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.JointPoint" title="Permalink to this definition">¶</a></dt>
-<dd><p>Implementation of joint point for the aspect orientated way.
-Triggers every function call and look for aspects to wrap around.</p>
+<dd><p>Implementation of joint point for the aspect orientated way.             Triggers every function call and look for aspects to wrap around.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nd">@JointPoint</span>
 <span class="gp">... </span><span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
@@ -155,8 +173,7 @@ Triggers every function call and look for aspects to wrap around.</p>
 <dl class="classmethod">
 <dt id="boostNode.paradigm.aspectOrientation.JointPointHandler.aspect">
 <em class="property">classmethod </em><tt class="descname">aspect</tt><big>(</big><big>)</big><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.JointPointHandler.aspect" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method should be overwritten to provide the essential aspect
-for handled function call.</p>
+<dd><p>This method should be overwritten to provide the essential aspect             for handled function call.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">a</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">pass</span>
@@ -181,15 +198,13 @@ for handled function call.</p>
 <dl class="method">
 <dt id="boostNode.paradigm.aspectOrientation.PointCut.handle_call">
 <tt class="descname">handle_call</tt><big>(</big><big>)</big><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.PointCut.handle_call" title="Permalink to this definition">¶</a></dt>
-<dd><p>Implementation of point cut for the aspect orientated way. Filters
-all functions calls and run given advice on given event.</p>
+<dd><p>Implementation of point cut for the aspect orientated way.             Filters all functions calls and run given advice on given event.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="boostNode.paradigm.aspectOrientation.PointCut.handle_return">
 <tt class="descname">handle_return</tt><big>(</big><em>return_value</em><big>)</big><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.PointCut.handle_return" title="Permalink to this definition">¶</a></dt>
-<dd><p>Implementation of point cut for the aspect orientated way. Filters
-all functions calls and run given advice on given event.</p>
+<dd><p>Implementation of point cut for the aspect orientated way.             Filters all functions calls and run given advice on given event.</p>
 </dd></dl>
 
 </dd></dl>

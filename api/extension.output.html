@@ -59,8 +59,7 @@
 <dl class="class">
 <dt id="boostNode.extension.output.Buffer">
 <em class="property">class </em><tt class="descclassname">boostNode.extension.output.</tt><tt class="descname">Buffer</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.output.Buffer" title="Permalink to this definition">¶</a></dt>
-<dd><p>This class represents a layer for writing and reading to an output
-buffer realized as file, queue or variable.</p>
+<dd><p>This class represents a layer for writing and reading to an output         buffer realized as file, queue or variable.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span> <span class="o">=</span> <span class="n">Buffer</span><span class="p">(</span><span class="nb">file</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;Buffer&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span> 
@@ -121,9 +120,7 @@ buffer realized as file, queue or variable.</p>
 <dl class="staticmethod">
 <dt id="boostNode.extension.output.Buffer.flush">
 <em class="property">static </em><tt class="descname">flush</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.output.Buffer.flush" title="Permalink to this definition">¶</a></dt>
-<dd><p>Flush methods usually called to guarantee that all objects putted
-to &#8220;write()&#8221; are materialized on their provided media. This
-implementation exists only for compatibility reasons.</p>
+<dd><p>Flush methods usually called to guarantee that all objects putted             to &#8220;write()&#8221; are materialized on their provided media. This             implementation exists only for compatibility reasons.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Buffer</span><span class="p">()</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
 <span class="go">Object of &quot;Buffer&quot; (memory buffered) with content &quot;&quot;.</span>
@@ -149,8 +146,7 @@ implementation exists only for compatibility reasons.</p>
 <dl class="staticmethod">
 <dt id="boostNode.extension.output.Buffer.write">
 <em class="property">static </em><tt class="descname">write</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.output.Buffer.write" title="Permalink to this definition">¶</a></dt>
-<dd><p>Writes content to the current output buffer file. If the current
-given file &#8220;Buffer.file&#8221; doesn&#8217;t exists it will be created.</p>
+<dd><p>Writes content to the current output buffer file. If the current             given file &#8220;Buffer.file&#8221; doesn&#8217;t exists it will be created.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span> <span class="o">=</span> <span class="n">Buffer</span><span class="p">(</span><span class="nb">file</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;write&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span> 
@@ -175,17 +171,12 @@ given file &#8220;Buffer.file&#8221; doesn&#8217;t exists it will be created.</p
 <dl class="class">
 <dt id="boostNode.extension.output.Logger">
 <em class="property">class </em><tt class="descclassname">boostNode.extension.output.</tt><tt class="descname">Logger</tt><a class="headerlink" href="#boostNode.extension.output.Logger" title="Permalink to this definition">¶</a></dt>
-<dd><p>This class provides handling with all components dealing with logger
-object. It stores all logger components in a single data structure.</p>
+<dd><p>This class provides handling with all components dealing with logger         object. It stores all logger components in a single data structure.</p>
 <dl class="staticmethod">
 <dt id="boostNode.extension.output.Logger.change_all">
 <em class="property">static </em><tt class="descname">change_all</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.output.Logger.change_all" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method changes the given properties to all created logger
-instances and saves the given properties as default properties for
-future created logger instances.</p>
-<p>Note that every argument except buffer setted to &#8220;None&#8221; will not
-edit this logger component. If you don&#8217;t want to change buffer
-leave it &#8220;False&#8221;.</p>
+<dd><p>This method changes the given properties to all created logger             instances and saves the given properties as default properties             for future created logger instances.</p>
+<p>Note that every argument except buffer setted to &#8220;None&#8221; will not             edit this logger component. If you don&#8217;t want to change buffer             leave it &#8220;False&#8221;.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Logger</span><span class="o">.</span><span class="n">change_all</span><span class="p">()</span> 
 <span class="go">&lt;class ...Logger...&gt;</span>
@@ -207,9 +198,7 @@ leave it &#8220;False&#8221;.</p>
 <dl class="staticmethod">
 <dt id="boostNode.extension.output.Logger.get">
 <em class="property">static </em><tt class="descname">get</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.output.Logger.get" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a new or existing instance of a logger with given
-properties. If a logger was already registered under given name the
-existing instance is given back and a new instance otherwise.</p>
+<dd><p>Returns a new or existing instance of a logger with given             properties. If a logger was already registered under given name             the existing instance is given back and a new instance otherwise.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">logger_a</span> <span class="o">=</span> <span class="n">Logger</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">,</span> <span class="nb">buffer</span><span class="o">=</span><span class="p">(</span><span class="n">__test_buffer__</span><span class="p">,))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">logger_b</span> <span class="o">=</span> <span class="n">Logger</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">)</span>
@@ -232,8 +221,7 @@ existing instance is given back and a new instance otherwise.</p>
 <dl class="class">
 <dt id="boostNode.extension.output.Print">
 <em class="property">class </em><tt class="descclassname">boostNode.extension.output.</tt><tt class="descname">Print</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.output.Print" title="Permalink to this definition">¶</a></dt>
-<dd><p>Provides a high level printing class on top of pythons native print
-function.</p>
+<dd><p>Provides a high level printing class on top of pythons native print         function.</p>
 </dd></dl>
 
 </div>

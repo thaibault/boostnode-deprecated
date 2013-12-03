@@ -60,16 +60,11 @@
 <dl class="class">
 <dt id="boostNode.runnable.template.Parser">
 <em class="property">class </em><tt class="descclassname">boostNode.runnable.template.</tt><tt class="descname">Parser</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.template.Parser" title="Permalink to this definition">¶</a></dt>
-<dd><p>This class can parse a string or file to interpret it as template for
-replacing containing placeholder and rendering embedded python script
-snippets.</p>
+<dd><p>This class can parse a string or file to interpret it as template for         replacing containing placeholder and rendering embedded python script         snippets.</p>
 <dl class="staticmethod">
 <dt id="boostNode.runnable.template.Parser.get_builtins">
 <em class="property">static </em><tt class="descname">get_builtins</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.template.Parser.get_builtins" title="Permalink to this definition">¶</a></dt>
-<dd><p>Defines minimum needed native python features for each template
-scope. It adds user-defined additionally python functions. The
-minimum needed functions (e.g. &#8220;print()&#8221;) will never be
-overwritten.</p>
+<dd><p>Defines minimum needed native python features for each template             scope. It adds user-defined additionally python functions. The             minimum needed functions (e.g. &#8220;print()&#8221;) will never be             overwritten.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">template</span> <span class="o">=</span> <span class="n">Parser</span><span class="p">(</span><span class="n">template</span><span class="o">=</span><span class="s">&#39;hans&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">template</span><span class="o">.</span><span class="n">builtins</span> 
@@ -96,9 +91,7 @@ overwritten.</p>
 <dl class="staticmethod">
 <dt id="boostNode.runnable.template.Parser.get_output">
 <em class="property">static </em><tt class="descname">get_output</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.template.Parser.get_output" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets the current output buffer. It consists everything printed out
-in code snippets rendered by the template instance or exists as
-plain text in given template.</p>
+<dd><p>Gets the current output buffer. It consists everything printed             out in code snippets rendered by the template instance or exists             as plain text in given template.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Parser</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="s">&#39;klaus says</span><span class="se">\n</span><span class="s">&lt;% print(&quot;who is hans?&quot;)&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="bp">True</span>
@@ -111,12 +104,8 @@ plain text in given template.</p>
 <dl class="staticmethod">
 <dt id="boostNode.runnable.template.Parser.render">
 <em class="property">static </em><tt class="descname">render</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.template.Parser.render" title="Permalink to this definition">¶</a></dt>
-<dd><p>Renders the template. Searches for python code snippets and handles
-correct indenting. Wraps plain text with a print function.</p>
-<dl class="docutils">
-<dt>&#8220;mapping&#8221; - A dictionary containing a mapping from placeholder name</dt>
-<dd>to value.</dd>
-</dl>
+<dd><p>Renders the template. Searches for python code snippets and             handles correct indenting. Wraps plain text with a print function.</p>
+<p>&#8220;mapping&#8221; - A dictionary containing a mapping from placeholder                         name to value.</p>
 <p>Additional keywords are used as additional mapping tuples.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">parser</span> <span class="o">=</span> <span class="n">Parser</span><span class="p">(</span>
@@ -131,9 +120,7 @@ correct indenting. Wraps plain text with a print function.</p>
 <dl class="staticmethod">
 <dt id="boostNode.runnable.template.Parser.represent_rendered_content">
 <em class="property">static </em><tt class="descname">represent_rendered_content</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.template.Parser.represent_rendered_content" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method adds line numbers to rendered contend which is visible
-if an template exception occurs in debug mode. Code representation
-is returned as string.</p>
+<dd><p>This method adds line numbers to rendered contend which is             visible if an template exception occurs in debug mode. Code             representation is returned as string.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Parser</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">represent_rendered_content</span><span class="p">()</span>
 <span class="go">&#39;&#39;</span>
@@ -153,10 +140,8 @@ is returned as string.</p>
 <dl class="staticmethod">
 <dt id="boostNode.runnable.template.Parser.safe_substitute">
 <em class="property">static </em><tt class="descname">safe_substitute</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.template.Parser.safe_substitute" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wrapper method for pythons native
-&#8220;string.Template.safe_substitute()&#8221; method.</p>
-<p>Arguments and keywords are forwarded to pythons native
-&#8220;string.Template.safe_substitute()&#8221; method.</p>
+<dd><p>Wrapper method for pythons native             &#8220;string.Template.safe_substitute()&#8221; method.</p>
+<p>Arguments and keywords are forwarded to pythons native             &#8220;string.Template.safe_substitute()&#8221; method.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">template</span> <span class="o">=</span> <span class="n">Parser</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">template</span><span class="o">=</span><span class="s">&#39;hans &lt;%placeholder%&gt;&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
@@ -183,10 +168,8 @@ is returned as string.</p>
 <dl class="staticmethod">
 <dt id="boostNode.runnable.template.Parser.substitute">
 <em class="property">static </em><tt class="descname">substitute</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.template.Parser.substitute" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wrapper method for pythons native &#8220;string.Template.substitute()&#8221;
-method.</p>
-<p>Arguments and keywords are forwarded to pythons native
-&#8220;string.Template.substitute()&#8221; method.</p>
+<dd><p>Wrapper method for pythons native &#8220;string.Template.substitute()&#8221;             method.</p>
+<p>Arguments and keywords are forwarded to pythons native             &#8220;string.Template.substitute()&#8221; method.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">template</span> <span class="o">=</span> <span class="n">Parser</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">template</span><span class="o">=</span><span class="s">&#39;hans &lt;%placeholder%&gt;&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
@@ -217,8 +200,7 @@ method.</p>
 <dl class="staticmethod">
 <dt id="boostNode.runnable.template.Parser.substitute_all">
 <em class="property">static </em><tt class="descname">substitute_all</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.template.Parser.substitute_all" title="Permalink to this definition">¶</a></dt>
-<dd><p>Substitutes every placeholder in template with a given replacement
-string.</p>
+<dd><p>Substitutes every placeholder in template with a given             replacement string.</p>
 <p>&#8220;replacement&#8221; - String to replace with every placeholder.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">template</span> <span class="o">=</span> <span class="n">Parser</span><span class="p">(</span>
