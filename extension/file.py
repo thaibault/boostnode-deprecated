@@ -3332,7 +3332,7 @@ class Handler(Class):
             stat.S_IWOTH
             stat.S_IXOTH
 
-            "right"      - Is the new right for the current object's path
+            "right"      - Is the new right for the current object's path \
                            location.
             "octal"      - Indicates weather we provide an octal number or a
                            constant combination from "stat.*".
