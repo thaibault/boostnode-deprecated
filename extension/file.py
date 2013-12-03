@@ -3332,11 +3332,16 @@ class Handler(Class):
             stat.S_IWOTH
             stat.S_IXOTH
 
+            TODO handle line breaks everwhere like here.
+
             "right"      - Is the new right for the current object's path \
                            location.
-            "octal"      - Indicates weather we provide an octal number or a
+
+            "octal"      - Indicates weather we provide an octal number or a \
                            constant combination from "stat.*".
+
             "recursive"  - Indicates weather rights should be set recursively.
+
             "allow_link" - Indicates weather links should be followed.
 
             Examples:
