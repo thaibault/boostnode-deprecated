@@ -11,7 +11,7 @@
 # region header
 
 '''
-    This module implements features like joint points, point cuts and advices
+    This module implements features like joint points, point cuts and advices \
     for implementing aspect orientated code.
 '''
 '''
@@ -55,9 +55,10 @@ pass
 
     # region public constants
 
+ASPECTS = []
 '''
-    Saves all aspects for cross cutting concerns for whole library and program
-    code that uses this feature.
+    Saves all aspects for cross cutting concerns for whole library and \
+    program code that uses this feature.
 
     Examples:
 
@@ -73,7 +74,6 @@ pass
     ...                  'event': 'return'}),
     ...      'point_cut': '^.+$'})
 '''
-ASPECTS = []
 
     # endregion
 
@@ -87,15 +87,15 @@ class FunctionDecorator(Class):
 
     # region properties
 
+    MANAGEABLE_DECORATORS = [builtins.classmethod, builtins.staticmethod]
     '''
         This constant holds a list of python decorators which could be emulated
         by this function wrapper instances.
     '''
-    MANAGEABLE_DECORATORS = [builtins.classmethod, builtins.staticmethod]
-    '''This property hold a list of common python's native decorators.'''
     COMMON_DECORATORS = [
         builtins.property, builtins.super, atexit.register,
         Class.pseudo_property]
+    '''This property hold a list of common python's native decorators.'''
 
     # endregion
 
@@ -401,11 +401,15 @@ class JointPointHandler(Class):
             Saves function call properties.
 
             "class_object" - function bounded class object
+
             "object"       - function bounded instance
+
             "function"     - function to handle
-            "arguments"    - arguments which should be forwarded to given
+
+            "arguments"    - arguments which should be forwarded to given \
                              function
-            "keywords"     - keywords which should be forwarded to given
+
+            "keywords"     - keywords which should be forwarded to given \
                              function
 
             Examples:
@@ -477,7 +481,7 @@ class JointPointHandler(Class):
 ## python3.3     def aspect(cls: SelfClass) -> None:
     def aspect(cls):
         '''
-            This method should be overwritten to provide the essential aspect
+            This method should be overwritten to provide the essential aspect \
             for handled function call.
 
             Examples:
@@ -585,7 +589,7 @@ class ReturnJointPoint(JointPointHandler, ReturnAspect):
         '''
             Initializes a joint point for saved function call.
 
-            Arguments and keywords are forwarded to the "JointPointHandler"
+            Arguments and keywords are forwarded to the "JointPointHandler" \
             initialize method.
 
             Examples:
@@ -794,14 +798,14 @@ class PointCut(ReturnAspect):
 ## python3.3     def handle_call(self: Self) -> builtins.bool:
     def handle_call(self):
         '''
-            Implementation of point cut for the aspect orientated way. Filters
-            all functions calls and run given advice on given event.
+            Implementation of point cut for the aspect orientated way. \
+            Filters all functions calls and run given advice on given event.
         '''
 ## python3.3         def call_handler(advice: builtins.dict) -> builtins.bool:
         def call_handler(advice):
             '''
-                Supports classes, simple functions or methods as triggered call
-                handler.
+                Supports classes, simple functions or methods as triggered \
+                call handler.
             '''
             if 'call' == advice['event']:
                 result = advice['callback'](
@@ -823,13 +827,13 @@ class PointCut(ReturnAspect):
     def handle_return(self, return_value):
 ##
         '''
-            Implementation of point cut for the aspect orientated way. Filters
-            all functions calls and run given advice on given event.
+            Implementation of point cut for the aspect orientated way. \
+            Filters all functions calls and run given advice on given event.
         '''
 ## python3.3         def return_handler(advice: builtins.dict) -> None:
         def return_handler(advice):
             '''
-                Supports classes, simple functions or methods as triggered
+                Supports classes, simple functions or methods as triggered \
                 return handler.
             '''
             if 'return' == advice['event']:
@@ -884,14 +888,14 @@ if sys.flags.optimize:
     def JointPoint(function):
 ##
         '''
-            Dummy function for simply return given function to avoid
+            Dummy function for simply return given function to avoid \
             joint points in high performance mode.
         '''
         return function
 else:
     class JointPoint(FunctionDecorator):
         '''
-            Implementation of joint point for the aspect orientated way.
+            Implementation of joint point for the aspect orientated way. \
             Triggers every function call and look for aspects to wrap around.
 
             Examples:
@@ -974,7 +978,7 @@ else:
             @functools.wraps(self.__func__)
             def wrapper_function(*arguments, **keywords):
                 '''
-                    Wrapper function for doing the aspect orientated stuff
+                    Wrapper function for doing the aspect orientated stuff \
                     before and after a function call.
                 '''
                 '''Unpack wrapper methods.'''
@@ -1003,15 +1007,15 @@ else:
 # region footer
 
 '''
-    Preset some variables given by introspection letting the linter know what
+    Preset some variables given by introspection letting the linter know what \
     globale variables are available.
 '''
 __logger__ = __exception__ = __module_name__ = __file_path__ = \
     __test_mode__ = None
 '''
-    Extends this module with some magic environment variables to provide better
-    introspection support. A generic command line interface for some code
-    preprocessing tools is provided by default.
+    Extends this module with some magic environment variables to provide \
+    better introspection support. A generic command line interface for some \
+    code preprocessing tools is provided by default.
 '''
 if __name__ == '__main__':
     from boostNode.extension.native import Module

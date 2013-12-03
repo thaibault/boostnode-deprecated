@@ -69,14 +69,13 @@ from boostNode.paradigm.objectOrientation import Class
 
 class Parser(Class, Runnable):
     '''
-        This class can parse a string or file to interpret it as template for
-        replacing containing placeholder and rendering embedded python script
+        This class can parse a string or file to interpret it as template for \
+        replacing containing placeholder and rendering embedded python script \
         snippets.
     '''
 
     # region properties
 
-    '''Holds all command line interface argument informations.'''
     COMMAND_LINE_ARGUMENTS = (
         {'arguments': ('template',),
          'keywords': {
@@ -268,6 +267,7 @@ class Parser(Class, Runnable):
              'default': {'execute': '__initializer_default_value__'},
              'help': 'Spend time on generating right indented output.',
              'dest': 'pretty_indent'}})
+    '''Holds all command line interface argument informations.'''
 
     # endregion
 
@@ -319,7 +319,7 @@ class Parser(Class, Runnable):
                 string = string.replace('"""', '"\\""')
                 break
         '''
-            Check if chosen delimiter collides with another delimiter like
+            Check if chosen delimiter collides with another delimiter like \
             """ + " at the string border.
         '''
         if string.startswith(delimiter[-1]):
@@ -373,9 +373,9 @@ class Parser(Class, Runnable):
 ## python3.3     def __len__(self: Self) -> builtins.int:
     def __len__(self):
         '''
-            Triggers if the pythons native "builtins.len()" function tries to
-            handle current instance. Returns the number of symbols given in the
-            current string representation of this object.
+            Triggers if the pythons native "builtins.len()" function tries to \
+            handle current instance. Returns the number of symbols given in \
+            the current string representation of this object.
 
             Examples:
 
@@ -418,9 +418,9 @@ class Parser(Class, Runnable):
 ## python3.3     def get_output(self: Self) -> builtins.str:
     def get_output(self):
         '''
-            Gets the current output buffer. It consists everything printed out
-            in code snippets rendered by the template instance or exists as
-            plain text in given template.
+            Gets the current output buffer. It consists everything printed \
+            out in code snippets rendered by the template instance or exists \
+            as plain text in given template.
 
             Examples:
 
@@ -435,9 +435,9 @@ class Parser(Class, Runnable):
 ## python3.3     def get_builtins(self: Self) -> builtins.dict:
     def get_builtins(self):
         '''
-            Defines minimum needed native python features for each template
-            scope. It adds user-defined additionally python functions. The
-            minimum needed functions (e.g. "print()") will never be
+            Defines minimum needed native python features for each template \
+            scope. It adds user-defined additionally python functions. The \
+            minimum needed functions (e.g. "print()") will never be \
             overwritten.
 
             Examples:
@@ -476,10 +476,10 @@ class Parser(Class, Runnable):
     def substitute(self, *arguments, **keywords):
 ##
         '''
-            Wrapper method for pythons native "string.Template.substitute()"
+            Wrapper method for pythons native "string.Template.substitute()" \
             method.
 
-            Arguments and keywords are forwarded to pythons native
+            Arguments and keywords are forwarded to pythons native \
             "string.Template.substitute()" method.
 
             Examples:
@@ -517,10 +517,10 @@ class Parser(Class, Runnable):
     def safe_substitute(self, *arguments, **keywords):
 ##
         '''
-            Wrapper method for pythons native
+            Wrapper method for pythons native \
             "string.Template.safe_substitute()" method.
 
-            Arguments and keywords are forwarded to pythons native
+            Arguments and keywords are forwarded to pythons native \
             "string.Template.safe_substitute()" method.
 
             Examples:
@@ -547,7 +547,7 @@ class Parser(Class, Runnable):
 ##             *arguments, **keywords))
         def substitute(match):
             '''
-                Substitution replacement for native pendant with no
+                Substitution replacement for native pendant with no \
                 exception raising.
             '''
             if match.group('variable_name') in keywords:
@@ -570,8 +570,8 @@ class Parser(Class, Runnable):
 ## python3.3     def substitute_all(self: Self, replacement='') -> Self:
     def substitute_all(self, replacement=''):
         '''
-            Substitutes every placeholder in template with a given replacement
-            string.
+            Substitutes every placeholder in template with a given \
+            replacement string.
 
             "replacement" - String to replace with every placeholder.
 
@@ -602,11 +602,11 @@ class Parser(Class, Runnable):
     def render(self, mapping={}, **keywords):
 ##
         '''
-            Renders the template. Searches for python code snippets and handles
-            correct indenting. Wraps plain text with a print function.
+            Renders the template. Searches for python code snippets and \
+            handles correct indenting. Wraps plain text with a print function.
 
-            "mapping" - A dictionary containing a mapping from placeholder name
-                        to value.
+            "mapping" - A dictionary containing a mapping from placeholder \
+                        name to value.
 
             Additional keywords are used as additional mapping tuples.
 
@@ -636,9 +636,9 @@ class Parser(Class, Runnable):
 ## python3.3     def represent_rendered_content(self: Self) -> builtins.str:
     def represent_rendered_content(self):
         '''
-            This method adds line numbers to rendered contend which is visible
-            if an template exception occurs in debug mode. Code representation
-            is returned as string.
+            This method adds line numbers to rendered contend which is \
+            visible if an template exception occurs in debug mode. Code \
+            representation is returned as string.
 
             Examples:
 
@@ -663,7 +663,7 @@ class Parser(Class, Runnable):
         def replace_rendered_content_line(match):
 ##
             '''
-                Prepends a line numbers to given line matching object of
+                Prepends a line numbers to given line matching object of \
                 rendered python code.
             '''
             self._current_rendered_content_line_number += 1
@@ -693,9 +693,9 @@ class Parser(Class, Runnable):
 ## python3.3     def _run(self: Self) -> Self:
     def _run(self):
         '''
-            Entry point for command line call of this program. Loads the given
-            template. If it is given by the command line it will be interpreted
-            directly.
+            Entry point for command line call of this program. Loads the \
+            given template. If it is given by the command line it will be \
+            interpreted directly.
 
             Examples:
 
@@ -847,57 +847,73 @@ class Parser(Class, Runnable):
     ):
 ##
         '''
-            Initializes output buffer and template scope. NOTE: "(?s...)" and
-            "(?m...)" is equivalent for regular expression flag "re.DOTALL"
-            and "re.MULTILINE". NOTE: This regular expression patterns assumes
-            that the delimiter has at least a length of two.
+            Initializes output buffer and template scope. NOTE: "(?s...)" and \
+            "(?m...)" is equivalent for regular expression flag "re.DOTALL" \
+            and "re.MULTILINE". NOTE: This regular expression patterns \
+            assumes that the delimiter has at least a length of two.
 
-            "template"                              - A template string, path
-                                                      to template file or file
-                                                      object pointing to a
-                                                      template file.
-            "string"                                - Indicates weather
-                                                      "template" is a template
-                                                      string or file path.
-            "file_encoding"                         - Encoding used for reading
-                                                      template file and writing
-                                                      rendered output.
-            "placeholder_name_pattern"              - Regular expression
-                                                      pattern to specify a
+            "template"                              - A template string, path \
+                                                      to template file or \
+                                                      file object pointing to \
+                                                      a template file.
+
+            "string"                                - Indicates weather \
+                                                      "template" is a \
+                                                      template string or file \
+                                                      path.
+
+            "file_encoding"                         - Encoding used for \
+                                                      reading template file \
+                                                      and writing rendered \
+                                                      output.
+
+            "placeholder_name_pattern"              - Regular expression \
+                                                      pattern to specify a \
                                                       placeholder name format.
-            "command_line_placeholder_name_pattern" - Regular expression to
-                                                      specify a placeholder
-                                                      name given via command
+
+            "command_line_placeholder_name_pattern" - Regular expression to \
+                                                      specify a placeholder \
+                                                      name given via command \
                                                       line interface.
-            "command_line_placeholder_pattern"      - Regular expression
-                                                      pattern to identify a
-                                                      placeholder value tuple
-                                                      in command line
+
+            "command_line_placeholder_pattern"      - Regular expression \
+                                                      pattern to identify a \
+                                                      placeholder value tuple \
+                                                      in command line \
                                                       interface.
-            "placeholder_pattern"                   - Pattern to specify a
-                                                      placeholder in template
+
+            "placeholder_pattern"                   - Pattern to specify a \
+                                                      placeholder in template \
                                                       string.
-            "template_pattern"                      - Regular expression to
-                                                      identify each template
+
+            "template_pattern"                      - Regular expression to \
+                                                      identify each template \
                                                       identify syntax.
-            "native_template_pattern"               - Regular expression
-                                                      pattern to used for
-                                                      pythons native template
+
+            "native_template_pattern"               - Regular expression \
+                                                      pattern to used for \
+                                                      pythons native template \
                                                       engine.
-            "left_code_delimiter"                   - Left code delimiter to
-                                                      identify a code starting
-                                                      point of a code line.
-            "right_escaped"                         - Escape symbol to mask a
+
+            "left_code_delimiter"                   - Left code delimiter to \
+                                                      identify a code \
+                                                      starting point of a \
+                                                      code line.
+
+            "right_escaped"                         - Escape symbol to mask a \
                                                       delimiter symbol.
-            "template_context_default_indent"       - Expected indention used
-                                                      for interpreting code
+
+            "template_context_default_indent"       - Expected indention used \
+                                                      for interpreting code \
                                                       blocks.
-            "builtin_names"                         - A tuple of function and
-                                                      variables available in
+
+            "builtin_names"                         - A tuple of function and \
+                                                      variables available in \
                                                       template engine.
-            "pretty_indent"                         - Indicates if we should
-                                                      spend time on rendering
-                                                      pretty indented code in
+
+            "pretty_indent"                         - Indicates if we should \
+                                                      spend time on rendering \
+                                                      pretty indented code in \
                                                       each case.
 
             Examples:
@@ -924,36 +940,36 @@ class Parser(Class, Runnable):
         '''Indicates if last rendered code snippet was a full line.'''
         self._new_line = True
         '''
-            Holds number of white spaces to indent a context dependent code
+            Holds number of white spaces to indent a context dependent code \
             block in templates.
         '''
         self._indent = 0
         '''Holds the number of lines in generated python code.'''
         self._number_of_generated_lines = 0
         '''
-            Holds the number of lines which will be generated in python code
+            Holds the number of lines which will be generated in python code \
             but doesn't occur in template code.
         '''
         self._number_of_generated_phantom_lines = 0
         '''
-            Saves the number of logical python code indents to distinguish
+            Saves the number of logical python code indents to distinguish \
             between style indents and logical indents.
         '''
         self._code_dependent_indents = []
         '''
-            A list of tuples holding the number of generated python code lines
-            and the number of generated phantom python code lines which doesn't
-            appear in template source code.
+            A list of tuples holding the number of generated python code \
+            lines and the number of generated phantom python code lines which \
+            doesn't appear in template source code.
         '''
         self._line_shifts = []
         '''
-            Buffers empty lines by parsing template source code. The list is
-            used as queue. Empty lines will be written finally to compiled
+            Buffers empty lines by parsing template source code. The list is \
+            used as queue. Empty lines will be written finally to compiled \
             source code if there dependence membership is resolved.
         '''
         self._empty_lines = []
         '''
-            Saves needed informations give a line number to each rendered
+            Saves needed informations give a line number to each rendered \
             content.
         '''
         self._current_rendered_content_line_number = 0
@@ -961,7 +977,7 @@ class Parser(Class, Runnable):
         '''Saves the output of running executed template.'''
         self._output = Buffer()
         '''
-            Holds a mapping from available builtin names and their references
+            Holds a mapping from available builtin names and their references \
             in template scope.
         '''
         self._builtins = {}
@@ -981,8 +997,8 @@ class Parser(Class, Runnable):
     def _set_builtins(self, builtins):
 ##
         '''
-            Generates a dictionary representing the templates scope from given
-            defined builtins.
+            Generates a dictionary representing the templates scope from \
+            given defined builtins.
         '''
         for builtin in builtins:
             self._builtins[builtin.__name__] = builtin
@@ -992,7 +1008,7 @@ class Parser(Class, Runnable):
 ## python3.3     def _generate_scope_variables(self: Self) -> builtins.dict:
     def _generate_scope_variables(self):
         '''
-            Generates scope variables given by the command line interface and
+            Generates scope variables given by the command line interface and \
             embeds them into the template.
 
             Examples:
@@ -1044,9 +1060,10 @@ class Parser(Class, Runnable):
         '''
             Load the given template into ram for rendering.
 
-            "template" the given template as file path or string.
-            "is_string" determines if the "template" should be interpreted as
-                        string or file path.
+            "template"  - the given template as file path or string.
+
+            "is_string" - determines if the "template" should be interpreted \
+                          as string or file path.
 
             Examples:
 
@@ -1092,8 +1109,8 @@ class Parser(Class, Runnable):
     def _run_template(self, template_scope):
 ##
         '''
-            Runs the compiled template in its given scope. All error will be
-            cached and error messages depending on source template will be
+            Runs the compiled template in its given scope. All error will be \
+            cached and error messages depending on source template will be \
             derived on produced exceptions based in the compiled template.
 
             Examples:
@@ -1208,8 +1225,8 @@ class Parser(Class, Runnable):
     ):
 ##
         '''
-            If an exception is raising during running generated template
-            (python) code this methods will handle it to map exception line
+            If an exception is raising during running generated template \
+            (python) code this methods will handle it to map exception line \
             number to template's source code line number.
 
             Examples:
@@ -1281,7 +1298,7 @@ class Parser(Class, Runnable):
     ):
 ##
         '''
-            Performs a wrapper exception for exception raising in template
+            Performs a wrapper exception for exception raising in template \
             context.
 
             Examples:
@@ -1333,10 +1350,10 @@ class Parser(Class, Runnable):
     def _get_exception_line(self, exception):
 ##
         '''
-            Determines the line where the given exception was raised. If in the
-            responsible line in compiled template was found, a tuple with the
-            resulting line in source template and compiled template will be
-            given back.
+            Determines the line where the given exception was raised. If in \
+            the responsible line in compiled template was found, a tuple with \
+            the resulting line in source template and compiled template will \
+            be given back.
 
             Examples:
 
@@ -1353,9 +1370,9 @@ class Parser(Class, Runnable):
             (4, 4)
         '''
         '''
-            NOTE: A tuple with line matching (a, b) means that till python code
-            line a + b we have b number of lines which doesn't occur in source
-            code.
+            NOTE: A tuple with line matching (a, b) means that till python \
+            code line a + b we have b number of lines which doesn't occur in \
+            source code.
         '''
         old_number_of_phantom_lines = 0
         line_number = self._determine_exec_string_exception_line(exception)
@@ -1382,16 +1399,16 @@ class Parser(Class, Runnable):
     def _determine_exec_string_exception_line(self, exception):
 ##
         '''
-            Determines the line number where the exception (in exec statement)
-            occurs from the given exception.
+            Determines the line number where the exception (in exec \
+            statement) occurs from the given exception.
         '''
 ## python3.3
 ##         exception_traceback = traceback.extract_tb(exception.__traceback__)
         exception_traceback = traceback.extract_tb(sys.exc_info()[2])
 ##
         '''
-            Search traceback for a context ran from "builtins.exec()" and begin
-            from the nearest context.
+            Search traceback for a context ran from "builtins.exec()" and \
+            begin from the nearest context.
         '''
         exception_traceback.reverse()
         for context in exception_traceback:
@@ -1414,8 +1431,8 @@ class Parser(Class, Runnable):
     def _print(self, *arguments, **keywords):
 ##
         '''
-            Represents the print function which will be used for all plain text
-            wraps and print expressions by compiling the source template.
+            Represents the print function which will be used for all plain \
+            text wraps and print expressions by compiling the source template.
 
             Examples:
 
@@ -1443,8 +1460,8 @@ class Parser(Class, Runnable):
 ##
             if indent and indent_space:
                 '''
-                    If an indent level was given prepend given indent space to
-                    each line.
+                    If an indent level was given prepend given indent space \
+                    to each line.
                 '''
                 print_buffer = Buffer()
                 codewords = copy.deepcopy(keywords)
@@ -1473,7 +1490,7 @@ class Parser(Class, Runnable):
     ):
 ##
         '''
-            Performs a template include. This method is implemented for using
+            Performs a template include. This method is implemented for using \
             in template context.
         '''
         scope.update(keywords)
@@ -1565,7 +1582,7 @@ class Parser(Class, Runnable):
             ''
         '''
         '''
-            This has been sorted by their average frequency for improving
+            This has been sorted by their average frequency for improving \
             performance.
         '''
         if match.group('NONE_CODE'):
@@ -1642,7 +1659,7 @@ class Parser(Class, Runnable):
         before_placeholder = ''
         if match.group('before_placeholder'):
             '''
-                Only cut code dependent indents if placeholder is the first
+                Only cut code dependent indents if placeholder is the first \
                 statement in current line.
             '''
             slice = 0
@@ -1758,7 +1775,7 @@ class Parser(Class, Runnable):
     def _handle_include_output_indent_level(self, code_line, match, slice):
 ##
         '''
-            Returns a string representing from include function call in
+            Returns a string representing from include function call in \
             generated python code with their indent level given.
         '''
         length_of_include_call = String(
@@ -1784,8 +1801,8 @@ class Parser(Class, Runnable):
     def _handle_print_output_indent_level(self, code_line, match, slice):
 ##
         '''
-            Returns a string representing from print function call in generated
-            python code with their indent level given.
+            Returns a string representing from print function call in \
+            generated python code with their indent level given.
         '''
         length_of_print_call = String(
             code_line[builtins.len('print('):]
@@ -1808,8 +1825,8 @@ class Parser(Class, Runnable):
     def _flush_empty_lines(self, indent):
 ##
         '''
-            Flushes the empty line stack needed for right line mapping through
-            template code and generated python code.
+            Flushes the empty line stack needed for right line mapping \
+            through template code and generated python code.
         '''
         result = ''
         for empty_line in self._empty_lines:
@@ -1821,7 +1838,7 @@ class Parser(Class, Runnable):
 ## python3.3     def _get_new_line(self: Self) -> builtins.str:
     def _get_new_line(self):
         '''
-            Returns a new line string if necessary for the correct template
+            Returns a new line string if necessary for the correct template \
             compiling to native python code.
         '''
         if(self._new_line and
@@ -1839,13 +1856,13 @@ class Parser(Class, Runnable):
     def _get_code_indent(self, current_indent, mode='passiv'):
 ##
         '''
-            Returns the right indent in code as string depending on the current
-            indention level and context.
+            Returns the right indent in code as string depending on the \
+            current indention level and context.
 
-            "mode" can have three different states.
-                passiv: This mode describes the ability to close or continue
-                        the current context by their level of indention.
-                activ: Means a new code depending context is open. The
+            "mode" - can have three different states. \
+                passiv: This mode describes the ability to close or continue \
+                        the current context by their level of indention. \
+                activ: Means a new code depending context is open. The \
                        following code is depended on this line.
         '''
         if current_indent is None:
@@ -1882,15 +1899,15 @@ class Parser(Class, Runnable):
 # region footer
 
 '''
-    Preset some variables given by introspection letting the linter know what
+    Preset some variables given by introspection letting the linter know what \
     globale variables are available.
 '''
 __logger__ = __exception__ = __module_name__ = __file_path__ = \
     __test_mode__ = None
 '''
-    Extends this module with some magic environment variables to provide better
-    introspection support. A generic command line interface for some code
-    preprocessing tools is provided by default.
+    Extends this module with some magic environment variables to provide \
+    better introspection support. A generic command line interface for some \
+    code preprocessing tools is provided by default.
 '''
 Module.default(name=__name__, frame=inspect.currentframe())
 

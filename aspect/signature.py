@@ -11,7 +11,7 @@
 # region header
 
 '''
-    This module provides functions for checking function call's against a
+    This module provides functions for checking function call's against a \
     given signature.
 '''
 '''
@@ -64,7 +64,7 @@ def add_check(point_cut):
     '''
         Adds signature checking in functions and methods for given point cuts.
 
-        "point_cut" - A regular expression which will be checked again every
+        "point_cut" - A regular expression which will be checked again every \
                       function context path.
 
         Examples:
@@ -92,8 +92,8 @@ def add_check(point_cut):
 ## python3.3 class CheckObject:
 class CheckObject(builtins.object):
     '''
-        Checks a function call against a given specification. This class serves
-        as helper class.
+        Checks a function call against a given specification. This class \
+        serves as helper class.
     '''
 
     # region static methods
@@ -149,7 +149,7 @@ class CheckObject(builtins.object):
     def _is_right_type(cls, given_type, expected_type):
 ##
         '''
-            Check weather a given type is expected type or given type is a
+            Check weather a given type is expected type or given type is a \
             subclass of expected type.
 
             Fixes bug that in python a boolean is a subtype of an integer.
@@ -195,13 +195,13 @@ class CheckObject(builtins.object):
                 # region properties
 
         '''
-            Holds informations about the function and their bounding that is to
-            be checked.
+            Holds informations about the function and their bounding that is \
+            to be checked.
         '''
         self.class_object = self.object = self.__func__ = None
         '''
-            Saves informations in which way the give method is used. It could
-            by something like "builtins.staticmethod" or
+            Saves informations in which way the give method is used. It could \
+            by something like "builtins.staticmethod" or \
             "builtins.classmethod".
         '''
         self._method_type = None
@@ -734,8 +734,8 @@ class CheckObject(builtins.object):
     def _check_value(self, expected_value, value, name='return value'):
 ##
         '''
-            Checks if the given argument value is equal the specified argument
-            value.
+            Checks if the given argument value is equal the specified \
+            argument value.
 
             Examples:
 
@@ -774,20 +774,21 @@ class CheckObject(builtins.object):
 class Check(FunctionDecorator):
 ## python3.3
 ##     '''
-##         This function provides function and method signature checking. An
+##         This function provides function and method signature checking. An \
 ##         exception is raised on invalid signature implementation.
 ##
-##         There are several possibilities to specify a given argument or the
+##         There are several possibilities to specify a given argument or the \
 ##         return value:
 ##
-##         1. Specify a type.
-##         2. Specify a number of types via a tuple.
-##         3. Specify a number of types expected as values explicit via list.
-##         4. Specify an explicit value.
-##         5. Specify type implicit by setting a default value.
-##         6. Specify current instance via "Self".
-##         7. Specify any instance of the current class via "SelfClassObject".
-##         8. Specify the current Class type (interpret as value) for static
+##         1. Specify a type. \
+##         2. Specify a number of types via a tuple. \
+##         3. Specify a number of types expected as values explicit via list. \
+##         4. Specify an explicit value. \
+##         5. Specify type implicit by setting a default value. \
+##         6. Specify current instance via "Self". \
+##         7. Specify any instance of the current class via
+##            "SelfClassObject". \
+##         8. Specify the current Class type (interpret as value) for static \
 ##            methods via "SelfClass".
 ##
 ##         Examples:
@@ -985,8 +986,8 @@ class Check(FunctionDecorator):
 ##             *arguments: builtins.object, **keywords: builtins.object
 ##         ) -> builtins.object:
 ##             '''
-##                 Wrapper function for function to be checked. Does the
-##                 argument and return value checks. Runs the function to be
+##                 Wrapper function for function to be checked. Does the \
+##                 argument and return value checks. Runs the function to be \
 ##                 checked and returns their return value.
 ##             '''
 ##             arguments = self._determine_arguments(arguments)
@@ -1034,12 +1035,12 @@ class CheckArguments(CallJointPoint, CheckObject):
 ## python3.3     def aspect(self: Self) -> Self:
     def aspect(self):
         '''
-            This function could be used as decorator function or aspects to
+            This function could be used as decorator function or aspects to \
             implement argument type check for each function call.
         '''
         if builtins.hasattr(self.__func__, '__annotations__'):
             '''
-                If there aren't any specifications (signature), the given
+                If there aren't any specifications (signature), the given \
                 function could be given back unmodified.
             '''
             for argument in self.argument_specifications:
@@ -1055,9 +1056,9 @@ class CheckArguments(CallJointPoint, CheckObject):
     def _check_argument_cases(self, argument):
 ##
         '''
-            Handles the different possibilities an argument could be specified.
-            It could be specified by a given type, multiple types, implicit
-            type through an default value or an explicit value.
+            Handles the different possibilities an argument could be \
+            specified. It could be specified by a given type, multiple types, \
+            implicit type through an default value or an explicit value.
         '''
         if builtins.isinstance(argument.annotation, builtins.type):
             return self._check_type(
@@ -1077,8 +1078,8 @@ class CheckArguments(CallJointPoint, CheckObject):
     def _check_argument(self, argument):
 ##
         '''
-            Checks an argument. No matter if argument was given by its keyword
-            or not.
+            Checks an argument. No matter if argument was given by its \
+            keyword or not.
         '''
         if argument.default is inspect.Parameter.empty:
             if argument.annotation is not inspect.Parameter.empty:
@@ -1110,7 +1111,7 @@ class CheckReturnValue(ReturnJointPoint, CheckObject):
         '''
             Checks the given return value.
 
-            Returns the original value of the given wrapped function if
+            Returns the original value of the given wrapped function if \
             everything goes right.
 
             Examples:
@@ -1151,15 +1152,15 @@ class CheckReturnValue(ReturnJointPoint, CheckObject):
 # region footer
 
 '''
-    Preset some variables given by introspection letting the linter know what
+    Preset some variables given by introspection letting the linter know what \
     globale variables are available.
 '''
 __logger__ = __exception__ = __module_name__ = __file_path__ = \
     __test_mode__ = None
 '''
-    Extends this module with some magic environment variables to provide better
-    introspection support. A generic command line interface for some code
-    preprocessing tools is provided by default.
+    Extends this module with some magic environment variables to provide \
+    better introspection support. A generic command line interface for some \
+    code preprocessing tools is provided by default.
 '''
 if __name__ == '__main__':
     from boostNode.extension.native import Module

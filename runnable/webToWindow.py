@@ -11,7 +11,7 @@
 # region header
 
 '''
-    Provides a web-browser-based technology to show web-pages as desktop
+    Provides a web-browser-based technology to show web-pages as desktop \
     window.
 '''
 '''
@@ -73,15 +73,14 @@ from boostNode.paradigm.objectOrientation import Class
 
 class Browser(Class, Runnable):
     '''
-        Provides a webkit browser without any browser typical visual
-        properties. Its only a very simple window for showing web pages. The
-        main goal is to make a web-interface look and behave like a real
+        Provides a webkit browser without any browser typical visual \
+        properties. Its only a very simple window for showing web pages. The \
+        main goal is to make a web-interface look and behave like a real \
         desktop application.
     '''
 
     # region properties
 
-    '''Holds all command line interface argument informations.'''
     COMMAND_LINE_ARGUMENTS = (
         {'arguments': ('_url',),
          'keywords': {
@@ -178,8 +177,9 @@ class Browser(Class, Runnable):
                             '__initializer_default_value__'},
              'dest': 'stop_order',
              'metavar': 'STRING'}})
-    '''Saves all initialized instances of this class.'''
+    '''Holds all command line interface argument informations.'''
     instances = []
+    '''Saves all initialized instances of this class.'''
 
     # endregion
 
@@ -229,7 +229,7 @@ class Browser(Class, Runnable):
 ## python3.3     def __repr__(self: Self) -> builtins.str:
     def __repr__(self):
         '''
-            Invokes if this object should describe itself by a string.
+            Invokes if this object should describe itself by a string. \
             Returns the computed self describing string.
 
             Examples:
@@ -324,8 +324,8 @@ class Browser(Class, Runnable):
     def stop(self, *arguments, **keywords):
 ##
         '''
-            Closes all created web views. Note that in case of using the
-            default installed browser fall-back this instance couldn't be
+            Closes all created web views. Note that in case of using the \
+            default installed browser fall-back this instance couldn't be \
             destroyed.
 
             Examples:
@@ -351,8 +351,8 @@ class Browser(Class, Runnable):
                     reason = 'clicking gtk close button'
                 else:
                     '''
-                        NOTE: We got a close trigger from another thread as
-                        where the main gtk loop is present. We have to wait
+                        NOTE: We got a close trigger from another thread as \
+                        where the main gtk loop is present. We have to wait \
                         until gtk has finished it's closing procedures.
                     '''
                     self._close_gtk_windows_lock.acquire()
@@ -373,8 +373,8 @@ class Browser(Class, Runnable):
 ## python3.3     def _run(self: Self) -> Self:
     def _run(self):
         '''
-            Entry point for command line call of this program. Initializes all
-            window and webkit components.
+            Entry point for command line call of this program. Initializes \
+            all window and webkit components.
 
             Examples:
 
@@ -408,22 +408,29 @@ class Browser(Class, Runnable):
             default_title='No gui loaded.', stop_order='stop', **keywords):
 ##
         '''
-            Initializes a web view or tries to open a default browser if no gui
-            suitable gui toolkit is available.
+            Initializes a web view or tries to open a default browser if no \
+            gui suitable gui toolkit is available.
 
             "_url"                 - URL to open in webview.
+
             "width_in_pixel"       - Width of opening browser window.
+
             "height_in_pixel"      - Height of opening browser window.
-            "fullscreen"           - Indicates weather windows should start in
-                                     fullscreen mode.
-            "no_window_decoration" - If set to "True" no windows decoration
+            "fullscreen"           - Indicates weather windows should start \
+                                     in fullscreen mode.
+
+            "no_window_decoration" - If set to "True" no windows decoration \
                                      will be provided.
-            "default_gui_toolkit"  - Toolkit to use if more than one is
+
+            "default_gui_toolkit"  - Toolkit to use if more than one is \
                                      available.
-            "no_progress_bar"      - If set to "True" progress bar for loading
-                                     web pages will be omitted.
-            "default_title"        - Default window title to show in window
+
+            "no_progress_bar"      - If set to "True" progress bar for \
+                                     loading web pages will be omitted.
+
+            "default_title"        - Default window title to show in window \
                                      decoration.
+
             "stop_order"           - Standard in command to close window.
 
             Examples:
@@ -451,7 +458,7 @@ class Browser(Class, Runnable):
             'Start web gui with gui toolkit "%s".', self.gui_toolkit)
         if not __test_mode__:
             '''
-                This lock object handles to wait until all gtk windows are
+                This lock object handles to wait until all gtk windows are \
                 closed before the program terminates.
             '''
             self._close_gtk_windows_lock = threading.Lock()
@@ -510,7 +517,7 @@ class Browser(Class, Runnable):
 ## python3.3     def _initialize_qt_progress_bar(self: Self) -> Self:
     def _initialize_qt_progress_bar(self):
         '''
-            Initializes the progress bar for qt on bottom of the window for
+            Initializes the progress bar for qt on bottom of the window for \
             showing current state of website rendering.
         '''
         if not self.no_progress_bar:
@@ -567,7 +574,7 @@ class Browser(Class, Runnable):
 ## python3.3     def _initialize_gtk_progress_bar(self: Self) -> Self:
     def _initialize_gtk_progress_bar(self):
         '''
-            Initializes the progress bar for gtk on bottom of the window for
+            Initializes the progress bar for gtk on bottom of the window for \
             showing current state of website rendering.
         '''
         self.progress_bar = gtk.ProgressBar()
@@ -583,9 +590,9 @@ class Browser(Class, Runnable):
 ## python3.3     def _check_for_gtk_closing_flag(self: Self) -> builtins.bool:
     def _check_for_gtk_closing_flag(self):
         '''
-            Checks if gtk should be closed after the last gtk main iteration.
-            If we return a "False" this method will not be triggered in future.
-            time.
+            Checks if gtk should be closed after the last gtk main iteration. \
+            If we return a "False" this method will not be triggered in \
+            future time.
 
             Examples:
 
@@ -607,7 +614,7 @@ class Browser(Class, Runnable):
     def _on_qt_title_changed(self, title):
 ##
         '''
-            Triggers if the current title (normally defined in the web page's
+            Triggers if the current title (normally defined in the web page's \
             markup).
         '''
         self.browser.setWindowTitle(title)
@@ -622,7 +629,7 @@ class Browser(Class, Runnable):
     def _on_gtk_title_changed(self, webview, frame, title):
 ##
         '''
-            Triggers if the current title (normally defined in the web page's
+            Triggers if the current title (normally defined in the web page's \
             markup).
         '''
         self.window.set_title(title)
@@ -706,15 +713,15 @@ class Browser(Class, Runnable):
 # region footer
 
 '''
-    Preset some variables given by introspection letting the linter know what
+    Preset some variables given by introspection letting the linter know what \
     globale variables are available.
 '''
 __logger__ = __exception__ = __module_name__ = __file_path__ = \
     __test_mode__ = None
 '''
-    Extends this module with some magic environment variables to provide better
-    introspection support. A generic command line interface for some code
-    preprocessing tools is provided by default.
+    Extends this module with some magic environment variables to provide \
+    better introspection support. A generic command line interface for some \
+    code preprocessing tools is provided by default.
 '''
 Module.default(
     name=__name__, frame=inspect.currentframe(),

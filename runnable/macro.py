@@ -11,10 +11,10 @@
 # region header
 
 '''
-    This module provides an interpreter to run a simple macro language written
-    in text-files. Converts special commented version depending code snippets
-    in given location to another given version. This code transformation can
-    always be made in both directions.
+    This module provides an interpreter to run a simple macro language \
+    written in text-files. Converts special commented version depending code \
+    snippets in given location to another given version. This code \
+    transformation can always be made in both directions.
 '''
 '''
     For conventions see "boostNode/__init__.py" on
@@ -60,13 +60,12 @@ from boostNode.paradigm.objectOrientation import Class
 
 class Replace(Class, Runnable):
     '''
-        Parse source code and replace version depended code snippets with the
+        Parse source code and replace version depended code snippets with the \
         correct given version code snippets.
     '''
 
     # region properties
 
-    '''Defines options for manipulating the programs default behavior.'''
     COMMAND_LINE_ARGUMENTS = (
         {'arguments': ('-p', '--path'),
          'keywords': {
@@ -177,6 +176,7 @@ class Replace(Class, Runnable):
                             "replace('%', '%%')"},
              'dest': 'encoding',
              'metavar': 'ENCODING'}})
+    '''Defines options for manipulating the programs default behavior.'''
 
     # endregion
 
@@ -216,10 +216,10 @@ class Replace(Class, Runnable):
     def set_new_version(self, version):
 ##
         '''
-            Checks if an explicit new version was given or a useful should be
+            Checks if an explicit new version was given or a useful should be \
             determined.
 
-            "version" - New version of current text file. Could be
+            "version" - New version of current text file. Could be \
                         "__determine_useful__" if it should be guessed.
 
             Returns new version.
@@ -269,7 +269,7 @@ class Replace(Class, Runnable):
     def set_exclude_locations(self, paths):
 ##
         '''
-            Converts all paths setted to "_exclude_locations" via string to
+            Converts all paths setted to "_exclude_locations" via string to \
             high level file objects.
 
             "paths" - A list of paths to exclude from processing the macro.
@@ -304,8 +304,8 @@ class Replace(Class, Runnable):
 ## python3.3     def _run(self: Self) -> Self:
     def _run(self):
         '''
-            Entry point for command line call of this program. Validates the
-            given input. Gives usage info or raises exception if the given
+            Entry point for command line call of this program. Validates the \
+            given input. Gives usage info or raises exception if the given \
             inputs don't make sense.
 
             Examples:
@@ -364,28 +364,37 @@ class Replace(Class, Runnable):
     ):
 ##
         '''
-            Triggers the conversion process with given arguments. NOTE:
-            "(?s...)" is equivalent to regular expression flag "re.DOTALL".
-            NOTE: That alternate version in one line regular expression
+            Triggers the conversion process with given arguments. NOTE: \
+            "(?s...)" is equivalent to regular expression flag "re.DOTALL". \
+            NOTE: That alternate version in one line regular expression \
             pattern could be empty.
 
             "location"                 - Location to execute macro processing.
-            "skip_self_file"           - If setted to "True" and this script
-                                         file is part of "location" this file
+
+            "skip_self_file"           - If setted to "True" and this script \
+                                         file is part of "location" this file \
                                          will be ignored.
-            "extension"                - File extensions to handle. Others will
-                                         be excluded.
-            "first_line_regex_pattern" - Regular expression pattern to
-                                         determine current version of given
+
+            "extension"                - File extensions to handle. Others \
+                                         will be excluded.
+
+            "first_line_regex_pattern" - Regular expression pattern to \
+                                         determine current version of given \
                                          text file.
-            "one_line_regex_pattern"   - One line regular expression syntax to
-                                         replace.
-            "more_line_regex_pattern"  - More line regular expression syntax to
-                                         replace.
+
+            "one_line_regex_pattern"   - One line regular expression syntax \
+                                         to replace.
+
+            "more_line_regex_pattern"  - More line regular expression syntax \
+                                         to replace.
+
             "encoding"                 - Encoding to use.
-            "dry"                      - Indicates weather a dry run with
+
+            "dry"                      - Indicates weather a dry run with \
                                          producing log output should be done.
+
             "_exclude_locations"       - Locations to exclude.
+
             "_new_version"             - Version description to convert to.
 
             Examples:
@@ -413,8 +422,8 @@ class Replace(Class, Runnable):
         '''NOTE: This additional declaration is needed to trigger setter.'''
         self.exclude_locations = self._exclude_locations
         '''
-            New version to convert given files to. NOTE: This property can only
-            determined after all properties are set. This additional
+            New version to convert given files to. NOTE: This property can \
+            only determined after all properties are set. This additional \
             declaration is needed to trigger setter.
         '''
         self.new_version = self._new_version
@@ -439,7 +448,7 @@ class Replace(Class, Runnable):
     def _in_exclude_location(self, location):
 ##
         '''
-            Returns "True" if given location is in one of initially defined
+            Returns "True" if given location is in one of initially defined \
             exclude locations.
 
             Examples:
@@ -474,7 +483,7 @@ class Replace(Class, Runnable):
     def _determine_useful_version_in_location(self, location):
 ##
         '''
-            Determines a useful version for replacing if nothing explicit was
+            Determines a useful version for replacing if nothing explicit was \
             given.
 
             Examples:
@@ -514,7 +523,7 @@ class Replace(Class, Runnable):
     def _determine_useful_version_in_file(self, file):
 ##
         '''
-            Searches for first version replacement in macro language as good
+            Searches for first version replacement in macro language as good \
             guess for new version if no new version was defined explicitly.
 
             Examples:
@@ -664,12 +673,12 @@ class Replace(Class, Runnable):
     def _convert_directory(self, directory):
 ##
         '''
-            Walks through a whole directory and its substructure to convert its
-            text based files between different versions of marked
+            Walks through a whole directory and its substructure to convert \
+            its text based files between different versions of marked \
             code-snippets.
 
-            "directory" the directory location with text-files which should
-                        be converted.
+            "directory" - the directory location with text-files which should \
+                          be converted.
 
             Examples:
 
@@ -704,7 +713,7 @@ class Replace(Class, Runnable):
 ## python3.3     def _convert_file(self: Self, file: FileHandler) -> Self:
     def _convert_file(self, file):
         '''
-            Opens a given file and parses its content and convert it through
+            Opens a given file and parses its content and convert it through \
             different versions of code snippets.
 
             "file" - the file to be converted.
@@ -792,13 +801,12 @@ class Replace(Class, Runnable):
             first_line = match.group().replace(
                 match.group('constant_version_pattern'), new_interpreter)
             '''
-                NOTE: Calling "read()" twice is necessary to work around a
-                python bug. First call only reads a part of corresponding
-                file.
-                NOTE: Catching an encoding error here isn't necessary,
-                because former "readline()" call has already loaded the
-                full file into buffer. An encoding error would already be
-                throne.
+                NOTE: Calling "read()" twice is necessary to work around a \
+                python bug. First call only reads a part of corresponding \
+                file. \
+                NOTE: Catching an encoding error here isn't necessary, \
+                because former "readline()" call has already loaded the full \
+                file into buffer. An encoding error would already be throne.
             '''
 ## python3.3
 ##             file_content = file_handler.read() + file_handler.read()
@@ -828,16 +836,17 @@ class Replace(Class, Runnable):
     def _replace_alternate_lines(self, match):
 ##
         '''
-            Replaces various numbers of code lines with its corresponding code
-            line in another version.
+            Replaces various numbers of code lines with its corresponding \
+            code line in another version.
 
-            "match" is a regular expression match object with all needed infos
-                    about the current code snippet and its corresponding
+            "match" - is a regular expression match object with all needed \
+                      infos about the current code snippet and its \
+                      corresponding.
         '''
         if match.group('alternate_version') == self._new_version:
             '''
-                "str.replace()" has to run over "current_text" twice. Two
-                consecutive lines with whitespace at the end of line aren't
+                "str.replace()" has to run over "current_text" twice. Two \
+                consecutive lines with whitespace at the end of line aren't \
                 matched in first run.
             '''
             return(
@@ -869,12 +878,12 @@ class Replace(Class, Runnable):
     def _replace_alternate_line(self, match):
 ##
         '''
-            Replaces one code line with its corresponding code line in another
-            version.
+            Replaces one code line with its corresponding code line in \
+            another version.
 
-            "match" is a regular expression match object with all needed infos
-                    about the current code snippet and its corresponding
-                    alternative.
+            "match" - is a regular expression match object with all needed \
+                      infos about the current code snippet and its \
+                      corresponding alternative.
         '''
         if match.group('alternate_version') == self._new_version:
             current_text = match.group('current_text')
@@ -897,7 +906,7 @@ class Replace(Class, Runnable):
     def _determine_useful_version_in_location_helper(self, location):
 ##
         '''
-            Searches in files in given locations the first occurrences of a
+            Searches in files in given locations the first occurrences of a \
             useful conversion format.
         '''
         if location.is_directory():
@@ -923,15 +932,15 @@ class Replace(Class, Runnable):
 # region footer
 
 '''
-    Preset some variables given by introspection letting the linter know what
+    Preset some variables given by introspection letting the linter know what \
     globale variables are available.
 '''
 __logger__ = __exception__ = __module_name__ = __file_path__ = \
     __test_mode__ = None
 '''
-    Extends this module with some magic environment variables to provide better
-    introspection support. A generic command line interface for some code
-    preprocessing tools is provided by default.
+    Extends this module with some magic environment variables to provide \
+    better introspection support. A generic command line interface for some \
+    code preprocessing tools is provided by default.
 '''
 Module.default(name=__name__, frame=inspect.currentframe())
 

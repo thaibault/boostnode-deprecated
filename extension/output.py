@@ -14,7 +14,7 @@
 from __future__ import print_function
 
 '''
-    This module provides classes for dealing with python's way to transport
+    This module provides classes for dealing with python's way to transport \
     strings to any output stream.
 '''
 '''
@@ -61,7 +61,7 @@ from boostNode.paradigm.objectOrientation import Class
 
 class Buffer(Class, logging.StreamHandler):
     '''
-        This class represents a layer for writing and reading to an output
+        This class represents a layer for writing and reading to an output \
         buffer realized as file, queue or variable.
 
         Examples:
@@ -90,7 +90,7 @@ class Buffer(Class, logging.StreamHandler):
     ):
 ##
         '''
-            Saves the file path in the current instance. If "file" is "None"
+            Saves the file path in the current instance. If "file" is "None" \
             an instance variable is used as buffer.
 
             Examples:
@@ -127,7 +127,7 @@ class Buffer(Class, logging.StreamHandler):
         elif file is not None:
             self.file = FileHandler(location=file)
         '''
-            A lock object to guarantee that no other thread read from buffer
+            A lock object to guarantee that no other thread read from buffer \
             during truncating or writing.
         '''
         self._lock = threading.Lock()
@@ -237,7 +237,7 @@ class Buffer(Class, logging.StreamHandler):
 ## python3.3     def write(self: Self, content: builtins.str) -> Self:
     def write(self, content):
         '''
-            Writes content to the current output buffer file. If the current
+            Writes content to the current output buffer file. If the current \
             given file "Buffer.file" doesn't exists it will be created.
 
             Examples:
@@ -270,8 +270,8 @@ class Buffer(Class, logging.StreamHandler):
 ## python3.3     def flush(self: Self) -> Self:
     def flush(self):
         '''
-            Flush methods usually called to guarantee that all objects putted
-            to "write()" are materialized on their provided media. This
+            Flush methods usually called to guarantee that all objects putted \
+            to "write()" are materialized on their provided media. This \
             implementation exists only for compatibility reasons.
 
             Examples:
@@ -344,7 +344,7 @@ class Buffer(Class, logging.StreamHandler):
 
 class Print(Class):
     '''
-        Provides a high level printing class on top of pythons native print
+        Provides a high level printing class on top of pythons native print \
         function.
     '''
 
@@ -357,7 +357,7 @@ class Print(Class):
     '''Print this string after every last argument to every "put()" call.'''
     end = '\n'
     '''
-        Redirect print output to this buffer if no buffer is defined for
+        Redirect print output to this buffer if no buffer is defined for \
         current instance.
     '''
     default_buffer = sys.stdout
@@ -378,20 +378,21 @@ class Print(Class):
     def __init__(self, *output, **codewords):
 ##
         '''
-            Writes something to the output buffer or prints to standard
+            Writes something to the output buffer or prints to standard \
             output.
 
-            "output" are the strings which should be printed or saved.
-            "codewords" represents all possible optional arguments.
+            "output"    - are the strings which should be printed or saved.
+
+            "codewords" - represents all possible optional arguments.
                 "codeword['start']"
                 "codeword['separator']"
                 "codeword['end']"
                 "codeword['flush']"
-                "codeword['buffer']" could be any instance as buffer which
+                "codeword['buffer']" could be any instance as buffer which \
                                      implements a "write()" method.
 
-            Returns the given string or the last element if an iterable object
-            was given.
+            Returns the given string or the last element if an iterable \
+            object was given.
 
             Examples:
 
@@ -506,18 +507,22 @@ class Print(Class):
 
 class Logger(Class):
     '''
-        This class provides handling with all components dealing with logger
+        This class provides handling with all components dealing with logger \
         object. It stores all logger components in a single data structure.
     '''
 
     # region properties
 
-    '''Defining all default components of the logger objects.'''
     default_level = 'critical',
+    '''Defines the default logging level for new created logger handler.'''
     format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    '''Output format.'''
     terminator = '\n',
+    '''Suffix in each logging output.'''
     buffer = sys.stdout,
+    '''Output buffer for all logging outputs.'''
     instances = []
+    '''Saves all logging handler instances.'''
 
     # endregion
 
@@ -618,9 +623,9 @@ class Logger(Class):
     ):
 ##
         '''
-            Returns a new or existing instance of a logger with given
-            properties. If a logger was already registered under given name the
-            existing instance is given back and a new instance otherwise.
+            Returns a new or existing instance of a logger with given \
+            properties. If a logger was already registered under given name \
+            the existing instance is given back and a new instance otherwise.
 
             Examples:
 
@@ -656,12 +661,12 @@ class Logger(Class):
     def change_all(cls, level=(), buffer=(), terminator=(), format=()):
 ##
         '''
-            This method changes the given properties to all created logger
-            instances and saves the given properties as default properties for
-            future created logger instances.
+            This method changes the given properties to all created logger \
+            instances and saves the given properties as default properties \
+            for future created logger instances.
 
-            Note that every argument except buffer setted to "None" will not
-            edit this logger component. If you don't want to change buffer
+            Note that every argument except buffer setted to "None" will not \
+            edit this logger component. If you don't want to change buffer \
             leave it "False".
 
             Examples:
@@ -735,8 +740,8 @@ class Logger(Class):
     def _generate_logger(cls, name, level, buffer, terminator, format):
 ##
         '''
-            Creates a new logger instance by initializing all its components
-            with given arguments or default properties saved as class
+            Creates a new logger instance by initializing all its components \
+            with given arguments or default properties saved as class \
             properties.
 
             Examples:
@@ -779,15 +784,15 @@ class Logger(Class):
 # region footer
 
 '''
-    Preset some variables given by introspection letting the linter know what
+    Preset some variables given by introspection letting the linter know what \
     globale variables are available.
 '''
 __logger__ = __exception__ = __module_name__ = __file_path__ = \
     __test_mode__ = None
 '''
-    Extends this module with some magic environment variables to provide better
-    introspection support. A generic command line interface for some code
-    preprocessing tools is provided by default.
+    Extends this module with some magic environment variables to provide \
+    better introspection support. A generic command line interface for some \
+    code preprocessing tools is provided by default.
 '''
 if __name__ == '__main__':
     Module.default(

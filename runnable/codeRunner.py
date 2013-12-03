@@ -11,7 +11,7 @@
 # region header
 
 '''
-    This module provides an easy way to compile, run and clean up a various
+    This module provides an easy way to compile, run and clean up a various \
     number of scripts.
 '''
 '''
@@ -60,13 +60,12 @@ from boostNode.runnable.template import Parser as TemplateParser
 
 class Run(Class, Runnable):
     '''
-        This class provides a large number of supported programming languages
+        This class provides a large number of supported programming languages \
         support for compiling, running and cleaning after running.
     '''
 
     # region properties
 
-    '''Holds all command line interface argument informations.'''
     COMMAND_LINE_ARGUMENTS = (
         {'arguments': ('-f', '--code-file'),
          'keywords': {
@@ -96,7 +95,7 @@ class Run(Class, Runnable):
              'default': False,
              'help': 'Shows this help message.',
              'dest': 'meta_help'}})
-    '''Holds all supported code types and there methods to do common stuff.'''
+    '''Holds all command line interface argument informations.'''
     SUPPORTED_CODES = {
         'template': {
             'commands': {
@@ -193,6 +192,7 @@ class Run(Class, Runnable):
             'delete_patterns': ('.*\.class$',)
         }
     }
+    '''Holds all supported code types and there methods to do common stuff.'''
 
     # endregion
 
@@ -232,9 +232,9 @@ class Run(Class, Runnable):
 ## python3.3     def _run(self: Self) -> Self:
     def _run(self):
         '''
-            Entry point for command line call of this program. Determines a
-            meaningful file for running. Set the right code dependent commands
-            and finally executes them.
+            Entry point for command line call of this program. Determines a \
+            meaningful file for running. Set the right code dependent \
+            commands and finally executes them.
 
             Examples:
 
@@ -276,32 +276,33 @@ class Run(Class, Runnable):
     ):
 ##
         '''
-            Determines a code file to run and runs them in its own thread by
+            Determines a code file to run and runs them in its own thread by \
             piping all outputs through the command line interface.
 
-            "code_file_path"           - A given code file handler or path
+            "code_file_path"           - A given code file handler or path \
                                          which should be run.
-            "default_command_sequence" - A default command sequence which
+
+            "default_command_sequence" - A default command sequence which \
                                          should be executed in given order.
         '''
 
                 # region properties
 
         '''
-            Holds the current code file and there potentially presented code
+            Holds the current code file and there potentially presented code \
             manager as file handler.
         '''
         self.code_manager_file = None
         '''
-            Saves every properties for current code taken from
+            Saves every properties for current code taken from \
             "SUPPORTED_CODES".
         '''
         self._current_code = {}
         '''Saves currently needed commands taken from "_current_code".'''
         self._current_commands = ()
         '''
-            Saves given arguments which should be piped through the run command
-            to determined code file.
+            Saves given arguments which should be piped through the run \
+            command to determined code file.
         '''
         self._command_line_arguments = ()
         '''Saves currently determined runnable code file object.'''
@@ -321,7 +322,7 @@ class Run(Class, Runnable):
 ## python3.3     def _tidy_up(self: Self) -> Self:
     def _tidy_up(self):
         '''
-            Tidies up the current working directory after running the given
+            Tidies up the current working directory after running the given \
             file.
 
             Examples:
@@ -392,9 +393,9 @@ class Run(Class, Runnable):
 ## python3.3     def _check_code_manager(self: Self) -> Self:
     def _check_code_manager(self):
         '''
-            Checks if a code manager file exists for the current detected code
-            file. For example it can find a makefile for a detected c++ source
-            code.
+            Checks if a code manager file exists for the current detected \
+            code file. For example it can find a makefile for a detected c++ \
+            source code.
 
             Examples:
 
@@ -438,8 +439,8 @@ class Run(Class, Runnable):
     def _determine_code_file(self, path):
 ##
         '''
-            Determines a code file which could make sense to run. It could
-            depend on inputs which where made to this class. Searches in the
+            Determines a code file which could make sense to run. It could \
+            depend on inputs which where made to this class. Searches in the \
             current working directory.
 
             Examples:
@@ -480,7 +481,7 @@ class Run(Class, Runnable):
     def _find_informations_by_extension(self, extension, code_file):
 ##
         '''
-            Tries to find the necessary informations for running code with
+            Tries to find the necessary informations for running code with \
             given extension.
 
             Examples:
@@ -517,8 +518,9 @@ class Run(Class, Runnable):
     def _search_supported_file_by_path(self, path):
 ##
         '''
-            Tries to find a useful file in current working directory by trying
-            to match one file with given path name and supported extension.
+            Tries to find a useful file in current working directory by \
+            trying to match one file with given path name and supported \
+            extension.
 
             Examples:
 
@@ -614,7 +616,7 @@ class Run(Class, Runnable):
     def _search_supported_file_in_current_working_directory(self):
 ##
         '''
-            Tries to find a useful file in current working directory with a
+            Tries to find a useful file in current working directory with a \
             supported extension.
 
             Examples:
@@ -653,7 +655,7 @@ class Run(Class, Runnable):
     def _run_command(self, command_name, command):
 ##
         '''
-            Runs the given command by printing out what is running by
+            Runs the given command by printing out what is running by \
             presenting there results.
 
             Examples:
@@ -692,7 +694,7 @@ class Run(Class, Runnable):
     def _log_command_run(self, command_name, command, result):
 ##
         '''
-            Generates logging output for wrapping around generated output by
+            Generates logging output for wrapping around generated output by \
             running code file.
 
             Examples:
@@ -781,7 +783,7 @@ class Run(Class, Runnable):
     def _render_properties(self, properties, code_file):
 ##
         '''
-            If a given code property is marked as executable respectively
+            If a given code property is marked as executable respectively \
             dynamic it's value will be determined.
 
             Examples:
@@ -831,15 +833,15 @@ class Run(Class, Runnable):
  # region footer
 
 '''
-    Preset some variables given by introspection letting the linter know what
+    Preset some variables given by introspection letting the linter know what \
     globale variables are available.
 '''
 __logger__ = __exception__ = __module_name__ = __file_path__ = \
     __test_mode__ = None
 '''
-    Extends this module with some magic environment variables to provide better
-    introspection support. A generic command line interface for some code
-    preprocessing tools is provided by default.
+    Extends this module with some magic environment variables to provide \
+    better introspection support. A generic command line interface for some \
+    code preprocessing tools is provided by default.
 '''
 Module.default(name=__name__, frame=inspect.currentframe())
 

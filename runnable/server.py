@@ -97,11 +97,11 @@ from boostNode.paradigm.objectOrientation import Class
 ## pass
 class SocketFileObjectWrapper(socket._fileobject):
     '''
-        This class wraps the native implementation of the server socket. The
-        main goal is that the first line from given socket have to be taken
-        twice. This curious feature is the only way to get the requested
-        file as early as needed to decide if we are able to spawn a new
-        process for better load balancing.
+        This class wraps the native implementation of the server socket. The \
+        main goal is that the first line from given socket have to be taken \
+        twice. This curious feature is the only way to get the requested file \
+        as early as needed to decide if we are able to spawn a new process \
+        for better load balancing.
     '''
 
     # region dynamic methods
@@ -113,7 +113,7 @@ class SocketFileObjectWrapper(socket._fileobject):
     @JointPoint
     def __init__(self, *arguments, **keywords):
         '''
-            This methods wraps the initializer to make the first read line
+            This methods wraps the initializer to make the first read line \
             variable instance bounded.
         '''
 
@@ -198,14 +198,14 @@ class MultiProcessingHTTPServer(
     def __init__(self, *arguments, **keywords):
 ##
         '''
-            This initializer wrapper makes sure that the special wrapped file
+            This initializer wrapper makes sure that the special wrapped file \
             socket is instance bounded.
         '''
 
                 # region properties
 
         '''
-            This attribute saves the modified read file socket to apply it in
+            This attribute saves the modified read file socket to apply it in \
             the request handler.
         '''
         self.read_file_socket = None
@@ -229,7 +229,7 @@ class MultiProcessingHTTPServer(
     def is_same_thread_request(self, request):
 ##
         '''
-            Determines if the given request could be run in its own dedicated
+            Determines if the given request could be run in its own dedicated \
             process.
         '''
         first_request_line = self.read_file_socket.readline(
@@ -252,7 +252,7 @@ class MultiProcessingHTTPServer(
     ):
 ##
         '''
-            Wraps the normal "process_request" method. To manage the process
+            Wraps the normal "process_request" method. To manage the process \
             forking stuff.
         '''
         try:
@@ -282,8 +282,8 @@ class MultiProcessingHTTPServer(
     def process_request(self, request_socket, *arguments, **keywords):
 ##
         '''
-            This method indicates weather the request is a read only or not.
-            Read only requests will be forked if enough free processors are
+            This method indicates weather the request is a read only or not. \
+            Read only requests will be forked if enough free processors are \
             available.
         '''
         if self.web.block_new_worker:
@@ -313,7 +313,7 @@ class MultiProcessingHTTPServer(
 ##             return result
 ##         self.read_file_socket.readline = readline
         '''
-            This assignment replace the python's native
+            This assignment replace the python's native \
             "socket.socket.makefile('rb', -1)" behavior.
         '''
         self.read_file_socket = SocketFileObjectWrapper(
@@ -369,13 +369,12 @@ class MultiProcessingHTTPServer(
 
 class Web(Class, Runnable):
     '''
-        Provides a small platform independent web server designed for easily
+        Provides a small platform independent web server designed for easily \
         serve a client-server structure.
     '''
 
     # region properties
 
-    '''Holds all command line interface argument informations.'''
     COMMAND_LINE_ARGUMENTS = (
         {'arguments': ('-r', '--root'),
          'keywords': {
@@ -644,19 +643,20 @@ class Web(Class, Runnable):
                             '__initializer_default_value__'},
              'dest': 'maximum_number_of_processes',
              'metavar': 'NUMBER'}})
+    '''Holds all command line interface argument informations.'''
+    DETERMINE_IP_SOCKET = '8.8.8.8', 80
     '''
         Globally accessible socket to ask for currently useful ip determining.
     '''
-    DETERMINE_IP_SOCKET = '8.8.8.8', 80
+    DEFAULT_NUMBER_OF_PROCESSES = 8
     '''
-        This is the maximum number of forked processes if nothing better was
+        This is the maximum number of forked processes if nothing better was \
         defined or determined.
     '''
-    DEFAULT_NUMBER_OF_PROCESSES = 8
-    '''This values describes the longest possible first get request line.'''
     MAXIMUM_FIRST_GET_REQUEST_LINE_IN_CHARS = 65537
-    '''Saves all initializes server instances.'''
+    '''This values describes the longest possible first get request line.'''
     instances = []
+    '''Saves all initializes server instances.'''
 
     # endregion
 
@@ -701,7 +701,7 @@ class Web(Class, Runnable):
         '''
             Waits for running workers and shuts the server down.
 
-            Arguments and keywords are forwarded to
+            Arguments and keywords are forwarded to \
             "boostNode.extension.system.Run.stop()".
 
             Examples:
@@ -760,7 +760,7 @@ class Web(Class, Runnable):
 ## python3.3     def _run(self: Self) -> Self:
     def _run(self):
         '''
-            Entry point for command line call of this program. Starts the
+            Entry point for command line call of this program. Starts the \
             server's request handler listing for incoming requests.
 
             Examples:
@@ -831,91 +831,120 @@ class Web(Class, Runnable):
     ):
 ##
         '''
-            Sets root path of web server and all properties. Although the
+            Sets root path of web server and all properties. Although the \
             server thread will be started.
 
-            "root"                                - Defines the root directory
-                                                    to be served via web.
-            "host_name"                           - Defines the current host
-                                                    name. Necessary for https
+            "root"                                - Defines the root \
+                                                    directory to be served \
+                                                    via web.
+
+            "host_name"                           - Defines the current host \
+                                                    name. Necessary for https \
                                                     support.
-            "port"                                - The port to listen for
-                                                    incoming requests. If "0"
-                                                    given a free port will be
+
+            "port"                                - The port to listen for \
+                                                    incoming requests. If "0" \
+                                                    given a free port will be \
                                                     determined automatically.
-            "default"                             - Defines a default static
-                                                    file, python module or
+
+            "default"                             - Defines a default static \
+                                                    file, python module or \
                                                     dynamic executable file.
-            "public_key_file"                     - Key file to support a https
-                                                    connection.
-            "stop_order"                          - Standard in command to stop
-                                                    server.
-            "encoding"                            - Encoding to use for
-                                                    incoming requests and
+
+            "public_key_file"                     - Key file to support a \
+                                                    https connection.
+
+            "stop_order"                          - Standard in command to \
+                                                    stop server.
+
+            "encoding"                            - Encoding to use for \
+                                                    incoming requests and \
                                                     outgoing data.
-            "request_whitelist"                   - A whitelist for requests.
-                                                    All requests which doesn't
-                                                    match to one of these will
-                                                    be answered with an 404
+
+            "request_whitelist"                   - A whitelist for requests. \
+                                                    All requests which \
+                                                    doesn't match to one of \
+                                                    these will be answered \
+                                                    with an 404 error code.
+
+            "request_blacklist"                   - A blacklist for requests \
+                                                    to answer with a 404 \
                                                     error code.
-            "request_blacklist"                   - A blacklist for requests to
-                                                    answer with a 404 error
-                                                    code.
-            "same_thread_request_whitelist"       - Requests which matches one
-                                                    of theses patterns should
-                                                    be run in same thread as
-                                                    the server itself. This is
-                                                    usually necessary if you
-                                                    plan to write in inter
-                                                    thread shared data.
-            "static_mime_type_pattern"            - Defines which mime types
-                                                    should be interpreted as
+
+            "same_thread_request_whitelist"       - Requests which matches \
+                                                    one of theses patterns \
+                                                    should be run in same \
+                                                    thread as the server \
+                                                    itself. This is usually \
+                                                    necessary if you plan to \
+                                                    write in inter thread \
+                                                    shared data.
+
+            "static_mime_type_pattern"            - Defines which mime types \
+                                                    should be interpreted as \
                                                     static.
-            "dynamic_mime_type_pattern"           - Defines which mime types
-                                                    should be interpreted as
+
+            "dynamic_mime_type_pattern"           - Defines which mime types \
+                                                    should be interpreted as \
                                                     dynamic.
-            "compressible_mime_type_pattern"      - Defines which mime types
-                                                    could be returned in a
+
+            "compressible_mime_type_pattern"      - Defines which mime types \
+                                                    could be returned in a \
                                                     compressed way.
-            "default_file_name_pattern"           - Defines file name pattern
-                                                    which should be returned if
-                                                    no explicit file was
+
+            "default_file_name_pattern"           - Defines file name pattern \
+                                                    which should be returned \
+                                                    if no explicit file was \
                                                     requested.
-            "default_module_names"                - Defines which module names
-                                                    should be ran if no
-                                                    explicit module was
+
+            "default_module_names"                - Defines which module \
+                                                    names should be ran if no \
+                                                    explicit module was \
                                                     requested.
-            "authentication"                      - Enables basic http
+
+            "authentication"                      - Enables basic http \
                                                     authentication.
-            "authentication_file_name"            - Defines file names for
+
+            "authentication_file_name"            - Defines file names for \
                                                     saving login data.
-            "authentication_file_content_pattern" - Defines how to parse
+
+            "authentication_file_content_pattern" - Defines how to parse \
                                                     authentication files.
-            "authentication_handler"              - A boolean function which
-                                                    decides by given request
-                                                    string and password if
-                                                    requested user is
+
+            "authentication_handler"              - A boolean function which \
+                                                    decides by given request \
+                                                    string and password if \
+                                                    requested user is \
                                                     authenticated.
-            "module_loading"                      - Enables or disables running
-                                                    python modules which are
-                                                    requested.
-            "maximum_number_of_processes"         - Maximum number of used
-                                                    processor cores to use.
-                                                    if "0" is provided a useful
-                                                    number will be determined.
-            "shared_data"                         - Data which will be
-                                                    available in every request
-                                                    handler instance and
-                                                    accessible for every common
-                                                    gateway interface script.
-            "request_parameter_delimiter"         - Delimiter to distinguish
-                                                    requested file from given
+
+            "module_loading"                      - Enables or disables \
+                                                    running python modules \
+                                                    which are requested.
+
+            "maximum_number_of_processes"         - Maximum number of used \
+                                                    processor cores to use. \
+                                                    if "0" is provided a \
+                                                    useful number will be \
+                                                    determined.
+
+            "shared_data"                         - Data which will be \
+                                                    available in every \
+                                                    request handler instance \
+                                                    and accessible for every \
+                                                    common gateway interface \
+                                                    script.
+
+            "request_parameter_delimiter"         - Delimiter to distinguish \
+                                                    requested file from given \
                                                     parameter.
-            "file_size_stream_threshold_in_byte"  - Threshold which will force
-                                                    the server to stream data.
-            "directory_listing"                   - Indicates weather the
-                                                    server generates a
-                                                    directory listing for
+
+            "file_size_stream_threshold_in_byte"  - Threshold which will \
+                                                    force the server to \
+                                                    stream data.
+
+            "directory_listing"                   - Indicates weather the \
+                                                    server generates a \
+                                                    directory listing for \
                                                     requested directories.
 
             Examples:
@@ -965,7 +994,7 @@ class Web(Class, Runnable):
                 self.maximum_number_of_processes = \
                     self.DEFAULT_NUMBER_OF_PROCESSES
         '''
-            Saves informations how to define authentications in protected
+            Saves informations how to define authentications in protected \
             directories.
         '''
         if self.public_key_file:
@@ -985,7 +1014,7 @@ class Web(Class, Runnable):
 ## python3.3     def _start_server_thread(self: Self) -> Self:
     def _start_server_thread(self):
         '''
-            Starts the server's request handler instance and listens for
+            Starts the server's request handler instance and listens for \
             shutting-down-command.
         '''
         if not __test_mode__:
@@ -1052,11 +1081,11 @@ class Web(Class, Runnable):
                 if not port:
 ## python3.3
 ##                     raise __exception__(
-##                         'No port is available to run the web-server with '
+##                         'No port is available to run the web-server with ' \
 ##                         'given rights.'
 ##                     ) from None
                     raise __exception__(
-                        'No port is available to run the web-server with '
+                        'No port is available to run the web-server with ' \
                         'given rights.')
 ##
             else:
@@ -1087,7 +1116,7 @@ class Web(Class, Runnable):
     def _serve_service_forever_exception_catcher(self):
 ##
         '''
-            This method wraps the python's native server "serve_forever()"
+            This method wraps the python's native server "serve_forever()" \
             method to handle incoming exceptions in a separat thread.
         '''
         try:
@@ -1141,8 +1170,8 @@ class CGIHTTPRequestHandler(
 ):
 ##
     '''
-        A small request-handler dealing with incoming file requests. It can
-        directly send static files back to client or run dynamic scripts and
+        A small request-handler dealing with incoming file requests. It can \
+        directly send static files back to client or run dynamic scripts and \
         give the output back to client.
     '''
 
@@ -1181,20 +1210,20 @@ class CGIHTTPRequestHandler(
         '''Saves the last started worker thread instance.'''
         self.last_running_worker = None
         '''
-            Consists the explicit requested file name (like python's native
+            Consists the explicit requested file name (like python's native \
             "self.file") coming from client.
         '''
         self.requested_file_name = ''
         '''References the corresponding file handler to requested file name.'''
         self.requested_file = None
         '''
-            Defines weather the handler has decided to run a python module or
+            Defines weather the handler has decided to run a python module or \
             an external script.
         '''
         self.load_module = False
         '''
-            Defines arguments given to a requested file which is running by the
-            server.
+            Defines arguments given to a requested file which is running by \
+            the server.
         '''
         self.request_arguments = []
         '''Indicates if an answer is expected from the requested file.'''
@@ -1217,7 +1246,7 @@ class CGIHTTPRequestHandler(
             '\t</body>\n'
             '</html>')
         '''
-            Saves the self describing server version string. This string is
+            Saves the self describing server version string. This string is \
             included in every response.
         '''
         self.server_version = '{program} {version} {status}'.format(
@@ -1227,7 +1256,7 @@ class CGIHTTPRequestHandler(
         '''Saves gziped encoded output.'''
         self._encoded_output = None
         '''
-            Points to location which is authoritative to be reachable from
+            Points to location which is authoritative to be reachable from \
             requested destination.
         '''
         self._authentication_location = None
@@ -1264,8 +1293,8 @@ class CGIHTTPRequestHandler(
 ## python3.3     def do_GET(self: Self) -> Self:
     def do_GET(self):
         '''
-            Is triggered if an incoming get-request is detected. Decides if
-            request is valid and static or dynamic. It also through an
+            Is triggered if an incoming get-request is detected. Decides if \
+            request is valid and static or dynamic. It also through an \
             exception and sends an http-error if request isn't valid.
 
             Examples:
@@ -1362,12 +1391,12 @@ class CGIHTTPRequestHandler(
 ## python3.3     def parse_url(self: Self, url=None) -> builtins.tuple:
     def parse_url(self, url=None):
         '''
-            This method provides an easy way to split a http request string
+            This method provides an easy way to split a http request string \
             into its components.
 
             "url" - URL to parse.
 
-            Returns a tuple containing of the parse object and a dictionary
+            Returns a tuple containing of the parse object and a dictionary \
             containing get parameter.
 
             >>> sys_argv_backup = copy.copy(sys.argv)
@@ -1439,8 +1468,8 @@ class CGIHTTPRequestHandler(
     def send_response(self, *arguments, **keywords):
 ##
         '''
-            Send the given response code to client if no response code was sent
-            yet.
+            Send the given response code to client if no response code was \
+            sent yet.
 
             Examples:
 
@@ -1485,7 +1514,7 @@ class CGIHTTPRequestHandler(
     def list_directory(self, *arguments, **keywords):
 ##
         '''
-            Generates a simple html web page listing requested directory
+            Generates a simple html web page listing requested directory \
             content.
         '''
         path_backup = self.path
@@ -1532,8 +1561,10 @@ class CGIHTTPRequestHandler(
             Response a static file-request header.
 
             "timestamp"              - Timestamp to use as last modified time.
+
             "cache_control"          - Cache control header string.
-            "expire_time_in_seconds" - Additional time to current timestamp
+
+            "expire_time_in_seconds" - Additional time to current timestamp \
                                        for expires header.
         '''
         if not __test_mode__:
@@ -1555,10 +1586,12 @@ class CGIHTTPRequestHandler(
             Sends a content type header to client if not sent yet.
 
             "mime_type"     - Mime type to send to client.
+
             "encoding"      - Encoding description to send to client.
+
             "response_code" - HTTP Response code to send.
 
-            Additional arguments and keywords will be forwarded to
+            Additional arguments and keywords will be forwarded to \
             "self.send_header()" method.
         '''
 ## python3.3
@@ -1591,9 +1624,11 @@ class CGIHTTPRequestHandler(
             Sends the content length header to client if not sent yet.
 
             "size"           - Content length to send.
-            "dynamic_output" - Indicates weather output should be forced to
-                               compressed because it is simply a computed
+
+            "dynamic_output" - Indicates weather output should be forced to \
+                               compressed because it is simply a computed \
                                string.
+
             "encoding"       - Encoding to compress current output.
         '''
 ## python3.3
@@ -1653,18 +1688,21 @@ class CGIHTTPRequestHandler(
     ):
 ##
         '''
-            Wrapper method for all logging output coming through the server
+            Wrapper method for all logging output coming through the server \
             thread.
 
-            "format"                   - Logging format. Allowed placeholder
-                                         are: "client_ip", "client_port",
-                                         "request_description",
-                                         "response_code", "forwarded_ip",
-                                         "forwarded_host", "forwarded_server",
+            "format"                   - Logging format. Allowed placeholder \
+                                         are: "client_ip", "client_port", \
+                                         "request_description", \
+                                         "response_code", "forwarded_ip", \
+                                         "forwarded_host", \
+                                         "forwarded_server", \
                                          "forwarded_server" and "server_port".
-            "message_or_error_code"    - Logging message or resulting HTTP
+
+            "message_or_error_code"    - Logging message or resulting HTTP \
                                          code.
-            "response_code_or_message" - Resulting HTTP code or response
+
+            "response_code_or_message" - Resulting HTTP code or response \
                                          message.
 
             Examples:
@@ -1763,7 +1801,7 @@ class CGIHTTPRequestHandler(
     def setup(self, *arguments, **keywords):
 ##
         '''
-            This method wraps the python's native request handler to provide
+            This method wraps the python's native request handler to provide \
             our wrapped file socket buffer.
         '''
         '''Take this method via introspection.'''
@@ -1868,8 +1906,9 @@ class CGIHTTPRequestHandler(
 ## python3.3     def _is_valid_reference(self: Self) -> builtins.bool:
     def _is_valid_reference(self):
         '''
-            Checks weather the requested is one of a python module-, static- or
-            dynamic file request. Returns "True" if so and "False" otherwise.
+            Checks weather the requested is one of a python module-, static- \
+            or dynamic file request. Returns "True" if so and "False" \
+            otherwise.
 
             Examples:
 
@@ -1929,7 +1968,7 @@ class CGIHTTPRequestHandler(
 ## python3.3     def _is_dynamic(self: Self) -> builtins.bool:
     def _is_dynamic(self):
         '''
-            Determines if the current request points to a dynamic executable
+            Determines if the current request points to a dynamic executable \
             file or is a static type which should be send back unmodified.
         '''
         return builtins.bool(self.load_module or self._check_pattern(
@@ -1965,8 +2004,8 @@ class CGIHTTPRequestHandler(
     def _determine_post_dictionary(self):
 ##
         '''
-            Determines the post values given by an html form. File uploads are
-            includes as bytes.
+            Determines the post values given by an html form. File uploads \
+            are includes as bytes.
         '''
 ## python3.3
 ##         form = cgi.FieldStorage(
@@ -2012,7 +2051,7 @@ class CGIHTTPRequestHandler(
     def _determine_environment_variables(self):
 ##
         '''
-            Determines all needed environment variables needed to determine
+            Determines all needed environment variables needed to determine \
             given post data with cgi module.
 
             Examples:
@@ -2111,7 +2150,7 @@ class CGIHTTPRequestHandler(
     def _send_no_file_error(self, valid_request=True, debug=False):
 ##
         '''
-            Generates a http-404-error if no useful file was found for
+            Generates a http-404-error if no useful file was found for \
             responding.
 
             Examples:
@@ -2189,7 +2228,7 @@ class CGIHTTPRequestHandler(
     def _check_pattern(self, patterns, subject):
 ##
         '''
-            Checks if one of a list of given regular expression patterns
+            Checks if one of a list of given regular expression patterns \
             matches the given subject.
         '''
         for pattern in patterns:
@@ -2279,7 +2318,7 @@ class CGIHTTPRequestHandler(
 ## python3.3     def _default_get(self: Self) -> builtins.bool:
     def _default_get(self):
         '''
-            Handles every request which doesn't takes a file or python module
+            Handles every request which doesn't takes a file or python module \
             with.
 
             Examples:
@@ -2360,7 +2399,7 @@ class CGIHTTPRequestHandler(
     def _handle_default_modules_get(self, module_name):
 ##
         '''
-            Handles requests which wants the current defaults modules
+            Handles requests which wants the current defaults modules \
             (initially called module) run for a server thread.
 
             Examples:
@@ -2468,9 +2507,9 @@ class CGIHTTPRequestHandler(
         '''
         if self.requested_file.is_directory():
             '''
-                If a directory was requested and no trailing slash where given
-                a 301 redirect will be returned to same request with trailing
-                slash.
+                If a directory was requested and no trailing slash where \
+                given a 301 redirect will be returned to same request with \
+                trailing slash.
             '''
             if not re.compile(
                 '/(%s.*)?$' % self.server.web.request_parameter_delimiter
@@ -2604,10 +2643,11 @@ class CGIHTTPRequestHandler(
 ## python3.3     def _dynamic_get(self: Self) -> Self:
     def _dynamic_get(self):
         '''
-            Handles a dynamic file or python module request. It initializes the
-            given script-file or python module environment weather to decide
-            running it in its own thread or not. If no respond is expected from
-            client it could be run without its own thread environment.
+            Handles a dynamic file or python module request. It initializes \
+            the given script-file or python module environment weather to \
+            decide running it in its own thread or not. If no respond is \
+            expected from client it could be run without its own thread \
+            environment.
         '''
         self.request_arguments = [
             self.requested_file_name, self.request_uri,
@@ -2625,7 +2665,7 @@ class CGIHTTPRequestHandler(
 ## python3.3     def _run_request(self: Self) -> Self:
     def _run_request(self):
         '''
-            Decides to run the given script as python-module or standalone
+            Decides to run the given script as python-module or standalone \
             script-file.
         '''
         if self.load_module:
@@ -2636,7 +2676,7 @@ class CGIHTTPRequestHandler(
 ## python3.3     def _run_requested_file(self: Self) -> Self:
     def _run_requested_file(self):
         '''
-            Runs a given external process in a subprocess. Output and errors
+            Runs a given external process in a subprocess. Output and errors \
             are piped to requested client.
 
             Examples:
@@ -2702,8 +2742,8 @@ class CGIHTTPRequestHandler(
 ## python3.3     def _run_requested_module(self: Self) -> Self:
     def _run_requested_module(self):
         '''
-            Imports and runs a given python module. Errors and output are piped
-            to requested client.
+            Imports and runs a given python module. Errors and output are \
+            piped to requested client.
         '''
         '''Redirect output buffer.'''
         print_default_buffer_backup = Print.default_buffer
@@ -2765,8 +2805,8 @@ class CGIHTTPRequestHandler(
     ):
 ##
         '''
-            This method handles each exception raised by running a module which
-            was requested by client.
+            This method handles each exception raised by running a module \
+            which was requested by client.
 
             Examples:
 
@@ -2819,15 +2859,15 @@ class CGIHTTPRequestHandler(
 # region footer
 
 '''
-    Preset some variables given by introspection letting the linter know what
+    Preset some variables given by introspection letting the linter know what \
     globale variables are available.
 '''
 __logger__ = __exception__ = __module_name__ = __file_path__ = \
     __test_mode__ = None
 '''
-    Extends this module with some magic environment variables to provide better
-    introspection support. A generic command line interface for some code
-    preprocessing tools is provided by default.
+    Extends this module with some magic environment variables to provide \
+    better introspection support. A generic command line interface for some \
+    code preprocessing tools is provided by default.
 '''
 Module.default(
     name=__name__, frame=inspect.currentframe(), default_caller=Web.__name__)

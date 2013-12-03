@@ -11,10 +11,10 @@
 # region header
 
 '''
-    Extension is a high level interface for interaction with pythons native
-    builtins. This class provides a full object oriented way to handle string
-    objects. Besides a number of new supported interactions with strings it
-    offers all core file system methods by the pythons native "builtins.str"
+    Extension is a high level interface for interaction with pythons native \
+    builtins. This class provides a full object oriented way to handle string \
+    objects. Besides a number of new supported interactions with strings it \
+    offers all core file system methods by the pythons native "builtins.str" \
     object.
 '''
 '''
@@ -65,17 +65,17 @@ from boostNode.paradigm.objectOrientation import Class
 
 class PropertyInitializer(FunctionDecorator):
     '''
-        Decorator class for automatically setting instance properties for
+        Decorator class for automatically setting instance properties for \
         corresponding arguments of wrapped function.
     '''
 
     # region properties
 
-    '''
-        Defines all argument names which will be ignored by generating instance
-        properties.
-    '''
     EXCLUDED_ARGUMENT_NAMES = 'self',
+    '''
+        Defines all argument names which will be ignored by generating \
+        instance properties.
+    '''
 
     # endregion
 
@@ -227,7 +227,7 @@ class Object(Class):
 ## python3.3     def restore(self: Self) -> (builtins.object, builtins.type):
     def restore(self):
         '''
-            Restores a given object's attributes by a given copy are last
+            Restores a given object's attributes by a given copy are last \
             copied item.
 
             Examples:
@@ -312,7 +312,7 @@ class Object(Class):
     ):
 ##
         '''
-            Generates a suitable exception for raising if a method is called
+            Generates a suitable exception for raising if a method is called \
             initially indented to be overwritten.
 
             Examples:
@@ -340,9 +340,9 @@ class Object(Class):
             NotImplementedError: Method "..." wasn't implemented...
         '''
         '''
-            NOTE: fetch third frame "inspect.stack()[2]"
-                0: this
-                1: Decorator wrapper
+            NOTE: fetch third frame "inspect.stack()[2]" \
+                0: this \
+                1: Decorator wrapper \
                 2: caller
         '''
         if class_name is None:
@@ -361,40 +361,40 @@ class Object(Class):
 
 class String(Object, builtins.str):
     '''
-        The string class inherits besides the interface class all pythons
-        native string methods. NOTE: This class has to implement inherited
-        special methods like "__str__()" and "__len__()" because they have to
-        use the "content" property which could be manipulated by not inherited
-        methods.
+        The string class inherits besides the interface class all pythons \
+        native string methods. NOTE: This class has to implement inherited \
+        special methods like "__str__()" and "__len__()" because they have to \
+        use the "content" property which could be manipulated by not \
+        inherited methods.
     '''
 
     # region properties
 
+    IMPORTANT_ENCODINGS = 'ascii', 'utf_8', 'latin_1', 'utf_16'
     '''
         Defines generally important encodings. Which should be tried at first.
     '''
-    IMPORTANT_ENCODINGS = 'ascii', 'utf_8', 'latin_1', 'utf_16'
-    '''All chars wich should be handle during dealing with web urls.'''
     NON_STANDARD_SPECIAL_URL_SEQUENCES = {
         '%1000': '#', '%1001': '&', '%1002': '=', '%1003': '%', '%1004': '+'}
-    '''
-        All chars which should be observed by handling with shell command.
-        Note that the escape sequence must not be defined.
-    '''
+    '''All chars wich should be handle during dealing with web urls.'''
     SPECIAL_SHELL_SEQUENCES = (
         '"', "'", '`', '(', ')', ' ', '&', '$', '-')
     '''
-        All chars which should be observed by handling with regex sequences.
+        All chars which should be observed by handling with shell command. \
         Note that the escape sequence must not be defined.
     '''
     SPECIAL_REGEX_SEQUENCES = (
         '-', '[', ']', '(', ')', '^', '$', '*', '+', '.', '{', '}')
-    '''ALl chars wich should be observed by handling with url sequences.'''
+    '''
+        All chars which should be observed by handling with regex sequences. \
+        Note that the escape sequence must not be defined.
+    '''
     SPECIAL_URL_SEQUENCES = {
         '+': ' ', '%20': ' ', '%22': '"', '%2F': '/', '%7E': '~',
         '%C3%A4': 'ä', '%C3%84': 'Ä',
         '%C3%B6': 'ö', '%C3%96': 'Ö',
         '%C3%BC': 'ü', '%C3%9C': 'Ü'}
+    '''All chars wich should be observed by handling with url sequences.'''
     SPECIAL_HTML_SEQUENCES = {
         # Note only needed in very old browsers.
         #'&': '&amp;',
@@ -468,6 +468,7 @@ class String(Object, builtins.str):
         'ð': '&eth;',
         'ñ': '&ntilde;',
         'þ': '&thorn;'}
+    '''All chars wich should be observed by handling with html sequences.'''
 
     # endregion
 
@@ -487,13 +488,14 @@ class String(Object, builtins.str):
     ):
 ##
         '''
-            Creates a replacement dictionary form a given iterable. Every
-            element will be associated with its escaped version. This method
+            Creates a replacement dictionary form a given iterable. Every \
+            element will be associated with its escaped version. This method \
             is useful for using before give "self.replace()" a dictionary.
 
-            "sequence" is an iterable with elements to be escaped.
-            "escape_sequence" is an escape sequence for each element from
-                              "sequence".
+            "sequence"        - is an iterable with elements to be escaped.
+
+            "escape_sequence" - is an escape sequence for each element from \
+                                "sequence".
 
             Examples:
 
@@ -578,9 +580,9 @@ class String(Object, builtins.str):
 ## python3.3     def __len__(self: Self) -> builtins.int:
     def __len__(self):
         '''
-            Triggers if the pythons native "builtins.len()" function tries to
-            handle current instance. Returns the number of symbols given in the
-            current string representation of this object.
+            Triggers if the pythons native "builtins.len()" function tries to \
+            handle current instance. Returns the number of symbols given in \
+            the current string representation of this object.
 
             Examples:
 
@@ -596,7 +598,7 @@ class String(Object, builtins.str):
 ## python3.3     def __str__(self: Self) -> builtins.str:
     def __str__(self):
         '''
-            Triggers if the current object should be directly interpreted as
+            Triggers if the current object should be directly interpreted as \
             pythons native string implementation.
 
             Examples:
@@ -613,7 +615,7 @@ class String(Object, builtins.str):
 ## python3.3     def __bool__(self: Self) -> builtins.bool:
     def __nonzero__(self):
         '''
-            Triggers if the current object should be interpreted as a boolean
+            Triggers if the current object should be interpreted as a boolean \
             value directly.
 
             Examples:
@@ -637,8 +639,8 @@ class String(Object, builtins.str):
 ## python3.3     def get_encoding(self: Self) -> builtins.str:
     def get_encoding(self):
         '''
-            Guesses the encoding used in current string (bytes). Encodings are
-            checked in alphabetic order.
+            Guesses the encoding used in current string (bytes). Encodings \
+            are checked in alphabetic order.
 
             Examples:
 
@@ -687,7 +689,7 @@ class String(Object, builtins.str):
 ## python3.3     def validate_shell(self: Self) -> Self:
     def validate_shell(self):
         '''
-            Validates the current string for using as a command in shell.
+            Validates the current string for using as a command in shell. \
             Special shell command chars will be escaped.
 
             Examples:
@@ -735,7 +737,7 @@ class String(Object, builtins.str):
 ## python3.3     def validate_regex(self: Self, exclude_symbols=()) -> Self:
     def validate_regex(self, exclude_symbols=()):
         '''
-            Validates the current string for using in a regular expression
+            Validates the current string for using in a regular expression \
             pattern. Special regular expression chars will be escaped.
 
             Examples:
@@ -770,9 +772,9 @@ class String(Object, builtins.str):
 ## python3.3     def validate_format(self: Self) -> Self:
     def validate_format(self):
         '''
-            Validates the current string for using in a string with placeholder
-            like "{name}". It will be escaped to not interpreted as placeholder
-            like "\{name\}".
+            Validates the current string for using in a string with \
+            placeholder like "{name}". It will be escaped to not interpreted \
+            as placeholder like "\{name\}".
 
             Examples:
 
@@ -826,7 +828,7 @@ class String(Object, builtins.str):
 ## python3.3     def camel_case_capitalize(self: Self) -> Self:
     def camel_case_capitalize(self):
         '''
-            Acts like pythons native "builtins.str.capitalize()" method but
+            Acts like pythons native "builtins.str.capitalize()" method but \
             preserves camel case characters.
 
             Examples:
@@ -849,7 +851,7 @@ class String(Object, builtins.str):
     def find_python_code_end_bracket(self):
 ##
         '''
-            Searches for the next not escaped closing end clamped in current
+            Searches for the next not escaped closing end clamped in current \
             string interpreted as python code.
 
             Examples:
@@ -882,13 +884,14 @@ class String(Object, builtins.str):
     def replace(self, search, replace='', *arguments, **keywords):
 ##
         '''
-            Implements the pythons native string method "str.replace()" in an
-            object orientated way. This method serves additionally dictionaries
-            as "search" parameter for multiple replacements. If you use
-            dictionaries, the second parameter "replace" becomes useless.
+            Implements the pythons native string method "str.replace()" in an \
+            object orientated way. This method serves additionally \
+            dictionaries as "search" parameter for multiple replacements. If \
+            you use dictionaries, the second parameter "replace" becomes \
+            useless.
 
-            Return a copy of the string with all occurrences of substring old
-            replaced by new. If an optional argument count is given, only the
+            Return a copy of the string with all occurrences of substring old \
+            replaced by new. If an optional argument count is given, only the \
             first count occurrences are replaced.
 
             Examples:
@@ -924,42 +927,43 @@ class String(Object, builtins.str):
     def sub(self, search, replace='', *arguments, **keywords):
 ##
         '''
-            Implements the pythons native "re.sub()" method in an object
-            oriented way. This method serves additionally dictionaries as
-            "search" parameter for multiple replacements. If you use
+            Implements the pythons native "re.sub()" method in an object \
+            oriented way. This method serves additionally dictionaries as \
+            "search" parameter for multiple replacements. If you use \
             dictionaries, the second parameter "replace" becomes useless.
 
-            Return the string obtained by replacing the leftmost
-            non-overlapping occurrences of pattern in string by the
-            replacement "replace". If the pattern isn’t found, string is
+            Return the string obtained by replacing the leftmost \
+            non-overlapping occurrences of pattern in string by the \
+            replacement "replace". If the pattern isn’t found, string is \
             returned unchanged. "replace" can be a string or a function;
 
-            If "replace" is a string, any backslash escapes in it are
-            processed. That means "\n" is converted to a single newline
-            character, "\r" is converted to a linefeed, and so forth. Unknown
-            escapes such as "\j" are left alone. Backreferences, such as "\6",
-            are replaced with the substring matched by group 6 in the pattern.
+            If "replace" is a string, any backslash escapes in it are \
+            processed. That means "\n" is converted to a single newline \
+            character, "\r" is converted to a linefeed, and so forth. Unknown \
+            escapes such as "\j" are left alone. Backreferences, such as \
+            "\6", are replaced with the substring matched by group 6 in the \
+            pattern.
 
-            If "replace" is a function, it is called for every non-overlapping
-            occurrence of pattern. The function takes a single match object
-            argument, and returns the replacement string.
+            If "replace" is a function, it is called for every \
+            non-overlapping occurrence of pattern. The function takes a \
+            single match object argument, and returns the replacement string.
 
-            The pattern may be a string or an RE object. The optional argument
-            count is the maximum number of pattern occurrences to be replaced;
-            count must be a non-negative integer. If omitted or zero, all
-            occurrences will be replaced. Empty matches for the pattern are
-            replaced only when not adjacent to a previous match, so
-            sub('x*', '-', 'abc') returns '-a-b-c-'.
+            The pattern may be a string or an RE object. The optional \
+            argument count is the maximum number of pattern occurrences to be \
+            replaced; count must be a non-negative integer. If omitted or \
+            zero, all occurrences will be replaced. Empty matches for the \
+            pattern are replaced only when not adjacent to a previous match, \
+            so sub('x*', '-', 'abc') returns '-a-b-c-'.
 
-            In addition to character escapes and back references as described
-            above, "\g<name>" will use the substring matched by the group
-            named name, as defined by the "(?P<name>...)" syntax. "\g<number>"
-            uses the corresponding group number; "\g<2>" is therefore
-            equivalent to "\2", but isn’t ambiguous in a replacement such as
-            "\g<2>0". "\20" would be interpreted as a reference to group 20,
-            not a reference to group 2 followed by the literal character "0".
-            The backreference "\g<0>" substitutes in the entire substring
-            matched by the RE.
+            In addition to character escapes and back references as described \
+            above, "\g<name>" will use the substring matched by the group \
+            named name, as defined by the "(?P<name>...)" syntax. \
+            "\g<number>" uses the corresponding group number; "\g<2>" is \
+            therefore equivalent to "\2", but isn’t ambiguous in a \
+            replacement such as "\g<2>0". "\20" would be interpreted as a \
+            reference to group 20, not a reference to group 2 followed by the \
+            literal character "0". The backreference "\g<0>" substitutes in \
+            the entire substring matched by the RE.
 
             Examples:
 
@@ -989,7 +993,7 @@ class String(Object, builtins.str):
                     **keywords)
         else:
             '''
-                Take this method name from regular expression object via
+                Take this method name from regular expression object via \
                 introspection.
             '''
             self.content = builtins.getattr(
@@ -1006,12 +1010,12 @@ class String(Object, builtins.str):
     def subn(self, search, replace='', *arguments, **keywords):
 ##
         '''
-            Implements the pythons native "re.subn()" method in an object
-            oriented way. This method serves additionally dictionaries as
-            "search" parameter for multiple replacements. If you use
+            Implements the pythons native "re.subn()" method in an object \
+            oriented way. This method serves additionally dictionaries as \
+            "search" parameter for multiple replacements. If you use \
             dictionaries, the second parameter "replace" becomes useless.
 
-            Perform the same operation as "self.sub()", but returns a tuple:
+            Perform the same operation as "self.sub()", but returns a tuple: \
             ("new_string", "number_of_subs_made"").
 
             Examples:
@@ -1049,11 +1053,11 @@ class String(Object, builtins.str):
 ## python3.3     def readline(self: Self) -> (SelfClassObject, builtins.bool):
     def readline(self):
         '''
-            Implements the pythons native "bz2.BZ2File.readline()" method in an
-            object oriented way.
+            Implements the pythons native "bz2.BZ2File.readline()" method in \
+            an object oriented way.
 
-            Return the next line from the string, as a string object, retaining
-            newline.
+            Return the next line from the string, as a string object, \
+            retaining newline.
 
             Returns "False" on EOF.
 
@@ -1092,11 +1096,11 @@ class String(Object, builtins.str):
     def readlines(self, *arguments, **keywords):
 ##
         '''
-            Implements the pythons native "builtins.str.splitlines()" method in
-            an object oriented way.
+            Implements the pythons native "builtins.str.splitlines()" method \
+            in an object oriented way.
 
-            Return a list of all lines in a string, breaking at line
-            boundaries. Line breaks are not included in the resulting list
+            Return a list of all lines in a string, breaking at line \
+            boundaries. Line breaks are not included in the resulting list \
             unless "keepends" is given and "True".
 
             Examples:
@@ -1120,9 +1124,9 @@ class String(Object, builtins.str):
 ## python3.3     def delete_variables_from_regex(self: Self) -> Self:
     def delete_variables_from_regex(self):
         '''
-            Removes python supported variables in regular expression strings.
-            This method is useful if a python regular expression should be
-            given to another regular expression engine which doesn't support
+            Removes python supported variables in regular expression strings. \
+            This method is useful if a python regular expression should be \
+            given to another regular expression engine which doesn't support \
             variables.
 
             Examples:
@@ -1339,8 +1343,8 @@ class Dictionary(Object, builtins.dict):
     def __getitem__(self, key):
 ##
         '''
-            Invokes if this object should returns current value stored at given
-            key.
+            Invokes if this object should returns current value stored at \
+            given key.
 
             Examples:
 
@@ -1357,7 +1361,7 @@ class Dictionary(Object, builtins.dict):
 ## python3.3     def get_immutable(self: Self) -> builtins.tuple:
     def get_immutable(self):
         '''
-            Generates an immutable copy of the current dictionary. Mutable
+            Generates an immutable copy of the current dictionary. Mutable \
             iterables are generally translated to sorted tuples.
         '''
         immutable = copy.copy(self.content)
@@ -1376,9 +1380,9 @@ class Dictionary(Object, builtins.dict):
     def pop(self, name, default_value=None):
 ##
         '''
-            Get a keyword element as it would be set by a default value. If
-            name is present in current saved dictionary its value will be
-            returned in a tuple with currently saved dictionary. The
+            Get a keyword element as it would be set by a default value. If \
+            name is present in current saved dictionary its value will be \
+            returned in a tuple with currently saved dictionary. The \
             corresponding data will be erased from dictionary.
 
             Examples:
@@ -1443,19 +1447,19 @@ class Module(Object):
 
     # region properties
 
-    '''Stores all magically defined globals.'''
 ## python3.3
 ##     HIDDEN_BUILTIN_CALLABLES = ()
     HIDDEN_BUILTIN_CALLABLES = (
         'GFileDescriptorBased', 'GInitiallyUnowned', 'GPollableInputStream',
         'GPollableOutputStream')
 ##
-    '''
-        Stores a priority order of preferred callable name as starting point in
-        a initialized module.
-    '''
+    '''Stores all magically defined globals.'''
     PREFERED_ENTRY_POINT_FUNCTION_NAMES = (
         'main', 'init', 'initialize', 'run', 'start')
+    '''
+        Stores a priority order of preferred callable name as starting point \
+        in a initialized module.
+    '''
 
     # endregion
 
@@ -1497,7 +1501,7 @@ class Module(Object):
     def get_context_path(cls, path=None, frame=inspect.currentframe()):
 ##
         '''
-            Determines the package and module level context path to a given
+            Determines the package and module level context path to a given \
             context or file.
 
             Examples:
@@ -1533,9 +1537,9 @@ class Module(Object):
     def get_name(cls, frame=None, module=None, extension=False, path=False):
 ##
         '''
-            Returns name of the given context "frame". If no frame is defined
-            this module's context will be selected. If "base" is set "True" the
-            modules name is given back without any file extension.
+            Returns name of the given context "frame". If no frame is defined \
+            this module's context will be selected. If "base" is set "True" \
+            the modules name is given back without any file extension.
 
             Examples:
 
@@ -1569,8 +1573,8 @@ class Module(Object):
     def get_package_name(cls, frame=inspect.currentframe(), path=False):
 ##
         '''
-            Determines package context of given frame. If current context isn't
-            in any package context an empty string is given back.
+            Determines package context of given frame. If current context \
+            isn't in any package context an empty string is given back.
 
             Examples:
 
@@ -1587,7 +1591,7 @@ class Module(Object):
         '''
         from boostNode.extension.file import Handler as FileHandler
         '''
-            NOTE: "must_exist=False" is necessary for supporting frozen
+            NOTE: "must_exist=False" is necessary for supporting frozen \
             executables.
         '''
         file = FileHandler(
@@ -1680,7 +1684,7 @@ class Module(Object):
     def determine_caller(cls, callable_objects, caller=None):
 ##
         '''
-            Searches for a useful caller object in given module objects via
+            Searches for a useful caller object in given module objects via \
             "module_objects".
 
             Examples:
@@ -1725,8 +1729,8 @@ class Module(Object):
     def get_defined_callables(cls, scope, only_module_level=True):
 ##
         '''
-            Takes a module and gives a list of objects explicit defined in this
-            module.
+            Takes a module and gives a list of objects explicit defined in \
+            this module.
 
             Examples:
 
@@ -1783,8 +1787,8 @@ class Module(Object):
     ):
 ##
         '''
-            Runs a given program for every given module. Returns "False" if no
-            modules were found or given program isn't installed.
+            Runs a given program for every given module. Returns "False" if \
+            no modules were found or given program isn't installed.
 
             Examples:
 
@@ -1844,10 +1848,10 @@ class Module(Object):
     ):
 ##
         '''
-            Extends a given scope of an module for useful things like own
-            exception class, a logger instance, variable to indicate if module
-            is running in test mode and a variable that saves the current
-            module name.
+            Extends a given scope of an module for useful things like own \
+            exception class, a logger instance, variable to indicate if \
+            module is running in test mode and a variable that saves the \
+            current module name.
 
             Returns a dictionary with new module's scope and module name.
 
@@ -1919,9 +1923,9 @@ class Module(Object):
     ):
 ##
         '''
-            Serves a common way to extend a given module. The given module's
-            scope will be extended and a common meta command line interface is
-            provided to test or run objects in given module.
+            Serves a common way to extend a given module. The given module's \
+            scope will be extended and a common meta command line interface \
+            is provided to test or run objects in given module.
 
             Examples:
 
@@ -1953,9 +1957,9 @@ class Module(Object):
     ):
 ##
         '''
-            Serves a common way to extend a given package. The given package's
-            scope will be extended and a common meta command line interface is
-            provided to test, lint or document modules.
+            Serves a common way to extend a given package. The given \
+            package's scope will be extended and a common meta command line \
+            interface is provided to test, lint or document modules.
 
             Examples:
 
@@ -2059,15 +2063,15 @@ class Module(Object):
 # region footer
 
 '''
-    Preset some variables given by introspection letting the linter know what
+    Preset some variables given by introspection letting the linter know what \
     globale variables are available.
 '''
 __logger__ = __exception__ = __module_name__ = __file_path__ = \
     __test_mode__ = None
 '''
-    Extends this module with some magic environment variables to provide better
-    introspection support. A generic command line interface for some code
-    preprocessing tools is provided by default.
+    Extends this module with some magic environment variables to provide \
+    better introspection support. A generic command line interface for some \
+    code preprocessing tools is provided by default.
 '''
 if __name__ == '__main__':
     Module.default(

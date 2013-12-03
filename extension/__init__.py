@@ -11,8 +11,8 @@
 # region header
 
 '''
-    This package provides a number of extension by dealing with often used
-    things like underlying operating system, file objects, python modules, or
+    This package provides a number of extension by dealing with often used \
+    things like underlying operating system, file objects, python modules, or \
     I/O operations.
 '''
 '''
@@ -45,13 +45,13 @@ from boostNode import __get_all_modules__
 
 # endregion
 
-'''Determine all modules in this folder via introspection.'''
 __all__ = __get_all_modules__()
+'''Determine all modules in this folder via introspection.'''
 
  # region footer
 
 '''
-    Preset some variables given by introspection letting the linter know what
+    Preset some variables given by introspection letting the linter know what \
     globale variables are available.
 '''
 __logger__ = __exception__ = __module_name__ = __file_path__ = \
@@ -59,9 +59,9 @@ __logger__ = __exception__ = __module_name__ = __file_path__ = \
 if __name__ == '__main__':
     from boostNode.extension.system import CommandLine
     '''
-        Extends this module with some magic environment variables to provide
-        better introspection support. A generic command line interface for some
-        code preprocessing tools is provided by default.
+        Extends this module with some magic environment variables to provide \
+        better introspection support. A generic command line interface for \
+        some code preprocessing tools is provided by default.
     '''
     CommandLine.generic_package_interface(
         name=__name__, frame=inspect.currentframe())

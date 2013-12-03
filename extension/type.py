@@ -11,8 +11,8 @@
 # region header
 
 '''
-    This module provides mostly dynamic types/classes for checking function
-    call's against a given signature. Dynamic classes means they depend on
+    This module provides mostly dynamic types/classes for checking function \
+    call's against a given signature. Dynamic classes means they depend on \
     their context.
 '''
 '''
@@ -58,15 +58,15 @@ class Self:
 # region footer
 
 '''
-    Preset some variables given by introspection letting the linter know what
+    Preset some variables given by introspection letting the linter know what \
     globale variables are available.
 '''
 __logger__ = __exception__ = __module_name__ = __file_path__ = \
     __test_mode__ = None
 '''
-    Extends this module with some magic environment variables to provide better
-    introspection support. A generic command line interface for some code
-    preprocessing tools is provided by default.
+    Extends this module with some magic environment variables to provide \
+    better introspection support. A generic command line interface for some \
+    code preprocessing tools is provided by default.
 '''
 if __name__ == '__main__':
     from boostNode.extension.native import Module

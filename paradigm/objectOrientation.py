@@ -11,7 +11,7 @@
 # region header
 
 '''
-    This module implements features like getter and setter methods for
+    This module implements features like getter and setter methods for \
     implementing object orientated code.
 '''
 '''
@@ -21,23 +21,24 @@
 '''
     The concept
 
-    Interface class is a high level interface support for interaction with
-    objects. This class transmits a full object oriented way to handle object
+    Interface class is a high level interface support for interaction with \
+    objects. This class transmits a full object oriented way to handle object \
     oriented concepts fast and efficient.
 
     Getter and setter
 
-    If you let transmit your class from the "Class" class you can use a getter
-    or setter method for every property you need. A user of your class doesn't
-    have to know which property has its own getter/setter, an universal
-    getter/setter or nothing of them. A user can always try to access any
-    property defined with an underscore at the beginning of the class with no
-    underscore. If it's necessary to use a function to get or set the property
-    it will be executed, otherwise not. If no explicit or general getter/setter
-    is provided, the property still takes inaccessible. Properties which should
-    be accessible and doesn't need any getter or setter method can be
-    implemented without any underscore. Doing that way saves your application
-    performance because no needless function calls are done.
+    If you let transmit your class from the "Class" class you can use a \
+    getter or setter method for every property you need. A user of your class \
+    doesn't have to know which property has its own getter/setter, an \
+    universal getter/setter or nothing of them. A user can always try to \
+    access any property defined with an underscore at the beginning of the \
+    class with no underscore. If it's necessary to use a function to get or \
+    set the property it will be executed, otherwise not. If no explicit or \
+    general getter/setter is provided, the property still takes inaccessible. \
+    Properties which should be accessible and doesn't need any getter or \
+    setter method can be implemented without any underscore. Doing that way \
+    saves your application performance because no needless function calls are \
+    done.
 
     Getter/setter examples:
 
@@ -121,9 +122,9 @@ for number in (3, 4):
 ## python3.3 class Class:
 class Class(builtins.object):
     '''
-        The main class which is intended for passing on other class. It serves
-        a scope for one application to minimize conflicts with other classes in
-        the global scope.
+        The main class which is intended for passing on other class. It \
+        serves a scope for one application to minimize conflicts with other \
+        classes in the global scope.
     '''
 
     # region static methods
@@ -149,8 +150,8 @@ class Class(builtins.object):
 ## python3.3     def __str__(cls: builtins.type) -> builtins.str:
     def __str__(cls):
         '''
-            Is triggered if the current object is tried to be converted into a
-            string object.
+            Is triggered if the current object is tried to be converted into \
+            a string object.
 
             It returns the output buffer as string.
 
@@ -173,7 +174,7 @@ class Class(builtins.object):
     def pseudo_property(cls, function):
 ##
         '''
-            Attaches a property to given function for indicating that given
+            Attaches a property to given function for indicating that given \
             function handles read access to corresponding property.
         '''
         function.pseudo_property = True
@@ -198,14 +199,14 @@ class Class(builtins.object):
     def __getattr__(self, name):
 ##
         '''
-            Is triggered if a property was tried to be read but is
+            Is triggered if a property was tried to be read but is \
             inaccessible.
 
             "name" is the inaccessible property name.
 
-            Should return the current value of the given property name depends
-            on its getter method. Returns "None" if no getter method is
-            accessible.
+            Should return the current value of the given property name \
+            depends on its getter method. Returns "None" if no getter method \
+            is accessible.
 
             Examples:
 
@@ -262,13 +263,14 @@ class Class(builtins.object):
     def __setattr__(self, name, value):
 ##
         '''
-            Is triggered if a property was tried to overwrite but is
+            Is triggered if a property was tried to overwrite but is \
             inaccessible.
 
-            "name" is the inaccessible property name.
-            "value" is the new value for the given property name.
+            "name"  - is the inaccessible property name.
 
-            Returns the new value of the given property name depending on the
+            "value" - is the new value for the given property name.
+
+            Returns the new value of the given property name depending on the \
             presence of setter method otherwise "None" is returned.
 
             Examples:
@@ -309,10 +311,10 @@ class Class(builtins.object):
 ## python3.3     def is_method(self, name: builtins.str) -> builtins.bool:
     def is_method(self, name):
         '''
-            Determines if the given class attribute is a callable method or
+            Determines if the given class attribute is a callable method or \
             something else.
 
-            Returns "True" if the given attribute is a method or "False"
+            Returns "True" if the given attribute is a method or "False" \
             otherwise.
 
             Examples:
@@ -336,10 +338,10 @@ class Class(builtins.object):
 ## python3.3     def is_property(self, name: builtins.str) -> builtins.bool:
     def is_property(self, name):
         '''
-            Determines if the given class attribute is a property or
+            Determines if the given class attribute is a property or \
             something else.
 
-            Returns "True" if the given attribute is a property or "False"
+            Returns "True" if the given attribute is a property or "False" \
             otherwise.
 
             Examples:
@@ -369,14 +371,15 @@ class Class(builtins.object):
     def _setattr_helper(self, name, value):
 ##
         '''
-            Helper method for "self.__setattr__()". Does the actual overwrite
+            Helper method for "self.__setattr__()". Does the actual overwrite \
             process on the given property.
 
-            "name" is the inaccessible property name.
-            "value" is the new value for the given property name.
+            "name" - is the inaccessible property name.
 
-            Returns "True" if the given property was successful overwritten or
-            "False" otherwise.
+            "value" - is the new value for the given property name.
+
+            Returns "True" if the given property was successful overwritten \
+            or "False" otherwise.
         '''
         name = '_' + name
         setter_name = 'set' + name
@@ -397,15 +400,15 @@ class Class(builtins.object):
 # region footer
 
 '''
-    Preset some variables given by introspection letting the linter know what
+    Preset some variables given by introspection letting the linter know what \
     globale variables are available.
 '''
 __logger__ = __exception__ = __module_name__ = __file_path__ = \
     __test_mode__ = None
 '''
-    Extends this module with some magic environment variables to provide better
-    introspection support. A generic command line interface for some code
-    preprocessing tools is provided by default.
+    Extends this module with some magic environment variables to provide \
+    better introspection support. A generic command line interface for some \
+    code preprocessing tools is provided by default.
 '''
 if __name__ == '__main__':
     from boostNode.extension.native import Module
