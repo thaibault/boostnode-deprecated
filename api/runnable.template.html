@@ -62,20 +62,20 @@
 <em class="property">class </em><tt class="descclassname">boostNode.runnable.template.</tt><tt class="descname">Parser</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.template.Parser" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class can parse a string or file to interpret it as template for         replacing containing placeholder and rendering embedded python script         snippets.</p>
 <p>NOTE: &#8220;(?s...)&#8221; and &#8220;(?m...)&#8221; is equivalent for regular expression         flag &#8220;re.DOTALL&#8221; and &#8220;re.MULTILINE&#8221;. NOTE: This regular expression         patterns assumes that the delimiter has at least a length of two.</p>
-<p>&#8220;template&#8221;                              - A template string, path to                                                   template file or file                                                   object pointing to a                                                   template file.</p>
-<p>&#8220;string&#8221;                                - Indicates weather                                                   &#8220;template&#8221; is a template                                                   string or file path.</p>
-<p>&#8220;file_encoding&#8221;                         - Encoding used for reading                                                   template file and writing                                                   rendered output.</p>
-<p>&#8220;placeholder_name_pattern&#8221;              - Regular expression pattern                                                   to specify a placeholder                                                   name format.</p>
-<p>&#8220;command_line_placeholder_name_pattern&#8221; - Regular expression to                                                   specify a placeholder name                                                   given via command line                                                   interface.</p>
-<p>&#8220;command_line_placeholder_pattern&#8221;      - Regular expression pattern                                                   to identify a placeholder                                                   value tuple in command line                                                   interface.</p>
-<p>&#8220;placeholder_pattern&#8221;                   - Pattern to specify a                                                   placeholder in template                                                   string.</p>
-<p>&#8220;template_pattern&#8221;                      - Regular expression to                                                   identify each template                                                   identify syntax.</p>
-<p>&#8220;native_template_pattern&#8221;               - Regular expression pattern                                                   to used for pythons native                                                   template engine.</p>
-<p>&#8220;left_code_delimiter&#8221;                   - Left code delimiter to                                                   identify a code starting                                                   point of a code line.</p>
-<p>&#8220;right_escaped&#8221;                         - Escape symbol to mask a                                                   delimiter symbol.</p>
-<p>&#8220;template_context_default_indent&#8221;       - Expected indention used for                                                   for interpreting code blocks.</p>
-<p>&#8220;builtin_names&#8221;                         - A tuple of function and                                                   variables available in                                                   template engine.</p>
-<p>&#8220;pretty_indent&#8221;                         - Indicates if we should                                                   spend time on rendering                                                   pretty indented code in                                                   each case.</p>
+<p><strong>template</strong>                              - A template string, path                                                     to template file or file                                                     object pointing to a                                                     template file.</p>
+<p><strong>string</strong>                                - Indicates weather                                                     &#8220;template&#8221; is a template                                                     string or file path.</p>
+<p><strong>file_encoding</strong>                         - Encoding used for reading                                                     template file and writing                                                     rendered output.</p>
+<p><strong>placeholder_name_pattern</strong>              - Regular expression                                                     pattern to specify a                                                     placeholder name format.</p>
+<p><strong>command_line_placeholder_name_pattern</strong> - Regular expression to                                                     specify a placeholder                                                     name given via command                                                     line interface.</p>
+<p><strong>command_line_placeholder_pattern</strong>      - Regular expression                                                     pattern to identify a                                                     placeholder value tuple                                                     in command line interface.</p>
+<p><strong>placeholder_pattern</strong>                   - Pattern to specify a                                                     placeholder in template                                                     string.</p>
+<p><strong>template_pattern</strong>                      - Regular expression to                                                     identify each template                                                     identify syntax.</p>
+<p><strong>native_template_pattern</strong>               - Regular expression                                                     pattern to used for                                                     pythons native template                                                     engine.</p>
+<p><strong>left_code_delimiter</strong>                   - Left code delimiter to                                                     identify a code starting                                                     point of a code line.</p>
+<p><strong>right_escaped</strong>                         - Escape symbol to mask a                                                     delimiter symbol.</p>
+<p><strong>template_context_default_indent</strong>       - Expected indention used                                                     for interpreting code                                                     blocks.</p>
+<p><strong>builtin_names</strong>                         - A tuple of function and                                                     variables available in                                                     template engine.</p>
+<p><strong>pretty_indent</strong>                         - Indicates if we should                                                     spend time on rendering                                                     pretty indented code in                                                     each case.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">file</span> <span class="o">=</span> <span class="n">FileHandler</span><span class="p">(</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;_run&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">file</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="s">&#39;hans &lt;%placeholder%&gt;&#39;</span>
@@ -130,7 +130,7 @@
 <dt id="boostNode.runnable.template.Parser.render">
 <em class="property">static </em><tt class="descname">render</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.template.Parser.render" title="Permalink to this definition">¶</a></dt>
 <dd><p>Renders the template. Searches for python code snippets and             handles correct indenting. Wraps plain text with a print function.</p>
-<p>&#8220;mapping&#8221; - A dictionary containing a mapping from placeholder                         name to value.</p>
+<p><strong>mapping</strong> - A dictionary containing a mapping from placeholder                           name to value.</p>
 <p>Additional keywords are used as additional mapping tuples.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">parser</span> <span class="o">=</span> <span class="n">Parser</span><span class="p">(</span>
@@ -226,7 +226,7 @@
 <dt id="boostNode.runnable.template.Parser.substitute_all">
 <em class="property">static </em><tt class="descname">substitute_all</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.template.Parser.substitute_all" title="Permalink to this definition">¶</a></dt>
 <dd><p>Substitutes every placeholder in template with a given             replacement string.</p>
-<p>&#8220;replacement&#8221; - String to replace with every placeholder.</p>
+<p><strong>replacement</strong> - String to replace with every placeholder.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">template</span> <span class="o">=</span> <span class="n">Parser</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">template</span><span class="o">=</span><span class="s">&#39;test &lt;%hans%&gt; &lt;%a%&gt; &lt;%b%&gt;&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>

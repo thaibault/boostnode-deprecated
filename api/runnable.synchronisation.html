@@ -61,16 +61,16 @@
 <dt id="boostNode.runnable.synchronisation.Reflector">
 <em class="property">class </em><tt class="descclassname">boostNode.runnable.synchronisation.</tt><tt class="descname">Reflector</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.synchronisation.Reflector" title="Permalink to this definition">¶</a></dt>
 <dd><p>Main class of the file reflection application.</p>
-<p>&#8220;source_location&#8221;                 - Source location to reflect.</p>
-<p>&#8220;target_location&#8221;                 - Target location where the                                             reflection should be saved.</p>
-<p>&#8220;limit&#8221;                           - Limit of summarized file size.</p>
-<p>&#8220;priority_locations&#8221;              - Location to prefer if limit                                             doesn&#8217;t suffices.</p>
-<p>&#8220;exclude_locations&#8221;               - Locations to ignore during                                             reflection creation.</p>
-<p>&#8220;target_rights&#8221;                   - Rights used to create reflection                                             files.</p>
-<p>&#8220;synchronize_back&#8221;                - Indicates weather to synchronize                                             a reflection back.</p>
-<p>&#8220;create&#8221;                          - Indicates weather to create a new                                             reflection.</p>
-<p>&#8220;use_native_symlinks&#8221;             - Indicates weather to use native                                             system symbolic links or portable                                             links.</p>
-<p>&#8220;minimum_reflection_size_in_byte&#8221; - Minimum reflection size to check                                             before synchronizing back. This                                             is only used as sanity check.</p>
+<p><strong>source_location</strong>                 - Source location to reflect.</p>
+<p><strong>target_location</strong>                 - Target location where the                                               reflection should be saved.</p>
+<p><strong>limit</strong>                           - Limit of summarized file size.</p>
+<p><strong>priority_locations</strong>              - Location to prefer if limit                                               doesn&#8217;t suffices.</p>
+<p><strong>exclude_locations</strong>               - Locations to ignore during                                               reflection creation.</p>
+<p><strong>target_rights</strong>                   - Rights used to create                                               reflection files.</p>
+<p><strong>synchronize_back</strong>                - Indicates weather to                                               synchronize a reflection back.</p>
+<p><strong>create</strong>                          - Indicates weather to create a                                               new reflection.</p>
+<p><strong>use_native_symlinks</strong>             - Indicates weather to use native                                               system symbolic links or                                               portable links.</p>
+<p><strong>minimum_reflection_size_in_byte</strong> - Minimum reflection size to                                               check before synchronizing                                               back. This is only used as                                               sanity check.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Reflector</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">source_location</span><span class="o">=</span><span class="n">__test_folder__</span><span class="p">,</span>
@@ -397,8 +397,8 @@
 <dt id="boostNode.runnable.synchronisation.Reflector.is_location_in_paths">
 <em class="property">static </em><tt class="descname">is_location_in_paths</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.synchronisation.Reflector.is_location_in_paths" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if a given path exists in a given list of paths or it&#8217;s             substructure.</p>
-<p>&#8220;search&#8221; - A file path or file handler object to search for.</p>
-<p>&#8220;paths&#8221;  - A list if paths or file handlers to search in.</p>
+<p><strong>search</strong> - A file path or file handler object to search for.</p>
+<p><strong>paths</strong>  - A list if paths or file handlers to search in.</p>
 <p>Returns &#8220;True&#8221; if searched file is presented in given list of             file locations and &#8220;False&#8221; otherwise.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">file</span> <span class="o">=</span> <span class="n">FileHandler</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;source5&#39;</span><span class="p">)</span>
@@ -422,7 +422,7 @@
 <dt id="boostNode.runnable.synchronisation.Reflector.open">
 <em class="property">static </em><tt class="descname">open</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.synchronisation.Reflector.open" title="Permalink to this definition">¶</a></dt>
 <dd><p>Opens the given files by using the &#8220;Platform.open()&#8221; method. It             can handle symbolic and portable links.</p>
-<p>&#8220;files&#8221; - A list if file paths or file objects to open with a                       usable installed application.</p>
+<p><strong>files</strong> - A list if file paths or file objects to open with a                         usable installed application.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Reflector</span><span class="o">.</span><span class="n">open</span><span class="p">(())</span> 
 <span class="go">&lt;class &#39;....Reflector&#39;&gt;</span>

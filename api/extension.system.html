@@ -417,17 +417,13 @@ positively.</p>
 <dt id="boostNode.extension.system.Platform.run">
 <em class="property">static </em><tt class="descname">run</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.system.Platform.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Runs a command natively on the current operating system using the             command line. Result will be given back as tuple. First element             is standard and second error output.</p>
-<dl class="docutils">
-<dt>&#8220;command&#8221;           - A command line interface command optionally</dt>
-<dd>with arguments.</dd>
-<dt>&#8220;command_arguments&#8221; - A list of arguments passing through the</dt>
-<dd>command line interface.</dd>
-</dl>
-<p>&#8220;secure&#8221;            - Disable output piping by python and run                                   command in systems native process.</p>
-<p>&#8220;error&#8221;             - If &#8220;False&#8221; exceptions by running command                                   are kept back.</p>
-<p>&#8220;shell&#8221;             - Simulate a shell if &#8220;True&#8221;. If explicit                                   command arguments are given shell&#8217;s default                                   value is &#8220;True&#8221; and &#8220;False&#8221; otherwise.</p>
-<p>&#8220;log&#8221;               - If &#8220;True&#8221; standard output will be logged                                   with level &#8220;info&#8221; and error output with                                   level &#8220;warning&#8221;.</p>
-<p>&#8220;no_blocking&#8221;       - If &#8220;True&#8221; resulting output won&#8217;t be a                                   string. You will get an python &#8220;IOBuffer&#8221;                                   like object. NOTE: If buffer is empty and                                   you try to read from buffer an exception                                   will occur.</p>
+<p><strong>command</strong>           - A command line interface command                                     optionally with arguments.</p>
+<p><strong>command_arguments</strong> - A list of arguments passing through the                                     command line interface.</p>
+<p><strong>secure</strong>            - Disable output piping by python and run                                     command in systems native process.</p>
+<p><strong>error</strong>             - If &#8220;False&#8221; exceptions by running command                                     are kept back.</p>
+<p><strong>shell</strong>             - Simulate a shell if &#8220;True&#8221;. If explicit                                     command arguments are given shell&#8217;s                                     default value is &#8220;True&#8221; and &#8220;False&#8221;                                     otherwise.</p>
+<p><strong>log</strong>               - If &#8220;True&#8221; standard output will be logged                                     with level &#8220;info&#8221; and error output with                                     level &#8220;warning&#8221;.</p>
+<p><strong>no_blocking</strong>       - If &#8220;True&#8221; resulting output won&#8217;t be a                                     string. You will get an python &#8220;IOBuffer&#8221;                                     like object. NOTE: If buffer is empty and                                     you try to read from buffer an exception                                     will occur.</p>
 <p>All following arguments are given through python&#8217;s native
 &#8220;subprocess.Popen()&#8221; class initialisation.</p>
 <p>Examples:</p>

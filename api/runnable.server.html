@@ -179,9 +179,9 @@
 <dt id="boostNode.runnable.server.CGIHTTPRequestHandler.log_message">
 <em class="property">static </em><tt class="descname">log_message</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.log_message" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wrapper method for all logging output coming through the server             thread.</p>
-<p>&#8220;format&#8221;                   - Logging format. Allowed placeholder                                          are: &#8220;client_ip&#8221;, &#8220;client_port&#8221;,                                          &#8220;request_description&#8221;,                                          &#8220;response_code&#8221;, &#8220;forwarded_ip&#8221;,                                          &#8220;forwarded_host&#8221;,                                          &#8220;forwarded_server&#8221;,                                          &#8220;forwarded_server&#8221; and &#8220;server_port&#8221;.</p>
-<p>&#8220;message_or_error_code&#8221;    - Logging message or resulting HTTP                                          code.</p>
-<p>&#8220;response_code_or_message&#8221; - Resulting HTTP code or response                                          message.</p>
+<p><strong>format</strong>                   - Logging format. Allowed                                            placeholder are: &#8220;client_ip&#8221;,                                            &#8220;client_port&#8221;,                                            &#8220;request_description&#8221;,                                            &#8220;response_code&#8221;, &#8220;forwarded_ip&#8221;,                                            &#8220;forwarded_host&#8221;,                                            &#8220;forwarded_server&#8221;,                                           &#8220;forwarded_server&#8221; and &#8220;server_port&#8221;.</p>
+<p><strong>message_or_error_code</strong>    - Logging message or resulting HTTP                                            code.</p>
+<p><strong>response_code_or_message</strong> - Resulting HTTP code or response                                            message.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span> <span class="o">=</span> <span class="n">CGIHTTPRequestHandler</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span> <span class="o">=</span> <span class="n">Class</span><span class="p">()</span>
@@ -246,7 +246,7 @@
 <dt id="boostNode.runnable.server.CGIHTTPRequestHandler.parse_url">
 <em class="property">static </em><tt class="descname">parse_url</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.parse_url" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method provides an easy way to split a http request string             into its components.</p>
-<p>&#8220;url&#8221; - URL to parse.</p>
+<p><strong>url</strong> - URL to parse.</p>
 <p>Returns a tuple containing of the parse object and a dictionary             containing get parameter.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sys_argv_backup</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span> <span class="o">=</span> <span class="n">CGIHTTPRequestHandler</span><span class="p">()</span>
@@ -328,18 +328,18 @@
 <dt id="boostNode.runnable.server.CGIHTTPRequestHandler.send_content_length_header">
 <em class="property">static </em><tt class="descname">send_content_length_header</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.send_content_length_header" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sends the content length header to client if not sent yet.</p>
-<p>&#8220;size&#8221;           - Content length to send.</p>
-<p>&#8220;dynamic_output&#8221; - Indicates weather output should be forced to                                compressed because it is simply a computed                                string.</p>
-<p>&#8220;encoding&#8221;       - Encoding to compress current output.</p>
+<p><strong>size</strong>           - Content length to send.</p>
+<p><strong>dynamic_output</strong> - Indicates weather output should be forced to                                  compressed because it is simply a computed                                  string.</p>
+<p><strong>encoding</strong>       - Encoding to compress current output.</p>
 </dd></dl>
 
 <dl class="staticmethod">
 <dt id="boostNode.runnable.server.CGIHTTPRequestHandler.send_content_type_header">
 <em class="property">static </em><tt class="descname">send_content_type_header</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.send_content_type_header" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sends a content type header to client if not sent yet.</p>
-<p>&#8220;mime_type&#8221;     - Mime type to send to client.</p>
-<p>&#8220;encoding&#8221;      - Encoding description to send to client.</p>
-<p>&#8220;response_code&#8221; - HTTP Response code to send.</p>
+<p><strong>mime_type</strong>     - Mime type to send to client.</p>
+<p><strong>encoding</strong>      - Encoding description to send to client.</p>
+<p><strong>response_code</strong> - HTTP Response code to send.</p>
 <p>Additional arguments and keywords will be forwarded to             &#8220;self.send_header()&#8221; method.</p>
 </dd></dl>
 
@@ -347,7 +347,7 @@
 <dt id="boostNode.runnable.server.CGIHTTPRequestHandler.send_error">
 <em class="property">static </em><tt class="descname">send_error</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.send_error" title="Permalink to this definition">¶</a></dt>
 <dd><p>Send the given error to client if no response code was sent yet.</p>
-<p>&#8220;code&#8221; - Error code to send.</p>
+<p><strong>code</strong> - Error code to send.</p>
 </dd></dl>
 
 <dl class="staticmethod">
@@ -365,9 +365,9 @@
 <dt id="boostNode.runnable.server.CGIHTTPRequestHandler.send_static_file_cache_header">
 <em class="property">static </em><tt class="descname">send_static_file_cache_header</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.send_static_file_cache_header" title="Permalink to this definition">¶</a></dt>
 <dd><p>Response a static file-request header.</p>
-<p>&#8220;timestamp&#8221;              - Timestamp to use as last modified time.</p>
-<p>&#8220;cache_control&#8221;          - Cache control header string.</p>
-<p>&#8220;expire_time_in_seconds&#8221; - Additional time to current timestamp                                        for expires header.</p>
+<p><strong>timestamp</strong>              - Timestamp to use as last modified                                          time.</p>
+<p><strong>cache_control</strong>          - Cache control header string.</p>
+<p><strong>expire_time_in_seconds</strong> - Additional time to current timestamp                                          for expires header.</p>
 </dd></dl>
 
 <dl class="attribute">

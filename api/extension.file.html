@@ -137,8 +137,8 @@
 <dt id="boostNode.extension.file.Handler.backup">
 <em class="property">static </em><tt class="descname">backup</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.backup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a backup of current file object in same location.</p>
-<p>&#8220;name_wrapper&#8221;     - A template formating the backup file name.</p>
-<p>&#8220;backup_if_exists&#8221; - Indicates if a backup should be make even if                                  there is already a file object with given                                  backup name and content (if                                  &#8220;compare_content&#8221; is set).</p>
+<p><strong>name_wrapper</strong>     - A template formating the backup file name.</p>
+<p><strong>backup_if_exists</strong> - Indicates if a backup should be make even                                    if there is already a file object with                                    given backup name and content (if                                    &#8220;compare_content&#8221; is set).</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span> <span class="o">=</span> <span class="n">Handler</span><span class="p">(</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;backup&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
@@ -191,10 +191,10 @@
 <dd><p>Implements the pythons native &#8220;os.chmod()&#8221; method in an object             oriented way.</p>
 <p>Change the mode of path to the numeric mode. &#8220;mode&#8221; may take one             of the following values (as defined in the stat module) or             bitwise combinations of them:</p>
 <p>stat.S_ISUID, stat.S_ISGID, stat.S_ENFMT, stat.S_ISVTX,             stat.S_IREAD, stat.S_IWRITE, stat.S_IEXEC, stat.S_IRWXU,             stat.S_IRUSR, stat.S_IWUSR, stat.S_IXUSR, stat.S_IRWXG,             stat.S_IRGRP, stat.S_IWGRP, stat.S_IXGRP, stat.S_IRWXO,             stat.S_IROTH, stat.S_IWOTH, stat.S_IXOTH</p>
-<p>&#8220;right&#8221;      - Is the new right for the current object&#8217;s path                            location.</p>
-<p>&#8220;octal&#8221;      - Indicates weather we provide an octal number or a                            constant combination from &#8220;stat.*&#8221;.</p>
-<p>&#8220;recursive&#8221;  - Indicates weather rights should be set recursively.</p>
-<p>&#8220;allow_link&#8221; - Indicates weather links should be followed.</p>
+<p><strong>right</strong>      - Is the new right for the current object&#8217;s path                              location.</p>
+<p><strong>octal</strong>      - Indicates weather we provide an octal number or                              a constant combination from &#8220;stat.*&#8221;.</p>
+<p><strong>recursive</strong>  - Indicates weather rights should be set                              recursively.</p>
+<p><strong>allow_link</strong> - Indicates weather links should be followed.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span> <span class="o">=</span> <span class="n">Handler</span><span class="p">(</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;change_right&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Handler</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="n">__file_path__</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">handler</span><span class="p">)</span>
@@ -321,9 +321,9 @@
 <dt id="boostNode.extension.file.Handler.convert_size_format">
 <em class="property">static </em><tt class="descname">convert_size_format</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.convert_size_format" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts between file size formats.</p>
-<p>&#8220;format&#8221;  - Determines the returning file size unit.</p>
-<p>&#8220;decimal&#8221; - Determines if the decimal or binary interpretation                         should be used.</p>
-<p>&#8220;formats&#8221; - If provided this formats will be used instead of                         &#8220;cls.FORMATS&#8221;.</p>
+<p><strong>format</strong>  - Determines the returning file size unit.</p>
+<p><strong>decimal</strong> - Determines if the decimal or binary interpretation                           should be used.</p>
+<p><strong>formats</strong> - If provided this formats will be used instead of                           &#8220;cls.FORMATS&#8221;.</p>
 <p>Returns computed size.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Handler</span><span class="o">.</span><span class="n">convert_size_format</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">decimal</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
@@ -355,7 +355,7 @@
 <em class="property">static </em><tt class="descname">copy</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.copy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implements the pythons native &#8220;shutil.copy2()&#8221; method and             &#8220;shutil.copytree()&#8221; in an object orientated way.</p>
 <p>Copy the current file to the file or directory &#8220;target&#8221;. If             current location is a directory, a file with the same name is             created (or overwritten) in the directory specified. Permission             bits are copied.</p>
-<p>&#8220;target&#8221; - Path or &#8220;Handler&#8221; object pointing to target destination.</p>
+<p><strong>target</strong> - Path or &#8220;Handler&#8221; object pointing to target                          destination.</p>
 <p>Additional arguments or keywords a forwarded to &#8220;shutil.copy2()&#8221;.</p>
 <p>Returns &#8220;True&#8221; if the copy process was successful or &#8220;False&#8221;             otherwise.</p>
 <p>Examples:</p>
@@ -390,8 +390,8 @@
 <em class="property">static </em><tt class="descname">deep_copy</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.deep_copy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implements the pythons native &#8220;shutil.copytree()&#8221; method in an             object oriented way.</p>
 <p>Recursively copy an entire directory tree rooted at current             location. The destination directory, named by given parameter             &#8220;target&#8221;, must not already exist; it will be created as well as             missing parent directories. Permissions and times of directories             are copied with pythons native method &#8220;shutil.copystat()&#8221;,             individual files are copied using pythons native &#8220;shutil.copy2()&#8221;             method. If given parameter &#8220;symbolic_links&#8221; is &#8220;True&#8221;, symbolic             links in the source tree are represented as symbolic links in the             new tree; if false, the contents of the linked files are copied             to the new tree. When &#8220;symbolic_links&#8221; is &#8220;False&#8221;, e.g. if the             file pointed by the symbolic link doesn&#8217;t exist, a exception will             be added in the list of errors raised in a error exception at the             end of the copy process. You can set the optional             &#8220;ignore_dangling_symlinks&#8221; flag to &#8220;True&#8221; if you want to silence             this exception. Notice that this option has no effect on             platforms that don&#8217;t support pythons native &#8220;os.symlink()&#8221;             method. If ignore is given, it must be a callable that will             receive as its arguments the directory being visited by pythons             native method &#8220;shutil.copytree&#8221;, and a list of its contents, as             returned by pythons &#8220;os.listdir&#8221; method. Since &#8220;shutil.copytree&#8221;             is called recursively, the ignore callable will be called once             for each directory that is copied. The callable must return a             sequence of directory and file names relative to the current             directory (i.e. a subset of the items in its second argument);             these names will then be ignored in the copy process. Pythons             native method &#8220;shutil.ignore_patterns()&#8221; can be used to create             such a callable that ignores names based on glob-style patterns.             If exception(s) occur, an error is raised with a list of reasons.             If parameter &#8220;copy_function&#8221; is given, it must be a callable that             will be used to copy each file. It will be called with the source             path and the target path as arguments. By default, pythons native             &#8220;shutil.copy2()&#8221; is used, but any function that supports the             ame signature (like pythons &#8220;shutil.copy()&#8221;) can be used.</p>
-<p>&#8220;target&#8221;         - Target location for coping current file object.</p>
-<p>&#8220;symbolic_links&#8221; - Indicates weather symbolic links should be                                followed.</p>
+<p><strong>target</strong>         - Target location for coping current file                                  object.</p>
+<p><strong>symbolic_links</strong> - Indicates weather symbolic links should be                                  followed.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span> <span class="o">=</span> <span class="n">Handler</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">location</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;deep_copy&#39;</span><span class="p">,</span>
@@ -460,9 +460,9 @@
 <dt id="boostNode.extension.file.Handler.determine_byte_from_other">
 <em class="property">static </em><tt class="descname">determine_byte_from_other</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.determine_byte_from_other" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts a given size format to byte format.</p>
-<p>&#8220;size&#8221;         - Size to convert.</p>
-<p>&#8220;given_format&#8221; - Input format.</p>
-<p>&#8220;decimal&#8221;      - Indicates weather decimal or binary computation                              should be used.</p>
+<p><strong>size</strong>         - Size to convert.</p>
+<p><strong>given_format</strong> - Input format.</p>
+<p><strong>decimal</strong>      - Indicates weather decimal or binary                                computation should be used.</p>
 <p>Returns computed size.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Handler</span><span class="o">.</span><span class="n">DECIMAL</span> <span class="o">=</span> <span class="bp">False</span>
@@ -482,7 +482,7 @@
 <dt id="boostNode.extension.file.Handler.determine_regex_units">
 <em class="property">static </em><tt class="descname">determine_regex_units</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.determine_regex_units" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a regular expression for validation if a given size             format is valid. The pattern is created depending on the given             size formats as dictionary.</p>
-<p>&#8220;formats&#8221; - Formats to use. Defaults to &#8220;cls.FORMATS&#8221;.</p>
+<p><strong>formats</strong> - Formats to use. Defaults to &#8220;cls.FORMATS&#8221;.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Handler</span><span class="o">.</span><span class="n">determine_regex_units</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">Handler</span><span class="o">.</span><span class="n">FORMATS</span>
@@ -500,9 +500,9 @@
 <dt id="boostNode.extension.file.Handler.determine_size_from_string">
 <em class="property">static </em><tt class="descname">determine_size_from_string</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.determine_size_from_string" title="Permalink to this definition">¶</a></dt>
 <dd><p>Becomes a size with unit as string. And gives it as float or             &#8220;False&#8221; (if given string hasn&#8217;t match any number with a useful             measure) back.</p>
-<p>&#8220;size_and_unit&#8221; - Given size with unit as string.</p>
-<p>&#8220;format&#8221;        - Format to returns.</p>
-<p>&#8220;decimal&#8221;       - Indicates weather decimal computation should be                               used.</p>
+<p><strong>size_and_unit</strong> - Given size with unit as string.</p>
+<p><strong>format</strong>        - Format to returns.</p>
+<p><strong>decimal</strong>       - Indicates weather decimal computation should                                 be used.</p>
 <p>Returns size if determined otherwise &#8220;False&#8221;.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Handler</span><span class="o">.</span><span class="n">determine_size_from_string</span><span class="p">(</span><span class="n">size_and_unit</span><span class="o">=</span><span class="s">&#39;10 MB&#39;</span><span class="p">)</span>
@@ -529,7 +529,7 @@
 <dt id="boostNode.extension.file.Handler.determine_special_path_values">
 <em class="property">static </em><tt class="descname">determine_special_path_values</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.determine_special_path_values" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gives all platform dependent symbols for special file system             locations.</p>
-<p>&#8220;operating_system&#8221; - If not provided operating system will be                                  determined.</p>
+<p><strong>operating_system</strong> - If not provided operating system will be                                    determined.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Handler</span><span class="o">.</span><span class="n">determine_special_path_values</span><span class="p">(</span><span class="n">operating_system</span><span class="o">=</span><span class="s">&#39;unix&#39;</span><span class="p">)</span>
 <span class="go">(&#39;~&#39;,)</span>
@@ -549,7 +549,7 @@
 <dt id="boostNode.extension.file.Handler.get_basename">
 <em class="property">static </em><tt class="descname">get_basename</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.get_basename" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines the current file name without directory path and file             extension. Same possible parameters as native python method             &#8220;os.path.name()&#8221;.</p>
-<p>&#8220;output_with_root_prefix&#8221; - Indicates if determined name should                                         be stripped from a path prefixed with                                         path to current sandbox.</p>
+<p><strong>output_with_root_prefix</strong> - Indicates if determined name should                                           be stripped from a path prefixed                                           with path to current sandbox.</p>
 <p>Additional arguments and keywords will be forwarded to             &#8220;os.path.name()&#8221;.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Handler</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="n">__file_path__</span><span class="p">)</span><span class="o">.</span><span class="n">basename</span>
@@ -570,8 +570,8 @@
 <dt id="boostNode.extension.file.Handler.get_content">
 <em class="property">static </em><tt class="descname">get_content</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.get_content" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the file content of a text-file. Accepts all arguments             python&#8217;s native &#8220;builtins.open()&#8221; or &#8220;codecs.open()&#8221; accepts. If             current file doesn&#8217;t exists an empty string will be returned.             Note that this method shouldn&#8217;t be used for binary files. If             current handler points to an directory containing files will be             returned as list.</p>
-<p>&#8220;mode&#8221;   - Mode for opening current file (if not pointing to a                        directory).</p>
-<p>&#8220;strict&#8221; - Indicates weather encoding should through an exception.</p>
+<p><strong>mode</strong>   - Mode for opening current file (if not pointing to a                          directory).</p>
+<p><strong>strict</strong> - Indicates weather encoding should through an                          exception.</p>
 <p>Every additional argument or keyword will be forwarded to             &#8220;builtins.open()&#8221;.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Handler</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="n">__file_path__</span><span class="p">)</span><span class="o">.</span><span class="n">content</span> 
@@ -646,7 +646,7 @@
 <dt id="boostNode.extension.file.Handler.get_directory_path">
 <em class="property">static </em><tt class="descname">get_directory_path</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.get_directory_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines the current path of the Directory object without file.</p>
-<p>&#8220;output_with_root_prefix&#8221; - Indicates weather the path to sandbox                                         should set as prefix.</p>
+<p><strong>output_with_root_prefix</strong> - Indicates weather the path to                                           sandbox should set as prefix.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">root_backup</span> <span class="o">=</span> <span class="n">Handler</span><span class="o">.</span><span class="n">get_root</span><span class="p">()</span>
 </pre></div>
@@ -694,7 +694,7 @@
 <dt id="boostNode.extension.file.Handler.get_dummy_size">
 <em class="property">static </em><tt class="descname">get_dummy_size</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.get_dummy_size" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates the potential dummy size for a portable link pointing             to this object.</p>
-<p>&#8220;label&#8221; - Is the actual used label for marking the text based                       portable link files.</p>
+<p><strong>label</strong> - Is the actual used label for marking the text based                         portable link files.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">isinstance</span><span class="p">(</span><span class="n">Handler</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="n">__file_path__</span><span class="p">)</span><span class="o">.</span><span class="n">get_dummy_size</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">label</span><span class="o">=</span><span class="s">&#39;LinkFile&#39;</span><span class="p">),</span> <span class="nb">int</span><span class="p">)</span>
@@ -814,7 +814,7 @@
 <dt id="boostNode.extension.file.Handler.get_human_readable_size">
 <em class="property">static </em><tt class="descname">get_human_readable_size</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.get_human_readable_size" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represents a given file size in byte as human readable string.</p>
-<p>&#8220;size&#8221; - If a size is given size of current file object will be                      ignored and that size will be used.</p>
+<p><strong>size</strong> - If a size is given size of current file object will be                        ignored and that size will be used.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Handler</span><span class="o">.</span><span class="n">DECIMAL</span> <span class="o">=</span> <span class="bp">False</span>
 </pre></div>
@@ -916,8 +916,8 @@
 <dt id="boostNode.extension.file.Handler.get_mime_type">
 <em class="property">static </em><tt class="descname">get_mime_type</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.get_mime_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines the mime-type of the current object.</p>
-<p>&#8220;default_type&#8221; - Defines the returned fallback mime type if it                              couldn&#8217;t be determined.</p>
-<p>&#8220;web&#8221;          - If web is set to &#8220;True&#8221; fallback mime type is                              &#8220;application/octet-stream&#8221;.</p>
+<p><strong>default_type</strong> - Defines the returned fallback mime type if it                                couldn&#8217;t be determined.</p>
+<p><strong>web</strong>          - If web is set to &#8220;True&#8221; fallback mime type is                                &#8220;application/octet-stream&#8221;.</p>
 <p>Returns the current object mime-type. The format is             &#8220;type/subtype&#8221;.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Handler</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="n">__file_path__</span><span class="p">)</span><span class="o">.</span><span class="n">mime_type</span> 
@@ -952,8 +952,8 @@
 <dt id="boostNode.extension.file.Handler.get_name">
 <em class="property">static </em><tt class="descname">get_name</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.get_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines the current file name without directory path. Same             possible parameters as native python method &#8220;os.path.name()&#8221;.</p>
-<p>&#8220;output_with_root_prefix&#8221; - Indicates if determined name should                                         be stripped from a path prefixed with                                         path to current sandbox.</p>
-<p>&#8220;force_windows_behavior&#8221;  - If set to &#8220;True&#8221; windows behavior                                         will be forced.</p>
+<p><strong>output_with_root_prefix</strong> - Indicates if determined name should                                           be stripped from a path prefixed                                           with path to current sandbox.</p>
+<p><strong>force_windows_behavior</strong>  - If set to &#8220;True&#8221; windows behavior                                           will be forced.</p>
 <p>Returns the determined file object name.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Handler</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="n">__file_path__</span><span class="p">)</span><span class="o">.</span><span class="n">name</span>
@@ -981,9 +981,9 @@
 <dt id="boostNode.extension.file.Handler.get_path">
 <em class="property">static </em><tt class="descname">get_path</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.get_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines path of current &#8220;Handler&#8221; object or returns the path             of a given &#8220;Handler&#8221; instance.</p>
-<p>&#8220;location&#8221;                - If a handle object is provided the                                         saved path will be given back.</p>
-<p>&#8220;respect_root_path&#8221;       - Indicates weather we check the                                         sandbox feature for this request.</p>
-<p>&#8220;output_with_root_prefix&#8221; - Indicates weather we should prefix                                         the resulting path with the path to                                         sandbox.</p>
+<p><strong>location</strong>                - If a handle object is provided the                                           saved path will be given back.</p>
+<p><strong>respect_root_path</strong>       - Indicates weather we check the                                           sandbox feature for this request.</p>
+<p><strong>output_with_root_prefix</strong> - Indicates weather we should prefix                                           the resulting path with the path to                                           sandbox.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Handler</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="n">__file_path__</span><span class="p">)</span><span class="o">.</span><span class="n">path</span> 
 <span class="go">&#39;...file.py&#39;</span>
@@ -1001,9 +1001,9 @@
 <dt id="boostNode.extension.file.Handler.get_portable_link_content">
 <em class="property">static </em><tt class="descname">get_portable_link_content</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.get_portable_link_content" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the final portable link content depending on the current             file referenced by &#8220;self.path&#8221;.</p>
-<p>&#8220;label&#8221;       - Label for better distinction with other                             text-based files.</p>
-<p>&#8220;relative&#8221;    - triggers if target should be referenced relative                             path. If &#8220;True&#8221; relative path will be determined                             from current working directory, if a path or                             Handler object is provided this location will be                             used as context to determine relative path, if                             &#8220;Self&#8221; is provided target location will be used                             as context and if &#8220;False&#8221; (default) path will be                             referenced absolute.</p>
-<p>&#8220;target_path&#8221; - this method is only needed if relative is setted                             to &#8220;Self&#8221;.</p>
+<p><strong>label</strong>       - Label for better distinction with other                               text-based files.</p>
+<p><strong>relative</strong>    - triggers if target should be referenced                               relative path. If &#8220;True&#8221; relative path will be                               determined from current working directory, if a                               path or Handler object is provided this                               location will be used as context to determine                               relative path, if &#8220;Self&#8221; is provided target                               location will be used as context and if &#8220;False&#8221;                               (default) path will be referenced absolute.</p>
+<p><strong>target_path</strong> - this method is only needed if relative is                               setted to &#8220;Self&#8221;.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Handler</span><span class="p">()</span><span class="o">.</span><span class="n">portable_link_content</span> 
 <span class="go">&#39;...portable...&#39;</span>
@@ -1020,7 +1020,7 @@
 <dt id="boostNode.extension.file.Handler.get_portable_link_pattern">
 <em class="property">static </em><tt class="descname">get_portable_link_pattern</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.get_portable_link_pattern" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines the portable link file content pattern. With the file             independent placeholder &#8220;executable_path&#8221; replaced.</p>
-<p>&#8220;force_windows_behavior&#8221; - If set to &#8220;True&#8221; this method will                                        force windows behavior on none windows                                        operating systems.</p>
+<p><strong>force_windows_behavior</strong> - If set to &#8220;True&#8221; this method will                                          force windows behavior on none                                          windows operating systems.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Handler</span><span class="p">()</span><span class="o">.</span><span class="n">portable_link_pattern</span> 
 <span class="go">&#39;...portable ...&#39;</span>
@@ -1066,7 +1066,7 @@
 <dt id="boostNode.extension.file.Handler.get_relative_path">
 <em class="property">static </em><tt class="descname">get_relative_path</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.get_relative_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the relative path of current &#8220;Handler&#8221; object depending             on the current location.</p>
-<p>&#8220;context&#8221; - If provided the relative path will be determined                         relative to this context. If nothing or &#8220;None&#8221; is                         given current directory will be used.</p>
+<p><strong>context</strong> - If provided the relative path will be determined                           relative to this context. If nothing or &#8220;None&#8221; is                           given current directory will be used.</p>
 <p>Additional arguments or keywords will be forwarded to             &#8220;os.path.relpath()&#8221;.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Handler</span><span class="p">(</span>
@@ -1111,8 +1111,8 @@
 <dt id="boostNode.extension.file.Handler.get_size">
 <em class="property">static </em><tt class="descname">get_size</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.get_size" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates the used space for this object by the first request of             the property &#8220;size&#8221;. If the current handler points to none             existing file on file system zero will be returned. This method             has the additionally all parameters as             &#8220;self.convert_size_format()&#8221;.</p>
-<p>&#8220;limit&#8221;       - Break and return current calculated size if limit                             is reached or doesn&#8217;t if limit is 0. Limit is                             interpreted in bytes.</p>
-<p>&#8220;follow_link&#8221; - Indicates weather to walk into links to aggregate                             size.</p>
+<p><strong>limit</strong>       - Break and return current calculated size if                               limit is reached or doesn&#8217;t if limit is 0.                               Limit is interpreted in bytes.</p>
+<p><strong>follow_link</strong> - Indicates weather to walk into links to                               aggregate size.</p>
 <p>Each additional argument or keyword will be forwarded to the             &#8220;self.convert_size_format()&#8221; method.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">boostNode.extension.system</span> <span class="kn">import</span> <span class="n">Platform</span>
@@ -1283,7 +1283,7 @@
 <dt id="boostNode.extension.file.Handler.is_directory">
 <em class="property">static </em><tt class="descname">is_directory</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.is_directory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implements the pythons native &#8220;os.path.isdir()&#8221; method in an             object oriented way and adds the &#8220;link&#8221; parameter.</p>
-<p>&#8220;link&#8221; - triggers if symbolic links to directories also evaluates                      to &#8220;True&#8221;.</p>
+<p><strong>link</strong> - triggers if symbolic links to directories also                        evaluates to &#8220;True&#8221;.</p>
 <p>Returns &#8220;True&#8221; if path is an existing directory.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Handler</span><span class="p">()</span><span class="o">.</span><span class="n">is_directory</span><span class="p">()</span>
@@ -1337,7 +1337,7 @@
 <dt id="boostNode.extension.file.Handler.is_equivalent">
 <em class="property">static </em><tt class="descname">is_equivalent</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.is_equivalent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns &#8220;True&#8221; if given file object contains likewise content as             current file object.</p>
-<p>&#8220;other&#8221; - The file object to compare.</p>
+<p><strong>other</strong> - The file object to compare.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span> <span class="o">=</span> <span class="n">Handler</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;is_equivalent&#39;</span><span class="p">,</span>
@@ -1386,7 +1386,7 @@
 <dt id="boostNode.extension.file.Handler.is_file">
 <em class="property">static </em><tt class="descname">is_file</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.is_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implements the pythons native &#8220;os.path.isfile()&#8221; method in an             object oriented way. And adds the &#8220;link&#8221; parameter.</p>
-<p>&#8220;link&#8221; - triggers if symbolic links also evaluates to &#8220;True&#8221;.</p>
+<p><strong>link</strong> - triggers if symbolic links also evaluates to &#8220;True&#8221;.</p>
 <p>Returns &#8220;True&#8221; if path is an existing regular file.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Handler</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="n">__file_path__</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span>
@@ -1480,7 +1480,7 @@
 <dt id="boostNode.extension.file.Handler.is_referenced_via_absolute_path">
 <em class="property">static </em><tt class="descname">is_referenced_via_absolute_path</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.is_referenced_via_absolute_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines if the given path is an absolute one.</p>
-<p>&#8220;location&#8221; - is path or &#8220;Handler&#8221; object pointing to target                          destination.</p>
+<p><strong>location</strong> - is path or &#8220;Handler&#8221; object pointing to target                            destination.</p>
 <p>Returns &#8220;False&#8221; if the given path is a relative one or &#8220;True&#8221;             otherwise.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Handler</span><span class="p">()</span><span class="o">.</span><span class="n">is_referenced_via_absolute_path</span><span class="p">(</span>
@@ -1534,7 +1534,7 @@
 <dt id="boostNode.extension.file.Handler.is_symbolic_link">
 <em class="property">static </em><tt class="descname">is_symbolic_link</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.is_symbolic_link" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implements the pythons native &#8220;os.path.islink()&#8221; method in an             object oriented way and adds the &#8220;portable_link&#8221; parameter.</p>
-<p>&#8220;portable_link&#8221; - triggers if portable links also evaluates to                               &#8220;True&#8221;.</p>
+<p><strong>portable_link</strong> - triggers if portable links also evaluates to                                 &#8220;True&#8221;.</p>
 <p>Returns &#8220;True&#8221; if path refers to a directory entry that is a link             file. Always &#8220;False&#8221; for symbolic links if they are not             supported.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">boostNode.extension.system</span> <span class="kn">import</span> <span class="n">Platform</span>
@@ -1585,13 +1585,10 @@
 <dt id="boostNode.extension.file.Handler.iterate_directory">
 <em class="property">static </em><tt class="descname">iterate_directory</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.iterate_directory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Apply a given function or method to the current directory path.             If the optional parameter &#8220;recursive&#8221; is set to &#8220;True&#8221; the given             function is applied to to all subdirectories of the current path.             If the given parameter &#8220;function&#8221; is a string, a new instance of             &#8220;Directory&#8221; will be created for each object. If &#8220;function&#8221;             represents a local method the current scope will be accessible in             the given method.</p>
-<p>&#8220;function&#8221;          - If is a string, a new instance is created                                   otherwise not.</p>
-<p>&#8220;recursive&#8221;         - Indicates weather iteration should be                                   recursive.</p>
-<p>&#8220;recursive_in_link&#8221; - Indicates weather links should be followed.</p>
-<dl class="docutils">
-<dt>&#8220;deep_first&#8221;        - Indicates weather breath first or deep                                   first recursive tree traversal should be</dt>
-<dd>used.</dd>
-</dl>
+<p><strong>function</strong>          - If is a string, a new instance is created                                     otherwise not.</p>
+<p><strong>recursive</strong>         - Indicates weather iteration should be                                     recursive.</p>
+<p><strong>recursive_in_link</strong> - Indicates weather links should be followed.</p>
+<p><strong>deep_first</strong>        - Indicates weather breath first or deep                                     first recursive tree traversal should be                                     used.</p>
 <p>Additional arguments of keywords will be forwarded to given             function.</p>
 <p>Returns &#8220;False&#8221; if any call of &#8220;function&#8221; returns &#8220;False&#8221; or             current thread was terminated and &#8220;True&#8221; otherwise.</p>
 <p>If function call returns &#8220;False&#8221; further iterations in current             dimension will be stopped. If function&#8217;s return value is &#8220;None&#8221;,             current file object is a directory and recursion is enabled the             iteration will not enter current directory.</p>
@@ -1729,8 +1726,8 @@
 <em class="property">static </em><tt class="descname">make_directory</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.make_directory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implements the pythons native &#8220;os.mkdir()&#8221; method in an object             oriented way.</p>
 <p>Create a directory named path with numeric mode. The default mode             is &#8220;700&#8221; (octal). If the directory already exists,             &#8220;builtins.OSError&#8221; is raised.</p>
-<p>&#8220;right&#8221; - is new the right for the current object&#8217;s path location.</p>
-<p>&#8220;octal&#8221; - Indicates weather given right should be interpreted as                       octal number.</p>
+<p><strong>right</strong> - is new the right for the current object&#8217;s path                         location.</p>
+<p><strong>octal</strong> - Indicates weather given right should be interpreted                         as octal number.</p>
 <p>Additional arguments or keywords are forwarded to &#8220;os.mkdir()&#8221;.</p>
 <p>Returns &#8220;True&#8221; if the creation process was successful or &#8220;False&#8221;             otherwise.</p>
 <p>Examples:</p>
@@ -1758,7 +1755,7 @@
 <dt id="boostNode.extension.file.Handler.make_hardlink">
 <em class="property">static </em><tt class="descname">make_hardlink</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.make_hardlink" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implements the pythons native &#8220;os.link()&#8221; method in an object             oriented way. The optional parameter &#8220;force&#8221; is added.</p>
-<p>&#8220;force&#8221; - Indicates if hard links with not existing referenced                       files should be made. If target exists it will be                       overwritten if set to &#8220;True&#8221;.</p>
+<p><strong>force</strong> - Indicates if hard links with not existing referenced                         files should be made. If target exists it will be                         overwritten if set to &#8220;True&#8221;.</p>
 <p>Returns &#8220;True&#8221; if creation was successful and &#8220;False&#8221; otherwise.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">boostNode.extension.system</span> <span class="kn">import</span> <span class="n">Platform</span>
@@ -1783,7 +1780,7 @@
 <dt id="boostNode.extension.file.Handler.make_new_directory">
 <em class="property">static </em><tt class="descname">make_new_directory</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.make_new_directory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Makes a new directory in each case. E.g. if current directory             name already exists. The given wrapper pattern is used as long             resulting name is unique. The handler which creates the folder             will be given back.</p>
-<p>&#8220;wrapper_pattern&#8221; - A template describing how the current object                                 should be renamed if current file object                                 already exists. The template has the current                                 file name as placeholder (usable with                                 {file_name}).</p>
+<p><strong>wrapper_pattern</strong> - A template describing how the current                                   object should be renamed if current file                                   object already exists. The template has the                                   current file name as placeholder (usable                                   with {file_name}).</p>
 <p>Returns the new created file object.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span> <span class="o">=</span> <span class="n">Handler</span><span class="p">(</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;make_new_directory&#39;</span><span class="p">)</span>
@@ -1813,9 +1810,9 @@
 <dt id="boostNode.extension.file.Handler.make_portable_link">
 <em class="property">static </em><tt class="descname">make_portable_link</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.make_portable_link" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a portable link on the current location referencing on             the given path (&#8220;target&#8221;).</p>
-<p>&#8220;target&#8221; - A path or file object interpreted as target location.</p>
-<p>&#8220;force&#8221;  - Means to trigger if a file on the target location                        should be overwritten.</p>
-<p>&#8220;label&#8221;  - Is a useful label to distinguish portable linked files                        from other text-based files. Default is setted to the                        current class description.</p>
+<p><strong>target</strong> - A path or file object interpreted as target location.</p>
+<p><strong>force</strong>  - Means to trigger if a file on the target location                          should be overwritten.</p>
+<p><strong>label</strong>  - Is a useful label to distinguish portable linked                          files from other text-based files. Default is setted                          to the current class description.</p>
 <p>Additional arguments and keywords are forwarded to             &#8220;self.get_portable_link_content()&#8221;.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">target</span> <span class="o">=</span> <span class="n">Handler</span><span class="p">(</span>
@@ -1853,8 +1850,8 @@
 <dd><p>Implements the pythons native &#8220;os.symlink()&#8221; method in an object             oriented way. The optional parameter &#8220;force&#8221; is added.</p>
 <p>Create a symbolic link pointing to current location named by             given &#8220;target&#8221; variable. On windows, symbolic link version takes             an additional optional parameter, target_is_directory, which             defaults to &#8220;False&#8221;. On windows, a symbolic link represents a             file or a directory, and does not morph to the target             dynamically. For this reason, when creating a symbolic link on             Windows, if the target is not already present, the symbolic link             will default to being a file symbolic link. If             &#8220;target_is_directory&#8221; is set to &#8220;True&#8221;, the symbolic link will be             created as a directory symbolic link. This parameter is ignored             if the target exists (and the symbolic link is created with the             same type as the target). Symbolic link support was introduced in             Windows 6.0 (Vista). The native python &#8220;os.symlink()&#8221; method will             raise a &#8220;builtins.NotImplementedError&#8221; on Windows versions             earlier than 6.0.</p>
 <p>Note: The &#8220;CreateSymbolicLinkPrivilege&#8221; is required in order to             successfully create symbolic links. This privilege is not             typically granted to regular users but is available to accounts             which can escalate privileges to the administrator level. Either             obtaining the privilege or running your application as an             administrator are ways to successfully create symbolic links.             &#8220;builtins.OSError&#8221; is raised when the function is called by an             unprivileged user.</p>
-<p>&#8220;force&#8221;    - triggers if symbolic links with not existing                          referenced files should be made. If target exists it                          will be overwritten if set to &#8220;True&#8221;.</p>
-<p>&#8220;relative&#8221; - triggers if target should be referenced via relative                          path. If &#8220;True&#8221; relative path will be determined                          from current working directory, if a path or Handler                          object is provided this location will be used as                          context to determine relative path, if &#8220;Self&#8221; is                          provided target location will be used as context and                          if &#8220;False&#8221; (default) path will be referenced absolute.</p>
+<p><strong>force</strong>    - triggers if symbolic links with not existing                            referenced files should be made. If target exists                            it will be overwritten if set to &#8220;True&#8221;.</p>
+<p><strong>relative</strong> - triggers if target should be referenced via                            relative path. If &#8220;True&#8221; relative path will be                            determined from current working directory, if a                            path or Handler object is provided this location                            will be used as context to determine relative                            path, if &#8220;Self&#8221; is provided target location will                            be used as context and if &#8220;False&#8221; (default) path                            will be referenced absolute.</p>
 <p>Returns &#8220;True&#8221; if creation was successful and &#8220;False&#8221; otherwise.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">boostNode.extension.system</span> <span class="kn">import</span> <span class="n">Platform</span>
@@ -1895,7 +1892,7 @@
 <em class="property">static </em><tt class="descname">move</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.move" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implements the pythons native &#8220;shutil.move()&#8221; method in an object             oriented way.</p>
 <p>Recursively move a file or directory to another location. If the             destination is on the current file system, then simply use             &#8220;rename&#8221;. Otherwise, copy current path (with &#8220;self.copy()&#8221;             method) to the target and then remove current path.</p>
-<p>&#8220;target&#8221; - Path or &#8220;Handler&#8221; object pointing to target destination.</p>
+<p><strong>target</strong> - Path or &#8220;Handler&#8221; object pointing to target                          destination.</p>
 <p>Additional arguments or keywords a forwarded to &#8220;shutil.move()&#8221;.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span> <span class="o">=</span> <span class="n">Handler</span><span class="p">(</span>
@@ -1931,7 +1928,7 @@
 <dt id="boostNode.extension.file.Handler.read_portable_link">
 <em class="property">static </em><tt class="descname">read_portable_link</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.read_portable_link" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reads the referenced path of a given portable link file.</p>
-<p>&#8220;as_object&#8221; - Indicates weather the resulting file should be                           returned as string or file handler.</p>
+<p><strong>as_object</strong> - Indicates weather the resulting file should be                             returned as string or file handler.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">target</span> <span class="o">=</span> <span class="n">Handler</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">location</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;read_portable_link&#39;</span><span class="p">)</span>
@@ -2120,7 +2117,7 @@
 <em class="property">static </em><tt class="descname">remove_file</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.remove_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implements the pythons native &#8220;os.remove()&#8221; method in an object             oriented way.</p>
 <p>Remove (delete) the file path. This is the same function as             pythons native &#8220;os.remove()&#8221;; the unlink name is its traditional             Unix name.</p>
-<p>&#8220;force_windows_behavior&#8221; - Indicates weather windows behavior                                        should be used on other operating                                        systems than windows.</p>
+<p><strong>force_windows_behavior</strong> - Indicates weather windows behavior                                          should be used on other operating                                          systems than windows.</p>
 <p>Additional arguments or keywords a forwarded to &#8220;os.remove()&#8221;.</p>
 <p>Returns &#8220;True&#8221; if file was deleted successfully and &#8220;False&#8221;             otherwise.</p>
 <p>Examples:</p>
@@ -2183,7 +2180,7 @@
 <dt id="boostNode.extension.file.Handler.set_basename">
 <em class="property">static </em><tt class="descname">set_basename</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.set_basename" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function could be understand as wrapper method for             &#8220;set_name()&#8221;.</p>
-<p>&#8220;basename&#8221; - New basename.</p>
+<p><strong>basename</strong> - New basename.</p>
 <p>Additional arguments and keywords are forwarded to             &#8220;self.set_name()&#8221;.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span> <span class="o">=</span> <span class="n">Handler</span><span class="p">(</span>
@@ -2218,8 +2215,8 @@
 <dt id="boostNode.extension.file.Handler.set_content">
 <em class="property">static </em><tt class="descname">set_content</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.set_content" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the file content of a text-file. Accepts all arguments             python&#8217;s native &#8220;builtins.open()&#8221; or &#8220;codecs.open()&#8221; accepts. If             current file doesn&#8217;t exists an empty string will be returned.             Note that this method shouldn&#8217;t be used for binary files. If             current handler points to an directory containing files will be             returned as list.</p>
-<p>&#8220;content&#8221; - Content to write in current file.</p>
-<p>&#8220;mode&#8221;    - File mode used for writing in file.</p>
+<p><strong>content</strong> - Content to write in current file.</p>
+<p><strong>mode</strong>    - File mode used for writing in file.</p>
 <p>Additional arguments and keywords are forwarded to             &#8220;builtins.open()&#8221;.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span> <span class="o">=</span> <span class="n">Handler</span><span class="p">(</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;set_content_file&#39;</span><span class="p">)</span>
@@ -2294,7 +2291,7 @@
 <dt id="boostNode.extension.file.Handler.set_directory_path">
 <em class="property">static </em><tt class="descname">set_directory_path</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.set_directory_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function could be understand as wrapper method for &#8220;move()&#8221;.</p>
-<p>&#8220;location&#8221; - New directory location for current file object.</p>
+<p><strong>location</strong> - New directory location for current file object.</p>
 <p>Additional arguments and keywords are forwarded to &#8220;self.move()&#8221;.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span> <span class="o">=</span> <span class="n">Handler</span><span class="p">(</span>
@@ -2343,7 +2340,7 @@
 <dt id="boostNode.extension.file.Handler.set_encoding">
 <em class="property">static </em><tt class="descname">set_encoding</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.set_encoding" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set encoding for a text-base file if current instance refers to             one. This method serves as wrapper method for &#8220;set_content()&#8221;.</p>
-<p>&#8220;encoding&#8221; - Encoding description.</p>
+<p><strong>encoding</strong> - Encoding description.</p>
 <p>Additional arguments and keywords will be forwarded to             &#8220;self.set_content()&#8221;.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">test_file</span> <span class="o">=</span> <span class="n">Handler</span><span class="p">(</span>
@@ -2364,7 +2361,7 @@
 <dt id="boostNode.extension.file.Handler.set_extension">
 <em class="property">static </em><tt class="descname">set_extension</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.set_extension" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function could be understand as wrapper method for             &#8220;set_name()&#8221;.</p>
-<p>&#8220;extension&#8221; - New file extension.</p>
+<p><strong>extension</strong> - New file extension.</p>
 <p>Additional arguments and keywords are forwarded to &#8220;self.name()&#8221;.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span> <span class="o">=</span> <span class="n">Handler</span><span class="p">(</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;set_extension.ext&#39;</span><span class="p">)</span>
@@ -2396,7 +2393,7 @@
 <dt id="boostNode.extension.file.Handler.set_name">
 <em class="property">static </em><tt class="descname">set_name</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.set_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function could be understand as wrapper method for &#8220;move()&#8221;.</p>
-<p>&#8220;name&#8221; - New name for current file object.</p>
+<p><strong>name</strong> - New name for current file object.</p>
 <p>Additional arguments and keywords are forwarded to &#8220;self.move()&#8221;.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span> <span class="o">=</span> <span class="n">Handler</span><span class="p">(</span>
@@ -2463,8 +2460,8 @@
 <dt id="boostNode.extension.file.Handler.set_root">
 <em class="property">static </em><tt class="descname">set_root</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.set_root" title="Permalink to this definition">¶</a></dt>
 <dd><p>Normalizes root path.</p>
-<p>&#8220;location&#8221;       - Location to set for new sandbox path.</p>
-<p>&#8220;make_directory&#8221; - If set to &#8220;True&#8221; given location will be                                created if not exists.</p>
+<p><strong>location</strong>       - Location to set for new sandbox path.</p>
+<p><strong>make_directory</strong> - If set to &#8220;True&#8221; given location will be                                  created if not exists.</p>
 <p>Returns current class.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">root_backup</span> <span class="o">=</span> <span class="n">Handler</span><span class="o">.</span><span class="n">get_root</span><span class="p">()</span>

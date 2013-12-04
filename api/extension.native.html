@@ -243,7 +243,7 @@
 
 <dl class="classmethod">
 <dt id="boostNode.extension.native.Module.get_context_path">
-<em class="property">classmethod </em><tt class="descname">get_context_path</tt><big>(</big><em>path=None</em>, <em>frame=&lt;frame object at 0x2d7d720&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_context_path" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><tt class="descname">get_context_path</tt><big>(</big><em>path=None</em>, <em>frame=&lt;frame object at 0x2d0ab00&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_context_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines the package and module level context path to a given             context or file.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Module</span><span class="o">.</span><span class="n">get_context_path</span><span class="p">(</span>
@@ -630,8 +630,8 @@
 <dt id="boostNode.extension.native.String.get_escaping_replace_dictionary">
 <em class="property">static </em><tt class="descname">get_escaping_replace_dictionary</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.get_escaping_replace_dictionary" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a replacement dictionary form a given iterable. Every             element will be associated with its escaped version. This method             is useful for using before give &#8220;self.replace()&#8221; a dictionary.</p>
-<p>&#8220;sequence&#8221;        - is an iterable with elements to be escaped.</p>
-<p>&#8220;escape_sequence&#8221; - is an escape sequence for each element from                                 &#8220;sequence&#8221;.</p>
+<p><strong>sequence</strong>        - is an iterable with elements to be escaped.</p>
+<p><strong>escape_sequence</strong> - is an escape sequence for each element from                                   &#8220;sequence&#8221;.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="o">.</span><span class="n">get_escaping_replace_dictionary</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="p">(</span><span class="s">&#39;&quot;&#39;</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">)</span>
