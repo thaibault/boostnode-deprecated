@@ -67,32 +67,33 @@ class Replace(Class, Runnable):
         NOTE: That alternate version in one line regular expression pattern \
         could be empty.
 
-        "location"                 - Location to execute macro processing.
+        **location**                 - Location to execute macro processing.
 
-        "skip_self_file"           - If setted to "True" and this script file \
-                                     file is part of "location" this file \
-                                     will be ignored.
+        **skip_self_file**           - If setted to "True" and this script \
+                                       file is part of "location" this file \
+                                       will be ignored.
 
-        "extension"                - File extensions to handle. Others will \
-                                     be excluded.
+        **extension**                - File extensions to handle. Others will \
+                                       be excluded.
 
-        "first_line_regex_pattern" - Regular expression pattern to determine \
-                                     current version of given text file.
+        **first_line_regex_pattern** - Regular expression pattern to \
+                                       determine current version of given \
+                                       text file.
 
-        "one_line_regex_pattern"   - One line regular expression syntax to \
-                                     replace.
+        **one_line_regex_pattern**   - One line regular expression syntax to \
+                                       replace.
 
-        "more_line_regex_pattern"  - More line regular expression syntax to \
-                                     replace.
+        **more_line_regex_pattern**  - More line regular expression syntax to \
+                                       replace.
 
-        "encoding"                 - Encoding to use.
+        **encoding**                 - Encoding to use.
 
-        "dry"                      - Indicates weather a dry run with \
-                                     producing log output should be done.
+        **dry**                      - Indicates weather a dry run with \
+                                       producing log output should be done.
 
-        "_exclude_locations"       - Locations to exclude.
+        **_exclude_locations**       - Locations to exclude.
 
-        "_new_version"             - Version description to convert to.
+        **_new_version**             - Version description to convert to.
 
         Examples:
 
@@ -266,8 +267,8 @@ class Replace(Class, Runnable):
             Checks if an explicit new version was given or a useful should be \
             determined.
 
-            "version" - New version of current text file. Could be \
-                        "__determine_useful__" if it should be guessed.
+            **version** - New version of current text file. Could be \
+                          "__determine_useful__" if it should be guessed.
 
             Returns new version.
 
@@ -319,7 +320,7 @@ class Replace(Class, Runnable):
             Converts all paths setted to "_exclude_locations" via string to \
             high level file objects.
 
-            "paths" - A list of paths to exclude from processing the macro.
+            **paths** - A list of paths to exclude from processing the macro.
 
             Returns a list of file objects to ignore.
 
@@ -675,8 +676,8 @@ class Replace(Class, Runnable):
             its text based files between different versions of marked \
             code-snippets.
 
-            "directory" - the directory location with text-files which should \
-                          be converted.
+            **directory** - the directory location with text-files which \
+                            should be converted.
 
             Examples:
 
@@ -714,7 +715,7 @@ class Replace(Class, Runnable):
             Opens a given file and parses its content and convert it through \
             different versions of code snippets.
 
-            "file" - the file to be converted.
+            **file** - the file to be converted.
 
             Examples:
 
@@ -837,9 +838,9 @@ class Replace(Class, Runnable):
             Replaces various numbers of code lines with its corresponding \
             code line in another version.
 
-            "match" - is a regular expression match object with all needed \
-                      infos about the current code snippet and its \
-                      corresponding.
+            **match** - is a regular expression match object with all needed \
+                        infos about the current code snippet and its \
+                        corresponding.
         '''
         if match.group('alternate_version') == self._new_version:
             '''
@@ -879,9 +880,9 @@ class Replace(Class, Runnable):
             Replaces one code line with its corresponding code line in \
             another version.
 
-            "match" - is a regular expression match object with all needed \
-                      infos about the current code snippet and its \
-                      corresponding alternative.
+            **match** - is a regular expression match object with all needed \
+                        infos about the current code snippet and its \
+                        corresponding alternative.
         '''
         if match.group('alternate_version') == self._new_version:
             current_text = match.group('current_text')

@@ -65,11 +65,11 @@ class Run(Class, Runnable):
         Determines a code file to run and runs them in its own thread by \
         piping all outputs through the command line interface.
 
-        "code_file_path"           - A given code file handler or path which \
-                                     should be run.
+        **code_file_path**           - A given code file handler or path \
+                                       which should be run.
 
-        "default_command_sequence" - A default command sequence which should \
-                                     be executed in given order.
+        **default_command_sequence** - A default command sequence which \
+                                       should be executed in given order.
     '''
 
     # region properties

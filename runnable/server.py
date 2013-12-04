@@ -372,110 +372,113 @@ class Web(Class, Runnable):
         Provides a small platform independent web server designed for easily \
         serve a client-server structure.
 
-        "root"                                - Defines the root directory to \
-                                                be served via web.
+        **root**                                - Defines the root directory \
+                                                  to be served via web.
 
-        "host_name"                           - Defines the current host \
-                                                name. Necessary for https \
-                                                support.
+        **host_name**                           - Defines the current host \
+                                                  name. Necessary for https \
+                                                  support.
 
-        "port"                                - The port to listen for \
-                                                incoming requests. If "0" \
-                                                given a free port will be \
-                                                determined automatically.
+        **port**                                - The port to listen for \
+                                                  incoming requests. If "0" \
+                                                  given a free port will be \
+                                                  determined automatically.
 
-        "default"                             - Defines a default static \
-                                                file, python module or \
-                                                dynamic executable file.
+        **default**                             - Defines a default static \
+                                                  file, python module or \
+                                                  dynamic executable file.
 
-        "public_key_file"                     - Key file to support a https \
-                                                connection.
+        **public_key_file**                     - Key file to support a https \
+                                                  connection.
 
-        "stop_order"                          - Standard in command to stop \
-                                                server.
+        **stop_order**                          - Standard in command to stop \
+                                                  server.
 
-        "encoding"                            - Encoding to use for incoming \
-                                                requests and outgoing data.
+        **encoding**                            - Encoding to use for \
+                                                  incoming requests and \
+                                                  outgoing data.
 
-        "request_whitelist"                   - A whitelist for requests. All \
-                                                requests which doesn't match \
-                                                to one of these will be \
-                                                answered with an 404 error \
-                                                code.
+        **request_whitelist**                   - A whitelist for requests. \
+                                                  All requests which doesn't \
+                                                  match to one of these will \
+                                                  be answered with an 404 \
+                                                  error code.
 
-        "request_blacklist"                   - A blacklist for requests to \
-                                                answer with a 404 error code.
+        **request_blacklist**                   - A blacklist for requests to \
+                                                  answer with a 404 error code.
 
-        "same_thread_request_whitelist"       - Requests which matches one \
-                                                one of theses patterns should \
-                                                be run in same thread as the \
-                                                server itself. This is \
-                                                usually necessary if you plan \
-                                                to write in inter thread \
-                                                shared data.
+        **same_thread_request_whitelist**       - Requests which matches one \
+                                                  one of theses patterns \
+                                                  should be run in same \
+                                                  thread as the server \
+                                                  itself. This is usually \
+                                                  necessary if you plan to \
+                                                  write in inter thread \
+                                                  shared data.
 
-        "static_mime_type_pattern"            - Defines which mime types \
-                                                should be interpreted as \
-                                                static.
+        **static_mime_type_pattern**            - Defines which mime types \
+                                                  should be interpreted as \
+                                                  static.
 
-        "dynamic_mime_type_pattern"           - Defines which mime types \
-                                                should be interpreted as \
-                                                dynamic.
+        **dynamic_mime_type_pattern**           - Defines which mime types \
+                                                  should be interpreted as \
+                                                  dynamic.
 
-        "compressible_mime_type_pattern"      - Defines which mime types \
-                                                could be returned in a \
-                                                compressed way.
+        **compressible_mime_type_pattern**      - Defines which mime types \
+                                                  could be returned in a \
+                                                  compressed way.
 
-        "default_file_name_pattern"           - Defines file name pattern \
-                                                which should be returned \
-                                                if no explicit file was \
-                                                requested.
+        **default_file_name_pattern**           - Defines file name pattern \
+                                                  which should be returned \
+                                                  if no explicit file was \
+                                                  requested.
 
-        "default_module_names"                - Defines which module names \
-                                                should be ran if no explicit \
-                                                module was requested.
+        **default_module_names**                - Defines which module names \
+                                                  should be ran if no \
+                                                  explicit module was \
+                                                  requested.
 
-        "authentication"                      - Enables basic http \
-                                                authentication.
+        **authentication**                      - Enables basic http \
+                                                  authentication.
 
-        "authentication_file_name"            - Defines file names for saving \
-                                                login data.
+        **authentication_file_name**            - Defines file names for \
+                                                  saving login data.
 
-        "authentication_file_content_pattern" - Defines how to parse \
-                                                authentication files.
+        **authentication_file_content_pattern** - Defines how to parse \
+                                                  authentication files.
 
-        "authentication_handler"              - A boolean function which \
-                                                decides by given request \
-                                                string and password if \
-                                                requested user is \
-                                                authenticated.
+        **authentication_handler**              - A boolean function which \
+                                                  decides by given request \
+                                                  string and password if \
+                                                  requested user is \
+                                                  authenticated.
 
-        "module_loading"                      - Enables or disables running \
-                                                python modules which are \
-                                                requested.
+        **module_loading**                      - Enables or disables running \
+                                                  python modules which are \
+                                                  requested.
 
-        "maximum_number_of_processes"         - Maximum number of used \
-                                                processor cores to use. if \
-                                                "0" is provided a useful \
-                                                number will be determined.
+        **maximum_number_of_processes**         - Maximum number of used \
+                                                  processor cores to use. if \
+                                                  "0" is provided a useful \
+                                                  number will be determined.
 
-        "shared_data"                         - Data which will be \
-                                                available in every request \
-                                                handler instance and \
-                                                accessible for every common \
-                                                gateway interface script.
+        **shared_data**                         - Data which will be \
+                                                  available in every request \
+                                                  handler instance and \
+                                                  accessible for every common \
+                                                  gateway interface script.
 
-        "request_parameter_delimiter"         - Delimiter to distinguish \
-                                                requested file from given \
-                                                parameter.
+        **request_parameter_delimiter**         - Delimiter to distinguish \
+                                                  requested file from given \
+                                                  parameter.
 
-        "file_size_stream_threshold_in_byte"  - Threshold which will force \
-                                                the server to stream data.
+        **file_size_stream_threshold_in_byte**  - Threshold which will force \
+                                                  the server to stream data.
 
-        "directory_listing"                   - Indicates weather the server \
-                                                server generates a directory \
-                                                listing for requested \
-                                                directories.
+        **directory_listing**                   - Indicates weather the \
+                                                  server generates a \
+                                                  directory listing for \
+                                                  requested directories.
 
         Examples:
 
