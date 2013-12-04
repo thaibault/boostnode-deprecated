@@ -62,16 +62,16 @@
 <em class="property">class </em><tt class="descclassname">boostNode.runnable.macro.</tt><tt class="descname">Replace</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.macro.Replace" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse source code and replace version depended code snippets with the         correct given version code snippets.</p>
 <p>NOTE: &#8220;(?s...)&#8221; is equivalent to regular expression flag &#8220;re.DOTALL&#8221;.         NOTE: That alternate version in one line regular expression pattern         could be empty.</p>
-<p>&#8220;location&#8221;                 - Location to execute macro processing.</p>
-<p>&#8220;skip_self_file&#8221;           - If setted to &#8220;True&#8221; and this script file                                      file is part of &#8220;location&#8221; this file                                      will be ignored.</p>
-<p>&#8220;extension&#8221;                - File extensions to handle. Others will                                      be excluded.</p>
-<p>&#8220;first_line_regex_pattern&#8221; - Regular expression pattern to determine                                      current version of given text file.</p>
-<p>&#8220;one_line_regex_pattern&#8221;   - One line regular expression syntax to                                      replace.</p>
-<p>&#8220;more_line_regex_pattern&#8221;  - More line regular expression syntax to                                      replace.</p>
-<p>&#8220;encoding&#8221;                 - Encoding to use.</p>
-<p>&#8220;dry&#8221;                      - Indicates weather a dry run with                                      producing log output should be done.</p>
-<p>&#8220;_exclude_locations&#8221;       - Locations to exclude.</p>
-<p>&#8220;_new_version&#8221;             - Version description to convert to.</p>
+<p><strong>location</strong>                 - Location to execute macro processing.</p>
+<p><strong>skip_self_file</strong>           - If setted to &#8220;True&#8221; and this script                                        file is part of &#8220;location&#8221; this file                                        will be ignored.</p>
+<p><strong>extension</strong>                - File extensions to handle. Others will                                        be excluded.</p>
+<p><strong>first_line_regex_pattern</strong> - Regular expression pattern to                                        determine current version of given                                        text file.</p>
+<p><strong>one_line_regex_pattern</strong>   - One line regular expression syntax to                                        replace.</p>
+<p><strong>more_line_regex_pattern</strong>  - More line regular expression syntax to                                        replace.</p>
+<p><strong>encoding</strong>                 - Encoding to use.</p>
+<p><strong>dry</strong>                      - Indicates weather a dry run with                                        producing log output should be done.</p>
+<p><strong>_exclude_locations</strong>       - Locations to exclude.</p>
+<p><strong>_new_version</strong>             - Version description to convert to.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Replace</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">location</span><span class="o">=</span><span class="s">&#39;non_existing_file&#39;</span>
@@ -99,7 +99,7 @@
 <dt id="boostNode.runnable.macro.Replace.set_exclude_locations">
 <em class="property">static </em><tt class="descname">set_exclude_locations</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.macro.Replace.set_exclude_locations" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts all paths setted to &#8220;_exclude_locations&#8221; via string to             high level file objects.</p>
-<p>&#8220;paths&#8221; - A list of paths to exclude from processing the macro.</p>
+<p><strong>paths</strong> - A list of paths to exclude from processing the macro.</p>
 <p>Returns a list of file objects to ignore.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">replace</span> <span class="o">=</span> <span class="n">Replace</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="n">__file_path__</span><span class="p">)</span>
@@ -117,7 +117,7 @@
 <dt id="boostNode.runnable.macro.Replace.set_new_version">
 <em class="property">static </em><tt class="descname">set_new_version</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.macro.Replace.set_new_version" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if an explicit new version was given or a useful should be             determined.</p>
-<p>&#8220;version&#8221; - New version of current text file. Could be                         &#8220;__determine_useful__&#8221; if it should be guessed.</p>
+<p><strong>version</strong> - New version of current text file. Could be                           &#8220;__determine_useful__&#8221; if it should be guessed.</p>
 <p>Returns new version.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">replace</span> <span class="o">=</span> <span class="n">Replace</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="n">__file_path__</span><span class="p">)</span>
