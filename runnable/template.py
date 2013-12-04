@@ -77,63 +77,65 @@ class Parser(Class, Runnable):
         flag "re.DOTALL" and "re.MULTILINE". NOTE: This regular expression \
         patterns assumes that the delimiter has at least a length of two.
 
-        "template"                              - A template string, path to \
-                                                  template file or file \
-                                                  object pointing to a \
-                                                  template file.
+        **template**                              - A template string, path \
+                                                    to template file or file \
+                                                    object pointing to a \
+                                                    template file.
 
-        "string"                                - Indicates weather \
-                                                  "template" is a template \
-                                                  string or file path.
+        **string**                                - Indicates weather \
+                                                    "template" is a template \
+                                                    string or file path.
 
-        "file_encoding"                         - Encoding used for reading \
-                                                  template file and writing \
-                                                  rendered output.
+        **file_encoding**                         - Encoding used for reading \
+                                                    template file and writing \
+                                                    rendered output.
 
-        "placeholder_name_pattern"              - Regular expression pattern \
-                                                  to specify a placeholder \
-                                                  name format.
+        **placeholder_name_pattern**              - Regular expression \
+                                                    pattern to specify a \
+                                                    placeholder name format.
 
-        "command_line_placeholder_name_pattern" - Regular expression to \
-                                                  specify a placeholder name \
-                                                  given via command line \
-                                                  interface.
+        **command_line_placeholder_name_pattern** - Regular expression to \
+                                                    specify a placeholder \
+                                                    name given via command \
+                                                    line interface.
 
-        "command_line_placeholder_pattern"      - Regular expression pattern \
-                                                  to identify a placeholder \
-                                                  value tuple in command line \
-                                                  interface.
+        **command_line_placeholder_pattern**      - Regular expression \
+                                                    pattern to identify a \
+                                                    placeholder value tuple \
+                                                    in command line interface.
 
-        "placeholder_pattern"                   - Pattern to specify a \
-                                                  placeholder in template \
-                                                  string.
+        **placeholder_pattern**                   - Pattern to specify a \
+                                                    placeholder in template \
+                                                    string.
 
-        "template_pattern"                      - Regular expression to \
-                                                  identify each template \
-                                                  identify syntax.
+        **template_pattern**                      - Regular expression to \
+                                                    identify each template \
+                                                    identify syntax.
 
-        "native_template_pattern"               - Regular expression pattern \
-                                                  to used for pythons native \
-                                                  template engine.
+        **native_template_pattern**               - Regular expression \
+                                                    pattern to used for \
+                                                    pythons native template \
+                                                    engine.
 
-        "left_code_delimiter"                   - Left code delimiter to \
-                                                  identify a code starting \
-                                                  point of a code line.
+        **left_code_delimiter**                   - Left code delimiter to \
+                                                    identify a code starting \
+                                                    point of a code line.
 
-        "right_escaped"                         - Escape symbol to mask a \
-                                                  delimiter symbol.
+        **right_escaped**                         - Escape symbol to mask a \
+                                                    delimiter symbol.
 
-        "template_context_default_indent"       - Expected indention used for \
-                                                  for interpreting code blocks.
+        **template_context_default_indent**       - Expected indention used \
+                                                    for interpreting code \
+                                                    blocks.
 
-        "builtin_names"                         - A tuple of function and \
-                                                  variables available in \
-                                                  template engine.
+        **builtin_names**                         - A tuple of function and \
+                                                    variables available in \
+                                                    template engine.
 
-        "pretty_indent"                         - Indicates if we should \
-                                                  spend time on rendering \
-                                                  pretty indented code in \
-                                                  each case.
+        **pretty_indent**                         - Indicates if we should \
+                                                    spend time on rendering \
+                                                    pretty indented code in \
+                                                    each case.
 
         Examples:
 
@@ -645,7 +647,7 @@ class Parser(Class, Runnable):
             Substitutes every placeholder in template with a given \
             replacement string.
 
-            "replacement" - String to replace with every placeholder.
+            **replacement** - String to replace with every placeholder.
 
             Examples:
 
@@ -677,8 +679,8 @@ class Parser(Class, Runnable):
             Renders the template. Searches for python code snippets and \
             handles correct indenting. Wraps plain text with a print function.
 
-            "mapping" - A dictionary containing a mapping from placeholder \
-                        name to value.
+            **mapping** - A dictionary containing a mapping from placeholder \
+                          name to value.
 
             Additional keywords are used as additional mapping tuples.
 
@@ -1053,10 +1055,10 @@ class Parser(Class, Runnable):
         '''
             Load the given template into ram for rendering.
 
-            "template"  - the given template as file path or string.
+            **template**  - the given template as file path or string.
 
-            "is_string" - determines if the "template" should be interpreted \
-                          as string or file path.
+            **is_string** - determines if the "template" should be \
+                            interpreted as string or file path.
 
             Examples:
 
@@ -1852,7 +1854,7 @@ class Parser(Class, Runnable):
             Returns the right indent in code as string depending on the \
             current indention level and context.
 
-            "mode" - can have three different states. \
+            **mode** - can have three different states. \
                 passiv: This mode describes the ability to close or continue \
                         the current context by their level of indention. \
                 activ: Means a new code depending context is open. The \

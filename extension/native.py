@@ -492,10 +492,10 @@ class String(Object, builtins.str):
             element will be associated with its escaped version. This method \
             is useful for using before give "self.replace()" a dictionary.
 
-            "sequence"        - is an iterable with elements to be escaped.
+            **sequence**        - is an iterable with elements to be escaped.
 
-            "escape_sequence" - is an escape sequence for each element from \
-                                "sequence".
+            **escape_sequence** - is an escape sequence for each element from \
+                                  "sequence".
 
             Examples:
 

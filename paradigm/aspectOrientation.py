@@ -115,12 +115,14 @@ class FunctionDecorator(Class):
         '''
             Collects informations about wrapped method.
 
-            "method"   - The wrapped function.
-            "function" - If not "None" this contains the real function and
-                         "method" contains a special type of function (like
-                         "builtins.classmethod" or "builtins.staticmethod").
-                         In this case the method type influences the behavior
-                         during calling the real function.
+            **method**   - The wrapped function.
+
+            **function** - If not "None" this contains the real function and \
+                           "method" contains a special type of function (like \
+                           "builtins.classmethod" or \
+                           "builtins.staticmethod"). In this case the method \
+                           type influences the behavior during calling the \
+                           real function.
 
             Examples:
 
@@ -262,8 +264,9 @@ class FunctionDecorator(Class):
             Triggers when wrapped function should be graped from instance.
             Saves bounded object instance and class.
 
-            "object"       - Contains the function bounded instance.
-            "class_object" - Contains the function bounded class.
+            **object**       - Contains the function bounded instance.
+
+            **class_object** - Contains the function bounded class.
 
             Examples:
 
@@ -400,17 +403,17 @@ class JointPointHandler(Class):
         '''
             Saves function call properties.
 
-            "class_object" - function bounded class object
+            **class_object** - function bounded class object
 
-            "object"       - function bounded instance
+            **object**       - function bounded instance
 
-            "function"     - function to handle
+            **function**     - function to handle
 
-            "arguments"    - arguments which should be forwarded to given \
-                             function
+            **arguments**    - arguments which should be forwarded to given \
+                               function
 
-            "keywords"     - keywords which should be forwarded to given \
-                             function
+            **keywords**     - keywords which should be forwarded to given \
+                               function
 
             Examples:
 

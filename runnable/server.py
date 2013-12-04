@@ -1389,7 +1389,7 @@ class CGIHTTPRequestHandler(
             This method provides an easy way to split a http request string \
             into its components.
 
-            "url" - URL to parse.
+            **url** - URL to parse.
 
             Returns a tuple containing of the parse object and a dictionary \
             containing get parameter.
@@ -1490,7 +1490,7 @@ class CGIHTTPRequestHandler(
         '''
             Send the given error to client if no response code was sent yet.
 
-            "code" - Error code to send.
+            **code** - Error code to send.
         '''
         if not (self.response_sent or __test_mode__):
             self.send_response(code)
@@ -1555,12 +1555,13 @@ class CGIHTTPRequestHandler(
         '''
             Response a static file-request header.
 
-            "timestamp"              - Timestamp to use as last modified time.
+            **timestamp**              - Timestamp to use as last modified \
+                                         time.
 
-            "cache_control"          - Cache control header string.
+            **cache_control**          - Cache control header string.
 
-            "expire_time_in_seconds" - Additional time to current timestamp \
-                                       for expires header.
+            **expire_time_in_seconds** - Additional time to current timestamp \
+                                         for expires header.
         '''
         if not __test_mode__:
             self.send_header('Cache-Control', cache_control)
@@ -1580,11 +1581,11 @@ class CGIHTTPRequestHandler(
         '''
             Sends a content type header to client if not sent yet.
 
-            "mime_type"     - Mime type to send to client.
+            **mime_type**     - Mime type to send to client.
 
-            "encoding"      - Encoding description to send to client.
+            **encoding**      - Encoding description to send to client.
 
-            "response_code" - HTTP Response code to send.
+            **response_code** - HTTP Response code to send.
 
             Additional arguments and keywords will be forwarded to \
             "self.send_header()" method.
@@ -1618,13 +1619,13 @@ class CGIHTTPRequestHandler(
         '''
             Sends the content length header to client if not sent yet.
 
-            "size"           - Content length to send.
+            **size**           - Content length to send.
 
-            "dynamic_output" - Indicates weather output should be forced to \
-                               compressed because it is simply a computed \
-                               string.
+            **dynamic_output** - Indicates weather output should be forced to \
+                                 compressed because it is simply a computed \
+                                 string.
 
-            "encoding"       - Encoding to compress current output.
+            **encoding**       - Encoding to compress current output.
         '''
 ## python3.3
 ##         pass
@@ -1686,19 +1687,20 @@ class CGIHTTPRequestHandler(
             Wrapper method for all logging output coming through the server \
             thread.
 
-            "format"                   - Logging format. Allowed placeholder \
-                                         are: "client_ip", "client_port", \
-                                         "request_description", \
-                                         "response_code", "forwarded_ip", \
-                                         "forwarded_host", \
-                                         "forwarded_server", \
-                                         "forwarded_server" and "server_port".
+            **format**                   - Logging format. Allowed \
+                                           placeholder are: "client_ip", \
+                                           "client_port", \
+                                           "request_description", \
+                                           "response_code", "forwarded_ip", \
+                                           "forwarded_host", \
+                                           "forwarded_server", \
+                                          "forwarded_server" and "server_port".
 
-            "message_or_error_code"    - Logging message or resulting HTTP \
-                                         code.
+            **message_or_error_code**    - Logging message or resulting HTTP \
+                                           code.
 
-            "response_code_or_message" - Resulting HTTP code or response \
-                                         message.
+            **response_code_or_message** - Resulting HTTP code or response \
+                                           message.
 
             Examples:
 

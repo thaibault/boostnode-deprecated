@@ -381,9 +381,9 @@ class Print(Class):
             Writes something to the output buffer or prints to standard \
             output.
 
-            "output"    - are the strings which should be printed or saved.
+            **output**    - are the strings which should be printed or saved.
 
-            "codewords" - represents all possible optional arguments.
+            **codewords** - represents all possible optional arguments.
                 "codeword['start']"
                 "codeword['separator']"
                 "codeword['end']"

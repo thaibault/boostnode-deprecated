@@ -266,9 +266,9 @@ class Class(builtins.object):
             Is triggered if a property was tried to overwrite but is \
             inaccessible.
 
-            "name"  - is the inaccessible property name.
+            **name**  - is the inaccessible property name.
 
-            "value" - is the new value for the given property name.
+            **value** - is the new value for the given property name.
 
             Returns the new value of the given property name depending on the \
             presence of setter method otherwise "None" is returned.
@@ -374,9 +374,9 @@ class Class(builtins.object):
             Helper method for "self.__setattr__()". Does the actual overwrite \
             process on the given property.
 
-            "name" - is the inaccessible property name.
+            **name** - is the inaccessible property name.
 
-            "value" - is the new value for the given property name.
+            **value** - is the new value for the given property name.
 
             Returns "True" if the given property was successful overwritten \
             or "False" otherwise.

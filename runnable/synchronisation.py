@@ -59,35 +59,36 @@ class Reflector(Class, Runnable):
     '''
         Main class of the file reflection application.
 
-        "source_location"                 - Source location to reflect.
+        **source_location**                 - Source location to reflect.
 
-        "target_location"                 - Target location where the \
-                                            reflection should be saved.
+        **target_location**                 - Target location where the \
+                                              reflection should be saved.
 
-        "limit"                           - Limit of summarized file size.
+        **limit**                           - Limit of summarized file size.
 
-        "priority_locations"              - Location to prefer if limit \
-                                            doesn't suffices.
+        **priority_locations**              - Location to prefer if limit \
+                                              doesn't suffices.
 
-        "exclude_locations"               - Locations to ignore during \
-                                            reflection creation.
+        **exclude_locations**               - Locations to ignore during \
+                                              reflection creation.
 
-        "target_rights"                   - Rights used to create reflection \
-                                            files.
+        **target_rights**                   - Rights used to create \
+                                              reflection files.
 
-        "synchronize_back"                - Indicates weather to synchronize \
-                                            a reflection back.
+        **synchronize_back**                - Indicates weather to \
+                                              synchronize a reflection back.
 
-        "create"                          - Indicates weather to create a new \
-                                            reflection.
+        **create**                          - Indicates weather to create a \
+                                              new reflection.
 
-        "use_native_symlinks"             - Indicates weather to use native \
-                                            system symbolic links or portable \
-                                            links.
+        **use_native_symlinks**             - Indicates weather to use native \
+                                              system symbolic links or \
+                                              portable links.
 
-        "minimum_reflection_size_in_byte" - Minimum reflection size to check \
-                                            before synchronizing back. This \
-                                            is only used as sanity check.
+        **minimum_reflection_size_in_byte** - Minimum reflection size to \
+                                              check before synchronizing \
+                                              back. This is only used as \
+                                              sanity check.
 
         Examples:
 
@@ -320,9 +321,9 @@ class Reflector(Class, Runnable):
             Checks if a given path exists in a given list of paths or it's \
             substructure.
 
-            "search" - A file path or file handler object to search for.
+            **search** - A file path or file handler object to search for.
 
-            "paths"  - A list if paths or file handlers to search in.
+            **paths**  - A list if paths or file handlers to search in.
 
             Returns "True" if searched file is presented in given list of \
             file locations and "False" otherwise.
@@ -359,8 +360,8 @@ class Reflector(Class, Runnable):
             Opens the given files by using the "Platform.open()" method. It \
             can handle symbolic and portable links.
 
-            "files" - A list if file paths or file objects to open with a \
-                      usable installed application.
+            **files** - A list if file paths or file objects to open with a \
+                        usable installed application.
 
             Examples:
 
@@ -1040,9 +1041,9 @@ class Reflector(Class, Runnable):
             Checks if the given paths are in source location. This method \
             uses serves as helper method for "self._check_path_lists()".
 
-            "path_type" - is an optional string which describes the meaning \
-                          of the given paths. They are used for an exact user \
-                          feedback for whats going on.
+            **path_type** - is an optional string which describes the meaning \
+                            of the given paths. They are used for an exact \
+                            user feedback for whats going on.
 
             Examples:
 
@@ -1191,12 +1192,12 @@ class Reflector(Class, Runnable):
             Serves as helper method for "_create_reflection_files()". Copies \
             given files in source to its pendant in the reflection area.
 
-            "source" - is a directory object with the file in source to copy.
+            **source** - is a directory object with the file in source to copy.
 
-            "path"   - is the relative path to the new file in the reflection \
-                       area.
+            **path**   - is the relative path to the new file in the \
+                         reflection area.
 
-            "size"   - is the given files size.
+            **size**   - is the given files size.
         '''
         __logger__.info(
             'Copying file "{source}" to "{target}". '
@@ -1221,10 +1222,10 @@ class Reflector(Class, Runnable):
         '''
             Creates a link to the given source element in target.
 
-            "source" - is a handler object with the file in source to link.
+            **source** - is a handler object with the file in source to link.
 
-            "path"   - is the relative path to the new link in the reflection \
-                       area.
+            **path**   - is the relative path to the new link in the \
+                         reflection area.
 
             Examples:
 
@@ -1321,9 +1322,9 @@ class Reflector(Class, Runnable):
             relocates a file in the source, if it was relocated in the \
             reflection area.
 
-            "relocated_file" - is a file which should be relocated.
+            **relocated_file** - is a file which should be relocated.
 
-            "linked_file" - The new file for the given relocated file.
+            **linked_file** - The new file for the given relocated file.
 
             Returns "True" if relocation where successful or "False" \
             otherwise.
@@ -1444,15 +1445,15 @@ class Reflector(Class, Runnable):
             Copies link in the reflection area which wasn't interpreted as \
             dummy file for a real file in the source area.
 
-            "source_file"        - The source location where the given \
-                                   reflection file will be located. It's the \
-                                   analogical location to the given file in \
-                                   reflection location.
+            **source_file**        - The source location where the given \
+                                     reflection file will be located. It's \
+                                     the analogical location to the given \
+                                     file in reflection location.
 
-            "link_file"          - The linked file in the reflection area.
+            **link_file**          - The linked file in the reflection area.
 
-            "target_path_length" - Number of chars in the path to link file \
-                                   in cache.
+            **target_path_length** - Number of chars in the path to link file \
+                                     in cache.
 
             Returns "True" if all file-copies where successful or "False" if \
             something goes wrong or a symbolic link circle was broken.
@@ -1650,12 +1651,12 @@ class Reflector(Class, Runnable):
         '''
             Copies or represent a file in the source in reflection area.
 
-            "file"     - A file in the source area.
+            **file**     - A file in the source area.
 
-            "target"   - The analogical location of "file" in the cache area.
+            **target**   - The analogical location of "file" in the cache area.
 
-            "priority" - Determines if the current handling file object is in \
-                         an higher priority location.
+            **priority** - Determines if the current handling file object is \
+                           in an higher priority location.
 
             Returns "True" if file-operation where successful or "False" \
             otherwise.
@@ -1686,13 +1687,13 @@ class Reflector(Class, Runnable):
             "self._create_reflection_structure()". Handles each source \
             element which should be represented in cache.
 
-            "source_file" - A file in the source area.
+            **source_file** - A file in the source area.
 
-            "target_file" - The analogical location of "file" in the cache \
-                            area.
+            **target_file** - The analogical location of "file" in the cache \
+                              area.
 
-            "priority"    - Determines if the current handling file object is \
-                            in an higher priority location.
+            **priority**    - Determines if the current handling file object \
+                              is in an higher priority location.
 
             Returns "True" if all file-operations where successful or "False" \
             otherwise.
@@ -1731,10 +1732,10 @@ class Reflector(Class, Runnable):
             Handles each source link element which should be represented in \
             cache.
 
-            "source_file" - A file in the source area.
+            **source_file** - A file in the source area.
 
-            "target_file" - The analogical location of "file" in the cache \
-                            area.
+            **target_file** - The analogical location of "file" in the cache \
+                              area.
 
             Returns "True" if file-link-operation where successful or "False" \
             otherwise.

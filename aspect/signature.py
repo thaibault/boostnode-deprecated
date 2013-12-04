@@ -64,8 +64,8 @@ def add_check(point_cut):
     '''
         Adds signature checking in functions and methods for given point cuts.
 
-        "point_cut" - A regular expression which will be checked again every \
-                      function context path.
+        **point_cut** - A regular expression which will be checked again \
+                        every function context path.
 
         Examples:
 

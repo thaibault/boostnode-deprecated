@@ -219,10 +219,10 @@ class Handler(Class):
         '''
             Normalizes root path.
 
-            "location"       - Location to set for new sandbox path.
+            **location**       - Location to set for new sandbox path.
 
-            "make_directory" - If set to "True" given location will be \
-                               created if not exists.
+            **make_directory** - If set to "True" given location will be \
+                                 created if not exists.
 
             Returns current class.
 
@@ -261,13 +261,13 @@ class Handler(Class):
         '''
             Converts between file size formats.
 
-            "format"  - Determines the returning file size unit.
+            **format**  - Determines the returning file size unit.
 
-            "decimal" - Determines if the decimal or binary interpretation \
-                        should be used.
+            **decimal** - Determines if the decimal or binary interpretation \
+                          should be used.
 
-            "formats" - If provided this formats will be used instead of \
-                        "cls.FORMATS".
+            **formats** - If provided this formats will be used instead of \
+                          "cls.FORMATS".
 
             Returns computed size.
 
@@ -317,12 +317,12 @@ class Handler(Class):
             "False" (if given string hasn't match any number with a useful \
             measure) back.
 
-            "size_and_unit" - Given size with unit as string.
+            **size_and_unit** - Given size with unit as string.
 
-            "format"        - Format to returns.
+            **format**        - Format to returns.
 
-            "decimal"       - Indicates weather decimal computation should be \
-                              used.
+            **decimal**       - Indicates weather decimal computation should \
+                                be used.
 
             Returns size if determined otherwise "False".
 
@@ -369,12 +369,12 @@ class Handler(Class):
         '''
             Converts a given size format to byte format.
 
-            "size"         - Size to convert.
+            **size**         - Size to convert.
 
-            "given_format" - Input format.
+            **given_format** - Input format.
 
-            "decimal"      - Indicates weather decimal or binary computation \
-                             should be used.
+            **decimal**      - Indicates weather decimal or binary \
+                               computation should be used.
 
             Returns computed size.
 
@@ -409,7 +409,7 @@ class Handler(Class):
             format is valid. The pattern is created depending on the given \
             size formats as dictionary.
 
-            "formats" - Formats to use. Defaults to "cls.FORMATS".
+            **formats** - Formats to use. Defaults to "cls.FORMATS".
 
             Examples:
 
@@ -441,8 +441,8 @@ class Handler(Class):
             Gives all platform dependent symbols for special file system \
             locations.
 
-            "operating_system" - If not provided operating system will be \
-                                 determined.
+            **operating_system** - If not provided operating system will be \
+                                   determined.
 
             Examples:
 
@@ -529,28 +529,28 @@ class Handler(Class):
         '''
             Initialize a new instance of a given file system object by path.
 
-            "location"                - is path or "Handler" referencing to \
-                                        file object.
+            **location**                - is path or "Handler" referencing to \
+                                          file object.
 
-            "make_directory"          - Make directory of path object if \
-                                        given location doesn't exists. \
-            "must_exist"              - Throws an exception if the given path \
-                                        doesn't exists if this argument is \
-                                        "True".
+            **make_directory**          - Make directory of path object if \
+                                          given location doesn't exists. \
+            **must_exist**              - Throws an exception if the given \
+                                          path doesn't exists if this \
+                                          argument is "True".
 
-            "encoding"                - Define encoding for reading and \
-                                        writing files.
+            **encoding**                - Define encoding for reading and \
+                                          writing files.
 
-            "respect_root_path"       - Defines if a previous statically \
-                                        defined virtual root path should be \
-                                        considered.
+            *+respect_root_path**       - Defines if a previous statically \
+                                          defined virtual root path should be \
+                                          considered.
 
-            "output_with_root_prefix" - Defines if "get_path()" returns a \
-                                        path with or without root path \
-                                        prefixed.
+            **output_with_root_prefix** - Defines if "get_path()" returns a \
+                                          path with or without root path \
+                                          prefixed.
 
-            "has_extension"           - Defines weather path interpretation \
-                                        should assume a file extension.
+            **has_extension**           - Defines weather path interpretation \
+                                          should assume a file extension.
 
             Every additional argument or keyword will be forwarded to the \
             "make_directory()" method if "make_directory" is set to "True".
@@ -699,8 +699,8 @@ class Handler(Class):
         '''
             Invokes if a comparison of two "Handler" objects is done.
 
-            "other" - Another file handler or file path to be checked again \
-                      current file object.
+            **other** - Another file handler or file path to be checked again \
+                        current file object.
 
             Returns the boolean result.
 
@@ -747,8 +747,8 @@ class Handler(Class):
         '''
             Triggers if an element is tried to get with the "[]" operator.
 
-            "key" - Defines which object in current directory should be \
-                    returned.
+            **key** - Defines which object in current directory should be \
+                      returned.
 
             Returns the requested file object.
 
@@ -767,8 +767,8 @@ class Handler(Class):
         '''
             Deletes the specified item from the file system.
 
-            "key" - Defines which object in current directory should be \
-                    deleted.
+            **key** - Defines which object in current directory should be \
+                      deleted.
 
             Examples:
 
@@ -793,8 +793,8 @@ class Handler(Class):
             Is triggered if you want to determine if an object is in a \
             "Handler" object.
 
-            "item" - Checks if given file object or file path is present in \
-                     current directory.
+            **item** - Checks if given file object or file path is present in \
+                       current directory.
 
             Returns the boolean result.
 
@@ -1018,12 +1018,12 @@ class Handler(Class):
             has the additionally all parameters as \
             "self.convert_size_format()".
 
-            "limit"       - Break and return current calculated size if limit \
-                            is reached or doesn't if limit is 0. Limit is \
-                            interpreted in bytes.
+            **limit**       - Break and return current calculated size if \
+                              limit is reached or doesn't if limit is 0. \
+                              Limit is interpreted in bytes.
 
-            "follow_link" - Indicates weather to walk into links to aggregate \
-                            size.
+            **follow_link** - Indicates weather to walk into links to \
+                              aggregate size.
 
             Each additional argument or keyword will be forwarded to the \
             "self.convert_size_format()" method.
@@ -1121,8 +1121,8 @@ class Handler(Class):
             Calculates the potential dummy size for a portable link pointing \
             to this object.
 
-            "label" - Is the actual used label for marking the text based \
-                      portable link files.
+            **label** - Is the actual used label for marking the text based \
+                        portable link files.
 
             Examples:
 
@@ -1150,8 +1150,8 @@ class Handler(Class):
         '''
             Represents a given file size in byte as human readable string.
 
-            "size" - If a size is given size of current file object will be \
-                     ignored and that size will be used.
+            **size** - If a size is given size of current file object will be \
+                       ignored and that size will be used.
 
             Examples:
 
@@ -1284,11 +1284,11 @@ class Handler(Class):
         '''
             Determines the mime-type of the current object.
 
-            "default_type" - Defines the returned fallback mime type if it \
-                             couldn't be determined.
+            **default_type** - Defines the returned fallback mime type if it \
+                               couldn't be determined.
 
-            "web"          - If web is set to "True" fallback mime type is \
-                             "application/octet-stream".
+            **web**          - If web is set to "True" fallback mime type is \
+                               "application/octet-stream".
 
             Returns the current object mime-type. The format is \
             "type/subtype".
@@ -1343,15 +1343,15 @@ class Handler(Class):
             Determines path of current "Handler" object or returns the path \
             of a given "Handler" instance.
 
-            "location"                - If a handle object is provided the \
-                                        saved path will be given back.
+            **location**                - If a handle object is provided the \
+                                          saved path will be given back.
 
-            "respect_root_path"       - Indicates weather we check the \
-                                        sandbox feature for this request.
+            **respect_root_path**       - Indicates weather we check the \
+                                          sandbox feature for this request.
 
-            "output_with_root_prefix" - Indicates weather we should prefix \
-                                        the resulting path with the path to \
-                                        sandbox.
+            **output_with_root_prefix** - Indicates weather we should prefix \
+                                          the resulting path with the path to \
+                                          sandbox.
 
             Examples:
 
@@ -1397,9 +1397,9 @@ class Handler(Class):
             Returns the relative path of current "Handler" object depending \
             on the current location.
 
-            "context" - If provided the relative path will be determined \
-                        relative to this context. If nothing or "None" is \
-                        given current directory will be used.
+            **context** - If provided the relative path will be determined \
+                          relative to this context. If nothing or "None" is \
+                          given current directory will be used.
 
             Additional arguments or keywords will be forwarded to \
             "os.path.relpath()".
@@ -1447,8 +1447,8 @@ class Handler(Class):
         '''
             Determines the current path of the Directory object without file.
 
-            "output_with_root_prefix" - Indicates weather the path to sandbox \
-                                        should set as prefix.
+            **output_with_root_prefix** - Indicates weather the path to \
+                                          sandbox should set as prefix.
 
             Examples:
 
@@ -1504,12 +1504,12 @@ class Handler(Class):
             Determines the current file name without directory path. Same \
             possible parameters as native python method "os.path.name()".
 
-            "output_with_root_prefix" - Indicates if determined name should \
-                                        be stripped from a path prefixed with \
-                                        path to current sandbox.
+            **output_with_root_prefix** - Indicates if determined name should \
+                                          be stripped from a path prefixed \
+                                          with path to current sandbox.
 
-            "force_windows_behavior"  - If set to "True" windows behavior \
-                                        will be forced.
+            **force_windows_behavior**  - If set to "True" windows behavior \
+                                          will be forced.
 
             Returns the determined file object name.
 
@@ -1560,9 +1560,9 @@ class Handler(Class):
             extension. Same possible parameters as native python method \
             "os.path.name()".
 
-            "output_with_root_prefix" - Indicates if determined name should \
-                                        be stripped from a path prefixed with \
-                                        path to current sandbox.
+            **output_with_root_prefix** - Indicates if determined name should \
+                                          be stripped from a path prefixed \
+                                          with path to current sandbox.
 
             Additional arguments and keywords will be forwarded to \
             "os.path.name()".
@@ -1642,10 +1642,11 @@ class Handler(Class):
             current handler points to an directory containing files will be \
             returned as list.
 
-            "mode"   - Mode for opening current file (if not pointing to a \
-                       directory).
+            **mode**   - Mode for opening current file (if not pointing to a \
+                         directory).
 
-            "strict" - Indicates weather encoding should through an exception.
+            **strict** - Indicates weather encoding should through an \
+                         exception.
 
             Every additional argument or keyword will be forwarded to \
             "builtins.open()".
@@ -1758,9 +1759,9 @@ class Handler(Class):
             Determines the portable link file content pattern. With the file \
             independent placeholder "executable_path" replaced.
 
-            "force_windows_behavior" - If set to "True" this method will \
-                                       force windows behavior on none windows \
-                                       operating systems.
+            **force_windows_behavior** - If set to "True" this method will \
+                                         force windows behavior on none \
+                                         windows operating systems.
 
             Examples:
 
@@ -1831,20 +1832,20 @@ class Handler(Class):
             Returns the final portable link content depending on the current \
             file referenced by "self.path".
 
-            "label"       - Label for better distinction with other \
-                            text-based files.
+            **label**       - Label for better distinction with other \
+                              text-based files.
 
-            "relative"    - triggers if target should be referenced relative \
-                            path. If "True" relative path will be determined \
-                            from current working directory, if a path or \
-                            Handler object is provided this location will be \
-                            used as context to determine relative path, if \
-                            "Self" is provided target location will be used \
-                            as context and if "False" (default) path will be \
-                            referenced absolute.
+            **relative**    - triggers if target should be referenced \
+                              relative path. If "True" relative path will be \
+                              determined from current working directory, if a \
+                              path or Handler object is provided this \
+                              location will be used as context to determine \
+                              relative path, if "Self" is provided target \
+                              location will be used as context and if "False" \
+                              (default) path will be referenced absolute.
 
-            "target_path" - this method is only needed if relative is setted \
-                            to "Self".
+            **target_path** - this method is only needed if relative is \
+                              setted to "Self".
 
             Examples:
 
@@ -1949,7 +1950,7 @@ class Handler(Class):
             Set encoding for a text-base file if current instance refers to \
             one. This method serves as wrapper method for "set_content()".
 
-            "encoding" - Encoding description.
+            **encoding** - Encoding description.
 
             Additional arguments and keywords will be forwarded to \
             "self.set_content()".
@@ -1984,9 +1985,9 @@ class Handler(Class):
             current handler points to an directory containing files will be \
             returned as list.
 
-            "content" - Content to write in current file.
+            **content** - Content to write in current file.
 
-            "mode"    - File mode used for writing in file.
+            **mode**    - File mode used for writing in file.
 
             Additional arguments and keywords are forwarded to \
             "builtins.open()".
@@ -2087,7 +2088,7 @@ class Handler(Class):
         '''
             This function could be understand as wrapper method for "move()".
 
-            "location" - New directory location for current file object.
+            **location** - New directory location for current file object.
 
             Additional arguments and keywords are forwarded to "self.move()".
 
@@ -2150,7 +2151,7 @@ class Handler(Class):
         '''
             This function could be understand as wrapper method for "move()".
 
-            "name" - New name for current file object.
+            **name** - New name for current file object.
 
             Additional arguments and keywords are forwarded to "self.move()".
 
@@ -2196,7 +2197,7 @@ class Handler(Class):
             This function could be understand as wrapper method for \
             "set_name()".
 
-            "basename" - New basename.
+            **basename** - New basename.
 
             Additional arguments and keywords are forwarded to \
             "self.set_name()".
@@ -2241,7 +2242,7 @@ class Handler(Class):
             This function could be understand as wrapper method for \
             "set_name()".
 
-            "extension" - New file extension.
+            **extension** - New file extension.
 
             Additional arguments and keywords are forwarded to "self.name()".
 
@@ -2358,8 +2359,8 @@ class Handler(Class):
             Implements the pythons native "os.path.isdir()" method in an \
             object oriented way and adds the "link" parameter.
 
-            "link" - triggers if symbolic links to directories also evaluates \
-                     to "True".
+            **link** - triggers if symbolic links to directories also \
+                       evaluates to "True".
 
             Returns "True" if path is an existing directory.
 
@@ -2388,7 +2389,7 @@ class Handler(Class):
             Implements the pythons native "os.path.isfile()" method in an \
             object oriented way. And adds the "link" parameter.
 
-            "link" - triggers if symbolic links also evaluates to "True".
+            **link** - triggers if symbolic links also evaluates to "True".
 
             Returns "True" if path is an existing regular file.
 
@@ -2426,8 +2427,8 @@ class Handler(Class):
             Implements the pythons native "os.path.islink()" method in an \
             object oriented way and adds the "portable_link" parameter.
 
-            "portable_link" - triggers if portable links also evaluates to \
-                              "True".
+            **portable_link** - triggers if portable links also evaluates to \
+                                "True".
 
             Returns "True" if path refers to a directory entry that is a link \
             file. Always "False" for symbolic links if they are not \
@@ -2487,8 +2488,8 @@ class Handler(Class):
         '''
             Determines if the given path is an absolute one.
 
-            "location" - is path or "Handler" object pointing to target \
-                         destination.
+            **location** - is path or "Handler" object pointing to target \
+                           destination.
 
             Returns "False" if the given path is a relative one or "True" \
             otherwise.
@@ -2709,12 +2710,12 @@ class Handler(Class):
         '''
             Creates a backup of current file object in same location.
 
-            "name_wrapper"     - A template formating the backup file name.
+            **name_wrapper**     - A template formating the backup file name.
 
-            "backup_if_exists" - Indicates if a backup should be make even if \
-                                 there is already a file object with given \
-                                 backup name and content (if \
-                                 "compare_content" is set).
+            **backup_if_exists** - Indicates if a backup should be make even \
+                                   if there is already a file object with \
+                                   given backup name and content (if \
+                                   "compare_content" is set).
 
             Examples:
 
@@ -2793,7 +2794,7 @@ class Handler(Class):
             Returns "True" if given file object contains likewise content as \
             current file object.
 
-            "other" - The file object to compare.
+            **other** - The file object to compare.
 
             Examples:
 
@@ -3095,7 +3096,8 @@ class Handler(Class):
             "rename". Otherwise, copy current path (with "self.copy()" \
             method) to the target and then remove current path.
 
-            "target" - Path or "Handler" object pointing to target destination.
+            **target** - Path or "Handler" object pointing to target \
+                         destination.
 
             Additional arguments or keywords a forwarded to "shutil.move()".
 
@@ -3236,9 +3238,9 @@ class Handler(Class):
             pythons native "os.remove()"; the unlink name is its traditional \
             Unix name.
 
-            "force_windows_behavior" - Indicates weather windows behavior \
-                                       should be used on other operating \
-                                       systems than windows.
+            **force_windows_behavior** - Indicates weather windows behavior \
+                                         should be used on other operating \
+                                         systems than windows.
 
             Additional arguments or keywords a forwarded to "os.remove()".
 
@@ -3346,15 +3348,16 @@ class Handler(Class):
             stat.S_IRGRP, stat.S_IWGRP, stat.S_IXGRP, stat.S_IRWXO, \
             stat.S_IROTH, stat.S_IWOTH, stat.S_IXOTH
 
-            "right"      - Is the new right for the current object's path \
-                           location.
+            **right**      - Is the new right for the current object's path \
+                             location.
 
-            "octal"      - Indicates weather we provide an octal number or a \
-                           constant combination from "stat.*".
+            **octal**      - Indicates weather we provide an octal number or \
+                             a constant combination from "stat.*".
 
-            "recursive"  - Indicates weather rights should be set recursively.
+            **recursive**  - Indicates weather rights should be set \
+                             recursively.
 
-            "allow_link" - Indicates weather links should be followed.
+            **allow_link** - Indicates weather links should be followed.
 
             Examples:
 
@@ -3409,7 +3412,8 @@ class Handler(Class):
             created (or overwritten) in the directory specified. Permission \
             bits are copied.
 
-            "target" - Path or "Handler" object pointing to target destination.
+            **target** - Path or "Handler" object pointing to target \
+                         destination.
 
             Additional arguments or keywords a forwarded to "shutil.copy2()".
 
@@ -3468,11 +3472,11 @@ class Handler(Class):
             resulting name is unique. The handler which creates the folder \
             will be given back.
 
-            "wrapper_pattern" - A template describing how the current object \
-                                should be renamed if current file object \
-                                already exists. The template has the current \
-                                file name as placeholder (usable with \
-                                {file_name}).
+            **wrapper_pattern** - A template describing how the current \
+                                  object should be renamed if current file \
+                                  object already exists. The template has the \
+                                  current file name as placeholder (usable \
+                                  with {file_name}).
 
             Returns the new created file object.
 
@@ -3518,10 +3522,11 @@ class Handler(Class):
             is "700" (octal). If the directory already exists, \
             "builtins.OSError" is raised.
 
-            "right" - is new the right for the current object's path location.
+            **right** - is new the right for the current object's path \
+                        location.
 
-            "octal" - Indicates weather given right should be interpreted as \
-                      octal number.
+            **octal** - Indicates weather given right should be interpreted \
+                        as octal number.
 
             Additional arguments or keywords are forwarded to "os.mkdir()".
 
@@ -3593,17 +3598,18 @@ class Handler(Class):
             "builtins.OSError" is raised when the function is called by an \
             unprivileged user.
 
-            "force"    - triggers if symbolic links with not existing \
-                         referenced files should be made. If target exists it \
-                         will be overwritten if set to "True".
+            **force**    - triggers if symbolic links with not existing \
+                           referenced files should be made. If target exists \
+                           it will be overwritten if set to "True".
 
-            "relative" - triggers if target should be referenced via relative \
-                         path. If "True" relative path will be determined \
-                         from current working directory, if a path or Handler \
-                         object is provided this location will be used as \
-                         context to determine relative path, if "Self" is \
-                         provided target location will be used as context and \
-                         if "False" (default) path will be referenced absolute.
+            **relative** - triggers if target should be referenced via \
+                           relative path. If "True" relative path will be \
+                           determined from current working directory, if a \
+                           path or Handler object is provided this location \
+                           will be used as context to determine relative \
+                           path, if "Self" is provided target location will \
+                           be used as context and if "False" (default) path \
+                           will be referenced absolute.
 
             Returns "True" if creation was successful and "False" otherwise.
 
@@ -3650,9 +3656,9 @@ class Handler(Class):
             Implements the pythons native "os.link()" method in an object \
             oriented way. The optional parameter "force" is added.
 
-            "force" - Indicates if hard links with not existing referenced \
-                      files should be made. If target exists it will be \
-                      overwritten if set to "True".
+            **force** - Indicates if hard links with not existing referenced \
+                        files should be made. If target exists it will be \
+                        overwritten if set to "True".
 
             Returns "True" if creation was successful and "False" otherwise.
 
@@ -3803,10 +3809,11 @@ class Handler(Class):
             "shutil.copy2()" is used, but any function that supports the \
             ame signature (like pythons "shutil.copy()") can be used.
 
-            "target"         - Target location for coping current file object.
+            **target**         - Target location for coping current file \
+                                 object.
 
-            "symbolic_links" - Indicates weather symbolic links should be \
-                               followed.
+            **symbolic_links** - Indicates weather symbolic links should be \
+                                 followed.
 
             Examples:
 
@@ -3907,14 +3914,14 @@ class Handler(Class):
             Creates a portable link on the current location referencing on \
             the given path ("target").
 
-            "target" - A path or file object interpreted as target location.
+            **target** - A path or file object interpreted as target location.
 
-            "force"  - Means to trigger if a file on the target location \
-                       should be overwritten.
+            **force**  - Means to trigger if a file on the target location \
+                         should be overwritten.
 
-            "label"  - Is a useful label to distinguish portable linked files \
-                       from other text-based files. Default is setted to the \
-                       current class description.
+            **label**  - Is a useful label to distinguish portable linked \
+                         files from other text-based files. Default is setted \
+                         to the current class description.
 
             Additional arguments and keywords are forwarded to \
             "self.get_portable_link_content()".
@@ -3964,8 +3971,8 @@ class Handler(Class):
         '''
             Reads the referenced path of a given portable link file.
 
-            "as_object" - Indicates weather the resulting file should be \
-                          returned as string or file handler.
+            **as_object** - Indicates weather the resulting file should be \
+                            returned as string or file handler.
 
             Examples:
 
@@ -4061,17 +4068,17 @@ class Handler(Class):
             represents a local method the current scope will be accessible in \
             the given method.
 
-            "function"          - If is a string, a new instance is created \
-                                  otherwise not.
+            **function**          - If is a string, a new instance is created \
+                                    otherwise not.
 
-            "recursive"         - Indicates weather iteration should be \
-                                  recursive.
+            **recursive**         - Indicates weather iteration should be \
+                                    recursive.
 
-            "recursive_in_link" - Indicates weather links should be followed.
+            **recursive_in_link** - Indicates weather links should be followed.
 
-            "deep_first"        - Indicates weather breath first or deep \
-                                  first recursive tree traversal should be
-                                  used.
+            **deep_first**        - Indicates weather breath first or deep \
+                                    first recursive tree traversal should be \
+                                    used.
 
             Additional arguments of keywords will be forwarded to given \
             function.

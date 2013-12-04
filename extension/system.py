@@ -1108,31 +1108,32 @@ class Platform(builtins.object):
             command line. Result will be given back as tuple. First element \
             is standard and second error output.
 
-            "command"           - A command line interface command optionally
-                                  with arguments.
+            **command**           - A command line interface command \
+                                    optionally with arguments.
 
-            "command_arguments" - A list of arguments passing through the
-                                  command line interface.
+            **command_arguments** - A list of arguments passing through the \
+                                    command line interface.
 
-            "secure"            - Disable output piping by python and run \
-                                  command in systems native process.
+            **secure**            - Disable output piping by python and run \
+                                    command in systems native process.
 
-            "error"             - If "False" exceptions by running command \
-                                  are kept back.
+            **error**             - If "False" exceptions by running command \
+                                    are kept back.
 
-            "shell"             - Simulate a shell if "True". If explicit \
-                                  command arguments are given shell's default \
-                                  value is "True" and "False" otherwise.
+            **shell**             - Simulate a shell if "True". If explicit \
+                                    command arguments are given shell's \
+                                    default value is "True" and "False" \
+                                    otherwise.
 
-            "log"               - If "True" standard output will be logged \
-                                  with level "info" and error output with \
-                                  level "warning".
+            **log**               - If "True" standard output will be logged \
+                                    with level "info" and error output with \
+                                    level "warning".
 
-            "no_blocking"       - If "True" resulting output won't be a \
-                                  string. You will get an python "IOBuffer" \
-                                  like object. NOTE: If buffer is empty and \
-                                  you try to read from buffer an exception \
-                                  will occur.
+            **no_blocking**       - If "True" resulting output won't be a \
+                                    string. You will get an python "IOBuffer" \
+                                    like object. NOTE: If buffer is empty and \
+                                    you try to read from buffer an exception \
+                                    will occur.
 
             All following arguments are given through python's native
             "subprocess.Popen()" class initialisation.
@@ -2652,8 +2653,8 @@ class CommandLine(builtins.object):
         '''
             Clears all temporary files in current directory.
 
-            "temp_file_patterns" - Defines wich file name matches a temporary
-                                   file.
+            **temp_file_patterns** - Defines wich file name matches a \
+                                     temporary file.
         '''
         current_working_directory = FileHandler()
         __logger__.info(
