@@ -77,6 +77,36 @@ class Browser(Class, Runnable):
         properties. Its only a very simple window for showing web pages. The \
         main goal is to make a web-interface look and behave like a real \
         desktop application.
+
+        "_url"                 - URL to open in webview.
+
+        "width_in_pixel"       - Width of opening browser window.
+
+        "height_in_pixel"      - Height of opening browser window.
+
+        "fullscreen"           - Indicates weather windows should start in \
+                                 fullscreen mode.
+
+        "no_window_decoration" - If set to "True" no windows decoration will \
+                                 be provided.
+
+        "default_gui_toolkit"  - Toolkit to use if more than one is available.
+
+        "no_progress_bar"      - If set to "True" progress bar for loading \
+                                 web pages will be omitted.
+
+        "default_title"        - Default window title to show in window \
+                                 decoration.
+
+        "stop_order"           - Standard in command to close window.
+
+        Examples:
+
+        >>> Browser(
+        ...     _url='http://www.google.com/', width_in_pixel=300,
+        ...     height_in_pixel=100
+        ... ) # doctest: +ELLIPSIS
+        Object of "Browser" with url "http://www.google.com/" in 300 pi...
     '''
 
     # region properties
@@ -410,36 +440,6 @@ class Browser(Class, Runnable):
         '''
             Initializes a web view or tries to open a default browser if no \
             gui suitable gui toolkit is available.
-
-            "_url"                 - URL to open in webview.
-
-            "width_in_pixel"       - Width of opening browser window.
-
-            "height_in_pixel"      - Height of opening browser window.
-            "fullscreen"           - Indicates weather windows should start \
-                                     in fullscreen mode.
-
-            "no_window_decoration" - If set to "True" no windows decoration \
-                                     will be provided.
-
-            "default_gui_toolkit"  - Toolkit to use if more than one is \
-                                     available.
-
-            "no_progress_bar"      - If set to "True" progress bar for \
-                                     loading web pages will be omitted.
-
-            "default_title"        - Default window title to show in window \
-                                     decoration.
-
-            "stop_order"           - Standard in command to close window.
-
-            Examples:
-
-            >>> Browser(
-            ...     _url='http://www.google.com/', width_in_pixel=300,
-            ...     height_in_pixel=100
-            ... ) # doctest: +ELLIPSIS
-            Object of "Browser" with url "http://www.google.com/" in 300 pi...
         '''
         self.__class__.instances.append(self)
 

@@ -56,7 +56,129 @@ from boostNode.paradigm.objectOrientation import Class
 # region classes
 
 class Reflector(Class, Runnable):
-    '''Main class of the file reflection application.'''
+    '''
+        Main class of the file reflection application.
+
+        "source_location"                 - Source location to reflect.
+
+        "target_location"                 - Target location where the \
+                                            reflection should be saved.
+
+        "limit"                           - Limit of summarized file size.
+
+        "priority_locations"              - Location to prefer if limit \
+                                            doesn't suffices.
+
+        "exclude_locations"               - Locations to ignore during \
+                                            reflection creation.
+
+        "target_rights"                   - Rights used to create reflection \
+                                            files.
+
+        "synchronize_back"                - Indicates weather to synchronize \
+                                            a reflection back.
+
+        "create"                          - Indicates weather to create a new \
+                                            reflection.
+
+        "use_native_symlinks"             - Indicates weather to use native \
+                                            system symbolic links or portable \
+                                            links.
+
+        "minimum_reflection_size_in_byte" - Minimum reflection size to check \
+                                            before synchronizing back. This \
+                                            is only used as sanity check.
+
+        Examples:
+
+        >>> Reflector(
+        ...     source_location=__test_folder__,
+        ...     target_location=__test_folder__.path + 'target'
+        ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
+        Traceback (most recent call last):
+        ...
+        boostNode.extension.native.SynchronisationError: Source path "...
+
+        >>> Reflector(
+        ...     source_location='not existing',
+        ...     target_location=__test_folder__.path + 'target'
+        ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
+        Traceback (most recent call last):
+        ...
+        boostNode.extension.native.FileError: Invalid path "...
+
+        >>> FileHandler(__test_folder__.path + 's/A/B').make_directories()
+        True
+
+        >>> Reflector(
+        ...     source_location=__test_folder__.path + 's',
+        ...     target_location=__test_folder__.path + 't',
+        ...     limit='10 apples'
+        ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
+        Traceback (most recent call last):
+        ...
+        boostNode.extension.native.SynchronisationError: Invalid cache-l...
+
+        >>> Reflector(
+        ...     source_location=__test_folder__.path + 's',
+        ...     target_location=__test_folder__.path + 't',
+        ...     limit='-1 byte'
+        ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
+        Traceback (most recent call last):
+        ...
+        boostNode.extension.native.SynchronisationError: Invalid cache-l...
+
+        >>> Reflector(
+        ...     source_location=__test_folder__.path + 's',
+        ...     target_location=__test_folder__.path + 't',
+        ...     target_rights=800
+        ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
+        Traceback (most recent call last):
+        ...
+        SynchronisationError: Reflection-rights "800" aren't written in ...
+
+        >>> Reflector(
+        ...     source_location=__test_folder__.path + 's',
+        ...     target_location=__test_folder__.path + 't',
+        ...     priority_locations=(__test_folder__.path + 't',)
+        ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
+        Traceback (most recent call last):
+        ...
+        SynchronisationError: Priority path ".../t/" have to be inside...
+
+        >>> Reflector(
+        ...     source_location=__test_folder__.path + 's',
+        ...     target_location=__test_folder__.path + 't',
+        ...     priority_locations=('not existing',)
+        ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
+        Traceback (most recent call last):
+        ...
+        boostNode.extension.native.FileError: Invalid path "...not existi
+
+        >>> Reflector(
+        ...     source_location=__test_folder__.path + 's',
+        ...     target_location=__test_folder__.path + 't',
+        ...     priority_locations=(__test_folder__.path + '../',),
+        ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
+        Traceback (most recent call last):
+        ...
+        boostNode.extension.native.SynchronisationError: ...have to be in
+
+        >>> __test_globals__['__test_mode__'] = False
+        >>> Reflector(
+        ...     source_location=__test_folder__.path + 's',
+        ...     target_location=__test_folder__.path + 't'
+        ... ) # doctest: +ELLIPSIS
+        Object of "Reflector" with source path "...s..." and target path...
+
+        >>> Reflector(
+        ...     source_location=__test_folder__.path + 's',
+        ...     target_location=__test_folder__.path + 't',
+        ...     synchronize_back=True, minimum_reflection_size_in_byte=0
+        ... ) # doctest: +ELLIPSIS
+        Object of "Reflector" with source path "...s..." and target path...
+        >>> __test_globals__['__test_mode__'] = True
+    '''
 
     # region properties
 
@@ -728,7 +850,7 @@ class Reflector(Class, Runnable):
 ## python3.3     def _run(self: Self) -> Self:
     def _run(self):
         '''
-            Entry point for command line call of this program. Initializes a
+            Entry point for command line call of this program. Initializes a \
             new instance of the option parser for the application interface.
 
             Examples:
@@ -785,121 +907,7 @@ class Reflector(Class, Runnable):
         **keywords
     ):
 ##
-        '''
-            Initializes a new object of a given synchronisation process.
-
-            "source_location"                 - Source location to reflect.
-            "target_location"                 - Target location where the
-                                                reflection should be saved.
-            "limit"                           - Limit of summarized file size.
-            "priority_locations"              - Location to prefer if limit
-                                                doesn't suffices.
-            "exclude_locations"               - Locations to ignore during
-                                                reflection creation.
-            "target_rights"                   - Rights used to create
-                                                reflection files.
-            "synchronize_back"                - Indicates weather to
-                                                synchronize a reflection back.
-            "create"                          - Indicates weather to create a
-                                                new reflection.
-            "use_native_symlinks"             - Indicates weather to use native
-                                                system symbolic links or
-                                                portable links.
-            "minimum_reflection_size_in_byte" - Minimum reflection size to
-                                                check before synchronizing
-                                                back. This is only used as
-                                                sanity check.
-
-            Examples:
-
-            >>> Reflector(
-            ...     source_location=__test_folder__,
-            ...     target_location=__test_folder__.path + 'target'
-            ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
-            Traceback (most recent call last):
-            ...
-            boostNode.extension.native.SynchronisationError: Source path "...
-
-            >>> Reflector(
-            ...     source_location='not existing',
-            ...     target_location=__test_folder__.path + 'target'
-            ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
-            Traceback (most recent call last):
-            ...
-            boostNode.extension.native.FileError: Invalid path "...
-
-            >>> FileHandler(__test_folder__.path + 's/A/B').make_directories()
-            True
-
-            >>> Reflector(
-            ...     source_location=__test_folder__.path + 's',
-            ...     target_location=__test_folder__.path + 't',
-            ...     limit='10 apples'
-            ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
-            Traceback (most recent call last):
-            ...
-            boostNode.extension.native.SynchronisationError: Invalid cache-l...
-
-            >>> Reflector(
-            ...     source_location=__test_folder__.path + 's',
-            ...     target_location=__test_folder__.path + 't',
-            ...     limit='-1 byte'
-            ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
-            Traceback (most recent call last):
-            ...
-            boostNode.extension.native.SynchronisationError: Invalid cache-l...
-
-            >>> Reflector(
-            ...     source_location=__test_folder__.path + 's',
-            ...     target_location=__test_folder__.path + 't',
-            ...     target_rights=800
-            ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
-            Traceback (most recent call last):
-            ...
-            SynchronisationError: Reflection-rights "800" aren't written in ...
-
-            >>> Reflector(
-            ...     source_location=__test_folder__.path + 's',
-            ...     target_location=__test_folder__.path + 't',
-            ...     priority_locations=(__test_folder__.path + 't',)
-            ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
-            Traceback (most recent call last):
-            ...
-            SynchronisationError: Priority path ".../t/" have to be inside...
-
-            >>> Reflector(
-            ...     source_location=__test_folder__.path + 's',
-            ...     target_location=__test_folder__.path + 't',
-            ...     priority_locations=('not existing',)
-            ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
-            Traceback (most recent call last):
-            ...
-            boostNode.extension.native.FileError: Invalid path "...not existi
-
-            >>> Reflector(
-            ...     source_location=__test_folder__.path + 's',
-            ...     target_location=__test_folder__.path + 't',
-            ...     priority_locations=(__test_folder__.path + '../',),
-            ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
-            Traceback (most recent call last):
-            ...
-            boostNode.extension.native.SynchronisationError: ...have to be in
-
-            >>> __test_globals__['__test_mode__'] = False
-            >>> Reflector(
-            ...     source_location=__test_folder__.path + 's',
-            ...     target_location=__test_folder__.path + 't'
-            ... ) # doctest: +ELLIPSIS
-            Object of "Reflector" with source path "...s..." and target path...
-
-            >>> Reflector(
-            ...     source_location=__test_folder__.path + 's',
-            ...     target_location=__test_folder__.path + 't',
-            ...     synchronize_back=True, minimum_reflection_size_in_byte=0
-            ... ) # doctest: +ELLIPSIS
-            Object of "Reflector" with source path "...s..." and target path...
-            >>> __test_globals__['__test_mode__'] = True
-        '''
+        '''Initializes a new object of a given synchronisation process.'''
 
                 # region properties
 
@@ -908,9 +916,9 @@ class Reflector(Class, Runnable):
         '''Count all edited files during the creation process.'''
         self._edited_number_of_files = 0
         '''
-            Lists which will be created before the reflection starts. It
-            provides a list of all files in descending order depending on there
-            file-sizes.
+            Lists which will be created before the reflection starts. It \
+            provides a list of all files in descending order depending on \
+            there file-sizes.
         '''
         self._files = []
         self._priority_files = []

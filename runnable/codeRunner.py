@@ -62,6 +62,14 @@ class Run(Class, Runnable):
     '''
         This class provides a large number of supported programming languages \
         support for compiling, running and cleaning after running.
+        Determines a code file to run and runs them in its own thread by \
+        piping all outputs through the command line interface.
+
+        "code_file_path"           - A given code file handler or path which \
+                                     should be run.
+
+        "default_command_sequence" - A default command sequence which should \
+                                     be executed in given order.
     '''
 
     # region properties
@@ -275,16 +283,7 @@ class Run(Class, Runnable):
         default_command_sequence=('compile', 'run', 'clean'), **keywords
     ):
 ##
-        '''
-            Determines a code file to run and runs them in its own thread by \
-            piping all outputs through the command line interface.
-
-            "code_file_path"           - A given code file handler or path \
-                                         which should be run.
-
-            "default_command_sequence" - A default command sequence which \
-                                         should be executed in given order.
-        '''
+        '''Sets some instance properties.'''
 
                 # region properties
 

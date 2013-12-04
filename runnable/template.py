@@ -72,6 +72,78 @@ class Parser(Class, Runnable):
         This class can parse a string or file to interpret it as template for \
         replacing containing placeholder and rendering embedded python script \
         snippets.
+
+        NOTE: "(?s...)" and "(?m...)" is equivalent for regular expression \
+        flag "re.DOTALL" and "re.MULTILINE". NOTE: This regular expression \
+        patterns assumes that the delimiter has at least a length of two.
+
+        "template"                              - A template string, path to \
+                                                  template file or file \
+                                                  object pointing to a \
+                                                  template file.
+
+        "string"                                - Indicates weather \
+                                                  "template" is a template \
+                                                  string or file path.
+
+        "file_encoding"                         - Encoding used for reading \
+                                                  template file and writing \
+                                                  rendered output.
+
+        "placeholder_name_pattern"              - Regular expression pattern \
+                                                  to specify a placeholder \
+                                                  name format.
+
+        "command_line_placeholder_name_pattern" - Regular expression to \
+                                                  specify a placeholder name \
+                                                  given via command line \
+                                                  interface.
+
+        "command_line_placeholder_pattern"      - Regular expression pattern \
+                                                  to identify a placeholder \
+                                                  value tuple in command line \
+                                                  interface.
+
+        "placeholder_pattern"                   - Pattern to specify a \
+                                                  placeholder in template \
+                                                  string.
+
+        "template_pattern"                      - Regular expression to \
+                                                  identify each template \
+                                                  identify syntax.
+
+        "native_template_pattern"               - Regular expression pattern \
+                                                  to used for pythons native \
+                                                  template engine.
+
+        "left_code_delimiter"                   - Left code delimiter to \
+                                                  identify a code starting \
+                                                  point of a code line.
+
+        "right_escaped"                         - Escape symbol to mask a \
+                                                  delimiter symbol.
+
+        "template_context_default_indent"       - Expected indention used for \
+                                                  for interpreting code blocks.
+
+        "builtin_names"                         - A tuple of function and \
+                                                  variables available in \
+                                                  template engine.
+
+        "pretty_indent"                         - Indicates if we should \
+                                                  spend time on rendering \
+                                                  pretty indented code in \
+                                                  each case.
+
+        Examples:
+
+        >>> file = FileHandler(__test_folder__.path + '_run')
+        >>> file.content = 'hans <%placeholder%>'
+        >>> template = Parser(template=file)
+        >>> template.substitute(placeholder='also hans')
+        Object of "Parser" with template "hans <%placeholder%>".
+        >>> template.output
+        'hans also hans'
     '''
 
     # region properties
@@ -846,86 +918,7 @@ class Parser(Class, Runnable):
         pretty_indent=False, **keywords
     ):
 ##
-        '''
-            Initializes output buffer and template scope. NOTE: "(?s...)" and \
-            "(?m...)" is equivalent for regular expression flag "re.DOTALL" \
-            and "re.MULTILINE". NOTE: This regular expression patterns \
-            assumes that the delimiter has at least a length of two.
-
-            "template"                              - A template string, path \
-                                                      to template file or \
-                                                      file object pointing to \
-                                                      a template file.
-
-            "string"                                - Indicates weather \
-                                                      "template" is a \
-                                                      template string or file \
-                                                      path.
-
-            "file_encoding"                         - Encoding used for \
-                                                      reading template file \
-                                                      and writing rendered \
-                                                      output.
-
-            "placeholder_name_pattern"              - Regular expression \
-                                                      pattern to specify a \
-                                                      placeholder name format.
-
-            "command_line_placeholder_name_pattern" - Regular expression to \
-                                                      specify a placeholder \
-                                                      name given via command \
-                                                      line interface.
-
-            "command_line_placeholder_pattern"      - Regular expression \
-                                                      pattern to identify a \
-                                                      placeholder value tuple \
-                                                      in command line \
-                                                      interface.
-
-            "placeholder_pattern"                   - Pattern to specify a \
-                                                      placeholder in template \
-                                                      string.
-
-            "template_pattern"                      - Regular expression to \
-                                                      identify each template \
-                                                      identify syntax.
-
-            "native_template_pattern"               - Regular expression \
-                                                      pattern to used for \
-                                                      pythons native template \
-                                                      engine.
-
-            "left_code_delimiter"                   - Left code delimiter to \
-                                                      identify a code \
-                                                      starting point of a \
-                                                      code line.
-
-            "right_escaped"                         - Escape symbol to mask a \
-                                                      delimiter symbol.
-
-            "template_context_default_indent"       - Expected indention used \
-                                                      for interpreting code \
-                                                      blocks.
-
-            "builtin_names"                         - A tuple of function and \
-                                                      variables available in \
-                                                      template engine.
-
-            "pretty_indent"                         - Indicates if we should \
-                                                      spend time on rendering \
-                                                      pretty indented code in \
-                                                      each case.
-
-            Examples:
-
-            >>> file = FileHandler(__test_folder__.path + '_run')
-            >>> file.content = 'hans <%placeholder%>'
-            >>> template = Parser(template=file)
-            >>> template.substitute(placeholder='also hans')
-            Object of "Parser" with template "hans <%placeholder%>".
-            >>> template.output
-            'hans also hans'
-        '''
+        '''Initializes output buffer and template scope.'''
 
                 # region properties
 

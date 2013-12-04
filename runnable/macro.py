@@ -62,6 +62,53 @@ class Replace(Class, Runnable):
     '''
         Parse source code and replace version depended code snippets with the \
         correct given version code snippets.
+
+        NOTE: "(?s...)" is equivalent to regular expression flag "re.DOTALL". \
+        NOTE: That alternate version in one line regular expression pattern \
+        could be empty.
+
+        "location"                 - Location to execute macro processing.
+
+        "skip_self_file"           - If setted to "True" and this script file \
+                                     file is part of "location" this file \
+                                     will be ignored.
+
+        "extension"                - File extensions to handle. Others will \
+                                     be excluded.
+
+        "first_line_regex_pattern" - Regular expression pattern to determine \
+                                     current version of given text file.
+
+        "one_line_regex_pattern"   - One line regular expression syntax to \
+                                     replace.
+
+        "more_line_regex_pattern"  - More line regular expression syntax to \
+                                     replace.
+
+        "encoding"                 - Encoding to use.
+
+        "dry"                      - Indicates weather a dry run with \
+                                     producing log output should be done.
+
+        "_exclude_locations"       - Locations to exclude.
+
+        "_new_version"             - Version description to convert to.
+
+        Examples:
+
+        >>> Replace(
+        ...     location='non_existing_file'
+        ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
+        Traceback (most recent call last):
+        ...
+        boostNode.extension.native.FileError: Invalid path "...non_exist...
+
+        >>> __test_globals__['__test_mode__'] = False
+        >>> file = FileHandler(__test_folder__.path + '_initialize')
+        >>> file.content = '#!/bin/python2.7\\n\\n## python3.3 a\\nb\\n'
+        >>> Replace(file) # doctest: +ELLIPSIS
+        Object of "Replace" with file "..._initialize" to convert to "py...
+        >>> __test_globals__['__test_mode__'] = True
     '''
 
     # region properties
@@ -363,56 +410,7 @@ class Replace(Class, Runnable):
         **keywords
     ):
 ##
-        '''
-            Triggers the conversion process with given arguments. NOTE: \
-            "(?s...)" is equivalent to regular expression flag "re.DOTALL". \
-            NOTE: That alternate version in one line regular expression \
-            pattern could be empty.
-
-            "location"                 - Location to execute macro processing.
-
-            "skip_self_file"           - If setted to "True" and this script \
-                                         file is part of "location" this file \
-                                         will be ignored.
-
-            "extension"                - File extensions to handle. Others \
-                                         will be excluded.
-
-            "first_line_regex_pattern" - Regular expression pattern to \
-                                         determine current version of given \
-                                         text file.
-
-            "one_line_regex_pattern"   - One line regular expression syntax \
-                                         to replace.
-
-            "more_line_regex_pattern"  - More line regular expression syntax \
-                                         to replace.
-
-            "encoding"                 - Encoding to use.
-
-            "dry"                      - Indicates weather a dry run with \
-                                         producing log output should be done.
-
-            "_exclude_locations"       - Locations to exclude.
-
-            "_new_version"             - Version description to convert to.
-
-            Examples:
-
-            >>> Replace(
-            ...     location='non_existing_file'
-            ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
-            Traceback (most recent call last):
-            ...
-            boostNode.extension.native.FileError: Invalid path "...non_exist...
-
-            >>> __test_globals__['__test_mode__'] = False
-            >>> file = FileHandler(__test_folder__.path + '_initialize')
-            >>> file.content = '#!/bin/python2.7\\n\\n## python3.3 a\\nb\\n'
-            >>> Replace(file) # doctest: +ELLIPSIS
-            Object of "Replace" with file "..._initialize" to convert to "py...
-            >>> __test_globals__['__test_mode__'] = True
-        '''
+        '''Triggers the conversion process with given arguments.'''
 
                 # region properties
 
