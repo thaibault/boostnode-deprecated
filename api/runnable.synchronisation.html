@@ -61,6 +61,116 @@
 <dt id="boostNode.runnable.synchronisation.Reflector">
 <em class="property">class </em><tt class="descclassname">boostNode.runnable.synchronisation.</tt><tt class="descname">Reflector</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.synchronisation.Reflector" title="Permalink to this definition">¶</a></dt>
 <dd><p>Main class of the file reflection application.</p>
+<p>&#8220;source_location&#8221;                 - Source location to reflect.</p>
+<p>&#8220;target_location&#8221;                 - Target location where the                                             reflection should be saved.</p>
+<p>&#8220;limit&#8221;                           - Limit of summarized file size.</p>
+<p>&#8220;priority_locations&#8221;              - Location to prefer if limit                                             doesn&#8217;t suffices.</p>
+<p>&#8220;exclude_locations&#8221;               - Locations to ignore during                                             reflection creation.</p>
+<p>&#8220;target_rights&#8221;                   - Rights used to create reflection                                             files.</p>
+<p>&#8220;synchronize_back&#8221;                - Indicates weather to synchronize                                             a reflection back.</p>
+<p>&#8220;create&#8221;                          - Indicates weather to create a new                                             reflection.</p>
+<p>&#8220;use_native_symlinks&#8221;             - Indicates weather to use native                                             system symbolic links or portable                                             links.</p>
+<p>&#8220;minimum_reflection_size_in_byte&#8221; - Minimum reflection size to check                                             before synchronizing back. This                                             is only used as sanity check.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Reflector</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">source_location</span><span class="o">=</span><span class="n">__test_folder__</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">target_location</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;target&#39;</span>
+<span class="gp">... </span><span class="p">)</span> 
+<span class="gt">Traceback (most recent call last):</span>
+<span class="c">...</span>
+<span class="gr">boostNode.extension.native.SynchronisationError</span>: <span class="n">Source path &quot;...</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Reflector</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">source_location</span><span class="o">=</span><span class="s">&#39;not existing&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">target_location</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;target&#39;</span>
+<span class="gp">... </span><span class="p">)</span> 
+<span class="gt">Traceback (most recent call last):</span>
+<span class="c">...</span>
+<span class="gr">boostNode.extension.native.FileError</span>: <span class="n">Invalid path &quot;...</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">FileHandler</span><span class="p">(</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;s/A/B&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">make_directories</span><span class="p">()</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Reflector</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">source_location</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;s&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">target_location</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;t&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">limit</span><span class="o">=</span><span class="s">&#39;10 apples&#39;</span>
+<span class="gp">... </span><span class="p">)</span> 
+<span class="gt">Traceback (most recent call last):</span>
+<span class="c">...</span>
+<span class="gr">boostNode.extension.native.SynchronisationError</span>: <span class="n">Invalid cache-l...</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Reflector</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">source_location</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;s&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">target_location</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;t&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">limit</span><span class="o">=</span><span class="s">&#39;-1 byte&#39;</span>
+<span class="gp">... </span><span class="p">)</span> 
+<span class="gt">Traceback (most recent call last):</span>
+<span class="c">...</span>
+<span class="gr">boostNode.extension.native.SynchronisationError</span>: <span class="n">Invalid cache-l...</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Reflector</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">source_location</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;s&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">target_location</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;t&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">target_rights</span><span class="o">=</span><span class="mi">800</span>
+<span class="gp">... </span><span class="p">)</span> 
+<span class="gt">Traceback (most recent call last):</span>
+<span class="c">...</span>
+<span class="gr">SynchronisationError</span>: <span class="n">Reflection-rights &quot;800&quot; aren&#39;t written in ...</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Reflector</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">source_location</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;s&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">target_location</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;t&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">priority_locations</span><span class="o">=</span><span class="p">(</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;t&#39;</span><span class="p">,)</span>
+<span class="gp">... </span><span class="p">)</span> 
+<span class="gt">Traceback (most recent call last):</span>
+<span class="c">...</span>
+<span class="gr">SynchronisationError</span>: <span class="n">Priority path &quot;.../t/&quot; have to be inside...</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Reflector</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">source_location</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;s&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">target_location</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;t&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">priority_locations</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;not existing&#39;</span><span class="p">,)</span>
+<span class="gp">... </span><span class="p">)</span> 
+<span class="gt">Traceback (most recent call last):</span>
+<span class="c">...</span>
+<span class="gr">boostNode.extension.native.FileError</span>: <span class="n">Invalid path &quot;...not existi</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Reflector</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">source_location</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;s&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">target_location</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;t&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">priority_locations</span><span class="o">=</span><span class="p">(</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;../&#39;</span><span class="p">,),</span>
+<span class="gp">... </span><span class="p">)</span> 
+<span class="gt">Traceback (most recent call last):</span>
+<span class="c">...</span>
+<span class="gr">boostNode.extension.native.SynchronisationError</span>: <span class="n">...have to be in</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">__test_globals__</span><span class="p">[</span><span class="s">&#39;__test_mode__&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Reflector</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">source_location</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;s&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">target_location</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;t&#39;</span>
+<span class="gp">... </span><span class="p">)</span> 
+<span class="go">Object of &quot;Reflector&quot; with source path &quot;...s...&quot; and target path...</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Reflector</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">source_location</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;s&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">target_location</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;t&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">synchronize_back</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">minimum_reflection_size_in_byte</span><span class="o">=</span><span class="mi">0</span>
+<span class="gp">... </span><span class="p">)</span> 
+<span class="go">Object of &quot;Reflector&quot; with source path &quot;...s...&quot; and target path...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">__test_globals__</span><span class="p">[</span><span class="s">&#39;__test_mode__&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+</pre></div>
+</div>
 <dl class="attribute">
 <dt id="boostNode.runnable.synchronisation.Reflector.COMMAND_LINE_ARGUMENTS">
 <tt class="descname">COMMAND_LINE_ARGUMENTS</tt><em class="property"> = ({'keywords': {'const': '', 'help': 'Select which path you want to use as source path.', 'nargs': '?', 'action': 'store', 'type': &lt;type 'str'&gt;, 'metavar': 'FOLDER_PATH'}, 'arguments': ('source_location',)}, {'keywords': {'const': '', 'help': 'Select which path you want to use as target (reflection) path.', 'default': {'execute': '__initializer_default_value__'}, 'nargs': '?', 'action': 'store', 'type': &lt;type 'str'&gt;, 'metavar': 'FOLDER_PATH'}, 'arguments': ('target_location',)}, {'keywords': {'execute': 'arguments[0][&quot;keywords&quot;]'}, 'arguments': ('-a', '--source')}, {'keywords': {'execute': 'arguments[1][&quot;keywords&quot;]'}, 'arguments': ('-b', '--target')}, {'keywords': {'help': {'execute': '\'Select a limit for your cache size (default: &quot;%s&quot;).\' % __initializer_default_value__.replace(\'%\', \'%%\')'}, 'default': {'execute': '__initializer_default_value__'}, 'required': {'execute': '__initializer_default_value__ is None'}, 'dest': 'limit', 'action': 'store', 'type': {'execute': 'type(__initializer_default_value__)'}, 'metavar': 'LIMIT'}, 'arguments': ('-f', '--limit')}, {'keywords': {'dest': 'priority_locations', 'default': {'execute': '__initializer_default_value__'}, 'help': 'Select locations which should be handle with higher priority this application will try to copy these files into the cache.', 'action': 'store', 'type': &lt;type 'str'&gt;, 'required': {'execute': '__initializer_default_value__ is None'}, 'nargs': '*', 'metavar': 'PATHS'}, 'arguments': ('-p', '--priority-locations')}, {'keywords': {'dest': 'exclude_locations', 'default': {'execute': '__initializer_default_value__'}, 'help': &quot;Select locations which should be ignored. This application doesn't touch these files in source and its corresponding locations in target.&quot;, 'action': 'store', 'type': &lt;type 'str'&gt;, 'required': {'execute': '__initializer_default_value__ is None'}, 'nargs': '*', 'metavar': 'PATHS'}, 'arguments': ('-e', '--exclude-locations')}, {'keywords': {'help': {'execute': '\'Select which rights your reflection files should have (default: &quot;%d&quot;).\' % __initializer_default_value__'}, 'default': {'execute': '__initializer_default_value__'}, 'required': {'execute': '__initializer_default_value__ is None'}, 'dest': 'target_rights', 'action': 'store', 'type': {'execute': 'type(__initializer_default_value__)'}, 'metavar': 'RIGHT'}, 'arguments': ('-r', '--target-rights')}, {'keywords': {'action': 'store_true', 'default': {'execute': '__initializer_default_value__'}, 'dest': 'synchronize_back', 'help': 'Select to synchronize an existing reflection back.'}, 'arguments': ('-s', '--synchronize-back')}, {'keywords': {'action': 'store_true', 'default': {'execute': '__initializer_default_value__'}, 'dest': 'create', 'help': 'Select to create a reflection (optionally after a synchronisation).'}, 'arguments': ('-d', '--create')}, {'keywords': {'action': 'store_true', 'default': {'execute': '__initializer_default_value__'}, 'dest': 'use_native_symlinks', 'help': 'Use native system symbolic links instead of portable FileReflector links.'}, 'arguments': ('-n', '--use-native-symlinks')}, {'keywords': {'help': {'execute': '\'A threshold in byte from where a warning is &quot;shown (default: &quot;%d&quot;).\' % __initializer_default_value__'}, 'default': {'execute': '__initializer_default_value__'}, 'required': {'execute': '__initializer_default_value__ is None'}, 'dest': 'minimum_reflection_size_in_byte', 'action': 'store', 'type': {'execute': 'type(__initializer_default_value__)'}, 'metavar': 'NUMBER_OF_BYTES'}, 'arguments': ('-u', '--minimum-reflection-size')}, {'keywords': {'dest': 'open', 'default': (), 'help': 'Open given files with a useful program.', 'action': 'store', 'type': &lt;type 'str'&gt;, 'required': False, 'nargs': '*', 'metavar': 'FILE_PATHS'}, 'arguments': ('-o', '--open')})</em><a class="headerlink" href="#boostNode.runnable.synchronisation.Reflector.COMMAND_LINE_ARGUMENTS" title="Permalink to this definition">¶</a></dt>
