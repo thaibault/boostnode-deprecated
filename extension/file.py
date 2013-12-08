@@ -2717,6 +2717,9 @@ class Handler(Class):
                                    given backup name and content (if \
                                    "compare_content" is set).
 
+            **compare_content**  - Compares content of directories and files \
+                                   instead simply check again file names.
+
             Examples:
 
             >>> handler = Handler(__test_folder__.path + 'backup')

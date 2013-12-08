@@ -238,8 +238,6 @@ Structure of meta documenting classes. (see bc14 and bc15)
 
 Structure of dependencies
 
-    # TODO check rendered version
-
     0.  builtins
     1.  boostNode.extension.type
     2.  boostNode.aspect.signature
