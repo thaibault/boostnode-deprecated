@@ -87,32 +87,6 @@
 <dt id="boostNode.paradigm.aspectOrientation.FunctionDecorator">
 <tt class="descclassname">boostNode.paradigm.aspectOrientation.</tt><tt class="descname">FunctionDecorator</tt><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.FunctionDecorator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Abstract class and interface for function decorator classes.</p>
-<p><strong>method</strong>   - The wrapped function.</p>
-<p><strong>function</strong> - If not &#8220;None&#8221; this contains the real function and                        &#8220;method&#8221; contains a special type of function (like                        &#8220;builtins.classmethod&#8221; or &#8220;builtins.staticmethod&#8221;). In                        this case the method type influences the behavior                        during calling the real function.</p>
-<p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">a</span><span class="p">():</span> <span class="k">pass</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">FunctionDecorator</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> 
-<span class="go">Object of &quot;FunctionDecorator&quot; with wrapped function &quot;a&quot; and ...</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">FunctionDecorator</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> 
-<span class="gt">Traceback (most recent call last):</span>
-<span class="c">...</span>
-<span class="gr">TypeError</span>: <span class="n">First ... but &quot;int&quot; (5) given.</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">FunctionDecorator</span><span class="p">(</span><span class="n">FunctionDecorator</span><span class="p">(</span><span class="n">a</span><span class="p">))</span> 
-<span class="go">Object of &quot;FunctionDecorator&quot; with wrapped function &quot;a&quot; and ...</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">FunctionDecorator</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">FunctionDecorator</span><span class="p">,</span> <span class="n">FunctionDecorator</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
-<span class="gp">... </span><span class="p">)</span> 
-<span class="go">Object of &quot;FunctionDecorator&quot; with wrapped function &quot;a&quot; and ...</span>
-</pre></div>
-</div>
 </dd></dl>
 
 <dl class="attribute">
@@ -196,20 +170,6 @@
 <dt id="boostNode.paradigm.aspectOrientation.JointPointHandler">
 <em class="property">class </em><tt class="descclassname">boostNode.paradigm.aspectOrientation.</tt><tt class="descname">JointPointHandler</tt><big>(</big><em>class_object</em>, <em>object</em>, <em>function</em>, <em>arguments</em>, <em>keywords</em><big>)</big><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.JointPointHandler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Abstract class for joint point implementations.</p>
-<p><strong>class_object</strong> - function bounded class object</p>
-<p><strong>object</strong>       - function bounded instance</p>
-<p><strong>function</strong>     - function to handle</p>
-<p><strong>arguments</strong>    - arguments which should be forwarded to given                            function</p>
-<p><strong>keywords</strong>     - keywords which should be forwarded to given function</p>
-<p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="k">def</span> <span class="nf">a</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">pass</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">JointPointHandler</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">A</span><span class="p">(),</span> <span class="n">A</span><span class="p">()</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="p">(),</span> <span class="p">{})</span> 
-<span class="go">Object of &quot;JointPointHandler&quot; with class object &quot;A&quot;, object &quot;...&quot;.</span>
-</pre></div>
-</div>
 <dl class="classmethod">
 <dt id="boostNode.paradigm.aspectOrientation.JointPointHandler.aspect">
 <em class="property">classmethod </em><tt class="descname">aspect</tt><big>(</big><big>)</big><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.JointPointHandler.aspect" title="Permalink to this definition">¶</a></dt>
@@ -259,24 +219,6 @@
 <dt id="boostNode.paradigm.aspectOrientation.ReturnJointPoint">
 <em class="property">class </em><tt class="descclassname">boostNode.paradigm.aspectOrientation.</tt><tt class="descname">ReturnJointPoint</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.ReturnJointPoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Abstract class for joint points dealing with function&#8217;s return value.</p>
-<p>Arguments and keywords are forwarded to the &#8220;JointPointHandler&#8221;         initialize method.</p>
-<p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="k">def</span> <span class="nf">a</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">pass</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ReturnJointPoint</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">A</span><span class="p">,</span> <span class="n">A</span><span class="p">(),</span> <span class="n">A</span><span class="p">()</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="p">(),</span> <span class="p">{},</span> <span class="n">return_value</span><span class="o">=</span><span class="bp">None</span>
-<span class="gp">... </span><span class="p">)</span> 
-<span class="go">Object of &quot;ReturnJointPoint&quot; with class object &quot;A&quot;, object &quot;...&quot;.</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ReturnJointPoint</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">A</span><span class="p">,</span> <span class="n">A</span><span class="p">(),</span> <span class="n">A</span><span class="p">()</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="p">(),</span> <span class="p">{},</span> <span class="bp">None</span>
-<span class="gp">... </span><span class="p">)</span> 
-<span class="go">Object of &quot;ReturnJointPoint&quot; with class object &quot;A&quot;, object &quot;...&quot;.</span>
-</pre></div>
-</div>
 </dd></dl>
 
 </div>
