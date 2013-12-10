@@ -1313,10 +1313,16 @@ class String(Object, builtins.str):
 
     # endregion
 
-# TODO STAND
 
 class Dictionary(Object, builtins.dict):
-    '''This class extends the native dictionary object.'''
+    '''
+        This class extends the native dictionary object.
+
+        **content** - content for dictionary object
+
+        Additional arguments and keywords are forwarded to python's native
+        "dict()" method.
+    '''
 
     # region dynamic methods
 
@@ -1392,6 +1398,10 @@ class Dictionary(Object, builtins.dict):
             Invokes if this object should returns current value stored at \
             given key.
 
+            **key** - dictionary key to get.
+
+            Returns the requested dictionary value.
+
             Examples:
 
             >>> Dictionary({'a': 'hans'})['a']
@@ -1430,6 +1440,11 @@ class Dictionary(Object, builtins.dict):
             name is present in current saved dictionary its value will be \
             returned in a tuple with currently saved dictionary. The \
             corresponding data will be erased from dictionary.
+
+            **name**          - key to get from current dictionary instance
+
+            **default_value** - value to return if requested key isn't \
+                                present in current dictionary instance.
 
             Examples:
 
@@ -1550,6 +1565,12 @@ class Module(Object):
             Determines the package and module level context path to a given \
             context or file.
 
+            **path**  - relative or absolute context or file path to normalize
+
+            **frame** - stack frame to analyse again context
+
+            Returns the normalized context path.
+
             Examples:
 
             >>> Module.get_context_path(
@@ -1587,6 +1608,16 @@ class Module(Object):
             this module's context will be selected. If "base" is set "True" \
             the modules name is given back without any file extension.
 
+            # TODO stand
+
+            **frame**     -
+
+            **module**    -
+
+            **extension** -
+
+            **path**      -
+
             Examples:
 
             >>> Module().name
@@ -1621,6 +1652,10 @@ class Module(Object):
         '''
             Determines package context of given frame. If current context \
             isn't in any package context an empty string is given back.
+
+            **frame** -
+
+            **path** -
 
             Examples:
 
@@ -1664,6 +1699,10 @@ class Module(Object):
         '''
             Returns the path to given module name.
 
+            **context_path**      -
+
+            **only_source_files** -
+
             Examples:
 
             >>> Module.get_file_path('doctest') # doctest: +ELLIPSIS
@@ -1703,6 +1742,8 @@ class Module(Object):
         '''
             Checks if given location is pointed to a python package.
 
+            **path** -
+
             Examples:
 
             >>> Module.is_package(__file_path__)
@@ -1732,6 +1773,10 @@ class Module(Object):
         '''
             Searches for a useful caller object in given module objects via \
             "module_objects".
+
+            **callable_objects** -
+
+            **caller**           -
 
             Examples:
 
@@ -1777,6 +1822,10 @@ class Module(Object):
         '''
             Takes a module and gives a list of objects explicit defined in \
             this module.
+
+            **scope**             -
+
+            **only_module_level** -
 
             Examples:
 
@@ -1835,6 +1884,23 @@ class Module(Object):
         '''
             Runs a given program for every given module. Returns "False" if \
             no modules were found or given program isn't installed.
+
+            **program_type** -
+
+            **program**      -
+
+            **modules**      -
+
+            **arguments**    -
+
+            **extension**    -
+
+            **delimiter**    -
+
+            **log**          -
+
+            Additional keywords are forwarded to
+            "boostNode.system.Platform.run()".
 
             Examples:
 
@@ -1898,6 +1964,14 @@ class Module(Object):
             exception class, a logger instance, variable to indicate if \
             module is running in test mode and a variable that saves the \
             current module name.
+
+            **name**               -
+
+            **frame**              -
+
+            **module**             -
+
+            **post_extend_others** -
 
             Returns a dictionary with new module's scope and module name.
 
@@ -1973,6 +2047,16 @@ class Module(Object):
             scope will be extended and a common meta command line interface \
             is provided to test or run objects in given module.
 
+            **name**             -
+
+            **frame**            -
+
+            **default_caller**   -
+
+            **caller_arguments** -
+
+            **caller_keywords**  -
+
             Examples:
 
             >>> command_line_arguments_save = copy.copy(sys.argv)
@@ -2006,6 +2090,15 @@ class Module(Object):
             Serves a common way to extend a given package. The given \
             package's scope will be extended and a common meta command line \
             interface is provided to test, lint or document modules.
+
+            **name**                   -
+
+            **frame**                  -
+
+            **command_line_arguments** -
+
+            Additional arguments and keywords are forwarded to
+            "...extension.system.CommandLine.generic_package_interface()".
 
             Examples:
 

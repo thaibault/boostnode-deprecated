@@ -64,6 +64,12 @@ class Buffer(Class, logging.StreamHandler):
         This class represents a layer for writing and reading to an output \
         buffer realized as file, queue or variable.
 
+        **file**                    -
+
+        **queue**                   -
+
+        **support_multiprocessing** -
+
         Examples:
 
         >>> buffer = Buffer(file=__test_folder__.path + 'Buffer')
@@ -240,6 +246,8 @@ class Buffer(Class, logging.StreamHandler):
             Writes content to the current output buffer file. If the current \
             given file "Buffer.file" doesn't exists it will be created.
 
+            **content** -
+
             Examples:
 
             >>> buffer = Buffer(file=__test_folder__.path + 'write')
@@ -286,6 +294,8 @@ class Buffer(Class, logging.StreamHandler):
     def clear(self, delete=True):
         '''
             Removes the current output buffer content.
+
+            **delete** -
 
             Examples:
 
@@ -346,6 +356,19 @@ class Print(Class):
     '''
         Provides a high level printing class on top of pythons native print \
         function.
+
+        **output**    - are the strings which should be printed or saved.
+
+        **codewords** - represents all possible optional arguments.
+            "codeword['start']"
+            "codeword['separator']"
+            "codeword['end']"
+            "codeword['flush']"
+            "codeword['buffer']" could be any instance as buffer which \
+                                 implements a "write()" method.
+
+        Returns the given string or the last element if an iterable object \
+        was given.
     '''
 
     # region properties
@@ -380,19 +403,6 @@ class Print(Class):
         '''
             Writes something to the output buffer or prints to standard \
             output.
-
-            **output**    - are the strings which should be printed or saved.
-
-            **codewords** - represents all possible optional arguments.
-                "codeword['start']"
-                "codeword['separator']"
-                "codeword['end']"
-                "codeword['flush']"
-                "codeword['buffer']" could be any instance as buffer which \
-                                     implements a "write()" method.
-
-            Returns the given string or the last element if an iterable \
-            object was given.
 
             Examples:
 
@@ -627,6 +637,16 @@ class Logger(Class):
             properties. If a logger was already registered under given name \
             the existing instance is given back and a new instance otherwise.
 
+            **name**       -
+
+            **level**      -
+
+            **buffer**     -
+
+            **terminator** -
+
+            **format**     -
+
             Examples:
 
             >>> logger_a = Logger.get('test', buffer=(__test_buffer__,))
@@ -668,6 +688,14 @@ class Logger(Class):
             Note that every argument except buffer setted to "None" will not \
             edit this logger component. If you don't want to change buffer \
             leave it "False".
+
+            **level**      -
+
+            **buffer**     -
+
+            **terminator** -
+
+            **format**     -
 
             Examples:
 

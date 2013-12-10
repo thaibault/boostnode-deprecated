@@ -80,6 +80,9 @@ class Runnable(builtins.object):
         Abstract class (interface) for implementing reusable classes which \
         acts directly as an command line interface to provide their features \
         platform independent.
+
+        Arguments and keywords are forwarded to the protected "_initialize()" \
+        method.
     '''
 
     # region properties
@@ -128,6 +131,9 @@ class Runnable(builtins.object):
         '''
             Method for an explicit run of a class implementing this abstract \
             class (interface).
+
+            Arguments and keywords are forwarded to current instance
+            initializer.
 
             Examples:
 
@@ -368,6 +374,12 @@ class Runnable(builtins.object):
         '''
             This method should usually be overwritten to handle cleanup jobs.
 
+            **signal_number** -
+
+            **stack_frame**   -
+
+            **reason**        -
+
             Examples:
 
             >>> class A(Runnable):
@@ -400,6 +412,8 @@ class Runnable(builtins.object):
 ##
         '''
             Method for cleaning up running workers.
+
+            Arguments and keywords are forwarded to the "stop()" method.
 
             Examples:
 
@@ -797,6 +811,12 @@ class Platform(builtins.object):
         '''
             Checks if a remote computer is available by pinging it.
 
+            **host**               -
+
+            **timeout_in_seconds** -
+
+            **port**               -
+
             Examples:
 
             >>> isinstance(
@@ -825,6 +845,9 @@ class Platform(builtins.object):
         '''
             Wakes a remote computer and ensure that it is ready by pinging \
             till it answers.
+
+            Arguments and keywords are forwarded to "change_computer_status()"
+            method.
 
             Examples:
 
@@ -863,6 +886,18 @@ class Platform(builtins.object):
             Shuts down or boot a computer and ensure that is is available \
             after boot or not available if it should be shut down.
 
+            **host**            -
+
+            **mac_address**     -
+
+            **broadcast**       -
+
+            **handler**         -
+
+            **down**            -
+
+            **number_of_tries** -
+
             Returns a tuple: first value indicates weather it was successful \
             and second is "True" if computer status was needed to be changed \
             and "False" otherwise.
@@ -896,6 +931,12 @@ class Platform(builtins.object):
         '''
             Wakes up a remote computer using a magic package \
             (wake-on-lan-package).
+
+            **make_address** -
+
+            **broadcast**    -
+
+            Returns "True" if no socket error occurs and "False" otherwise.
 
             Examples:
 
@@ -965,6 +1006,8 @@ class Platform(builtins.object):
             of pausing the current thread stay in the current function call \
             still a continue event is triggered.
 
+            **waiting_delay_in_seconds** -
+
             Examples:
 
             >>> Platform.check_thread()
@@ -1005,6 +1048,8 @@ class Platform(builtins.object):
             Sets a global lock. Creates a file with given name prefix of \
             "description".
 
+            **description** -
+
             Examples:
 
             >>> lock_file = FileHandler(
@@ -1044,6 +1089,8 @@ class Platform(builtins.object):
         '''
             Removes a prior setted lock file.
 
+            **description** -
+
             Examples:
 
             >>> file = FileHandler(
@@ -1075,6 +1122,8 @@ class Platform(builtins.object):
         '''
             Checks if a lock file with given description exists. NOTE: \
             Calling this function doesn't prevent you from race conditions.
+
+            **description** -
 
             Examples:
 
@@ -1221,6 +1270,8 @@ class Platform(builtins.object):
             the Windows environment variable "COMSPEC": it is usually \
             "cmd.exe", which returns the exit status of the command run; on \
             systems using a non-native shell, consult your shell documentation.
+
+            **location** -
 
             Examples:
 
@@ -1550,6 +1601,25 @@ class CommandLine(builtins.object):
             Represents a basic argument parsing for command line interface \
             inputs. It's used as default pattern for many interface concepts.
 
+            **arguments**   -
+
+            **module_name** -
+
+            **scope**       -
+
+            **meta**        -
+
+            **description** -
+
+            **version**     -
+
+            **default**     -
+
+            Additional arguments are forwarded to python's native \
+            "argparse.ArgumentParser()" initializer. \
+            Additional keywords are forwarded to \
+            "_determine_argument_parser_keywords()" method.
+
             Examples:
 
             >>> import copy
@@ -1612,6 +1682,8 @@ class CommandLine(builtins.object):
             Handles log level in a generic way. If given command line \
             arguments contains a log level all logger levels will be setted \
             to this level.
+
+            **arguments** -
         '''
         if(builtins.hasattr(arguments, 'log_level') and
            arguments.log_level is not None):
@@ -1628,6 +1700,8 @@ class CommandLine(builtins.object):
         '''
             This methods implements a handy way to get "yes" or "no" answers \
             from the user via command line.
+
+            **question** -
 
             Examples:
 
@@ -1657,6 +1731,10 @@ class CommandLine(builtins.object):
 ##
         '''
             Returns all aspect orientated wrapped methods in given module.
+
+            **scope** -
+
+            **only_module_level** -
 
             Examples:
 
@@ -1713,6 +1791,28 @@ class CommandLine(builtins.object):
             features are linting, generate documentation, testing and \
             removing temporary files.
 
+            **name**                         -
+
+            **frame**                        -
+
+            **command_line_arguments**       -
+
+            **linter**                       -
+
+            **documenter**                   -
+
+            **documenter_arguments**         -
+
+            **documentation_path**           -
+
+            **clear_old_documentation**      -
+
+            **documentation_file_extension** -
+
+            **temp_file_patterns**           -
+
+            **exclude_packages**             -
+
             Examples:
 
             >>> CommandLine.generic_package_interface(
@@ -1758,6 +1858,8 @@ class CommandLine(builtins.object):
         '''
             Provides a generic command line interface for modules. Things \
             like unit testing or calling objects in module are provided.
+
+            TODO predoc STAND
         '''
         if temp_file_patterns is None:
             temp_file_patterns = cls.DEFAULT_TEMP_FILE_PATTERNS
