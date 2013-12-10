@@ -106,7 +106,11 @@ class PropertyInitializer(FunctionDecorator):
         '''
         @functools.wraps(self.__func__)
         def wrapper_function(*arguments, **keywords):
-            '''Wrapper function for initializing instance properties.'''
+            '''
+                Wrapper function for initializing instance properties.
+
+                Given arguments and keywords are forwarded to wrapped function.
+            '''
             '''Unpack wrapper methods.'''
             while builtins.hasattr(self.__func__, '__func__'):
                 self.__func__ = self.__func__.__func__
@@ -127,7 +131,11 @@ class PropertyInitializer(FunctionDecorator):
 
 
 class Object(Class):
-    '''This class extends all native python classes.'''
+    '''
+        This class extends all native python classes.
+
+        **content** - Object value to save.
+    '''
 
     # region dynamic methods
 
@@ -315,6 +323,12 @@ class Object(Class):
             Generates a suitable exception for raising if a method is called \
             initially indented to be overwritten.
 
+            **abstract_class_name** - Class name of super class.
+
+            **class_name**          - Class name which initiates the exception.
+
+            Returns generated exception.
+
             Examples:
 
             >>> class A(Object):
@@ -366,6 +380,8 @@ class String(Object, builtins.str):
         special methods like "__str__()" and "__len__()" because they have to \
         use the "content" property which could be manipulated by not \
         inherited methods.
+
+        **content** - Content to be saved as string.
     '''
 
     # region properties
@@ -496,6 +512,8 @@ class String(Object, builtins.str):
 
             **escape_sequence** - is an escape sequence for each element from \
                                   "sequence".
+
+            Returns the generated dictionary.
 
             Examples:
 
@@ -740,6 +758,9 @@ class String(Object, builtins.str):
             Validates the current string for using in a regular expression \
             pattern. Special regular expression chars will be escaped.
 
+            **exclude_symbols** - Escapes each regular expression special \
+                                  character.
+
             Examples:
 
             >>> String("that's no regex: .*$").validate_regex()
@@ -890,6 +911,13 @@ class String(Object, builtins.str):
             you use dictionaries, the second parameter "replace" becomes \
             useless.
 
+            **search**  - search sequence
+
+            **replace** - string to replace with given search sequence
+
+            Additional arguments and keywords are forwarded to pythons native \
+            "str.replace()" method.
+
             Return a copy of the string with all occurrences of substring old \
             replaced by new. If an optional argument count is given, only the \
             first count occurrences are replaced.
@@ -931,6 +959,13 @@ class String(Object, builtins.str):
             oriented way. This method serves additionally dictionaries as \
             "search" parameter for multiple replacements. If you use \
             dictionaries, the second parameter "replace" becomes useless.
+
+            **search**  - regular expression search pattern
+
+            **replace** - string to replace with given search sequence
+
+            Additional arguments and keywords are forwarded to python's \
+            native "re.sub()" method.
 
             Return the string obtained by replacing the leftmost \
             non-overlapping occurrences of pattern in string by the \
@@ -1015,8 +1050,15 @@ class String(Object, builtins.str):
             "search" parameter for multiple replacements. If you use \
             dictionaries, the second parameter "replace" becomes useless.
 
-            Perform the same operation as "self.sub()", but returns a tuple: \
+            Perform the same operation as "re.sub()", but returns a tuple: \
             ("new_string", "number_of_subs_made"").
+
+            **search**  - regular expression search pattern
+
+            **replace** - string to replace with given search sequence
+
+            Additional arguments and keywords are forwarded to pythons's native
+            "re.subn()" method.
 
             Examples:
 
@@ -1098,6 +1140,9 @@ class String(Object, builtins.str):
         '''
             Implements the pythons native "builtins.str.splitlines()" method \
             in an object oriented way.
+
+            Additional arguments and keywords are forwarded to python's \
+            native "str.splitlines()" method.
 
             Return a list of all lines in a string, breaking at line \
             boundaries. Line breaks are not included in the resulting list \
@@ -1268,6 +1313,7 @@ class String(Object, builtins.str):
 
     # endregion
 
+# TODO STAND
 
 class Dictionary(Object, builtins.dict):
     '''This class extends the native dictionary object.'''
