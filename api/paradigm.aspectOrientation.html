@@ -87,6 +87,8 @@
 <dt id="boostNode.paradigm.aspectOrientation.FunctionDecorator">
 <tt class="descclassname">boostNode.paradigm.aspectOrientation.</tt><tt class="descname">FunctionDecorator</tt><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.FunctionDecorator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Abstract class and interface for function decorator classes.</p>
+<p><strong>method</strong>   - The wrapped function.</p>
+<p><strong>function</strong> - If not &#8220;None&#8221; this contains the real function and                        &#8220;method&#8221; contains a special type of function (like                        &#8220;builtins.classmethod&#8221; or &#8220;builtins.staticmethod&#8221;). In                        this case the method type influences the behavior                        during calling the real function.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -170,6 +172,11 @@
 <dt id="boostNode.paradigm.aspectOrientation.JointPointHandler">
 <em class="property">class </em><tt class="descclassname">boostNode.paradigm.aspectOrientation.</tt><tt class="descname">JointPointHandler</tt><big>(</big><em>class_object</em>, <em>object</em>, <em>function</em>, <em>arguments</em>, <em>keywords</em><big>)</big><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.JointPointHandler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Abstract class for joint point implementations.</p>
+<p><strong>class_object</strong> - function bounded class object</p>
+<p><strong>object</strong>       - function bounded instance</p>
+<p><strong>function</strong>     - function to handle</p>
+<p><strong>arguments</strong>    - arguments which should be forwarded to given                            function</p>
+<p><strong>keywords</strong>     - keywords which should be forwarded to given                            function</p>
 <dl class="classmethod">
 <dt id="boostNode.paradigm.aspectOrientation.JointPointHandler.aspect">
 <em class="property">classmethod </em><tt class="descname">aspect</tt><big>(</big><big>)</big><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.JointPointHandler.aspect" title="Permalink to this definition">¶</a></dt>
@@ -205,6 +212,8 @@
 <dt id="boostNode.paradigm.aspectOrientation.PointCut.handle_return">
 <tt class="descname">handle_return</tt><big>(</big><em>return_value</em><big>)</big><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.PointCut.handle_return" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implementation of point cut for the aspect orientated way.             Filters all functions calls and run given advice on given event.</p>
+<p><strong>return_value</strong> - function call return value</p>
+<p>Returns functions return value or the wrapped return value             provided be a return callback handler.</p>
 </dd></dl>
 
 </dd></dl>

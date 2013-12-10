@@ -65,6 +65,7 @@
 <dt id="boostNode.paradigm.objectOrientation.Class.is_method">
 <tt class="descname">is_method</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#boostNode.paradigm.objectOrientation.Class.is_method" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines if the given class attribute is a callable method or             something else.</p>
+<p><strong>name</strong> - function name to check</p>
 <p>Returns &#8220;True&#8221; if the given attribute is a method or &#8220;False&#8221;             otherwise.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Class</span><span class="p">()</span><span class="o">.</span><span class="n">is_method</span><span class="p">(</span><span class="s">&#39;is_method&#39;</span><span class="p">)</span>
@@ -79,6 +80,7 @@
 <dt id="boostNode.paradigm.objectOrientation.Class.is_property">
 <tt class="descname">is_property</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#boostNode.paradigm.objectOrientation.Class.is_property" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines if the given class attribute is a property or             something else.</p>
+<p><strong>name</strong> - property name to check</p>
 <p>Returns &#8220;True&#8221; if the given attribute is a property or &#8220;False&#8221;             otherwise.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Class</span><span class="p">()</span><span class="o">.</span><span class="n">is_property</span><span class="p">(</span><span class="s">&#39;is_property&#39;</span><span class="p">)</span>
@@ -94,6 +96,8 @@
 <dt id="boostNode.paradigm.objectOrientation.Class.pseudo_property">
 <em class="property">classmethod </em><tt class="descname">pseudo_property</tt><big>(</big><em>function</em><big>)</big><a class="headerlink" href="#boostNode.paradigm.objectOrientation.Class.pseudo_property" title="Permalink to this definition">¶</a></dt>
 <dd><p>Attaches a property to given function for indicating that given             function handles read access to corresponding property.</p>
+<p><strong>function</strong> - Function which should act as property.</p>
+<p>Returns given function to be usable as decorator.</p>
 </dd></dl>
 
 </dd></dl>
