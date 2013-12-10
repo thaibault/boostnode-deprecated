@@ -97,11 +97,11 @@ from boostNode.paradigm.objectOrientation import Class
 ## pass
 class SocketFileObjectWrapper(socket._fileobject):
     '''
-        This class wraps the native implementation of the server socket. The \
-        main goal is that the first line from given socket have to be taken \
-        twice. This curious feature is the only way to get the requested file \
-        as early as needed to decide if we are able to spawn a new process \
-        for better load balancing.
+        This class wraps the native implementation of the server socket. \
+        The main goal is that the first line from given socket have to be \
+        taken twice. This curious feature is the only way to get the \
+        requested file as early as needed to decide if we are able to \
+        spawn a new process for better load balancing.
     '''
 
     # region dynamic methods
