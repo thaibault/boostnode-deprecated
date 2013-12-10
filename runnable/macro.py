@@ -772,7 +772,7 @@ class Replace(Class, Runnable):
             >>> file.content = '#!/usr/bin/env python3.3\\na'
             >>> replace.dry = True
             >>> replace._convert_file_code(file) # doctest: +ELLIPSIS
-            Object of "Replace" with directory "..." to convert to "".
+            Object of "Replace" with directory "..." to convert to "...".
         '''
 ## python3.3         with builtins.open(
         with codecs.open(
