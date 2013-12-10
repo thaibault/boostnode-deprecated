@@ -243,7 +243,7 @@
 
 <dl class="classmethod">
 <dt id="boostNode.extension.native.Module.get_context_path">
-<em class="property">classmethod </em><tt class="descname">get_context_path</tt><big>(</big><em>path=None</em>, <em>frame=&lt;frame object at 0x2bfd5d0&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_context_path" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><tt class="descname">get_context_path</tt><big>(</big><em>path=None</em>, <em>frame=&lt;frame object at 0x19db810&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_context_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines the package and module level context path to a given             context or file.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Module</span><span class="o">.</span><span class="n">get_context_path</span><span class="p">(</span>
@@ -380,6 +380,7 @@
 <dt id="boostNode.extension.native.Object">
 <em class="property">class </em><tt class="descclassname">boostNode.extension.native.</tt><tt class="descname">Object</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Object" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class extends all native python classes.</p>
+<p><strong>content</strong> - Object value to save.</p>
 <dl class="staticmethod">
 <dt id="boostNode.extension.native.Object.copy">
 <em class="property">static </em><tt class="descname">copy</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Object.copy" title="Permalink to this definition">¶</a></dt>
@@ -411,6 +412,9 @@
 <dt id="boostNode.extension.native.Object.determine_abstract_method_exception">
 <em class="property">static </em><tt class="descname">determine_abstract_method_exception</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Object.determine_abstract_method_exception" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates a suitable exception for raising if a method is called             initially indented to be overwritten.</p>
+<p><strong>abstract_class_name</strong> - Class name of super class.</p>
+<p><strong>class_name</strong>          - Class name which initiates the exception.</p>
+<p>Returns generated exception.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">A</span><span class="p">(</span><span class="n">Object</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="nd">@classmethod</span>
@@ -506,6 +510,7 @@
 <dt id="boostNode.extension.native.String">
 <em class="property">class </em><tt class="descclassname">boostNode.extension.native.</tt><tt class="descname">String</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String" title="Permalink to this definition">¶</a></dt>
 <dd><p>The string class inherits besides the interface class all pythons         native string methods. NOTE: This class has to implement inherited         special methods like &#8220;__str__()&#8221; and &#8220;__len__()&#8221; because they have to         use the &#8220;content&#8221; property which could be manipulated by not         inherited methods.</p>
+<p><strong>content</strong> - Content to be saved as string.</p>
 <dl class="attribute">
 <dt id="boostNode.extension.native.String.IMPORTANT_ENCODINGS">
 <tt class="descname">IMPORTANT_ENCODINGS</tt><em class="property"> = ('ascii', 'utf_8', 'latin_1', 'utf_16')</em><a class="headerlink" href="#boostNode.extension.native.String.IMPORTANT_ENCODINGS" title="Permalink to this definition">¶</a></dt>
@@ -632,6 +637,7 @@
 <dd><p>Creates a replacement dictionary form a given iterable. Every             element will be associated with its escaped version. This method             is useful for using before give &#8220;self.replace()&#8221; a dictionary.</p>
 <p><strong>sequence</strong>        - is an iterable with elements to be escaped.</p>
 <p><strong>escape_sequence</strong> - is an escape sequence for each element from                                   &#8220;sequence&#8221;.</p>
+<p>Returns the generated dictionary.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="o">.</span><span class="n">get_escaping_replace_dictionary</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="p">(</span><span class="s">&#39;&quot;&#39;</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">)</span>
@@ -682,6 +688,7 @@
 <dt id="boostNode.extension.native.String.readlines">
 <em class="property">static </em><tt class="descname">readlines</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.readlines" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implements the pythons native &#8220;builtins.str.splitlines()&#8221; method             in an object oriented way.</p>
+<p>Additional arguments and keywords are forwarded to python&#8217;s             native &#8220;str.splitlines()&#8221; method.</p>
 <p>Return a list of all lines in a string, breaking at line             boundaries. Line breaks are not included in the resulting list             unless &#8220;keepends&#8221; is given and &#8220;True&#8221;.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">lines</span> <span class="o">=</span> <span class="n">String</span><span class="p">(</span><span class="s">&#39;hans</span><span class="se">\n</span><span class="s">peter</span><span class="se">\n</span><span class="s">klaus and sally</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
@@ -707,6 +714,9 @@
 <dt id="boostNode.extension.native.String.replace">
 <em class="property">static </em><tt class="descname">replace</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.replace" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implements the pythons native string method &#8220;str.replace()&#8221; in an             object orientated way. This method serves additionally             dictionaries as &#8220;search&#8221; parameter for multiple replacements. If             you use dictionaries, the second parameter &#8220;replace&#8221; becomes             useless.</p>
+<p><strong>search</strong>  - search sequence</p>
+<p><strong>replace</strong> - string to replace with given search sequence</p>
+<p>Additional arguments and keywords are forwarded to pythons native             &#8220;str.replace()&#8221; method.</p>
 <p>Return a copy of the string with all occurrences of substring old             replaced by new. If an optional argument count is given, only the             first count occurrences are replaced.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;ans&#39;</span><span class="p">,</span> <span class="s">&#39;ut&#39;</span><span class="p">)</span>
@@ -732,7 +742,10 @@
 <em class="property">static </em><tt class="descname">sub</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.sub" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implements the pythons native &#8220;re.sub()&#8221; method in an object             oriented way. This method serves additionally dictionaries as             &#8220;search&#8221; parameter for multiple replacements. If you use             dictionaries, the second parameter &#8220;replace&#8221; becomes useless.</p>
 <blockquote>
-<div><p>Return the string obtained by replacing the leftmost             non-overlapping occurrences of pattern in string by the             replacement &#8220;replace&#8221;. If the pattern isn’t found, string is             returned unchanged. &#8220;replace&#8221; can be a string or a function;</p>
+<div><p><strong>search</strong>  - regular expression search pattern</p>
+<p><strong>replace</strong> - string to replace with given search sequence</p>
+<p>Additional arguments and keywords are forwarded to python&#8217;s             native &#8220;re.sub()&#8221; method.</p>
+<p>Return the string obtained by replacing the leftmost             non-overlapping occurrences of pattern in string by the             replacement &#8220;replace&#8221;. If the pattern isn’t found, string is             returned unchanged. &#8220;replace&#8221; can be a string or a function;</p>
 <p>If &#8220;replace&#8221; is a string, any backslash escapes in it are             processed. That means &#8220;</p>
 </div></blockquote>
 <p>&#8221; is converted to a single newline             character, &#8221;
@@ -769,7 +782,11 @@
 <dt id="boostNode.extension.native.String.subn">
 <em class="property">static </em><tt class="descname">subn</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.subn" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implements the pythons native &#8220;re.subn()&#8221; method in an object             oriented way. This method serves additionally dictionaries as             &#8220;search&#8221; parameter for multiple replacements. If you use             dictionaries, the second parameter &#8220;replace&#8221; becomes useless.</p>
-<p>Perform the same operation as &#8220;self.sub()&#8221;, but returns a tuple:             (&#8220;new_string&#8221;, &#8220;number_of_subs_made&#8221;&#8221;).</p>
+<p>Perform the same operation as &#8220;re.sub()&#8221;, but returns a tuple:             (&#8220;new_string&#8221;, &#8220;number_of_subs_made&#8221;&#8221;).</p>
+<p><strong>search</strong>  - regular expression search pattern</p>
+<p><strong>replace</strong> - string to replace with given search sequence</p>
+<p>Additional arguments and keywords are forwarded to pythons&#8217;s native
+&#8220;re.subn()&#8221; method.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">String</span><span class="p">()</span><span class="o">.</span><span class="n">subn</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">content</span>
@@ -817,6 +834,7 @@
 <dt id="boostNode.extension.native.String.validate_regex">
 <em class="property">static </em><tt class="descname">validate_regex</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.validate_regex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Validates the current string for using in a regular expression             pattern. Special regular expression chars will be escaped.</p>
+<p><strong>exclude_symbols</strong> - Escapes each regular expression special                                   character.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&quot;that&#39;s no regex: .*$&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">validate_regex</span><span class="p">()</span>
 <span class="go">Object of &quot;String&quot; with &quot;that&#39;s no regex: \.\*\$&quot; saved.</span>
