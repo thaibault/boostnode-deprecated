@@ -61,6 +61,9 @@
 <dt id="boostNode.extension.native.Dictionary">
 <em class="property">class </em><tt class="descclassname">boostNode.extension.native.</tt><tt class="descname">Dictionary</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Dictionary" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class extends the native dictionary object.</p>
+<p><strong>content</strong> - content for dictionary object</p>
+<p>Additional arguments and keywords are forwarded to python&#8217;s native
+&#8220;dict()&#8221; method.</p>
 <dl class="attribute">
 <dt id="boostNode.extension.native.Dictionary.content">
 <tt class="descname">content</tt><em class="property"> = None</em><a class="headerlink" href="#boostNode.extension.native.Dictionary.content" title="Permalink to this definition">¶</a></dt>
@@ -77,6 +80,8 @@
 <dt id="boostNode.extension.native.Dictionary.pop">
 <em class="property">static </em><tt class="descname">pop</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Dictionary.pop" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a keyword element as it would be set by a default value. If             name is present in current saved dictionary its value will be             returned in a tuple with currently saved dictionary. The             corresponding data will be erased from dictionary.</p>
+<p><strong>name</strong>          - key to get from current dictionary instance</p>
+<p><strong>default_value</strong> - value to return if requested key isn&#8217;t                                 present in current dictionary instance.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">dictionary</span> <span class="o">=</span> <span class="n">Dictionary</span><span class="p">({</span><span class="s">&#39;hans&#39;</span><span class="p">:</span> <span class="s">&#39;peter&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">:</span> <span class="mi">3</span><span class="p">})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dictionary</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
@@ -115,6 +120,11 @@
 <dt id="boostNode.extension.native.Module.default">
 <em class="property">static </em><tt class="descname">default</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.default" title="Permalink to this definition">¶</a></dt>
 <dd><p>Serves a common way to extend a given module. The given module&#8217;s             scope will be extended and a common meta command line interface             is provided to test or run objects in given module.</p>
+<p><strong>name</strong>             -</p>
+<p><strong>frame</strong>            -</p>
+<p><strong>default_caller</strong>   -</p>
+<p><strong>caller_arguments</strong> -</p>
+<p><strong>caller_keywords</strong>  -</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">command_line_arguments_save</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&#39;--module-object&#39;</span><span class="p">,</span> <span class="n">Module</span><span class="o">.</span><span class="n">__name__</span><span class="p">]</span>
@@ -133,6 +143,11 @@
 <dt id="boostNode.extension.native.Module.default_package">
 <em class="property">static </em><tt class="descname">default_package</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.default_package" title="Permalink to this definition">¶</a></dt>
 <dd><p>Serves a common way to extend a given package. The given             package&#8217;s scope will be extended and a common meta command line             interface is provided to test, lint or document modules.</p>
+<p><strong>name</strong>                   -</p>
+<p><strong>frame</strong>                  -</p>
+<p><strong>command_line_arguments</strong> -</p>
+<p>Additional arguments and keywords are forwarded to
+&#8221;...extension.system.CommandLine.generic_package_interface()&#8221;.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Module</span><span class="o">.</span><span class="n">default_package</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="s">&#39;not_existing&#39;</span><span class="p">,</span> <span class="n">inspect</span><span class="o">.</span><span class="n">currentframe</span><span class="p">())</span>
@@ -151,6 +166,8 @@
 <dt id="boostNode.extension.native.Module.determine_caller">
 <em class="property">static </em><tt class="descname">determine_caller</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.determine_caller" title="Permalink to this definition">¶</a></dt>
 <dd><p>Searches for a useful caller object in given module objects via             &#8220;module_objects&#8221;.</p>
+<p><strong>callable_objects</strong> -</p>
+<p><strong>caller</strong>           -</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Module</span><span class="o">.</span><span class="n">determine_caller</span><span class="p">([])</span> <span class="ow">is</span> <span class="bp">None</span>
 <span class="go">True</span>
@@ -182,6 +199,15 @@
 <dt id="boostNode.extension.native.Module.execute_program_for_modules">
 <em class="property">static </em><tt class="descname">execute_program_for_modules</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.execute_program_for_modules" title="Permalink to this definition">¶</a></dt>
 <dd><p>Runs a given program for every given module. Returns &#8220;False&#8221; if             no modules were found or given program isn&#8217;t installed.</p>
+<p><strong>program_type</strong> -</p>
+<p><strong>program</strong>      -</p>
+<p><strong>modules</strong>      -</p>
+<p><strong>arguments</strong>    -</p>
+<p><strong>extension</strong>    -</p>
+<p><strong>delimiter</strong>    -</p>
+<p><strong>log</strong>          -</p>
+<p>Additional keywords are forwarded to
+&#8220;boostNode.system.Platform.run()&#8221;.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">boostNode.extension</span>
 </pre></div>
@@ -212,6 +238,10 @@
 <dt id="boostNode.extension.native.Module.extend">
 <em class="property">static </em><tt class="descname">extend</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.extend" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extends a given scope of an module for useful things like own             exception class, a logger instance, variable to indicate if             module is running in test mode and a variable that saves the             current module name.</p>
+<p><strong>name</strong>               -</p>
+<p><strong>frame</strong>              -</p>
+<p><strong>module</strong>             -</p>
+<p><strong>post_extend_others</strong> -</p>
 <p>Returns a dictionary with new module&#8217;s scope and module name.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">logging</span>
@@ -243,8 +273,11 @@
 
 <dl class="classmethod">
 <dt id="boostNode.extension.native.Module.get_context_path">
-<em class="property">classmethod </em><tt class="descname">get_context_path</tt><big>(</big><em>path=None</em>, <em>frame=&lt;frame object at 0x251c810&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_context_path" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><tt class="descname">get_context_path</tt><big>(</big><em>path=None</em>, <em>frame=&lt;frame object at 0x1cba7b0&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_context_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines the package and module level context path to a given             context or file.</p>
+<p><strong>path</strong>  - relative or absolute context or file path to normalize</p>
+<p><strong>frame</strong> - stack frame to analyse again context</p>
+<p>Returns the normalized context path.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Module</span><span class="o">.</span><span class="n">get_context_path</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">frame</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">currentframe</span><span class="p">()</span>
@@ -266,6 +299,8 @@
 <dt id="boostNode.extension.native.Module.get_defined_callables">
 <em class="property">static </em><tt class="descname">get_defined_callables</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_defined_callables" title="Permalink to this definition">¶</a></dt>
 <dd><p>Takes a module and gives a list of objects explicit defined in             this module.</p>
+<p><strong>scope</strong>             -</p>
+<p><strong>only_module_level</strong> -</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Module</span><span class="o">.</span><span class="n">get_defined_callables</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="s">&#39;__main__&#39;</span><span class="p">]</span>
@@ -299,6 +334,8 @@
 <dt id="boostNode.extension.native.Module.get_file_path">
 <em class="property">static </em><tt class="descname">get_file_path</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_file_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the path to given module name.</p>
+<p><strong>context_path</strong>      -</p>
+<p><strong>only_source_files</strong> -</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Module</span><span class="o">.</span><span class="n">get_file_path</span><span class="p">(</span><span class="s">&#39;doctest&#39;</span><span class="p">)</span> 
 <span class="go">&#39;...doctest.py...&#39;</span>
@@ -323,6 +360,11 @@
 <dt id="boostNode.extension.native.Module.get_name">
 <em class="property">static </em><tt class="descname">get_name</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns name of the given context &#8220;frame&#8221;. If no frame is defined             this module&#8217;s context will be selected. If &#8220;base&#8221; is set &#8220;True&#8221;             the modules name is given back without any file extension.</p>
+<p># TODO stand</p>
+<p><strong>frame</strong>     -</p>
+<p><strong>module</strong>    -</p>
+<p><strong>extension</strong> -</p>
+<p><strong>path</strong>      -</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Module</span><span class="p">()</span><span class="o">.</span><span class="n">name</span>
 <span class="go">&#39;native&#39;</span>
@@ -346,6 +388,8 @@
 <dt id="boostNode.extension.native.Module.get_package_name">
 <em class="property">static </em><tt class="descname">get_package_name</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_package_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines package context of given frame. If current context             isn&#8217;t in any package context an empty string is given back.</p>
+<p><strong>frame</strong> -</p>
+<p><strong>path</strong> -</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Module</span><span class="p">()</span><span class="o">.</span><span class="n">package_name</span>
 <span class="go">&#39;extension&#39;</span>
@@ -367,6 +411,7 @@
 <dt id="boostNode.extension.native.Module.is_package">
 <em class="property">classmethod </em><tt class="descname">is_package</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.is_package" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if given location is pointed to a python package.</p>
+<p><strong>path</strong> -</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Module</span><span class="o">.</span><span class="n">is_package</span><span class="p">(</span><span class="n">__file_path__</span><span class="p">)</span>
 <span class="go">False</span>

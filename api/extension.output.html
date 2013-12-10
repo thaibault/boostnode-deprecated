@@ -60,6 +60,9 @@
 <dt id="boostNode.extension.output.Buffer">
 <em class="property">class </em><tt class="descclassname">boostNode.extension.output.</tt><tt class="descname">Buffer</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.output.Buffer" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class represents a layer for writing and reading to an output         buffer realized as file, queue or variable.</p>
+<p><strong>file</strong>                    -</p>
+<p><strong>queue</strong>                   -</p>
+<p><strong>support_multiprocessing</strong> -</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span> <span class="o">=</span> <span class="n">Buffer</span><span class="p">(</span><span class="nb">file</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;Buffer&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span> 
@@ -73,6 +76,7 @@
 <dt id="boostNode.extension.output.Buffer.clear">
 <em class="property">static </em><tt class="descname">clear</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.output.Buffer.clear" title="Permalink to this definition">¶</a></dt>
 <dd><p>Removes the current output buffer content.</p>
+<p><strong>delete</strong> -</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span> <span class="o">=</span> <span class="n">Buffer</span><span class="p">(</span><span class="nb">file</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;clear&#39;</span><span class="p">)</span>
 </pre></div>
@@ -147,6 +151,7 @@
 <dt id="boostNode.extension.output.Buffer.write">
 <em class="property">static </em><tt class="descname">write</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.output.Buffer.write" title="Permalink to this definition">¶</a></dt>
 <dd><p>Writes content to the current output buffer file. If the current             given file &#8220;Buffer.file&#8221; doesn&#8217;t exists it will be created.</p>
+<p><strong>content</strong> -</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span> <span class="o">=</span> <span class="n">Buffer</span><span class="p">(</span><span class="nb">file</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;write&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span> 
@@ -177,6 +182,10 @@
 <em class="property">static </em><tt class="descname">change_all</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.output.Logger.change_all" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method changes the given properties to all created logger             instances and saves the given properties as default properties             for future created logger instances.</p>
 <p>Note that every argument except buffer setted to &#8220;None&#8221; will not             edit this logger component. If you don&#8217;t want to change buffer             leave it &#8220;False&#8221;.</p>
+<p><strong>level</strong>      -</p>
+<p><strong>buffer</strong>     -</p>
+<p><strong>terminator</strong> -</p>
+<p><strong>format</strong>     -</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Logger</span><span class="o">.</span><span class="n">change_all</span><span class="p">()</span> 
 <span class="go">&lt;class ...Logger...&gt;</span>
@@ -199,6 +208,11 @@
 <dt id="boostNode.extension.output.Logger.get">
 <em class="property">static </em><tt class="descname">get</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.output.Logger.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a new or existing instance of a logger with given             properties. If a logger was already registered under given name             the existing instance is given back and a new instance otherwise.</p>
+<p><strong>name</strong>       -</p>
+<p><strong>level</strong>      -</p>
+<p><strong>buffer</strong>     -</p>
+<p><strong>terminator</strong> -</p>
+<p><strong>format</strong>     -</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">logger_a</span> <span class="o">=</span> <span class="n">Logger</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">,</span> <span class="nb">buffer</span><span class="o">=</span><span class="p">(</span><span class="n">__test_buffer__</span><span class="p">,))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">logger_b</span> <span class="o">=</span> <span class="n">Logger</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">)</span>
@@ -222,6 +236,16 @@
 <dt id="boostNode.extension.output.Print">
 <em class="property">class </em><tt class="descclassname">boostNode.extension.output.</tt><tt class="descname">Print</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.output.Print" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provides a high level printing class on top of pythons native print         function.</p>
+<p><strong>output</strong>    - are the strings which should be printed or saved.</p>
+<dl class="docutils">
+<dt><strong>codewords</strong> - represents all possible optional arguments.</dt>
+<dd>&#8220;codeword[&#8216;start&#8217;]&#8221;
+&#8220;codeword[&#8216;separator&#8217;]&#8221;
+&#8220;codeword[&#8216;end&#8217;]&#8221;
+&#8220;codeword[&#8216;flush&#8217;]&#8221;
+&#8220;codeword[&#8216;buffer&#8217;]&#8221; could be any instance as buffer which                                  implements a &#8220;write()&#8221; method.</dd>
+</dl>
+<p>Returns the given string or the last element if an iterable object         was given.</p>
 </dd></dl>
 
 </div>
