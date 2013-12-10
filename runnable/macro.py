@@ -756,7 +756,7 @@ class Replace(Class, Runnable):
             '...'
 
             >>> replace._convert_file_code(file) # doctest: +ELLIPSIS
-            Object of "Replace" with directory "..." to convert to "".
+            Object of "Replace" with directory "..." to convert to "...".
             >>> __test_buffer__.clear() # doctest: +ELLIPSIS
             '... decode file "..._file_code" with given encoding "ascii"...'
 
@@ -765,7 +765,7 @@ class Replace(Class, Runnable):
             ... ) # doctest: +ELLIPSIS
             Object of "Handler" with path "..._convert_file_code" and ...
             >>> replace._convert_file_code(file) # doctest: +ELLIPSIS
-            Object of "Replace" with directory "..." to convert to "".
+            Object of "Replace" with directory "..." to convert to "...".
             >>> __test_buffer__.clear() # doctest: +ELLIPSIS
             '...decode file "...ert_file_code" with given encoding "ascii"...'
 

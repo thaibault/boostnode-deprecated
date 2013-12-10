@@ -1076,11 +1076,11 @@ class Web(Class, Runnable):
                 if not port:
 ## python3.3
 ##                     raise __exception__(
-##                         'No port is available to run the web-server with ' \
+##                         'No port is available to run the web-server with '
 ##                         'given rights.'
 ##                     ) from None
                     raise __exception__(
-                        'No port is available to run the web-server with ' \
+                        'No port is available to run the web-server with '
                         'given rights.')
 ##
             else:
@@ -2502,7 +2502,7 @@ class CGIHTTPRequestHandler(
             >>> handler._static_get() # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "" and parame...
         '''
-        if self.requested_file.is_directory():
+        if not __test_mode__ and self.requested_file.is_directory():
             '''
                 If a directory was requested and no trailing slash where \
                 given a 301 redirect will be returned to same request with \
