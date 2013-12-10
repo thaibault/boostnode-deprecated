@@ -83,7 +83,17 @@ ASPECTS = []
 # region abstract classes
 
 class FunctionDecorator(Class):
-    '''Abstract class and interface for function decorator classes.'''
+    '''
+        Abstract class and interface for function decorator classes.
+
+        **method**   - The wrapped function.
+
+        **function** - If not "None" this contains the real function and \
+                       "method" contains a special type of function (like \
+                       "builtins.classmethod" or "builtins.staticmethod"). In \
+                       this case the method type influences the behavior \
+                       during calling the real function.
+    '''
 
     # region properties
 
@@ -114,15 +124,6 @@ class FunctionDecorator(Class):
 ##
         '''
             Collects informations about wrapped method.
-
-            **method**   - The wrapped function.
-
-            **function** - If not "None" this contains the real function and \
-                           "method" contains a special type of function (like \
-                           "builtins.classmethod" or \
-                           "builtins.staticmethod"). In this case the method \
-                           type influences the behavior during calling the \
-                           real function.
 
             Examples:
 
@@ -384,7 +385,21 @@ class FunctionDecorator(Class):
 
 
 class JointPointHandler(Class):
-    '''Abstract class for joint point implementations.'''
+    '''
+        Abstract class for joint point implementations.
+
+        **class_object** - function bounded class object
+
+        **object**       - function bounded instance
+
+        **function**     - function to handle
+
+        **arguments**    - arguments which should be forwarded to given \
+                           function
+
+        **keywords**     - keywords which should be forwarded to given \
+                           function
+    '''
 
     # region dynamic methods
 
@@ -402,18 +417,6 @@ class JointPointHandler(Class):
 ##
         '''
             Saves function call properties.
-
-            **class_object** - function bounded class object
-
-            **object**       - function bounded instance
-
-            **function**     - function to handle
-
-            **arguments**    - arguments which should be forwarded to given \
-                               function
-
-            **keywords**     - keywords which should be forwarded to given \
-                               function
 
             Examples:
 
@@ -592,6 +595,9 @@ class ReturnJointPoint(JointPointHandler, ReturnAspect):
         '''
             Initializes a joint point for saved function call.
 
+            **return_value** - Return value to set as return value for \
+                               wrapped function.
+
             Arguments and keywords are forwarded to the "JointPointHandler" \
             initialize method.
 
@@ -654,19 +660,24 @@ class Argument(Class):
 
             # region special
 
-    # TODO STAND
-
 ## python3.3
 ##     def __init__(
 ##         self: Self, parameter: inspect.Parameter,
 ##         value: (builtins.object, builtins.type),
-##         function: (types.MethodType, types.FunctionType),
-##         name=None
+##         function: (types.MethodType, types.FunctionType), name=None
 ##     ) -> None:
     def __init__(self, parameter, value, function, name=None):
 ##
         '''
             Collects information about argument.
+
+            **parameter** - Parameter object to save in new generated instance.
+
+            **value**     - Parameter value.
+
+            **function**  - Function bounded to given parameter.
+
+            **name**      - Description of given parameter.
 
             Examples:
 
@@ -695,7 +706,7 @@ class Argument(Class):
             'b'
         '''
 
-                # region properties
+                # reg ion properties
 
         '''
             Holds some informations about arguments passing through the
@@ -773,6 +784,17 @@ class PointCut(ReturnAspect):
         '''
             Initializes a point cut object for implementing the aspect
             orientated model.
+
+            **class_object** - bounded class to given method
+
+            **object**       - bounded class object to given method
+
+            **function**     - function which is associated with point cut to \
+                               initialize
+
+            **arguments**    - Arguments for given function
+
+            **keywords**     - Keywords for given function
         '''
         '''
             NOTE: Taking this method via introspection from super classes is
@@ -809,6 +831,11 @@ class PointCut(ReturnAspect):
             '''
                 Supports classes, simple functions or methods as triggered \
                 call handler.
+
+                **advice** - Dictionary saving the advice properties.
+
+                Returns "True" if we have a "call" event and the functions
+                return value if we have "return" event.
             '''
             if 'call' == advice['event']:
                 result = advice['callback'](
@@ -832,6 +859,11 @@ class PointCut(ReturnAspect):
         '''
             Implementation of point cut for the aspect orientated way. \
             Filters all functions calls and run given advice on given event.
+
+            **return_value** - function call return value
+
+            Returns functions return value or the wrapped return value \
+            provided be a return callback handler.
         '''
 ## python3.3         def return_handler(advice: builtins.dict) -> None:
         def return_handler(advice):
@@ -893,6 +925,10 @@ if sys.flags.optimize:
         '''
             Dummy function for simply return given function to avoid \
             joint points in high performance mode.
+
+            **function** - function to wrap and extend with a joint point.
+
+            Returns given function.
         '''
         return function
 else:
@@ -983,6 +1019,8 @@ else:
                 '''
                     Wrapper function for doing the aspect orientated stuff \
                     before and after a function call.
+
+                    Arguments and keywords are forwarded to wrapped function.
                 '''
                 '''Unpack wrapper methods.'''
                 while builtins.hasattr(self.__func__, '__func__'):

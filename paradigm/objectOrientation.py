@@ -176,6 +176,10 @@ class Class(builtins.object):
         '''
             Attaches a property to given function for indicating that given \
             function handles read access to corresponding property.
+
+            **function** - Function which should act as property.
+
+            Returns given function to be usable as decorator.
         '''
         function.pseudo_property = True
         return function
@@ -202,7 +206,7 @@ class Class(builtins.object):
             Is triggered if a property was tried to be read but is \
             inaccessible.
 
-            "name" is the inaccessible property name.
+            **name** - is the inaccessible property name.
 
             Should return the current value of the given property name \
             depends on its getter method. Returns "None" if no getter method \
@@ -314,6 +318,8 @@ class Class(builtins.object):
             Determines if the given class attribute is a callable method or \
             something else.
 
+            **name** - function name to check
+
             Returns "True" if the given attribute is a method or "False" \
             otherwise.
 
@@ -340,6 +346,8 @@ class Class(builtins.object):
         '''
             Determines if the given class attribute is a property or \
             something else.
+
+            **name** - property name to check
 
             Returns "True" if the given attribute is a property or "False" \
             otherwise.
