@@ -60,9 +60,9 @@
 <dt id="boostNode.extension.output.Buffer">
 <em class="property">class </em><tt class="descclassname">boostNode.extension.output.</tt><tt class="descname">Buffer</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.output.Buffer" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class represents a layer for writing and reading to an output         buffer realized as file, queue or variable.</p>
-<p><strong>file</strong>                    -</p>
-<p><strong>queue</strong>                   -</p>
-<p><strong>support_multiprocessing</strong> -</p>
+<p><strong>file</strong>                    - a file path or file handler to use as                                       buffer</p>
+<p><strong>queue</strong>                   - a queue object to use as buffer</p>
+<p><strong>support_multiprocessing</strong> - indicates weather buffer read and write                                       requests should be multiprocessing save</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span> <span class="o">=</span> <span class="n">Buffer</span><span class="p">(</span><span class="nb">file</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;Buffer&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span> 
@@ -76,7 +76,7 @@
 <dt id="boostNode.extension.output.Buffer.clear">
 <em class="property">static </em><tt class="descname">clear</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.output.Buffer.clear" title="Permalink to this definition">¶</a></dt>
 <dd><p>Removes the current output buffer content.</p>
-<p><strong>delete</strong> -</p>
+<p><strong>delete</strong> - indicates weather a file buffer should be deleted or                          truncated</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span> <span class="o">=</span> <span class="n">Buffer</span><span class="p">(</span><span class="nb">file</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;clear&#39;</span><span class="p">)</span>
 </pre></div>
@@ -151,7 +151,7 @@
 <dt id="boostNode.extension.output.Buffer.write">
 <em class="property">static </em><tt class="descname">write</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.output.Buffer.write" title="Permalink to this definition">¶</a></dt>
 <dd><p>Writes content to the current output buffer file. If the current             given file &#8220;Buffer.file&#8221; doesn&#8217;t exists it will be created.</p>
-<p><strong>content</strong> -</p>
+<p><strong>content</strong> - content to write into current buffer instance</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span> <span class="o">=</span> <span class="n">Buffer</span><span class="p">(</span><span class="nb">file</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;write&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span> 
@@ -208,6 +208,7 @@
 <dt id="boostNode.extension.output.Logger.get">
 <em class="property">static </em><tt class="descname">get</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.output.Logger.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a new or existing instance of a logger with given             properties. If a logger was already registered under given name             the existing instance is given back and a new instance otherwise.</p>
+<p>TODO STAND</p>
 <p><strong>name</strong>       -</p>
 <p><strong>level</strong>      -</p>
 <p><strong>buffer</strong>     -</p>
