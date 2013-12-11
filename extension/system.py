@@ -374,11 +374,11 @@ class Runnable(builtins.object):
         '''
             This method should usually be overwritten to handle cleanup jobs.
 
-            **signal_number** -
+            **signal_number** - signal number to end with
 
-            **stack_frame**   -
+            **stack_frame**   - frame of last executed stack
 
-            **reason**        -
+            **reason**        - description why the application should stop
 
             Examples:
 
@@ -811,11 +811,12 @@ class Platform(builtins.object):
         '''
             Checks if a remote computer is available by pinging it.
 
-            **host**               -
+            **host**               - host to check
 
-            **timeout_in_seconds** -
+            **timeout_in_seconds** - timeout until an unreachable host will \
+                                     be assumed
 
-            **port**               -
+            **port**               - port to check
 
             Examples:
 
@@ -886,17 +887,20 @@ class Platform(builtins.object):
             Shuts down or boot a computer and ensure that is is available \
             after boot or not available if it should be shut down.
 
-            **host**            -
+            **host**            - host to change
 
-            **mac_address**     -
+            **mac_address**     - mac address of host to change
 
-            **broadcast**       -
+            **broadcast**       - broadcast address
 
-            **handler**         -
+            **handler**         - function to execute to change computer's \
+                                  status
 
-            **down**            -
+            **down**            - indicates weather we should check again \
+                                  reachability or none reachability after \
+                                  performing "handler()"
 
-            **number_of_tries** -
+            **number_of_tries** - number of tries to run given "handler()"
 
             Returns a tuple: first value indicates weather it was successful \
             and second is "True" if computer status was needed to be changed \
@@ -932,9 +936,9 @@ class Platform(builtins.object):
             Wakes up a remote computer using a magic package \
             (wake-on-lan-package).
 
-            **make_address** -
+            **mac_address** - physical address of computer to wake
 
-            **broadcast**    -
+            **broadcast**    - broadcast address
 
             Returns "True" if no socket error occurs and "False" otherwise.
 
@@ -1001,12 +1005,14 @@ class Platform(builtins.object):
     def check_thread(cls, waiting_delay_in_seconds=2):
 ##
         '''
-            Checks weather the current thread should be paused or terminated. \
+            Checks weather the current thread should be paused or terminated.
+
+            **waiting_delay_in_seconds** - time between checking if thread is \
+                                           currently running
+
             If thread should be terminated "True" will be given back. In case \
             of pausing the current thread stay in the current function call \
-            still a continue event is triggered.
-
-            **waiting_delay_in_seconds** -
+            still a continue event is triggered and "False" will be given back.
 
             Examples:
 
@@ -1048,7 +1054,7 @@ class Platform(builtins.object):
             Sets a global lock. Creates a file with given name prefix of \
             "description".
 
-            **description** -
+            **description** - an identifying description
 
             Examples:
 
@@ -1089,7 +1095,7 @@ class Platform(builtins.object):
         '''
             Removes a prior setted lock file.
 
-            **description** -
+            **description** - the process identification
 
             Examples:
 
@@ -1123,7 +1129,7 @@ class Platform(builtins.object):
             Checks if a lock file with given description exists. NOTE: \
             Calling this function doesn't prevent you from race conditions.
 
-            **description** -
+            **description** - the process identification
 
             Examples:
 
@@ -1271,7 +1277,7 @@ class Platform(builtins.object):
             "cmd.exe", which returns the exit status of the command run; on \
             systems using a non-native shell, consult your shell documentation.
 
-            **location** -
+            **location** - location to open
 
             Examples:
 
@@ -1601,19 +1607,22 @@ class CommandLine(builtins.object):
             Represents a basic argument parsing for command line interface \
             inputs. It's used as default pattern for many interface concepts.
 
-            **arguments**   -
+            **arguments**   - arguments for the command line
 
-            **module_name** -
+            **module_name** - module name wich provides the command line
 
-            **scope**       -
+            **scope**       - scope for rendering advanced command line \
+                              arguments
 
-            **meta**        -
+            **meta**        - indicates if generated argument parser should \
+                              ignore additional unknown arguments
 
-            **description** -
+            **description** - command line interface showing description
 
-            **version**     -
+            **version**     - version description
 
-            **default**     -
+            **default**     - indicates weather some default arguments should \
+                              be added
 
             Additional arguments are forwarded to python's native \
             "argparse.ArgumentParser()" initializer. \
@@ -1683,7 +1692,7 @@ class CommandLine(builtins.object):
             arguments contains a log level all logger levels will be setted \
             to this level.
 
-            **arguments** -
+            **arguments** - command line arguments
         '''
         if(builtins.hasattr(arguments, 'log_level') and
            arguments.log_level is not None):
@@ -1701,7 +1710,7 @@ class CommandLine(builtins.object):
             This methods implements a handy way to get "yes" or "no" answers \
             from the user via command line.
 
-            **question** -
+            **question** - question to ask via command line interface
 
             Examples:
 
@@ -1732,9 +1741,10 @@ class CommandLine(builtins.object):
         '''
             Returns all aspect orientated wrapped methods in given module.
 
-            **scope** -
+            **scope**             - scope to check again objects
 
-            **only_module_level** -
+            **only_module_level** - indicates weather imported object should \
+                                    be ignored
 
             Examples:
 
@@ -1791,27 +1801,32 @@ class CommandLine(builtins.object):
             features are linting, generate documentation, testing and \
             removing temporary files.
 
-            **name**                         -
+            **name**                         - package name
 
-            **frame**                        -
+            **frame**                        - frame bounded to package scope
 
-            **command_line_arguments**       -
+            **command_line_arguments**       - additional command line \
+                                               arguments
 
-            **linter**                       -
+            **linter**                       - linter program name to use
 
-            **documenter**                   -
+            **documenter**                   - api documentation program name
 
-            **documenter_arguments**         -
+            **documenter_arguments**         - command line arguments for \
+                                               given documenter
 
-            **documentation_path**           -
+            **documentation_path**           - path to put generated api \
+                                               documentation
 
-            **clear_old_documentation**      -
+            **clear_old_documentation**      - indicates weather to delete \
+                                               old documentation files
 
-            **documentation_file_extension** -
+            **documentation_file_extension** - documentation file extension \
+                                               to search for moving
 
-            **temp_file_patterns**           -
+            **temp_file_patterns**           - file patterns to tidy up
 
-            **exclude_packages**             -
+            **exclude_packages**             - sub packages to ignore
 
             Examples:
 
@@ -1859,17 +1874,18 @@ class CommandLine(builtins.object):
             Provides a generic command line interface for modules. Things \
             like unit testing or calling objects in module are provided.
 
-            **module**             -
+            **module**             - module object to provide an interface for
 
-            **temp_file_patterns** -
+            **temp_file_patterns** - temporary file patterns to delete
 
-            **test**               -
+            **test**               - indicates weather this module should be \
+                                     tested or not
 
-            **default_caller**     -
+            **default_caller**     - default callable object in given module
 
-            **caller_arguments**   -
+            **caller_arguments**   - arguments for given caller to forward
 
-            **caller_keywords**    -
+            **caller_keywords**    - keywords for given caller to forward
         '''
         if temp_file_patterns is None:
             temp_file_patterns = cls.DEFAULT_TEMP_FILE_PATTERNS
@@ -1906,11 +1922,12 @@ class CommandLine(builtins.object):
         '''
             Test a given module's doctests.
 
-            **module**             -
+            **module**             - module object to test
 
-            **temp_file_patterns** -
+            **temp_file_patterns** - temporary file patterns to delete
 
-            **verbose**            -
+            **verbose**            - indicates weather testing output should \
+                                     be verbose
         '''
         module = cls._extend_module_for_testing(module)
         '''Backup old runtime environment.'''

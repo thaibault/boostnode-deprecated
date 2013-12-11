@@ -640,17 +640,16 @@ class Logger(Class):
             properties. If a logger was already registered under given name \
             the existing instance is given back and a new instance otherwise.
 
-            TODO STAND
+            **name**       - logger name to get
 
-            **name**       -
+            **level**      - sets levels for all logger
 
-            **level**      -
+            **buffer**     - sets buffers for all logger
 
-            **buffer**     -
+            **terminator** - sets an ending char for each log message in each \
+                             logger
 
-            **terminator** -
-
-            **format**     -
+            **format**     - sets templates for logging messages in each logger
 
             Examples:
 
@@ -692,15 +691,16 @@ class Logger(Class):
 
             Note that every argument except buffer setted to "None" will not \
             edit this logger component. If you don't want to change buffer \
-            leave it "False".
+            leave it by its default value.
 
-            **level**      -
+            **level**      - sets levels for all logger
 
-            **buffer**     -
+            **buffer**     - sets buffers for all logger
 
-            **terminator** -
+            **terminator** - sets an ending char for each log message in each \
+                             logger
 
-            **format**     -
+            **format**     - sets templates for logging messages in each logger
 
             Examples:
 
