@@ -140,13 +140,13 @@ positively.</p>
 <dt id="boostNode.extension.system.CommandLine.argument_parser">
 <em class="property">static </em><tt class="descname">argument_parser</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.system.CommandLine.argument_parser" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represents a basic argument parsing for command line interface             inputs. It&#8217;s used as default pattern for many interface concepts.</p>
-<p><strong>arguments</strong>   -</p>
-<p><strong>module_name</strong> -</p>
-<p><strong>scope</strong>       -</p>
-<p><strong>meta</strong>        -</p>
-<p><strong>description</strong> -</p>
-<p><strong>version</strong>     -</p>
-<p><strong>default</strong>     -</p>
+<p><strong>arguments</strong>   - arguments for the command line</p>
+<p><strong>module_name</strong> - module name wich provides the command line</p>
+<p><strong>scope</strong>       - scope for rendering advanced command line                               arguments</p>
+<p><strong>meta</strong>        - indicates if generated argument parser should                               ignore additional unknown arguments</p>
+<p><strong>description</strong> - command line interface showing description</p>
+<p><strong>version</strong>     - version description</p>
+<p><strong>default</strong>     - indicates weather some default arguments should                               be added</p>
 <p>Additional arguments are forwarded to python&#8217;s native             &#8220;argparse.ArgumentParser()&#8221; initializer.             Additional keywords are forwarded to             &#8220;_determine_argument_parser_keywords()&#8221; method.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">copy</span>
@@ -184,7 +184,7 @@ positively.</p>
 <dt id="boostNode.extension.system.CommandLine.boolean_input">
 <em class="property">static </em><tt class="descname">boolean_input</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.system.CommandLine.boolean_input" title="Permalink to this definition">¶</a></dt>
 <dd><p>This methods implements a handy way to get &#8220;yes&#8221; or &#8220;no&#8221; answers             from the user via command line.</p>
-<p><strong>question</strong> -</p>
+<p><strong>question</strong> - question to ask via command line interface</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">CommandLine</span><span class="o">.</span><span class="n">boolean_input</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">question</span><span class="o">=</span><span class="s">&#39;All right? {boolean_arguments}: &#39;</span>
@@ -204,8 +204,8 @@ positively.</p>
 <dt id="boostNode.extension.system.CommandLine.determine_wrapped_objects">
 <em class="property">static </em><tt class="descname">determine_wrapped_objects</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.system.CommandLine.determine_wrapped_objects" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns all aspect orientated wrapped methods in given module.</p>
-<p><strong>scope</strong> -</p>
-<p><strong>only_module_level</strong> -</p>
+<p><strong>scope</strong>             - scope to check again objects</p>
+<p><strong>only_module_level</strong> - indicates weather imported object should                                     be ignored</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">boostNode.extension.system</span>
 </pre></div>
@@ -233,29 +233,29 @@ positively.</p>
 <dt id="boostNode.extension.system.CommandLine.generic_module_interface">
 <em class="property">static </em><tt class="descname">generic_module_interface</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.system.CommandLine.generic_module_interface" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provides a generic command line interface for modules. Things             like unit testing or calling objects in module are provided.</p>
-<p><strong>module</strong>             -</p>
-<p><strong>temp_file_patterns</strong> -</p>
-<p><strong>test</strong>               -</p>
-<p><strong>default_caller</strong>     -</p>
-<p><strong>caller_arguments</strong>   -</p>
-<p><strong>caller_keywords</strong>    -</p>
+<p><strong>module</strong>             - module object to provide an interface for</p>
+<p><strong>temp_file_patterns</strong> - temporary file patterns to delete</p>
+<p><strong>test</strong>               - indicates weather this module should be                                      tested or not</p>
+<p><strong>default_caller</strong>     - default callable object in given module</p>
+<p><strong>caller_arguments</strong>   - arguments for given caller to forward</p>
+<p><strong>caller_keywords</strong>    - keywords for given caller to forward</p>
 </dd></dl>
 
 <dl class="staticmethod">
 <dt id="boostNode.extension.system.CommandLine.generic_package_interface">
 <em class="property">static </em><tt class="descname">generic_package_interface</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.system.CommandLine.generic_package_interface" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provides a command-line interface like a makefile. Supported             features are linting, generate documentation, testing and             removing temporary files.</p>
-<p><strong>name</strong>                         -</p>
-<p><strong>frame</strong>                        -</p>
-<p><strong>command_line_arguments</strong>       -</p>
-<p><strong>linter</strong>                       -</p>
-<p><strong>documenter</strong>                   -</p>
-<p><strong>documenter_arguments</strong>         -</p>
-<p><strong>documentation_path</strong>           -</p>
-<p><strong>clear_old_documentation</strong>      -</p>
-<p><strong>documentation_file_extension</strong> -</p>
-<p><strong>temp_file_patterns</strong>           -</p>
-<p><strong>exclude_packages</strong>             -</p>
+<p><strong>name</strong>                         - package name</p>
+<p><strong>frame</strong>                        - frame bounded to package scope</p>
+<p><strong>command_line_arguments</strong>       - additional command line                                                arguments</p>
+<p><strong>linter</strong>                       - linter program name to use</p>
+<p><strong>documenter</strong>                   - api documentation program name</p>
+<p><strong>documenter_arguments</strong>         - command line arguments for                                                given documenter</p>
+<p><strong>documentation_path</strong>           - path to put generated api                                                documentation</p>
+<p><strong>clear_old_documentation</strong>      - indicates weather to delete                                                old documentation files</p>
+<p><strong>documentation_file_extension</strong> - documentation file extension                                                to search for moving</p>
+<p><strong>temp_file_patterns</strong>           - file patterns to tidy up</p>
+<p><strong>exclude_packages</strong>             - sub packages to ignore</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">CommandLine</span><span class="o">.</span><span class="n">generic_package_interface</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">name</span><span class="o">=</span><span class="s">&#39;not__main__&#39;</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">currentframe</span><span class="p">())</span>
@@ -268,16 +268,16 @@ positively.</p>
 <dt id="boostNode.extension.system.CommandLine.handle_log_level">
 <em class="property">static </em><tt class="descname">handle_log_level</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.system.CommandLine.handle_log_level" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handles log level in a generic way. If given command line             arguments contains a log level all logger levels will be setted             to this level.</p>
-<p><strong>arguments</strong> -</p>
+<p><strong>arguments</strong> - command line arguments</p>
 </dd></dl>
 
 <dl class="staticmethod">
 <dt id="boostNode.extension.system.CommandLine.test_module">
 <em class="property">static </em><tt class="descname">test_module</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.system.CommandLine.test_module" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test a given module&#8217;s doctests.</p>
-<p><strong>module</strong>             -</p>
-<p><strong>temp_file_patterns</strong> -</p>
-<p><strong>verbose</strong>            -</p>
+<p><strong>module</strong>             - module object to test</p>
+<p><strong>temp_file_patterns</strong> - temporary file patterns to delete</p>
+<p><strong>verbose</strong>            - indicates weather testing output should                                      be verbose</p>
 </dd></dl>
 
 </dd></dl>
@@ -302,12 +302,12 @@ positively.</p>
 <dt id="boostNode.extension.system.Platform.change_computer_status">
 <em class="property">static </em><tt class="descname">change_computer_status</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.system.Platform.change_computer_status" title="Permalink to this definition">¶</a></dt>
 <dd><p>Shuts down or boot a computer and ensure that is is available             after boot or not available if it should be shut down.</p>
-<p><strong>host</strong>            -</p>
-<p><strong>mac_address</strong>     -</p>
-<p><strong>broadcast</strong>       -</p>
-<p><strong>handler</strong>         -</p>
-<p><strong>down</strong>            -</p>
-<p><strong>number_of_tries</strong> -</p>
+<p><strong>host</strong>            - host to change</p>
+<p><strong>mac_address</strong>     - mac address of host to change</p>
+<p><strong>broadcast</strong>       - broadcast address</p>
+<p><strong>handler</strong>         - function to execute to change computer&#8217;s                                   status</p>
+<p><strong>down</strong>            - indicates weather we should check again                                   reachability or none reachability after                                   performing &#8220;handler()&#8221;</p>
+<p><strong>number_of_tries</strong> - number of tries to run given &#8220;handler()&#8221;</p>
 <p>Returns a tuple: first value indicates weather it was successful             and second is &#8220;True&#8221; if computer status was needed to be changed             and &#8220;False&#8221; otherwise.</p>
 </dd></dl>
 
@@ -315,9 +315,9 @@ positively.</p>
 <dt id="boostNode.extension.system.Platform.check_computer_reachability">
 <em class="property">static </em><tt class="descname">check_computer_reachability</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.system.Platform.check_computer_reachability" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if a remote computer is available by pinging it.</p>
-<p><strong>host</strong>               -</p>
-<p><strong>timeout_in_seconds</strong> -</p>
-<p><strong>port</strong>               -</p>
+<p><strong>host</strong>               - host to check</p>
+<p><strong>timeout_in_seconds</strong> - timeout until an unreachable host will                                      be assumed</p>
+<p><strong>port</strong>               - port to check</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">isinstance</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">Platform</span><span class="o">.</span><span class="n">check_computer_reachability</span><span class="p">(</span><span class="s">&#39;localhost&#39;</span><span class="p">),</span> <span class="nb">bool</span><span class="p">)</span>
@@ -330,7 +330,7 @@ positively.</p>
 <dt id="boostNode.extension.system.Platform.check_process_lock">
 <em class="property">static </em><tt class="descname">check_process_lock</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.system.Platform.check_process_lock" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if a lock file with given description exists. NOTE:             Calling this function doesn&#8217;t prevent you from race conditions.</p>
-<p><strong>description</strong> -</p>
+<p><strong>description</strong> - the process identification</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Platform</span><span class="o">.</span><span class="n">set_process_lock</span><span class="p">(</span><span class="s">&#39;check_process&#39;</span><span class="p">)</span>
 <span class="go">True</span>
@@ -345,8 +345,9 @@ positively.</p>
 <dl class="staticmethod">
 <dt id="boostNode.extension.system.Platform.check_thread">
 <em class="property">static </em><tt class="descname">check_thread</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.system.Platform.check_thread" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks weather the current thread should be paused or terminated.             If thread should be terminated &#8220;True&#8221; will be given back. In case             of pausing the current thread stay in the current function call             still a continue event is triggered.</p>
-<p><strong>waiting_delay_in_seconds</strong> -</p>
+<dd><p>Checks weather the current thread should be paused or terminated.</p>
+<p><strong>waiting_delay_in_seconds</strong> - time between checking if thread is                                            currently running</p>
+<p>If thread should be terminated &#8220;True&#8221; will be given back. In case             of pausing the current thread stay in the current function call             still a continue event is triggered and &#8220;False&#8221; will be given back.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Platform</span><span class="o">.</span><span class="n">check_thread</span><span class="p">()</span>
 <span class="go">False</span>
@@ -378,7 +379,7 @@ positively.</p>
 <dt id="boostNode.extension.system.Platform.clear_process_lock">
 <em class="property">static </em><tt class="descname">clear_process_lock</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.system.Platform.clear_process_lock" title="Permalink to this definition">¶</a></dt>
 <dd><p>Removes a prior setted lock file.</p>
-<p><strong>description</strong> -</p>
+<p><strong>description</strong> - the process identification</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">file</span> <span class="o">=</span> <span class="n">FileHandler</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">Platform</span><span class="o">.</span><span class="n">process_lock_directory</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span>
@@ -432,7 +433,7 @@ method.</p>
 <em class="property">static </em><tt class="descname">open</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.system.Platform.open" title="Permalink to this definition">¶</a></dt>
 <dd><p>Opens the current file with its default user preference             application.</p>
 <p>On Unix, the return value is the exit state of the process             encoded in the format specified for wait(). Note that &#8220;POSIX&#8221;             does not specify the meaning of the return value of the C             system() function, so the return value of the Python function is             system-dependent. On Windows, the return value is that returned             by the system shell after running command. The shell is given by             the Windows environment variable &#8220;COMSPEC&#8221;: it is usually             &#8220;cmd.exe&#8221;, which returns the exit status of the command run; on             systems using a non-native shell, consult your shell documentation.</p>
-<p><strong>location</strong> -</p>
+<p><strong>location</strong> - location to open</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Platform</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s">&#39;/path/to/file&#39;</span><span class="p">)</span> 
 </pre></div>
@@ -531,7 +532,7 @@ method.</p>
 <dt id="boostNode.extension.system.Platform.set_process_lock">
 <em class="property">static </em><tt class="descname">set_process_lock</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.system.Platform.set_process_lock" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets a global lock. Creates a file with given name prefix of             &#8220;description&#8221;.</p>
-<p><strong>description</strong> -</p>
+<p><strong>description</strong> - an identifying description</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">lock_file</span> <span class="o">=</span> <span class="n">FileHandler</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">Platform</span><span class="o">.</span><span class="n">process_lock_directory</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;set_process_lock&#39;</span><span class="p">)</span>
@@ -574,8 +575,8 @@ method.</p>
 <dt id="boostNode.extension.system.Platform.wake_computer">
 <em class="property">static </em><tt class="descname">wake_computer</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.system.Platform.wake_computer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wakes up a remote computer using a magic package             (wake-on-lan-package).</p>
-<p><strong>make_address</strong> -</p>
-<p><strong>broadcast</strong>    -</p>
+<p><strong>mac_address</strong> - physical address of computer to wake</p>
+<p><strong>broadcast</strong>    - broadcast address</p>
 <p>Returns &#8220;True&#8221; if no socket error occurs and &#8220;False&#8221; otherwise.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">isinstance</span><span class="p">(</span>
@@ -657,9 +658,9 @@ initializer.</p>
 <dt id="boostNode.extension.system.Runnable.stop">
 <em class="property">static </em><tt class="descname">stop</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.system.Runnable.stop" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method should usually be overwritten to handle cleanup jobs.</p>
-<p><strong>signal_number</strong> -</p>
-<p><strong>stack_frame</strong>   -</p>
-<p><strong>reason</strong>        -</p>
+<p><strong>signal_number</strong> - signal number to end with</p>
+<p><strong>stack_frame</strong>   - frame of last executed stack</p>
+<p><strong>reason</strong>        - description why the application should stop</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">A</span><span class="p">(</span><span class="n">Runnable</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">_initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">pass</span>
