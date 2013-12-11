@@ -1859,7 +1859,17 @@ class CommandLine(builtins.object):
             Provides a generic command line interface for modules. Things \
             like unit testing or calling objects in module are provided.
 
-            TODO predoc STAND
+            **module**             -
+
+            **temp_file_patterns** -
+
+            **test**               -
+
+            **default_caller**     -
+
+            **caller_arguments**   -
+
+            **caller_keywords**    -
         '''
         if temp_file_patterns is None:
             temp_file_patterns = cls.DEFAULT_TEMP_FILE_PATTERNS
@@ -1893,7 +1903,15 @@ class CommandLine(builtins.object):
 ##     ) -> SelfClass:
     def test_module(cls, module, temp_file_patterns, verbose):
 ##
-        '''Test a given module's doctests.'''
+        '''
+            Test a given module's doctests.
+
+            **module**             -
+
+            **temp_file_patterns** -
+
+            **verbose**            -
+        '''
         module = cls._extend_module_for_testing(module)
         '''Backup old runtime environment.'''
         platform_process_lock_directory_backup = \

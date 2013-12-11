@@ -64,11 +64,13 @@ class Buffer(Class, logging.StreamHandler):
         This class represents a layer for writing and reading to an output \
         buffer realized as file, queue or variable.
 
-        **file**                    -
+        **file**                    - a file path or file handler to use as \
+                                      buffer
 
-        **queue**                   -
+        **queue**                   - a queue object to use as buffer
 
-        **support_multiprocessing** -
+        **support_multiprocessing** - indicates weather buffer read and write \
+                                      requests should be multiprocessing save
 
         Examples:
 
@@ -246,7 +248,7 @@ class Buffer(Class, logging.StreamHandler):
             Writes content to the current output buffer file. If the current \
             given file "Buffer.file" doesn't exists it will be created.
 
-            **content** -
+            **content** - content to write into current buffer instance
 
             Examples:
 
@@ -295,7 +297,8 @@ class Buffer(Class, logging.StreamHandler):
         '''
             Removes the current output buffer content.
 
-            **delete** -
+            **delete** - indicates weather a file buffer should be deleted or \
+                         truncated
 
             Examples:
 
@@ -636,6 +639,8 @@ class Logger(Class):
             Returns a new or existing instance of a logger with given \
             properties. If a logger was already registered under given name \
             the existing instance is given back and a new instance otherwise.
+
+            TODO STAND
 
             **name**       -
 

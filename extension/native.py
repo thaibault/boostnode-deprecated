@@ -1515,7 +1515,7 @@ class Module(Object):
         'GPollableOutputStream')
 ##
     '''Stores all magically defined globals.'''
-    PREFERED_ENTRY_POINT_FUNCTION_NAMES = (
+    PREFERRED_ENTRY_POINT_FUNCTION_NAMES = (
         'main', 'init', 'initialize', 'run', 'start')
     '''
         Stores a priority order of preferred callable name as starting point \
@@ -1608,15 +1608,15 @@ class Module(Object):
             this module's context will be selected. If "base" is set "True" \
             the modules name is given back without any file extension.
 
-            # TODO stand
+            **frame**     - Frame of module to determine
 
-            **frame**     -
+            **module**    - module to determine the name of
 
-            **module**    -
+            **extension** - Indicates weather the modules file name extension \
+                            should be returned as well
 
-            **extension** -
-
-            **path**      -
+            **path**      - Indicates weather the modules file path should be \
+                            returned as well
 
             Examples:
 
@@ -1653,9 +1653,9 @@ class Module(Object):
             Determines package context of given frame. If current context \
             isn't in any package context an empty string is given back.
 
-            **frame** -
+            **frame** - frame of the package name to inspect
 
-            **path** -
+            **path**  - path to package
 
             Examples:
 
@@ -1697,11 +1697,11 @@ class Module(Object):
     ):
 ##
         '''
-            Returns the path to given module name.
+            Returns the path to given context path.
 
-            **context_path**      -
+            **context_path**      - the context path to a module to determine
 
-            **only_source_files** -
+            **only_source_files** - ignores compiled python modules
 
             Examples:
 
@@ -1742,7 +1742,7 @@ class Module(Object):
         '''
             Checks if given location is pointed to a python package.
 
-            **path** -
+            **path** - given location
 
             Examples:
 
@@ -1774,9 +1774,9 @@ class Module(Object):
             Searches for a useful caller object in given module objects via \
             "module_objects".
 
-            **callable_objects** -
+            **callable_objects** - available caller objects
 
-            **caller**           -
+            **caller**           - if provided this value will be returned
 
             Examples:
 
@@ -1800,7 +1800,7 @@ class Module(Object):
         '''
         if not (caller or caller is False):
             for object in callable_objects:
-                if object.lower() in cls.PREFERED_ENTRY_POINT_FUNCTION_NAMES:
+                if object.lower() in cls.PREFERRED_ENTRY_POINT_FUNCTION_NAMES:
                     return object
             if builtins.len(callable_objects):
                 index = 0
@@ -1823,9 +1823,10 @@ class Module(Object):
             Takes a module and gives a list of objects explicit defined in \
             this module.
 
-            **scope**             -
+            **scope**             - scope to search for callables
 
-            **only_module_level** -
+            **only_module_level** - indicates weather imported modules should \
+                                    be used.
 
             Examples:
 
@@ -1885,19 +1886,20 @@ class Module(Object):
             Runs a given program for every given module. Returns "False" if \
             no modules were found or given program isn't installed.
 
-            **program_type** -
+            **program_type** - program description to show in standard output
 
-            **program**      -
+            **program**      - program name to run
 
-            **modules**      -
+            **modules**      - module file to hand over given program
 
-            **arguments**    -
+            **arguments**    - command line arguments for given program
 
-            **extension**    -
+            **extension**    - extension to use for module files
 
-            **delimiter**    -
+            **delimiter**    - delimiter to show between resulting standard \
+                               outputs
 
-            **log**          -
+            **log**          - indicates weather logging should be enabled
 
             Additional keywords are forwarded to
             "boostNode.system.Platform.run()".
@@ -1965,13 +1967,16 @@ class Module(Object):
             module is running in test mode and a variable that saves the \
             current module name.
 
-            **name**               -
+            **name**               - name to use for module to extend
 
-            **frame**              -
+            **frame**              - frame to determine modules name and file \
+                                     path
 
-            **module**             -
+            **module**             - module to extend
 
-            **post_extend_others** -
+            **post_extend_others** - indicates weather to check for resolved \
+                                     dependencies of other modules and extend \
+                                     them if possible.
 
             Returns a dictionary with new module's scope and module name.
 
@@ -2047,15 +2052,18 @@ class Module(Object):
             scope will be extended and a common meta command line interface \
             is provided to test or run objects in given module.
 
-            **name**             -
+            **name**             - module name to extend
 
-            **frame**            -
+            **frame**            - frame of module to extend
 
-            **default_caller**   -
+            **default_caller**   - a default caller to run after extending \
+                                   module
 
-            **caller_arguments** -
+            **caller_arguments** - arguments to forwarded to given default \
+                                   caller
 
-            **caller_keywords**  -
+            **caller_keywords**  - keywords to forwarded to given default \
+                                   caller
 
             Examples:
 
@@ -2091,11 +2099,11 @@ class Module(Object):
             package's scope will be extended and a common meta command line \
             interface is provided to test, lint or document modules.
 
-            **name**                   -
+            **name**                   - package name to extend
 
-            **frame**                  -
+            **frame**                  - frame of package to extend
 
-            **command_line_arguments** -
+            **command_line_arguments** - additional command line arguments
 
             Additional arguments and keywords are forwarded to
             "...extension.system.CommandLine.generic_package_interface()".
