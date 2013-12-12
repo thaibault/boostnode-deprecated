@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.3
 # -*- coding: utf-8 -*-
 
 # region vim modline
@@ -27,15 +27,15 @@ __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-## python3.3 import builtins
-import __builtin__ as builtins
+## python2.7 import __builtin__ as builtins
+import builtins
 import inspect
 import os
 import re
 import sys
 import threading
-## python3.3 import types
-pass
+## python2.7 pass
+import types
 import webbrowser
 
 try:
@@ -61,8 +61,8 @@ for number in (3, 4):
 
 from boostNode.extension.native import Dictionary, Module, PropertyInitializer
 from boostNode.extension.system import CommandLine, Runnable
-## python3.3 from boostNode.extension.type import Self, SelfClass
-pass
+## python2.7 pass
+from boostNode.extension.type import Self, SelfClass
 from boostNode.paradigm.aspectOrientation import JointPoint
 from boostNode.paradigm.objectOrientation import Class
 
@@ -222,9 +222,9 @@ class Browser(Class, Runnable):
 
     @JointPoint(builtins.classmethod)
     @Class.pseudo_property
-## python3.3
-##     def get_available_gui_toolkits(cls: SelfClass) -> builtins.tuple:
-    def get_available_gui_toolkits(cls):
+## python2.7
+##     def get_available_gui_toolkits(cls):
+    def get_available_gui_toolkits(cls: SelfClass) -> builtins.tuple:
 ##
         '''
             Determines available gui toolkits.
@@ -257,8 +257,8 @@ class Browser(Class, Runnable):
             # region special
 
     @JointPoint
-## python3.3     def __repr__(self: Self) -> builtins.str:
-    def __repr__(self):
+## python2.7     def __repr__(self):
+    def __repr__(self: Self) -> builtins.str:
         '''
             Invokes if this object should describe itself by a string. \
             Returns the computed self describing string.
@@ -284,8 +284,8 @@ class Browser(Class, Runnable):
             # region getter
 
     @JointPoint(Class.pseudo_property)
-## python3.3     def get_gui_toolkit(self: Self) -> builtins.str:
-    def get_gui_toolkit(self):
+## python2.7     def get_gui_toolkit(self):
+    def get_gui_toolkit(self: Self) -> builtins.str:
         '''
             Determines available gui toolkit.
 
@@ -331,8 +331,8 @@ class Browser(Class, Runnable):
             # region setter
 
     @JointPoint
-## python3.3     def set_url(self: Self, url: builtins.str) -> builtins.str:
-    def set_url(self, url):
+## python2.7     def set_url(self, url):
+    def set_url(self: Self, url: builtins.str) -> builtins.str:
         '''
             Setter for current url.
 
@@ -347,12 +347,12 @@ class Browser(Class, Runnable):
             # endregion
 
     @JointPoint
-## python3.3
-##     def stop(
-##         self: Self, *arguments: builtins.object, reason='',
-##         **keywords: builtins.object
-##     ) -> Self:
-    def stop(self, *arguments, **keywords):
+## python2.7
+##     def stop(self, *arguments, **keywords):
+    def stop(
+        self: Self, *arguments: builtins.object, reason='',
+        **keywords: builtins.object
+    ) -> Self:
 ##
         '''
             Closes all created web views. Note that in case of using the \
@@ -364,10 +364,10 @@ class Browser(Class, Runnable):
             >>> Browser('google.de').stop() # doctest: +ELLIPSIS
             Object of "Browser" with url "http://google.de" in 800 pixel...
         '''
-## python3.3
-##         pass
-        reason, keywords = Dictionary(content=keywords).pop(
-            name='reason', default_value='')
+## python2.7
+##         reason, keywords = Dictionary(content=keywords).pop(
+##             name='reason', default_value='')
+        pass
 ##
         if self.__dict__.get('window') is not None:
             if self.gui_toolkit == 'qt':
@@ -401,8 +401,8 @@ class Browser(Class, Runnable):
             # region runnable implementation
 
     @JointPoint
-## python3.3     def _run(self: Self) -> Self:
-    def _run(self):
+## python2.7     def _run(self):
+    def _run(self: Self) -> Self:
         '''
             Entry point for command line call of this program. Initializes \
             all window and webkit components.
@@ -424,19 +424,19 @@ class Browser(Class, Runnable):
                 arguments=self.COMMAND_LINE_ARGUMENTS)))
 
     @JointPoint(PropertyInitializer)
-## python3.3
+## python2.7
 ##     def _initialize(
-##         self: Self, _url: builtins.str, width_in_pixel=800,
-##         height_in_pixel=600, fullscreen=False, no_window_decoration=False,
-##         default_gui_toolkit='qt', no_progress_bar=False,
-##         default_title='No gui loaded.', stop_order='stop',
-##         **keywords: builtins.object
-##     ) -> Self:
+##             self, _url, width_in_pixel=800, height_in_pixel=600,
+##             fullscreen=False, no_window_decoration=False,
+##             default_gui_toolkit='qt', no_progress_bar=False,
+##             default_title='No gui loaded.', stop_order='stop', **keywords):
     def _initialize(
-            self, _url, width_in_pixel=800, height_in_pixel=600,
-            fullscreen=False, no_window_decoration=False,
-            default_gui_toolkit='qt', no_progress_bar=False,
-            default_title='No gui loaded.', stop_order='stop', **keywords):
+        self: Self, _url: builtins.str, width_in_pixel=800,
+        height_in_pixel=600, fullscreen=False, no_window_decoration=False,
+        default_gui_toolkit='qt', no_progress_bar=False,
+        default_title='No gui loaded.', stop_order='stop',
+        **keywords: builtins.object
+    ) -> Self:
 ##
         '''
             Initializes a web view or tries to open a default browser if no \
@@ -467,16 +467,16 @@ class Browser(Class, Runnable):
 
                 # endregion
 
-## python3.3
-##             browser_thread = threading.Thread(
-##                 target=builtins.getattr(
-##                     self, '_initialize_%s_browser' % self.gui_toolkit),
-##                 daemon=True
-##             ).start()
-            browser_thread = threading.Thread(target=builtins.getattr(
-                self, '_initialize_%s_browser' % self.gui_toolkit))
-            browser_thread.daemon = True
-            browser_thread.start()
+## python2.7
+##             browser_thread = threading.Thread(target=builtins.getattr(
+##                 self, '_initialize_%s_browser' % self.gui_toolkit))
+##             browser_thread.daemon = True
+##             browser_thread.start()
+            browser_thread = threading.Thread(
+                target=builtins.getattr(
+                    self, '_initialize_%s_browser' % self.gui_toolkit),
+                daemon=True
+            ).start()
 ##
             if self.stop_order:
                 self.wait_for_order()
@@ -487,16 +487,16 @@ class Browser(Class, Runnable):
             # region native web view components
 
     @JointPoint
-## python3.3     def _initialize_default_browser(self: Self) -> Self:
-    def _initialize_default_browser(self):
+## python2.7     def _initialize_default_browser(self):
+    def _initialize_default_browser(self: Self) -> Self:
         '''Starts the default browser with currently stored url.'''
         self.browser = webbrowser
         self.browser.open(self._url)
         return self
 
     @JointPoint
-## python3.3     def _initialize_qt_browser(self: Self) -> Self:
-    def _initialize_qt_browser(self):
+## python2.7     def _initialize_qt_browser(self):
+    def _initialize_qt_browser(self: Self) -> Self:
         '''Starts the qt webkit webview thread.'''
         self.window = PyQt4.QtGui.QApplication(sys.argv)
         self.browser = PyQt4.QtWebKit.QWebView()
@@ -515,8 +515,8 @@ class Browser(Class, Runnable):
         return self
 
     @JointPoint
-## python3.3     def _initialize_qt_progress_bar(self: Self) -> Self:
-    def _initialize_qt_progress_bar(self):
+## python2.7     def _initialize_qt_progress_bar(self):
+    def _initialize_qt_progress_bar(self: Self) -> Self:
         '''
             Initializes the progress bar for qt on bottom of the window for \
             showing current state of website rendering.
@@ -541,8 +541,8 @@ class Browser(Class, Runnable):
         return self
 
     @JointPoint
-## python3.3     def _initialize_gtk_browser(self: Self) -> Self:
-    def _initialize_gtk_browser(self):
+## python2.7     def _initialize_gtk_browser(self):
+    def _initialize_gtk_browser(self: Self) -> Self:
         '''Sets various event-handlers for browser and window objects.'''
         self.window = gtk.Window()
         self.vbox = gtk.VBox()
@@ -572,8 +572,8 @@ class Browser(Class, Runnable):
         return self
 
     @JointPoint
-## python3.3     def _initialize_gtk_progress_bar(self: Self) -> Self:
-    def _initialize_gtk_progress_bar(self):
+## python2.7     def _initialize_gtk_progress_bar(self):
+    def _initialize_gtk_progress_bar(self: Self) -> Self:
         '''
             Initializes the progress bar for gtk on bottom of the window for \
             showing current state of website rendering.
@@ -588,8 +588,8 @@ class Browser(Class, Runnable):
         return self
 
     @JointPoint
-## python3.3     def _check_for_gtk_closing_flag(self: Self) -> builtins.bool:
-    def _check_for_gtk_closing_flag(self):
+## python2.7     def _check_for_gtk_closing_flag(self):
+    def _check_for_gtk_closing_flag(self: Self) -> builtins.bool:
         '''
             Checks if gtk should be closed after the last gtk main iteration. \
             If we return a "False" this method will not be triggered in \
@@ -610,9 +610,9 @@ class Browser(Class, Runnable):
                     # region webkit event
 
     @JointPoint
-## python3.3
-##     def _on_qt_title_changed(self: Self, title: builtins.str) -> Self:
-    def _on_qt_title_changed(self, title):
+## python2.7
+##     def _on_qt_title_changed(self, title):
+    def _on_qt_title_changed(self: Self, title: builtins.str) -> Self:
 ##
         '''
             Triggers if the current title (normally defined in the web page's \
@@ -622,12 +622,12 @@ class Browser(Class, Runnable):
         return self
 
     @JointPoint
-## python3.3
-##     def _on_gtk_title_changed(
-##         self: Self, webview: webkit.WebView, frame: webkit.WebFrame,
-##         title: builtins.str
-##     ) -> Self:
-    def _on_gtk_title_changed(self, webview, frame, title):
+## python2.7
+##     def _on_gtk_title_changed(self, webview, frame, title):
+    def _on_gtk_title_changed(
+        self: Self, webview: webkit.WebView, frame: webkit.WebFrame,
+        title: builtins.str
+    ) -> Self:
 ##
         '''
             Triggers if the current title (normally defined in the web page's \
@@ -637,19 +637,19 @@ class Browser(Class, Runnable):
         return self
 
     @JointPoint
-## python3.3     def _on_qt_load_started(self: Self) -> Self:
-    def _on_qt_load_started(self):
+## python2.7     def _on_qt_load_started(self):
+    def _on_qt_load_started(self: Self) -> Self:
         '''Triggers if browser starts to load a new web page.'''
         self.progress_bar.text = ''
         self.progress_bar.setVisible(True)
         return self
 
     @JointPoint
-## python3.3
-##     def _on_gtk_load_started(
-##         self: Self, webview: webkit.WebView, frame: webkit.WebFrame
-##     ) -> Self:
-    def _on_gtk_load_started(self, webview, frame):
+## python2.7
+##     def _on_gtk_load_started(self, webview, frame):
+    def _on_gtk_load_started(
+        self: Self, webview: webkit.WebView, frame: webkit.WebFrame
+    ) -> Self:
 ##
         '''Triggers if browser starts to load a new web page.'''
         self.progress_bar.set_fraction(0 / 100.0)
@@ -657,42 +657,42 @@ class Browser(Class, Runnable):
         return self
 
     @JointPoint
-## python3.3
-##     def _on_qt_load_progress_changed(
-##         self: Self, status: builtins.int
-##     ) -> Self:
-    def _on_qt_load_progress_changed(self, status):
+## python2.7
+##     def _on_qt_load_progress_changed(self, status):
+    def _on_qt_load_progress_changed(
+        self: Self, status: builtins.int
+    ) -> Self:
 ##
         '''Triggers if the current web page load process was changed.'''
         self.progress_bar.setValue(status)
         return self
 
     @JointPoint
-## python3.3
-##     def _on_gtk_load_progress_changed(
-##         self: Self, webview: webkit.WebView, amount: builtins.int
-##     ) -> Self:
-    def _on_gtk_load_progress_changed(self, webview, amount):
+## python2.7
+##     def _on_gtk_load_progress_changed(self, webview, amount):
+    def _on_gtk_load_progress_changed(
+        self: Self, webview: webkit.WebView, amount: builtins.int
+    ) -> Self:
 ##
         '''Triggers if the current web page load process was changed.'''
         self.progress_bar.set_fraction(amount / 100.0)
         return self
 
     @JointPoint
-## python3.3
-##     def _on_qt_load_finished(self: Self, successful: builtins.bool) -> Self:
-    def _on_qt_load_finished(self, successful):
+## python2.7
+##     def _on_qt_load_finished(self, successful):
+    def _on_qt_load_finished(self: Self, successful: builtins.bool) -> Self:
 ##
         '''Triggers if a page load process has finished.'''
         self.progress_bar.setVisible(False)
         return self
 
     @JointPoint
-## python3.3
-##     def _on_gtk_load_finished(
-##         self: Self, webview: webkit.WebView, frame: webkit.WebFrame
-##     ) -> Self:
-    def _on_gtk_load_finished(self, webview, frame):
+## python2.7
+##     def _on_gtk_load_finished(self, webview, frame):
+    def _on_gtk_load_finished(
+        self: Self, webview: webkit.WebView, frame: webkit.WebFrame
+    ) -> Self:
 ##
         '''Triggers if a page load process has finished.'''
         self.progress_bar.set_fraction(100.0 / 100.0)
