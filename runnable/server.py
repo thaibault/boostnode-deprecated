@@ -1199,6 +1199,7 @@ class CGIHTTPRequestHandler(
                 # region properties
 
         '''Properties defined by incoming request.'''
+        self.host = ''
         self.request_uri = ''
         self.parameter = ''
         self.post_dictionary = {}
@@ -2259,6 +2260,20 @@ class CGIHTTPRequestHandler(
 ## python3.3     def _create_environment_variables(self: Self) -> builtins.str:
     def _create_environment_variables(self):
         '''Creates all request specified environment-variables.'''
+        if not __test_mode__:
+            self.host = self.server.web.host_name
+            if self.server.web.port != 80:
+                self.host += ':%d' % self.server.web.port
+## python3.3
+##             if self.headers.get('X-Forwarded-Host'):
+##                 self.host = self.headers.get('X-Forwarded-Host')
+##             elif self.headers.get('Host'):
+##                 self.host = self.headers.get('Host')
+            if self.headers.getheader('X-Forwarded-Host'):
+                self.host = self.headers.getheader('X-Forwarded-Host')
+            elif self.headers.get('Host'):
+                self.host = self.headers.getheader('Host')
+##
         self.request_uri = self.path
         match = re.compile(
             '[^/{delimiter}]*/+(?P<file_name>[^{delimiter}]*){delimiter}?'
@@ -2647,7 +2662,7 @@ class CGIHTTPRequestHandler(
             environment.
         '''
         self.request_arguments = [
-            self.requested_file_name, self.request_uri,
+            self.requested_file_name, self.host, self.request_uri,
             self.parse_url(self.request_uri)[1], self.post_dictionary,
             self.server.web.shared_data, self]
         if '__no_respond__' not in self.post_dictionary:
