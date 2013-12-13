@@ -1,5 +1,6 @@
 # Vim temporary file
 *.swp
+.roperproject
 
 # Generated runtime bytecode files.
 *.py[cod]
