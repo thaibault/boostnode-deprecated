@@ -3,7 +3,7 @@
 boostNode
 =========
 
-`Project Page <http://thaibault.github.io/boostNode>`_
+`Project Page <http://thaibault.github.com/boostNode>`_
 
 Contents
 --------
