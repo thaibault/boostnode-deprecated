@@ -387,7 +387,6 @@ class Browser(Class, Runnable):
                         until gtk has finished it's closing procedures.
                     '''
                     self._close_gtk_windows_lock.acquire()
-        if 'gui_toolkit' in self.__dict__:
             __logger__.info('All "%s" windows closed.', self.gui_toolkit)
         '''Take this method type by the abstract class via introspection.'''
         return builtins.getattr(

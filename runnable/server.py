@@ -2257,23 +2257,33 @@ class CGIHTTPRequestHandler(
         return False
 
     @JointPoint
+## python3.3     def _determine_host(self: Self) -> Self:
+    def _determine_host(self):
+        '''
+            Determines the full host name with port included (if it's not \
+            "80").
+        '''
+        self.host = self.server.web.host_name
+        if self.server.web.port != 80:
+            self.host += ':%d' % self.server.web.port
+## python3.3
+##         if self.headers.get('X-Forwarded-Host'):
+##             self.host = self.headers.get('X-Forwarded-Host')
+##         elif self.headers.get('Host'):
+##             self.host = self.headers.get('Host')
+        if self.headers.getheader('X-Forwarded-Host'):
+            self.host = self.headers.getheader('X-Forwarded-Host')
+        elif self.headers.get('Host'):
+            self.host = self.headers.getheader('Host')
+##
+        return self
+
+    @JointPoint
 ## python3.3     def _create_environment_variables(self: Self) -> builtins.str:
     def _create_environment_variables(self):
         '''Creates all request specified environment-variables.'''
         if not __test_mode__:
-            self.host = self.server.web.host_name
-            if self.server.web.port != 80:
-                self.host += ':%d' % self.server.web.port
-## python3.3
-##             if self.headers.get('X-Forwarded-Host'):
-##                 self.host = self.headers.get('X-Forwarded-Host')
-##             elif self.headers.get('Host'):
-##                 self.host = self.headers.get('Host')
-            if self.headers.getheader('X-Forwarded-Host'):
-                self.host = self.headers.getheader('X-Forwarded-Host')
-            elif self.headers.get('Host'):
-                self.host = self.headers.getheader('Host')
-##
+            self._determine_host()
         self.request_uri = self.path
         match = re.compile(
             '[^/{delimiter}]*/+(?P<file_name>[^{delimiter}]*){delimiter}?'
