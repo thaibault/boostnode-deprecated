@@ -16,8 +16,9 @@ License
 
 endregion -->
 
-Use case<!--deDE:Einsatz--><!--frFR:Utilisier-->
-------------------------------------------------
+<!--TODO write German versions.-->
+
+<h2>Use case<!--deDE:Einsatz--><!--frFR:Utilisier--></h2>
 
 boostNode is a high level python library. This library supports python2.7+ and
 python3.3+ environments. And will always try to use every new cutting edge
@@ -32,14 +33,12 @@ for applications in a full generic, reusable and very solid way.
     Hochzuverlässige Bausteine zu unterstützen.
 -->
 
-Content<!--deDE:Inhalt-->
--------------------------
+<h2>Content<!--deDE:Inhalt--></h2>
 
 <!--Place for automatic generated table of contents.-->
 [TOC]
 
-Features
---------
+<h2>Features<!--deDE:Merkmale--></h2>
 
 * Very high code quality
     * 100% platform independent reachable branch coverage tested!
@@ -82,8 +81,7 @@ Features
   (see extension/system.py and extension/output.py).
 * Many tools to bring the dry concept to the highest possible level.
 
-Usage<!--deDE:Verwendung-->
----------------------------
+<h2>Usage<!--deDE:Verwendung--></h2>
 
 Copy this folder to your projects directory and write something like:
 
