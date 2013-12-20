@@ -40,50 +40,188 @@ for applications in a full generic, reusable and very solid way.
 
 <h2>Features<!--deDE:Merkmale--></h2>
 
-* Very high code quality
-    * 100% platform independent reachable branch coverage tested!
-    * Signature based type checking in development mode
-    * Each unit(function) has a cyclomatic complexity less than 8!
-    * Every function, class, module, package has a short straight
-      documentation.
-* Always compatible
-    * Always compatible to newest stable python release with newest features
-      included.
-    * Always compatible to last major stable python release. You can switch
-      between both versions via the embedded macro languages
-      (see runnabel/macro.py).
-* Platform independent web-based gui-toolkit (see runnable/webToWindow.py).
-* Smart, very secure and multiprocessing web-server supporting gzip, htaccess,
-  ssl file parsing, directory listing, thread-based and process-based
-  cgi-script handling. Can run every executable script as cgi-script out of the
-  box. You don't need any sockets like FastCGI or WebSocket
-  (see runnable/server.py).
-* Macro processor for maintaining multiple versions of text based files in one
-  place (see runnable/macro.py).
-* File synchronisation and reflection via native and platform independent
-  symbolic file linking (see runnable/synchronisation.py).
-* Many extended language feature like signature checking, joint points for
-  aspect orientated programming, automatic getter or setter generation.
-  (see aspect/signature, paradigm/aspectOrientation.py or
-  paradigm/objectOrientation.py).
-* Many additional introspection features and native type extensions
-  (see extension/native.py and extension/type.py).
-* Very high-level file abstraction layer with sandboxing support, and backup
-  mechanisms (see extension/file.py).
-* Highlevel code file handling (see runnable/codeRunner.py). Run every
-  source code without manually compiling code.
-* Template engine with embedded python code in any text based file supporting
-  every python syntax and additional file-include statement
-  (see runnable/template.py).
-* Full featured global logging mechanism handling (see extension/system.py)
-* Very generic full featured command line argument parsing interface written
-  on top of python's native "ArgumentParser" module
-  (see extension/system.py and extension/output.py).
-* Many tools to bring the dry concept to the highest possible level.
+<ul>
+    <li>
+        Very high code quality<!--deDE:Sehr hohe Code-Qualität-->
+        <ul>
+            <li>
+                100% platform independent reachable branch coverage tested!
+                <!--deDE:
+                    100% platform unabhängig erreichbare Branch-Coverage
+                    getestet!
+                -->
+            </li>
+            <li>
+                Signature based type checking in development mode
+                <!--deDE:
+                    Signatur basiertes Type-Checking im Entwicklungsmodus
+                -->
+            </li>
+            <li>
+                Each unit(function) has a cyclomatic complexity less than 8!
+                <!--deDE:
+                    Jede Logikeinheit (Funktion) hat eine kleinere
+                    cyclomatische Komplexität als 8!
+                -->
+            </li>
+            <li>
+                Every function, class, module or package has a simple api
+                documentation.
+                <!--deDE:
+                    Jede Funktion, Klasse, Modul oder Packet hat eine einfache
+                    API-Dokumentation.
+                -->
+            </li>
+        </ul>
+    </li>
+    <li>
+        Always compatible<--!deDE:Immer Kompatibel-->
+        <ul>
+            <li>
+                Always compatible to newest stable python release with latest
+                features included.
+                <!--deDE:
+                    Immer kompatibel zum neusten stabilen Python-Release
+                    mit den neusten Features integriert.
+                -->
+            </li>
+            <li>
+                Always compatible to last major stable python release. You can
+                switch between both versions via the embedded macro languages
+                (see runnabel/macro.py).
+                <!--deDE:
+                    Immer kompatibel zum letzten stabilen Python-Release.
+                    Der zu unterstützende Interpreter kann von dem Framework
+                    selbst gewechselt werdne (siehe runnable/macro.py).
+                -->
+            </li>
+        </ul>
+    </li>
+    <li>
+        Platform independent web-based gui-toolkit
+        (see runnable/webToWindow.py).
+        <!--deDE:
+            Platformunabhängige Web-basiertes GUI-Toolkit
+            (siehe runnable/webToWindow.py).
+        -->
+    </li>
+    <li>
+        Smart, very secure and multiprocessing web-server supporting gzip,
+        htaccess, ssl file parsing, directory listing, thread-based and
+        process-based cgi-script handling. You Can run every executable file
+        as cgi-script out of the box. You don't need any sockets like FastCGI
+        or WebSocket (see runnable/server.py).
+        <!--deDE:
+            Eleganter, sehr sicherer und Multiprozess fähiger Web-Server.
+            Unterstützte werden gzip, htaccess, das Parsen von ssl Dateien,
+            automatische Ordnerauflistung, Thread-basiertes und
+            Prozess-basiertes cgi-Skript Handhabung. Es ist möglich jede
+            ausführbare Datei als cgi-Skript auszuführen, ohne Sockets
+            einrichten zu müssen (siehe runnable/server.py).
+        -->
+    </li>
+    <li>
+        Macro processor for maintaining multiple versions of text based files
+        in one place (see runnable/macro.py).
+        <!--deDE:
+            Macroprozessor zum Verwalten mehrere text Datei basierter Versionen
+            im selben Ort (siehe runnable/macro.py).
+        -->
+    </li>
+    <li>
+        File synchronisation and reflection via native and platform independent
+        symbolic file linking (see runnable/synchronisation.py).
+        <!--deDE:
+            Dateisynchronisierung und Reflektion über native und
+            platformunabhängige symbolisches Dateiverlinkung
+            (siehe runnable/synchronisation.py).
+        -->
+    </li>
+    <li>
+        Many extended language feature like signature checking, joint points
+        for aspect orientated programming, automatic getter or setter
+        generation (see aspect/signature.py, paradigm/aspectOrientation.py or
+        paradigm/objectOrientation.py).
+        <!--deDE:
+            Viele erweiterte Sprach-Features wie Signaturüberprüfung,
+            Joint-Points für Aspekt-Orientierte-Programmierung, automatische
+            Getter- und Settergenerierung (siehe aspect/signature.py,
+            paradigm/aspectOrientation.py oder paradigm/objectOrientation.py).
+        -->
+    </li>
+    <li>
+        Many additional introspection features and native type extensions
+        (see extension/native.py and extension/type.py).
+        <!--deDE:
+            Viele zusätzliche Introspektion-Features und native
+            Typen-Erweiterungen
+            (siehe extension/native.py und extension/type.py).
+        -->
+    </li>
+    <li>
+        Very high-level object orientated file abstraction layer with
+        sandboxing support, and backup mechanisms included
+        (see extension/file.py).
+        <!--deDE:
+            Sehr stark vereinfachte Objekt-Orientierte Dateiabstraktions
+            Schicht mit eingebautem Sanboxing und Backup Mechanismus
+            (siehe extension/file.py).
+        -->
+    </li>
+    <li>
+        Highlevel code file handling (see runnable/codeRunner.py). Run every
+        source code without manually compiling code or tidying up.
+        <!--deDE:
+            Vereinfachtes einheitliche Handhabung mit diversen Code-Dateien
+            (siehe runnable/codeRunner.py). Führe jeden Quellcode aus, ohne
+            dabei Kompilierungs oder Aufräumarbeiten beachten zu müssen.
+        -->
+    </li>
+    <li>
+        Template engine with embedded python code in any text based file
+        supporting every python syntax and additional nesteable file-include
+        statement (see runnable/template.py).
+        <!--deDE:
+            Template-Engine welche eingebetteten Pythoncode in beliebigen
+            Text-dateien erlaubt. Verschachtelte Template-Includes mit
+            individueller Scope-vergabe ist möglich
+            (siehe runnable/template.py).
+        -->
+    </li>
+    <li>
+        Full featured global logging mechanism handling
+        (see extension/system.py).
+        <!--deDE:
+            Featurereiches globale Log-mechanismen (siehe extension/system.py).
+        -->
+    </li>
+    <li>
+        Very generic full featured command line argument parsing interface
+        written on top of python's native "ArgumentParser" module
+        (see extension/system.py and extension/output.py).
+        <!--deDE:
+            Sehr generischer Featurereiches
+            Commandline-Argumenten-Pars-Interface, das auf Pythons nativem
+            "ArgumentParser" Modul aufsetzt
+            (see extension/system.py und extension/output.py).
+        -->
+    </li>
+    <li>
+        Many tools to bring the dry concept to the highest possible level.
+        <!--deDE:
+            Viele Tools die ein durchgänges Einhalten des dry-Konzepts
+            erlauben.
+        -->
+    </li>
+</ul>
 
 <h2>Usage<!--deDE:Verwendung--></h2>
 
 Copy this folder to your projects directory and write something like:
+<!--deDE:
+    Kopiere diesen Ordner in den Projektordner und verwende das Framework z.B.
+    folgendermaßen:
+-->
 
     #!/usr/bin/env python
 
@@ -100,11 +238,20 @@ Copy this folder to your projects directory and write something like:
     # some stuff using imported boostNode components...
 
 For advanced usage see the recommended module pattern described in
-"path/to/boosNode/\_\_init\_\_.py".
+"boosNode/\_\_init\_\_.py".
+<!--deDE:
+    Um eigene komplexere Module zu verfassen sollte man dem vorgegebenen
+    Format, beschrieben in "boostNode/\_\_init\_\_.py" folgen.
+--
 
-BoostNode is able to switch itself between python2.X and python3.X.
+boostNode is able to switch itself between python2.X and python3.X.
 To switch boostNode version between python3.X and python 2.X use this
 command:
+<!--deDE:
+    boostNode ist in der Lage seine eigene Version unterstützt von Python2.X
+    und Python3.X zu wechseln. Um eine Konvertierung vorzunehmen kann man
+    folgenden Befehl verwenden:
+-->
 
 ```bash
 >>> /path/to/boostNode/runnable/macro.py -p /path/to/boostNode -e py
@@ -112,9 +259,14 @@ command:
 
 Note that you have to temporary support the needed python environment
 of given boostNode version to convert to the other one.
-
 Writing own code supporting two different interpreter version is very easy.
 Follow one of the two following syntax examples:
+<!--deDE:
+    Zu beachten ist, dass man temporär die aktuelle Interpreter Version
+    zur Verfügung stellen muss, um den Wechsel vorzunehmen. Um eigenen Code
+    zu schreiben, der verschiedene Interpreterversionen unterstützt sollte man
+    einen der beiden folgenden Syntax verwenden.
+-->
 
     #!/usr/bin/env interpreterA
 
@@ -133,14 +285,13 @@ Follow one of the two following syntax examples:
     ## interpreterB functionCall();
     functionCall()
 
-Have Fun with boostNode!
+Have Fun with boostNode!<!--deDE:Viel Spass mit boostNode!-->
 
 Copyright
 ---------
 
-see header in ./\_\_init\_\_.py
+see header in ./\_\_init\_\_.py<!--deDE:Siehe Header in ./\_\_init\_\_.py-->
 
-License<!--deDE:Lizenz-->
--------------------------
+<h2>License<!--deDE:Lizenz--></h2>
 
-see header in ./\_\_init\_\_.py
+see header in ./\_\_init\_\_.py<!--deDE:Siehe Header in ./\_\_init\_\_.py-->

@@ -527,14 +527,18 @@ class Parser(Class, Runnable):
 ##             'str': builtins.str, 'len': builtins.len, 'json': json,
 ##             'path_name_to_url': urllib.request.pathname2url, 'False': False,
 ##             'True': True, 'locals': builtins.locals, 'type': builtins.type,
-##             'sorted': builtins.sorted})
+##             'sorted': builtins.sorted, 'is_type_of': builtins.isinstance,
+##             'tuple': builtins.tuple, 'dict': builtins.dict,
+##             'list': builtins.list})
         self._builtins.update({
             '__indent__': self.indent, 'FileHandler': FileHandler,
             'print': self._print, 'include': self._include,
             'str': builtins.str, 'len': builtins.len, 'json': json,
             'path_name_to_url': urllib.pathname2url, 'False': False,
             'True': True, 'locals': builtins.locals, 'type': builtins.type,
-            'sorted': builtins.sorted})
+            'sorted': builtins.sorted, 'is_type_of': builtins.isinstance,
+            'tuple': builtins.tuple, 'dict': builtins.dict,
+            'list': builtins.list})
 ##
         return self._builtins
 
