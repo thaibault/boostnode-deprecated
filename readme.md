@@ -18,8 +18,9 @@ endregion -->
 
 <!--TODO detect headlines for toc-->
 
-<!--deDE:Einsatz-->Use case
----------------------------
+<!--deDE:Einsatz-->
+Use case
+--------
 
 boostNode is a high level python library. This library supports python2.7+ and
 python3.3+ environments. And will always try to use every new cutting edge
