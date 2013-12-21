@@ -75,7 +75,7 @@ for applications in a full generic, reusable and very solid way.
         </ul>
     </li>
     <li>
-        Always compatible<--!deDE:Immer Kompatibel-->
+        Always compatible<!--deDE:Immer Kompatibel-->
         <ul>
             <li>
                 Always compatible to newest stable python release with latest
