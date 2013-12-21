@@ -18,7 +18,8 @@ endregion -->
 
 <!--TODO detect headlines for toc-->
 
-<h2 id="header-1">Use case<!--deDE:Einsatz--><!--frFR:Utilisier--></h2>
+Use case <!--deDE:Einsatz--><!--frFR:Utilisier-->
+-------------------------------------------------
 
 boostNode is a high level python library. This library supports python2.7+ and
 python3.3+ environments. And will always try to use every new cutting edge
@@ -242,7 +243,7 @@ For advanced usage see the recommended module pattern described in
 <!--deDE:
     Um eigene komplexere Module zu verfassen sollte man dem vorgegebenen
     Format, beschrieben in "boostNode/\_\_init\_\_.py" folgen.
---
+-->
 
 boostNode is able to switch itself between python2.X and python3.X.
 To switch boostNode version between python3.X and python 2.X use this
