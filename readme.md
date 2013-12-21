@@ -35,7 +35,9 @@ for applications in a full generic, reusable and very solid way.
     Hochzuverlässige Bausteine zu unterstützen.
 -->
 
-<h2>Content<!--deDE:Inhalt--></h2>
+<!--deDE:Inhalt-->
+Content
+-------
 
 <!--Place for automatic generated table of contents.-->
 [TOC]
