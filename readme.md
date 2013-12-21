@@ -18,7 +18,7 @@ endregion -->
 
 <!--TODO detect headlines for toc-->
 
-<!--deDE:Einsatz-->
+<!--|deDE:Einsatz-->
 Use case
 --------
 
@@ -35,14 +35,16 @@ for applications in a full generic, reusable and very solid way.
     Hochzuverlässige Bausteine zu unterstützen.
 -->
 
-<!--deDE:Inhalt-->
+<!--|deDE:Inhalt-->
 Content
 -------
 
 <!--Place for automatic generated table of contents.-->
 [TOC]
 
-<h2>Features<!--deDE:Merkmale--></h2>
+<!--|deDE:Merkmale-->
+Features
+--------
 
 <ul>
     <li>
