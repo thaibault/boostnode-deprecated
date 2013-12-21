@@ -41,6 +41,9 @@ for applications in a full generic, reusable and very solid way.
 
 <h2>Features<!--deDE:Merkmale--></h2>
 
+* a<!--deDE:Sehr hohe Code-Qualität-->
+* b<!--deDE:Sehr hohe Code-Qualität-->
+
 <ul>
     <li>
         Very high code quality<!--deDE:Sehr hohe Code-Qualität-->
