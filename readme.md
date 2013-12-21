@@ -16,9 +16,9 @@ License
 
 endregion -->
 
-<!--TODO write German versions.-->
+<!--TODO detect headlines for toc-->
 
-<h2>Use case<!--deDE:Einsatz--><!--frFR:Utilisier--></h2>
+<h2 id="header-1">Use case<!--deDE:Einsatz--><!--frFR:Utilisier--></h2>
 
 boostNode is a high level python library. This library supports python2.7+ and
 python3.3+ environments. And will always try to use every new cutting edge
