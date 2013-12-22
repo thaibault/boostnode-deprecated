@@ -42,9 +42,9 @@ Content
 <!--Place for automatic generated table of contents.-->
 [TOC]
 
-<!--|deDE:Merkmale-->
 Features
 --------
+<!--|deDE:Merkmale-->
 
 <ul>
     <li>
