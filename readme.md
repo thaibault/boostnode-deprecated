@@ -42,9 +42,9 @@ Content
 <!--Place for automatic generated table of contents.-->
 [TOC]
 
+<!--|deDE:Merkmale-->
 Features
 --------
-<!--|deDE:Merkmale-->
 
 <ul>
     <li>
@@ -221,7 +221,9 @@ Features
     </li>
 </ul>
 
-<h2>Usage<!--deDE:Verwendung--></h2>
+<!--|deDE:Verwendung-->
+Usage
+-----
 
 Copy this folder to your projects directory and write something like:
 <!--deDE:
@@ -298,6 +300,8 @@ Copyright
 
 see header in ./\_\_init\_\_.py<!--deDE:Siehe Header in ./\_\_init\_\_.py-->
 
-<h2>License<!--deDE:Lizenz--></h2>
+<!--|deDE:Lizenz-->
+License
+-------
 
 see header in ./\_\_init\_\_.py<!--deDE:Siehe Header in ./\_\_init\_\_.py-->
