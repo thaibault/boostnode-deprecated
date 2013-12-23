@@ -293,6 +293,7 @@ Follow one of the two following syntax examples:
 
 Have Fun with boostNode!<!--deDE:Viel Spass mit boostNode!-->
 
+<!--|deDE:Urheberrecht-->
 Copyright
 ---------
 
