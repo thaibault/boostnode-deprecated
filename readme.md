@@ -38,11 +38,7 @@ Content
 -------
 
 <!--Place for automatic generated table of contents.-->
-<knownLanguage>
-
 [TOC]
-
-</knownLanguage>
 
 <!--|deDE:Merkmale-->
 Features
