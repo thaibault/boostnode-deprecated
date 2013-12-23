@@ -16,8 +16,6 @@ License
 
 endregion -->
 
-<!--TODO detect headlines for toc-->
-
 <!--|deDE:Einsatz-->
 Use case
 --------
@@ -41,7 +39,9 @@ Content
 
 <!--Place for automatic generated table of contents.-->
 <knownLanguage>
+
 [TOC]
+
 </knownLanguage>
 
 <!--|deDE:Merkmale-->
