@@ -39,10 +39,8 @@ for applications in a full generic, reusable and very solid way.
 Content
 -------
 
-<knownLanguage>
-    <!--Place for automatic generated table of contents.-->
-    [TOC]
-</knownLanguage>
+<!--Place for automatic generated table of contents.-->
+<knownLanguage>[TOC]</knownLanguage>
 
 <!--|deDE:Merkmale-->
 Features
