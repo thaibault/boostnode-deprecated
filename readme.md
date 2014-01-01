@@ -72,8 +72,8 @@ Features
                 Every function, class, module or package has a simple api
                 documentation.
                 <!--deDE:
-                    Jede Funktion, Klasse, Modul oder Packet hat eine einfache
-                    API-Dokumentation.
+                    Jede Funktion, Klasse, Modul oder jedes Paket hat eine
+                    einfache API-Dokumentation.
                 -->
             </li>
         </ul>
