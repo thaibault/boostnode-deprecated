@@ -866,6 +866,52 @@ class String(Object, builtins.str):
 
     @JointPoint
 ## python3.3
+##     def delimit(self: Self, delimiter='-', search_pattern='a-zA-Z') -> Self:
+    def delimit(self, delimiter='-', search_pattern='a-zA-Z'):
+##
+        '''
+            Replaces all typical delimiting chars with given delimiter.
+
+            Examples:
+
+            >>> String().delimit().content
+            ''
+
+            >>> String('a b').delimit().content
+            'a-b'
+
+            >>> String('a b_').delimit().content
+            'a-b'
+
+            >>> String('ab').delimit().content
+            'ab'
+
+            >>> String(' ').delimit().content
+            ''
+
+            >>> String('   a ').delimit().content
+            'a'
+
+            >>> String(' -  a _').delimit().content
+            'a'
+
+            >>> String('\\na').delimit().content
+            'a'
+
+            >>> String('Get in touch').delimit().content
+            'Get-in-touch'
+
+            >>> String("I'm cool").delimit().content
+            'I-m-cool'
+        '''
+        return self.sub(
+            '^[^{pattern}]*(.*?)[^{pattern}]*$'.format(
+                pattern=search_pattern
+            ), '\\1'
+        ).sub('[^%s]+' % search_pattern, delimiter)
+
+    @JointPoint
+## python3.3
 ##     def find_python_code_end_bracket(
 ##         self: Self
 ##     ) -> (builtins.int, builtins.bool):

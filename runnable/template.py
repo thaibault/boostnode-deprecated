@@ -529,7 +529,7 @@ class Parser(Class, Runnable):
 ##             'True': True, 'locals': builtins.locals, 'type': builtins.type,
 ##             'sorted': builtins.sorted, 'is_type_of': builtins.isinstance,
 ##             'tuple': builtins.tuple, 'dict': builtins.dict,
-##             'list': builtins.list})
+##             'String': String, 'list': builtins.list})
         self._builtins.update({
             '__indent__': self.indent, 'FileHandler': FileHandler,
             'print': self._print, 'include': self._include,
@@ -538,7 +538,7 @@ class Parser(Class, Runnable):
             'True': True, 'locals': builtins.locals, 'type': builtins.type,
             'sorted': builtins.sorted, 'is_type_of': builtins.isinstance,
             'tuple': builtins.tuple, 'dict': builtins.dict,
-            'list': builtins.list})
+            'String': String, 'list': builtins.list})
 ##
         return self._builtins
 
