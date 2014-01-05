@@ -1,10 +1,36 @@
-# Vim temporary file
-*.swp
-.roperproject
-
 # Generated runtime bytecode files.
 *.py[cod]
 
 # Generated documentations
 documentation/build
 api
+
+## Generic
+# Packages
+*.egg
+*.egg-info
+dist
+build
+eggs
+parts
+bin
+var
+sdist
+develop-eggs
+.installed.cfg
+lib
+lib64
+# Unit test / coverage reports
+.coverage
+.tox
+nosetests.xml
+# Translations
+*.mo
+# Mr Developer
+.mr.developer.cfg
+.project
+.pydevproject
+
+# Vim temporary file
+*.swp
+.roperproject
