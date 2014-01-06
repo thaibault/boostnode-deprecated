@@ -168,8 +168,8 @@ class Run(Class, Runnable):
         'laTeX': {
             'commands': {
                 'compile': 'pdflatex "<%code_file.path%>" && '
-                           'bibtex "<%code_file.directory_path%>'
-                           '<%code_file.basename%>.aux"; '
+                           'cd "<%code_file.directory_path%>" && bibtex '
+                           '"<%code_file.basename%>.aux"; '
                            'pdflatex "<%code_file.path%>" && '
                            'pdflatex "<%code_file.path%>"',
                 'run': ' || '.join(builtins.map(
