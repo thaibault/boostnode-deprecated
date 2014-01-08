@@ -2286,17 +2286,16 @@ class CGIHTTPRequestHandler(
             self._determine_host()
         self.request_uri = self.path
         match = re.compile(
-            '[^/{delimiter}]*/+(?P<file_name>[^{delimiter}]*){delimiter}?'
-            '(?P<parameter>.*)'.format(
+            '^[^/]*/+(?P<path>.*?)(?:{delimiter}(?P<parameter>.*))?$'.format(
                 delimiter=self.server.web.request_parameter_delimiter)
         ).match(self.request_uri)
         self.path = ''
         if match:
 ## python3.3
 ##             self.path = posixpath.normpath(urllib.parse.unquote(match.group(
-##                 'file_name')))
+##                 'path')))
             self.path = posixpath.normpath(urllib.unquote(match.group(
-                'file_name')))
+                'path')))
 ##
             if self.path == '.':
                 self.path = ''
