@@ -82,6 +82,10 @@ class Parser(Class, Runnable):
                                                     object pointing to a \
                                                     template file.
 
+        **cache_path**                            - Indicates weather to \
+                                                    cache the compiled \
+                                                    template in given path.
+
         **string**                                - Indicates weather \
                                                     "template" is a template \
                                                     string or file path.
@@ -167,6 +171,16 @@ class Parser(Class, Runnable):
              'help': 'Determine if given template should be interpreted as '
                      'template or a file name pointing to a template file.',
              'dest': 'string'}},
+        {'arguments': ('-u', '--cache-path'),
+         'keywords': {
+             'action': 'store',
+             'default': {'execute': '__initializer_default_value__'},
+             'type': builtins.str,
+             'required': {'execute': '__initializer_default_value__ is None'},
+             'help': 'Determines if a cached compiled version of template '
+                     'should be saved in given path.',
+             'dest': 'cache_path',
+             'metavar': 'PATH'}},
         {'arguments': ('-q', '--file-encoding'),
          'keywords': {
              'action': 'store',
@@ -696,17 +710,18 @@ class Parser(Class, Runnable):
             >>> parser.render() # doctest: +ELLIPSIS
             Object of "Parser" with template "hans says...who the fu.. is ha...
         '''
-        self.rendered_content = re.compile(
-            self.template_pattern.format(
-                left_delimiter=String(
-                    self.left_code_delimiter
-                ).validate_regex(),
-                right_delimiter=String(
-                    self.right_code_delimiter
-                ).validate_regex(),
-                placeholder=self.placeholder_name_pattern,
-                right_escaped=self.right_escaped)
-        ).sub(self._render_code, self.content).strip()
+        # TODO test!
+        if self.cache:
+            cache_file = FileHandler(
+                location=self.cache.path + builtins.str(builtins.hash(
+                    self.content)))
+            if cache_file:
+                self.rendered_content = cache_file.content
+            else:
+                self.rendered_content = self._render_content()
+                cache_file.content = self.rendered_content
+        else:
+            self.rendered_content = self._render_content()
         mapping.update(keywords)
         return self._run_template(template_scope=mapping)
 
@@ -810,7 +825,7 @@ class Parser(Class, Runnable):
     @JointPoint(PropertyInitializer)
 ## python3.3
 ##     def _initialize(
-##         self: Self, template: (builtins.str, FileHandler),
+##         self: Self, template: (builtins.str, FileHandler), cache_path=False,
 ##         string=False, file_encoding=FileHandler.DEFAULT_ENCODING,
 ##         placeholder_name_pattern='[a-zA-Z0-9_\[\]\'"\.()\\\\,\-+ :/={}]+',
 ##         command_line_placeholder_name_pattern='(?s)'
@@ -867,7 +882,7 @@ class Parser(Class, Runnable):
 ##         pretty_indent=False, **keywords: builtins.object
 ##     ) -> Self:
     def _initialize(
-        self, template, string=False,
+        self, template, cache_path=False, string=False,
         file_encoding=FileHandler.DEFAULT_ENCODING,
         placeholder_name_pattern='[a-zA-Z0-9_\[\]\'"\.()\\\\,\-+ :/={}]+',
         command_line_placeholder_name_pattern='(?s)'
@@ -980,6 +995,12 @@ class Parser(Class, Runnable):
             in template scope.
         '''
         self._builtins = {}
+        '''Saves a rendered python code for caching.'''
+        # TODO test!
+        self.cache = None
+        if builtins.isinstance(self.cache_path, builtins.str):
+            self.cache = FileHandler(
+                location=self.cache_path, make_directory=True)
 
                 # endregion
 
@@ -987,6 +1008,22 @@ class Parser(Class, Runnable):
             template, string)
 
             # endregion
+
+    @JointPoint
+## python3.3     def _render_content(self: Self) -> builtins.str:
+    def _render_content(self):
+        '''Generates runnable python code from current template.'''
+        return re.compile(
+            self.template_pattern.format(
+                left_delimiter=String(
+                    self.left_code_delimiter
+                ).validate_regex(),
+                right_delimiter=String(
+                    self.right_code_delimiter
+                ).validate_regex(),
+                placeholder=self.placeholder_name_pattern,
+                right_escaped=self.right_escaped)
+        ).sub(self._render_code, self.content).strip()
 
     @JointPoint
 ## python3.3
@@ -1496,9 +1533,21 @@ class Parser(Class, Runnable):
         root_path = ''
         if self.file:
             root_path = self.file.directory_path
+        shortcut = self.template_context_default_indent
         self._print(
             self.__class__(
-                template=root_path + template_file_path
+                template=root_path + template_file_path,
+                cache_path=self.cache_path,
+                file_encoding=self.file_encoding,
+                placeholder_name_pattern=self.placeholder_name_pattern,
+                placeholder_pattern=self.placeholder_pattern,
+                template_pattern=self.template_pattern,
+                left_code_delimiter=self.left_code_delimiter,
+                right_code_delimiter=self.right_code_delimiter,
+                right_escaped=self.right_escaped,
+                template_context_default_indent=shortcut,
+                builtin_names=self.builtin_names,
+                pretty_indent=self.pretty_indent
             ).render(mapping=scope).output,
             end=end, indent=indent, indent_space=indent_space)
 
