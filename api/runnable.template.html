@@ -134,11 +134,31 @@
 <p><strong>mapping</strong> - A dictionary containing a mapping from placeholder                           name to value.</p>
 <p>Additional keywords are used as additional mapping tuples.</p>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">parser</span> <span class="o">=</span> <span class="n">Parser</span><span class="p">(</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Parser</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="s">&#39;hans says</span><span class="se">\n</span><span class="s">&lt;% print(&quot;who the fu.. is hans?&quot;)&#39;</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">string</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">parser</span><span class="o">.</span><span class="n">render</span><span class="p">()</span> 
+<span class="gp">... </span>    <span class="n">string</span><span class="o">=</span><span class="bp">True</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">()</span> 
 <span class="go">Object of &quot;Parser&quot; with template &quot;hans says...who the fu.. is ha...</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Parser</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="s">&#39;hans says</span><span class="se">\n</span><span class="s">&lt;% print(&quot;who the fu.. is hans?&quot;)&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">string</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">cache_path</span><span class="o">=</span><span class="n">__test_folder__</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">()</span> 
+<span class="go">Object of &quot;Parser&quot; with template &quot;hans says...who the fu.. is ha...</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Parser</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="s">&#39;hans says</span><span class="se">\n</span><span class="s">&lt;% print(&quot;who the fu.. is hans?&quot;)&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">string</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">cache_path</span><span class="o">=</span><span class="n">__test_folder__</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">()</span> 
+<span class="go">Object of &quot;Parser&quot; with template &quot;hans says...who the fu.. is ha...</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Parser</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="s">&#39;hans says</span><span class="se">\n</span><span class="s">&lt;</span><span class="si">% e</span><span class="s">nd&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="bp">True</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">()</span> 
+<span class="go">Object of &quot;Parser&quot; with template &quot;hans says...&lt;% end...</span>
 </pre></div>
 </div>
 </dd></dl>
