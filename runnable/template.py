@@ -704,13 +704,29 @@ class Parser(Class, Runnable):
 
             Examples:
 
-            >>> parser = Parser(
+            >>> Parser(
             ...     'hans says\\n<% print("who the fu.. is hans?")',
-            ...     string=True)
-            >>> parser.render() # doctest: +ELLIPSIS
+            ...     string=True
+            ... ).render() # doctest: +ELLIPSIS
             Object of "Parser" with template "hans says...who the fu.. is ha...
+
+            >>> Parser(
+            ...     'hans says\\n<% print("who the fu.. is hans?")',
+            ...     string=True, cache_path=__test_folder__
+            ... ).render() # doctest: +ELLIPSIS
+            Object of "Parser" with template "hans says...who the fu.. is ha...
+
+            >>> Parser(
+            ...     'hans says\\n<% print("who the fu.. is hans?")',
+            ...     string=True, cache_path=__test_folder__
+            ... ).render() # doctest: +ELLIPSIS
+            Object of "Parser" with template "hans says...who the fu.. is ha...
+
+            >>> Parser(
+            ...     'hans says\\n<% end', string=True
+            ... ).render() # doctest: +ELLIPSIS
+            Object of "Parser" with template "hans says...<% end...
         '''
-        # TODO test!
         if self.cache:
             cache_file = FileHandler(
                 location=self.cache.path + builtins.str(builtins.hash(
@@ -825,7 +841,7 @@ class Parser(Class, Runnable):
     @JointPoint(PropertyInitializer)
 ## python3.3
 ##     def _initialize(
-##         self: Self, template: (builtins.str, FileHandler), cache_path=False,
+##         self: Self, template: (builtins.str, FileHandler), cache_path=None,
 ##         string=False, file_encoding=FileHandler.DEFAULT_ENCODING,
 ##         placeholder_name_pattern='[a-zA-Z0-9_\[\]\'"\.()\\\\,\-+ :/={}]+',
 ##         command_line_placeholder_name_pattern='(?s)'
@@ -882,7 +898,7 @@ class Parser(Class, Runnable):
 ##         pretty_indent=False, **keywords: builtins.object
 ##     ) -> Self:
     def _initialize(
-        self, template, cache_path=False, string=False,
+        self, template, cache_path=False, string=None,
         file_encoding=FileHandler.DEFAULT_ENCODING,
         placeholder_name_pattern='[a-zA-Z0-9_\[\]\'"\.()\\\\,\-+ :/={}]+',
         command_line_placeholder_name_pattern='(?s)'
@@ -996,9 +1012,8 @@ class Parser(Class, Runnable):
         '''
         self._builtins = {}
         '''Saves a rendered python code for caching.'''
-        # TODO test!
         self.cache = None
-        if builtins.isinstance(self.cache_path, builtins.str):
+        if self.cache_path:
             self.cache = FileHandler(
                 location=self.cache_path, make_directory=True)
 
