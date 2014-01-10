@@ -59,6 +59,7 @@ from boostNode.runnable.template import Parser as TemplateParser
 # region classes
 
 class Run(Class, Runnable):
+
     '''
         This class provides a large number of supported programming languages \
         support for compiling, running and cleaning after running.
@@ -836,7 +837,7 @@ class Run(Class, Runnable):
     globale variables are available.
 '''
 __logger__ = __exception__ = __module_name__ = __file_path__ = \
-    __test_mode__ = None
+    __test_mode__ = __test_buffer__ = __test_folder__ = __test_globals__ = None
 '''
     Extends this module with some magic environment variables to provide \
     better introspection support. A generic command line interface for some \

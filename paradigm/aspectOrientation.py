@@ -83,6 +83,7 @@ ASPECTS = []
 # region abstract classes
 
 class FunctionDecorator(Class):
+
     '''
         Abstract class and interface for function decorator classes.
 
@@ -385,6 +386,7 @@ class FunctionDecorator(Class):
 
 
 class JointPointHandler(Class):
+
     '''
         Abstract class for joint point implementations.
 
@@ -513,6 +515,7 @@ class JointPointHandler(Class):
 
 
 class ReturnAspect(Class):
+
     '''Abstract class for aspects dealing with function's return value.'''
 
     # region dynamic methods
@@ -573,11 +576,13 @@ class ReturnAspect(Class):
 
 
 class CallJointPoint(JointPointHandler):
+
     '''Abstract class for joint points dealing with function calls.'''
     pass
 
 
 class ReturnJointPoint(JointPointHandler, ReturnAspect):
+
     '''Abstract class for joint points dealing with function's return value.'''
 
     # region dynamic methods
@@ -765,6 +770,7 @@ class Argument(Class):
 
 
 class PointCut(ReturnAspect):
+
     '''Generic way to handle point cuts.'''
 
     # region dynamic methods
@@ -933,6 +939,7 @@ if sys.flags.optimize:
         return function
 else:
     class JointPoint(FunctionDecorator):
+
         '''
             Implementation of joint point for the aspect orientated way. \
             Triggers every function call and look for aspects to wrap around.
@@ -1052,7 +1059,7 @@ else:
     globale variables are available.
 '''
 __logger__ = __exception__ = __module_name__ = __file_path__ = \
-    __test_mode__ = None
+    __test_mode__ = __test_buffer__ = __test_folder__ = __test_globals__ = None
 '''
     Extends this module with some magic environment variables to provide \
     better introspection support. A generic command line interface for some \

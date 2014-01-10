@@ -29,8 +29,6 @@ __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-## python3.3 import builtins
-import __builtin__ as builtins
 import inspect
 import os
 import sys
@@ -53,7 +51,7 @@ __all__ = __get_all_modules__()
     globale variables are available.
 '''
 __logger__ = __exception__ = __module_name__ = __file_path__ = \
-    __test_mode__ = None
+    __test_mode__ = __test_buffer__ = __test_folder__ = __test_globals__ = None
 if __name__ == '__main__':
     from boostNode.extension.system import CommandLine
     '''

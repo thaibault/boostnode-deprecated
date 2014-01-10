@@ -60,6 +60,7 @@ from boostNode.paradigm.objectOrientation import Class
 # region classes
 
 class Buffer(Class, logging.StreamHandler):
+
     '''
         This class represents a layer for writing and reading to an output \
         buffer realized as file, queue or variable.
@@ -356,6 +357,7 @@ class Buffer(Class, logging.StreamHandler):
 
 
 class Print(Class):
+
     '''
         Provides a high level printing class on top of pythons native print \
         function.
@@ -437,10 +439,11 @@ class Print(Class):
             >>> buffer # doctest: +ELLIPSIS
             Object ... (memory buffered) with content "hans, peter and klaus".
         '''
-        keywords = {'start': self.__class__.start,
-                    'separator': self.__class__.separator,
-                    'end': self.__class__.end,
-                    'buffer': self.__class__.default_buffer, 'flush': False}
+        keywords = {
+            'start': self.__class__.start,
+            'separator': self.__class__.separator,
+            'end': self.__class__.end,
+            'buffer': self.__class__.default_buffer, 'flush': False}
         keywords.update(codewords)
 
                  # region properties
@@ -519,6 +522,7 @@ class Print(Class):
 
 
 class Logger(Class):
+
     '''
         This class provides handling with all components dealing with logger \
         object. It stores all logger components in a single data structure.
@@ -821,7 +825,7 @@ class Logger(Class):
     globale variables are available.
 '''
 __logger__ = __exception__ = __module_name__ = __file_path__ = \
-    __test_mode__ = None
+    __test_mode__ = __test_buffer__ = __test_folder__ = __test_globals__ = None
 '''
     Extends this module with some magic environment variables to provide \
     better introspection support. A generic command line interface for some \

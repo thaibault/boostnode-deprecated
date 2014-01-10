@@ -91,6 +91,7 @@ def add_check(point_cut):
 
 ## python3.3 class CheckObject:
 class CheckObject(builtins.object):
+
     '''
         Checks a function call against a given specification. This class \
         serves as helper class.
@@ -772,6 +773,7 @@ class CheckObject(builtins.object):
 # region classes
 
 class Check(FunctionDecorator):
+
 ## python3.3
 ##     '''
 ##         This function provides function and method signature checking. An \
@@ -1026,6 +1028,7 @@ class Check(FunctionDecorator):
 
 
 class CheckArguments(CallJointPoint, CheckObject):
+
     '''Checks arguments given to a function again their specification.'''
 
     # region dynamic methods
@@ -1100,6 +1103,7 @@ class CheckArguments(CallJointPoint, CheckObject):
 
 
 class CheckReturnValue(ReturnJointPoint, CheckObject):
+
     '''Checks return value from a function again their specification.'''
 
     # region dynamic methods
@@ -1156,7 +1160,7 @@ class CheckReturnValue(ReturnJointPoint, CheckObject):
     globale variables are available.
 '''
 __logger__ = __exception__ = __module_name__ = __file_path__ = \
-    __test_mode__ = None
+    __test_mode__ = __test_buffer__ = __test_folder__ = __test_globals__ = None
 '''
     Extends this module with some magic environment variables to provide \
     better introspection support. A generic command line interface for some \

@@ -66,6 +66,7 @@ from boostNode.paradigm.objectOrientation import Class
 # region classes
 
 class Handler(Class):
+
     '''
         The main class for initializing new file system objects to handle \
         them in an object oriented way.
@@ -75,66 +76,84 @@ class Handler(Class):
 
     REGEX_FORMAT = '^([0-9]+\.?[0-9]{{0,2}})\s*({units})$'
     '''Pattern for supported formats to handle size of file system elements.'''
-    FORMATS = {'Byte': {'notations': ('byte', 'b'),
-                        'decimal_factor': 1,
-                        'binary_factor': 1,
-                        'useful_range': (0, 1024)},
-               'Kilobyte': {'notations': ('kb', 'kib',
-                                          'kilobyte', 'kibibyte',
-                                          'kbyte', 'kibyte',
-                                          'kilob', 'kibib'),
-                            'decimal_factor': 10 ** 3,
-                            'binary_factor': 2 ** 10,
-                            'useful_range': (1024 + 1, 1024 ** 2)},
-               'Megabyte': {'notations': ('mb', 'mib',
-                                          'megabyte', 'mebibyte',
-                                          'mbyte', 'mibyte',
-                                          'megab', 'mebib'),
-                            'decimal_factor': 10 ** 6,
-                            'binary_factor': 2 ** 20,
-                            'useful_range': ((1024 ** 2) + 1, 1024 ** 3)},
-               'Gigabyte': {'notations': ('gb', 'gib',
-                                          'gigabyte', 'gibibyte',
-                                          'gbyte', 'gibyte',
-                                          'gigab', 'gibib'),
-                            'decimal_factor': 10 ** 9,
-                            'binary_factor': 2 ** 30,
-                            'useful_range': ((1024 ** 3) + 1, 1024 ** 4)},
-               'Terabyte': {'notations': ('tb', 'tib',
-                                          'terabyte', 'tebibyte',
-                                          'tbyte', 'tibyte',
-                                          'terab', 'tebib'),
-                            'decimal_factor': 10 ** 12,
-                            'binary_factor': 2 ** 40,
-                            'useful_range': ((1024 ** 4) + 1, 1024 ** 5)},
-               'Petabyte': {'notations': ('pb', 'pib',
-                                          'petabyte', 'pebibyte',
-                                          'pbyte', 'pibyte',
-                                          'petab', 'pebib'),
-                            'decimal_factor': 10 ** 15,
-                            'binary_factor': 2 ** 50,
-                            'useful_range': ((1024 ** 5) + 1, 1024 ** 6)},
-               'Exabyte': {'notations': ('eb', 'eib',
-                                         'exabyte', 'exbibyte',
-                                         'ebyte', 'eibyte',
-                                         'exab', 'exib'),
-                           'decimal_factor': 10 ** 18,
-                           'binary_factor': 2 ** 60,
-                           'useful_range': ((1024 ** 6) + 1, 1024 ** 7)},
-               'Zettabyte': {'notations': ('zb', 'zib',
-                                           'zettabyte', 'zebibyte',
-                                           'zbyte', 'zibyte',
-                                           'zettab', 'zebib'),
-                             'decimal_factor': 10 ** 21,
-                             'binary_factor': 2 ** 70,
-                             'useful_range': ((1024 ** 7) + 1, 1024 ** 8)},
-               'Yottabyte': {'notations': ('yb', 'yib',
-                                           'yottabyte', 'yobibyte',
-                                           'ybyte', 'yibyte',
-                                           'yottab', 'yobib'),
-                             'decimal_factor': 10 ** 24,
-                             'binary_factor': 2 ** 80,
-                             'useful_range': ((1024 ** 8) + 1, None)}}
+    FORMATS = {
+        'Byte': {
+            'notations': ('byte', 'b'),
+            'decimal_factor': 1,
+            'binary_factor': 1,
+            'useful_range': (0, 1024)
+        }, 'Kilobyte': {
+            'notations': (
+                'kb', 'kib',
+                'kilobyte', 'kibibyte',
+                'kbyte', 'kibyte',
+                'kilob', 'kibib'),
+            'decimal_factor': 10 ** 3,
+            'binary_factor': 2 ** 10,
+            'useful_range': (1024 + 1, 1024 ** 2)
+        }, 'Megabyte': {
+            'notations': (
+                'mb', 'mib',
+                'megabyte', 'mebibyte',
+                'mbyte', 'mibyte',
+                'megab', 'mebib'),
+            'decimal_factor': 10 ** 6,
+            'binary_factor': 2 ** 20,
+            'useful_range': ((1024 ** 2) + 1, 1024 ** 3)
+        }, 'Gigabyte': {
+            'notations': (
+                'gb', 'gib',
+                'gigabyte', 'gibibyte',
+                'gbyte', 'gibyte',
+                'gigab', 'gibib'),
+            'decimal_factor': 10 ** 9,
+            'binary_factor': 2 ** 30,
+            'useful_range': ((1024 ** 3) + 1, 1024 ** 4)
+        }, 'Terabyte': {
+            'notations': (
+                'tb', 'tib',
+                'terabyte', 'tebibyte',
+                'tbyte', 'tibyte',
+                'terab', 'tebib'),
+            'decimal_factor': 10 ** 12,
+            'binary_factor': 2 ** 40,
+            'useful_range': ((1024 ** 4) + 1, 1024 ** 5)
+        }, 'Petabyte': {
+            'notations': (
+                'pb', 'pib',
+                'petabyte', 'pebibyte',
+                'pbyte', 'pibyte',
+                'petab', 'pebib'),
+            'decimal_factor': 10 ** 15,
+            'binary_factor': 2 ** 50,
+            'useful_range': ((1024 ** 5) + 1, 1024 ** 6)
+        }, 'Exabyte': {
+            'notations': (
+                'eb', 'eib',
+                'exabyte', 'exbibyte',
+                'ebyte', 'eibyte',
+                'exab', 'exib'),
+            'decimal_factor': 10 ** 18,
+            'binary_factor': 2 ** 60,
+            'useful_range': ((1024 ** 6) + 1, 1024 ** 7)
+        }, 'Zettabyte': {
+            'notations': (
+                'zb', 'zib',
+                'zettabyte', 'zebibyte',
+                'zbyte', 'zibyte',
+                'zettab', 'zebib'),
+            'decimal_factor': 10 ** 21,
+            'binary_factor': 2 ** 70,
+            'useful_range': ((1024 ** 7) + 1, 1024 ** 8)
+        }, 'Yottabyte': {
+            'notations': (
+                'yb', 'yib',
+                'yottabyte', 'yobibyte',
+                'ybyte', 'yibyte',
+                'yottab', 'yobib'),
+            'decimal_factor': 10 ** 24,
+            'binary_factor': 2 ** 80,
+            'useful_range': ((1024 ** 8) + 1, None)}}
     '''Supported formats to handle the size of file.'''
     BLOCK_SIZE_IN_BYTE = 4096
     '''Defines the size of an empty folder, a symbolic link or empty file.'''
@@ -4851,7 +4870,7 @@ class Handler(Class):
     globale variables are available.
 '''
 __logger__ = __exception__ = __module_name__ = __file_path__ = \
-    __test_mode__ = None
+    __test_mode__ = __test_buffer__ = __test_folder__ = __test_globals__ = None
 '''
     Extends this module with some magic environment variables to provide \
     better introspection support. A generic command line interface for some \

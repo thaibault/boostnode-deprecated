@@ -8,7 +8,6 @@
 
 # endregion
 
-
 # region header
 
 '''Provides server and request handler classes.'''
@@ -30,18 +29,21 @@ import base64
 ## python3.3
 ## import builtins
 import __builtin__ as builtins
-import BaseHTTPServer
+import BaseHTTPServer as server
 import CGIHTTPServer
 ##
 import cgi
 ## python3.3
 ## import collections
 ## import copy
-## import http.server
+## from http import server
 ## import imp
+import Cookie as cookies
 import copy
 ##
 import gzip
+## python3.3 from http import cookies
+pass
 import inspect
 ## python3.3
 ## import _io
@@ -69,7 +71,7 @@ import threading
 import time
 ## python3.3
 ## import types
-## import urllib.parse
+## from urllib import parse as urlparse
 import urllib
 import urlparse
 ##
@@ -96,6 +98,7 @@ from boostNode.paradigm.objectOrientation import Class
 ## python3.3
 ## pass
 class SocketFileObjectWrapper(socket._fileobject):
+
     '''
         This class wraps the native implementation of the server socket. \
         The main goal is that the first line from given socket have to be \
@@ -176,12 +179,13 @@ class SocketFileObjectWrapper(socket._fileobject):
 
 ## python3.3
 ## class MultiProcessingHTTPServer(
-##     socketserver.ThreadingMixIn, http.server.HTTPServer
+##     socketserver.ThreadingMixIn, server.HTTPServer
 ## ):
 class MultiProcessingHTTPServer(
-    SocketServer.ThreadingMixIn, BaseHTTPServer.HTTPServer, builtins.object
+    SocketServer.ThreadingMixIn, server.HTTPServer, builtins.object
 ):
 ##
+
     '''The Class implements a partial multiprocessing supported web server.'''
 
     # region dynamic methods
@@ -322,12 +326,8 @@ class MultiProcessingHTTPServer(
         '''NOTE: We have to add 1 for the server processes itself.'''
         self.web.number_of_running_processes = \
             builtins.len(multiprocessing.active_children()) + 1
-## python3.3
-##         parent_function = builtins.getattr(
-##             http.server.HTTPServer, inspect.stack()[0][3])
         parent_function = builtins.getattr(
-            BaseHTTPServer.HTTPServer, inspect.stack()[0][3])
-##
+            server.HTTPServer, inspect.stack()[0][3])
         if(not self.is_same_thread_request(request_socket) and
            self.web.number_of_running_processes <
            self.web.maximum_number_of_processes):
@@ -368,6 +368,7 @@ class MultiProcessingHTTPServer(
 
 
 class Web(Class, Runnable):
+
     '''
         Provides a small platform independent web server designed for easily \
         serve a client-server structure.
@@ -1159,11 +1160,12 @@ class Web(Class, Runnable):
 
 
 ## python3.3
-## class CGIHTTPRequestHandler(http.server.CGIHTTPRequestHandler):
+## class CGIHTTPRequestHandler(server.CGIHTTPRequestHandler):
 class CGIHTTPRequestHandler(
     CGIHTTPServer.CGIHTTPRequestHandler, builtins.object
 ):
 ##
+
     '''
         A small request-handler dealing with incoming file requests. It can \
         directly send static files back to client or run dynamic scripts and \
@@ -1311,7 +1313,7 @@ class CGIHTTPRequestHandler(
 
             >>> handler.server.web.authentication = True
             >>> handler.server.web.authentication_handler = (
-            ...     lambda authorization_header, request_uri: False)
+            ...     lambda header, request_uri, request_handler: False)
             >>> ## python2.7
             >>> if sys.version_info.major < 3:
             ...     handler.headers = handler.MessageClass(
@@ -1326,7 +1328,7 @@ class CGIHTTPRequestHandler(
             >>> handler.path = '/not_existing_file'
             >>> handler.server.web.request_whitelist = '^/not_existing_file$',
             >>> handler.server.web.authentication_handler = (
-            ...     lambda authorization_header, request_uri: True)
+            ...     lambda header, request_uri, request_handler: True)
             >>> handler.do_GET() # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "/not_existin...
 
@@ -1368,7 +1370,7 @@ class CGIHTTPRequestHandler(
             self.post_dictionary = self._determine_post_dictionary()
         elif data_type == 'application/x-www-form-urlencoded':
 ## python3.3
-##             self.post_dictionary = urllib.parse.parse_qs(self.rfile.read(
+##             self.post_dictionary = urlparse.parse_qs(self.rfile.read(
 ##                 builtins.int(self.headers.get('content-length'))
 ##             ).decode(self.server.web.encoding))
             self.post_dictionary = cgi.parse_qs(
@@ -1433,12 +1435,11 @@ class CGIHTTPRequestHandler(
             url = re.compile(
                 self.server.web.request_parameter_delimiter
             ).sub('?', url, 1)
-## python3.3             get = urllib.parse.urlparse(url).query
             get = urlparse.urlparse(url).query
             if get:
                 try:
 ## python3.3
-##                     get = urllib.parse.parse_qs(
+##                     get = urlparse.parse_qs(
 ##                         qs=get, keep_blank_values=True, strict_parsing=True,
 ##                         encoding=self.server.web.encoding, errors='replace')
                     get = urlparse.parse_qs(
@@ -1452,7 +1453,6 @@ class CGIHTTPRequestHandler(
                 get = {}
             for key, value in get.items():
                 get[key] = value[0]
-## python3.3             return urllib.parse.urlparse(url), get
             return urlparse.urlparse(url), get
         return None, {}
 
@@ -1545,12 +1545,12 @@ class CGIHTTPRequestHandler(
     @JointPoint
 ## python3.3
 ##     def send_static_file_cache_header(
-##         self: Self, timestamp=time.time(),
+##         self: Self, timestamp=time.time(), response_code=200,
 ##         cache_control='public, max-age=0', expire_time_in_seconds=0
 ##     ) -> Self:
     def send_static_file_cache_header(
-        self, timestamp=time.time(), cache_control='public, max-age=0',
-        expire_time_in_seconds=0
+        self, timestamp=time.time(), response_code=200,
+        cache_control='public, max-age=0', expire_time_in_seconds=0
     ):
 ##
         '''
@@ -1559,13 +1559,16 @@ class CGIHTTPRequestHandler(
             **timestamp**              - Timestamp to use as last modified \
                                          time.
 
+            **response_code**          - Response code to send if not sent yet.
+
             **cache_control**          - Cache control header string.
 
             **expire_time_in_seconds** - Additional time to current timestamp \
                                          for expires header.
         '''
         if not __test_mode__:
-            self.send_header('Cache-Control', cache_control)
+            self.send_response(response_code).send_header(
+                'Cache-Control', cache_control)
             self.send_header('Last-Modified', self.date_time_string(timestamp))
             self.send_header('Expires', self.date_time_string(
                 timestamp + expire_time_in_seconds))
@@ -1573,11 +1576,102 @@ class CGIHTTPRequestHandler(
 
     @JointPoint
 ## python3.3
-##     def send_content_type_header(
-##         self: Self, *arguments: builtins.object, mime_type='text/html',
-##         encoding='UTF-8', response_code=200, **keywords: builtins.object
+##     def get_cookie(
+##         self: Self, name=None
+##     ) -> (builtins.str, cookies.SimpleCookie, builtins.type(None)):
+    def get_cookie(self, name=None):
+##
+        '''
+            Retrieves a http cookie.
+
+            **name** - If provided only the matching value will be returned \
+                       instead of the whole cookie object.
+        '''
+## python3.3         if self.headers.get('Cookie'):
+        if self.headers.getheader('Cookie'):
+            cookie = cookies.SimpleCookie()
+            cookie.load(self.headers.getheader('Cookie'))
+            return cookie[name].value if name and name in cookie else cookie
+        return None
+
+    @JointPoint
+## python3.3
+##     def send_cookie(
+##         self: Self,
+##         cookie: (cookies.SimpleCookie, builtins.str, builtins.dict),
+##         header='Set-Cookie', expires='Tue, 29-Mar-2014 19:30:42 GMT',
+##         max_age=2592000, version=1, response_code=200
 ##     ) -> Self:
-    def send_content_type_header(self, *arguments, **keywords):
+    def send_cookie(
+        self, cookie, header='Set-Cookie',
+        expires='Tue, 29-Mar-2014 19:30:42 GMT', max_age=2592000, version=1,
+        response_code=200
+    ):
+##
+        '''
+            Sends a http cookie.
+
+            **cookie**                 - Cookie object, dictionary or string.
+
+            **header**                 - HTTP Header to use.
+
+            **expires**                - Expiration date of given cookie.
+
+            **max_age**                - Maximum age of given cookie.
+
+            **version**                - Given cookie version.
+
+            **response_code**          - Response code to send if not sent yet.
+
+            Examples:
+
+            >>> handler = CGIHTTPRequestHandler()
+
+            >>> handler.send_cookie('') # doctest: +ELLIPSIS
+            Object of "CGIHTTPRequestHandler" with request uri "" and parame...
+
+            >>> handler.send_cookie('key=value;a=1') # doctest: +ELLIPSIS
+            Object of "CGIHTTPRequestHandler" with request uri "" and parame...
+
+            >>> handler.send_cookie({}) # doctest: +ELLIPSIS
+            Object of "CGIHTTPRequestHandler" with request uri "" and parame...
+
+            >>> handler.send_cookie(
+            ...     {'key': 'value', 'a': 1}
+            ... ) # doctest: +ELLIPSIS
+            Object of "CGIHTTPRequestHandler" with request uri "" and parame...
+
+            >>> cookie = cookies.SimpleCookie()
+            >>> cookie['key'] = 'value'
+            >>> cookie['a'] = 1
+            >>> handler.send_cookie(cookie) # doctest: +ELLIPSIS
+            Object of "CGIHTTPRequestHandler" with request uri "" and parame...
+        '''
+        if not builtins.isinstance(cookie, cookies.SimpleCookie):
+            cookie_object = cookies.SimpleCookie()
+            if builtins.isinstance(cookie, builtins.str):
+                cookie_object.load(cookie_object)
+            else:
+                for key, value in cookie.items():
+                    cookie_object[key] = value
+            cookie = cookie_object
+        cookie = re.compile('^[^:]+: *').sub(
+            '', cookie.output()
+        ) + ';version="%s";expires=%s;Max-Age=%d' % (
+            builtins.str(version), expires, max_age)
+        if not __test_mode__:
+            self.send_response(response_code).send_header(header, cookie)
+        return self
+
+    @JointPoint
+## python3.3
+##     def send_content_type_header(
+##         self: Self, mime_type='text/html', encoding='UTF-8',
+##         response_code=200
+##     ) -> Self:
+    def send_content_type_header(
+        self, mime_type='text/html', encoding='UTF-8', response_code=200
+    ):
 ##
         '''
             Sends a content type header to client if not sent yet.
@@ -1591,31 +1685,21 @@ class CGIHTTPRequestHandler(
             Additional arguments and keywords will be forwarded to \
             "self.send_header()" method.
         '''
-## python3.3
-##         pass
-        default_keywords = Dictionary(content=keywords)
-        mime_type, keywords = default_keywords.pop(
-            name='mime_type', default_value='text/html')
-        encoding, keywords = default_keywords.pop(
-            name='encoding', default_value='UTF-8')
-        response_code, keywords = default_keywords.pop(
-            name='response_code', default_value=200)
-##
         if not (self.content_type_sent or __test_mode__):
             self.send_response(response_code).content_type_sent = True
             self.send_header(
-                'Content-Type', '%s; charset=%s' % (mime_type, encoding),
-                *arguments, **keywords)
+                'Content-Type', '%s; charset=%s' % (mime_type, encoding))
         return self
 
     @JointPoint
 ## python3.3
 ##     def send_content_length_header(
-##         self: Self, size: builtins.int, *arguments: builtins.object,
-##         dynamic_output='', encoding='UTF-8', response_code=200,
-##         **keywords: builtins.object
+##         self: Self, size: builtins.int, dynamic_output='', encoding='UTF-8',
+##         response_code=200
 ##     ) -> Self:
-    def send_content_length_header(self, size, *arguments, **keywords):
+    def send_content_length_header(
+        self, size, dynamic_output='', encoding='UTF-8', response_code=200
+    ):
 ##
         '''
             Sends the content length header to client if not sent yet.
@@ -1627,17 +1711,9 @@ class CGIHTTPRequestHandler(
                                  string.
 
             **encoding**       - Encoding to compress current output.
+
+            **response_code** - HTTP Response code to send.
         '''
-## python3.3
-##         pass
-        default_keywords = Dictionary(content=keywords)
-        dynamic_output, keywords = default_keywords.pop(
-            name='dynamic_output', default_value='')
-        encoding, keywords = default_keywords.pop(
-            name='encoding', default_value='UTF-8')
-        response_code, keywords = default_keywords.pop(
-            name='response_code', default_value=200)
-##
         if not (self.content_length_sent or __test_mode__):
             self.send_response(response_code).content_length_sent = True
             threshold = self.server.web.file_size_stream_threshold_in_byte
@@ -1667,8 +1743,7 @@ class CGIHTTPRequestHandler(
                 self.send_header('Content-Length', builtins.len(
                     self._encoded_output))
             else:
-                self.send_header(
-                    'Content-Length', size, *arguments, **keywords)
+                self.send_header('Content-Length', size)
         return self
 
     @JointPoint
@@ -1891,12 +1966,13 @@ class CGIHTTPRequestHandler(
 ##             return builtins.bool(
 ##                 self.server.web.authentication_handler is None or
 ##                 self.server.web.authentication_handler(
-##                     self.headers.get('authorization'), self.request_uri))
+##                     self.headers.get('authorization'), self.request_uri,
+##                     self))
             return builtins.bool(
                 self.server.web.authentication_handler is None or
                 self.server.web.authentication_handler(
                     self.headers.getheader('authorization'),
-                    self.request_uri))
+                    self.request_uri, self))
 ##
         return True
 
@@ -2262,19 +2338,39 @@ class CGIHTTPRequestHandler(
         '''
             Determines the full host name with port included (if it's not \
             "80").
+
+            Examples:
+
+            >>> handler = CGIHTTPRequestHandler()
+            >>> handler.server = Class()
+            >>> handler.server.web = Web(__test_folder__)
+            >>> handler.server.web.host_name = 'test'
+
+            >>> handler.server.web.port = 80
+            >>> handler._determine_host() # doctest: +ELLIPSIS
+            Object of "CGIHTTPRequestHandler" with request uri "" and parame...
+            >>> handler.host
+            'test'
+
+            >>> handler.server.web.port = 8080
+            >>> handler._determine_host() # doctest: +ELLIPSIS
+            Object of "CGIHTTPRequestHandler" with request uri "" and parame...
+            >>> handler.host
+            'test:8080'
         '''
         self.host = self.server.web.host_name
         if self.server.web.port != 80:
             self.host += ':%d' % self.server.web.port
+        if not __test_mode__:
 ## python3.3
-##         if self.headers.get('X-Forwarded-Host'):
-##             self.host = self.headers.get('X-Forwarded-Host')
-##         elif self.headers.get('Host'):
-##             self.host = self.headers.get('Host')
-        if self.headers.getheader('X-Forwarded-Host'):
-            self.host = self.headers.getheader('X-Forwarded-Host')
-        elif self.headers.get('Host'):
-            self.host = self.headers.getheader('Host')
+##             if self.headers.get('X-Forwarded-Host'):
+##                 self.host = self.headers.get('X-Forwarded-Host')
+##             elif self.headers.get('Host'):
+##                 self.host = self.headers.get('Host')
+            if self.headers.getheader('X-Forwarded-Host'):
+                self.host = self.headers.getheader('X-Forwarded-Host')
+            elif self.headers.get('Host'):
+                self.host = self.headers.getheader('Host')
 ##
         return self
 
@@ -2282,9 +2378,7 @@ class CGIHTTPRequestHandler(
 ## python3.3     def _create_environment_variables(self: Self) -> builtins.str:
     def _create_environment_variables(self):
         '''Creates all request specified environment-variables.'''
-        if not __test_mode__:
-            self._determine_host()
-        self.request_uri = self.path
+        self._determine_host().request_uri = self.path
         match = re.compile(
             '^[^/]*/+(?P<path>.*?)(?:{delimiter}(?P<parameter>.*))?$'.format(
                 delimiter=self.server.web.request_parameter_delimiter)
@@ -2292,7 +2386,7 @@ class CGIHTTPRequestHandler(
         self.path = ''
         if match:
 ## python3.3
-##             self.path = posixpath.normpath(urllib.parse.unquote(match.group(
+##             self.path = posixpath.normpath(urlparse.unquote(match.group(
 ##                 'path')))
             self.path = posixpath.normpath(urllib.unquote(match.group(
                 'path')))
@@ -2884,7 +2978,7 @@ class CGIHTTPRequestHandler(
     globale variables are available.
 '''
 __logger__ = __exception__ = __module_name__ = __file_path__ = \
-    __test_mode__ = None
+    __test_mode__ = __test_buffer__ = __test_folder__ = __test_globals__ = None
 '''
     Extends this module with some magic environment variables to provide \
     better introspection support. A generic command line interface for some \

@@ -2028,8 +2028,6 @@ class Module(Object):
 
             Examples:
 
-            >>> import logging
-
             >>> Module.extend() # doctest: +ELLIPSIS
             {...native...}
             >>> __logger__ # doctest: +ELLIPSIS
@@ -2260,7 +2258,7 @@ class Module(Object):
     globale variables are available.
 '''
 __logger__ = __exception__ = __module_name__ = __file_path__ = \
-    __test_mode__ = None
+    __test_mode__ = __test_buffer__ = __test_folder__ = __test_globals__ = None
 '''
     Extends this module with some magic environment variables to provide \
     better introspection support. A generic command line interface for some \

@@ -76,6 +76,7 @@ from boostNode.paradigm.aspectOrientation import FunctionDecorator, JointPoint
 
 ## python3.3 class Runnable:
 class Runnable(builtins.object):
+
     '''
         Abstract class (interface) for implementing reusable classes which \
         acts directly as an command line interface to provide their features \
@@ -711,6 +712,7 @@ class Runnable(builtins.object):
 
 ## python3.3 class Platform:
 class Platform(builtins.object):
+
     '''Handles issues dealing with the underlying operating system.'''
 
     # region properties
@@ -1451,6 +1453,7 @@ class Platform(builtins.object):
 
 ## python3.3 class CommandLine:
 class CommandLine(builtins.object):
+
     '''
         Defines which possibilities are supported for boolean interactive \
         command line user inputs.
@@ -2923,7 +2926,7 @@ class CommandLine(builtins.object):
     globale variables are available.
 '''
 __logger__ = __exception__ = __module_name__ = __file_path__ = \
-    __test_mode__ = None
+    __test_mode__ = __test_buffer__ = __test_folder__ = __test_globals__ = None
 '''
     Extends this module with some magic environment variables to provide \
     better introspection support. A generic command line interface for some \

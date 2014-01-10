@@ -43,14 +43,17 @@ for number in (3, 4):
 # region classes
 
 class SelfClass:
+
     '''Type for defining the current object of its method.'''
 
 
 class SelfClassObject:
+
     '''Type for defining the current object of its method.'''
 
 
 class Self:
+
     '''Type for defining the current object of its method.'''
 
 # endregion
@@ -62,7 +65,7 @@ class Self:
     globale variables are available.
 '''
 __logger__ = __exception__ = __module_name__ = __file_path__ = \
-    __test_mode__ = None
+    __test_mode__ = __test_buffer__ = __test_folder__ = __test_globals__ = None
 '''
     Extends this module with some magic environment variables to provide \
     better introspection support. A generic command line interface for some \

@@ -108,7 +108,8 @@ import __builtin__ as builtins
 import inspect
 import os
 import sys
-import types
+## python3.3 import types
+pass
 
 '''Make boostNode packages and modules importable via relative paths.'''
 for number in (3, 4):
@@ -121,6 +122,7 @@ for number in (3, 4):
 
 ## python3.3 class Class:
 class Class(builtins.object):
+
     '''
         The main class which is intended for passing on other class. It \
         serves a scope for one application to minimize conflicts with other \
@@ -412,7 +414,7 @@ class Class(builtins.object):
     globale variables are available.
 '''
 __logger__ = __exception__ = __module_name__ = __file_path__ = \
-    __test_mode__ = None
+    __test_mode__ = __test_buffer__ = __test_folder__ = __test_globals__ = None
 '''
     Extends this module with some magic environment variables to provide \
     better introspection support. A generic command line interface for some \
