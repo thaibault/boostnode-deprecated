@@ -1599,30 +1599,43 @@ class CGIHTTPRequestHandler(
 ##     def send_cookie(
 ##         self: Self,
 ##         cookie: (cookies.SimpleCookie, builtins.str, builtins.dict),
-##         header='Set-Cookie', expires='Tue, 29-Mar-2014 19:30:42 GMT',
-##         max_age=2592000, version=1, response_code=200
+##         header='Set-Cookie', max_age_in_seconds=60 * 60 * 60 * 24 * 7,
+##         version=1, domain='', secure=False, httponly=False, comment='',
+##         response_code=200
 ##     ) -> Self:
     def send_cookie(
         self, cookie, header='Set-Cookie',
-        expires='Tue, 29-Mar-2014 19:30:42 GMT', max_age=2592000, version=1,
-        response_code=200, domain='', secure=False, httponly=False, comment='',
-        path='/'
+        max_age_in_seconds=60 * 60 * 60 * 24 * 7, version=1, domain='',
+        secure=False, httponly=False, comment='', path='/',
+        response_code=200
     ):
 ##
         '''
             Sends a http cookie.
 
-            **cookie**                 - Cookie object, dictionary or string.
+            **cookie**             - Cookie object, dictionary or string.
 
-            **header**                 - HTTP Header to use.
+            **header**             - HTTP Header to use.
 
-            **expires**                - Expiration date of given cookie.
+            **max_age_in_seconds** - Maximum age of given cookie. Default is \
+                                     7 days.
 
-            **max_age**                - Maximum age of given cookie.
+            **version**            - Given cookie version.
 
-            **version**                - Given cookie version.
+            **domain**             - The domain the cookie should bounded to.
 
-            **response_code**          - Response code to send if not sent yet.
+            **secure**             - Indicates weather only secure \
+                                     connections should be associated with \
+                                     given cookie.
+
+            **httponly**           - Disables JavaScript access to given \
+                                     cookie.
+
+            **comment**            - A comment provided for given cookie.
+
+            **path**               - Web path the cookie should bounded to.
+
+            **response_code**      - Response code to send if not sent yet.
 
             Examples:
 
@@ -1656,13 +1669,15 @@ class CGIHTTPRequestHandler(
                 for key, value in cookie.items():
                     cookie_object[key] = value
             cookie = cookie_object
+        expires = self.date_time_string(time.time() + max_age_in_seconds)
         cookie = re.compile('^[^:]+: *').sub(
             '', cookie.output()
         ) + (
-            ';version="%s";expires=%s;max-age=%d;path=%s;comment=%s;'
+            ';version="%s";expires=%s;Max-Age=%d;Path=%s;comment=%s;'
             'domain=%s%s%s' % (
-                builtins.str(version), expires, max_age, path, comment, domain,
-                ';secure' if secure else '', ';httponly' if httponly else ''))
+                builtins.str(version), expires, max_age_in_seconds, path,
+                comment, domain, ';secure' if secure else '',
+                ';httponly' if httponly else ''))
         if not __test_mode__:
             self.send_response(response_code).send_header(header, cookie)
         return self
