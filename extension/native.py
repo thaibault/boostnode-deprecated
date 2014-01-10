@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.3
+#!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 
 # region vim modline
@@ -31,9 +31,9 @@ __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-## python2.7
-## import __builtin__ as builtins
-import builtins
+## python3.3
+## import builtins
+import __builtin__ as builtins
 ##
 import collections
 import copy
@@ -43,17 +43,17 @@ import inspect
 import os
 import re
 import sys
-## python2.7 pass
-import types
+## python3.3 import types
+pass
 
 '''Make boostNode packages and modules importable via relative paths.'''
 for number in (3, 4):
     sys.path.append(os.path.abspath(sys.path[0] + number * ('..' + os.sep)))
 
 import boostNode
-## python2.7
-## pass
-from boostNode.extension.type import Self, SelfClass, SelfClassObject
+## python3.3
+## from boostNode.extension.type import Self, SelfClass, SelfClassObject
+pass
 ##
 from boostNode.paradigm.aspectOrientation import FunctionDecorator, JointPoint
 from boostNode.paradigm.objectOrientation import Class
@@ -84,11 +84,11 @@ class PropertyInitializer(FunctionDecorator):
         # region public
 
     @JointPoint
-## python2.7
-##     def get_wrapper_function(self):
-    def get_wrapper_function(
-        self: Self
-    ) -> (types.FunctionType, types.MethodType):
+## python3.3
+##     def get_wrapper_function(
+##         self: Self
+##     ) -> (types.FunctionType, types.MethodType):
+    def get_wrapper_function(self):
 ##
         '''
             This methods returns the wrapped function.
@@ -121,8 +121,8 @@ class PropertyInitializer(FunctionDecorator):
                 if not name in self.EXCLUDED_ARGUMENT_NAMES:
                     self.object.__dict__[name] = value
             return self.__func__(*arguments, **keywords)
-## python2.7         wrapper_function.__wrapped__ = self.__func__
-        pass
+## python3.3         pass
+        wrapper_function.__wrapped__ = self.__func__
         return wrapper_function
 
         # endregion
@@ -144,13 +144,13 @@ class Object(Class):
             # region special
 
     @JointPoint(PropertyInitializer)
-## python2.7
-##     def __init__(self, content=None, *arguments, **keywords):
-    def __init__(
-        self: Self, content=None,
-        *arguments: (builtins.object, builtins.type),
-        **keywords: (builtins.object, builtins.type)
-    ) -> None:
+## python3.3
+##     def __init__(
+##         self: Self, content=None,
+##         *arguments: (builtins.object, builtins.type),
+##         **keywords: (builtins.object, builtins.type)
+##     ) -> None:
+    def __init__(self, content=None, *arguments, **keywords):
 ##
         '''
             Generates a new high level wrapper around given object.
@@ -173,16 +173,16 @@ class Object(Class):
                 # endregion
 
     @JointPoint
-## python2.7     def __repr__(self):
-    def __repr__(self: Self) -> builtins.str:
+## python3.3     def __repr__(self: Self) -> builtins.str:
+    def __repr__(self):
         '''Invokes if this object should describe itself by a string.'''
         return 'Object of "{class_name}" ({content}).'.format(
             class_name=self.content.__class__.__name__,
             content=builtins.repr(self.content))
 
     @JointPoint
-## python2.7     def __str__(self):
-    def __str__(self: Self) -> builtins.str:
+## python3.3     def __str__(self: Self) -> builtins.str:
+    def __str__(self):
         '''
             Is triggered if this object should be converted to string.
 
@@ -196,8 +196,8 @@ class Object(Class):
             # endregion
 
     @JointPoint
-## python2.7     def copy(self):
-    def copy(self: Self) -> builtins.dict:
+## python3.3     def copy(self: Self) -> builtins.dict:
+    def copy(self):
         '''
             Copies a given object's attributes and returns them.
 
@@ -232,8 +232,8 @@ class Object(Class):
         return self._content_copy
 
     @JointPoint
-## python2.7     def restore(self):
-    def restore(self: Self) -> (builtins.object, builtins.type):
+## python3.3     def restore(self: Self) -> (builtins.object, builtins.type):
+    def restore(self):
         '''
             Restores a given object's attributes by a given copy are last \
             copied item.
@@ -267,8 +267,8 @@ class Object(Class):
         return self.content
 
     @JointPoint
-## python2.7     def is_binary(self):
-    def is_binary(self: Self) -> builtins.bool:
+## python3.3     def is_binary(self: Self) -> builtins.bool:
+    def is_binary(self):
         '''
             Determines if given data is binary.
 
@@ -291,15 +291,15 @@ class Object(Class):
         '''
         # NOTE: This is a dirty workaround to handle python2.7 lack of
         # differentiation between "string" and "bytes" objects.
-## python2.7
-##         content = self.content
-##         if builtins.isinstance(self.content, builtins.unicode):
-##             content = self.content.encode(encoding='utf_8')
-##         text_chars = ''.join(builtins.map(
-##             builtins.chr,
-##             builtins.range(7, 14) + [27] + builtins.range(0x20, 0x100)))
-##         return builtins.bool(content.translate(None, text_chars))
-        return builtins.isinstance(self.content, builtins.bytes)
+## python3.3
+##         return builtins.isinstance(self.content, builtins.bytes)
+        content = self.content
+        if builtins.isinstance(self.content, builtins.unicode):
+            content = self.content.encode(encoding='utf_8')
+        text_chars = ''.join(builtins.map(
+            builtins.chr,
+            builtins.range(7, 14) + [27] + builtins.range(0x20, 0x100)))
+        return builtins.bool(content.translate(None, text_chars))
 ##
 
         # endregion
@@ -311,13 +311,13 @@ class Object(Class):
         # region public
 
     @JointPoint(builtins.classmethod)
-## python2.7
+## python3.3
 ##     def determine_abstract_method_exception(
-##         cls, abstract_class_name, class_name=None
-##     ):
+##         cls: SelfClass, abstract_class_name: builtins.str, class_name=None
+##     ) -> builtins.NotImplementedError:
     def determine_abstract_method_exception(
-        cls: SelfClass, abstract_class_name: builtins.str, class_name=None
-    ) -> builtins.NotImplementedError:
+        cls, abstract_class_name, class_name=None
+    ):
 ##
         '''
             Generates a suitable exception for raising if a method is called \
@@ -494,14 +494,14 @@ class String(Object, builtins.str):
 
     @JointPoint(builtins.classmethod)
     @Class.pseudo_property
-## python2.7
+## python3.3
 ##     def get_escaping_replace_dictionary(
-##         cls, sequence, escape_sequence='\{symbole}'
-##     ):
+##         cls: SelfClass, sequence: collections.Iterable,
+##         escape_sequence='\{symbole}'
+##     ) -> builtins.dict:
     def get_escaping_replace_dictionary(
-        cls: SelfClass, sequence: collections.Iterable,
-        escape_sequence='\{symbole}'
-    ) -> builtins.dict:
+        cls, sequence, escape_sequence='\{symbole}'
+    ):
 ##
         '''
             Creates a replacement dictionary form a given iterable. Every \
@@ -544,12 +544,12 @@ class String(Object, builtins.str):
             # region special
 
     @JointPoint
-## python2.7
-##     def __init__(self, content=None, *arguments, **keywords):
-    def __init__(
-        self: Self, content=None, *arguments: builtins.object,
-        **keywords: builtins.object
-    ) -> None:
+## python3.3
+##     def __init__(
+##         self: Self, content=None, *arguments: builtins.object,
+##         **keywords: builtins.object
+##     ) -> None:
+    def __init__(self, content=None, *arguments, **keywords):
 ##
         '''
             Initialize a new "String" object.
@@ -581,8 +581,8 @@ class String(Object, builtins.str):
                 # endregion
 
     @JointPoint
-## python2.7     def __repr__(self):
-    def __repr__(self: Self) -> builtins.str:
+## python3.3     def __repr__(self: Self) -> builtins.str:
+    def __repr__(self):
         '''
             Invokes if this object should describe itself by a string.
 
@@ -595,8 +595,8 @@ class String(Object, builtins.str):
             class_name=self.__class__.__name__, content=self.content)
 
     @JointPoint
-## python2.7     def __len__(self):
-    def __len__(self: Self) -> builtins.int:
+## python3.3     def __len__(self: Self) -> builtins.int:
+    def __len__(self):
         '''
             Triggers if the pythons native "builtins.len()" function tries to \
             handle current instance. Returns the number of symbols given in \
@@ -613,8 +613,8 @@ class String(Object, builtins.str):
         return builtins.len(self.__str__())
 
     @JointPoint
-## python2.7     def __str__(self):
-    def __str__(self: Self) -> builtins.str:
+## python3.3     def __str__(self: Self) -> builtins.str:
+    def __str__(self):
         '''
             Triggers if the current object should be directly interpreted as \
             pythons native string implementation.
@@ -630,8 +630,8 @@ class String(Object, builtins.str):
         return self.content
 
     @JointPoint
-## python2.7     def __nonzero__(self):
-    def __bool__(self: Self) -> builtins.bool:
+## python3.3     def __bool__(self: Self) -> builtins.bool:
+    def __nonzero__(self):
         '''
             Triggers if the current object should be interpreted as a boolean \
             value directly.
@@ -654,8 +654,8 @@ class String(Object, builtins.str):
             # region getter
 
     @JointPoint(Class.pseudo_property)
-## python2.7     def get_encoding(self):
-    def get_encoding(self: Self) -> builtins.str:
+## python3.3     def get_encoding(self: Self) -> builtins.str:
+    def get_encoding(self):
         '''
             Guesses the encoding used in current string (bytes). Encodings \
             are checked in alphabetic order.
@@ -704,8 +704,8 @@ class String(Object, builtins.str):
             # region validation
 
     @JointPoint
-## python2.7     def validate_shell(self):
-    def validate_shell(self: Self) -> Self:
+## python3.3     def validate_shell(self: Self) -> Self:
+    def validate_shell(self):
         '''
             Validates the current string for using as a command in shell. \
             Special shell command chars will be escaped.
@@ -738,8 +738,8 @@ class String(Object, builtins.str):
                 self.SPECIAL_SHELL_SEQUENCES))
 
     @JointPoint
-## python2.7     def validate_html(self):
-    def validate_html(self: Self) -> Self:
+## python3.3     def validate_html(self: Self) -> Self:
+    def validate_html(self):
 ##
         '''
             Validates current string for using as snippet in a html document.
@@ -752,8 +752,8 @@ class String(Object, builtins.str):
         return self.replace(self.SPECIAL_HTML_SEQUENCES)
 
     @JointPoint
-## python2.7     def validate_regex(self, exclude_symbols=()):
-    def validate_regex(self: Self, exclude_symbols=()) -> Self:
+## python3.3     def validate_regex(self: Self, exclude_symbols=()) -> Self:
+    def validate_regex(self, exclude_symbols=()):
         '''
             Validates the current string for using in a regular expression \
             pattern. Special regular expression chars will be escaped.
@@ -790,8 +790,8 @@ class String(Object, builtins.str):
                     builtins.set(exclude_symbols))))
 
     @JointPoint
-## python2.7     def validate_format(self):
-    def validate_format(self: Self) -> Self:
+## python3.3     def validate_format(self: Self) -> Self:
+    def validate_format(self):
         '''
             Validates the current string for using in a string with \
             placeholder like "{name}". It will be escaped to not interpreted \
@@ -809,8 +809,8 @@ class String(Object, builtins.str):
         return self
 
     @JointPoint
-## python2.7     def validate_url(self):
-    def validate_url(self: Self) -> Self:
+## python3.3     def validate_url(self: Self) -> Self:
+    def validate_url(self):
         '''
             Validates a given url by escaping special chars.
 
@@ -846,8 +846,8 @@ class String(Object, builtins.str):
             # endregion
 
     @JointPoint
-## python2.7     def camel_case_capitalize(self):
-    def camel_case_capitalize(self: Self) -> Self:
+## python3.3     def camel_case_capitalize(self: Self) -> Self:
+    def camel_case_capitalize(self):
         '''
             Acts like pythons native "builtins.str.capitalize()" method but \
             preserves camel case characters.
@@ -865,9 +865,9 @@ class String(Object, builtins.str):
         return self
 
     @JointPoint
-## python2.7
-##     def delimit(self, delimiter='-', search_pattern='a-zA-Z'):
-    def delimit(self: Self, delimiter='-', search_pattern='a-zA-Z') -> Self:
+## python3.3
+##     def delimit(self: Self, delimiter='-', search_pattern='a-zA-Z') -> Self:
+    def delimit(self, delimiter='-', search_pattern='a-zA-Z'):
 ##
         '''
             Replaces all typical delimiting chars with given delimiter.
@@ -911,11 +911,11 @@ class String(Object, builtins.str):
         ).sub('[^%s]+' % search_pattern, delimiter)
 
     @JointPoint
-## python2.7
-##     def find_python_code_end_bracket(self):
-    def find_python_code_end_bracket(
-        self: Self
-    ) -> (builtins.int, builtins.bool):
+## python3.3
+##     def find_python_code_end_bracket(
+##         self: Self
+##     ) -> (builtins.int, builtins.bool):
+    def find_python_code_end_bracket(self):
 ##
         '''
             Searches for the next not escaped closing end clamped in current \
@@ -943,12 +943,12 @@ class String(Object, builtins.str):
         return False
 
     @JointPoint
-## python2.7
-##     def replace(self, search, replace='', *arguments, **keywords):
-    def replace(
-        self: Self, search: (builtins.str, builtins.dict),
-        replace='', *arguments: builtins.object, **keywords: builtins.object
-    ) -> Self:
+## python3.3
+##     def replace(
+##         self: Self, search: (builtins.str, builtins.dict),
+##         replace='', *arguments: builtins.object, **keywords: builtins.object
+##     ) -> Self:
+    def replace(self, search, replace='', *arguments, **keywords):
 ##
         '''
             Implements the pythons native string method "str.replace()" in an \
@@ -993,12 +993,12 @@ class String(Object, builtins.str):
         return self
 
     @JointPoint
-## python2.7
-##     def sub(self, search, replace='', *arguments, **keywords):
-    def sub(
-        self: Self, search: (builtins.str, builtins.dict), replace='',
-        *arguments: builtins.object, **keywords: builtins.object
-    ) -> Self:
+## python3.3
+##     def sub(
+##         self: Self, search: (builtins.str, builtins.dict), replace='',
+##         *arguments: builtins.object, **keywords: builtins.object
+##     ) -> Self:
+    def sub(self, search, replace='', *arguments, **keywords):
 ##
         '''
             Implements the pythons native "re.sub()" method in an object \
@@ -1083,12 +1083,12 @@ class String(Object, builtins.str):
         return self
 
     @JointPoint
-## python2.7
-##     def subn(self, search, replace='', *arguments, **keywords):
-    def subn(
-        self: Self, search: (builtins.str, builtins.dict), replace='',
-        *arguments: builtins.object, **keywords: builtins.object
-    ) -> builtins.tuple:
+## python3.3
+##     def subn(
+##         self: Self, search: (builtins.str, builtins.dict), replace='',
+##         *arguments: builtins.object, **keywords: builtins.object
+##     ) -> builtins.tuple:
+    def subn(self, search, replace='', *arguments, **keywords):
 ##
         '''
             Implements the pythons native "re.subn()" method in an object \
@@ -1138,8 +1138,8 @@ class String(Object, builtins.str):
         return self, number_of_replaces
 
     @JointPoint
-## python2.7     def readline(self):
-    def readline(self: Self) -> (SelfClassObject, builtins.bool):
+## python3.3     def readline(self: Self) -> (SelfClassObject, builtins.bool):
+    def readline(self):
         '''
             Implements the pythons native "bz2.BZ2File.readline()" method in \
             an object oriented way.
@@ -1177,11 +1177,11 @@ class String(Object, builtins.str):
         return False
 
     @JointPoint
-## python2.7
-##     def readlines(self, *arguments, **keywords):
-    def readlines(
-        self: Self, *arguments: builtins.object, **keywords: builtins.object
-    ) -> builtins.list:
+## python3.3
+##     def readlines(
+##         self: Self, *arguments: builtins.object, **keywords: builtins.object
+##     ) -> builtins.list:
+    def readlines(self, *arguments, **keywords):
 ##
         '''
             Implements the pythons native "builtins.str.splitlines()" method \
@@ -1212,8 +1212,8 @@ class String(Object, builtins.str):
         return self.content.splitlines(*arguments, **keywords)
 
     @JointPoint
-## python2.7     def delete_variables_from_regex(self):
-    def delete_variables_from_regex(self: Self) -> Self:
+## python3.3     def delete_variables_from_regex(self: Self) -> Self:
+    def delete_variables_from_regex(self):
         '''
             Removes python supported variables in regular expression strings. \
             This method is useful if a python regular expression should be \
@@ -1239,15 +1239,15 @@ class String(Object, builtins.str):
             # region find python code end bracket helper
 
     @JointPoint
-## python2.7
+## python3.3
 ##     def _handle_char_to_find_end_bracket(
-##         self, index, char, quote, skip, brackets
-##     ):
+##         self: Self, index: builtins.int, char: builtins.str,
+##         quote: (builtins.str, builtins.bool), skip: builtins.int,
+##         brackets: builtins.int
+##     ) -> (builtins.tuple, builtins.int):
     def _handle_char_to_find_end_bracket(
-        self: Self, index: builtins.int, char: builtins.str,
-        quote: (builtins.str, builtins.bool), skip: builtins.int,
-        brackets: builtins.int
-    ) -> (builtins.tuple, builtins.int):
+        self, index, char, quote, skip, brackets
+    ):
 ##
         '''
             Helper method for "find_python_code_end_bracket()".
@@ -1301,14 +1301,14 @@ class String(Object, builtins.str):
         return index + 1, char, quote, skip, brackets
 
     @JointPoint
-## python2.7
+## python3.3
 ##     def _handle_start_quotes_to_find_end_bracket(
-##         self, index, char, quote, skip
-##     ):
+##         self: Self, index: builtins.int, char: builtins.str,
+##         quote: (builtins.str, builtins.bool), skip: builtins.int
+##     ) -> builtins.tuple:
     def _handle_start_quotes_to_find_end_bracket(
-        self: Self, index: builtins.int, char: builtins.str,
-        quote: (builtins.str, builtins.bool), skip: builtins.int
-    ) -> builtins.tuple:
+        self, index, char, quote, skip
+    ):
 ##
         '''
             Helper method for "find_python_code_end_bracket()".
@@ -1327,12 +1327,12 @@ class String(Object, builtins.str):
         return quote, skip
 
     @JointPoint
-## python2.7
-##     def _handle_quotes_to_find_end_bracket(self, index, char, quote, skip):
-    def _handle_quotes_to_find_end_bracket(
-        self: Self, index: builtins.int, char: builtins.str,
-        quote: (builtins.str, builtins.bool), skip: builtins.int
-    ) -> builtins.tuple:
+## python3.3
+##     def _handle_quotes_to_find_end_bracket(
+##         self: Self, index: builtins.int, char: builtins.str,
+##         quote: (builtins.str, builtins.bool), skip: builtins.int
+##     ) -> builtins.tuple:
+    def _handle_quotes_to_find_end_bracket(self, index, char, quote, skip):
 ##
         '''
             Helper method for "find_python_code_end_bracket()".
@@ -1377,12 +1377,12 @@ class Dictionary(Object, builtins.dict):
             # region special
 
     @JointPoint
-## python2.7
-##     def __init__(self, content, *arguments, **keywords):
-    def __init__(
-        self: Self, content: collections.Iterable,
-        *arguments: builtins.object, **keywords: builtins.object
-    ) -> None:
+## python3.3
+##     def __init__(
+##         self: Self, content: collections.Iterable,
+##         *arguments: builtins.object, **keywords: builtins.object
+##     ) -> None:
+    def __init__(self, content, *arguments, **keywords):
 ##
         '''
             Generates a new high level wrapper around given object.
@@ -1406,8 +1406,8 @@ class Dictionary(Object, builtins.dict):
         )(content, *arguments, **keywords)
 
     @JointPoint
-## python2.7     def __repr__(self):
-    def __repr__(self: Self) -> builtins.str:
+## python3.3     def __repr__(self: Self) -> builtins.str:
+    def __repr__(self):
         '''
             Invokes if this object should describe itself by a string.
 
@@ -1421,8 +1421,8 @@ class Dictionary(Object, builtins.dict):
             content=builtins.repr(self.content))
 
     @JointPoint
-## python2.7     def __hash__(self):
-    def __hash__(self: Self) -> builtins.int:
+## python3.3     def __hash__(self: Self) -> builtins.int:
+    def __hash__(self):
         '''
             Invokes if this object should describe itself by a hash value.
 
@@ -1434,11 +1434,11 @@ class Dictionary(Object, builtins.dict):
         return builtins.hash(self.immutable)
 
     @JointPoint
-## python2.7
-##     def __getitem__(self, key):
-    def __getitem__(
-        self: Self, key: (builtins.object, builtins.type)
-    ) -> (builtins.object, builtins.type):
+## python3.3
+##     def __getitem__(
+##         self: Self, key: (builtins.object, builtins.type)
+##     ) -> (builtins.object, builtins.type):
+    def __getitem__(self, key):
 ##
         '''
             Invokes if this object should returns current value stored at \
@@ -1460,8 +1460,8 @@ class Dictionary(Object, builtins.dict):
             # region getter methods
 
     @JointPoint(Class.pseudo_property)
-## python2.7     def get_immutable(self):
-    def get_immutable(self: Self) -> builtins.tuple:
+## python3.3     def get_immutable(self: Self) -> builtins.tuple:
+    def get_immutable(self):
         '''
             Generates an immutable copy of the current dictionary. Mutable \
             iterables are generally translated to sorted tuples.
@@ -1475,11 +1475,11 @@ class Dictionary(Object, builtins.dict):
             # endregion
 
     @JointPoint
-## python2.7
-##     def pop(self, name, default_value=None):
-    def pop(
-        self: Self, name: builtins.str, default_value=None
-    ) -> builtins.tuple:
+## python3.3
+##     def pop(
+##         self: Self, name: builtins.str, default_value=None
+##     ) -> builtins.tuple:
+    def pop(self, name, default_value=None):
 ##
         '''
             Get a keyword element as it would be set by a default value. If \
@@ -1515,11 +1515,11 @@ class Dictionary(Object, builtins.dict):
         # region protected methods
 
     @JointPoint
-## python2.7
-##     def _immutable_helper(self, value):
-    def _immutable_helper(
-        self: Self, value: (builtins.object, builtins.type)
-    ) -> (builtins.object, builtins.type):
+## python3.3
+##     def _immutable_helper(
+##         self: Self, value: (builtins.object, builtins.type)
+##     ) -> (builtins.object, builtins.type):
+    def _immutable_helper(self, value):
 ##
         '''
             Helper methods for potential immutable given value.
@@ -1554,11 +1554,11 @@ class Module(Object):
 
     # region properties
 
-## python2.7
-##     HIDDEN_BUILTIN_CALLABLES = (
-##         'GFileDescriptorBased', 'GInitiallyUnowned', 'GPollableInputStream',
-##         'GPollableOutputStream')
-    HIDDEN_BUILTIN_CALLABLES = ()
+## python3.3
+##     HIDDEN_BUILTIN_CALLABLES = ()
+    HIDDEN_BUILTIN_CALLABLES = (
+        'GFileDescriptorBased', 'GInitiallyUnowned', 'GPollableInputStream',
+        'GPollableOutputStream')
 ##
     '''Stores all magically defined globals.'''
     PREFERRED_ENTRY_POINT_FUNCTION_NAMES = (
@@ -1577,8 +1577,8 @@ class Module(Object):
             # region special
 
     @JointPoint(builtins.classmethod)
-## python2.7     def __repr__(cls):
-    def __repr__(cls: SelfClass) -> builtins.str:
+## python3.3     def __repr__(cls: SelfClass) -> builtins.str:
+    def __repr__(cls):
         '''
             Invokes if this object should describe itself by a string.
 
@@ -1601,11 +1601,11 @@ class Module(Object):
     # dependencies.
     @builtins.classmethod
     @Class.pseudo_property
-## python2.7
-##     def get_context_path(cls, path=None, frame=inspect.currentframe()):
-    def get_context_path(
-        cls: SelfClass, path=None, frame=inspect.currentframe(),
-    ) -> builtins.str:
+## python3.3
+##     def get_context_path(
+##         cls: SelfClass, path=None, frame=inspect.currentframe(),
+##     ) -> builtins.str:
+    def get_context_path(cls, path=None, frame=inspect.currentframe()):
 ##
         '''
             Determines the package and module level context path to a given \
@@ -1643,11 +1643,11 @@ class Module(Object):
 
     @JointPoint(builtins.classmethod)
     @Class.pseudo_property
-## python2.7
-##     def get_name(cls, frame=None, module=None, extension=False, path=False):
-    def get_name(
-        cls: SelfClass, frame=None, module=None, extension=False, path=False
-    ) -> builtins.str:
+## python3.3
+##     def get_name(
+##         cls: SelfClass, frame=None, module=None, extension=False, path=False
+##     ) -> builtins.str:
+    def get_name(cls, frame=None, module=None, extension=False, path=False):
 ##
         '''
             Returns name of the given context "frame". If no frame is defined \
@@ -1689,11 +1689,11 @@ class Module(Object):
 
     @JointPoint(builtins.classmethod)
     @Class.pseudo_property
-## python2.7
-##     def get_package_name(cls, frame=inspect.currentframe(), path=False):
-    def get_package_name(
-        cls: SelfClass, frame=inspect.currentframe(), path=False
-    ) -> builtins.str:
+## python3.3
+##     def get_package_name(
+##         cls: SelfClass, frame=inspect.currentframe(), path=False
+##     ) -> builtins.str:
+    def get_package_name(cls, frame=inspect.currentframe(), path=False):
 ##
         '''
             Determines package context of given frame. If current context \
@@ -1734,13 +1734,13 @@ class Module(Object):
 
     @JointPoint(builtins.classmethod)
     @Class.pseudo_property
-## python2.7
+## python3.3
 ##     def get_file_path(
-##         cls, context_path, only_source_files=False
-##     ):
+##         cls: SelfClass, context_path: builtins.str, only_source_files=False
+##     ) -> (builtins.str, builtins.bool):
     def get_file_path(
-        cls: SelfClass, context_path: builtins.str, only_source_files=False
-    ) -> (builtins.str, builtins.bool):
+        cls, context_path, only_source_files=False
+    ):
 ##
         '''
             Returns the path to given context path.
@@ -1781,9 +1781,9 @@ class Module(Object):
             # region boolean
 
     @builtins.classmethod
-## python2.7
-##     def is_package(cls, path):
-    def is_package(cls: SelfClass, path: builtins.str) -> builtins.bool:
+## python3.3
+##     def is_package(cls: SelfClass, path: builtins.str) -> builtins.bool:
+    def is_package(cls, path):
 ##
         '''
             Checks if given location is pointed to a python package.
@@ -1810,11 +1810,11 @@ class Module(Object):
             # endregion
 
     @JointPoint(builtins.classmethod)
-## python2.7
-##     def determine_caller(cls, callable_objects, caller=None):
-    def determine_caller(
-        cls: SelfClass, callable_objects: collections.Iterable, caller=None
-    ) -> (builtins.bool, builtins.str, builtins.type(None)):
+## python3.3
+##     def determine_caller(
+##         cls: SelfClass, callable_objects: collections.Iterable, caller=None
+##     ) -> (builtins.bool, builtins.str, builtins.type(None)):
+    def determine_caller(cls, callable_objects, caller=None):
 ##
         '''
             Searches for a useful caller object in given module objects via \
@@ -1858,12 +1858,12 @@ class Module(Object):
 
     @JointPoint(builtins.classmethod)
     @Class.pseudo_property
-## python2.7
-##     def get_defined_callables(cls, scope, only_module_level=True):
-    def get_defined_callables(
-        cls: SelfClass, scope: (builtins.type, builtins.object),
-        only_module_level=True
-    ) -> builtins.list:
+## python3.3
+##     def get_defined_callables(
+##         cls: SelfClass, scope: (builtins.type, builtins.object),
+##         only_module_level=True
+##     ) -> builtins.list:
+    def get_defined_callables(cls, scope, only_module_level=True):
 ##
         '''
             Takes a module and gives a list of objects explicit defined in \
@@ -1917,16 +1917,16 @@ class Module(Object):
         return callables
 
     @JointPoint(builtins.classmethod)
-## python2.7
+## python3.3
 ##     def execute_program_for_modules(
-##         cls, program_type, program, modules, arguments=(),
-##         extension='py', delimiter=', ', log=True, **keywords
-##     ):
+##         cls: SelfClass, program_type: builtins.str, program: builtins.str,
+##         modules: collections.Iterable, arguments=(), extension='py',
+##         delimiter=', ', log=True, **keywords: builtins.object
+##     ) -> builtins.tuple:
     def execute_program_for_modules(
-        cls: SelfClass, program_type: builtins.str, program: builtins.str,
-        modules: collections.Iterable, arguments=(), extension='py',
-        delimiter=', ', log=True, **keywords: builtins.object
-    ) -> builtins.tuple:
+        cls, program_type, program, modules, arguments=(),
+        extension='py', delimiter=', ', log=True, **keywords
+    ):
 ##
         '''
             Runs a given program for every given module. Returns "False" if \
@@ -1998,14 +1998,14 @@ class Module(Object):
         return builtins.tuple(result)
 
     @JointPoint(builtins.classmethod)
-## python2.7
+## python3.3
 ##     def extend(
-##         cls, name=__name__, frame=None, module=None, post_extend_others=True
-##     ):
+##         cls: SelfClass, name=__name__, frame=None, module=None,
+##         post_extend_others=True
+##     ) -> builtins.dict:
     def extend(
-        cls: SelfClass, name=__name__, frame=None, module=None,
-        post_extend_others=True
-    ) -> builtins.dict:
+        cls, name=__name__, frame=None, module=None, post_extend_others=True
+    ):
 ##
         '''
             Extends a given scope of an module for useful things like own \
@@ -2081,15 +2081,15 @@ class Module(Object):
         return {'name': name, 'scope': module}
 
     @JointPoint(builtins.classmethod)
-## python2.7
+## python3.3
 ##     def default(
-##         cls, name, frame, default_caller=None, caller_arguments=(),
-##         caller_keywords={}
-##     ):
+##         cls: SelfClass, name: builtins.str, frame: types.FrameType,
+##         default_caller=None, caller_arguments=(), caller_keywords={}
+##     ) -> SelfClass:
     def default(
-        cls: SelfClass, name: builtins.str, frame: types.FrameType,
-        default_caller=None, caller_arguments=(), caller_keywords={}
-    ) -> SelfClass:
+        cls, name, frame, default_caller=None, caller_arguments=(),
+        caller_keywords={}
+    ):
 ##
         '''
             Serves a common way to extend a given module. The given module's \
@@ -2129,14 +2129,14 @@ class Module(Object):
         return cls
 
     @JointPoint(builtins.classmethod)
-## python2.7
+## python3.3
 ##     def default_package(
-##         cls, name, frame, command_line_arguments=(), *arguments, **keywords
-##     ):
+##         cls: SelfClass, name: builtins.str, frame: types.FrameType,
+##         *arguments: builtins.object, **keywords: builtins.object
+##     ) -> (builtins.tuple, builtins.bool):
     def default_package(
-        cls: SelfClass, name: builtins.str, frame: types.FrameType,
-        *arguments: builtins.object, **keywords: builtins.object
-    ) -> (builtins.tuple, builtins.bool):
+        cls, name, frame, command_line_arguments=(), *arguments, **keywords
+    ):
 ##
         '''
             Serves a common way to extend a given package. The given \
@@ -2173,11 +2173,11 @@ class Module(Object):
         # region protected
 
     @JointPoint(builtins.classmethod)
-## python2.7
-##     def _determine_object(cls, object):
-    def _determine_object(
-        cls: SelfClass, object: (builtins.type, builtins.object)
-    ) -> (builtins.object, builtins.type):
+## python3.3
+##     def _determine_object(
+##         cls: SelfClass, object: (builtins.type, builtins.object)
+##     ) -> (builtins.object, builtins.type):
+    def _determine_object(cls, object):
 ##
         '''Determines a potentially wrapped object.'''
         if(builtins.isinstance(JointPoint, builtins.type) and
@@ -2186,12 +2186,12 @@ class Module(Object):
         return object
 
     @JointPoint(builtins.classmethod)
-## python2.7
-##     def _get_module_file(cls, frame, module):
-    def _get_module_file(
-        cls: SelfClass, frame: (builtins.type(None), types.FrameType),
-        module: (builtins.type(None), types.ModuleType)
-    ) -> (Class, builtins.bool):
+## python3.3
+##     def _get_module_file(
+##         cls: SelfClass, frame: (builtins.type(None), types.FrameType),
+##         module: (builtins.type(None), types.ModuleType)
+##     ) -> (Class, builtins.bool):
+    def _get_module_file(cls, frame, module):
 ##
         '''
             Determines the file of a given module or frame context.
@@ -2220,14 +2220,14 @@ class Module(Object):
         return file
 
     @JointPoint(builtins.classmethod)
-## python2.7
+## python3.3
 ##     def _search_library_file(
-##         cls, location, context_path, only_source_files=False
-##     ):
+##         cls: SelfClass, location: Class, context_path: builtins.str,
+##         only_source_files: builtins.bool
+##     ) -> (builtins.str, builtins.bool):
     def _search_library_file(
-        cls: SelfClass, location: Class, context_path: builtins.str,
-        only_source_files: builtins.bool
-    ) -> (builtins.str, builtins.bool):
+        cls, location, context_path, only_source_files=False
+    ):
 ##
         '''
             Searches for full path to a given context path in given locations.
