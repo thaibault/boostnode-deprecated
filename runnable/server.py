@@ -81,8 +81,8 @@ for number in (3, 4):
     sys.path.append(os.path.abspath(sys.path[0] + number * ('..' + os.sep)))
 
 from boostNode.extension.file import Handler as FileHandler
-from boostNode.extension.native import Dictionary, Module, Object, \
-    PropertyInitializer, String
+from boostNode.extension.native import Module, Object, PropertyInitializer, \
+    String
 from boostNode.extension.output import Buffer, Print
 from boostNode.extension.system import CommandLine, Platform, Runnable
 ## python3.3 from boostNode.extension.type import Self
@@ -1605,7 +1605,8 @@ class CGIHTTPRequestHandler(
     def send_cookie(
         self, cookie, header='Set-Cookie',
         expires='Tue, 29-Mar-2014 19:30:42 GMT', max_age=2592000, version=1,
-        response_code=200
+        response_code=200, domain='', secure=False, httponly=False, comment='',
+        path='/'
     ):
 ##
         '''
@@ -1657,8 +1658,11 @@ class CGIHTTPRequestHandler(
             cookie = cookie_object
         cookie = re.compile('^[^:]+: *').sub(
             '', cookie.output()
-        ) + ';version="%s";expires=%s;Max-Age=%d' % (
-            builtins.str(version), expires, max_age)
+        ) + (
+            ';version="%s";expires=%s;max-age=%d;path=%s;comment=%s;'
+            'domain=%s%s%s' % (
+                builtins.str(version), expires, max_age, path, comment, domain,
+                ';secure' if secure else '', ';httponly' if httponly else ''))
         if not __test_mode__:
             self.send_response(response_code).send_header(header, cookie)
         return self
