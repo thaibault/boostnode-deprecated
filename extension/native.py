@@ -1460,15 +1460,25 @@ class Dictionary(Object, builtins.dict):
             # region getter methods
 
     @JointPoint(Class.pseudo_property)
-## python3.3     def get_immutable(self: Self) -> builtins.tuple:
-    def get_immutable(self):
+## python3.3     def get_immutable(self: Self, exclude=()) -> builtins.tuple:
+    def get_immutable(self, exclude=()):
         '''
             Generates an immutable copy of the current dictionary. Mutable \
             iterables are generally translated to sorted tuples.
+
+            **exclude** - A tuple of keys to ignore in resulting immutable.
+
+            Examples:
+
+            >>> Dictionary({'a': 'A', 'b': 'B'}).get_immutable(exclude=('a',))
+            (('b', 'B'),)
         '''
         immutable = copy.copy(self.content)
-        for key, value in immutable.items():
-            immutable[key] = self._immutable_helper(value)
+        for key, value in self.content.items():
+            if key in exclude:
+                del immutable[key]
+            else:
+                immutable[key] = self._immutable_helper(value, exclude)
         return builtins.tuple(builtins.sorted(
             immutable.items(), key=builtins.str))
 
@@ -1517,30 +1527,33 @@ class Dictionary(Object, builtins.dict):
     @JointPoint
 ## python3.3
 ##     def _immutable_helper(
-##         self: Self, value: (builtins.object, builtins.type)
+##         self: Self, value: (builtins.object, builtins.type),
+##         exclude: builtins.tuple
 ##     ) -> (builtins.object, builtins.type):
-    def _immutable_helper(self, value):
+    def _immutable_helper(self, value, exclude):
 ##
         '''
             Helper methods for potential immutable given value.
 
             Examples:
 
-            >>> Dictionary({})._immutable_helper({5: 'hans'})
+            >>> Dictionary({})._immutable_helper({5: 'hans'}, exclude=())
             ((5, 'hans'),)
 
-            >>> Dictionary({})._immutable_helper([5, 'hans'])
+            >>> Dictionary({})._immutable_helper([5, 'hans'], exclude=())
             (5, 'hans')
         '''
         if builtins.isinstance(value, builtins.dict):
-            value = self.__class__(content=value).immutable
+            value = self.__class__(content=value).get_immutable(exclude)
         elif(builtins.isinstance(value, collections.Iterable) and
              not builtins.isinstance(value, builtins.str)):
-            value = copy.copy(value)
+            value = builtins.list(copy.copy(value))
             for key, sub_value in builtins.enumerate(value):
-                value[key] = self._immutable_helper(value=sub_value)
-        if not (builtins.hasattr(value, '__hash__') and
-                builtins.callable(builtins.getattr(value, '__hash__'))):
+                value[key] = self._immutable_helper(
+                    value=sub_value, exclude=exclude)
+        if not (builtins.type(value) is builtins.type or
+                (builtins.hasattr(value, '__hash__') and
+                 builtins.callable(builtins.getattr(value, '__hash__')))):
             value = builtins.tuple(builtins.sorted(value, key=builtins.str))
         return value
 

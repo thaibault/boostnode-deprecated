@@ -179,6 +179,25 @@ class Parser(Class, Runnable):
              'type': builtins.str,
              'required': {'execute': '__initializer_default_value__ is None'},
              'help': 'Determines if a cached compiled version of template '
+                     'should be saved in given path. This make sense for big '
+                     'templates with more than 100 lines.',
+             'dest': 'cache_path',
+             'metavar': 'PATH'}},
+        {'arguments': ('-w', '--full-caching'),
+         'keywords': {
+             'action': 'store_true',
+             'default': {'execute': '__initializer_default_value__'},
+             'help': 'Only takes affect if a cache path is provided. It '
+                     'caches the complete template result. This makes sense '
+                     "if given scope variables doesn't change very often.",
+             'dest': 'full_caching'}},
+        {'arguments': ('-u', '--cache-path'),
+         'keywords': {
+             'action': 'store',
+             'default': {'execute': '__initializer_default_value__'},
+             'type': builtins.str,
+             'required': {'execute': '__initializer_default_value__ is None'},
+             'help': 'Determines if a cached compiled version of template '
                      'should be saved in given path.',
              'dest': 'cache_path',
              'metavar': 'PATH'}},
@@ -724,23 +743,62 @@ class Parser(Class, Runnable):
             Object of "Parser" with template "hans says...who the fu.. is ha...
 
             >>> Parser(
+            ...     'hans says\\n<% print("who the fu.. is hans?")',
+            ...     string=True, cache_path=__test_folder__, full_caching=True
+            ... ).render() # doctest: +ELLIPSIS
+            Object of "Parser" with template "hans says...who the fu.. is ha...
+
+            >>> Parser(
+            ...     'hans says\\n<% print("who the fu.. is hans?")',
+            ...     string=True, cache_path=__test_folder__, full_caching=True
+            ... ).render() # doctest: +ELLIPSIS
+            Object of "Parser" with template "hans says...who the fu.. is ha...
+
+            >>> file = FileHandler(__test_folder__.path + 'render')
+            >>> file.content = 'hans says\\n<% print("who the fu.. is hans?")'
+            >>> Parser(
+            ...     file, cache_path=__test_folder__, full_caching=True
+            ... ).render() # doctest: +ELLIPSIS
+            Object of "Parser" with template "hans says...who the fu.. is ha...
+
+            >>> Parser(
             ...     'hans says\\n<% end', string=True
             ... ).render() # doctest: +ELLIPSIS
             Object of "Parser" with template "hans says...<% end...
         '''
+        mapping.update(keywords)
         if self.cache:
+            if self.string:
+                template_hash = builtins.str(builtins.hash(self.content))
+            else:
+                template_hash = self.file.path.replace(os.sep, '_')
+            if self.full_caching:
+                full_cache_file = FileHandler(
+                    location='%s/%s.txt' % (
+                        FileHandler(
+                            location=self.cache.path + template_hash,
+                            make_directory=True
+                        ).path, builtins.str(
+                            builtins.hash(Dictionary(
+                                content=mapping
+                            ).get_immutable(exclude=('include', 'print'))))))
+                if full_cache_file:
+                    self._output.write(full_cache_file.content)
+                    return self
             cache_file = FileHandler(
-                location=self.cache.path + builtins.str(builtins.hash(
-                    self.content)))
+                location='%s%s.py' % (self.cache.path, template_hash))
             if cache_file:
                 self.rendered_content = cache_file.content
             else:
                 self.rendered_content = self._render_content()
                 cache_file.content = self.rendered_content
+            self._run_template(template_scope=mapping)
+            if self.full_caching:
+                full_cache_file.content = self.output
         else:
             self.rendered_content = self._render_content()
-        mapping.update(keywords)
-        return self._run_template(template_scope=mapping)
+            self._run_template(template_scope=mapping)
+        return self
 
     @JointPoint
 ## python3.3     def represent_rendered_content(self: Self) -> builtins.str:
@@ -842,8 +900,9 @@ class Parser(Class, Runnable):
     @JointPoint(PropertyInitializer)
 ## python3.3
 ##     def _initialize(
-##         self: Self, template: (builtins.str, FileHandler), cache_path=None,
-##         string=False, file_encoding=FileHandler.DEFAULT_ENCODING,
+##         self: Self, template: (builtins.str, FileHandler), string=False,
+##         cache_path=None, full_caching=False,
+##         file_encoding=FileHandler.DEFAULT_ENCODING,
 ##         placeholder_name_pattern='[a-zA-Z0-9_\[\]\'"\.()\\\\,\-+ :/={}]+',
 ##         command_line_placeholder_name_pattern='(?s)'
 ##                                               '[a-zA-Z0-9_\[\]\.(),\-+]+',
@@ -899,7 +958,7 @@ class Parser(Class, Runnable):
 ##         pretty_indent=False, **keywords: builtins.object
 ##     ) -> Self:
     def _initialize(
-        self, template, cache_path=False, string=None,
+        self, template, string=None, cache_path=False, full_caching=False,
         file_encoding=FileHandler.DEFAULT_ENCODING,
         placeholder_name_pattern='[a-zA-Z0-9_\[\]\'"\.()\\\\,\-+ :/={}]+',
         command_line_placeholder_name_pattern='(?s)'
@@ -1020,8 +1079,7 @@ class Parser(Class, Runnable):
 
                 # endregion
 
-        return self._set_builtins(self.builtin_names)._load_template(
-            template, string)
+        return self._set_builtins(self.builtin_names)._load_template()
 
             # endregion
 
@@ -1102,13 +1160,8 @@ class Parser(Class, Runnable):
         return keywords
 
     @JointPoint
-## python3.3
-##     def _load_template(
-##         self: Self, template: (builtins.str, FileHandler),
-##         string: builtins.bool
-##     ) -> Self:
-    def _load_template(self, template, string):
-##
+## python3.3     def _load_template(self: Self) -> Self:
+    def _load_template(self):
         '''
             Load the given template into ram for rendering.
 
@@ -1136,18 +1189,19 @@ class Parser(Class, Runnable):
             ...
             TemplateError: No suitable template found with given name "...".
         '''
-        if string:
-            self.content = template
+        if self.string:
+            self.content = self.template
         else:
             self.file = FileHandler(
-                location=template, encoding=self.file_encoding)
+                location=self.template, encoding=self.file_encoding)
             if not self.file.is_file():
                 self.file = FileHandler(
-                    location=template + '.tpl', encoding=self.file_encoding)
+                    location=self.template + '.tpl',
+                    encoding=self.file_encoding)
             if not self.file.is_file():
                 raise __exception__(
                     'No suitable template found with given name "%s" in '
-                    '"%s".', template, self.file.directory_path)
+                    '"%s".', self.template, self.file.directory_path)
             self.content = self.file.content
         self.native_template_object = native_string.Template(self.content)
         self.native_template_object.pattern = re.compile(
@@ -1173,8 +1227,16 @@ class Parser(Class, Runnable):
             >>> nested_file = FileHandler(
             ...     __test_folder__.path  + '_run_template_nested')
             >>> nested_file.content = (
-            ...     "<% include('" + nested_nested_file.name + "')")
+            ...     "<% include('" + nested_nested_file.name + "', **{})")
             >>> file = FileHandler(__test_folder__.path + '_run_template')
+
+            >>> Parser(
+            ...     '<% peter = 5\\n'
+            ...     "<% include('" + nested_nested_file.path + "', hans=5, "
+            ...     "locals=('peter',), full_caching=False)",
+            ...     string=True
+            ... ).render() # doctest: +ELLIPSIS
+            Object of "Parser" with template "...<% include('...', hans=5, ...
 
             >>> file.content = "<% include('" + nested_nested_file.name + "')"
             >>> Parser(file).render() # doctest: +IGNORE_EXCEPTION_DETAIL
@@ -1204,7 +1266,6 @@ class Parser(Class, Runnable):
             <BLANKLINE>
             1 | hans
             <BLANKLINE>
-
 
             >>> Parser(
             ...     "<% include('" + __test_folder__.path +
@@ -1533,27 +1594,38 @@ class Parser(Class, Runnable):
     @JointPoint
 ## python3.3
 ##     def _include(
-##         self: Self, template_file_path: builtins.str, scope={}, end='\n',
-##         indent=True, indent_space='', **keywords: builtins.object
+##         self: Self, template_file_path: builtins.str, scope={},
+##         locals=(), end='\n', full_caching=None, indent=True,
+##         indent_space='', **keywords: builtins.object
 ##     ) -> None:
     def _include(
-        self, template_file_path, scope={}, end='\n', indent=True,
-        indent_space='', **keywords
+        self, template_file_path, scope={}, locals=(), end='\n',
+        full_caching=None, indent=True, indent_space='', **keywords
     ):
 ##
         '''
             Performs a template include. This method is implemented for using \
             in template context.
         '''
+        '''NOTE: Force python to swap reference to default scope value.'''
+        scope = copy.copy(scope)
         scope.update(keywords)
+        for local in locals:
+            if sys.flags.optimize:
+                scope[local] = inspect.currentframe().f_back.f_locals[local]
+            else:
+                scope[local] = \
+                    inspect.currentframe().f_back.f_back.f_locals[local]
         root_path = ''
         if self.file:
             root_path = self.file.directory_path
         shortcut = self.template_context_default_indent
+        if full_caching is False:
+            full_caching = self.full_caching
         self._print(
             self.__class__(
                 template=root_path + template_file_path,
-                cache_path=self.cache_path,
+                cache_path=self.cache_path, full_caching=full_caching,
                 file_encoding=self.file_encoding,
                 placeholder_name_pattern=self.placeholder_name_pattern,
                 placeholder_pattern=self.placeholder_pattern,
@@ -1846,15 +1918,18 @@ class Parser(Class, Runnable):
             code_line[builtins.len('include('):]
         ).find_python_code_end_bracket()
         slice_position = builtins.len('include(') + length_of_include_call
-        if code_line[builtins.len('include('):slice_position]:
-            return(
-                'include(' +
-                code_line[builtins.len('include('):slice_position] +
-                ", indent_space='" + match.group('indent_code')[slice:] +
-                "')" + code_line[slice_position + 1:])
-        return(
-            "include(indent_space='" + match.group('indent_code')[slice:] +
-            "')" + code_line[slice_position + 1:])
+        indent_space = match.group('indent_code')[slice:]
+        arguments = code_line[builtins.len('include('):slice_position]
+        regex = re.compile('(?:, *)?\*\*[^ ]+$')
+        match = regex.search(arguments)
+        if match:
+            arguments = regex.sub('', arguments)
+        post_code = code_line[slice_position + 1:]
+        if arguments:
+            return("include(%s, indent_space='%s'%s)%s" % (
+                arguments, indent_space, match.group() if match else '',
+                post_code))
+        return("include(indent_space='%s')%s" % (indent_space, post_code))
 
     @JointPoint
 ## python3.3
