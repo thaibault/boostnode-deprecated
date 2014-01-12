@@ -709,9 +709,12 @@ class Parser(Class, Runnable):
     @JointPoint
 ## python3.3
 ##     def render(
-##         self: Self, mapping={}, **keywords: builtins.object
+##         self: Self, mapping={}, prevent_rendered_python_code=False,
+##         **keywords: builtins.object
 ##     ) -> Self:
-    def render(self, mapping={}, **keywords):
+    def render(
+        self, mapping={}, prevent_rendered_python_code=False, **keywords
+    ):
 ##
         '''
             Renders the template. Searches for python code snippets and \
@@ -788,21 +791,25 @@ class Parser(Class, Runnable):
             cache_file = FileHandler(
                 location='%s%s.py' % (self.cache.path, template_hash))
             if cache_file:
-                self.rendered_content = cache_file.content
+                self.rendered_python_code = cache_file.content
             else:
-                self.rendered_content = self._render_content()
-                cache_file.content = self.rendered_content
-            self._run_template(template_scope=mapping)
+                self.rendered_python_code = self._render_content()
+                cache_file.content = self.rendered_python_code
+            self._run_template(
+                prevent_rendered_python_code, template_scope=mapping)
             if self.full_caching:
                 full_cache_file.content = self.output
         else:
-            self.rendered_content = self._render_content()
-            self._run_template(template_scope=mapping)
+            self.rendered_python_code = self._render_content()
+            self._run_template(
+                prevent_rendered_python_code, template_scope=mapping)
         return self
 
     @JointPoint
-## python3.3     def represent_rendered_content(self: Self) -> builtins.str:
-    def represent_rendered_content(self):
+## python3.3
+##     def represent_rendered_python_code(self: Self) -> builtins.str:
+    def represent_rendered_python_code(self):
+##
         '''
             This method adds line numbers to rendered contend which is \
             visible if an template exception occurs in debug mode. Code \
@@ -810,43 +817,49 @@ class Parser(Class, Runnable):
 
             Examples:
 
-            >>> Parser('', string=True).represent_rendered_content()
+            >>> Parser('', string=True).represent_rendered_python_code()
             ''
 
-            >>> Parser('', string=True).render().represent_rendered_content()
+            >>> Parser(
+            ...     '', string=True
+            ... ).render().represent_rendered_python_code()
             ''
 
             >>> Parser('klaus', string=True).render(
-            ...     ).represent_rendered_content() # doctest: +ELLIPSIS
-            "\\nrendered content:\\n---...-\\n\\n1 | print('klaus', end='')\\n"
+            ...     ).represent_rendered_python_code() # doctest: +ELLIPSIS
+            "\\nrendered python code...-\\n\\n1 | print('klaus', end='')\\n"
         '''
-        self._number_of_rendered_content_lines = builtins.len(
-            String(self.rendered_content).readlines())
+        self._number_of_rendered_python_code_lines = builtins.len(
+            String(self.rendered_python_code).readlines())
 
         @JointPoint
 ## python3.3
-##         def replace_rendered_content_line(
+##         def replace_rendered_python_code_line(
 ##             match: builtins.type(re.compile('').match(''))
 ##         ) -> builtins.str:
-        def replace_rendered_content_line(match):
+        def replace_rendered_python_code_line(match):
 ##
             '''
                 Prepends a line numbers to given line matching object of \
                 rendered python code.
             '''
-            self._current_rendered_content_line_number += 1
+            self._current_rendered_python_code_line_number += 1
             number_of_whitspaces = builtins.len(builtins.str(
-                self._number_of_rendered_content_lines)
+                self._number_of_rendered_python_code_lines)
             ) - builtins.len(builtins.str(
-                self._current_rendered_content_line_number))
+                self._current_rendered_python_code_line_number))
             return number_of_whitspaces * ' ' + builtins.str(
-                self._current_rendered_content_line_number
+                self._current_rendered_python_code_line_number
             ) + ' | ' + match.group('line')
-        if self._number_of_rendered_content_lines:
-            return(
-                '\nrendered content:\n-----------------\n\n%s\n' % re.compile(
+        if self._number_of_rendered_python_code_lines:
+            headline = 'rendered python code of %s:' % (
+                self._determine_template_description())
+            return('\n%s\n%s\n\n%s\n' % (
+                headline, builtins.len(headline) * '-', re.compile(
                     '^(?P<line>.*)$', re.MULTILINE
-                ).sub(replace_rendered_content_line, self.rendered_content))
+                ).sub(
+                    replace_rendered_python_code_line,
+                    self.rendered_python_code)))
         return ''
 
             # endregion
@@ -1024,7 +1037,7 @@ class Parser(Class, Runnable):
         '''
             Holds the given template as rendered (runnable python code) string.
         '''
-        self.rendered_content = ''
+        self.rendered_python_code = ''
         '''Template file handler.'''
         self.file = None
         '''Indicates if last rendered code snippet was a full line.'''
@@ -1062,8 +1075,8 @@ class Parser(Class, Runnable):
             Saves needed informations give a line number to each rendered \
             content.
         '''
-        self._current_rendered_content_line_number = 0
-        self._number_of_rendered_content_lines = 0
+        self._current_rendered_python_code_line_number = 0
+        self._number_of_rendered_python_code_lines = 0
         '''Saves the output of running executed template.'''
         self._output = Buffer()
         '''
@@ -1211,8 +1224,11 @@ class Parser(Class, Runnable):
 
     @JointPoint
 ## python3.3
-##     def _run_template(self: Self, template_scope: builtins.dict) -> Self:
-    def _run_template(self, template_scope):
+##     def _run_template(
+##         self: Self, prevent_rendered_python_code: builtins.bool,
+##         template_scope: builtins.dict
+##     ) -> Self:
+    def _run_template(self, prevent_rendered_python_code, template_scope):
 ##
         '''
             Runs the compiled template in its given scope. All error will be \
@@ -1239,18 +1255,14 @@ class Parser(Class, Runnable):
             Object of "Parser" with template "...<% include('...', hans=5, ...
 
             >>> file.content = "<% include('" + nested_nested_file.name + "')"
-            >>> Parser(file).render() # doctest: +IGNORE_EXCEPTION_DETAIL
+            >>> Parser(file).render(
+            ...     prevent_rendered_python_code=True
+            ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
             TemplateError: Error with "..._run_template" in include statemen...
             TemplateError: Error with "..._run_template_nested_nested" in ...
             NameError: Name "hans" is not defined
-            <BLANKLINE>
-            rendered content:
-            -----------------
-            <BLANKLINE>
-            1 | hans
-            <BLANKLINE>
 
             >>> file.content = "<% include('" + nested_file.name + "')"
             >>> Parser(file).render() # doctest: +IGNORE_EXCEPTION_DETAIL
@@ -1261,8 +1273,8 @@ class Parser(Class, Runnable):
             TemplateError: Error with "..._run_template_nested_nested" in ...
             NameError: Name "hans" is not defined
             <BLANKLINE>
-            rendered content:
-            -----------------
+            rendered python code ...:
+            ---------------------...
             <BLANKLINE>
             1 | hans
             <BLANKLINE>
@@ -1276,8 +1288,8 @@ class Parser(Class, Runnable):
             ...
             TemplateError: Error with given template string in include ...
             TemplateError: No suitable template found with given name "...
-            rendered content:
-            -----------------
+            rendered python code ...:
+            ---------------------...
             <BLANKLINE>
             1 | include('..._run_template_not_existing', indent_space='')
             <BLANKLINE>
@@ -1285,38 +1297,37 @@ class Parser(Class, Runnable):
         template_scope.update({'__builtins__': self.builtins})
         try:
 ## python3.3
-##             builtins.exec(self.rendered_content, template_scope)
-            exec(self.rendered_content, template_scope)
+##             builtins.exec(self.rendered_python_code, template_scope)
+            exec(self.rendered_python_code, template_scope)
 ##
         except __exception__ as exception:
             '''Propagate nested template exceptions.'''
             '''
                 NOTE: We only want to show one rendered content representation.
             '''
-            rendered_content = ''
-            if(__test_mode__ or sys.flags.debug or
-               __logger__.isEnabledFor(logging.DEBUG)) and not (
-                    builtins.hasattr(exception, 'rendered_content') and
-                    exception.rendered_content):
-                rendered_content = self.represent_rendered_content()
             source_line, mapped_line = self._get_exception_line(exception)
+            rendered_python_code = ''
+            if not prevent_rendered_python_code and (
+                __test_mode__ or sys.flags.debug or
+                __logger__.isEnabledFor(logging.DEBUG)
+            ):
+                rendered_python_code = self.represent_rendered_python_code()
 ## python3.3
 ##             exception = __exception__(
 ##                 'Error with %s in include statement in line %s '
 ##                 '(line in compiled template: %s).\n%s: %s%s',
 ##                 self._determine_template_description(),
 ##                 source_line, mapped_line, __exception__.__name__,
-##                 builtins.str(exception), rendered_content)
+##                 builtins.str(exception), rendered_python_code)
+##             raise exception from None
             exception = __exception__(
                 'Error with %s in include statement in line %s '
                 '(line in compiled template: %s).\n%s: %s%s',
                 self._determine_template_description(),
                 source_line, mapped_line, __exception__.__name__,
-                builtins.str(exception), rendered_content)
-##
-            exception.rendered_content = rendered_content
-## python3.3             raise exception from None
+                builtins.str(exception), rendered_python_code)
             raise exception
+##
         except builtins.BaseException as exception:
             line_info, exception_message, native_exception_description = \
                 self._handle_template_exception(exception)
@@ -1403,11 +1414,11 @@ class Parser(Class, Runnable):
 ##         exception_message: builtins.str,
 ##         native_exception_description: builtins.str,
 ##         native_exception: builtins.BaseException,
-##         prevent_rendered_content=False
+##         prevent_rendered_python_code=False
 ##     ) -> None:
     def _raise_template_exception(
         self, line_info, exception_message, native_exception_description,
-        native_exception, prevent_rendered_content=False
+        native_exception, prevent_rendered_python_code=False
     ):
 ##
         '''
@@ -1425,35 +1436,34 @@ class Parser(Class, Runnable):
             TemplateError: Error with given template string.
             <BLANKLINE>
         '''
-        rendered_content = ''
-        if not prevent_rendered_content and (
+        rendered_python_code = ''
+        if not prevent_rendered_python_code and (
             __test_mode__ or sys.flags.debug or
             __logger__.isEnabledFor(logging.DEBUG)
         ):
-            rendered_content = self.represent_rendered_content()
+            rendered_python_code = self.represent_rendered_python_code()
 ## python3.3
 ##         exception = __exception__(
 ##             'Error with {template_description}{line_info}.\n'
 ##             '{exception_message}{native_exception_description}'
-##             '{rendered_content}'.format(
+##             '{rendered_python_code}'.format(
 ##                 template_description=self._determine_template_description(),
 ##                 line_info=line_info,
 ##                 exception_message=exception_message,
 ##                 native_exception_description=native_exception_description,
-##                 rendered_content=rendered_content))
+##                 rendered_python_code=rendered_python_code))
+##         raise exception from None
         exception = __exception__(
             'Error with {template_description}{line_info}.\n'
             '{exception_message}{native_exception_description}'
-            '{rendered_content}'.format(
+            '{rendered_python_code}'.format(
                 template_description=self._determine_template_description(),
                 line_info=line_info,
                 exception_message=exception_message,
                 native_exception_description=native_exception_description,
-                rendered_content=rendered_content))
-##
-        exception.rendered_content = rendered_content
-## python3.3         raise exception from None
+                rendered_python_code=rendered_python_code))
         raise exception
+##
 
     @JointPoint
 ## python3.3
@@ -1676,8 +1686,8 @@ class Parser(Class, Runnable):
             ...
             TemplateError: Error with given template string in line 2 (line ...
             IndentationError: Expected an indented block (<string>, line 2)
-            rendered content:
-            -----------------
+            rendered python code ...:
+            ---------------------...
             <BLANKLINE>
             1 | if True:
             2 | print(str(hans), end='')
@@ -1692,8 +1702,8 @@ class Parser(Class, Runnable):
             ...
             TemplateError: Error with given template string in line 1 (line ...
             TypeError: _include() takes at least 2 arguments (2 given)
-            rendered content:
-            -----------------
+            rendered python code ...:
+            ---------------------...
             <BLANKLINE>
             1 | include(indent_space='')
             <BLANKLINE>

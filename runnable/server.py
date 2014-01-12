@@ -1601,7 +1601,7 @@ class CGIHTTPRequestHandler(
 ##         cookie: (cookies.SimpleCookie, builtins.str, builtins.dict),
 ##         header='Set-Cookie', max_age_in_seconds=60 * 60 * 24 * 7,
 ##         version=1, domain='', secure=False, httponly=False, comment='',
-##         path='/',  response_code=200
+##         path='/', response_code=200
 ##     ) -> Self:
     def send_cookie(
         self, cookie, header='Set-Cookie',
