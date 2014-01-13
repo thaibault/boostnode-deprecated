@@ -1606,25 +1606,30 @@ class Parser(Class, Runnable):
 ##     def _include(
 ##         self: Self, template_file_path: builtins.str, scope={},
 ##         locals=(), end='\n', full_caching=None, indent=True,
-##         indent_space='', **keywords: builtins.object
-##     ) -> None:
+##         indent_space='', scope_reference={}, **keywords: builtins.object
+##     ) -> builtins.dict:
     def _include(
         self, template_file_path, scope={}, locals=(), end='\n',
-        full_caching=None, indent=True, indent_space='', **keywords
+        full_caching=None, indent=True, indent_space='', scope_reference={},
+        **keywords
     ):
 ##
         '''
             Performs a template include. This method is implemented for using \
             in template context.
         '''
-        '''NOTE: Force python to swap reference to default scope value.'''
-        scope = copy.copy(scope)
-        scope.update(keywords)
+        '''
+            NOTE: Force python to swap reference to default scope value.
+            This enables a real namespace for included files.
+        '''
+        internal_scope = copy.copy(scope)
+        internal_scope.update(keywords)
         for local in locals:
             if sys.flags.optimize:
-                scope[local] = inspect.currentframe().f_back.f_locals[local]
+                internal_scope[local] = \
+                    inspect.currentframe().f_back.f_locals[local]
             else:
-                scope[local] = \
+                internal_scope[local] = \
                     inspect.currentframe().f_back.f_back.f_locals[local]
         root_path = ''
         if self.file:
@@ -1646,8 +1651,9 @@ class Parser(Class, Runnable):
                 template_context_default_indent=shortcut,
                 builtin_names=self.builtin_names,
                 pretty_indent=self.pretty_indent
-            ).render(mapping=scope).output,
+            ).render(mapping=internal_scope).output,
             end=end, indent=indent, indent_space=indent_space)
+        return internal_scope
 
             # endregion
 
