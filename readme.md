@@ -83,20 +83,20 @@ Features
         <ul>
             <li>
                 Always compatible to newest stable python release with latest
-                features included.
+                features included
                 <!--deDE:
                     Immer kompatibel zum neusten stabilen Python-Release
-                    mit den neusten Features integriert.
+                    mit den neusten Features integriert
                 -->
             </li>
             <li>
                 Always compatible to last major stable python release. You can
                 switch between both versions via the embedded macro languages
-                (see runnabel/macro.py).
+                (see runnabel/macro.py)
                 <!--deDE:
-                    Immer kompatibel zum letzten stabilen Python-Release.
+                    Immer kompatibel zum letzten stabilen Python-Release
                     Der zu unterstützende Interpreter kann von dem Framework
-                    selbst gewechselt werdne (siehe runnable/macro.py).
+                    selbst gewechselt werden (siehe runnable/macro.py).
                 -->
             </li>
         </ul>
