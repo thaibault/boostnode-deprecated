@@ -970,8 +970,8 @@ class Parser(Class, Runnable):
 ##         pretty_indent=False, **keywords
 ##     ):
     def _initialize(
-        self: Self, template: (builtins.str, FileHandler), string=False,
-        cache_path=None, full_caching=False,
+        self: Self, template: (builtins.str, FileHandler), string=None,
+        cache_path=False, full_caching=False,
         file_encoding=FileHandler.DEFAULT_ENCODING,
         placeholder_name_pattern='[a-zA-Z0-9_\[\]\'"\.()\\\\,\-+ :/={}]+',
         command_line_placeholder_name_pattern='(?s)'
