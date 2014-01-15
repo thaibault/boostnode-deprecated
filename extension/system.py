@@ -723,8 +723,9 @@ class Platform(builtins.object):
         application down.
     '''
     UNIX_OPEN_APPLICATIONS = (
-        'gnome-open', 'kde-open', 'xdg-open', 'gedit', 'mousepad', 'gvim',
-        'vim', 'emacs', 'nano', 'vi', 'less', 'cat')
+        'openPath', 'gnome-open', 'kde-open', 'gvfs-open', 'exo-open',
+        'xdg-open', 'gedit', 'mousepad', 'gvim', 'vim', 'emacs', 'nano', 'vi',
+        'less', 'cat')
     '''Saves a list of known unix commands to open a specified file.'''
     operating_system = 'unknown'
     '''Saves the current operating system type.'''
