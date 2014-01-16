@@ -263,14 +263,14 @@ command:
 >>> /path/to/boostNode/runnable/macro.py -p /path/to/boostNode -e py
 ```
 
-Note that you have to temporary support the needed python environment
-of given boostNode version to convert to the other one.
-Writing own code supporting two different interpreter version is very easy.
-Follow one of the two following syntax examples:
+Note that you have to temporary support the needed python environment of given
+boostNode version to convert to the other one. Writing own code supporting two
+different interpreter version is very easy. Follow one of the two following
+syntax examples:
 <!--deDE:
-    Zu beachten ist, dass man temporär die aktuelle Interpreter Version
-    zur Verfügung stellen muss, um den Wechsel vorzunehmen. Um eigenen Code
-    zu schreiben, der verschiedene Interpreterversionen unterstützt sollte man
+    Zu beachten ist, dass man temporär die aktuelle Interpreter Version zur
+    Verfügung stellen muss, um den Wechsel vorzunehmen. Um eigenen Code zu
+    schreiben, der verschiedene Interpreterversionen unterstützt sollte man
     einen der beiden folgenden Syntax verwenden.
 -->
 
