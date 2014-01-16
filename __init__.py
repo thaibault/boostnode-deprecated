@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.3
 # -*- coding: utf-8 -*-
 
 # region vim modline
@@ -263,12 +263,12 @@ Module pattern (see bc16)
     ... # region header
     ...
     ... '''
-    ...     Module documentation which should be useable as help message for
-    ...     modules which supports command line interfaces
+    ...     Module documentation which should be useable as help message for \
+    ...     modules which supports command line interfaces \
     ...     (see Runnable implementation interface).
     ... '''
     ... '''
-    ...     For conventions see "boostNode/__init__.py" on
+    ...     For conventions see "boostNode/__init__.py" on \
     ...     https://github.com/thaibault/boostNode
     ... '''
     ...
@@ -295,16 +295,40 @@ Module pattern (see bc16)
     ...
     ... # endregion
     ...
+    ...
     ... # region functions
     ...
     ... def main():
-    ...     builtins.print('Hello world!')
+    ...     '''Description of this method.'''
+    ...     builtins.print('Program started...')
     ...
     ... # endregion
     ...
+    ... # region classes
+    ...
+    ... class testClass:
+    ...
+    ...     '''Description of this class.'''
+    ...
+    ...     def __init__(self):
+    ...         '''Description of the initializer method.'''
+    ...         print('A class was initialized.')
+    ...
     ... # region footer
     ...
-    ... CommandLine.package(name=__name__, frame=inspect.currentframe())
+    ... '''
+    ...     Preset some variables given by introspection letting the linter \
+    ...     know what globale variables are available.
+    ... '''
+    ... __logger__ = __exception__ = __module_name__ = __file_path__ = \
+    ...    __test_mode__ = __test_buffer__ = __test_folder__ = \
+    ...    __test_globals__ = None
+    ... '''
+    ...     Extends this module with some magic environment variables to \
+    ...     provide better introspection support. A generic command line \
+    ...     interface for some code preprocessing tools is provided by default.
+    ... '''
+    ... Module.default(name=__name__, frame=inspect.currentframe())
     ...
     ... # endregion
 """
@@ -320,8 +344,8 @@ __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-## python3.3 import builtins
-import __builtin__ as builtins
+## python2.7 import __builtin__ as builtins
+import builtins
 import inspect
 import logging
 import os
@@ -335,8 +359,8 @@ sys.path.append(os.path.abspath(sys.path[0] + 2 * ('..' + os.sep)))
 # region functions
 
 
-## python3.3 def __get_all_modules__(path=sys.path[0]) -> builtins.list:
-def __get_all_modules__(path=sys.path[0]):
+## python2.7 def __get_all_modules__(path=sys.path[0]):
+def __get_all_modules__(path=sys.path[0]) -> builtins.list:
     '''
         This method provides a generic way to determine all modules in \
         current package or folder. It is useful for "__init__.py" files.

@@ -291,16 +291,19 @@ syntax examples:
     ## interpreterB functionCall();
     functionCall()
 
-Have Fun with boostNode!<!--deDE:Viel Spass mit boostNode!-->
+Have Fun with boostNode!
+<!--deDE:Viel Spass mit boostNode!-->
 
 <!--|deDE:Urheberrecht-->
 Copyright
 ---------
 
-see header in ./\_\_init\_\_.py<!--deDE:Siehe Header in ./\_\_init\_\_.py-->
+see header in ./\_\_init\_\_.py
+<!--deDE:Siehe Header in ./\_\_init\_\_.py-->
 
 <!--|deDE:Lizenz-->
 License
 -------
 
-see header in ./\_\_init\_\_.py<!--deDE:Siehe Header in ./\_\_init\_\_.py-->
+see header in ./\_\_init\_\_.py
+<!--deDE:Siehe Header in ./\_\_init\_\_.py-->
