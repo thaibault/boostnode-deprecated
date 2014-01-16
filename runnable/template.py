@@ -151,6 +151,13 @@ class Parser(Class, Runnable):
         Object of "Parser" with template "hans <%placeholder%>".
         >>> template.output
         'hans also hans'
+
+        >>> Parser(
+        ...     "<% include('', **{})", string=True
+        ... ).render() # doctest: +IGNORE_EXCEPTION_DETAIL
+        Traceback (most recent call last):
+        ...
+        boostNode.extension.native.TemplateError: Error with given template ...
     '''
 
     # region properties
@@ -191,6 +198,13 @@ class Parser(Class, Runnable):
                      'caches the complete template result. This makes sense '
                      "if given scope variables doesn't change very often.",
              'dest': 'full_caching'}},
+        {'arguments': ('-y', '-propagate-full-caching'),
+         'keywords': {
+             'action': 'store_true',
+             'default': {'execute': '__initializer_default_value__'},
+             'help': 'Indicates if an activated full caching should be '
+                     'propagated to nested template includes.',
+             'dest': 'propagate_full_caching'}},
         {'arguments': ('-u', '--cache-path'),
          'keywords': {
              'action': 'store',
@@ -914,7 +928,7 @@ class Parser(Class, Runnable):
 ## python3.3
 ##     def _initialize(
 ##         self: Self, template: (builtins.str, FileHandler), string=None,
-##         cache_path=False, full_caching=False,
+##         cache_path=None, full_caching=False, propagate_full_caching=False,
 ##         file_encoding=FileHandler.DEFAULT_ENCODING,
 ##         placeholder_name_pattern='[a-zA-Z0-9_\[\]\'"\.()\\\\,\-+ :/={}]+',
 ##         command_line_placeholder_name_pattern='(?s)'
@@ -971,7 +985,8 @@ class Parser(Class, Runnable):
 ##         pretty_indent=False, **keywords: builtins.object
 ##     ) -> Self:
     def _initialize(
-        self, template, string=None, cache_path=False, full_caching=False,
+        self, template, string=None, cache_path=None, full_caching=False,
+        propagate_full_caching=False,
         file_encoding=FileHandler.DEFAULT_ENCODING,
         placeholder_name_pattern='[a-zA-Z0-9_\[\]\'"\.()\\\\,\-+ :/={}]+',
         command_line_placeholder_name_pattern='(?s)'
@@ -1250,6 +1265,23 @@ class Parser(Class, Runnable):
             ...     '<% peter = 5\\n'
             ...     "<% include('" + nested_nested_file.path + "', hans=5, "
             ...     "locals=('peter',), full_caching=False)",
+            ...     string=True
+            ... ).render() # doctest: +ELLIPSIS
+            Object of "Parser" with template "...<% include('...', hans=5, ...
+
+            >>> Parser(
+            ...     '<% peter = 5\\n'
+            ...     "<% include('" + nested_nested_file.path + "', hans=5, "
+            ...     "locals=('peter',), full_caching=False, "
+            ...     "propagate_full_caching=False)",
+            ...     string=True
+            ... ).render() # doctest: +ELLIPSIS
+            Object of "Parser" with template "...<% include('...', hans=5, ...
+
+            >>> Parser(
+            ...     '<% peter = 5\\n'
+            ...     "<% include('" + nested_nested_file.path + "', hans=5, "
+            ...     "locals=('peter',), propagate_full_caching=True)",
             ...     string=True
             ... ).render() # doctest: +ELLIPSIS
             Object of "Parser" with template "...<% include('...', hans=5, ...
@@ -1605,12 +1637,14 @@ class Parser(Class, Runnable):
 ## python3.3
 ##     def _include(
 ##         self: Self, template_file_path: builtins.str, scope={},
-##         locals=(), end='\n', full_caching=None, indent=True,
-##         indent_space='', scope_reference={}, **keywords: builtins.object
+##         locals=(), end='\n', full_caching=None, propagate_full_caching=None,
+##         indent=True, indent_space='', scope_reference={},
+##         **keywords: builtins.object
 ##     ) -> builtins.dict:
     def _include(
         self, template_file_path, scope={}, locals=(), end='\n',
-        full_caching=None, indent=True, indent_space='', scope_reference={},
+        full_caching=None, propagate_full_caching=None, indent=True,
+        indent_space='', scope_reference={},
         **keywords
     ):
 ##
@@ -1635,12 +1669,17 @@ class Parser(Class, Runnable):
         if self.file:
             root_path = self.file.directory_path
         shortcut = self.template_context_default_indent
+        if propagate_full_caching is None:
+            propagate_full_caching = self.propagate_full_caching
         if full_caching is None:
-            full_caching = self.full_caching
+            full_caching = False
+            if propagate_full_caching:
+                full_caching = self.full_caching
         self._print(
             self.__class__(
                 template=root_path + template_file_path,
                 cache_path=self.cache_path, full_caching=full_caching,
+                propagate_full_caching=propagate_full_caching,
                 file_encoding=self.file_encoding,
                 placeholder_name_pattern=self.placeholder_name_pattern,
                 placeholder_pattern=self.placeholder_pattern,
