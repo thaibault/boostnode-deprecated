@@ -205,7 +205,7 @@ Features
         (see extension/system.py and extension/output.py).
         <!--deDE:
             Sehr generischer Featurereiches
-            Commandline-Argumenten-Pars-Interface, das auf Pythons nativem
+            Commandline-Argumenten-Pars-Interface, das auf Pythons nativen
             "ArgumentParser" Modul aufsetzt
             (see extension/system.py und extension/output.py).
         -->
