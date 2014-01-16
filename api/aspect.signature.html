@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -15,7 +13,7 @@
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
+        URL_ROOT:    './',
         VERSION:     '1.0 rc',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
@@ -57,10 +55,26 @@
   <div class="section" id="module-boostNode.aspect.signature">
 <span id="boostnode-aspect-signature"></span><h1>boostNode.aspect.signature<a class="headerlink" href="#module-boostNode.aspect.signature" title="Permalink to this headline">¶</a></h1>
 <p>This module provides functions for checking function call&#8217;s against a     given signature.</p>
-<dl class="attribute">
+<dl class="class">
 <dt id="boostNode.aspect.signature.Check">
-<tt class="descclassname">boostNode.aspect.signature.</tt><tt class="descname">Check</tt><a class="headerlink" href="#boostNode.aspect.signature.Check" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">boostNode.aspect.signature.</tt><tt class="descname">Check</tt><big>(</big><em>method</em>, <em>function=None</em><big>)</big><a class="headerlink" href="#boostNode.aspect.signature.Check" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class is needed to be compatible with future implementations.</p>
+<dl class="staticmethod">
+<dt id="boostNode.aspect.signature.Check.get_wrapper_function">
+<em class="property">static </em><tt class="descname">get_wrapper_function</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.aspect.signature.Check.get_wrapper_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dummy method to be compatible to newer features.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">a</span><span class="p">(</span><span class="n">a</span><span class="p">):</span> <span class="k">return</span> <span class="n">a</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Check</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">get_wrapper_function</span><span class="p">()</span> 
+<span class="go">&lt;function a at ...&gt;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Check</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">get_wrapper_function</span><span class="p">()(</span><span class="mi">5</span><span class="p">)</span>
+<span class="go">5</span>
+</pre></div>
+</div>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -192,7 +206,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2013, Torben Sickert.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.
     </div>
   </body>
 </html>
