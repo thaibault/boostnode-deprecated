@@ -52,8 +52,54 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="boostnode-paradigm-objectorientation">
-<h1>boostNode.paradigm.objectOrientation<a class="headerlink" href="#boostnode-paradigm-objectorientation" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-boostNode.paradigm.objectOrientation">
+<span id="boostnode-paradigm-objectorientation"></span><h1>boostNode.paradigm.objectOrientation<a class="headerlink" href="#module-boostNode.paradigm.objectOrientation" title="Permalink to this headline">¶</a></h1>
+<p>This module implements features like getter and setter methods for     implementing object orientated code.</p>
+<dl class="class">
+<dt id="boostNode.paradigm.objectOrientation.Class">
+<em class="property">class </em><tt class="descclassname">boostNode.paradigm.objectOrientation.</tt><tt class="descname">Class</tt><a class="headerlink" href="#boostNode.paradigm.objectOrientation.Class" title="Permalink to this definition">¶</a></dt>
+<dd><p>The main class which is intended for passing on other class. It         serves a scope for one application to minimize conflicts with other         classes in the global scope.</p>
+<dl class="method">
+<dt id="boostNode.paradigm.objectOrientation.Class.is_method">
+<tt class="descname">is_method</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#boostNode.paradigm.objectOrientation.Class.is_method" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines if the given class attribute is a callable method or             something else.</p>
+<p><strong>name</strong> - function name to check</p>
+<p>Returns &#8220;True&#8221; if the given attribute is a method or &#8220;False&#8221;             otherwise.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Class</span><span class="p">()</span><span class="o">.</span><span class="n">is_method</span><span class="p">(</span><span class="s">&#39;is_method&#39;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Class</span><span class="p">()</span><span class="o">.</span><span class="n">is_method</span><span class="p">(</span><span class="s">&#39;not existing&#39;</span><span class="p">)</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="boostNode.paradigm.objectOrientation.Class.is_property">
+<tt class="descname">is_property</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#boostNode.paradigm.objectOrientation.Class.is_property" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines if the given class attribute is a property or             something else.</p>
+<p><strong>name</strong> - property name to check</p>
+<p>Returns &#8220;True&#8221; if the given attribute is a property or &#8220;False&#8221;             otherwise.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Class</span><span class="p">()</span><span class="o">.</span><span class="n">is_property</span><span class="p">(</span><span class="s">&#39;is_property&#39;</span><span class="p">)</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Class</span><span class="o">.</span><span class="n">test</span> <span class="o">=</span> <span class="s">&#39;A&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Class</span><span class="p">()</span><span class="o">.</span><span class="n">is_property</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="boostNode.paradigm.objectOrientation.Class.pseudo_property">
+<em class="property">classmethod </em><tt class="descname">pseudo_property</tt><big>(</big><em>function</em><big>)</big><a class="headerlink" href="#boostNode.paradigm.objectOrientation.Class.pseudo_property" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attaches a property to given function for indicating that given             function handles read access to corresponding property.</p>
+<p><strong>function</strong> - Function which should act as property.</p>
+<p>Returns given function to be usable as decorator.</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 

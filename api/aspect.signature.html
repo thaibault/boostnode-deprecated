@@ -52,8 +52,104 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="boostnode-aspect-signature">
-<h1>boostNode.aspect.signature<a class="headerlink" href="#boostnode-aspect-signature" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-boostNode.aspect.signature">
+<span id="boostnode-aspect-signature"></span><h1>boostNode.aspect.signature<a class="headerlink" href="#module-boostNode.aspect.signature" title="Permalink to this headline">¶</a></h1>
+<p>This module provides functions for checking function call&#8217;s against a     given signature.</p>
+<dl class="class">
+<dt id="boostNode.aspect.signature.Check">
+<em class="property">class </em><tt class="descclassname">boostNode.aspect.signature.</tt><tt class="descname">Check</tt><big>(</big><em>method</em>, <em>function=None</em><big>)</big><a class="headerlink" href="#boostNode.aspect.signature.Check" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is needed to be compatible with future implementations.</p>
+<dl class="staticmethod">
+<dt id="boostNode.aspect.signature.Check.get_wrapper_function">
+<em class="property">static </em><tt class="descname">get_wrapper_function</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.aspect.signature.Check.get_wrapper_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dummy method to be compatible to newer features.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">a</span><span class="p">(</span><span class="n">a</span><span class="p">):</span> <span class="k">return</span> <span class="n">a</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Check</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">get_wrapper_function</span><span class="p">()</span> 
+<span class="go">&lt;function a at ...&gt;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Check</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">get_wrapper_function</span><span class="p">()(</span><span class="mi">5</span><span class="p">)</span>
+<span class="go">5</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="boostNode.aspect.signature.CheckObject">
+<em class="property">class </em><tt class="descclassname">boostNode.aspect.signature.</tt><tt class="descname">CheckObject</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.aspect.signature.CheckObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks a function call against a given specification. This class         serves as helper class.</p>
+<dl class="attribute">
+<dt id="boostNode.aspect.signature.CheckObject.class_object">
+<tt class="descname">class_object</tt><em class="property"> = None</em><a class="headerlink" href="#boostNode.aspect.signature.CheckObject.class_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves informations in which way the give method is used. It could by something like &#8220;builtins.staticmethod&#8221; or &#8220;builtins.classmethod&#8221;.</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="boostNode.aspect.signature.CheckObject.get_function_path">
+<em class="property">static </em><tt class="descname">get_function_path</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.aspect.signature.CheckObject.get_function_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an object depended function description.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">test</span><span class="p">():</span> <span class="k">pass</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">A</span><span class="p">(</span><span class="n">CheckObject</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="nb">getattr</span><span class="p">(</span>
+<span class="gp">... </span>            <span class="nb">super</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="p">,</span> <span class="bp">self</span><span class="p">),</span> <span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span>
+<span class="gp">... </span>        <span class="p">)()</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">__func__</span> <span class="o">=</span> <span class="n">test</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">_method_type</span> <span class="o">=</span> <span class="nb">staticmethod</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">test</span><span class="p">():</span> <span class="k">pass</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">A</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">get_function_path</span><span class="p">()</span>
+<span class="go">&#39;test&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">__func__</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">test</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">class_object</span> <span class="o">=</span> <span class="n">A</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">get_function_path</span><span class="p">()</span>
+<span class="go">&#39;A.test&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="boostNode.aspect.signature.CheckObject.object">
+<tt class="descname">object</tt><em class="property"> = None</em><a class="headerlink" href="#boostNode.aspect.signature.CheckObject.object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves informations in which way the give method is used. It could by something like &#8220;builtins.staticmethod&#8221; or &#8220;builtins.classmethod&#8221;.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="boostNode.aspect.signature.CheckReturnValue">
+<em class="property">class </em><tt class="descclassname">boostNode.aspect.signature.</tt><tt class="descname">CheckReturnValue</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.aspect.signature.CheckReturnValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks return value from a function again their specification.</p>
+<dl class="method">
+<dt id="boostNode.aspect.signature.CheckReturnValue.aspect">
+<tt class="descname">aspect</tt><big>(</big><big>)</big><a class="headerlink" href="#boostNode.aspect.signature.CheckReturnValue.aspect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks the given return value.</p>
+<p>Returns the original value of the given wrapped function if             everything goes right.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">pass</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">CheckReturnValue</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">A</span><span class="p">,</span> <span class="n">A</span><span class="p">(),</span> <span class="n">A</span><span class="o">.</span><span class="n">__init__</span><span class="p">,</span> <span class="p">(</span><span class="n">A</span><span class="p">(),),</span> <span class="p">{},</span> <span class="n">return_value</span><span class="o">=</span><span class="s">&#39;hans&#39;</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">aspect</span><span class="p">()</span>
+<span class="go">&#39;hans&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 

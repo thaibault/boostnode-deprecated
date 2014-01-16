@@ -52,8 +52,30 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="boostnode-runnable-coderunner">
-<h1>boostNode.runnable.codeRunner<a class="headerlink" href="#boostnode-runnable-coderunner" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-boostNode.runnable.codeRunner">
+<span id="boostnode-runnable-coderunner"></span><h1>boostNode.runnable.codeRunner<a class="headerlink" href="#module-boostNode.runnable.codeRunner" title="Permalink to this headline">¶</a></h1>
+<p>This module provides an easy way to compile, run and clean up a various     number of scripts.</p>
+<dl class="class">
+<dt id="boostNode.runnable.codeRunner.Run">
+<em class="property">class </em><tt class="descclassname">boostNode.runnable.codeRunner.</tt><tt class="descname">Run</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.codeRunner.Run" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class provides a large number of supported programming languages         support for compiling, running and cleaning after running.
+Determines a code file to run and runs them in its own thread by         piping all outputs through the command line interface.</p>
+<p><strong>code_file_path</strong>           - A given code file handler or path                                        which should be run.</p>
+<p><strong>default_command_sequence</strong> - A default command sequence which                                        should be executed in given order.</p>
+<dl class="attribute">
+<dt id="boostNode.runnable.codeRunner.Run.COMMAND_LINE_ARGUMENTS">
+<tt class="descname">COMMAND_LINE_ARGUMENTS</tt><em class="property"> = ({'keywords': {'help': 'Select a file for running.', 'default': {'execute': '__initializer_default_value__'}, 'required': {'execute': '__initializer_default_value__ is None'}, 'dest': 'code_file_path', 'action': 'store', 'type': {'execute': 'type(__initializer_default_value__)'}, 'metavar': 'FILE_PATH'}, 'arguments': ('-f', '--code-file')}, {'keywords': {'dest': 'default_command_sequence', 'default': {'execute': '__initializer_default_value__'}, 'help': {'execute': '\'Select a default sequence of things to do with code files (default: &quot;%s&quot;).\' % \'&quot;, &quot;\'.join(__initializer_default_value__)'}, 'action': 'store', 'type': &lt;type 'str'&gt;, 'required': {'execute': '__initializer_default_value__ is None'}, 'nargs': '*', 'metavar': 'COMMAND'}, 'arguments': ('-d', '--default-command-sequence')}, {'keywords': {'action': 'store_true', 'default': False, 'dest': 'meta_help', 'help': 'Shows this help message.'}, 'arguments': ('-n', '--runner-meta-help')})</em><a class="headerlink" href="#boostNode.runnable.codeRunner.Run.COMMAND_LINE_ARGUMENTS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Holds all command line interface argument informations.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="boostNode.runnable.codeRunner.Run.SUPPORTED_CODES">
+<tt class="descname">SUPPORTED_CODES</tt><em class="property"> = {'laTeX': {'commands': {'compile': 'pdflatex &quot;&lt;%code_file.path%&gt;&quot; &amp;&amp; cd &quot;&lt;%code_file.directory_path%&gt;&quot; &amp;&amp; bibtex &quot;&lt;%code_file.basename%&gt;.aux&quot;; pdflatex &quot;&lt;%code_file.path%&gt;&quot; &amp;&amp; pdflatex &quot;&lt;%code_file.path%&gt;&quot;', 'run': 'openPath &quot;&lt;%code_file.basename%&gt;.pdf&quot; || gnome-open &quot;&lt;%code_file.basename%&gt;.pdf&quot; || kde-open &quot;&lt;%code_file.basename%&gt;.pdf&quot; || gvfs-open &quot;&lt;%code_file.basename%&gt;.pdf&quot; || exo-open &quot;&lt;%code_file.basename%&gt;.pdf&quot; || xdg-open &quot;&lt;%code_file.basename%&gt;.pdf&quot; || gedit &quot;&lt;%code_file.basename%&gt;.pdf&quot; || mousepad &quot;&lt;%code_file.basename%&gt;.pdf&quot; || gvim &quot;&lt;%code_file.basename%&gt;.pdf&quot; || vim &quot;&lt;%code_file.basename%&gt;.pdf&quot; || emacs &quot;&lt;%code_file.basename%&gt;.pdf&quot; || nano &quot;&lt;%code_file.basename%&gt;.pdf&quot; || vi &quot;&lt;%code_file.basename%&gt;.pdf&quot; || less &quot;&lt;%code_file.basename%&gt;.pdf&quot; || cat &quot;&lt;%code_file.basename%&gt;.pdf&quot;'}, 'code_manager': {'commands': {'compile': 'make compile', 'all': 'make all', 'run': 'make preview', 'clean': 'make clean'}, 'file_path': 'Makefile'}, 'extensions': ('tex',), 'delete_patterns': ('^.+\\.aux$', '^.+\\.log$', '^.+\\.toc$', '^.+\\.out$', '^.+\\.blg$', '^.+\\.bbl$', '^.+\\.lol$')}, 'c': {'commands': {'compile': 'g++ &quot;&lt;%code_file.path%&gt;&quot; -o &quot;&lt;%code_file.directory_path%&gt;&lt;%code_file.basename%&gt;&quot;', 'run': '&quot;&lt;%code_file.directory_path%&gt;&lt;%code_file.basename%&gt;&quot; &lt;%arguments%&gt;'}, 'code_manager': {'commands': {'compile': 'make compile', 'test': 'make test', 'all': 'make all', 'clean': 'make clean'}, 'file_path': 'Makefile'}, 'extensions': ('cpp', 'c', 'cc'), 'delete_patterns': ('.*\\.o$', '.*Main$', '.*Test$')}, 'shell': {'commands': {'run': '&quot;&lt;%code_file.path%&gt;&quot; &lt;%arguments%&gt;'}, 'extensions': ('sh', 'shell')}, 'java': {'commands': {'compile': 'javac &quot;&lt;%code_file.path%&gt;&quot;', 'run': 'java &quot;&lt;%code_file.basename%&gt;&quot; &lt;%arguments%&gt;'}, 'extensions': ('java',), 'delete_patterns': ('.*\\.class$',)}, 'python': {'commands': {'run': '&quot;&lt;%code_file.path%&gt;&quot; &lt;%arguments%&gt;'}, 'code_manager': {'commands': {'test': '__init__.&lt;%code_file.extension%&gt; test', 'all': '__init__.&lt;%code_file.extension%&gt; all', 'clean': '__init__.&lt;%code_file.extension%&gt; clear'}, 'file_path': '__init__.&lt;%code_file.extension%&gt;'}, 'extensions': ('py', 'pyc', 'pyw', 'pyo', 'pyd'), 'delete_patterns': ('.*\\.py[cod]$', '^__pycache__$', '^temp_\\.*')}, 'template': {'commands': {'compile': 'bash --login -c \'template &quot;&lt;%code_file.path%&gt;&quot; 1&gt;&quot;&lt;%code_file.directory_path%&gt;&lt;%code_file.basename%&gt;.html&quot;\'', 'run': 'bash --login -c \'webbrowser &quot;&lt;%code_file.directory_path%&gt;&lt;%code_file.basename%&gt;.html&quot;\''}, 'extensions': ('tpl',)}, 'bash': {'commands': {'run': '&quot;&lt;%code_file.path%&gt;&quot; &lt;%arguments%&gt;'}, 'extensions': ('bash',)}}</em><a class="headerlink" href="#boostNode.runnable.codeRunner.Run.SUPPORTED_CODES" title="Permalink to this definition">¶</a></dt>
+<dd><p>Holds all supported code types and there methods to do common stuff.</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 
