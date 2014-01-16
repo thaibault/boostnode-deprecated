@@ -1635,7 +1635,7 @@ class Parser(Class, Runnable):
         if self.file:
             root_path = self.file.directory_path
         shortcut = self.template_context_default_indent
-        if full_caching is False:
+        if full_caching is None:
             full_caching = self.full_caching
         self._print(
             self.__class__(
