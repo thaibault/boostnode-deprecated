@@ -390,6 +390,13 @@ class Parser(Class, Runnable):
              'help': 'Spend time on generating right indented output.',
              'dest': 'pretty_indent'}})
     '''Holds all command line interface argument informations.'''
+    PYTHON_CODE_TEMPLATE = (
+        '#!/usr/bin/env python%d.%d\n# -*- coding: utf-8 -*-\n\n%%s' %
+        sys.version_info[:2])
+    '''
+        Saves a generic python code template used for saving python code
+        caches.
+    '''
 
     # endregion
 
@@ -783,6 +790,7 @@ class Parser(Class, Runnable):
             ... ).render() # doctest: +ELLIPSIS
             Object of "Parser" with template "hans says...<% end...
         '''
+        mapping.update({'__builtins__': self.builtins})
         mapping.update(keywords)
         if self.cache:
             if self.string:
@@ -805,10 +813,12 @@ class Parser(Class, Runnable):
             cache_file = FileHandler(
                 location='%s%s.py' % (self.cache.path, template_hash))
             if cache_file:
-                self.rendered_python_code = cache_file.content
+                self.rendered_python_code = cache_file.content[builtins.len(
+                    self.PYTHON_CODE_TEMPLATE) - builtins.len('%s'):]
             else:
                 self.rendered_python_code = self._render_content()
-                cache_file.content = self.rendered_python_code
+                cache_file.content = self.PYTHON_CODE_TEMPLATE % \
+                    self.rendered_python_code
             self._run_template(
                 prevent_rendered_python_code, template_scope=mapping)
             if self.full_caching:
@@ -1326,7 +1336,6 @@ class Parser(Class, Runnable):
             1 | include('..._run_template_not_existing', indent_space='')
             <BLANKLINE>
         '''
-        template_scope.update({'__builtins__': self.builtins})
         try:
 ## python3.3
 ##             builtins.exec(self.rendered_python_code, template_scope)
