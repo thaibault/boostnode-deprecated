@@ -1662,8 +1662,8 @@ class Parser(Class, Runnable):
             in template context.
         '''
         '''
-            NOTE: Force python to swap reference to default scope value.
-            This enables a real namespace for included files.
+            NOTE: Force python to swap reference to default scope value. This \
+            enables a real namespace for included files.
         '''
         internal_scope = copy.copy(scope)
         internal_scope.update(keywords)
