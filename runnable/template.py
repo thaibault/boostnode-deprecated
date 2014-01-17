@@ -1234,7 +1234,7 @@ class Parser(Class, Runnable):
                 location=self.template, encoding=self.file_encoding)
             if not self.file.is_file():
                 self.file = FileHandler(
-                    location=self.template + '.tpl',
+                    location=self.file.path + '.tpl',
                     encoding=self.file_encoding)
             if not self.file.is_file():
                 raise __exception__(
