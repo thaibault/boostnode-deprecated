@@ -30,9 +30,9 @@
 
     - bc1 Capitalized variables are constant and shouldn't be mutable.
 
-    - bc2 Properties with preceding underscores shouldn't be accessed from the \
-          outer scope. They could accessed in inherited objects (protected \
-          attributes).
+    - bc2 Properties with preceding underscores shouldn't be accessed from \
+          the outer scope. They could accessed in inherited objects \
+          (protected attributes).
 
     - bc3 Property with two preceding underscore shouldn't be accessed from \
           any location then the object itself (private attributes).
@@ -97,16 +97,20 @@
 
     - bc21 Indent function parameter which doesn't match in one line like:
 
-    >>> function_name(
+    >>> def function_name(
     ...     parameter1, parameter2, parameter3,
-            parameter4)
+    ...     parameter4
+    ... ):
+    ...     pass
 
     instead of:
 
-    >>> function_name(parameter1,
-    ...               parameter2,
-    ...               parameter3,
-                      parameter4)
+    >>> def function_name(parameter1,
+    ...                   parameter2,
+    ...                   parameter3,
+    ...                   parameter4
+    ... ):
+    ...     pass
 
     - bc22 Indent function call brackets like:
 
