@@ -263,8 +263,8 @@
     ... # region header
     ...
     ... '''
-    ...     Module documentation which should be useable as help message for \
-    ...     modules which supports command line interfaces \
+    ...     Module documentation which should be useable as help message for \\
+    ...     modules which supports command line interfaces \\
     ...     (see Runnable implementation interface).
     ... '''
     ... '''
