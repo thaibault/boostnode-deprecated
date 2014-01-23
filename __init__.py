@@ -104,7 +104,7 @@
     ...     parameter1, parameter2, parameter3,
     ...     parameter4='default_value'
     ... ):
-    ...     return {{'a': 5}}
+    ...     return {'a': 5}
 
     instead of:
 
@@ -113,7 +113,7 @@
     ...                   parameter3,
     ...                   parameter4='default_value'
     ... ):
-    ...     return {{'a': 5}}
+    ...     return {'a': 5}
 
     - bc22 Indent function call brackets like:
 
