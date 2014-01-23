@@ -268,7 +268,7 @@
     ...     (see Runnable implementation interface).
     ... '''
     ... '''
-    ...     For conventions see "boostNode/__init__.py" on \
+    ...     For conventions see "boostNode/__init__.py" on \\
     ...     https://github.com/thaibault/boostNode
     ... '''
     ...
@@ -319,15 +319,15 @@
     ... # region footer
     ...
     ... '''
-    ...     Preset some variables given by introspection letting the linter \
+    ...     Preset some variables given by introspection letting the linter \\
     ...     know what globale variables are available.
     ... '''
-    ... __logger__ = __exception__ = __module_name__ = __file_path__ = \
-    ...    __test_mode__ = __test_buffer__ = __test_folder__ = \
+    ... __logger__ = __exception__ = __module_name__ = __file_path__ = \\
+    ...    __test_mode__ = __test_buffer__ = __test_folder__ = \\
     ...    __test_globals__ = None
     ... '''
-    ...     Extends this module with some magic environment variables to \
-    ...     provide better introspection support. A generic command line \
+    ...     Extends this module with some magic environment variables to \\
+    ...     provide better introspection support. A generic command line \\
     ...     interface for some code preprocessing tools is provided by default.
     ... '''
     ... Module.default(name=__name__, frame=inspect.currentframe())
