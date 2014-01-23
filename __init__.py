@@ -14,6 +14,9 @@
     Offers a higher level for common tasks. Most of the modules are written \
     on top of python's native implementations.
 
+    Package meta informations
+    =========================
+
     Copyright Torben Sickert 16.12.2012
 
     License
@@ -99,51 +102,54 @@
 
     >>> def function_name(
     ...     parameter1, parameter2, parameter3,
-    ...     parameter4
+    ...     parameter4='default_value'
     ... ):
-    ...     pass
+    ...     return {{'a': 5}}
 
     instead of:
 
     >>> def function_name(parameter1,
     ...                   parameter2,
     ...                   parameter3,
-    ...                   parameter4
+    ...                   parameter4='default_value'
     ... ):
-    ...     pass
+    ...     return {{'a': 5}}
 
     - bc22 Indent function call brackets like:
 
     >>> function_name(
-    ...     parameter1, parameter2, parameter3
-    ... ).method_name()
+    ...     'parameter1', 'parameter2', 'parameter3'
+    ... ).get('a')
+    5
 
     instead of:
 
     >>> function_name(
-    ...     parameter1, parameter2, parameter3).method_name()
+    ...     'parameter1', 'parameter2', 'parameter3').get('a')
+    5
 
     Structure of meta documenting classes. (see bc14 and bc15)
     ----------------------------------------------------------
 
     >>> # region header
     ...
-    ... import ia
+    ... import sys
+    ... # ...
     ...
     ... # endregion
     ...
     ... # region function
     ...
-    ... def a:
-    ...     ...
-    ... def b:
-    ...     ...
+    ... def a: pass
+    ... def b: pass
     ...
     ... # endregion
     ...
     ... # region abstract classes
     ...
     ... class A:
+    ...
+    ...     '''Class level description'''
     ...
     ...     # region properties
     ...
@@ -195,6 +201,7 @@
     ...             # region special
     ...
     ...     def __init__(self):
+    ...         '''Initializer's docstring.'''
     ...
     ...                 # region properties
     ...
@@ -227,6 +234,9 @@
     ...
     ... class B:
     ...
+    ...    '''Class level documentation.'''
+    ...
+    ...    pass
     ...    # ...
     ...
     ... # endregion
@@ -234,6 +244,7 @@
     ... # region footer
     ...
     ... if __name__ == '__main__':
+    ...     pass
     ...     # ...
     ...
     ... # endregion
@@ -304,7 +315,7 @@
     ...
     ... def main():
     ...     '''Description of this method.'''
-    ...     builtins.print('Program started...')
+    ...     pass
     ...
     ... # endregion
     ...
@@ -334,7 +345,7 @@
     ...     provide better introspection support. A generic command line \\
     ...     interface for some code preprocessing tools is provided by default.
     ... '''
-    ... Module.default(name=__name__, frame=inspect.currentframe())
+    ... # Module.default(name=__name__, frame=inspect.currentframe())
     ...
     ... # endregion
 """
