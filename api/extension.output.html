@@ -56,7 +56,7 @@
 <span id="boostnode-extension-output"></span><h1>boostNode.extension.output<a class="headerlink" href="#module-boostNode.extension.output" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="boostNode.extension.output.Buffer">
-<em class="property">class </em><tt class="descclassname">boostNode.extension.output.</tt><tt class="descname">Buffer</tt><big>(</big><em>file=None</em>, <em>queue=None</em>, <em>support_multiprocessing=False</em><big>)</big> &rarr; None<a class="headerlink" href="#boostNode.extension.output.Buffer" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">boostNode.extension.output.</tt><tt class="descname">Buffer</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.output.Buffer" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class represents a layer for writing and reading to an output         buffer realized as file, queue or variable.</p>
 <p><strong>file</strong>                    - a file path or file handler to use as                                       buffer</p>
 <p><strong>queue</strong>                   - a queue object to use as buffer</p>
@@ -70,9 +70,9 @@
 <span class="go">&#39;hans+&#39;</span>
 </pre></div>
 </div>
-<dl class="method">
+<dl class="staticmethod">
 <dt id="boostNode.extension.output.Buffer.clear">
-<tt class="descname">clear</tt><big>(</big><em>delete=True</em><big>)</big> &rarr; str<a class="headerlink" href="#boostNode.extension.output.Buffer.clear" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">clear</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.output.Buffer.clear" title="Permalink to this definition">¶</a></dt>
 <dd><p>Removes the current output buffer content.</p>
 <p><strong>delete</strong> - indicates weather a file buffer should be deleted or                          truncated</p>
 <p>Examples:</p>
@@ -119,15 +119,9 @@
 </div>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="boostNode.extension.output.Buffer.file">
-<tt class="descname">file</tt><em class="property"> = None</em><a class="headerlink" href="#boostNode.extension.output.Buffer.file" title="Permalink to this definition">¶</a></dt>
-<dd><p>Saves the queue instance for writing content into.</p>
-</dd></dl>
-
-<dl class="method">
+<dl class="staticmethod">
 <dt id="boostNode.extension.output.Buffer.flush">
-<tt class="descname">flush</tt><big>(</big><big>)</big> &rarr; boostNode.extension.type.Self<a class="headerlink" href="#boostNode.extension.output.Buffer.flush" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">flush</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.output.Buffer.flush" title="Permalink to this definition">¶</a></dt>
 <dd><p>Flush methods usually called to guarantee that all objects putted             to &#8220;write()&#8221; are materialized on their provided media. This             implementation exists only for compatibility reasons.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Buffer</span><span class="p">()</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
@@ -136,9 +130,9 @@
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="boostNode.extension.output.Buffer.get_content">
-<tt class="descname">get_content</tt><big>(</big><big>)</big> &rarr; str<a class="headerlink" href="#boostNode.extension.output.Buffer.get_content" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">get_content</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.output.Buffer.get_content" title="Permalink to this definition">¶</a></dt>
 <dd><p>Getter for the current content.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Buffer</span><span class="p">()</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
@@ -151,9 +145,9 @@
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="boostNode.extension.output.Buffer.write">
-<tt class="descname">write</tt><big>(</big><em>content: str</em><big>)</big> &rarr; boostNode.extension.type.Self<a class="headerlink" href="#boostNode.extension.output.Buffer.write" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">write</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.output.Buffer.write" title="Permalink to this definition">¶</a></dt>
 <dd><p>Writes content to the current output buffer file. If the current             given file &#8220;Buffer.file&#8221; doesn&#8217;t exists it will be created.</p>
 <p><strong>content</strong> - content to write into current buffer instance</p>
 <p>Examples:</p>
@@ -181,15 +175,9 @@
 <dt id="boostNode.extension.output.Logger">
 <em class="property">class </em><tt class="descclassname">boostNode.extension.output.</tt><tt class="descname">Logger</tt><a class="headerlink" href="#boostNode.extension.output.Logger" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class provides handling with all components dealing with logger         object. It stores all logger components in a single data structure.</p>
-<dl class="attribute">
-<dt id="boostNode.extension.output.Logger.buffer">
-<tt class="descname">buffer</tt><em class="property"> = (&lt;_io.TextIOWrapper name='&lt;stdout&gt;' mode='w' encoding='UTF-8'&gt;,)</em><a class="headerlink" href="#boostNode.extension.output.Logger.buffer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Output buffer for all logging outputs.</p>
-</dd></dl>
-
-<dl class="method">
+<dl class="staticmethod">
 <dt id="boostNode.extension.output.Logger.change_all">
-<tt class="descname">change_all</tt><big>(</big><em>level=()</em>, <em>buffer=()</em>, <em>terminator=()</em>, <em>format=()</em><big>)</big> &rarr; boostNode.extension.type.SelfClass<a class="headerlink" href="#boostNode.extension.output.Logger.change_all" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">change_all</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.output.Logger.change_all" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method changes the given properties to all created logger             instances and saves the given properties as default properties             for future created logger instances.</p>
 <p>Note that every argument except buffer setted to &#8220;None&#8221; will not             edit this logger component. If you don&#8217;t want to change buffer             leave it by its default value.</p>
 <p><strong>level</strong>      - sets levels for all logger</p>
@@ -203,15 +191,9 @@
 </div>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="boostNode.extension.output.Logger.default_level">
-<tt class="descname">default_level</tt><em class="property"> = ('critical',)</em><a class="headerlink" href="#boostNode.extension.output.Logger.default_level" title="Permalink to this definition">¶</a></dt>
-<dd><p>Defines the default logging level for new created logger handler.</p>
-</dd></dl>
-
-<dl class="method">
+<dl class="staticmethod">
 <dt id="boostNode.extension.output.Logger.flush">
-<tt class="descname">flush</tt><big>(</big><big>)</big> &rarr; boostNode.extension.type.SelfClass<a class="headerlink" href="#boostNode.extension.output.Logger.flush" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">flush</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.output.Logger.flush" title="Permalink to this definition">¶</a></dt>
 <dd><p>Flushes all buffers in all logger handlers.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Logger</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span> 
@@ -220,15 +202,9 @@
 </div>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="boostNode.extension.output.Logger.format">
-<tt class="descname">format</tt><em class="property"> = ('%(asctime)s - %(name)s - %(levelname)s - %(message)s',)</em><a class="headerlink" href="#boostNode.extension.output.Logger.format" title="Permalink to this definition">¶</a></dt>
-<dd><p>Output format.</p>
-</dd></dl>
-
-<dl class="method">
+<dl class="staticmethod">
 <dt id="boostNode.extension.output.Logger.get">
-<tt class="descname">get</tt><big>(</big><em>name='boostNode.extension.output'</em>, <em>level=()</em>, <em>buffer=()</em>, <em>terminator=()</em>, <em>format=()</em><big>)</big> &rarr; logging.Logger<a class="headerlink" href="#boostNode.extension.output.Logger.get" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">get</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.output.Logger.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a new or existing instance of a logger with given             properties. If a logger was already registered under given name             the existing instance is given back and a new instance otherwise.</p>
 <p><strong>name</strong>       - logger name to get</p>
 <p><strong>level</strong>      - sets levels for all logger</p>
@@ -252,23 +228,11 @@
 </div>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="boostNode.extension.output.Logger.instances">
-<tt class="descname">instances</tt><em class="property"> = [&lt;logging.Logger object at 0x7f23dbf8b910&gt;, &lt;logging.Logger object at 0x7f23dbe6bb90&gt;, &lt;logging.Logger object at 0x7f23dbe6be90&gt;, &lt;logging.Logger object at 0x7f23dbe6bb10&gt;, &lt;logging.Logger object at 0x7f23dbe6bad0&gt;, &lt;logging.Logger object at 0x7f23dbe7e790&gt;, &lt;logging.Logger object at 0x7f23dbe7e5d0&gt;, &lt;logging.Logger object at 0x7f23dbe6bd90&gt;, &lt;logging.Logger object at 0x7f23dbe7ecd0&gt;, &lt;logging.Logger object at 0x7f23dbe7e8d0&gt;, &lt;logging.Logger object at 0x7f23dbe7ef10&gt;]</em><a class="headerlink" href="#boostNode.extension.output.Logger.instances" title="Permalink to this definition">¶</a></dt>
-<dd><p>Saves all logging handler instances.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="boostNode.extension.output.Logger.terminator">
-<tt class="descname">terminator</tt><em class="property"> = ('\n',)</em><a class="headerlink" href="#boostNode.extension.output.Logger.terminator" title="Permalink to this definition">¶</a></dt>
-<dd><p>Suffix in each logging output.</p>
-</dd></dl>
-
 </dd></dl>
 
 <dl class="class">
 <dt id="boostNode.extension.output.Print">
-<em class="property">class </em><tt class="descclassname">boostNode.extension.output.</tt><tt class="descname">Print</tt><big>(</big><em>*output: object</em>, <em>**codewords: object</em><big>)</big> &rarr; None<a class="headerlink" href="#boostNode.extension.output.Print" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">boostNode.extension.output.</tt><tt class="descname">Print</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.output.Print" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provides a high level printing class on top of pythons native print         function.</p>
 <p><strong>output</strong>    - are the strings which should be printed or saved.</p>
 <dl class="docutils">
@@ -280,24 +244,6 @@
 &#8220;codeword[&#8216;buffer&#8217;]&#8221; could be any instance as buffer which                                  implements a &#8220;write()&#8221; method.</dd>
 </dl>
 <p>Returns the given string or the last element if an iterable object         was given.</p>
-<dl class="attribute">
-<dt id="boostNode.extension.output.Print.end">
-<tt class="descname">end</tt><em class="property"> = '\n'</em><a class="headerlink" href="#boostNode.extension.output.Print.end" title="Permalink to this definition">¶</a></dt>
-<dd><p>Redirect print output to this buffer if no buffer is defined for current instance.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="boostNode.extension.output.Print.separator">
-<tt class="descname">separator</tt><em class="property"> = ' '</em><a class="headerlink" href="#boostNode.extension.output.Print.separator" title="Permalink to this definition">¶</a></dt>
-<dd><p>Print this string after every last argument to every &#8220;put()&#8221; call.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="boostNode.extension.output.Print.start">
-<tt class="descname">start</tt><em class="property"> = ''</em><a class="headerlink" href="#boostNode.extension.output.Print.start" title="Permalink to this definition">¶</a></dt>
-<dd><p>Print this string between every given element to one &#8220;put()&#8221; call.</p>
-</dd></dl>
-
 </dd></dl>
 
 </div>

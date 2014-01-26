@@ -57,7 +57,7 @@
 <p>Extension is a high level interface for interaction with pythons native     builtins. This class provides a full object oriented way to handle string     objects. Besides a number of new supported interactions with strings it     offers all core file system methods by the pythons native &#8220;builtins.str&#8221;     object.</p>
 <dl class="class">
 <dt id="boostNode.extension.native.Dictionary">
-<em class="property">class </em><tt class="descclassname">boostNode.extension.native.</tt><tt class="descname">Dictionary</tt><big>(</big><em>content: collections.abc.Iterable</em>, <em>*arguments: object</em>, <em>**keywords: object</em><big>)</big> &rarr; None<a class="headerlink" href="#boostNode.extension.native.Dictionary" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">boostNode.extension.native.</tt><tt class="descname">Dictionary</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Dictionary" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class extends the native dictionary object.</p>
 <p><strong>content</strong> - content for dictionary object</p>
 <p>Additional arguments and keywords are forwarded to python&#8217;s native
@@ -68,9 +68,9 @@
 <dd><p>Take this method type by the abstract class via introspection.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="boostNode.extension.native.Dictionary.get_immutable">
-<tt class="descname">get_immutable</tt><big>(</big><em>exclude=()</em><big>)</big> &rarr; tuple<a class="headerlink" href="#boostNode.extension.native.Dictionary.get_immutable" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">get_immutable</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Dictionary.get_immutable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates an immutable copy of the current dictionary. Mutable             iterables are generally translated to sorted tuples.</p>
 <p><strong>exclude</strong> - A tuple of keys to ignore in resulting immutable.</p>
 <p>Examples:</p>
@@ -80,9 +80,9 @@
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="boostNode.extension.native.Dictionary.pop">
-<tt class="descname">pop</tt><big>(</big><em>name: str</em>, <em>default_value=None</em><big>)</big> &rarr; tuple<a class="headerlink" href="#boostNode.extension.native.Dictionary.pop" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">pop</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Dictionary.pop" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a keyword element as it would be set by a default value. If             name is present in current saved dictionary its value will be             returned in a tuple with currently saved dictionary. The             corresponding data will be erased from dictionary.</p>
 <p><strong>name</strong>          - key to get from current dictionary instance</p>
 <p><strong>default_value</strong> - value to return if requested key isn&#8217;t                                 present in current dictionary instance.</p>
@@ -106,11 +106,11 @@
 
 <dl class="class">
 <dt id="boostNode.extension.native.Module">
-<em class="property">class </em><tt class="descclassname">boostNode.extension.native.</tt><tt class="descname">Module</tt><big>(</big><em>content=None</em>, <em>*arguments: (&lt;class 'object'&gt;</em>, <em>&lt;class 'type'&gt;)</em>, <em>**keywords: (&lt;class 'object'&gt;</em>, <em>&lt;class 'type'&gt;)</em><big>)</big> &rarr; None<a class="headerlink" href="#boostNode.extension.native.Module" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">boostNode.extension.native.</tt><tt class="descname">Module</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class add some features for dealing with modules.</p>
 <dl class="attribute">
 <dt id="boostNode.extension.native.Module.HIDDEN_BUILTIN_CALLABLES">
-<tt class="descname">HIDDEN_BUILTIN_CALLABLES</tt><em class="property"> = ()</em><a class="headerlink" href="#boostNode.extension.native.Module.HIDDEN_BUILTIN_CALLABLES" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">HIDDEN_BUILTIN_CALLABLES</tt><em class="property"> = ('GFileDescriptorBased', 'GInitiallyUnowned', 'GPollableInputStream', 'GPollableOutputStream')</em><a class="headerlink" href="#boostNode.extension.native.Module.HIDDEN_BUILTIN_CALLABLES" title="Permalink to this definition">¶</a></dt>
 <dd><p>Stores all magically defined globals.</p>
 </dd></dl>
 
@@ -120,9 +120,9 @@
 <dd><p>Stores a priority order of preferred callable name as starting point in a initialized module.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="boostNode.extension.native.Module.default">
-<tt class="descname">default</tt><big>(</big><em>name: str</em>, <em>frame: frame</em>, <em>default_caller=None</em>, <em>caller_arguments=()</em>, <em>caller_keywords={}</em><big>)</big> &rarr; boostNode.extension.type.SelfClass<a class="headerlink" href="#boostNode.extension.native.Module.default" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">default</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.default" title="Permalink to this definition">¶</a></dt>
 <dd><p>Serves a common way to extend a given module. The given module&#8217;s             scope will be extended and a common meta command line interface             is provided to test or run objects in given module.</p>
 <p><strong>name</strong>             - module name to extend</p>
 <p><strong>frame</strong>            - frame of module to extend</p>
@@ -143,9 +143,9 @@
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="boostNode.extension.native.Module.default_package">
-<tt class="descname">default_package</tt><big>(</big><em>name: str</em>, <em>frame: frame</em>, <em>*arguments: object</em>, <em>**keywords: object) -&gt; (&lt;class 'tuple'&gt;</em>, <em>&lt;class 'bool'&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.default_package" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">default_package</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.default_package" title="Permalink to this definition">¶</a></dt>
 <dd><p>Serves a common way to extend a given package. The given             package&#8217;s scope will be extended and a common meta command line             interface is provided to test, lint or document modules.</p>
 <p><strong>name</strong>                   - package name to extend</p>
 <p><strong>frame</strong>                  - frame of package to extend</p>
@@ -166,9 +166,9 @@
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="boostNode.extension.native.Module.determine_caller">
-<tt class="descname">determine_caller</tt><big>(</big><em>callable_objects: collections.abc.Iterable</em>, <em>caller=None) -&gt; (&lt;class 'bool'&gt;</em>, <em>&lt;class 'str'&gt;</em>, <em>&lt;class 'NoneType'&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.determine_caller" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">determine_caller</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.determine_caller" title="Permalink to this definition">¶</a></dt>
 <dd><p>Searches for a useful caller object in given module objects via             &#8220;module_objects&#8221;.</p>
 <p><strong>callable_objects</strong> - available caller objects</p>
 <p><strong>caller</strong>           - if provided this value will be returned</p>
@@ -199,9 +199,9 @@
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="boostNode.extension.native.Module.execute_program_for_modules">
-<tt class="descname">execute_program_for_modules</tt><big>(</big><em>program_type: str</em>, <em>program: str</em>, <em>modules: collections.abc.Iterable</em>, <em>arguments=()</em>, <em>extension='py'</em>, <em>delimiter='</em>, <em>'</em>, <em>log=True</em>, <em>**keywords: object</em><big>)</big> &rarr; tuple<a class="headerlink" href="#boostNode.extension.native.Module.execute_program_for_modules" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">execute_program_for_modules</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.execute_program_for_modules" title="Permalink to this definition">¶</a></dt>
 <dd><p>Runs a given program for every given module. Returns &#8220;False&#8221; if             no modules were found or given program isn&#8217;t installed.</p>
 <p><strong>program_type</strong> - program description to show in standard output</p>
 <p><strong>program</strong>      - program name to run</p>
@@ -238,9 +238,9 @@
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="boostNode.extension.native.Module.extend">
-<tt class="descname">extend</tt><big>(</big><em>name='boostNode.extension.native'</em>, <em>frame=None</em>, <em>module=None</em>, <em>post_extend_others=True</em><big>)</big> &rarr; dict<a class="headerlink" href="#boostNode.extension.native.Module.extend" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">extend</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.extend" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extends a given scope of an module for useful things like own             exception class, a logger instance, variable to indicate if             module is running in test mode and a variable that saves the             current module name.</p>
 <p><strong>name</strong>               - name to use for module to extend</p>
 <p><strong>frame</strong>              - frame to determine modules name and file                                      path</p>
@@ -274,7 +274,7 @@
 
 <dl class="classmethod">
 <dt id="boostNode.extension.native.Module.get_context_path">
-<em class="property">classmethod </em><tt class="descname">get_context_path</tt><big>(</big><em>path=None</em>, <em>frame=&lt;frame object at 0x2186060&gt;</em><big>)</big> &rarr; str<a class="headerlink" href="#boostNode.extension.native.Module.get_context_path" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><tt class="descname">get_context_path</tt><big>(</big><em>path=None</em>, <em>frame=&lt;frame object at 0x1ed89d0&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_context_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines the package and module level context path to a given             context or file.</p>
 <p><strong>path</strong>  - relative or absolute context or file path to normalize</p>
 <p><strong>frame</strong> - stack frame to analyse again context</p>
@@ -296,9 +296,9 @@
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="boostNode.extension.native.Module.get_defined_callables">
-<tt class="descname">get_defined_callables</tt><big>(</big><em>scope: (&lt;class 'type'&gt;</em>, <em>&lt;class 'object'&gt;)</em>, <em>only_module_level=True</em><big>)</big> &rarr; list<a class="headerlink" href="#boostNode.extension.native.Module.get_defined_callables" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">get_defined_callables</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_defined_callables" title="Permalink to this definition">¶</a></dt>
 <dd><p>Takes a module and gives a list of objects explicit defined in             this module.</p>
 <p><strong>scope</strong>             - scope to search for callables</p>
 <p><strong>only_module_level</strong> - indicates weather imported modules should                                     be used.</p>
@@ -331,9 +331,9 @@
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="boostNode.extension.native.Module.get_file_path">
-<tt class="descname">get_file_path</tt><big>(</big><em>context_path: str</em>, <em>only_source_files=False) -&gt; (&lt;class 'str'&gt;</em>, <em>&lt;class 'bool'&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_file_path" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">get_file_path</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_file_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the path to given context path.</p>
 <p><strong>context_path</strong>      - the context path to a module to determine</p>
 <p><strong>only_source_files</strong> - ignores compiled python modules</p>
@@ -357,9 +357,9 @@
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="boostNode.extension.native.Module.get_name">
-<tt class="descname">get_name</tt><big>(</big><em>frame=None</em>, <em>module=None</em>, <em>extension=False</em>, <em>path=False</em><big>)</big> &rarr; str<a class="headerlink" href="#boostNode.extension.native.Module.get_name" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">get_name</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns name of the given context &#8220;frame&#8221;. If no frame is defined             this module&#8217;s context will be selected. If &#8220;base&#8221; is set &#8220;True&#8221;             the modules name is given back without any file extension.</p>
 <p><strong>frame</strong>     - Frame of module to determine</p>
 <p><strong>module</strong>    - module to determine the name of</p>
@@ -384,9 +384,9 @@
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="boostNode.extension.native.Module.get_package_name">
-<tt class="descname">get_package_name</tt><big>(</big><em>frame=&lt;frame object at 0x2186060&gt;</em>, <em>path=False</em><big>)</big> &rarr; str<a class="headerlink" href="#boostNode.extension.native.Module.get_package_name" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">get_package_name</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_package_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines package context of given frame. If current context             isn&#8217;t in any package context an empty string is given back.</p>
 <p><strong>frame</strong> - frame of the package name to inspect</p>
 <p><strong>path</strong>  - path to package</p>
@@ -409,7 +409,7 @@
 
 <dl class="classmethod">
 <dt id="boostNode.extension.native.Module.is_package">
-<em class="property">classmethod </em><tt class="descname">is_package</tt><big>(</big><em>path: str</em><big>)</big> &rarr; bool<a class="headerlink" href="#boostNode.extension.native.Module.is_package" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><tt class="descname">is_package</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.is_package" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if given location is pointed to a python package.</p>
 <p><strong>path</strong> - given location</p>
 <p>Examples:</p>
@@ -423,12 +423,12 @@
 
 <dl class="class">
 <dt id="boostNode.extension.native.Object">
-<em class="property">class </em><tt class="descclassname">boostNode.extension.native.</tt><tt class="descname">Object</tt><big>(</big><em>content=None</em>, <em>*arguments: (&lt;class 'object'&gt;</em>, <em>&lt;class 'type'&gt;)</em>, <em>**keywords: (&lt;class 'object'&gt;</em>, <em>&lt;class 'type'&gt;)</em><big>)</big> &rarr; None<a class="headerlink" href="#boostNode.extension.native.Object" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">boostNode.extension.native.</tt><tt class="descname">Object</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Object" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class extends all native python classes.</p>
 <p><strong>content</strong> - Object value to save.</p>
-<dl class="method">
+<dl class="staticmethod">
 <dt id="boostNode.extension.native.Object.copy">
-<tt class="descname">copy</tt><big>(</big><big>)</big> &rarr; dict<a class="headerlink" href="#boostNode.extension.native.Object.copy" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">copy</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Object.copy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Copies a given object&#8217;s attributes and returns them.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">A</span><span class="p">:</span> <span class="k">pass</span>
@@ -453,9 +453,9 @@
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="boostNode.extension.native.Object.determine_abstract_method_exception">
-<tt class="descname">determine_abstract_method_exception</tt><big>(</big><em>abstract_class_name: str</em>, <em>class_name=None</em><big>)</big> &rarr; NotImplementedError<a class="headerlink" href="#boostNode.extension.native.Object.determine_abstract_method_exception" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">determine_abstract_method_exception</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Object.determine_abstract_method_exception" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates a suitable exception for raising if a method is called             initially indented to be overwritten.</p>
 <p><strong>abstract_class_name</strong> - Class name of super class.</p>
 <p><strong>class_name</strong>          - Class name which initiates the exception.</p>
@@ -487,9 +487,9 @@
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="boostNode.extension.native.Object.is_binary">
-<tt class="descname">is_binary</tt><big>(</big><big>)</big> &rarr; bool<a class="headerlink" href="#boostNode.extension.native.Object.is_binary" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">is_binary</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Object.is_binary" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines if given data is binary.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Object</span><span class="p">(</span><span class="s">&#39;A&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">is_binary</span><span class="p">()</span>
@@ -512,9 +512,9 @@
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="boostNode.extension.native.Object.restore">
-<tt class="descname">restore</tt><big>(</big><em>) -&gt; (&lt;class 'object'&gt;</em>, <em>&lt;class 'type'&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Object.restore" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">restore</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Object.restore" title="Permalink to this definition">¶</a></dt>
 <dd><p>Restores a given object&#8217;s attributes by a given copy are last             copied item.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">A</span><span class="p">:</span> <span class="k">pass</span>
@@ -547,7 +547,7 @@
 
 <dl class="class">
 <dt id="boostNode.extension.native.PropertyInitializer">
-<em class="property">class </em><tt class="descclassname">boostNode.extension.native.</tt><tt class="descname">PropertyInitializer</tt><big>(</big><em>method: (&lt;class 'function'&gt;</em>, <em>&lt;class 'method'&gt;)</em>, <em>function=None</em><big>)</big> &rarr; None<a class="headerlink" href="#boostNode.extension.native.PropertyInitializer" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">boostNode.extension.native.</tt><tt class="descname">PropertyInitializer</tt><big>(</big><em>method</em>, <em>function=None</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.PropertyInitializer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decorator class for automatically setting instance properties for         corresponding arguments of wrapped function.</p>
 <dl class="attribute">
 <dt id="boostNode.extension.native.PropertyInitializer.EXCLUDED_ARGUMENT_NAMES">
@@ -555,9 +555,9 @@
 <dd><p>Defines all argument names which will be ignored by generating instance properties.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="boostNode.extension.native.PropertyInitializer.get_wrapper_function">
-<tt class="descname">get_wrapper_function</tt><big>(</big><em>) -&gt; (&lt;class 'function'&gt;</em>, <em>&lt;class 'method'&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.PropertyInitializer.get_wrapper_function" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">get_wrapper_function</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.PropertyInitializer.get_wrapper_function" title="Permalink to this definition">¶</a></dt>
 <dd><p>This methods returns the wrapped function.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
@@ -577,7 +577,7 @@
 
 <dl class="class">
 <dt id="boostNode.extension.native.String">
-<em class="property">class </em><tt class="descclassname">boostNode.extension.native.</tt><tt class="descname">String</tt><big>(</big><em>content=None</em>, <em>*arguments: object</em>, <em>**keywords: object</em><big>)</big> &rarr; None<a class="headerlink" href="#boostNode.extension.native.String" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">boostNode.extension.native.</tt><tt class="descname">String</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String" title="Permalink to this definition">¶</a></dt>
 <dd><p>The string class inherits besides the interface class all pythons         native string methods. NOTE: This class has to implement inherited         special methods like &#8220;__str__()&#8221; and &#8220;__len__()&#8221; because they have to         use the &#8220;content&#8221; property which could be manipulated by not         inherited methods.</p>
 <p><strong>content</strong> - Content to be saved as string.</p>
 <dl class="attribute">
@@ -588,13 +588,13 @@
 
 <dl class="attribute">
 <dt id="boostNode.extension.native.String.NON_STANDARD_SPECIAL_URL_SEQUENCES">
-<tt class="descname">NON_STANDARD_SPECIAL_URL_SEQUENCES</tt><em class="property"> = {'%1004': '+', '%1002': '=', '%1003': '%', '%1000': '#', '%1001': '&amp;'}</em><a class="headerlink" href="#boostNode.extension.native.String.NON_STANDARD_SPECIAL_URL_SEQUENCES" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">NON_STANDARD_SPECIAL_URL_SEQUENCES</tt><em class="property"> = {'%1004': '+', '%1003': '%', '%1002': '=', '%1001': '&amp;', '%1000': '#'}</em><a class="headerlink" href="#boostNode.extension.native.String.NON_STANDARD_SPECIAL_URL_SEQUENCES" title="Permalink to this definition">¶</a></dt>
 <dd><p>All chars wich should be handle during dealing with web urls.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="boostNode.extension.native.String.SPECIAL_HTML_SEQUENCES">
-<tt class="descname">SPECIAL_HTML_SEQUENCES</tt><em class="property"> = {'é': '&amp;eacute;', 'ë': '&amp;euml;', 'í': '&amp;iacute;', 'ï': '&amp;iuml;', 'á': '&amp;aacute;', 'ã': '&amp;atilde;', 'å': '&amp;aring;', 'ç': '&amp;ccedil;', 'ù': '&amp;ugrave;', 'û': '&amp;ucirc;', 'ý': '&amp;yacute;', 'ÿ': '&amp;yuml;', 'ñ': '&amp;ntilde;', 'ó': '&amp;oacute;', 'õ': '&amp;otilde;', '÷': '&amp;divide;', 'É': '&amp;Eacute;', 'Ë': '&amp;Euml;', 'Í': '&amp;Iacute;', 'Ï': '&amp;Iuml;', 'Á': '&amp;Aacute;', 'Ã': '&amp;Atilde;', 'Å': '&amp;Aring;', 'Ç': '&amp;Ccedil;', 'Ù': '&amp;Ugrave;', 'Û': '&amp;Ucirc;', 'Ý': '&amp;Yacute;', 'ß': '&amp;szlig;', 'Ñ': '&amp;Ntilde;', 'Ó': '&amp;Oacute;', 'Õ': '&amp;Otilde;', '×': '&amp;times;', '©': '&amp;copy;', '«': '&amp;laquo;', '¯': '&amp;macr;', '¡': '&amp;iexcl;', '£': '&amp;pound;', '¥': '&amp;yen;', '§': '&amp;sect;', '¹': '&amp;sup1;', '»': '&amp;raquo;', '&lt;': '&amp;lt;', '½': '&amp;frac12;', '&gt;': '&amp;gt;', '¿': '&amp;iquest;', '±': '&amp;plusmn;', '³': '&amp;sup3;', 'µ': '&amp;micro;', '·': '&amp;middot;', 'è': '&amp;egrave;', 'ê': '&amp;ecirc;', 'ì': '&amp;igrave;', 'î': '&amp;icirc;', 'à': '&amp;agrave;', 'â': '&amp;acirc;', 'ä': '&amp;auml;', 'æ': '&amp;aelig;', 'ø': '&amp;oslash;', 'ú': '&amp;uacute;', 'ü': '&amp;uuml;', 'þ': '&amp;thorn;', 'ð': '&amp;eth;', 'ò': '&amp;ograve;', 'ô': '&amp;ocirc;', 'ö': '&amp;ouml;', 'È': '&amp;Egrave;', 'Ê': '&amp;Ecirc;', 'Ì': '&amp;Igrave;', 'Î': '&amp;Icirc;', 'À': '&amp;Agrave;', 'Â': '&amp;Acirc;', 'Ä': '&amp;Auml;', 'Æ': '&amp;AElig;', 'Ø': '&amp;Oslash;', 'Ú': '&amp;Uacute;', 'Ü': '&amp;Uuml;', 'Þ': '&amp;THORN;', 'Ð': '&amp;ETH;', 'Ò': '&amp;Ograve;', 'Ô': '&amp;Ocirc;', 'Ö': '&amp;Ouml;', '¨': '&amp;uml;', 'ª': '&amp;ordf;', '¬': '&amp;not;', '®': '&amp;reg;', '¢': '&amp;cent;', '¤': '&amp;curren;', '¦': '&amp;brvbar;', &quot;'&quot;: '&amp;apos;', '¸': '&amp;cedil;', 'º': '&amp;ordm;', '¼': '&amp;frac14;', '¾': '&amp;frac34;', '°': '&amp;deg;', '²': '&amp;sup2;', '´': '&amp;acute;', '¶': '&amp;para;'}</em><a class="headerlink" href="#boostNode.extension.native.String.SPECIAL_HTML_SEQUENCES" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">SPECIAL_HTML_SEQUENCES</tt><em class="property"> = {'&lt;': '&amp;lt;', '\xc3\xb4': '&amp;ocirc;', &quot;'&quot;: '&amp;apos;', '\xc3\x8b': '&amp;Euml;', '\xc3\x8a': '&amp;Ecirc;', '\xc3\x89': '&amp;Eacute;', '\xc3\x88': '&amp;Egrave;', '\xc3\x8f': '&amp;Iuml;', '\xc3\x8e': '&amp;Icirc;', '\xc3\x8d': '&amp;Iacute;', '\xc3\x8c': '&amp;Igrave;', '\xc3\x83': '&amp;Atilde;', '\xc3\x82': '&amp;Acirc;', '\xc3\x81': '&amp;Aacute;', '\xc3\x80': '&amp;Agrave;', '\xc3\x87': '&amp;Ccedil;', '\xc3\x86': '&amp;AElig;', '\xc3\x85': '&amp;Aring;', '\xc3\x84': '&amp;Auml;', '\xc3\x9b': '&amp;Ucirc;', '\xc3\x9a': '&amp;Uacute;', '\xc3\x99': '&amp;Ugrave;', '\xc3\x98': '&amp;Oslash;', '\xc3\x9f': '&amp;szlig;', '\xc3\x9e': '&amp;THORN;', '\xc3\x9d': '&amp;Yacute;', '\xc3\x9c': '&amp;Uuml;', '\xc3\x93': '&amp;Oacute;', '\xc3\x92': '&amp;Ograve;', '\xc3\x91': '&amp;Ntilde;', '\xc3\x90': '&amp;ETH;', '\xc3\x97': '&amp;times;', '\xc3\x96': '&amp;Ouml;', '\xc3\x95': '&amp;Otilde;', '\xc3\x94': '&amp;Ocirc;', '\xc3\xab': '&amp;euml;', '\xc3\xaa': '&amp;ecirc;', '\xc3\xa9': '&amp;eacute;', '\xc3\xa8': '&amp;egrave;', '\xc3\xaf': '&amp;iuml;', '\xc3\xae': '&amp;icirc;', '\xc3\xad': '&amp;iacute;', '\xc3\xac': '&amp;igrave;', '\xc3\xa3': '&amp;atilde;', '\xc3\xa2': '&amp;acirc;', '\xc3\xa1': '&amp;aacute;', '\xc3\xa0': '&amp;agrave;', '\xc3\xa7': '&amp;ccedil;', '\xc3\xa6': '&amp;aelig;', '\xc3\xa5': '&amp;aring;', '\xc3\xa4': '&amp;auml;', '\xc3\xbb': '&amp;ucirc;', '\xc3\xba': '&amp;uacute;', '\xc3\xb9': '&amp;ugrave;', '\xc3\xb8': '&amp;oslash;', '\xc3\xbf': '&amp;yuml;', '\xc3\xbe': '&amp;thorn;', '\xc3\xbd': '&amp;yacute;', '\xc3\xbc': '&amp;uuml;', '\xc3\xb3': '&amp;oacute;', '\xc3\xb2': '&amp;ograve;', '\xc3\xb1': '&amp;ntilde;', '\xc3\xb0': '&amp;eth;', '\xc3\xb7': '&amp;divide;', '\xc3\xb6': '&amp;ouml;', '\xc3\xb5': '&amp;otilde;', '&gt;': '&amp;gt;', '\xc2\xa4': '&amp;curren;', '\xc2\xa5': '&amp;yen;', '\xc2\xa6': '&amp;brvbar;', '\xc2\xa7': '&amp;sect;', '\xc2\xa1': '&amp;iexcl;', '\xc2\xa2': '&amp;cent;', '\xc2\xa3': '&amp;pound;', '\xc2\xac': '&amp;not;', '\xc2\xae': '&amp;reg;', '\xc2\xaf': '&amp;macr;', '\xc2\xa8': '&amp;uml;', '\xc2\xa9': '&amp;copy;', '\xc2\xaa': '&amp;ordf;', '\xc2\xab': '&amp;laquo;', '\xc2\xb4': '&amp;acute;', '\xc2\xb5': '&amp;micro;', '\xc2\xb6': '&amp;para;', '\xc2\xb7': '&amp;middot;', '\xc2\xb0': '&amp;deg;', '\xc2\xb1': '&amp;plusmn;', '\xc2\xb2': '&amp;sup2;', '\xc2\xb3': '&amp;sup3;', '\xc2\xbc': '&amp;frac14;', '\xc2\xbd': '&amp;frac12;', '\xc2\xbe': '&amp;frac34;', '\xc2\xbf': '&amp;iquest;', '\xc2\xb8': '&amp;cedil;', '\xc2\xb9': '&amp;sup1;', '\xc2\xba': '&amp;ordm;', '\xc2\xbb': '&amp;raquo;'}</em><a class="headerlink" href="#boostNode.extension.native.String.SPECIAL_HTML_SEQUENCES" title="Permalink to this definition">¶</a></dt>
 <dd><p>All chars wich should be observed by handling with html sequences.</p>
 </dd></dl>
 
@@ -612,13 +612,13 @@
 
 <dl class="attribute">
 <dt id="boostNode.extension.native.String.SPECIAL_URL_SEQUENCES">
-<tt class="descname">SPECIAL_URL_SEQUENCES</tt><em class="property"> = {'%C3%A4': 'ä', '+': ' ', '%C3%BC': 'ü', '%C3%9C': 'Ü', '%7E': '~', '%C3%96': 'Ö', '%2F': '/', '%C3%84': 'Ä', '%20': ' ', '%C3%B6': 'ö', '%22': '&quot;'}</em><a class="headerlink" href="#boostNode.extension.native.String.SPECIAL_URL_SEQUENCES" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">SPECIAL_URL_SEQUENCES</tt><em class="property"> = {'%C3%BC': '\xc3\xbc', '%7E': '~', '%2F': '/', '%C3%84': '\xc3\x84', '%C3%96': '\xc3\x96', '%20': ' ', '%22': '&quot;', '+': ' ', '%C3%9C': '\xc3\x9c', '%C3%A4': '\xc3\xa4', '%C3%B6': '\xc3\xb6'}</em><a class="headerlink" href="#boostNode.extension.native.String.SPECIAL_URL_SEQUENCES" title="Permalink to this definition">¶</a></dt>
 <dd><p>All chars wich should be observed by handling with url sequences.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="boostNode.extension.native.String.camel_case_capitalize">
-<tt class="descname">camel_case_capitalize</tt><big>(</big><big>)</big> &rarr; boostNode.extension.type.Self<a class="headerlink" href="#boostNode.extension.native.String.camel_case_capitalize" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">camel_case_capitalize</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.camel_case_capitalize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Acts like pythons native &#8220;builtins.str.capitalize()&#8221; method but             preserves camel case characters.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">()</span><span class="o">.</span><span class="n">camel_case_capitalize</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
@@ -631,9 +631,9 @@
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="boostNode.extension.native.String.delete_variables_from_regex">
-<tt class="descname">delete_variables_from_regex</tt><big>(</big><big>)</big> &rarr; boostNode.extension.type.Self<a class="headerlink" href="#boostNode.extension.native.String.delete_variables_from_regex" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">delete_variables_from_regex</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.delete_variables_from_regex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Removes python supported variables in regular expression strings.             This method is useful if a python regular expression should be             given to another regular expression engine which doesn&#8217;t support             variables.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;^--(?P&lt;name&gt;.+)--$&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delete_variables_from_regex</span><span class="p">()</span>
@@ -648,9 +648,9 @@
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="boostNode.extension.native.String.delimit">
-<tt class="descname">delimit</tt><big>(</big><em>delimiter='-'</em>, <em>search_pattern='a-zA-Z'</em><big>)</big> &rarr; boostNode.extension.type.Self<a class="headerlink" href="#boostNode.extension.native.String.delimit" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">delimit</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.delimit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Replaces all typical delimiting chars with given delimiter.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">()</span><span class="o">.</span><span class="n">delimit</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
@@ -695,9 +695,9 @@
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="boostNode.extension.native.String.find_python_code_end_bracket">
-<tt class="descname">find_python_code_end_bracket</tt><big>(</big><em>) -&gt; (&lt;class 'int'&gt;</em>, <em>&lt;class 'bool'&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.find_python_code_end_bracket" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">find_python_code_end_bracket</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.find_python_code_end_bracket" title="Permalink to this definition">¶</a></dt>
 <dd><p>Searches for the next not escaped closing end clamped in current             string interpreted as python code.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">string</span> <span class="o">=</span> <span class="s">&#39;hans () peter)&#39;</span>
@@ -713,9 +713,9 @@
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="boostNode.extension.native.String.get_encoding">
-<tt class="descname">get_encoding</tt><big>(</big><big>)</big> &rarr; str<a class="headerlink" href="#boostNode.extension.native.String.get_encoding" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">get_encoding</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.get_encoding" title="Permalink to this definition">¶</a></dt>
 <dd><p>Guesses the encoding used in current string (bytes). Encodings             are checked in alphabetic order.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">()</span><span class="o">.</span><span class="n">encoding</span> <span class="o">==</span> <span class="n">String</span><span class="o">.</span><span class="n">IMPORTANT_ENCODINGS</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -747,9 +747,9 @@
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="boostNode.extension.native.String.get_escaping_replace_dictionary">
-<tt class="descname">get_escaping_replace_dictionary</tt><big>(</big><em>sequence: collections.abc.Iterable</em>, <em>escape_sequence='\{symbole}'</em><big>)</big> &rarr; dict<a class="headerlink" href="#boostNode.extension.native.String.get_escaping_replace_dictionary" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">get_escaping_replace_dictionary</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.get_escaping_replace_dictionary" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a replacement dictionary form a given iterable. Every             element will be associated with its escaped version. This method             is useful for using before give &#8220;self.replace()&#8221; a dictionary.</p>
 <p><strong>sequence</strong>        - is an iterable with elements to be escaped.</p>
 <p><strong>escape_sequence</strong> - is an escape sequence for each element from                                   &#8220;sequence&#8221;.</p>
@@ -769,9 +769,9 @@
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="boostNode.extension.native.String.readline">
-<tt class="descname">readline</tt><big>(</big><em>) -&gt; (&lt;class 'boostNode.extension.type.SelfClassObject'&gt;</em>, <em>&lt;class 'bool'&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.readline" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">readline</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.readline" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implements the pythons native &#8220;bz2.BZ2File.readline()&#8221; method in             an object oriented way.</p>
 <p>Return the next line from the string, as a string object,             retaining newline.</p>
 <p>Returns &#8220;False&#8221; on EOF.</p>
@@ -800,9 +800,9 @@
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="boostNode.extension.native.String.readlines">
-<tt class="descname">readlines</tt><big>(</big><em>*arguments: object</em>, <em>**keywords: object</em><big>)</big> &rarr; list<a class="headerlink" href="#boostNode.extension.native.String.readlines" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">readlines</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.readlines" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implements the pythons native &#8220;builtins.str.splitlines()&#8221; method             in an object oriented way.</p>
 <p>Additional arguments and keywords are forwarded to python&#8217;s             native &#8220;str.splitlines()&#8221; method.</p>
 <p>Return a list of all lines in a string, breaking at line             boundaries. Line breaks are not included in the resulting list             unless &#8220;keepends&#8221; is given and &#8220;True&#8221;.</p>
@@ -826,9 +826,9 @@
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="boostNode.extension.native.String.replace">
-<tt class="descname">replace</tt><big>(</big><em>search: (&lt;class 'str'&gt;</em>, <em>&lt;class 'dict'&gt;)</em>, <em>replace=''</em>, <em>*arguments: object</em>, <em>**keywords: object</em><big>)</big> &rarr; boostNode.extension.type.Self<a class="headerlink" href="#boostNode.extension.native.String.replace" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">replace</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.replace" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implements the pythons native string method &#8220;str.replace()&#8221; in an             object orientated way. This method serves additionally             dictionaries as &#8220;search&#8221; parameter for multiple replacements. If             you use dictionaries, the second parameter &#8220;replace&#8221; becomes             useless.</p>
 <p><strong>search</strong>  - search sequence</p>
 <p><strong>replace</strong> - string to replace with given search sequence</p>
@@ -853,9 +853,9 @@
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="boostNode.extension.native.String.sub">
-<tt class="descname">sub</tt><big>(</big><em>search: (&lt;class 'str'&gt;</em>, <em>&lt;class 'dict'&gt;)</em>, <em>replace=''</em>, <em>*arguments: object</em>, <em>**keywords: object</em><big>)</big> &rarr; boostNode.extension.type.Self<a class="headerlink" href="#boostNode.extension.native.String.sub" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">sub</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.sub" title="Permalink to this definition">¶</a></dt>
 <dd><blockquote>
 <div><p>Implements the pythons native &#8220;re.sub()&#8221; method in an object             oriented way. This method serves additionally dictionaries as             &#8220;search&#8221; parameter for multiple replacements. If you use             dictionaries, the second parameter &#8220;replace&#8221; becomes useless.</p>
 <p><strong>search</strong>  - regular expression search pattern</p>
@@ -894,9 +894,9 @@
 </div></blockquote>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="boostNode.extension.native.String.subn">
-<tt class="descname">subn</tt><big>(</big><em>search: (&lt;class 'str'&gt;</em>, <em>&lt;class 'dict'&gt;)</em>, <em>replace=''</em>, <em>*arguments: object</em>, <em>**keywords: object</em><big>)</big> &rarr; tuple<a class="headerlink" href="#boostNode.extension.native.String.subn" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">subn</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.subn" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implements the pythons native &#8220;re.subn()&#8221; method in an object             oriented way. This method serves additionally dictionaries as             &#8220;search&#8221; parameter for multiple replacements. If you use             dictionaries, the second parameter &#8220;replace&#8221; becomes useless.</p>
 <p>Perform the same operation as &#8220;re.sub()&#8221;, but returns a tuple:             (&#8220;new_string&#8221;, &#8220;number_of_subs_made&#8221;&#8221;).</p>
 <p><strong>search</strong>  - regular expression search pattern</p>
@@ -920,9 +920,9 @@
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="boostNode.extension.native.String.validate_format">
-<tt class="descname">validate_format</tt><big>(</big><big>)</big> &rarr; boostNode.extension.type.Self<a class="headerlink" href="#boostNode.extension.native.String.validate_format" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">validate_format</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.validate_format" title="Permalink to this definition">¶</a></dt>
 <dd><p>Validates the current string for using in a string with             placeholder like &#8220;{name}&#8221;. It will be escaped to not interpreted             as placeholder like &#8220;{name}&#8221;.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&quot;that&#39;s no {placeholder}&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">validate_format</span><span class="p">()</span>
@@ -935,9 +935,9 @@
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="boostNode.extension.native.String.validate_html">
-<tt class="descname">validate_html</tt><big>(</big><big>)</big> &rarr; boostNode.extension.type.Self<a class="headerlink" href="#boostNode.extension.native.String.validate_html" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">validate_html</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.validate_html" title="Permalink to this definition">¶</a></dt>
 <dd><p>Validates current string for using as snippet in a html document.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;&lt;html&gt;&lt;/html&gt;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">validate_html</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
@@ -946,9 +946,9 @@
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="boostNode.extension.native.String.validate_regex">
-<tt class="descname">validate_regex</tt><big>(</big><em>exclude_symbols=()</em><big>)</big> &rarr; boostNode.extension.type.Self<a class="headerlink" href="#boostNode.extension.native.String.validate_regex" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">validate_regex</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.validate_regex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Validates the current string for using in a regular expression             pattern. Special regular expression chars will be escaped.</p>
 <p><strong>exclude_symbols</strong> - Escapes each regular expression special                                   character.</p>
 <p>Examples:</p>
@@ -976,9 +976,9 @@
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="boostNode.extension.native.String.validate_shell">
-<tt class="descname">validate_shell</tt><big>(</big><big>)</big> &rarr; boostNode.extension.type.Self<a class="headerlink" href="#boostNode.extension.native.String.validate_shell" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">validate_shell</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.validate_shell" title="Permalink to this definition">¶</a></dt>
 <dd><p>Validates the current string for using as a command in shell.             Special shell command chars will be escaped.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span>
@@ -1005,9 +1005,9 @@
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="boostNode.extension.native.String.validate_url">
-<tt class="descname">validate_url</tt><big>(</big><big>)</big> &rarr; boostNode.extension.type.Self<a class="headerlink" href="#boostNode.extension.native.String.validate_url" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">validate_url</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.validate_url" title="Permalink to this definition">¶</a></dt>
 <dd><p>Validates a given url by escaping special chars.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span>
