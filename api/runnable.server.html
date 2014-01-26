@@ -52,8 +52,525 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="boostnode-runnable-server">
-<h1>boostNode.runnable.server<a class="headerlink" href="#boostnode-runnable-server" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-boostNode.runnable.server">
+<span id="boostnode-runnable-server"></span><h1>boostNode.runnable.server<a class="headerlink" href="#module-boostNode.runnable.server" title="Permalink to this headline">¶</a></h1>
+<p>Provides server and request handler classes.</p>
+<dl class="class">
+<dt id="boostNode.runnable.server.CGIHTTPRequestHandler">
+<em class="property">class </em><tt class="descclassname">boostNode.runnable.server.</tt><tt class="descname">CGIHTTPRequestHandler</tt><big>(</big><em>*arguments: object</em>, <em>**keywords: object</em><big>)</big> &rarr; None<a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>A small request-handler dealing with incoming file requests. It can         directly send static files back to client or run dynamic scripts and         give the output back to client.</p>
+<dl class="attribute">
+<dt id="boostNode.runnable.server.CGIHTTPRequestHandler.content_length_sent">
+<tt class="descname">content_length_sent</tt><em class="property"> = None</em><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.content_length_sent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves the error message format.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="boostNode.runnable.server.CGIHTTPRequestHandler.content_type_sent">
+<tt class="descname">content_type_sent</tt><em class="property"> = None</em><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.content_type_sent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves the error message format.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="boostNode.runnable.server.CGIHTTPRequestHandler.do_GET">
+<tt class="descname">do_GET</tt><big>(</big><big>)</big> &rarr; boostNode.extension.type.Self<a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.do_GET" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is triggered if an incoming get-request is detected. Decides if             request is valid and static or dynamic. It also through an             exception and sends an http-error if request isn&#8217;t valid.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span> <span class="o">=</span> <span class="n">CGIHTTPRequestHandler</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s">&#39;/&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span> <span class="o">=</span> <span class="n">Class</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">web</span> <span class="o">=</span> <span class="n">Web</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">__test_folder__</span><span class="p">,</span> <span class="n">request_whitelist</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;^/?$&#39;</span><span class="p">,))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">do_GET</span><span class="p">()</span> 
+<span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;/&quot; and param...</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">directory_listing</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">do_GET</span><span class="p">()</span> 
+<span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;&quot; and parame...</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">authentication</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">authentication_handler</span> <span class="o">=</span> <span class="p">(</span>
+<span class="gp">... </span>    <span class="k">lambda</span> <span class="n">header</span><span class="p">,</span> <span class="n">request_uri</span><span class="p">,</span> <span class="n">request_handler</span><span class="p">:</span> <span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">## python2.7</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">(</span>
+<span class="gp">... </span>        <span class="n">String</span><span class="p">(</span><span class="s">&#39;key: value&#39;</span><span class="p">),</span> <span class="n">seekable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">else</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">()</span>
+<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s">&#39;key&#39;</span><span class="p">,</span> <span class="s">&#39;value&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">##</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">do_GET</span><span class="p">()</span> 
+<span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;&quot; and parame...</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s">&#39;/not_existing_file&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">request_whitelist</span> <span class="o">=</span> <span class="s">&#39;^/not_existing_file$&#39;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">authentication_handler</span> <span class="o">=</span> <span class="p">(</span>
+<span class="gp">... </span>    <span class="k">lambda</span> <span class="n">header</span><span class="p">,</span> <span class="n">request_uri</span><span class="p">,</span> <span class="n">request_handler</span><span class="p">:</span> <span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">do_GET</span><span class="p">()</span> 
+<span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;/not_existin...</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">file</span> <span class="o">=</span> <span class="n">FileHandler</span><span class="p">(</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;do_GET&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">file</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="nb">file</span><span class="o">.</span><span class="n">name</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">request_whitelist</span> <span class="o">=</span> <span class="s">&#39;^/</span><span class="si">%s</span><span class="s">$&#39;</span> <span class="o">%</span> <span class="nb">file</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">do_GET</span><span class="p">()</span> 
+<span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;/do_GET&quot; ...</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s">&#39;not_in_whitlist&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">do_GET</span><span class="p">()</span> 
+<span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;not_in_whitl...</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="boostNode.runnable.server.CGIHTTPRequestHandler.do_POST">
+<tt class="descname">do_POST</tt><big>(</big><big>)</big> &rarr; boostNode.extension.type.Self<a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.do_POST" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is triggered if a post-request is coming.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="boostNode.runnable.server.CGIHTTPRequestHandler.end_headers">
+<tt class="descname">end_headers</tt><big>(</big><em>*arguments: object</em>, <em>**keywords: object</em><big>)</big> &rarr; boostNode.extension.type.Self<a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.end_headers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finishes all sent headers by a trailing new empty line.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="boostNode.runnable.server.CGIHTTPRequestHandler.error_message_format">
+<tt class="descname">error_message_format</tt><em class="property"> = None</em><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.error_message_format" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves the self describing server version string. This string is included in every response.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="boostNode.runnable.server.CGIHTTPRequestHandler.get_cookie">
+<tt class="descname">get_cookie</tt><big>(</big><em>name=None) -&gt; (&lt;class 'str'&gt;</em>, <em>&lt;class 'http.cookies.SimpleCookie'&gt;</em>, <em>&lt;class 'NoneType'&gt;</em><big>)</big><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.get_cookie" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves a http cookie.</p>
+<p><strong>name</strong> - If provided only the matching value will be returned                        instead of the whole cookie object.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="boostNode.runnable.server.CGIHTTPRequestHandler.headers_ended">
+<tt class="descname">headers_ended</tt><em class="property"> = None</em><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.headers_ended" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves the error message format.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="boostNode.runnable.server.CGIHTTPRequestHandler.last_running_worker">
+<tt class="descname">last_running_worker</tt><em class="property"> = None</em><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.last_running_worker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Consists the explicit requested file name (like python&#8217;s native &#8220;self.file&#8221;) coming from client.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="boostNode.runnable.server.CGIHTTPRequestHandler.list_directory">
+<tt class="descname">list_directory</tt><big>(</big><em>*arguments: object</em>, <em>**keywords: object</em><big>)</big> &rarr; boostNode.extension.type.Self<a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.list_directory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a simple html web page listing requested directory             content.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="boostNode.runnable.server.CGIHTTPRequestHandler.load_module">
+<tt class="descname">load_module</tt><em class="property"> = None</em><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.load_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines arguments given to a requested file which is running by the server.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="boostNode.runnable.server.CGIHTTPRequestHandler.log_message">
+<tt class="descname">log_message</tt><big>(</big><em>format: str</em>, <em>message_or_error_code: (&lt;class 'int'&gt;</em>, <em>&lt;class 'str'&gt;)</em>, <em>response_code_or_message: (&lt;class 'str'&gt;</em>, <em>&lt;class 'int'&gt;)</em>, <em>message_end=None</em><big>)</big> &rarr; boostNode.extension.type.Self<a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.log_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper method for all logging output coming through the server             thread.</p>
+<p><strong>format</strong>                   - Logging format. Allowed                                            placeholder are: &#8220;client_ip&#8221;,                                            &#8220;client_port&#8221;,                                            &#8220;request_description&#8221;,                                            &#8220;response_code&#8221;, &#8220;forwarded_ip&#8221;,                                            &#8220;forwarded_host&#8221;,                                            &#8220;forwarded_server&#8221;,                                           &#8220;forwarded_server&#8221; and &#8220;server_port&#8221;.</p>
+<p><strong>message_or_error_code</strong>    - Logging message or resulting HTTP                                            code.</p>
+<p><strong>response_code_or_message</strong> - Resulting HTTP code or response                                            message.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span> <span class="o">=</span> <span class="n">CGIHTTPRequestHandler</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span> <span class="o">=</span> <span class="n">Class</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">web</span> <span class="o">=</span> <span class="n">Web</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">client_address</span> <span class="o">=</span> <span class="s">&#39;192.168.0.1&#39;</span><span class="p">,</span> <span class="mi">80</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">__test_buffer__</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span> 
+<span class="go">&#39;...&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">log_message</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="mi">404</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span> 
+<span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;&quot; and parame...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">__test_buffer__</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span> 
+<span class="go">&#39;...404...&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">instances</span> <span class="o">=</span> <span class="p">[</span><span class="n">handler</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">web</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">log_message</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="mi">404</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span> 
+<span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;&quot; and parame...</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">log_message</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="mi">404</span><span class="p">)</span> 
+<span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;&quot; and parame...</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c">## python2.7</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">(</span>
+<span class="gp">... </span>        <span class="n">String</span><span class="p">(</span><span class="s">&#39;key: value&#39;</span><span class="p">),</span> <span class="n">seekable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">else</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">()</span>
+<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s">&#39;key&#39;</span><span class="p">,</span> <span class="s">&#39;value&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">##</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">log_message</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="mi">404</span><span class="p">)</span> 
+<span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;&quot; and parame...</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c">## python2.7</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">(</span><span class="n">String</span><span class="p">(</span>
+<span class="gp">... </span>        <span class="s">&#39;X-Forwarded-For: 192.168.0.1</span><span class="se">\n</span><span class="s">&#39;</span>
+<span class="gp">... </span>        <span class="s">&#39;X-Forwarded-Host: 192.168.0.1</span><span class="se">\n</span><span class="s">&#39;</span>
+<span class="gp">... </span>        <span class="s">&#39;X-Forwarded-Server: 192.168.0.1&#39;</span><span class="p">),</span> <span class="n">seekable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">else</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">()</span>
+<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span>
+<span class="gp">... </span>        <span class="s">&#39;X-Forwarded-For&#39;</span><span class="p">,</span> <span class="s">&#39;192.168.0.1&#39;</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span>
+<span class="gp">... </span>        <span class="s">&#39;X-Forwarded-Host&#39;</span><span class="p">,</span> <span class="s">&#39;192.168.0.1&#39;</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span>
+<span class="gp">... </span>        <span class="s">&#39;X-Forwarded-Server&#39;</span><span class="p">,</span> <span class="s">&#39;192.168.0.1&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">__test_buffer__</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span> 
+<span class="go">&#39;...&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">log_message</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="mi">404</span><span class="p">)</span> 
+<span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;&quot; and parame...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">__test_buffer__</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span> 
+<span class="go">&#39;...192.168.0.1:80  -&gt; 404 - forwarded for: 192.168.0.1 - forwar...</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="boostNode.runnable.server.CGIHTTPRequestHandler.parse_url">
+<tt class="descname">parse_url</tt><big>(</big><em>url=None</em><big>)</big> &rarr; tuple<a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.parse_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method provides an easy way to split a http request string             into its components.</p>
+<p><strong>url</strong> - URL to parse.</p>
+<p>Returns a tuple containing of the parse object and a dictionary             containing get parameter.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sys_argv_backup</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span> <span class="o">=</span> <span class="n">CGIHTTPRequestHandler</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">request_parameter_delimiter</span> <span class="o">=</span> <span class="s">&#39;?&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[:</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">parse_url</span><span class="p">()</span>
+<span class="go">(None, {})</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;hans&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span> <span class="o">=</span> <span class="n">Class</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">web</span> <span class="o">=</span> <span class="n">Web</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">parse_url</span><span class="p">()</span> 
+<span class="go">(ParseResult(...&#39;hans&#39;...), {})</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;?hans=peter&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span> <span class="o">=</span> <span class="n">Class</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">web</span> <span class="o">=</span> <span class="n">Web</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">parse_url</span><span class="p">()</span> 
+<span class="go">(ParseResult(..., {&#39;hans&#39;: &#39;peter&#39;})</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;?hans=peter&amp;s&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span> <span class="o">=</span> <span class="n">Class</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">web</span> <span class="o">=</span> <span class="n">Web</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">__test_buffer__</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span> 
+<span class="go">&#39;...&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">parse_url</span><span class="p">()</span> 
+<span class="go">(ParseResult(...&#39;hans=peter&amp;s&#39;...})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">__test_buffer__</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span> 
+<span class="go">&#39;... &quot;?hans=peter&amp;s&quot; is not a valid get query string.\n&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span> <span class="o">=</span> <span class="n">sys_argv_backup</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="boostNode.runnable.server.CGIHTTPRequestHandler.post_dictionary">
+<tt class="descname">post_dictionary</tt><em class="property"> = None</em><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.post_dictionary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves the last started worker thread instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="boostNode.runnable.server.CGIHTTPRequestHandler.request_arguments">
+<tt class="descname">request_arguments</tt><em class="property"> = None</em><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.request_arguments" title="Permalink to this definition">¶</a></dt>
+<dd><p>Indicates if an answer is expected from the requested file.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="boostNode.runnable.server.CGIHTTPRequestHandler.requested_file">
+<tt class="descname">requested_file</tt><em class="property"> = None</em><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.requested_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines weather the handler has decided to run a python module or an external script.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="boostNode.runnable.server.CGIHTTPRequestHandler.requested_file_name">
+<tt class="descname">requested_file_name</tt><em class="property"> = None</em><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.requested_file_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>References the corresponding file handler to requested file name.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="boostNode.runnable.server.CGIHTTPRequestHandler.respond">
+<tt class="descname">respond</tt><em class="property"> = None</em><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.respond" title="Permalink to this definition">¶</a></dt>
+<dd><p>Indicates if the specified response was sent yet.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="boostNode.runnable.server.CGIHTTPRequestHandler.response_sent">
+<tt class="descname">response_sent</tt><em class="property"> = None</em><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.response_sent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves the error message format.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="boostNode.runnable.server.CGIHTTPRequestHandler.send_content_length_header">
+<tt class="descname">send_content_length_header</tt><big>(</big><em>size: int</em>, <em>dynamic_output=''</em>, <em>encoding='UTF-8'</em>, <em>response_code=200</em><big>)</big> &rarr; boostNode.extension.type.Self<a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.send_content_length_header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends the content length header to client if not sent yet.</p>
+<p><strong>size</strong>           - Content length to send.</p>
+<p><strong>dynamic_output</strong> - Indicates weather output should be forced to                                  compressed because it is simply a computed                                  string.</p>
+<p><strong>encoding</strong>       - Encoding to compress current output.</p>
+<p><strong>response_code</strong> - HTTP Response code to send.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="boostNode.runnable.server.CGIHTTPRequestHandler.send_content_type_header">
+<tt class="descname">send_content_type_header</tt><big>(</big><em>mime_type='text/html'</em>, <em>encoding='UTF-8'</em>, <em>response_code=200</em><big>)</big> &rarr; boostNode.extension.type.Self<a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.send_content_type_header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends a content type header to client if not sent yet.</p>
+<p><strong>mime_type</strong>     - Mime type to send to client.</p>
+<p><strong>encoding</strong>      - Encoding description to send to client.</p>
+<p><strong>response_code</strong> - HTTP Response code to send.</p>
+<p>Additional arguments and keywords will be forwarded to             &#8220;self.send_header()&#8221; method.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="boostNode.runnable.server.CGIHTTPRequestHandler.send_cookie">
+<tt class="descname">send_cookie</tt><big>(</big><em>cookie: (&lt;class 'http.cookies.SimpleCookie'&gt;</em>, <em>&lt;class 'str'&gt;</em>, <em>&lt;class 'dict'&gt;)</em>, <em>header='Set-Cookie'</em>, <em>max_age_in_seconds=604800</em>, <em>version=1</em>, <em>domain=''</em>, <em>secure=False</em>, <em>httponly=False</em>, <em>comment=''</em>, <em>path='/'</em>, <em>response_code=200</em><big>)</big> &rarr; boostNode.extension.type.Self<a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.send_cookie" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends a http cookie.</p>
+<p><strong>cookie</strong>             - Cookie object, dictionary or string.</p>
+<p><strong>header</strong>             - HTTP Header to use.</p>
+<p><strong>max_age_in_seconds</strong> - Maximum age of given cookie. Default is                                      7 days.</p>
+<p><strong>version</strong>            - Given cookie version.</p>
+<p><strong>domain</strong>             - The domain the cookie should bounded to.</p>
+<p><strong>secure</strong>             - Indicates weather only secure                                      connections should be associated with                                      given cookie.</p>
+<p><strong>httponly</strong>           - Disables JavaScript access to given                                      cookie.</p>
+<p><strong>comment</strong>            - A comment provided for given cookie.</p>
+<p><strong>path</strong>               - Web path the cookie should bounded to.</p>
+<p><strong>response_code</strong>      - Response code to send if not sent yet.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span> <span class="o">=</span> <span class="n">CGIHTTPRequestHandler</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">send_cookie</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">)</span> 
+<span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;&quot; and parame...</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">send_cookie</span><span class="p">(</span><span class="s">&#39;key=value;a=1&#39;</span><span class="p">)</span> 
+<span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;&quot; and parame...</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">send_cookie</span><span class="p">({})</span> 
+<span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;&quot; and parame...</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">send_cookie</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="p">{</span><span class="s">&#39;key&#39;</span><span class="p">:</span> <span class="s">&#39;value&#39;</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
+<span class="gp">... </span><span class="p">)</span> 
+<span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;&quot; and parame...</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cookie</span> <span class="o">=</span> <span class="n">cookies</span><span class="o">.</span><span class="n">SimpleCookie</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cookie</span><span class="p">[</span><span class="s">&#39;key&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;value&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cookie</span><span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">send_cookie</span><span class="p">(</span><span class="n">cookie</span><span class="p">)</span> 
+<span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;&quot; and parame...</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="boostNode.runnable.server.CGIHTTPRequestHandler.send_error">
+<tt class="descname">send_error</tt><big>(</big><em>code: int</em>, <em>*arguments: object</em>, <em>**keywords: object</em><big>)</big> &rarr; boostNode.extension.type.Self<a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.send_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send the given error to client if no response code was sent yet.</p>
+<p><strong>code</strong> - Error code to send.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="boostNode.runnable.server.CGIHTTPRequestHandler.send_response">
+<tt class="descname">send_response</tt><big>(</big><em>*arguments: object</em>, <em>**keywords: object</em><big>)</big> &rarr; boostNode.extension.type.Self<a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.send_response" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send the given response code to client if no response code was             sent yet.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">CGIHTTPRequestHandler</span><span class="p">()</span><span class="o">.</span><span class="n">send_response</span><span class="p">()</span> 
+<span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;&quot; and parame...</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="boostNode.runnable.server.CGIHTTPRequestHandler.send_static_file_cache_header">
+<tt class="descname">send_static_file_cache_header</tt><big>(</big><em>timestamp=1390776017.8095293</em>, <em>response_code=200</em>, <em>cache_control='public</em>, <em>max-age=0'</em>, <em>expire_time_in_seconds=0</em><big>)</big> &rarr; boostNode.extension.type.Self<a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.send_static_file_cache_header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Response a static file-request header.</p>
+<p><strong>timestamp</strong>              - Timestamp to use as last modified                                          time.</p>
+<p><strong>response_code</strong>          - Response code to send if not sent yet.</p>
+<p><strong>cache_control</strong>          - Cache control header string.</p>
+<p><strong>expire_time_in_seconds</strong> - Additional time to current timestamp                                          for expires header.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="boostNode.runnable.server.CGIHTTPRequestHandler.server_version">
+<tt class="descname">server_version</tt><em class="property"> = None</em><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.server_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves gziped encoded output.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="boostNode.runnable.server.CGIHTTPRequestHandler.setup">
+<tt class="descname">setup</tt><big>(</big><em>*arguments: object</em>, <em>**keywords: object</em><big>)</big> &rarr; None<a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method wraps the python&#8217;s native request handler to provide             our wrapped file socket buffer.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="boostNode.runnable.server.MultiProcessingHTTPServer">
+<em class="property">class </em><tt class="descclassname">boostNode.runnable.server.</tt><tt class="descname">MultiProcessingHTTPServer</tt><big>(</big><em>*arguments: object</em>, <em>**keywords: object</em><big>)</big> &rarr; None<a class="headerlink" href="#boostNode.runnable.server.MultiProcessingHTTPServer" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Class implements a partial multiprocessing supported web server.</p>
+<dl class="method">
+<dt id="boostNode.runnable.server.MultiProcessingHTTPServer.is_same_thread_request">
+<tt class="descname">is_same_thread_request</tt><big>(</big><em>request: socket.socket</em><big>)</big> &rarr; bool<a class="headerlink" href="#boostNode.runnable.server.MultiProcessingHTTPServer.is_same_thread_request" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines if the given request could be run in its own dedicated             process.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="boostNode.runnable.server.MultiProcessingHTTPServer.process_request">
+<tt class="descname">process_request</tt><big>(</big><em>request_socket: socket.socket</em>, <em>*arguments: object</em>, <em>**keywords: object</em><big>)</big> &rarr; None<a class="headerlink" href="#boostNode.runnable.server.MultiProcessingHTTPServer.process_request" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method indicates weather the request is a read only or not.             Read only requests will be forked if enough free processors are             available.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="boostNode.runnable.server.MultiProcessingHTTPServer.process_request_no_termination_wrapper">
+<tt class="descname">process_request_no_termination_wrapper</tt><big>(</big><em>parent_function: function</em>, <em>request: socket.socket</em>, <em>arguments: tuple</em>, <em>keywords: dict</em><big>)</big> &rarr; None<a class="headerlink" href="#boostNode.runnable.server.MultiProcessingHTTPServer.process_request_no_termination_wrapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wraps the normal &#8220;process_request&#8221; method. To manage the process             forking stuff.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="boostNode.runnable.server.MultiProcessingHTTPServer.read_file_socket">
+<tt class="descname">read_file_socket</tt><em class="property"> = None</em><a class="headerlink" href="#boostNode.runnable.server.MultiProcessingHTTPServer.read_file_socket" title="Permalink to this definition">¶</a></dt>
+<dd><p>Take this method via introspection.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="boostNode.runnable.server.Web">
+<em class="property">class </em><tt class="descclassname">boostNode.runnable.server.</tt><tt class="descname">Web</tt><big>(</big><em>*arguments: object</em>, <em>**keywords: object</em><big>)</big> &rarr; None<a class="headerlink" href="#boostNode.runnable.server.Web" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides a small platform independent web server designed for easily         serve a client-server structure.</p>
+<p><strong>root</strong>                                - Defines the root directory                                                   to be served via web.</p>
+<p><strong>host_name</strong>                           - Defines the current host                                                   name. Necessary for https                                                   support.</p>
+<p><strong>port</strong>                                - The port to listen for                                                   incoming requests. If &#8220;0&#8221;                                                   given a free port will be                                                   determined automatically.</p>
+<p><strong>default</strong>                             - Defines a default static                                                   file, python module or                                                   dynamic executable file.</p>
+<p><strong>public_key_file</strong>                     - Key file to support a https                                                   connection.</p>
+<p><strong>stop_order</strong>                          - Standard in command to stop                                                   server.</p>
+<p><strong>encoding</strong>                            - Encoding to use for                                                   incoming requests and                                                   outgoing data.</p>
+<p><strong>request_whitelist</strong>                   - A whitelist for requests.                                                   All requests which doesn&#8217;t                                                   match to one of these will                                                   be answered with an 404                                                   error code.</p>
+<p><strong>request_blacklist</strong>                   - A blacklist for requests to                                                   answer with a 404 error code.</p>
+<p><strong>same_thread_request_whitelist</strong>       - Requests which matches one                                                   one of theses patterns                                                   should be run in same                                                   thread as the server                                                   itself. This is usually                                                   necessary if you plan to                                                   write in inter thread                                                   shared data.</p>
+<p><strong>static_mime_type_pattern</strong>            - Defines which mime types                                                   should be interpreted as                                                   static.</p>
+<p><strong>dynamic_mime_type_pattern</strong>           - Defines which mime types                                                   should be interpreted as                                                   dynamic.</p>
+<p><strong>compressible_mime_type_pattern</strong>      - Defines which mime types                                                   could be returned in a                                                   compressed way.</p>
+<p><strong>default_file_name_pattern</strong>           - Defines file name pattern                                                   which should be returned                                                   if no explicit file was                                                   requested.</p>
+<p><strong>default_module_names</strong>                - Defines which module names                                                   should be ran if no                                                   explicit module was                                                   requested.</p>
+<p><strong>authentication</strong>                      - Enables basic http                                                   authentication.</p>
+<p><strong>authentication_file_name</strong>            - Defines file names for                                                   saving login data.</p>
+<p><strong>authentication_file_content_pattern</strong> - Defines how to parse                                                   authentication files.</p>
+<p><strong>authentication_handler</strong>              - A boolean function which                                                   decides by given request                                                   string and password if                                                   requested user is                                                   authenticated.</p>
+<p><strong>module_loading</strong>                      - Enables or disables running                                                   python modules which are                                                   requested.</p>
+<p><strong>maximum_number_of_processes</strong>         - Maximum number of used                                                   processor cores to use. if                                                   &#8220;0&#8221; is provided a useful                                                   number will be determined.</p>
+<p><strong>shared_data</strong>                         - Data which will be                                                   available in every request                                                   handler instance and                                                   accessible for every common                                                   gateway interface script.</p>
+<p><strong>request_parameter_delimiter</strong>         - Delimiter to distinguish                                                   requested file from given                                                   parameter.</p>
+<p><strong>file_size_stream_threshold_in_byte</strong>  - Threshold which will force                                                   the server to stream data.</p>
+<p><strong>directory_listing</strong>                   - Indicates weather the                                                   server generates a                                                   directory listing for                                                   requested directories.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Web</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">maximum_number_of_processes</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">public_key_file_path</span><span class="o">=</span><span class="s">&#39;.&#39;</span>
+<span class="gp">... </span><span class="p">)</span> 
+<span class="go">Object of &quot;Web&quot; with root path &quot;...&quot;, port &quot;0&quot; and stop order ...</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">public_key_file</span> <span class="o">=</span> <span class="n">FileHandler</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;_initialize_public_key_file&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">public_key_file</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Web</span><span class="p">(</span><span class="n">public_key_file</span><span class="o">=</span><span class="n">public_key_file</span><span class="p">)</span> 
+<span class="go">Object of &quot;Web&quot; with root path &quot;...&quot;, port &quot;0&quot; and stop order ...</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Web</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">public_key_file</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span>
+<span class="gp">... </span><span class="p">)</span> 
+<span class="gt">Traceback (most recent call last):</span>
+<span class="c">...</span>
+<span class="gr">ServerError</span>: <span class="n">Given public key file path &quot;...&quot; ...</span>
+</pre></div>
+</div>
+<dl class="attribute">
+<dt id="boostNode.runnable.server.Web.COMMAND_LINE_ARGUMENTS">
+<tt class="descname">COMMAND_LINE_ARGUMENTS</tt><em class="property"> = ({'keywords': {'help': 'Defines which path is used as web root (default is current working directory).', 'dest': 'root', 'default': {'execute': '__initializer_default_value__'}, 'action': 'store', 'required': {'execute': '__initializer_default_value__ is None'}, 'metavar': 'PATH', 'type': {'execute': 'type(__initializer_default_value__)'}}, 'arguments': ('-r', '--root')}, {'keywords': {'help': 'Defines the port number to access the web server. If zero given a free port will be determined.', 'dest': 'port', 'choices': range(0, 65536), 'default': {'execute': '__initializer_default_value__'}, 'action': 'store', 'required': {'execute': '__initializer_default_value__ is None'}, 'metavar': 'NUMBER', 'type': {'execute': 'type(__initializer_default_value__)'}}, 'arguments': ('-p', '--port')}, {'keywords': {'help': {'execute': '\'Defines which file or module should be requested if nothing was declared explicitly. It could be understood as welcome page (default: &quot;%s&quot;).\' % __initializer_default_value__.replace(\'%\', \'%%\')'}, 'dest': 'default', 'default': {'execute': '__initializer_default_value__'}, 'action': 'store', 'required': {'execute': '__initializer_default_value__ is None'}, 'metavar': 'PATH', 'type': {'execute': 'type(__initializer_default_value__)'}}, 'arguments': ('-d', '--default')}, {'keywords': {'help': {'execute': '\'Defines a public key file (*.pem) to enable open ssl encryption (default: &quot;%s&quot;).\' % __initializer_default_value__.replace(\'%\', \'%%\')'}, 'dest': 'public_key_file_path', 'default': {'execute': '__initializer_default_value__'}, 'action': 'store', 'required': {'execute': '__initializer_default_value__ is None'}, 'metavar': 'PATH', 'type': {'execute': 'type(__initializer_default_value__)'}}, 'arguments': ('-u', '--public-key-file-path')}, {'keywords': {'help': {'execute': '&quot;&quot;&quot;Saves a cli-command for shutting down the server (default: &quot;%s&quot;).&quot;&quot;&quot; % __initializer_default_value__'}, 'dest': 'stop_order', 'default': {'execute': '__initializer_default_value__'}, 'action': 'store', 'required': {'execute': '__initializer_default_value__ is None'}, 'metavar': 'STRING', 'type': {'execute': 'type(__initializer_default_value__)'}}, 'arguments': ('-o', '--stop-order')}, {'keywords': {'dest': 'request_whitelist', 'help': 'Select request type regular expression patterns which are only allowed for being interpreted.', 'nargs': '*', 'default': {'execute': '__initializer_default_value__'}, 'action': 'store', 'required': {'execute': '__initializer_default_value__ is None'}, 'metavar': 'REGEX_PATTERN', 'type': &lt;class 'str'&gt;}, 'arguments': ('-w', '--request-whitelist')}, {'keywords': {'dest': 'request_blacklist', 'help': &quot;Select request type regular expression patterns which aren't allowed for being interpreted.&quot;, 'nargs': '*', 'default': {'execute': '__initializer_default_value__'}, 'action': 'store', 'required': {'execute': '__initializer_default_value__ is None'}, 'metavar': 'REGEX_PATTERN', 'type': &lt;class 'str'&gt;}, 'arguments': ('-b', '--request-blacklist')}, {'keywords': {'dest': 'static_mime_type_pattern', 'help': {'execute': '\'All mime-type patterns which should recognize a static file. Those files will be directly sent to client without any preprocessing (default: &quot;%s&quot;).\' % \'&quot;, &quot;\'.join(__initializer_default_value__).replace(\'%\', \'%%\')'}, 'nargs': '*', 'default': {'execute': '__initializer_default_value__'}, 'action': 'store', 'required': {'execute': '__initializer_default_value__ is None'}, 'metavar': 'REGEX_PATTERN', 'type': &lt;class 'str'&gt;}, 'arguments': ('-s', '--static-mime-type-pattern')}, {'keywords': {'dest': 'dynamic_mime_type_pattern', 'help': {'execute': '\'All mime-type patterns which should recognize a dynamic file. Those files will be interpreted so the result can be send back to client (default: &quot;%s&quot;).\' % \'&quot;, &quot;\'.join(__initializer_default_value__).replace(\'%\', \'%%\')'}, 'nargs': '*', 'default': {'execute': '__initializer_default_value__'}, 'action': 'store', 'required': {'execute': '__initializer_default_value__ is None'}, 'metavar': 'REGEX_PATTERN', 'type': &lt;class 'str'&gt;}, 'arguments': ('-y', '--dynamic-mime-type-pattern')}, {'keywords': {'dest': 'compressible_mime_type_pattern', 'help': {'execute': '\'All mime-type patterns which should compressed before sending through network socket (default: &quot;%s&quot;).\' % \'&quot;, &quot;\'.join(__initializer_default_value__).replace(\'%\', \'%%\')'}, 'nargs': '*', 'default': {'execute': '__initializer_default_value__'}, 'action': 'store', 'required': {'execute': '__initializer_default_value__ is None'}, 'metavar': 'REGEX_PATTERN', 'type': &lt;class 'str'&gt;}, 'arguments': ('-C', '--compressible-mime-type-pattern')}, {'keywords': {'dest': 'default_file_name_pattern', 'help': {'execute': '\'All file name patterns which should be run if there is one present and no other default file pattern/name is given on initialisation (default: &quot;%s&quot;).\' % \'&quot;, &quot;\'.join(__initializer_default_value__).replace(\'%\', \'%%\')'}, 'nargs': '*', 'default': {'execute': '__initializer_default_value__'}, 'action': 'store', 'required': {'execute': '__initializer_default_value__ is None'}, 'metavar': 'REGEX_PATTERN', 'type': &lt;class 'str'&gt;}, 'arguments': ('-f', '--default-file-name-pattern')}, {'keywords': {'dest': 'default_module_names', 'help': {'execute': '\'Same as file name for module name patterns. Note that default files have a lower priority as default python modules (default: &quot;%s&quot;).\' % \'&quot;, &quot;\'.join(__initializer_default_value__).replace(\'%\', \'%%\')'}, 'nargs': '*', 'default': {'execute': '__initializer_default_value__'}, 'action': 'store', 'required': {'execute': '__initializer_default_value__ is None'}, 'metavar': 'REGEX_PATTERN', 'type': &lt;class 'str'&gt;}, 'arguments': ('-n', '--default-module-name-pattern')}, {'keywords': {'help': {'execute': '\'Defines the minimum number of bytes which triggers the server to send an octet-stream header to client (default: &quot;%d&quot;).\' % __initializer_default_value__'}, 'dest': 'file_size_stream_threshold_in_byte', 'default': {'execute': '__initializer_default_value__'}, 'action': 'store', 'required': {'execute': '__initializer_default_value__ is None'}, 'metavar': 'NUMBER', 'type': {'execute': 'type(__initializer_default_value__)'}}, 'arguments': ('-q', '--file-size-stream-threshold-in-byte')}, {'keywords': {'action': 'store_true', 'required': {'execute': '__initializer_default_value__ is None'}, 'help': 'Enables basic http authentication. You can control this behavior by providing an authentication file in directories you want to save.', 'dest': 'authentication', 'default': {'execute': '__initializer_default_value__'}}, 'arguments': ('-a', '--authentication')}, {'keywords': {'action': 'store_true', 'required': False, 'help': 'Enables module loading via get query. Enabling this feature can slow down your request performance extremely. Note that self module loading via &quot;__main__&quot; is independently possible.', 'dest': 'module_loading', 'default': False}, 'arguments': ('-e', '--enable-module-loading')}, {'keywords': {'action': 'store_false', 'required': False, 'help': 'Disables automatic directory listing if a directory is requested.', 'dest': 'directory_listing', 'default': True}, 'arguments': ('-z', '--disable-directory-listing')}, {'keywords': {'help': {'execute': '\'Defines the regular expression pattern to define how to parse authentication files (default: &quot;%s&quot;).\' % __initializer_default_value__.replace(\'%\', \'%%\')'}, 'dest': 'authentication_file_content_pattern', 'default': {'execute': '__initializer_default_value__'}, 'action': 'store', 'required': {'execute': '__initializer_default_value__ is None'}, 'metavar': 'REGEX_PATTERN', 'type': {'execute': 'type(__initializer_default_value__)'}}, 'arguments': ('-g', '--authentication-file-content-pattern')}, {'keywords': {'help': {'execute': '\'Defines the authentication file name (default: &quot;%s&quot;).\' % __initializer_default_value__.replace(\'%\', \'%%\')'}, 'dest': 'authentication_file_name', 'default': {'execute': '__initializer_default_value__'}, 'action': 'store', 'required': {'execute': '__initializer_default_value__ is None'}, 'metavar': 'STRING', 'type': {'execute': 'type(__initializer_default_value__)'}}, 'arguments': ('-i', '--authentication-file-name-pattern')}, {'keywords': {'help': {'execute': '\'Defines the request delimiter parameter (default: &quot;%s&quot;).\' % __initializer_default_value__.replace(\'%\', \'%%\')'}, 'dest': 'request_parameter_delimiter', 'default': {'execute': '__initializer_default_value__'}, 'action': 'store', 'required': {'execute': '__initializer_default_value__ is None'}, 'metavar': 'STRING', 'type': {'execute': 'type(__initializer_default_value__)'}}, 'arguments': ('-j', '--request-parameter-delimiter')}, {'keywords': {'help': {'execute': '\'Sets encoding for interpreting binary data like post or authentication requests, decoding given url\\\'s or encoding compressed gzip data for clients (default: &quot;%s&quot;).\' % __initializer_default_value__.replace(\'%\', \'%%\')'}, 'dest': 'encoding', 'default': {'execute': '__initializer_default_value__'}, 'action': 'store', 'required': {'execute': '__initializer_default_value__ is None'}, 'metavar': 'STRING', 'type': {'execute': 'type(__initializer_default_value__)'}}, 'arguments': ('-E', '--encoding')}, {'keywords': {'help': {'execute': '\'Defines the maximum number of concurrent running processes. If set to zero a useful value depending on detected processor will be determined (default: &quot;%d&quot;).\' % __initializer_default_value__'}, 'dest': 'maximum_number_of_processes', 'default': {'execute': '__initializer_default_value__'}, 'action': 'store', 'required': {'execute': '__initializer_default_value__ is None'}, 'metavar': 'NUMBER', 'type': {'execute': 'type(__initializer_default_value__)'}}, 'arguments': ('-k', '--maximum-number-of-processes')})</em><a class="headerlink" href="#boostNode.runnable.server.Web.COMMAND_LINE_ARGUMENTS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Holds all command line interface argument informations.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="boostNode.runnable.server.Web.DEFAULT_NUMBER_OF_PROCESSES">
+<tt class="descname">DEFAULT_NUMBER_OF_PROCESSES</tt><em class="property"> = 8</em><a class="headerlink" href="#boostNode.runnable.server.Web.DEFAULT_NUMBER_OF_PROCESSES" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the maximum number of forked processes if nothing better was defined or determined.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="boostNode.runnable.server.Web.DETERMINE_IP_SOCKET">
+<tt class="descname">DETERMINE_IP_SOCKET</tt><em class="property"> = ('8.8.8.8', 80)</em><a class="headerlink" href="#boostNode.runnable.server.Web.DETERMINE_IP_SOCKET" title="Permalink to this definition">¶</a></dt>
+<dd><p>Globally accessible socket to ask for currently useful ip determining.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="boostNode.runnable.server.Web.MAXIMUM_FIRST_GET_REQUEST_LINE_IN_CHARS">
+<tt class="descname">MAXIMUM_FIRST_GET_REQUEST_LINE_IN_CHARS</tt><em class="property"> = 65537</em><a class="headerlink" href="#boostNode.runnable.server.Web.MAXIMUM_FIRST_GET_REQUEST_LINE_IN_CHARS" title="Permalink to this definition">¶</a></dt>
+<dd><p>This values describes the longest possible first get request line.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="boostNode.runnable.server.Web.instances">
+<tt class="descname">instances</tt><em class="property"> = []</em><a class="headerlink" href="#boostNode.runnable.server.Web.instances" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves all initializes server instances.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="boostNode.runnable.server.Web.stop">
+<tt class="descname">stop</tt><big>(</big><em>*arguments: object</em>, <em>**keywords: object</em><big>)</big> &rarr; boostNode.extension.type.Self<a class="headerlink" href="#boostNode.runnable.server.Web.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Waits for running workers and shuts the server down.</p>
+<p>Arguments and keywords are forwarded to             &#8220;boostNode.extension.system.Run.stop()&#8221;.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">web</span> <span class="o">=</span> <span class="n">Web</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">web</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span> 
+<span class="go">Object of &quot;Web&quot; with root path &quot;...&quot;, port &quot;0&quot; and stop order &quot;...</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">web</span><span class="o">.</span><span class="n">service</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">web</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="c">...</span>
+<span class="gr">AttributeError</span>: <span class="n">&#39;bool&#39; object has no attribute &#39;socket&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 

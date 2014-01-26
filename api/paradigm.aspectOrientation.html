@@ -52,8 +52,251 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="boostnode-paradigm-aspectorientation">
-<h1>boostNode.paradigm.aspectOrientation<a class="headerlink" href="#boostnode-paradigm-aspectorientation" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-boostNode.paradigm.aspectOrientation">
+<span id="boostnode-paradigm-aspectorientation"></span><h1>boostNode.paradigm.aspectOrientation<a class="headerlink" href="#module-boostNode.paradigm.aspectOrientation" title="Permalink to this headline">¶</a></h1>
+<p>This module implements features like joint points, point cuts and advices     for implementing aspect orientated code.</p>
+<dl class="data">
+<dt id="boostNode.paradigm.aspectOrientation.ASPECTS">
+<tt class="descclassname">boostNode.paradigm.aspectOrientation.</tt><tt class="descname">ASPECTS</tt><em class="property"> = [{'advice': ({'callback': &lt;class 'boostNode.aspect.signature.CheckArguments'&gt;, 'event': 'call'}, {'callback': &lt;class 'boostNode.aspect.signature.CheckReturnValue'&gt;, 'event': 'return'}), 'point_cut': '^boostNode\\..*$'}]</em><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.ASPECTS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves all aspects for cross cutting concerns for whole library and program code that uses this feature.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ASPECTS</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="p">{</span><span class="s">&#39;advice&#39;</span><span class="p">:</span> <span class="p">({</span><span class="s">&#39;callback&#39;</span><span class="p">:</span> <span class="n">check_arguments</span><span class="p">,</span>
+<span class="gp">... </span>                 <span class="s">&#39;event&#39;</span><span class="p">:</span> <span class="s">&#39;call&#39;</span><span class="p">},</span>
+<span class="gp">... </span>                <span class="p">{</span><span class="s">&#39;callback&#39;</span><span class="p">:</span> <span class="n">check_return_value</span><span class="p">,</span>
+<span class="gp">... </span>                 <span class="s">&#39;event&#39;</span><span class="p">:</span> <span class="s">&#39;return&#39;</span><span class="p">}),</span>
+<span class="gp">... </span>     <span class="s">&#39;point_cut&#39;</span><span class="p">:</span> <span class="s">&#39;^library\..+$&#39;</span><span class="p">},</span>
+<span class="gp">... </span>    <span class="p">{</span><span class="s">&#39;advice&#39;</span><span class="p">:</span> <span class="p">({</span><span class="s">&#39;callback&#39;</span><span class="p">:</span> <span class="n">log_call</span><span class="p">,</span>
+<span class="gp">... </span>                 <span class="s">&#39;event&#39;</span><span class="p">:</span> <span class="s">&#39;call&#39;</span><span class="p">},</span>
+<span class="gp">... </span>                <span class="p">{</span><span class="s">&#39;callback&#39;</span><span class="p">:</span> <span class="n">log_return</span><span class="p">,</span>
+<span class="gp">... </span>                 <span class="s">&#39;event&#39;</span><span class="p">:</span> <span class="s">&#39;return&#39;</span><span class="p">}),</span>
+<span class="gp">... </span>     <span class="s">&#39;point_cut&#39;</span><span class="p">:</span> <span class="s">&#39;^.+$&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="boostNode.paradigm.aspectOrientation.Argument">
+<em class="property">class </em><tt class="descclassname">boostNode.paradigm.aspectOrientation.</tt><tt class="descname">Argument</tt><big>(</big><em>parameter: inspect.Parameter</em>, <em>value: (&lt;class 'object'&gt;</em>, <em>&lt;class 'type'&gt;)</em>, <em>function: (&lt;class 'method'&gt;</em>, <em>&lt;class 'function'&gt;)</em>, <em>name=None</em><big>)</big> &rarr; None<a class="headerlink" href="#boostNode.paradigm.aspectOrientation.Argument" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents a given argument given to a function.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="boostNode.paradigm.aspectOrientation.CallJointPoint">
+<em class="property">class </em><tt class="descclassname">boostNode.paradigm.aspectOrientation.</tt><tt class="descname">CallJointPoint</tt><big>(</big><em>class_object: type</em>, <em>object: object</em>, <em>function: (&lt;class 'function'&gt;</em>, <em>&lt;class 'method'&gt;)</em>, <em>arguments: collections.abc.Iterable</em>, <em>keywords: dict</em><big>)</big> &rarr; None<a class="headerlink" href="#boostNode.paradigm.aspectOrientation.CallJointPoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract class for joint points dealing with function calls.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="boostNode.paradigm.aspectOrientation.FunctionDecorator">
+<em class="property">class </em><tt class="descclassname">boostNode.paradigm.aspectOrientation.</tt><tt class="descname">FunctionDecorator</tt><big>(</big><em>method: (&lt;class 'function'&gt;</em>, <em>&lt;class 'method'&gt;)</em>, <em>function=None</em><big>)</big> &rarr; None<a class="headerlink" href="#boostNode.paradigm.aspectOrientation.FunctionDecorator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract class and interface for function decorator classes.</p>
+<p><strong>method</strong>   - The wrapped function.</p>
+<p><strong>function</strong> - If not &#8220;None&#8221; this contains the real function and                        &#8220;method&#8221; contains a special type of function (like                        &#8220;builtins.classmethod&#8221; or &#8220;builtins.staticmethod&#8221;). In                        this case the method type influences the behavior                        during calling the real function.</p>
+<dl class="attribute">
+<dt id="boostNode.paradigm.aspectOrientation.FunctionDecorator.COMMON_DECORATORS">
+<tt class="descname">COMMON_DECORATORS</tt><em class="property"> = [&lt;class 'property'&gt;, &lt;class 'super'&gt;, &lt;built-in function register&gt;, &lt;bound method type.pseudo_property of &lt;class 'boostNode.paradigm.objectOrientation.Class'&gt;&gt;]</em><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.FunctionDecorator.COMMON_DECORATORS" title="Permalink to this definition">¶</a></dt>
+<dd><p>This property hold a list of common python&#8217;s native decorators.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="boostNode.paradigm.aspectOrientation.FunctionDecorator.MANAGEABLE_DECORATORS">
+<tt class="descname">MANAGEABLE_DECORATORS</tt><em class="property"> = [&lt;class 'classmethod'&gt;, &lt;class 'staticmethod'&gt;]</em><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.FunctionDecorator.MANAGEABLE_DECORATORS" title="Permalink to this definition">¶</a></dt>
+<dd><p>This constant holds a list of python decorators which could be emulated
+by this function wrapper instances.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="boostNode.paradigm.aspectOrientation.FunctionDecorator.arguments_determined">
+<tt class="descname">arguments_determined</tt><em class="property"> = None</em><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.FunctionDecorator.arguments_determined" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves the wrapped function.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="boostNode.paradigm.aspectOrientation.FunctionDecorator.class_object">
+<tt class="descname">class_object</tt><em class="property"> = None</em><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.FunctionDecorator.class_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves method types like static or class bounded.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="boostNode.paradigm.aspectOrientation.FunctionDecorator.get_wrapper_function">
+<tt class="descname">get_wrapper_function</tt><big>(</big><em>) -&gt; (&lt;class 'function'&gt;</em>, <em>&lt;class 'method'&gt;</em><big>)</big><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.FunctionDecorator.get_wrapper_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method should usually be overridden. It serves the wrapper
+function to manipulate decorated function calls.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="boostNode.paradigm.aspectOrientation.FunctionDecorator.method_type">
+<tt class="descname">method_type</tt><em class="property"> = None</em><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.FunctionDecorator.method_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines if class or object references for a wrapped method are
+already determined.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="boostNode.paradigm.aspectOrientation.FunctionDecorator.object">
+<tt class="descname">object</tt><em class="property"> = None</em><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.FunctionDecorator.object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves method types like static or class bounded.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="boostNode.paradigm.aspectOrientation.FunctionDecorator.return_value">
+<tt class="descname">return_value</tt><em class="property"> = None</em><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.FunctionDecorator.return_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves method types like static or class bounded.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="boostNode.paradigm.aspectOrientation.FunctionDecorator.wrapped_decorator">
+<tt class="descname">wrapped_decorator</tt><em class="property"> = None</em><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.FunctionDecorator.wrapped_decorator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves method types like static or class bounded.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="boostNode.paradigm.aspectOrientation.JointPoint">
+<em class="property">class </em><tt class="descclassname">boostNode.paradigm.aspectOrientation.</tt><tt class="descname">JointPoint</tt><big>(</big><em>method: (&lt;class 'function'&gt;</em>, <em>&lt;class 'method'&gt;)</em>, <em>function=None</em><big>)</big> &rarr; None<a class="headerlink" href="#boostNode.paradigm.aspectOrientation.JointPoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implementation of joint point for the aspect orientated way.             Triggers every function call and look for aspects to wrap around.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nd">@JointPoint</span>
+<span class="gp">... </span><span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">a</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">call_handler</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">class_object</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">function</span><span class="p">,</span> <span class="n">arguments</span><span class="p">,</span> <span class="n">keywords</span>
+<span class="gp">... </span><span class="p">):</span> <span class="k">return</span> <span class="bp">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">return_handler</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">class_object</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">function</span><span class="p">,</span> <span class="n">arguments</span><span class="p">,</span> <span class="n">keywords</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">return_value</span>
+<span class="gp">... </span><span class="p">):</span> <span class="k">return</span> <span class="s">&#39;wrapped_result&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">__test_globals__</span><span class="p">[</span><span class="s">&#39;ASPECTS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[{</span>
+<span class="gp">... </span>    <span class="s">&#39;advice&#39;</span><span class="p">:</span> <span class="p">(</span>
+<span class="gp">... </span>        <span class="p">{</span><span class="s">&#39;callback&#39;</span><span class="p">:</span> <span class="n">call_handler</span><span class="p">,</span> <span class="s">&#39;event&#39;</span><span class="p">:</span> <span class="s">&#39;call&#39;</span><span class="p">},</span>
+<span class="gp">... </span>        <span class="p">{</span><span class="s">&#39;callback&#39;</span><span class="p">:</span> <span class="n">return_handler</span><span class="p">,</span> <span class="s">&#39;event&#39;</span><span class="p">:</span> <span class="s">&#39;return&#39;</span><span class="p">}),</span>
+<span class="gp">... </span>    <span class="s">&#39;point_cut&#39;</span><span class="p">:</span> <span class="s">&#39;^.+\.((A\.b)|a)$&#39;</span><span class="p">}]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="nd">@JointPoint</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">b</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">pass</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="p">()</span><span class="o">.</span><span class="n">b</span><span class="p">()</span>
+<span class="go">&#39;wrapped_result&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nd">@JointPoint</span>
+<span class="gp">... </span><span class="k">def</span> <span class="nf">a</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="k">pass</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">()</span>
+<span class="go">&#39;wrapped_result&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nd">@JointPoint</span>
+<span class="gp">... </span><span class="k">def</span> <span class="nf">b</span><span class="p">():</span> <span class="k">return</span> <span class="s">&#39;not_wrapped&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="p">()</span>
+<span class="go">&#39;not_wrapped&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">call_handler</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">class_object</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">function</span><span class="p">,</span> <span class="n">arguments</span><span class="p">,</span> <span class="n">keywords</span>
+<span class="gp">... </span><span class="p">):</span> <span class="k">return</span> <span class="bp">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">__test_globals__</span><span class="p">[</span><span class="s">&#39;ASPECTS&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s">&#39;advice&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s">&#39;callback&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+<span class="gp">... </span>    <span class="n">call_handler</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@JointPoint</span>
+<span class="gp">... </span><span class="k">def</span> <span class="nf">a</span><span class="p">():</span> <span class="k">return</span> <span class="s">&#39;wrapper_prevents_calling&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">a</span><span class="p">():</span> <span class="k">pass</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">b</span><span class="p">():</span> <span class="k">pass</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">.</span><span class="n">__func__</span> <span class="o">=</span> <span class="n">a</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">JointPoint</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">CallHandler</span><span class="p">(</span><span class="n">CallJointPoint</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">aspect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="bp">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">ReturnHandler</span><span class="p">(</span><span class="n">ReturnJointPoint</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">aspect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="s">&#39;class_wrapped_result&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">__test_globals__</span><span class="p">[</span><span class="s">&#39;ASPECTS&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s">&#39;advice&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s">&#39;callback&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+<span class="gp">... </span>    <span class="n">CallHandler</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">__test_globals__</span><span class="p">[</span><span class="s">&#39;ASPECTS&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s">&#39;advice&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;callback&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+<span class="gp">... </span>    <span class="n">ReturnHandler</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="p">()</span><span class="o">.</span><span class="n">b</span><span class="p">()</span>
+<span class="go">&#39;class_wrapped_result&#39;</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="boostNode.paradigm.aspectOrientation.JointPoint.get_wrapper_function">
+<tt class="descname">get_wrapper_function</tt><big>(</big><em>) -&gt; (&lt;class 'function'&gt;</em>, <em>&lt;class 'method'&gt;</em><big>)</big><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.JointPoint.get_wrapper_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>This methods returns the joint point&#8217;s wrapped function.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="boostNode.paradigm.aspectOrientation.JointPointHandler">
+<em class="property">class </em><tt class="descclassname">boostNode.paradigm.aspectOrientation.</tt><tt class="descname">JointPointHandler</tt><big>(</big><em>class_object: type</em>, <em>object: object</em>, <em>function: (&lt;class 'function'&gt;</em>, <em>&lt;class 'method'&gt;)</em>, <em>arguments: collections.abc.Iterable</em>, <em>keywords: dict</em><big>)</big> &rarr; None<a class="headerlink" href="#boostNode.paradigm.aspectOrientation.JointPointHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract class for joint point implementations.</p>
+<p><strong>class_object</strong> - function bounded class object</p>
+<p><strong>object</strong>       - function bounded instance</p>
+<p><strong>function</strong>     - function to handle</p>
+<p><strong>arguments</strong>    - arguments which should be forwarded to given                            function</p>
+<p><strong>keywords</strong>     - keywords which should be forwarded to given                            function</p>
+<dl class="classmethod">
+<dt id="boostNode.paradigm.aspectOrientation.JointPointHandler.aspect">
+<em class="property">classmethod </em><tt class="descname">aspect</tt><big>(</big><big>)</big> &rarr; None<a class="headerlink" href="#boostNode.paradigm.aspectOrientation.JointPointHandler.aspect" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method should be overwritten to provide the essential aspect             for handled function call.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">a</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">pass</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">JointPointHandler</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">A</span><span class="p">,</span> <span class="n">A</span><span class="p">(),</span> <span class="n">A</span><span class="p">()</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="p">(),</span> <span class="p">{}</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">aspect</span><span class="p">()</span> 
+<span class="gt">Traceback (most recent call last):</span>
+<span class="c">...</span>
+<span class="gr">NotImplementedError</span>: <span class="n">Method &quot;aspect&quot; wasn&#39;t implemented by &quot;...&quot;.</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="boostNode.paradigm.aspectOrientation.PointCut">
+<em class="property">class </em><tt class="descclassname">boostNode.paradigm.aspectOrientation.</tt><tt class="descname">PointCut</tt><big>(</big><em>class_object: type</em>, <em>object: object</em>, <em>function: (&lt;class 'function'&gt;</em>, <em>&lt;class 'method'&gt;)</em>, <em>arguments: collections.abc.Iterable</em>, <em>keywords: dict</em><big>)</big> &rarr; None<a class="headerlink" href="#boostNode.paradigm.aspectOrientation.PointCut" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generic way to handle point cuts.</p>
+<dl class="method">
+<dt id="boostNode.paradigm.aspectOrientation.PointCut.handle_call">
+<tt class="descname">handle_call</tt><big>(</big><big>)</big> &rarr; bool<a class="headerlink" href="#boostNode.paradigm.aspectOrientation.PointCut.handle_call" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implementation of point cut for the aspect orientated way.             Filters all functions calls and run given advice on given event.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="boostNode.paradigm.aspectOrientation.PointCut.handle_return">
+<tt class="descname">handle_return</tt><big>(</big><em>return_value: object</em><big>)</big> &rarr; object<a class="headerlink" href="#boostNode.paradigm.aspectOrientation.PointCut.handle_return" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implementation of point cut for the aspect orientated way.             Filters all functions calls and run given advice on given event.</p>
+<p><strong>return_value</strong> - function call return value</p>
+<p>Returns functions return value or the wrapped return value             provided be a return callback handler.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="boostNode.paradigm.aspectOrientation.ReturnAspect">
+<em class="property">class </em><tt class="descclassname">boostNode.paradigm.aspectOrientation.</tt><tt class="descname">ReturnAspect</tt> &rarr; None<a class="headerlink" href="#boostNode.paradigm.aspectOrientation.ReturnAspect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract class for aspects dealing with function&#8217;s return value.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="boostNode.paradigm.aspectOrientation.ReturnJointPoint">
+<em class="property">class </em><tt class="descclassname">boostNode.paradigm.aspectOrientation.</tt><tt class="descname">ReturnJointPoint</tt><big>(</big><em>*arguments: object</em>, <em>**keywords: object</em><big>)</big> &rarr; None<a class="headerlink" href="#boostNode.paradigm.aspectOrientation.ReturnJointPoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract class for joint points dealing with function&#8217;s return value.</p>
+</dd></dl>
+
 </div>
 
 
