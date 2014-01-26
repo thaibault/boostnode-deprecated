@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.3
 # -*- coding: utf-8 -*-
 
 # region vim modline
@@ -247,7 +247,7 @@
     ...     pass
     ...     # ...
     ...
-    ... # endregion
+    ... # endregion # doctest: +SKIP
 
     Structure of dependencies
     -------------------------
@@ -272,7 +272,7 @@
     Module pattern (see bc16)
     -------------------------
 
-    >>> #!/usr/bin/env python3.2
+    >>> #!/usr/bin/env python3.3
     ... # -*- coding: utf-8 -*-
     ...
     ... # region header
@@ -289,7 +289,7 @@
     ...
     ... __author__ = 'FULL NAME'
     ... __copyright__ = 'see boostNode/__init__.py'
-    ... __credits__ = ('FIRST NAME', 'SECOND NAME', ...)
+    ... __credits__ = 'FIRST NAME', 'SECOND NAME', ...
     ... __license__ = 'see boostNode/__init__.py'
     ... __maintainer__ = 'FULL NAME'
     ... __maintainer_email__ = 'EMAIL ADDRESS'
@@ -347,7 +347,8 @@
     ... '''
     ... # Module.default(name=__name__, frame=inspect.currentframe())
     ...
-    ... # endregion
+    ... # endregion # doctest: +SKIP
+    '\\n    Module documentation which should be useable as help message fo...'
 """
 
 # endregion
@@ -361,23 +362,26 @@ __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-## python3.3 import builtins
-import __builtin__ as builtins
+## python2.7 import __builtin__ as builtins
+import builtins
 import inspect
 import logging
 import os
 import sys
 
 '''Make boostNode packages and modules importable via relative paths.'''
-sys.path.append(os.path.abspath(sys.path[0] + 2 * ('..' + os.sep)))
+if sys.path[0]:
+    sys.path.append(os.path.abspath(sys.path[0] + 2 * ('..' + os.sep)))
+else:
+    sys.path[0] = os.path.abspath(sys.path[0] + '..' + os.sep)
 
 # endregion
 
 # region functions
 
 
-## python3.3 def __get_all_modules__(path=sys.path[0]) -> builtins.list:
-def __get_all_modules__(path=sys.path[0]):
+## python2.7 def __get_all_modules__(path=sys.path[0]):
+def __get_all_modules__(path=sys.path[0]) -> builtins.list:
     '''
         This method provides a generic way to determine all modules in \
         current package or folder. It is useful for "__init__.py" files.
