@@ -71,10 +71,22 @@
 <dd><p>Saves the error message format.</p>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="boostNode.runnable.server.CGIHTTPRequestHandler.data">
+<tt class="descname">data</tt><em class="property"> = None</em><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves the last started worker thread instance.</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="boostNode.runnable.server.CGIHTTPRequestHandler.do_DELETE">
+<em class="property">static </em><tt class="descname">do_DELETE</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.do_DELETE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is triggered if a delete request is coming.</p>
+</dd></dl>
+
 <dl class="staticmethod">
 <dt id="boostNode.runnable.server.CGIHTTPRequestHandler.do_GET">
 <em class="property">static </em><tt class="descname">do_GET</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.do_GET" title="Permalink to this definition">¶</a></dt>
-<dd><p>Is triggered if an incoming get-request is detected. Decides if             request is valid and static or dynamic. It also through an             exception and sends an http-error if request isn&#8217;t valid.</p>
+<dd><p>Is triggered if an incoming get request is detected. Decides if             request is valid and static or dynamic. It also through an             exception and sends an http-error if request isn&#8217;t valid.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span> <span class="o">=</span> <span class="n">CGIHTTPRequestHandler</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s">&#39;/&#39;</span>
@@ -134,7 +146,13 @@
 <dl class="staticmethod">
 <dt id="boostNode.runnable.server.CGIHTTPRequestHandler.do_POST">
 <em class="property">static </em><tt class="descname">do_POST</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.do_POST" title="Permalink to this definition">¶</a></dt>
-<dd><p>Is triggered if a post-request is coming.</p>
+<dd><p>Is triggered if a post request is coming.</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="boostNode.runnable.server.CGIHTTPRequestHandler.do_PUT">
+<em class="property">static </em><tt class="descname">do_PUT</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.do_PUT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is triggered if a put request is coming.</p>
 </dd></dl>
 
 <dl class="staticmethod">
@@ -291,12 +309,6 @@
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span> <span class="o">=</span> <span class="n">sys_argv_backup</span>
 </pre></div>
 </div>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="boostNode.runnable.server.CGIHTTPRequestHandler.post_dictionary">
-<tt class="descname">post_dictionary</tt><em class="property"> = None</em><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.post_dictionary" title="Permalink to this definition">¶</a></dt>
-<dd><p>Saves the last started worker thread instance.</p>
 </dd></dl>
 
 <dl class="attribute">
