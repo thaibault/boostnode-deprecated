@@ -1204,7 +1204,7 @@ class CGIHTTPRequestHandler(
         self.host = ''
         self.request_uri = ''
         self.parameter = ''
-        self.post_dictionary = {}
+        self.data = {}
         '''Saves the last started worker thread instance.'''
         self.last_running_worker = None
         '''
@@ -1291,7 +1291,7 @@ class CGIHTTPRequestHandler(
 ## python3.3     def do_GET(self: Self) -> Self:
     def do_GET(self):
         '''
-            Is triggered if an incoming get-request is detected. Decides if \
+            Is triggered if an incoming get request is detected. Decides if \
             request is valid and static or dynamic. It also through an \
             exception and sends an http-error if request isn't valid.
 
@@ -1359,7 +1359,7 @@ class CGIHTTPRequestHandler(
     @JointPoint
 ## python3.3     def do_POST(self: Self) -> Self:
     def do_POST(self):
-        '''Is triggered if a post-request is coming.'''
+        '''Is triggered if a post request is coming.'''
 ## python3.3
 ##         data_type, post_data = cgi.parse_header(
 ##             self.headers.get_content_type())
@@ -1367,21 +1367,33 @@ class CGIHTTPRequestHandler(
             'content-type'))
 ##
         if data_type == 'multipart/form-data':
-            self.post_dictionary = self._determine_post_dictionary()
+            self.data = self._determine_data()
         elif data_type == 'application/x-www-form-urlencoded':
 ## python3.3
-##             self.post_dictionary = urlparse.parse_qs(self.rfile.read(
+##             self.data = urlparse.parse_qs(self.rfile.read(
 ##                 builtins.int(self.headers.get('content-length'))
 ##             ).decode(self.server.web.encoding))
-            self.post_dictionary = cgi.parse_qs(
+            self.data = cgi.parse_qs(
                 self.rfile.read(builtins.int(self.headers.getheader(
                     'content-length'))),
                 keep_blank_values=True)
 ##
-            for name, value in self.post_dictionary.items():
+            for name, value in self.data.items():
                 if Object(content=value).is_binary():
-                    self.post_dictionary[name] = {'content': value}
+                    self.data[name] = {'content': value}
         return self.do_GET()
+
+    @JointPoint
+## python3.3     def do_DELETE(self: Self) -> Self:
+    def do_DELETE(self):
+        '''Is triggered if a delete request is coming.'''
+        return self.do_POST()
+
+    @JointPoint
+## python3.3     def do_PUT(self: Self) -> Self:
+    def do_PUT(self):
+        '''Is triggered if a put request is coming.'''
+        return self.do_POST()
 
             # endregion
 
@@ -2092,10 +2104,8 @@ class CGIHTTPRequestHandler(
 ##
 
     @JointPoint
-## python3.3
-##     def _determine_post_dictionary(self: Self) -> builtins.dict:
-    def _determine_post_dictionary(self):
-##
+## python3.3     def _determine_data(self: Self) -> builtins.dict:
+    def _determine_data(self):
         '''
             Determines the post values given by an html form. File uploads \
             are includes as bytes.
@@ -2111,9 +2121,9 @@ class CGIHTTPRequestHandler(
             strict_parsing=True,
             environ=self._determine_environment_variables())
 ##
-        post_dictionary = {}
+        data = {}
         for name in form:
-            post_dictionary[name] = []
+            data[name] = []
             index = 0
             for value in form.getlist(name):
                 # NOTE: This definition handles a cgi module bug.
@@ -2123,20 +2133,20 @@ class CGIHTTPRequestHandler(
                 if(builtins.isinstance(value_reference.file, builtins.file) or
                    value_reference.filename):
 ## python3.3
-##                     post_dictionary[name].append({
+##                     data[name].append({
 ##                         'content': value,
 ##                         'name': value_reference.filename,
 ##                         'disposition': value_reference.disposition,
 ##                         'encoding': value_reference.encoding})
-                    post_dictionary[name].append({
+                    data[name].append({
                         'content': value,
                         'name': value_reference.filename,
                         'disposition': value_reference.disposition})
 ##
                 else:
-                    post_dictionary[name].append(value)
+                    data[name].append(value)
                 index += 1
-        return post_dictionary
+        return data
 
     @JointPoint
 ## python3.3
@@ -2480,7 +2490,7 @@ class CGIHTTPRequestHandler(
 
             >>> handler.server.web.default = ''
             >>> handler.server.web.default_module_names = 'doctest',
-            >>> handler.post_dictionary['__no_respond__'] = True
+            >>> handler.data['__no_respond__'] = True
             >>> handler.respond = False
             >>> handler._default_get()
             True
@@ -2785,9 +2795,9 @@ class CGIHTTPRequestHandler(
         '''
         self.request_arguments = [
             self.requested_file_name, self.host, self.request_uri,
-            self.parse_url(self.request_uri)[1], self.post_dictionary,
+            self.parse_url(self.request_uri)[1], self.data,
             self.server.web.shared_data, self]
-        if '__no_respond__' not in self.post_dictionary:
+        if '__no_respond__' not in self.data:
             self.respond = True
             return self._run_request()
         self.__class__.last_running_worker = threading.Thread(

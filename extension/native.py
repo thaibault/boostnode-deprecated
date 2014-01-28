@@ -299,7 +299,8 @@ class Object(Class):
         text_chars = ''.join(builtins.map(
             builtins.chr,
             builtins.range(7, 14) + [27] + builtins.range(0x20, 0x100)))
-        return builtins.bool(content.translate(None, text_chars))
+        return builtins.hasattr(content, 'translate') and builtins.bool(
+            content.translate(None, text_chars))
 ##
 
         # endregion
