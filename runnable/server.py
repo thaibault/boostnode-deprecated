@@ -1205,6 +1205,7 @@ class CGIHTTPRequestHandler(
         self.request_uri = ''
         self.parameter = ''
         self.data = {}
+        self.request_type = ''
         '''Saves the last started worker thread instance.'''
         self.last_running_worker = None
         '''
@@ -1343,6 +1344,7 @@ class CGIHTTPRequestHandler(
             >>> handler.do_GET() # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "not_in_whitl...
         '''
+        self.request_type = self.request_type if self.request_type else 'get'
         self._create_environment_variables()
         if self._is_authenticated():
             valid_request = self._is_valid_request()
@@ -1360,6 +1362,7 @@ class CGIHTTPRequestHandler(
 ## python3.3     def do_POST(self: Self) -> Self:
     def do_POST(self):
         '''Is triggered if a post request is coming.'''
+        self.request_type = self.request_type if self.request_type else 'post'
 ## python3.3
 ##         data_type, post_data = cgi.parse_header(
 ##             self.headers.get_content_type())
@@ -1387,12 +1390,14 @@ class CGIHTTPRequestHandler(
 ## python3.3     def do_DELETE(self: Self) -> Self:
     def do_DELETE(self):
         '''Is triggered if a delete request is coming.'''
+        self.request_type = 'delete'
         return self.do_POST()
 
     @JointPoint
 ## python3.3     def do_PUT(self: Self) -> Self:
     def do_PUT(self):
         '''Is triggered if a put request is coming.'''
+        self.request_type = 'put'
         return self.do_POST()
 
             # endregion
@@ -2793,10 +2798,13 @@ class CGIHTTPRequestHandler(
             expected from client it could be run without its own thread \
             environment.
         '''
-        self.request_arguments = [
-            self.requested_file_name, self.host, self.request_uri,
-            self.parse_url(self.request_uri)[1], self.data,
-            self.server.web.shared_data, self]
+        self.request_arguments = (
+            ('requested_file_name', self.requested_file_name),
+            ('host', self.host), ('request_uri', self.request_uri),
+            ('get', self.parse_url(self.request_uri)[1]), ('data', self.data),
+            ('request_type', self.request_type),
+            ('shared_data', self.server.web.shared_data),
+            ('request_handler', self))
         if '__no_respond__' not in self.data:
             self.respond = True
             return self._run_request()
@@ -2831,16 +2839,16 @@ class CGIHTTPRequestHandler(
             >>> handler.requested_file = FileHandler(
             ...     __test_folder__.path + '_run_requested_file')
             >>> handler.requested_file.content = ''
-            >>> handler.request_arguments = ['hans']
+            >>> handler.request_arguments = ('hans', 'peter'),
 
             >>> handler.respond = False
             >>> handler._run_requested_file() # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "" and parame...
         '''
-        self.request_arguments[0] = self.server.web.root.path + \
-            self.request_arguments[0]
         self.request_arguments = builtins.list(builtins.map(
-            lambda element: builtins.str(element), self.request_arguments))
+            lambda element: builtins.str(element[1]), self.request_arguments))
+        self.request_arguments[0] = self.server.web.root.path + \
+            self.request_arguments[0][1]
         __logger__.debug('Execute file "%s".', self.request_arguments[0])
         self.server.web.number_of_running_threads += 1
         try:
@@ -2889,6 +2897,7 @@ class CGIHTTPRequestHandler(
             Imports and runs a given python module. Errors and output are \
             piped to requested client.
         '''
+        self.request_arguments = builtins.dict(self.request_arguments)
         '''Redirect output buffer.'''
         print_default_buffer_backup = Print.default_buffer
         Print.default_buffer = self.server.web.thread_buffer
@@ -2896,7 +2905,8 @@ class CGIHTTPRequestHandler(
         sys_path_backup = copy.copy(sys.path)
         sys.path = [self.server.web.root.path] + sys.path
         self.server.web.number_of_running_threads += 1
-        requested_module = builtins.__import__(self.request_arguments[0])
+        requested_module = builtins.__import__(
+            self.request_arguments['requested_file_name'])
         '''Extend requested scope with request dependent globals.'''
         requested_module.__requested_arguments__ = self.request_arguments
         sys.path = sys_path_backup
