@@ -351,8 +351,6 @@
     '\\n    Module documentation which should be useable as help message fo...'
 """
 
-# endregion
-
 __author__ = 'Torben Sickert'
 __copyright__ = 'see module level docstring'
 __credits__ = 'Torben Sickert',

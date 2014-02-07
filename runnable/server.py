@@ -1604,8 +1604,8 @@ class CGIHTTPRequestHandler(
             **name** - If provided only the matching value will be returned \
                        instead of the whole cookie object.
         '''
-## python3.3         if self.headers.get('Cookie'):
-        if self.headers.getheader('Cookie'):
+## python3.3         if not __test_mode__ and self.headers.get('Cookie'):
+        if not __test_mode__ and self.headers.getheader('Cookie'):
             cookie = cookies.SimpleCookie()
             cookie.load(self.headers.getheader('Cookie'))
             return cookie[name].value if name and name in cookie else cookie
@@ -2798,7 +2798,6 @@ class CGIHTTPRequestHandler(
             expected from client it could be run without its own thread \
             environment.
         '''
-        # TODO check new branch.
         cookie = {}
         if self.get_cookie() is not None:
             for key, morsel in self.get_cookie().items():
