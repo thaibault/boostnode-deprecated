@@ -2798,11 +2798,16 @@ class CGIHTTPRequestHandler(
             expected from client it could be run without its own thread \
             environment.
         '''
+        # TODO check new branch.
+        cookie = {}
+        if self.get_cookie() is not None:
+            for key, morsel in self.get_cookie().items():
+                cookie[key] = morsel.value
         self.request_arguments = (
             ('requested_file_name', self.requested_file_name),
             ('host', self.host), ('request_uri', self.request_uri),
             ('get', self.parse_url(self.request_uri)[1]), ('data', self.data),
-            ('request_type', self.request_type),
+            ('cookie', cookie), ('request_type', self.request_type),
             ('shared_data', self.server.web.shared_data),
             ('request_handler', self))
         if '__no_respond__' not in self.data:
@@ -2908,7 +2913,7 @@ class CGIHTTPRequestHandler(
         requested_module = builtins.__import__(
             self.request_arguments['requested_file_name'])
         '''Extend requested scope with request dependent globals.'''
-        requested_module.__requested_arguments__ = self.request_arguments
+        requested_module.__request_arguments__ = self.request_arguments
         sys.path = sys_path_backup
         __logger__.debug('Run module "%s".', requested_module)
         return self._handle_module_running(
