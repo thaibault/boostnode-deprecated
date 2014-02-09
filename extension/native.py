@@ -866,6 +866,33 @@ class String(Object, builtins.str):
         return self
 
     @JointPoint
+## python3.3     def camel_case_to_delimited(self: Self) -> Self:
+    def camel_case_to_delimited(self):
+        '''
+            Converts a camel cased string to its delimited string version.
+
+            Examples:
+
+            >>> String().camel_case_to_delimited().content
+            ''
+
+            >>> String('hansPeter').camel_case_to_delimited().content
+            'hans_peter'
+
+            >>> String('hans_peter').camel_case_to_delimited().content
+            'hans_peter'
+
+            >>> String('Hans').camel_case_to_delimited().content
+            'hans'
+        '''
+        self.content = re.sub(
+            '([a-z0-9])([A-Z])', r'\1_\2', re.sub(
+                '(.)([A-Z][a-z]+)', r'\1_\2', self.content
+            )
+        ).lower()
+        return self
+
+    @JointPoint
 ## python3.3
 ##     def delimit(self: Self, delimiter='-', search_pattern='a-zA-Z') -> Self:
     def delimit(self, delimiter='-', search_pattern='a-zA-Z'):
