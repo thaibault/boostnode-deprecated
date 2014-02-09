@@ -274,7 +274,7 @@
 
 <dl class="classmethod">
 <dt id="boostNode.extension.native.Module.get_context_path">
-<em class="property">classmethod </em><tt class="descname">get_context_path</tt><big>(</big><em>path=None</em>, <em>frame=&lt;frame object at 0x22644f0&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_context_path" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><tt class="descname">get_context_path</tt><big>(</big><em>path=None</em>, <em>frame=&lt;frame object at 0x36dad90&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_context_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines the package and module level context path to a given             context or file.</p>
 <p><strong>path</strong>  - relative or absolute context or file path to normalize</p>
 <p><strong>frame</strong> - stack frame to analyse again context</p>
@@ -648,6 +648,14 @@
 <span class="go">&#39;hans_peter&#39;</span>
 </pre></div>
 </div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hansPeter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">camel_case_to_delimited</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;hans-peter&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hansPeter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">camel_case_to_delimited</span><span class="p">(</span><span class="s">&#39;+&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;hans+peter&#39;</span>
+</pre></div>
+</div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;Hans&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">camel_case_to_delimited</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;hans&#39;</span>
 </pre></div>
@@ -675,6 +683,9 @@
 <dt id="boostNode.extension.native.String.delimit">
 <em class="property">static </em><tt class="descname">delimit</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.delimit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Replaces all typical delimiting chars with given delimiter.</p>
+<p><strong>delimiter</strong>      - Delimiter string</p>
+<p><strong>search_pattern</strong> - Patterns not to delimit</p>
+<p>Returns the modified string instance.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">()</span><span class="o">.</span><span class="n">delimit</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;&#39;</span>
