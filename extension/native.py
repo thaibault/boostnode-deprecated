@@ -873,6 +873,8 @@ class String(Object, builtins.str):
         '''
             Converts a camel cased string to its delimited string version.
 
+            **delimiter** - Delimiter string
+
             Examples:
 
             >>> String().camel_case_to_delimited().content
