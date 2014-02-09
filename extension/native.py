@@ -866,8 +866,10 @@ class String(Object, builtins.str):
         return self
 
     @JointPoint
-## python3.3     def camel_case_to_delimited(self: Self) -> Self:
-    def camel_case_to_delimited(self):
+## python3.3
+##     def camel_case_to_delimited(self: Self, delimiter='_') -> Self:
+    def camel_case_to_delimited(self, delimiter='_'):
+##
         '''
             Converts a camel cased string to its delimited string version.
 
@@ -882,12 +884,18 @@ class String(Object, builtins.str):
             >>> String('hans_peter').camel_case_to_delimited().content
             'hans_peter'
 
+            >>> String('hansPeter').camel_case_to_delimited('-').content
+            'hans-peter'
+
+            >>> String('hansPeter').camel_case_to_delimited('+').content
+            'hans+peter'
+
             >>> String('Hans').camel_case_to_delimited().content
             'hans'
         '''
         self.content = re.sub(
-            '([a-z0-9])([A-Z])', r'\1_\2', re.sub(
-                '(.)([A-Z][a-z]+)', r'\1_\2', self.content
+            '([a-z0-9])([A-Z])', '\\1%s\\2' % delimiter, re.sub(
+                '(.)([A-Z][a-z]+)', '\\1%s\\2' % delimiter, self.content
             )
         ).lower()
         return self
@@ -899,6 +907,12 @@ class String(Object, builtins.str):
 ##
         '''
             Replaces all typical delimiting chars with given delimiter.
+
+            **delimiter**      - Delimiter string
+
+            **search_pattern** - Patterns not to delimit
+
+            Returns the modified string instance.
 
             Examples:
 
