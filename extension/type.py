@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.3
 # -*- coding: utf-8 -*-
 
 # region vim modline
@@ -29,8 +29,8 @@ __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-## python3.3 import builtins
-import __builtin__ as builtins
+## python2.7 import __builtin__ as builtins
+import builtins
 import inspect
 import os
 import sys
@@ -59,57 +59,39 @@ class Self:
     '''Type for defining the current object of its method.'''
 
 
-class MetaModel(builtins.type):
+class Model(builtins.type):
 
     '''Creates a model for orm based using.'''
 
-## python3.3
+## python2.7
 ##     def __new__(
-##         cls: SelfClass, class_name: builtins.str, base_classes: builtins.tuple,
-##         class_scope: builtins.dict,
-##         *arguments: (builtins.type, builtins.object),
-##         **keywords: (builtins.type, builtins.object)
+##         cls, class_name, base_classes, class_scope, *arguments, **keywords
 ##     ):
     def __new__(
-        cls, class_name, base_classes, class_scope, *arguments, **keywords
-    ):
+        cls: SelfClass, class_name: builtins.str,
+        base_classes: builtins.tuple, class_scope: builtins.dict,
+        *arguments: (builtins.type, builtins.object),
+        **keywords: (builtins.type, builtins.object)
+    ) -> builtins.type:
 ##
         '''
-            Triggers if a new instance is created. Set the default name for
+            Triggers if a new instance is created. Set the default name for \
             an orm instance.
 
-            TODO
+            Examples:
+
+            >>> if sys.version_info.major < 3:
+            ...     class UserModel: __metaclass__ = Model
+            ... else:
+            ...     exec('class UserModel(metaclass=Model): pass')
         '''
-        class_scope['__tablename__'] = class_scope['__table__'] = \
-            class_name.lower()
-        return builtins.super(MetaModel, cls).__new__(
-            cls, class_name, base_classes, class_scope, *arguments, **keywords)
+        class_scope['__tablename__'] = class_scope['__table_name__'] = \
+            class_scope['db_table'] = class_name.lower()
+        '''Take this method name via introspection.'''
+        return builtins.getattr(
+            builtins.super(Model, cls), inspect.stack()[0][3]
+        )(cls, class_name, base_classes, class_scope, *arguments, **keywords)
 
-
-class Model(builtins.object):
-
-    '''Represents an abstract model for an orm base model.'''
-
-## python3.3     def __repr__(self: Self):
-    def __repr__(self):
-        '''
-            Describes the model as string.
-
-            TODO
-        '''
-        if self.__dict__:
-            property_descriptions = ''
-            index = 1
-            for name, value in self.__dict__.items():
-                if index == builtins.len(self.__dict__):
-                    property_descriptions += ' and '
-                elif index != 1:
-                    property_descriptions += ', '
-                property_descriptions += '"%s": "%s"' % (name, value)
-                index += 1
-            return '%s with properties %s.' % (
-                self.__class__.__name__, property_descriptions)
-        return self.__class__.__name__
 
 # endregion
 
