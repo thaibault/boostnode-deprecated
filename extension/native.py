@@ -839,7 +839,7 @@ class String(Object, builtins.str):
             ...     True
             ... else:
             ...     String(
-            ...         """[\"'`´()&$ -]"""
+            ...         """[\"'`()&$ -]"""
             ...     ).validate_shell().content == (
             ...         '[\\\\"\\\\\\'\\\\`\\\\(\\\\)\\\\&\\\\$\\\\ \\\\-]')
             True
