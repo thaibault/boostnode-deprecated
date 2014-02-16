@@ -68,6 +68,9 @@
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Class</span><span class="p">()</span><span class="o">.</span><span class="n">is_method</span><span class="p">(</span><span class="s">&#39;is_method&#39;</span><span class="p">)</span>
 <span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">A</span><span class="p">(</span><span class="n">Class</span><span class="p">):</span> <span class="k">pass</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="p">()</span><span class="o">.</span><span class="n">is_method</span><span class="p">(</span><span class="s">&#39;is_method&#39;</span><span class="p">)</span>
+<span class="go">True</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Class</span><span class="p">()</span><span class="o">.</span><span class="n">is_method</span><span class="p">(</span><span class="s">&#39;not existing&#39;</span><span class="p">)</span>
 <span class="go">False</span>
 </pre></div>
@@ -85,6 +88,9 @@
 <span class="go">False</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Class</span><span class="o">.</span><span class="n">test</span> <span class="o">=</span> <span class="s">&#39;A&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Class</span><span class="p">()</span><span class="o">.</span><span class="n">is_property</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">A</span><span class="p">(</span><span class="n">Class</span><span class="p">):</span> <span class="k">pass</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="p">()</span><span class="o">.</span><span class="n">is_property</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">)</span>
 <span class="go">True</span>
 </pre></div>
 </div>
