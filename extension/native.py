@@ -841,8 +841,7 @@ class String(Object, builtins.str):
             ...     String(
             ...         """[\"'`´()&$ -]"""
             ...     ).validate_shell().content == (
-            ...         '[\\\\"\\\\\\'\\\\`\\\\´\\\\(\\\\)\\\\&\\\\$\\\\ '
-            ...         '\\\\-]')
+            ...         '[\\\\"\\\\\\'\\\\`\\\\(\\\\)\\\\&\\\\$\\\\ \\\\-]')
             True
         '''
         '''The escape sequence must be escaped at first.'''

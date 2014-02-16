@@ -240,7 +240,10 @@ class MultiProcessingHTTPServer(
             Web.MAXIMUM_FIRST_GET_REQUEST_LINE_IN_CHARS
         ).strip()
         for pattern in self.web.same_thread_request_whitelist:
+## python3.3
+##             if re.compile(pattern).match(first_request_line.decode()):
             if re.compile(pattern).match(first_request_line):
+##
                 return True
         return False
 
@@ -1607,6 +1610,7 @@ class CGIHTTPRequestHandler(
 ## python3.3         if not __test_mode__ and self.headers.get('Cookie'):
         if not __test_mode__ and self.headers.getheader('Cookie'):
             cookie = cookies.SimpleCookie()
+## python3.3             cookie.load(self.headers.get('Cookie'))
             cookie.load(self.headers.getheader('Cookie'))
             return cookie[name].value if name and name in cookie else cookie
         return None
