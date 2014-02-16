@@ -200,7 +200,7 @@ class Model(builtins.object):
             {}
 
             >>> class User(Model): pass
-            >>> User().dictionary
+            >>> User().get_dictionary()
             {}
 
             >>> class User(Model): pass
@@ -839,9 +839,10 @@ class String(Object, builtins.str):
             ...     True
             ... else:
             ...     String(
-            ...         """[\"'`()&$ -]"""
+            ...         """[\"'`´()&$ -]"""
             ...     ).validate_shell().content == (
-            ...         '[\\\\"\\\\\\'\\\\`\\\\(\\\\)\\\\&\\\\$\\\\ \\\\-]')
+            ...         '[\\\\"\\\\\\'\\\\`\\\\´\\\\(\\\\)\\\\&\\\\$\\\\ '
+            ...         '\\\\-]')
             True
         '''
         '''The escape sequence must be escaped at first.'''

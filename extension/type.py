@@ -84,7 +84,17 @@ class Model(builtins.type):
             Triggers if a new instance is created. Set the default name for \
             an orm instance.
 
-            TODO
+            **class_name**   - Name of class to create.
+
+            **base_classes** - A tuple of base classes for class to create.
+
+            **class_scope**  - A dictionary object to define properties and \
+                               methods for new class.
+
+            Additional arguments and keywords are forwarded to python's \
+            native "builtins.type" function.
+
+            Returns the newly created class.
 
             Examples:
 
