@@ -84,6 +84,8 @@ class Model(builtins.type):
             Triggers if a new instance is created. Set the default name for \
             an orm instance.
 
+            TODO
+
             Examples:
 
             >>> if sys.version_info.major < 3:
