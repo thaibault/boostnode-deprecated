@@ -189,10 +189,19 @@ class Model(builtins.object):
             # region getter
 
     @JointPoint(Class.pseudo_property)
-## python3.3     def get_dictionary(self: Self) -> builtins.dict:
-    def get_dictionary(self):
+## python3.3
+##     def get_dictionary(
+##         self: Self, value_wrapper=lambda value: value
+##     ) -> builtins.dict:
+    def get_dictionary(self, value_wrapper=lambda value: value):
+##
         '''
             Returns the dictionary representation of the model instance.
+
+            **value_wrapper** - A function to call for manipulating each \
+                                value in returned dictionary.
+
+            Returns the rendered dictionary.
 
             Examples:
 
@@ -227,7 +236,7 @@ class Model(builtins.object):
             properties = builtins.map(
                 lambda column: column.name, self.__table__.columns)
         for name in properties:
-            result[name] = builtins.getattr(self, name)
+            result[name] = value_wrapper(builtins.getattr(self, name))
 ## python3.3
 ##             pass
             if builtins.isinstance(result[name], builtins.unicode):
