@@ -790,6 +790,7 @@ class Parser(Class, Runnable):
             ... ).render() # doctest: +ELLIPSIS
             Object of "Parser" with template "hans says...<% end...
         '''
+        mapping = copy.copy(mapping)
         mapping.update({'__builtins__': self.builtins})
         mapping.update(keywords)
         if self.cache:
@@ -1628,7 +1629,7 @@ class Parser(Class, Runnable):
                     to each line.
                 '''
                 print_buffer = Buffer()
-                codewords = copy.deepcopy(keywords)
+                codewords = copy.copy(keywords)
                 codewords.update({'buffer': print_buffer})
                 Print(*arguments, **codewords)
                 arguments = (indent_space + print_buffer.content.replace(

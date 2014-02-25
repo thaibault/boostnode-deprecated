@@ -191,15 +191,36 @@ class Model(builtins.object):
     @JointPoint(Class.pseudo_property)
 ## python3.3
 ##     def get_dictionary(
-##         self: Self, value_wrapper=lambda value: value
+##         self: Self, key_wrapper=lambda key: String(
+##             key
+##         ).delimited_to_camel_case().content if builtins.isinstance(
+##             key, builtins.str
+##         ) else key,
+##         value_wrapper=lambda value: value, prefix_filter='password'
 ##     ) -> builtins.dict:
-    def get_dictionary(self, value_wrapper=lambda value: value):
+    def get_dictionary(
+        self, key_wrapper=lambda key: String(
+            key
+        ).delimited_to_camel_case().content if builtins.isinstance(
+            key, builtins.str
+        ) else key,
+        value_wrapper=lambda value: value, prefix_filter='password'
+    ):
 ##
         '''
-            Returns the dictionary representation of the model instance.
+            Returns the dictionary representation of the model instance. All
+            properties with prefixed underscore will be ignored.
+
+            **key_wrapper**   - A function to call for manipulating each \
+                                key in returned dictionary.
 
             **value_wrapper** - A function to call for manipulating each \
                                 value in returned dictionary.
+
+            **prefix_filter** - Indicates weather all columns with the \
+                                specified prefix will be filtered. If the \
+                                empty string is given nothing will be \
+                                filtered.
 
             Returns the rendered dictionary.
 
@@ -220,6 +241,20 @@ class Model(builtins.object):
             >>> user.get_dictionary() == {'a': 5, 'b': 'hans'}
             True
 
+            >>> user = User()
+            >>> user.a = 5
+            >>> user.password = 'secret'
+            >>> user.get_dictionary() == {'a': 5}
+            True
+            >>> user.get_dictionary(prefix_filter='') == {
+            ...     'a': 5, 'password': 'secret'}
+            True
+
+            >>> user = User()
+            >>> user.hans_peter = 5
+            >>> user.get_dictionary() == {'hansPeter': 5}
+            True
+
             >>> class Column: name = 'a'
             >>> class Table: columns = [Column]
             >>> class User(Model): pass
@@ -231,16 +266,20 @@ class Model(builtins.object):
         '''
         result = {}
         properties = builtins.tuple(builtins.filter(
-            lambda name: not name.startswith('_'), self.__dict__))
+            lambda name: not (
+                name.startswith('_') or prefix_filter and
+                name.startswith(prefix_filter)
+            ), self.__dict__))
         if '__table__' in self.__dict__:
             properties = builtins.map(
                 lambda column: column.name, self.__table__.columns)
         for name in properties:
-            result[name] = value_wrapper(builtins.getattr(self, name))
+            key = key_wrapper(name)
+            result[key] = value_wrapper(builtins.getattr(self, name))
 ## python3.3
 ##             pass
-            if builtins.isinstance(result[name], builtins.unicode):
-                result[name] = result[name].encode('utf_8')
+            if builtins.isinstance(result[key], builtins.unicode):
+                result[key] = result[key].encode('utf_8')
 ##
         return result
 
@@ -984,6 +1023,50 @@ class String(Object, builtins.str):
         '''
         if self.content:
             self.content = self.content[0].upper() + self.content[1:]
+        return self
+
+    @JointPoint(Class.pseudo_property)
+## python3.3    def delimited_to_camel_case(self: Self, delimiter='_') -> Self:
+    def delimited_to_camel_case(self, delimiter='_'):
+        '''
+            Converts a delimited string to its camel case representation.
+
+            **delimiter** - Delimiter string
+
+            Examples:
+
+            >>> String().delimited_to_camel_case().content
+            ''
+
+            >>> String('hans_peter').delimited_to_camel_case().content
+            'hansPeter'
+
+            >>> String('hans__peter').delimited_to_camel_case().content
+            'hans_Peter'
+
+            >>> String('HansPeter').delimited_to_camel_case().content
+            'HansPeter'
+
+            >>> String('Hans_Peter').delimited_to_camel_case().content
+            'HansPeter'
+
+            >>> String('_Hans_Peter').delimited_to_camel_case().content
+            '_HansPeter'
+
+            >>> String('_').delimited_to_camel_case().content
+            '_'
+
+            >>> String('hans_peter').delimited_to_camel_case('-').content
+            'hans_peter'
+
+            >>> String('hans-peter').delimited_to_camel_case('-').content
+            'hansPeter'
+        '''
+        self.content = re.sub(
+            '(?!^)%s(?P<first_letter>[a-zA-Z])' % self.__class__(
+                delimiter
+            ).validate_regex().content,
+            lambda match: match.group('first_letter').upper(), self.content)
         return self
 
     @JointPoint
