@@ -111,8 +111,11 @@
 <dl class="staticmethod">
 <dt id="boostNode.extension.native.Model.get_dictionary">
 <em class="property">static </em><tt class="descname">get_dictionary</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Model.get_dictionary" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the dictionary representation of the model instance.</p>
+<dd><p>Returns the dictionary representation of the model instance. All
+properties with prefixed underscore will be ignored.</p>
+<p><strong>key_wrapper</strong>   - A function to call for manipulating each                                 key in returned dictionary.</p>
 <p><strong>value_wrapper</strong> - A function to call for manipulating each                                 value in returned dictionary.</p>
+<p><strong>prefix_filter</strong> - Indicates weather all columns with the                                 specified prefix will be filtered. If the                                 empty string is given nothing will be                                 filtered.</p>
 <p>Returns the rendered dictionary.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Model</span><span class="p">()</span><span class="o">.</span><span class="n">get_dictionary</span><span class="p">()</span>
@@ -130,6 +133,22 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">user</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="s">&#39;hans&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">user</span><span class="o">.</span><span class="n">_a</span> <span class="o">=</span> <span class="mi">4</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">user</span><span class="o">.</span><span class="n">get_dictionary</span><span class="p">()</span> <span class="o">==</span> <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">:</span> <span class="s">&#39;hans&#39;</span><span class="p">}</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">user</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">user</span><span class="o">.</span><span class="n">password</span> <span class="o">=</span> <span class="s">&#39;secret&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">user</span><span class="o">.</span><span class="n">get_dictionary</span><span class="p">()</span> <span class="o">==</span> <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">}</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">user</span><span class="o">.</span><span class="n">get_dictionary</span><span class="p">(</span><span class="n">prefix_filter</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="p">{</span>
+<span class="gp">... </span>    <span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s">&#39;password&#39;</span><span class="p">:</span> <span class="s">&#39;secret&#39;</span><span class="p">}</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">user</span><span class="o">.</span><span class="n">hans_peter</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">user</span><span class="o">.</span><span class="n">get_dictionary</span><span class="p">()</span> <span class="o">==</span> <span class="p">{</span><span class="s">&#39;hansPeter&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">}</span>
 <span class="go">True</span>
 </pre></div>
 </div>
@@ -317,7 +336,7 @@
 
 <dl class="classmethod">
 <dt id="boostNode.extension.native.Module.get_context_path">
-<em class="property">classmethod </em><tt class="descname">get_context_path</tt><big>(</big><em>path=None</em>, <em>frame=&lt;frame object at 0x34c5340&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_context_path" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><tt class="descname">get_context_path</tt><big>(</big><em>path=None</em>, <em>frame=&lt;frame object at 0x1dd9ed0&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_context_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines the package and module level context path to a given             context or file.</p>
 <p><strong>path</strong>  - relative or absolute context or file path to normalize</p>
 <p><strong>frame</strong> - stack frame to analyse again context</p>
@@ -769,6 +788,50 @@
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&quot;I&#39;m cool&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">delimit</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;I-m-cool&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="boostNode.extension.native.String.delimited_to_camel_case">
+<em class="property">static </em><tt class="descname">delimited_to_camel_case</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.delimited_to_camel_case" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a delimited string to its camel case representation.</p>
+<p><strong>delimiter</strong> - Delimiter string</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">()</span><span class="o">.</span><span class="n">delimited_to_camel_case</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans_peter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delimited_to_camel_case</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;hansPeter&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans__peter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delimited_to_camel_case</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;hans_Peter&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;HansPeter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delimited_to_camel_case</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;HansPeter&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;Hans_Peter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delimited_to_camel_case</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;HansPeter&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;_Hans_Peter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delimited_to_camel_case</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;_HansPeter&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delimited_to_camel_case</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;_&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans_peter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delimited_to_camel_case</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;hans_peter&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans-peter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delimited_to_camel_case</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;hansPeter&#39;</span>
 </pre></div>
 </div>
 </dd></dl>
