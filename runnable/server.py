@@ -1366,55 +1366,25 @@ class CGIHTTPRequestHandler(
 ## python3.3     def do_POST(self: Self) -> Self:
     def do_POST(self):
         '''Is triggered if a post request is coming.'''
-        self.request_type = self.request_type if self.request_type else 'post'
-## python3.3
-##         data_type, post_data = cgi.parse_header(
-##             self.headers.get_content_type())
-##         content_length = builtins.int(self.headers.get('content-length'))
-        data_type, post_data = cgi.parse_header(self.headers.getheader(
-            'content-type'))
-        content_length = builtins.int(self.headers.getheader(
-            'content-length'))
-##
-        if data_type == 'application/x-www-form-urlencoded':
-## python3.3
-##             self.data = urlparse.parse_qs(self.rfile.read(
-##                 content_length
-##             ).decode(self.server.web.encoding))
-            self.data = cgi.parse_qs(
-                self.rfile.read(content_length), keep_blank_values=True)
-##
-            for name, value in self.data.items():
-                if Object(content=value).is_binary():
-                    self.data[name] = {'content': value}
-        elif data_type == 'multipart/form-data':
-            self.data = self._determine_data()
-        elif data_type == 'application/json':
-## python3.3
-##             self.data = json.loads(self.rfile.read(content_length).decode(
-##                 self.server.web.encoding))
-            self.data = json.loads(
-                self.rfile.read(content_length),
-                encoding=self.server.web.encoding)
-##
-        else:
-            self.data = {
-                'type': data_type, 'content': self.rfile.read(content_length)}
-        return self.do_GET()
+        return self._do_special_request(type=inspect.stack()[0][3])
+
+    @JointPoint
+## python3.3     def do_PATCH(self: Self) -> Self:
+    def do_PATCH(self):
+        '''Is triggered if a patch request is coming.'''
+        return self._do_special_request(type=inspect.stack()[0][3])
 
     @JointPoint
 ## python3.3     def do_DELETE(self: Self) -> Self:
     def do_DELETE(self):
         '''Is triggered if a delete request is coming.'''
-        self.request_type = 'delete'
-        return self.do_POST()
+        return self._do_special_request(type=inspect.stack()[0][3])
 
     @JointPoint
 ## python3.3     def do_PUT(self: Self) -> Self:
     def do_PUT(self):
         '''Is triggered if a put request is coming.'''
-        self.request_type = 'put'
-        return self.do_POST()
+        return self._do_special_request(type=inspect.stack()[0][3])
 
             # endregion
 
@@ -2102,6 +2072,48 @@ class CGIHTTPRequestHandler(
             self.requested_file.mime_type))
 
             # endregion
+
+    @JointPoint
+## python3.3
+##     def _do_special_request(self: Self, type: builtins.str) -> Self:
+    def _do_special_request(self, type):
+##
+        '''Is triggered if a special request is coming.'''
+        self.request_type = type[builtins.len('do_'):].lower()
+## python3.3
+##         data_type, post_data = cgi.parse_header(
+##             self.headers.get_content_type())
+##         content_length = builtins.int(self.headers.get('content-length'))
+        data_type, post_data = cgi.parse_header(self.headers.getheader(
+            'content-type'))
+        content_length = builtins.int(self.headers.getheader(
+            'content-length'))
+##
+        if data_type == 'application/x-www-form-urlencoded':
+## python3.3
+##             self.data = urlparse.parse_qs(self.rfile.read(
+##                 content_length
+##             ).decode(self.server.web.encoding))
+            self.data = cgi.parse_qs(
+                self.rfile.read(content_length), keep_blank_values=True)
+##
+            for name, value in self.data.items():
+                if Object(content=value).is_binary():
+                    self.data[name] = {'content': value}
+        elif data_type == 'multipart/form-data':
+            self.data = self._determine_data()
+        elif data_type == 'application/json':
+## python3.3
+##             self.data = json.loads(self.rfile.read(content_length).decode(
+##                 self.server.web.encoding))
+            self.data = json.loads(
+                self.rfile.read(content_length),
+                encoding=self.server.web.encoding)
+##
+        else:
+            self.data = {
+                'type': data_type, 'content': self.rfile.read(content_length)}
+        return self.do_GET()
 
     @JointPoint
 ## python3.3
