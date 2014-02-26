@@ -39,8 +39,6 @@ import sys
 for number in (3, 4):
     sys.path.append(os.path.abspath(sys.path[0] + number * ('..' + os.sep)))
 
-from boostNode.extension.native import String
-
 # endregion
 
 
@@ -105,6 +103,8 @@ class Model(builtins.type):
             ... else:
             ...     exec('class UserModel(metaclass=Model): pass')
         '''
+        from boostNode.extension.native import String
+
         class_scope['__tablename__'] = class_scope['__table_name__'] = \
             class_scope['db_table'] = String(
                 class_name

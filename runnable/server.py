@@ -50,6 +50,7 @@ import inspect
 ## import io
 pass
 ##
+import json
 import logging
 import multiprocessing
 import os
@@ -1369,24 +1370,36 @@ class CGIHTTPRequestHandler(
 ## python3.3
 ##         data_type, post_data = cgi.parse_header(
 ##             self.headers.get_content_type())
+##         content_length = builtins.int(self.headers.get('content-length'))
         data_type, post_data = cgi.parse_header(self.headers.getheader(
             'content-type'))
+        content_length = builtins.int(self.headers.getheader(
+            'content-length'))
 ##
-        if data_type == 'multipart/form-data':
-            self.data = self._determine_data()
-        elif data_type == 'application/x-www-form-urlencoded':
+        if data_type == 'application/x-www-form-urlencoded':
 ## python3.3
 ##             self.data = urlparse.parse_qs(self.rfile.read(
-##                 builtins.int(self.headers.get('content-length'))
+##                 content_length
 ##             ).decode(self.server.web.encoding))
             self.data = cgi.parse_qs(
-                self.rfile.read(builtins.int(self.headers.getheader(
-                    'content-length'))),
-                keep_blank_values=True)
+                self.rfile.read(content_length), keep_blank_values=True)
 ##
             for name, value in self.data.items():
                 if Object(content=value).is_binary():
                     self.data[name] = {'content': value}
+        elif data_type == 'multipart/form-data':
+            self.data = self._determine_data()
+        elif data_type == 'application/json':
+## python3.3
+##             self.data = json.loads(self.rfile.read(content_length).decode(
+##                 self.server.web.encoding))
+            self.data = json.loads(
+                self.rfile.read(content_length),
+                encoding=self.server.web.encoding)
+##
+        else:
+            self.data = {
+                'type': data_type, 'content': self.rfile.read(content_length)}
         return self.do_GET()
 
     @JointPoint
@@ -1734,11 +1747,10 @@ class CGIHTTPRequestHandler(
     @JointPoint
 ## python3.3
 ##     def send_content_length_header(
-##         self: Self, size: builtins.int, dynamic_output='', encoding='UTF-8',
-##         response_code=200
+##         self: Self, size: builtins.int, dynamic_output='', response_code=200
 ##     ) -> Self:
     def send_content_length_header(
-        self, size, dynamic_output='', encoding='UTF-8', response_code=200
+        self, size, dynamic_output='', response_code=200
     ):
 ##
         '''
@@ -1749,8 +1761,6 @@ class CGIHTTPRequestHandler(
             **dynamic_output** - Indicates weather output should be forced to \
                                  compressed because it is simply a computed \
                                  string.
-
-            **encoding**       - Encoding to compress current output.
 
             **response_code** - HTTP Response code to send.
         '''
@@ -2873,7 +2883,7 @@ class CGIHTTPRequestHandler(
         size = builtins.len(output)
         if not builtins.isinstance(errors, builtins.str):
             errors = errors.decode(
-                encoding=String(errors).encoding, errors='strict')
+                encoding=self.server.web.encoding, errors='strict')
         if self.respond:
             if errors:
                 program_description = ''
@@ -2887,7 +2897,7 @@ class CGIHTTPRequestHandler(
                 header_match = re.compile(
                     '^[A-Z0-9]+/([0-9]+\.)+[0-9]+ [0-9]{3} [a-zA-Z ]+\n'
                     '([^:]+: .+\n)+\n.+'
-                ).match(output.decode(encoding=String(output).encoding))
+                ).match(output.decode(encoding=self.server.web.encoding))
                 if not header_match:
                     self.send_content_type_header().send_content_length_header(
                         size, dynamic_output=output

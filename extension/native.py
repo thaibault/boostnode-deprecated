@@ -1026,8 +1026,10 @@ class String(Object, builtins.str):
         return self
 
     @JointPoint(Class.pseudo_property)
-## python3.3    def delimited_to_camel_case(self: Self, delimiter='_') -> Self:
+## python3.3
+##     def delimited_to_camel_case(self: Self, delimiter='_') -> Self:
     def delimited_to_camel_case(self, delimiter='_'):
+##
         '''
             Converts a delimited string to its camel case representation.
 
@@ -1641,17 +1643,12 @@ class Dictionary(Object, builtins.dict):
             Object of "Dictionary" (...hans...5...).
         '''
 
-            # region properties
+                # region properties
 
         '''The main property. It saves the current dictionary.'''
         self.content = builtins.dict(content)
 
-            # endregion
-
-        '''Take this method type by the abstract class via introspection.'''
-        return builtins.getattr(
-            builtins.super(self.__class__, self), inspect.stack()[0][3]
-        )(content, *arguments, **keywords)
+                # endregion
 
     @JointPoint
 ## python3.3     def __repr__(self: Self) -> builtins.str:
@@ -1768,9 +1765,108 @@ class Dictionary(Object, builtins.dict):
             return result, self.content
         return default_value, self.content
 
+    @JointPoint
+## python3.3
+##     def convert(
+##         self: Self, key_wrapper=lambda key: key,
+##         value_wrapper=lambda value: value
+##     ) -> Self:
+    def convert(
+        self, key_wrapper=lambda key: key, value_wrapper=lambda value: value
+    ):
+##
+        '''
+            Converts all keys or values and nested keys or values with given
+            callback functions.
+
+            Examples:
+
+            TODO Check code coverage
+
+            >>> Dictionary({}).convert().content
+            {}
+
+            >>> input = {'hans': 'peter', 5: 3}
+            >>> Dictionary(input).convert().content == input
+            True
+
+            >>> input = {'a': 'b', 'b': ['a']}
+            >>> Dictionary(input).convert(
+            ...     key_wrapper=lambda key: '_%s_' % key
+            ... ).content == {'_a_': 'b', '_b_': ['a']}
+            True
+
+            >>> input = {'a': 'b', 'b': ['a']}
+            >>> Dictionary(input).convert(
+            ...     value_wrapper=lambda key: '_%s_' % key
+            ... ).content == {'a': '_b_', 'b': ['_a_']}
+            True
+
+            >>> input = {'a': 'b', 'b': ['a']}
+            >>> Dictionary(input).convert(
+            ...     key_wrapper=lambda key: '_%s_' % key,
+            ...     value_wrapper=lambda key: '_%s_' % key
+            ... ).content == {'_a_': '_b_', '_b_': ['_a_']}
+            True
+        '''
+        for key, value in self.content.items():
+            del self.content[key]
+            key = key_wrapper(key)
+            if builtins.isinstance(value, builtins.dict):
+                '''
+                    Take this method type by the abstract class via
+                    introspection.
+                '''
+                self.content[key] = builtins.getattr(
+                    self.__class__(value), inspect.stack()[0][3]
+                )(key_wrapper, value_wrapper).content
+## python3.3
+##             elif(builtins.isinstance(value, collections.Iterable) and
+##                  not builtins.isinstance(value, builtins.str)):
+            elif(builtins.isinstance(value, collections.Iterable) and
+                 not builtins.isinstance(value, (
+                     builtins.unicode, builtins.str))):
+##
+                '''
+                    Take this method type by the abstract class via
+                    introspection.
+                '''
+                self.content[key] = self._convert_iterable(
+                    iterable=value, key_wrapper=key_wrapper,
+                    value_wrapper=value_wrapper)
+            else:
+                self.content[key] = value_wrapper(value)
+        return self
+
         # endregion
 
         # region protected methods
+
+    @JointPoint(builtins.classmethod)
+## python3.3
+##     def _convert_iterable(cls, iterable, key_wrapper, value_wrapper):
+    def _convert_iterable(cls, iterable, key_wrapper, value_wrapper):
+##
+        '''
+            Converts all keys or values and nested keys or values with given
+            callback function in a given iterable.
+        '''
+        for key, value in builtins.enumerate(iterable):
+            if builtins.isinstance(value, builtins.dict):
+                iterable[key] = cls(value).convert(
+                    key_wrapper, value_wrapper
+                ).content
+            elif builtins.isinstance(value, builtins.list):
+                '''
+                    Take this method type by the abstract class via
+                    introspection.
+                '''
+                iterable[key] = builtins.getattr(cls, inspect.stack()[0][3])(
+                    iterable, key_wrapper, value_wrapper
+                ).content
+            else:
+                iterable[key] = value_wrapper(value)
+        return iterable
 
     @JointPoint
 ## python3.3
