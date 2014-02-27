@@ -65,10 +65,8 @@
 <dl class="staticmethod">
 <dt id="boostNode.extension.native.Dictionary.convert">
 <em class="property">static </em><tt class="descname">convert</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Dictionary.convert" title="Permalink to this definition">¶</a></dt>
-<dd><p>Converts all keys or values and nested keys or values with given
-callback functions.</p>
+<dd><p>Converts all keys or values and nested keys or values with given             callback functions.</p>
 <p>Examples:</p>
-<p>TODO Check code coverage</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Dictionary</span><span class="p">({})</span><span class="o">.</span><span class="n">convert</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
 <span class="go">{}</span>
 </pre></div>
@@ -78,25 +76,39 @@ callback functions.</p>
 <span class="go">True</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">input</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">]}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Dictionary</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Dictionary</span><span class="p">({</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">]})</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">key_wrapper</span><span class="o">=</span><span class="k">lambda</span> <span class="n">key</span><span class="p">:</span> <span class="s">&#39;_</span><span class="si">%s</span><span class="s">_&#39;</span> <span class="o">%</span> <span class="n">key</span>
 <span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">content</span> <span class="o">==</span> <span class="p">{</span><span class="s">&#39;_a_&#39;</span><span class="p">:</span> <span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="s">&#39;_b_&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">]}</span>
 <span class="go">True</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">input</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">]}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Dictionary</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">value_wrapper</span><span class="o">=</span><span class="k">lambda</span> <span class="n">key</span><span class="p">:</span> <span class="s">&#39;_</span><span class="si">%s</span><span class="s">_&#39;</span> <span class="o">%</span> <span class="n">key</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Dictionary</span><span class="p">({</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">]})</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">value_wrapper</span><span class="o">=</span><span class="k">lambda</span> <span class="n">value</span><span class="p">:</span> <span class="s">&#39;_</span><span class="si">%s</span><span class="s">_&#39;</span> <span class="o">%</span> <span class="n">value</span>
 <span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">content</span> <span class="o">==</span> <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="s">&#39;_b_&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;_a_&#39;</span><span class="p">]}</span>
 <span class="go">True</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">input</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">]}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Dictionary</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Dictionary</span><span class="p">({</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">]})</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">key_wrapper</span><span class="o">=</span><span class="k">lambda</span> <span class="n">key</span><span class="p">:</span> <span class="s">&#39;_</span><span class="si">%s</span><span class="s">_&#39;</span> <span class="o">%</span> <span class="n">key</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">value_wrapper</span><span class="o">=</span><span class="k">lambda</span> <span class="n">key</span><span class="p">:</span> <span class="s">&#39;_</span><span class="si">%s</span><span class="s">_&#39;</span> <span class="o">%</span> <span class="n">key</span>
+<span class="gp">... </span>    <span class="n">value_wrapper</span><span class="o">=</span><span class="k">lambda</span> <span class="n">value</span><span class="p">:</span> <span class="s">&#39;_</span><span class="si">%s</span><span class="s">_&#39;</span> <span class="o">%</span> <span class="n">value</span>
 <span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">content</span> <span class="o">==</span> <span class="p">{</span><span class="s">&#39;_a_&#39;</span><span class="p">:</span> <span class="s">&#39;_b_&#39;</span><span class="p">,</span> <span class="s">&#39;_b_&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;_a_&#39;</span><span class="p">]}</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Dictionary</span><span class="p">({</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">}})</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">key_wrapper</span><span class="o">=</span><span class="k">lambda</span> <span class="n">key</span><span class="p">:</span> <span class="s">&#39;_</span><span class="si">%s</span><span class="s">_&#39;</span> <span class="o">%</span> <span class="n">key</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">value_wrapper</span><span class="o">=</span><span class="k">lambda</span> <span class="n">value</span><span class="p">:</span> <span class="s">&#39;_</span><span class="si">%s</span><span class="s">_&#39;</span> <span class="o">%</span> <span class="n">value</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">content</span> <span class="o">==</span> <span class="p">{</span><span class="s">&#39;_a_&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;_a_&#39;</span><span class="p">,</span> <span class="s">&#39;_b_&#39;</span><span class="p">}}</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Dictionary</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;b&#39;</span><span class="p">},</span> <span class="s">&#39;b&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="s">&#39;b&#39;</span><span class="p">},</span> <span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">]]}}</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">key_wrapper</span><span class="o">=</span><span class="k">lambda</span> <span class="n">key</span><span class="p">:</span> <span class="s">&#39;_</span><span class="si">%s</span><span class="s">_&#39;</span> <span class="o">%</span> <span class="n">key</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">value_wrapper</span><span class="o">=</span><span class="k">lambda</span> <span class="n">value</span><span class="p">:</span> <span class="s">&#39;_</span><span class="si">%s</span><span class="s">_&#39;</span> <span class="o">%</span> <span class="n">value</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">content</span> <span class="o">==</span> <span class="p">{</span>
+<span class="gp">... </span>    <span class="s">&#39;_a_&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;_b_&#39;</span><span class="p">},</span> <span class="s">&#39;_b_&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;_a_&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s">&#39;_a_&#39;</span><span class="p">:</span> <span class="s">&#39;_b_&#39;</span><span class="p">},</span> <span class="p">[</span><span class="s">&#39;_a_&#39;</span><span class="p">]]}}</span>
 <span class="go">True</span>
 </pre></div>
 </div>
@@ -145,8 +157,7 @@ callback functions.</p>
 <dl class="staticmethod">
 <dt id="boostNode.extension.native.Model.get_dictionary">
 <em class="property">static </em><tt class="descname">get_dictionary</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Model.get_dictionary" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the dictionary representation of the model instance. All
-properties with prefixed underscore will be ignored.</p>
+<dd><p>Returns the dictionary representation of the model instance. All             properties with prefixed underscore will be ignored.</p>
 <p><strong>key_wrapper</strong>   - A function to call for manipulating each                                 key in returned dictionary.</p>
 <p><strong>value_wrapper</strong> - A function to call for manipulating each                                 value in returned dictionary.</p>
 <p><strong>prefix_filter</strong> - Indicates weather all columns with the                                 specified prefix will be filtered. If the                                 empty string is given nothing will be                                 filtered.</p>
@@ -370,7 +381,7 @@ properties with prefixed underscore will be ignored.</p>
 
 <dl class="classmethod">
 <dt id="boostNode.extension.native.Module.get_context_path">
-<em class="property">classmethod </em><tt class="descname">get_context_path</tt><big>(</big><em>path=None</em>, <em>frame=&lt;frame object at 0x1c76810&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_context_path" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><tt class="descname">get_context_path</tt><big>(</big><em>path=None</em>, <em>frame=&lt;frame object at 0x360f2a0&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_context_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines the package and module level context path to a given             context or file.</p>
 <p><strong>path</strong>  - relative or absolute context or file path to normalize</p>
 <p><strong>frame</strong> - stack frame to analyse again context</p>
