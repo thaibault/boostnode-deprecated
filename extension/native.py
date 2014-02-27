@@ -208,7 +208,7 @@ class Model(builtins.object):
     ):
 ##
         '''
-            Returns the dictionary representation of the model instance. All
+            Returns the dictionary representation of the model instance. All \
             properties with prefixed underscore will be ignored.
 
             **key_wrapper**   - A function to call for manipulating each \
@@ -1776,12 +1776,10 @@ class Dictionary(Object, builtins.dict):
     ):
 ##
         '''
-            Converts all keys or values and nested keys or values with given
+            Converts all keys or values and nested keys or values with given \
             callback functions.
 
             Examples:
-
-            TODO Check code coverage
 
             >>> Dictionary({}).convert().content
             {}
@@ -1790,31 +1788,43 @@ class Dictionary(Object, builtins.dict):
             >>> Dictionary(input).convert().content == input
             True
 
-            >>> input = {'a': 'b', 'b': ['a']}
-            >>> Dictionary(input).convert(
+            >>> Dictionary({'a': 'b', 'b': ['a']}).convert(
             ...     key_wrapper=lambda key: '_%s_' % key
             ... ).content == {'_a_': 'b', '_b_': ['a']}
             True
 
-            >>> input = {'a': 'b', 'b': ['a']}
-            >>> Dictionary(input).convert(
-            ...     value_wrapper=lambda key: '_%s_' % key
+            >>> Dictionary({'a': 'b', 'b': ['a']}).convert(
+            ...     value_wrapper=lambda value: '_%s_' % value
             ... ).content == {'a': '_b_', 'b': ['_a_']}
             True
 
-            >>> input = {'a': 'b', 'b': ['a']}
-            >>> Dictionary(input).convert(
+            >>> Dictionary({'a': 'b', 'b': ['a']}).convert(
             ...     key_wrapper=lambda key: '_%s_' % key,
-            ...     value_wrapper=lambda key: '_%s_' % key
+            ...     value_wrapper=lambda value: '_%s_' % value
             ... ).content == {'_a_': '_b_', '_b_': ['_a_']}
             True
+
+            >>> Dictionary({'a': {'a', 'b'}}).convert(
+            ...     key_wrapper=lambda key: '_%s_' % key,
+            ...     value_wrapper=lambda value: '_%s_' % value
+            ... ).content == {'_a_': {'_a_', '_b_'}}
+            True
+
+            >>> Dictionary(
+            ...     {'a': {'b'}, 'b': {'a': [{'a': 'b'}, ['a']]}}
+            ... ).convert(
+            ...     key_wrapper=lambda key: '_%s_' % key,
+            ...     value_wrapper=lambda value: '_%s_' % value
+            ... ).content == {
+            ...     '_a_': {'_b_'}, '_b_': {'_a_': [{'_a_': '_b_'}, ['_a_']]}}
+            True
         '''
-        for key, value in self.content.items():
+        for key, value in copy.copy(self.content).items():
             del self.content[key]
             key = key_wrapper(key)
             if builtins.isinstance(value, builtins.dict):
                 '''
-                    Take this method type by the abstract class via
+                    Take this method type by the abstract class via \
                     introspection.
                 '''
                 self.content[key] = builtins.getattr(
@@ -1828,7 +1838,7 @@ class Dictionary(Object, builtins.dict):
                      builtins.unicode, builtins.str))):
 ##
                 '''
-                    Take this method type by the abstract class via
+                    Take this method type by the abstract class via \
                     introspection.
                 '''
                 self.content[key] = self._convert_iterable(
@@ -1848,25 +1858,48 @@ class Dictionary(Object, builtins.dict):
     def _convert_iterable(cls, iterable, key_wrapper, value_wrapper):
 ##
         '''
-            Converts all keys or values and nested keys or values with given
+            Converts all keys or values and nested keys or values with given \
             callback function in a given iterable.
         '''
+        if builtins.isinstance(iterable, builtins.set):
+            return cls._convert_set(iterable, key_wrapper, value_wrapper)
         for key, value in builtins.enumerate(iterable):
             if builtins.isinstance(value, builtins.dict):
                 iterable[key] = cls(value).convert(
                     key_wrapper, value_wrapper
                 ).content
-            elif builtins.isinstance(value, builtins.list):
+## python3.3
+##             elif(builtins.isinstance(value, collections.Iterable) and
+##                  not builtins.isinstance(value, builtins.str)):
+            elif(builtins.isinstance(value, collections.Iterable) and
+                 not builtins.isinstance(value, (
+                     builtins.unicode, builtins.str))):
+##
                 '''
-                    Take this method type by the abstract class via
+                    Take this method type by the abstract class via \
                     introspection.
                 '''
                 iterable[key] = builtins.getattr(cls, inspect.stack()[0][3])(
-                    iterable, key_wrapper, value_wrapper
-                ).content
+                    iterable=value, key_wrapper=key_wrapper,
+                    value_wrapper=value_wrapper)
             else:
                 iterable[key] = value_wrapper(value)
         return iterable
+
+    @JointPoint(builtins.classmethod)
+## python3.3
+##     def _convert_set(cls, set, key_wrapper, value_wrapper):
+    def _convert_set(cls, set, key_wrapper, value_wrapper):
+##
+        '''
+            Converts all keys or values and nested keys or values with given \
+            callback function in a given set.
+        '''
+        new_set = builtins.set()
+        for value in set:
+            '''NOTE: Only hashable objects are allowed in a set.'''
+            new_set.add(value_wrapper(value))
+        return new_set
 
     @JointPoint
 ## python3.3
