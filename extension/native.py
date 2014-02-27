@@ -1067,9 +1067,8 @@ class String(Object, builtins.str):
         self.content = re.compile(
             '(?!^)%s(?P<first_letter>[a-zA-Z])' % self.__class__(
                 delimiter
-            ).validate_regex().content).sub(lambda match: match.group(
-                'first_letter'
-            ).upper(), self.content)
+            ).validate_regex().content
+        ).sub(lambda match: match.group('first_letter').upper(), self.content)
         return self
 
     @JointPoint
