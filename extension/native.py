@@ -1064,11 +1064,12 @@ class String(Object, builtins.str):
             >>> String('hans-peter').delimited_to_camel_case('-').content
             'hansPeter'
         '''
-        self.content = re.sub(
+        self.content = re.compile(
             '(?!^)%s(?P<first_letter>[a-zA-Z])' % self.__class__(
                 delimiter
-            ).validate_regex().content,
-            lambda match: match.group('first_letter').upper(), self.content)
+            ).validate_regex().content).sub(lambda match: match.group(
+                'first_letter'
+            ).upper(), self.content)
         return self
 
     @JointPoint
