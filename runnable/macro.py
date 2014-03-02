@@ -46,7 +46,7 @@ for number in (3, 4):
     sys.path.append(os.path.abspath(sys.path[0] + number * ('..' + os.sep)))
 
 from boostNode.extension.file import Handler as FileHandler
-from boostNode.extension.native import Module, PropertyInitializer
+from boostNode.extension.native import Module, PropertyInitializer, String
 from boostNode.extension.system import CommandLine, Runnable
 ## python3.3 from boostNode.extension.type import Self
 pass
@@ -762,7 +762,7 @@ class Replace(Class, Runnable):
             >>> replace._convert_file_content(file) # doctest: +ELLIPSIS
             Object of "Replace" with directory "..." to convert to "...".
             >>> __test_buffer__.clear() # doctest: +ELLIPSIS
-            '... decode file "..._file_code" with given encoding "ascii"...'
+            '... decode file "..._file_content" with given encoding "ascii"...'
 
             >>> file.set_content(
             ...     'a\\nä', encoding='latin_1'
@@ -771,7 +771,7 @@ class Replace(Class, Runnable):
             >>> replace._convert_file_content(file) # doctest: +ELLIPSIS
             Object of "Replace" with directory "..." to convert to "...".
             >>> __test_buffer__.clear() # doctest: +ELLIPSIS
-            '...decode file "...ert_file_code" with given encoding "ascii"...'
+            '...decode file "..._file_content" with given encoding "ascii"...'
 
             >>> file.content = '#!/usr/bin/env python3.3\\na'
             >>> replace.dry = True
@@ -866,11 +866,12 @@ class Replace(Class, Runnable):
                     ).replace(
                         '\n%s \n' % match.group('prefix'),
                         '\n%s\n' % match.group('prefix')
-                    ).rstrip(), alternate_text=match.group(
+                    ).rstrip(), alternate_text=re.compile(
+                        '\n%s ?' % String(
+                            match.group('prefix')).validate_regex().content
+                    ).sub('\n', match.group(
                         'alternate_text'
-                    ).replace(
-                        '\n%s ' % match.group('prefix'), '\n'
-                    )[builtins.len(match.group('prefix')) + 1:]))
+                    ))[builtins.len(match.group('prefix')) + 1:]))
         return match.group()
 
     @JointPoint
