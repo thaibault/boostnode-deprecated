@@ -737,26 +737,29 @@ class Replace(Class, Runnable):
         if self.skip_self_file and self_file == file:
             __logger__.info('Skip self file "%s".', self_file)
         else:
-            self._convert_file_code(file)
+            self._convert_file_content(file)
         return self
 
     @JointPoint
-## python3.3     def _convert_file_code(self: Self, file: FileHandler) -> Self:
-    def _convert_file_code(self, file):
+## python3.3
+##     def _convert_file_content(self: Self, file: FileHandler) -> Self:
+    def _convert_file_content(self, file):
+##
         '''
             Converts source code of given file to new version.
 
             Examples:
 
-            >>> file = FileHandler(__test_folder__.path + '_convert_file_code')
+            >>> file = FileHandler(
+            ...     __test_folder__.path + '_convert_file_content')
             >>> replace = Replace(__test_folder__, encoding='ascii')
 
             >>> file.set_content('ä', encoding='latin_1') # doctest: +ELLIPSIS
-            Object of "Handler" with path "..._convert_file_code" and ...
+            Object of "Handler" with path "..._convert_file_content" and ...
             >>> __test_buffer__.clear() # doctest: +ELLIPSIS
             '...'
 
-            >>> replace._convert_file_code(file) # doctest: +ELLIPSIS
+            >>> replace._convert_file_content(file) # doctest: +ELLIPSIS
             Object of "Replace" with directory "..." to convert to "...".
             >>> __test_buffer__.clear() # doctest: +ELLIPSIS
             '... decode file "..._file_code" with given encoding "ascii"...'
@@ -764,15 +767,15 @@ class Replace(Class, Runnable):
             >>> file.set_content(
             ...     'a\\nä', encoding='latin_1'
             ... ) # doctest: +ELLIPSIS
-            Object of "Handler" with path "..._convert_file_code" and ...
-            >>> replace._convert_file_code(file) # doctest: +ELLIPSIS
+            Object of "Handler" with path "..._convert_file_content" and ...
+            >>> replace._convert_file_content(file) # doctest: +ELLIPSIS
             Object of "Replace" with directory "..." to convert to "...".
             >>> __test_buffer__.clear() # doctest: +ELLIPSIS
             '...decode file "...ert_file_code" with given encoding "ascii"...'
 
             >>> file.content = '#!/usr/bin/env python3.3\\na'
             >>> replace.dry = True
-            >>> replace._convert_file_code(file) # doctest: +ELLIPSIS
+            >>> replace._convert_file_content(file) # doctest: +ELLIPSIS
             Object of "Replace" with directory "..." to convert to "...".
         '''
 ## python3.3         with builtins.open(
@@ -849,6 +852,7 @@ class Replace(Class, Runnable):
                 consecutive lines with whitespace at the end of line aren't \
                 matched in first run.
             '''
+
             return(
                 '\n{prefix} {current_version}\n{prefix} {current_text}\n'
                 '{alternate_text}{prefix}\n'.format(
@@ -866,8 +870,7 @@ class Replace(Class, Runnable):
                         'alternate_text'
                     ).replace(
                         '\n%s ' % match.group('prefix'), '\n'
-                    )[builtins.len(match.group('prefix')) + 1:].replace(
-                        '\n%s' % match.group('prefix'), '\n')))
+                    )[builtins.len(match.group('prefix')) + 1:]))
         return match.group()
 
     @JointPoint
