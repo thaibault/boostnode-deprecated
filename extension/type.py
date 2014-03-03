@@ -44,6 +44,14 @@ for number in (3, 4):
 
 # region classes
 
+class Null:
+
+    '''
+        Special none type if "builtins.None" should be distinguished from a \
+        real dummy value.
+    '''
+
+
 class SelfClass:
 
     '''Type for defining the current object of its method.'''

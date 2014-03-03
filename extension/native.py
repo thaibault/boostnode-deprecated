@@ -191,20 +191,20 @@ class Model(builtins.object):
     @JointPoint(Class.pseudo_property)
 ## python3.3
 ##     def get_dictionary(
-##         self: Self, key_wrapper=lambda key: String(
+##         self: Self, key_wrapper=lambda key, value: String(
 ##             key
 ##         ).delimited_to_camel_case().content if builtins.isinstance(
 ##             key, builtins.str
 ##         ) else key,
-##         value_wrapper=lambda value: value, prefix_filter='password'
+##         value_wrapper=lambda key, value: value, prefix_filter='password'
 ##     ) -> builtins.dict:
     def get_dictionary(
-        self, key_wrapper=lambda key: String(
+        self, key_wrapper=lambda key, value: String(
             key
         ).delimited_to_camel_case().content if builtins.isinstance(
-            key, builtins.str
+            key, (builtins.str, builtins.unicode)
         ) else key,
-        value_wrapper=lambda value: value, prefix_filter='password'
+        value_wrapper=lambda key, value: value, prefix_filter='password'
     ):
 ##
         '''
@@ -274,8 +274,9 @@ class Model(builtins.object):
             properties = builtins.map(
                 lambda column: column.name, self.__table__.columns)
         for name in properties:
-            key = key_wrapper(name)
-            result[key] = value_wrapper(builtins.getattr(self, name))
+            value = builtins.getattr(self, name)
+            key = key_wrapper(key=name, value=value)
+            result[key] = value_wrapper(key, value)
 ## python3.3
 ##             pass
             if builtins.isinstance(result[key], builtins.unicode):
@@ -1768,11 +1769,12 @@ class Dictionary(Object, builtins.dict):
     @JointPoint
 ## python3.3
 ##     def convert(
-##         self: Self, key_wrapper=lambda key: key,
-##         value_wrapper=lambda value: value
+##         self: Self, key_wrapper=lambda key, value: key,
+##         value_wrapper=lambda key, value: value
 ##     ) -> Self:
     def convert(
-        self, key_wrapper=lambda key: key, value_wrapper=lambda value: value
+        self, key_wrapper=lambda key, value: key,
+        value_wrapper=lambda key, value: value
     ):
 ##
         '''
@@ -1789,39 +1791,39 @@ class Dictionary(Object, builtins.dict):
             True
 
             >>> Dictionary({'a': 'b', 'b': ['a']}).convert(
-            ...     key_wrapper=lambda key: '_%s_' % key
+            ...     key_wrapper=lambda key, value: '_%s_' % key
             ... ).content == {'_a_': 'b', '_b_': ['a']}
             True
 
             >>> Dictionary({'a': 'b', 'b': ['a']}).convert(
-            ...     value_wrapper=lambda value: '_%s_' % value
+            ...     value_wrapper=lambda key, value: '_%s_' % value
             ... ).content == {'a': '_b_', 'b': ['_a_']}
             True
 
             >>> Dictionary({'a': 'b', 'b': ['a']}).convert(
-            ...     key_wrapper=lambda key: '_%s_' % key,
-            ...     value_wrapper=lambda value: '_%s_' % value
+            ...     key_wrapper=lambda key, value: '_%s_' % key,
+            ...     value_wrapper=lambda key, value: '_%s_' % value
             ... ).content == {'_a_': '_b_', '_b_': ['_a_']}
             True
 
             >>> Dictionary({'a': {'a', 'b'}}).convert(
-            ...     key_wrapper=lambda key: '_%s_' % key,
-            ...     value_wrapper=lambda value: '_%s_' % value
+            ...     key_wrapper=lambda key, value: '_%s_' % key,
+            ...     value_wrapper=lambda key, value: '_%s_' % value
             ... ).content == {'_a_': {'_a_', '_b_'}}
             True
 
             >>> Dictionary(
             ...     {'a': {'b'}, 'b': {'a': [{'a': 'b'}, ['a']]}}
             ... ).convert(
-            ...     key_wrapper=lambda key: '_%s_' % key,
-            ...     value_wrapper=lambda value: '_%s_' % value
+            ...     key_wrapper=lambda key, value: '_%s_' % key,
+            ...     value_wrapper=lambda key, value: '_%s_' % value
             ... ).content == {
             ...     '_a_': {'_b_'}, '_b_': {'_a_': [{'_a_': '_b_'}, ['_a_']]}}
             True
         '''
         for key, value in copy.copy(self.content).items():
             del self.content[key]
-            key = key_wrapper(key)
+            key = key_wrapper(key, value)
             if builtins.isinstance(value, builtins.dict):
                 '''
                     Take this method type by the abstract class via \
@@ -1845,7 +1847,7 @@ class Dictionary(Object, builtins.dict):
                     iterable=value, key_wrapper=key_wrapper,
                     value_wrapper=value_wrapper)
             else:
-                self.content[key] = value_wrapper(value)
+                self.content[key] = value_wrapper(key, value)
         return self
 
         # endregion
@@ -1883,7 +1885,7 @@ class Dictionary(Object, builtins.dict):
                     iterable=value, key_wrapper=key_wrapper,
                     value_wrapper=value_wrapper)
             else:
-                iterable[key] = value_wrapper(value)
+                iterable[key] = value_wrapper(key, value)
         return iterable
 
     @JointPoint(builtins.classmethod)
@@ -1898,7 +1900,7 @@ class Dictionary(Object, builtins.dict):
         new_set = builtins.set()
         for value in set:
             '''NOTE: Only hashable objects are allowed in a set.'''
-            new_set.add(value_wrapper(value))
+            new_set.add(value_wrapper(key=None, value=value))
         return new_set
 
     @JointPoint
