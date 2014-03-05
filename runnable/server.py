@@ -2376,6 +2376,7 @@ class CGIHTTPRequestHandler(
 ## python3.3     def _is_valid_request(self: Self) -> builtins.bool:
     def _is_valid_request(self):
         '''Checks if given request fulfill all restrictions.'''
+        
         return self._request_in_pattern_list(
             self.server.web.request_whitelist
         ) and not self._request_in_pattern_list(
@@ -2389,8 +2390,15 @@ class CGIHTTPRequestHandler(
     def _request_in_pattern_list(self, pattern_list):
 ##
         '''Checks if current request matches on of the given pattern.'''
+        patterns = re.compile('(?P<request_type>.+?):(?P<request_uri>.*)')
+        request_type_uppercase = self.request_type.upper()
         for pattern in pattern_list:
-            if re.compile(pattern).match(self.request_uri) is not None:
+            match = patterns.match(pattern)
+            if re.compile(match.group('request_uri')).match(
+                self.request_uri
+            ) is not None and request_type_uppercase in match.group(
+                'request_type'
+            ).split('|'):
                 return True
         return False
 
