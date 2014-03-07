@@ -2083,12 +2083,13 @@ class CGIHTTPRequestHandler(
 ## python3.3
 ##         data_type, post_data = cgi.parse_header(
 ##             self.headers.get_content_type())
-##         content_length = builtins.int(self.headers.get('content-length'))
-        data_type, post_data = cgi.parse_header(self.headers.getheader(
-            'content-type'))
-        content_length = builtins.int(self.headers.getheader(
-            'content-length'))
+##         given_content_length = self.headers.get('content-length')
+        data_type, post_data = cgi.parse_header(self.headers.gettype())
+        given_content_length = self.headers.getheader('content-length')
 ##
+        content_length = 0
+        if builtins.isinstance(given_content_length, builtins.str):
+            content_length = builtins.int(given_content_length)
         if data_type == 'application/x-www-form-urlencoded':
 ## python3.3
 ##             self.data = urlparse.parse_qs(self.rfile.read(
@@ -2376,7 +2377,7 @@ class CGIHTTPRequestHandler(
 ## python3.3     def _is_valid_request(self: Self) -> builtins.bool:
     def _is_valid_request(self):
         '''Checks if given request fulfill all restrictions.'''
-        
+
         return self._request_in_pattern_list(
             self.server.web.request_whitelist
         ) and not self._request_in_pattern_list(
