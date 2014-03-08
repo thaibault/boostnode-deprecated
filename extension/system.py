@@ -1894,12 +1894,13 @@ class CommandLine(builtins.object):
         if temp_file_patterns is None:
             temp_file_patterns = cls.DEFAULT_TEMP_FILE_PATTERNS
         if module['name'] == '__main__' or test:
-            callable_objects, default_caller = cls._determine_callable_objects(
-                module, default_caller, test)
+            callable_object_names, default_caller_name = \
+                cls._determine_callable_objects(module, default_caller, test)
             given_arguments = cls.argument_parser(
                 arguments=cls.DEFAULT_CALLER_ARGUMENTS,
-                scope={'objects': callable_objects,
-                       'default_caller': default_caller},
+                scope={
+                    'objects': callable_object_names,
+                    'default_caller': default_caller_name},
                 meta=True, default=False)
             if given_arguments.meta_help:
                 cls.current_argument_parser.print_help()
@@ -1909,8 +1910,8 @@ class CommandLine(builtins.object):
                     verbose=given_arguments.verbose_test)
             elif given_arguments.module_object is not False:
                 cls._call_module_object(
-                    module, callable_objects,
-                    object=given_arguments.module_object,
+                    module, callable_object_names,
+                    object_name=given_arguments.module_object,
                     caller_arguments=caller_arguments,
                     caller_keywords=caller_keywords)
         return cls
@@ -2253,12 +2254,12 @@ class CommandLine(builtins.object):
 ## python3.3
 ##     def _call_module_object(
 ##         cls: SelfClass, module: builtins.dict,
-##         callable_objects: collections.Iterable, object: builtins.str,
-##         caller_arguments: collections.Iterable,
+##         callable_object_names: collections.Iterable,
+##         object_name: builtins.str, caller_arguments: collections.Iterable,
 ##         caller_keywords: builtins.dict
 ##     ) -> SelfClass:
     def _call_module_object(
-        cls, module, callable_objects, object, caller_arguments,
+        cls, module, callable_object_names, object_name, caller_arguments,
         caller_keywords
     ):
 ##
@@ -2288,9 +2289,9 @@ class CommandLine(builtins.object):
 
             >>> sys.argv = sys_argv_backup
         '''
-        if builtins.len(sys.argv) > 2 and sys.argv[1] in callable_objects:
+        if builtins.len(sys.argv) > 2 and sys.argv[1] in callable_object_names:
             sys.argv = [sys.argv[0]] + sys.argv[2:]
-        builtins.getattr(module['scope'], object)(
+        builtins.getattr(module['scope'], object_name)(
             *caller_arguments, **caller_keywords)
         return cls
 
@@ -2324,10 +2325,14 @@ class CommandLine(builtins.object):
             ...
             boosteNode.extension.system.SystemError: No callable objects in ...
         '''
-        callable_objects = Module.get_defined_callables(scope=module['scope'])
+        callable_objects = builtins.tuple(Module.get_defined_callables(
+            scope=module['scope']))
         if callable_objects:
             default_caller = Module.determine_caller(
                 caller=default_caller, callable_objects=callable_objects)
+            # TODO check new branch.
+            if builtins.isinstance(default_caller, builtins.tuple):
+                default_caller = default_caller[0]
         else:
             message = 'No callable objects in "{name}" ({scope}).'.format(
                 name=module['name'], scope=module['scope'])
@@ -2335,7 +2340,7 @@ class CommandLine(builtins.object):
                 __logger__.info(message)
             else:
                 raise __exception__(message)
-        return callable_objects, default_caller
+        return builtins.dict(callable_objects).keys(), default_caller
 
     @JointPoint(builtins.classmethod)
 ## python3.3

@@ -917,7 +917,7 @@ class Web(Class, Runnable):
 ##     def _initialize(
 ##         self: Self, root=None, host_name='', port=0, default='',
 ##         public_key_file=None, stop_order='stop',
-##         encoding=FileHandler.DEFAULT_ENCODING, request_whitelist=('/.*',),
+##         encoding=FileHandler.DEFAULT_ENCODING, request_whitelist=('*:/.*',),
 ##         request_blacklist=(), same_thread_request_whitelist=(),
 ##         # NOTE: Tuple for explicit web_server file reference validation.
 ##         # ('^text/.+', '^image/.+', '^application/(x-)?javascript$')
@@ -941,7 +941,7 @@ class Web(Class, Runnable):
     def _initialize(
         self, root=None, host_name='', port=0, default='',
         public_key_file=None, stop_order='stop',
-        encoding=FileHandler.DEFAULT_ENCODING, request_whitelist=('/.*',),
+        encoding=FileHandler.DEFAULT_ENCODING, request_whitelist=('*:/.*',),
         request_blacklist=(), same_thread_request_whitelist=(),
         # NOTE: Tuple for explicit web_server file reference validation.
         # ('^text/.+', '^image/.+', '^application/(x-)?javascript$')
@@ -1306,7 +1306,7 @@ class CGIHTTPRequestHandler(
             >>> handler.path = '/'
             >>> handler.server = Class()
             >>> handler.server.web = Web(
-            ...     __test_folder__, request_whitelist=('^/?$',))
+            ...     __test_folder__, request_whitelist=('*:/?',))
 
             >>> handler.do_GET() # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "/" and param...
@@ -1331,7 +1331,7 @@ class CGIHTTPRequestHandler(
             Object of "CGIHTTPRequestHandler" with request uri "" and parame...
 
             >>> handler.path = '/not_existing_file'
-            >>> handler.server.web.request_whitelist = '^/not_existing_file$',
+            >>> handler.server.web.request_whitelist = '*:/not_existing_file',
             >>> handler.server.web.authentication_handler = (
             ...     lambda header, request_uri, request_handler: True)
             >>> handler.do_GET() # doctest: +ELLIPSIS
@@ -1340,7 +1340,7 @@ class CGIHTTPRequestHandler(
             >>> file = FileHandler(__test_folder__.path + 'do_GET')
             >>> file.content = ''
             >>> handler.path = '/' + file.name
-            >>> handler.server.web.request_whitelist = '^/%s$' % file.name,
+            >>> handler.server.web.request_whitelist = '*:/%s' % file.name,
             >>> handler.do_GET() # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "/do_GET" ...
 
@@ -2395,11 +2395,12 @@ class CGIHTTPRequestHandler(
         request_type_uppercase = self.request_type.upper()
         for pattern in pattern_list:
             match = patterns.match(pattern)
-            if re.compile(match.group('request_uri')).match(
+            request_types = match.group('request_type').split('|')
+            if(request_type_uppercase in request_types or
+               '*' in request_types
+               ) and re.compile(match.group('request_uri')).match(
                 self.request_uri
-            ) is not None and request_type_uppercase in match.group(
-                'request_type'
-            ).split('|'):
+            ) is not None:
                 return True
         return False
 
@@ -2968,10 +2969,10 @@ class CGIHTTPRequestHandler(
         '''Handles exceptions raising in requested modules.'''
         try:
             if not __test_mode__:
-                builtins.getattr(
-                    requested_module, Module.determine_caller(
-                        callable_objects=Module.get_defined_callables(
-                            scope=requested_module)))()
+                Module.determine_caller(
+                    callable_objects=Module.get_defined_callables(
+                        scope=requested_module)
+                )[1]()
         except builtins.BaseException as exception:
             self._handle_module_exception(requested_module, exception)
         else:

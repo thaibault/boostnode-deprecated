@@ -2205,7 +2205,7 @@ class Module(Object):
 ## python3.3
 ##     def determine_caller(
 ##         cls: SelfClass, callable_objects: collections.Iterable, caller=None
-##     ) -> (builtins.bool, builtins.str, builtins.type(None)):
+##     ) -> (builtins.bool, builtins.tuple, builtins.type(None)):
     def determine_caller(cls, callable_objects, caller=None):
 ##
         '''
@@ -2221,29 +2221,36 @@ class Module(Object):
             >>> Module.determine_caller([]) is None
             True
 
-            >>> Module.determine_caller(['A', 'B'], 'B')
+            >>> Module.determine_caller((('A', object), ('B', object)), 'B')
             'B'
 
-            >>> Module.determine_caller(['A', 'B'], None)
-            'A'
+            >>> Module.determine_caller(
+            ...     (('A', object), ('B', object)), None
+            ... ) == ('A', object)
+            True
 
-            >>> Module.determine_caller(['A', 'Main'], None)
-            'Main'
+            >>> Module.determine_caller(
+            ...     (('A', object), ('Main', object)), None
+            ... ) == ('Main', object)
+            True
 
             >>> Module.determine_caller(['A'], False)
             False
 
-            >>> Module.determine_caller(['AError', 'A'], None)
-            'A'
+            >>> Module.determine_caller(
+            ...     [('AError', object), ('A', object)], None
+            ... ) == ('A', object)
+            True
         '''
         if not (caller or caller is False):
-            for object in callable_objects:
-                if object.lower() in cls.PREFERRED_ENTRY_POINT_FUNCTION_NAMES:
-                    return object
-            if builtins.len(callable_objects):
+            for object_name, object in callable_objects:
+                if(object_name.lower() in
+                   cls.PREFERRED_ENTRY_POINT_FUNCTION_NAMES):
+                    return object_name, object
+            if builtins.len(builtins.tuple(callable_objects)):
                 index = 0
                 while(builtins.len(callable_objects) > index + 1 and
-                      callable_objects[index].endswith('Error')):
+                      callable_objects[index][0].endswith('Error')):
                     index += 1
                 return callable_objects[index]
         return caller
@@ -2252,10 +2259,56 @@ class Module(Object):
     @Class.pseudo_property
 ## python3.3
 ##     def get_defined_callables(
+##         cls: SelfClass, *arguments: (builtins.type, builtins.object),
+##         **keywords: (builtins.type, builtins.object), only_module_level=True
+##     ) -> types.GeneratorType:
+    def get_defined_callables(cls, *arguments, **keywords):
+##
+        '''
+            Takes a module and gives a list of callables explicit defined in \
+            this module. Arguments and keywords are forwarded to the \
+            "get_defined_objects()" method.
+
+            Examples:
+
+            >>> tuple(Module.get_defined_callables(
+            ...     sys.modules['__main__']
+            ... )) # doctest: +ELLIPSIS
+            (...'Module'...)
+
+            >>> class A:
+            ...     a = 'hans'
+            ...     def b(): pass
+            ...     def __A__(): pass
+            >>> tuple(
+            ...     Module.get_defined_callables(A, only_module_level=False)
+            ... ) == (('b', A.b),)
+            True
+
+            >>> @JointPoint
+            ... def b(): pass
+            >>> temporary_object = object
+            >>> a = A()
+            >>> a.b = b
+            >>> tuple(
+            ...     Module.get_defined_callables(a, only_module_level=False)
+            ... ) # doctest: +ELLIPSIS
+            (('b', ...),)
+        '''
+        for object_name, object in cls.get_defined_objects(
+            *arguments, **keywords
+        ):
+            if builtins.callable(object):
+                yield object_name, object
+
+    @JointPoint(builtins.classmethod)
+    @Class.pseudo_property
+## python3.3
+##     def get_defined_objects(
 ##         cls: SelfClass, scope: (builtins.type, builtins.object),
 ##         only_module_level=True
 ##     ) -> builtins.list:
-    def get_defined_callables(cls, scope, only_module_level=True):
+    def get_defined_objects(cls, scope, only_module_level=True):
 ##
         '''
             Takes a module and gives a list of objects explicit defined in \
@@ -2268,35 +2321,33 @@ class Module(Object):
 
             Examples:
 
-            >>> Module.get_defined_callables(
+            >>> tuple(Module.get_defined_objects(
             ...     sys.modules['__main__']
-            ... ) # doctest: +ELLIPSIS
-            [...'Module'...]
+            ... )) # doctest: +ELLIPSIS
+            (...'Module'...)
 
             >>> class A:
             ...     a = 'hans'
-            ...     def b():
-            ...         pass
-            ...     def __A__():
-            ...         pass
-            >>> Module.get_defined_callables(A, only_module_level=False)
-            ['b']
+            ...     def b(): pass
+            ...     def __A__(): pass
+            >>> set(
+            ...     Module.get_defined_objects(A, only_module_level=False)
+            ... ) == {('b', A.b), ('a', 'hans')}
+            True
 
-            >>> @JointPoint
-            ... def b():
-            ...     pass
+            >>> def b(): pass
             >>> temporary_object = object
             >>> a = A()
             >>> a.b = b
-            >>> Module.get_defined_callables(a, only_module_level=False)
-            ['b']
+            >>> set(
+            ...     Module.get_defined_objects(a, only_module_level=False)
+            ... ) == {('b', a.b), ('a', 'hans')}
+            True
         '''
-        callables = []
         for object_name in builtins.set(builtins.dir(scope)):
             object = cls._determine_object(object=builtins.getattr(
                 scope, object_name))
-            if(builtins.callable(object) and
-               not (object_name.startswith('__') and
+            if(not (object_name.startswith('__') and
                     object_name.endswith('__')) and
                not (inspect.ismodule(object) or
                     object_name in cls.HIDDEN_BUILTIN_CALLABLES or
@@ -2305,8 +2356,7 @@ class Module(Object):
                     object_name in sys.builtin_module_names or
                     (only_module_level and inspect.getmodule(object) !=
                         scope))):
-                callables.append(object_name)
-        return callables
+                yield object_name, object
 
     @JointPoint(builtins.classmethod)
 ## python3.3
