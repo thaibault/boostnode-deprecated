@@ -2345,8 +2345,12 @@ class Module(Object):
             True
         '''
         for object_name in builtins.set(builtins.dir(scope)):
-            object = cls._determine_object(object=builtins.getattr(
-                scope, object_name))
+            # TODO check branch
+            try:
+                object = cls._determine_object(object=builtins.getattr(
+                    scope, object_name))
+            except builtins.AttributeError:
+                object = None
             if(not (object_name.startswith('__') and
                     object_name.endswith('__')) and
                not (inspect.ismodule(object) or
