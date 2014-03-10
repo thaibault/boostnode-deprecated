@@ -2184,8 +2184,8 @@ class CommandLine(builtins.object):
 ##                         parameters[scope['__name__']].annotation
 ##                     ) is builtins.type:
 ##                         '''
-##                             Set default value to default value of specified \
-##                             parameter type.
+##                             Set default value to default value of \
+##                             specified parameter type.
 ##                         '''
 ##                         scope['__initializer_default_value__'] = \
 ##                             parameters[scope['__name__']].annotation()
