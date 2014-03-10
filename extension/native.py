@@ -1858,6 +1858,11 @@ class Dictionary(Object, builtins.dict):
         '''
         if builtins.isinstance(iterable, builtins.set):
             return cls._convert_set(iterable, key_wrapper, value_wrapper)
+## python3.3
+##         if builtins.isinstance(iterable, builtins.range):
+##             return iterable
+        pass
+##
         for key, value in builtins.enumerate(iterable):
             if builtins.isinstance(value, builtins.dict):
                 iterable[key] = cls(value).convert(
