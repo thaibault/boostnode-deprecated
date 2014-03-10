@@ -1,13 +1,6 @@
 #!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 
-# region vim modline
-
-# vim: set tabstop=4 shiftwidth=4 expandtab:
-# vim: foldmethod=marker foldmarker=region,endregion:
-
-# endregion
-
 # region header
 
 """
@@ -22,10 +15,8 @@
     License
     -------
 
-    This library written by Torben Sickert stand under a creative commons
-    naming 3.0 unported license.
-    see http://creativecommons.org/licenses/by/3.0/deed.de
-
+    This library written by Torben Sickert stand under a creative commons \
+    naming 3.0 unported license. \
     see http://creativecommons.org/licenses/by/3.0/deed.de
 
     Additional conventions beside pep8 (bcX := boostNode convention number X)
@@ -476,5 +467,12 @@ if __name__ == '__main__':
     from boostNode.extension.system import CommandLine
     CommandLine.generic_package_interface(
         name=__name__, frame=inspect.currentframe())
+
+# endregion
+
+# region vim modline
+
+# vim: set tabstop=4 shiftwidth=4 expandtab:
+# vim: foldmethod=marker foldmarker=region,endregion:
 
 # endregion

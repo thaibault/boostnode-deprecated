@@ -1,5 +1,6 @@
+# -*- coding: utf-8 -*-
+
 # Makefile for Sphinx documentation
-#
 
 # You can set these variables from the command line.
 SPHINXOPTS    =
@@ -175,3 +176,10 @@ pseudoxml:
 	$(SPHINXBUILD) -b pseudoxml $(ALLSPHINXOPTS) $(BUILDDIR)/pseudoxml
 	@echo
 	@echo "Build finished. The pseudo-XML files are in $(BUILDDIR)/pseudoxml."
+
+# region vim modline
+
+# vim: set tabstop=4 shiftwidth=4 expandtab:
+# vim: foldmethod=marker foldmarker=region,endregion:
+
+# endregion

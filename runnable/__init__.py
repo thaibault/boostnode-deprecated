@@ -1,13 +1,6 @@
 #!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 
-# region vim modline
-
-# vim: set tabstop=4 shiftwidth=4 expandtab:
-# vim: foldmethod=marker foldmarker=region,endregion:
-
-# endregion
-
 # region header
 
 '''
@@ -16,7 +9,7 @@
     calling them via the command line.
 '''
 '''
-    For conventions see "boostNode/__init__.py" on
+    For conventions see "boostNode/__init__.py" on \
     https://github.com/thaibault/boostNode
 '''
 
@@ -61,5 +54,12 @@ if __name__ == '__main__':
     '''
     CommandLine.generic_package_interface(
         name=__name__, frame=inspect.currentframe())
+
+# endregion
+
+# region vim modline
+
+# vim: set tabstop=4 shiftwidth=4 expandtab:
+# vim: foldmethod=marker foldmarker=region,endregion:
 
 # endregion

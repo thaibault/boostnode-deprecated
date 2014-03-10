@@ -1,9 +1,4 @@
-<!-- region vim modline
-
-vim: set tabstop=4 shiftwidth=4 expandtab:
-vim: foldmethod=marker foldmarker=region,endregion:
-
-endregion
+<!-- -*- coding: utf-8 -*-
 
 region header
 
@@ -307,3 +302,10 @@ License
 
 see header in ./\_\_init\_\_.py
 <!--deDE:Siehe Header in ./\_\_init\_\_.py-->
+
+<!-- region vim modline
+
+vim: set tabstop=4 shiftwidth=4 expandtab:
+vim: foldmethod=marker foldmarker=region,endregion:
+
+endregion -->

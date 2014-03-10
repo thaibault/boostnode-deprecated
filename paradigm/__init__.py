@@ -1,13 +1,6 @@
 #!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 
-# region vim modline
-
-# vim: set tabstop=4 shiftwidth=4 expandtab:
-# vim: foldmethod=marker foldmarker=region,endregion:
-
-# endregion
-
 # region header
 
 '''
@@ -15,7 +8,7 @@
     useful programming concepts like object or aspect orientation.
 '''
 '''
-    For conventions see "boostNode/__init__.py" on
+    For conventions see "boostNode/__init__.py" on \
     https://github.com/thaibault/boostNode
 '''
 
@@ -62,3 +55,10 @@ if __name__ == '__main__':
         name=__name__, frame=inspect.currentframe())
 
 # ednregion
+
+# region vim modline
+
+# vim: set tabstop=4 shiftwidth=4 expandtab:
+# vim: foldmethod=marker foldmarker=region,endregion:
+
+# endregion
