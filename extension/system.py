@@ -1830,6 +1830,11 @@ class CommandLine(builtins.object):
             >>> CommandLine.generic_package_interface(
             ...     name='not__main__', frame=inspect.currentframe())
             False
+
+            >>> CommandLine.generic_package_interface(
+            ...     name='not__main__', frame=inspect.currentframe(),
+            ...     temp_file_patterns=())
+            False
         '''
         if temp_file_patterns is None:
             temp_file_patterns = cls.DEFAULT_TEMP_FILE_PATTERNS
@@ -1883,6 +1888,13 @@ class CommandLine(builtins.object):
             **caller_arguments**   - arguments for given caller to forward
 
             **caller_keywords**    - keywords for given caller to forward
+
+            Examples:
+
+            >>> CommandLine.generic_module_interface(
+            ...     module={'name': 'hans'}, temp_file_patterns=()
+            ... ) # doctest: +ELLIPSIS
+            <class '...CommandLine'>
         '''
         if temp_file_patterns is None:
             temp_file_patterns = cls.DEFAULT_TEMP_FILE_PATTERNS
@@ -2172,7 +2184,7 @@ class CommandLine(builtins.object):
 ##                         parameters[scope['__name__']].annotation
 ##                     ) is builtins.type:
 ##                         '''
-##                             Set default value to default value of specified
+##                             Set default value to default value of specified \
 ##                             parameter type.
 ##                         '''
 ##                         scope['__initializer_default_value__'] = \
@@ -2309,7 +2321,7 @@ class CommandLine(builtins.object):
 
             >>> CommandLine._determine_callable_objects(
             ...     {'scope': A('A'), 'name': 'A'}, None, True)
-            ([], None)
+            ((), None)
 
             >>> CommandLine._determine_callable_objects(
             ...     {'scope': A('A'), 'name': 'A'}, None, False
@@ -2317,13 +2329,20 @@ class CommandLine(builtins.object):
             Traceback (most recent call last):
             ...
             boosteNode.extension.system.SystemError: No callable objects in ...
+
+            >>> class A(types.ModuleType):
+            ...     def a(self): pass
+            >>> a = A('A')
+            >>> CommandLine._determine_callable_objects(
+            ...     {'scope': a, 'name': 'A'}, 'a', True
+            ... ) == ((), 'a')
+            True
         '''
         callable_objects = builtins.tuple(Module.get_defined_callables(
             scope=module['scope']))
         if callable_objects:
             default_caller = Module.determine_caller(
                 caller=default_caller, callable_objects=callable_objects)
-            # TODO check new branch.
             if builtins.isinstance(default_caller, builtins.tuple):
                 default_caller = default_caller[0]
         else:
@@ -2333,7 +2352,9 @@ class CommandLine(builtins.object):
                 __logger__.info(message)
             else:
                 raise __exception__(message)
-        return builtins.dict(callable_objects).keys(), default_caller
+        return builtins.tuple(
+            builtins.dict(callable_objects).keys()
+        ), default_caller
 
     @JointPoint(builtins.classmethod)
 ## python3.3

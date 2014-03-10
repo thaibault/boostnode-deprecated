@@ -2198,7 +2198,7 @@ class Module(Object):
 ## python3.3
 ##     def determine_caller(
 ##         cls: SelfClass, callable_objects: collections.Iterable, caller=None
-##     ) -> (builtins.bool, builtins.tuple, builtins.type(None)):
+##     ) -> (builtins.bool, builtins.str, builtins.tuple, builtins.type(None)):
     def determine_caller(cls, callable_objects, caller=None):
 ##
         '''
@@ -2253,7 +2253,7 @@ class Module(Object):
 ## python3.3
 ##     def get_defined_callables(
 ##         cls: SelfClass, *arguments: (builtins.type, builtins.object),
-##         **keywords: (builtins.type, builtins.object), only_module_level=True
+##         **keywords: (builtins.type, builtins.object)
 ##     ) -> types.GeneratorType:
     def get_defined_callables(cls, *arguments, **keywords):
 ##
@@ -2300,7 +2300,7 @@ class Module(Object):
 ##     def get_defined_objects(
 ##         cls: SelfClass, scope: (builtins.type, builtins.object),
 ##         only_module_level=True
-##     ) -> builtins.list:
+##     ) -> types.GeneratorType:
     def get_defined_objects(cls, scope, only_module_level=True):
 ##
         '''
@@ -2338,12 +2338,11 @@ class Module(Object):
             True
         '''
         for object_name in builtins.set(builtins.dir(scope)):
-            # TODO check branch
             try:
-                object = cls._determine_object(object=builtins.getattr(
-                    scope, object_name))
+                object = object=builtins.getattr(scope, object_name)
             except builtins.AttributeError:
                 object = None
+            object = cls._determine_object(object)
             if(not (object_name.startswith('__') and
                     object_name.endswith('__')) and
                not (inspect.ismodule(object) or
