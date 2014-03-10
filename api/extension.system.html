@@ -237,6 +237,13 @@ positively.</p>
 <p><strong>default_caller</strong>     - default callable object in given module</p>
 <p><strong>caller_arguments</strong>   - arguments for given caller to forward</p>
 <p><strong>caller_keywords</strong>    - keywords for given caller to forward</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">CommandLine</span><span class="o">.</span><span class="n">generic_module_interface</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">module</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;hans&#39;</span><span class="p">},</span> <span class="n">temp_file_patterns</span><span class="o">=</span><span class="p">()</span>
+<span class="gp">... </span><span class="p">)</span> 
+<span class="go">&lt;class &#39;...CommandLine&#39;&gt;</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="staticmethod">
@@ -257,6 +264,12 @@ positively.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">CommandLine</span><span class="o">.</span><span class="n">generic_package_interface</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">name</span><span class="o">=</span><span class="s">&#39;not__main__&#39;</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">currentframe</span><span class="p">())</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">CommandLine</span><span class="o">.</span><span class="n">generic_package_interface</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">name</span><span class="o">=</span><span class="s">&#39;not__main__&#39;</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">currentframe</span><span class="p">(),</span>
+<span class="gp">... </span>    <span class="n">temp_file_patterns</span><span class="o">=</span><span class="p">())</span>
 <span class="go">False</span>
 </pre></div>
 </div>
