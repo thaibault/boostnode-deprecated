@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.3
+#!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 
 # region header
@@ -8,7 +8,7 @@
     programming.
 '''
 '''
-    For conventions see "boostNode/__init__.py" on
+    For conventions see "boostNode/__init__.py" on \
     https://github.com/thaibault/boostNode
 '''
 

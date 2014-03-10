@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.3
+#!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 
 # region header
@@ -22,8 +22,8 @@ __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-## python2.7 import __builtin__ as builtins
-import builtins
+## python3.3 import builtins
+import __builtin__ as builtins
 import inspect
 import os
 import sys
@@ -70,16 +70,16 @@ class Model(builtins.type):
 
             # region special
 
-## python2.7
+## python3.3
 ##     def __new__(
-##         cls, class_name, base_classes, class_scope, *arguments, **keywords
-##     ):
+##         cls: SelfClass, class_name: builtins.str,
+##         base_classes: builtins.tuple, class_scope: builtins.dict,
+##         *arguments: (builtins.type, builtins.object),
+##         **keywords: (builtins.type, builtins.object)
+##     ) -> builtins.type:
     def __new__(
-        cls: SelfClass, class_name: builtins.str,
-        base_classes: builtins.tuple, class_scope: builtins.dict,
-        *arguments: (builtins.type, builtins.object),
-        **keywords: (builtins.type, builtins.object)
-    ) -> builtins.type:
+        cls, class_name, base_classes, class_scope, *arguments, **keywords
+    ):
 ##
         '''
             Triggers if a new instance is created. Set the default name for \
