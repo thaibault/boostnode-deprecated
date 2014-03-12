@@ -2445,7 +2445,7 @@ class CGIHTTPRequestHandler(
         '''Creates all request specified environment-variables.'''
         self._determine_host().request_uri = self.path
         match = re.compile(
-            '^[^/]*/+(?P<path>.*?)(?:{delimiter}(?P<parameter>.*))?$'.format(
+            '[^/]*/+(?P<path>.*?)(?:{delimiter}(?P<parameter>.*))?$'.format(
                 delimiter=self.server.web.request_parameter_delimiter)
         ).match(self.request_uri)
         self.path = ''
@@ -2910,7 +2910,7 @@ class CGIHTTPRequestHandler(
             else:
                 '''Check if given output contains a header.'''
                 header_match = re.compile(
-                    '^[A-Z0-9]+/([0-9]+\.)+[0-9]+ [0-9]{3} [a-zA-Z ]+\n'
+                    '[A-Z0-9]+/([0-9]+\.)+[0-9]+ [0-9]{3} [a-zA-Z ]+\n'
                     '([^:]+: .+\n)+\n.+'
                 ).match(output.decode(encoding=self.server.web.encoding))
                 if not header_match:

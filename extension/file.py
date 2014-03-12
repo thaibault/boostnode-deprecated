@@ -1555,7 +1555,7 @@ class Handler(Class):
         if builtins.len(path) and path.endswith(os.sep):
             path = path[:-builtins.len(os.sep)]
         if((Platform().operating_system == 'windows' or force_windows_behavior)
-           and re.compile('^[A-Za-z]:$').match(path)):
+           and re.compile('[A-Za-z]:$').match(path)):
             return path
         return os.path.basename(path, *arguments, **keywords)
 
@@ -4397,7 +4397,7 @@ class Handler(Class):
             not self._path.startswith(
                 self.__class__._root_path[:-builtins.len(os.sep)])) and not
             ('windows' == Platform().operating_system and
-             re.compile('^[a-zA-Z]:\\.*').match(self._path) and
+             re.compile('[a-zA-Z]:\\.*').match(self._path) and
              self.__class__._root_path == os.sep)):
             if self._path.startswith(os.sep):
                 self._path = self.__class__._root_path[:-builtins.len(
@@ -4470,7 +4470,7 @@ class Handler(Class):
         '''
         self._path = self._initialized_path
         self._path = os.path.normpath(os.path.expanduser(self._path))
-        if re.compile('^[a-zA-Z]:$').match(self._initialized_path):
+        if re.compile('[a-zA-Z]:$').match(self._initialized_path):
             self._path += os.sep
         if not self.is_referenced_via_absolute_path():
             self._path = os.path.abspath(self._path)

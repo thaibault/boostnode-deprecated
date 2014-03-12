@@ -527,7 +527,7 @@ class Parser(Class, Runnable):
         if not self._indent and self.content:
             self._indent = self.template_context_default_indent
             match = re.compile(
-                '^(.*\n)?%s *__indent__ *= *(?P<number_of_indents>[1-9][0-9]*)'
+                '(.*\n)?%s *__indent__ *= *(?P<number_of_indents>[1-9][0-9]*)'
                 ' *(?:;+|\n).*$' %
                 String(self.left_code_delimiter).validate_regex().content,
                 re.DOTALL

@@ -293,6 +293,92 @@ class Model(builtins.object):
 
             # endregion
 
+    @JointPoint(builtins.staticmethod)
+## python3.3
+##     def validate_property(
+##         model_instance: builtins.object, name: builtins.str,
+##         value: builtins.object,
+##         info_determiner=lambda model_instance, name: builtins.getattr(
+##             model_instance, '_%s_info' % name)):
+    def validate_property(
+        model_instance, name, value,
+        info_determiner=lambda model_instance, name: builtins.getattr(
+            model_instance, '_%s_info' % name)):
+##
+        '''
+            Intercepts each property set of any derived model.
+
+            Examples:
+
+            >>> class A(Model):
+            ...     _a_info = {
+            ...         'minimum_length': 5, 'maximum_length': 10,
+            ...         'pattern': '[^a]+$'}
+            ...     def set_a(self, value):
+            ...         return self.validate_property(self, 'a', value)
+            >>> a = A()
+
+            >>> a.set_a('peter')
+            'peter'
+
+            >>> a.set_a('hans') # doctest: +ELLIPSIS
+            Traceback (most recent call last):
+            ...
+            ValueError: Property "a" of model "A" has minimum length 5 ...
+
+            >>> a.set_a('hansHans') # doctest: +ELLIPSIS
+            Traceback (most recent call last):
+            ...
+            ValueError: Property "a" of model "A" has pattern "...
+
+            >>> a.set_a('hansHansHans') # doctest: +ELLIPSIS
+            Traceback (most recent call last):
+            ...
+            ValueError: Property "a" of model "A" has maximum length 10 but...
+        '''
+## python3.3
+##         pass
+        encoding_was_unicode = False
+        if builtins.isinstance(value, builtins.unicode):
+            encoding_was_unicode = True
+            value = value.encode('utf_8')
+##
+        property_information = info_determiner(model_instance, name)
+        if 'minimum_length' in property_information and builtins.len(
+            value
+        ) < property_information['minimum_length']:
+            raise ValueError(
+                'Property "%s" of model "%s" has minimum length %d but '
+                'given value ("%s") has length %d.' % (
+                    name, model_instance.__class__.__name__,
+                    property_information['minimum_length'], value,
+                    builtins.len(value)))
+        if 'maximum_length' in property_information and builtins.len(
+            value
+        ) > property_information['maximum_length']:
+            raise ValueError(
+                'Property "%s" of model "%s" has maximum length %d but '
+                'given value ("%s") has length %d.' % (
+                    name, model_instance.__class__.__name__,
+                    property_information['maximum_length'], value,
+                    builtins.len(value)))
+        if 'pattern' in property_information and re.compile(
+            property_information['pattern']
+        ).match(value) is None:
+            raise ValueError(
+                'Property "%s" of model "%s" has pattern "%s" but given '
+                'value ("%s") doesn\'t match.' % (
+                    name, model_instance.__class__.__name__,
+                    property_information['pattern'], value))
+## python3.3
+##         pass
+        if encoding_was_unicode and builtins.isinstance(
+            value, builtins.str
+        ):
+            return builtins.unicode(value, 'utf_8')
+##
+        return value
+
         # endregion
 
     # endregion
@@ -306,6 +392,9 @@ class AuthenticationModel(Model):
 
     _password_salt_length = 100
     _password_pepper = 'a1b2c3d4e3f5g6h7i8j9k0l1m2n3o4p5x6y7z'
+    _password_info = {
+        'minimum_length': 4, 'maximum_length': 100, 'pattern': '.{4}.*'
+    }
     password_salt = ''
     password_hash = ''
 
@@ -332,6 +421,11 @@ class AuthenticationModel(Model):
             >>> authentication_model.set_password('hans')
             >>> authentication_model.get_password() # doctest: +ELLIPSIS
             '...'
+
+            >>> authentication_model.set_password('han') # doctest: +ELLIPSIS
+            Traceback (most recent call last):
+            ...
+            ValueError: Property "password" of model "..." has minimum lengt...
         '''
         return self.password_hash
 
@@ -340,6 +434,7 @@ class AuthenticationModel(Model):
         '''
             Password setter which provides automatic salt and hash generation.
         '''
+        self.validate_property(self, 'password', value)
 ## python3.3
 ##         from boostNode.extension.file import Handler as FileHandler
 ##
