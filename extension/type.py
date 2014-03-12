@@ -121,7 +121,6 @@ class Model(builtins.type):
 
     # endregion
 
-
 # endregion
 
 # region footer

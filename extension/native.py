@@ -25,6 +25,7 @@ __status__ = 'stable'
 __version__ = '1.0'
 
 ## python3.3
+## from base64 import b64encode as base64encode
 ## import builtins
 import __builtin__ as builtins
 ##
@@ -32,6 +33,7 @@ import collections
 import copy
 import encodings
 import functools
+from hashlib import sha224
 import inspect
 import os
 import re
@@ -159,6 +161,8 @@ class Model(builtins.object):
             >>> repr(UserModel())
             'UserModel with properties "a": "hans", "b": "5" and "c": "True".'
         '''
+        from boostNode.extension.file import Handler as FileHandler
+
         if self.__dict__:
             property_descriptions = ''
             index = 1
@@ -171,6 +175,13 @@ class Model(builtins.object):
                         property_descriptions += ' and '
                     else:
                         property_descriptions += ', '
+## python3.3
+##                 pass
+                if builtins.isinstance(value, builtins.unicode):
+                    value = value.encode(FileHandler.DEFAULT_ENCODING)
+##
+                if not builtins.isinstance(value, builtins.str):
+                    value = builtins.repr(value)
                 property_descriptions += '"%s": "%s"' % (name, value)
                 index += 1
             return '%s with properties %s.' % (
@@ -257,6 +268,8 @@ class Model(builtins.object):
             >>> user.get_dictionary() == {'a': 3}
             True
         '''
+        from boostNode.extension.file import Handler as FileHandler
+
         result = {}
         properties = builtins.tuple(builtins.filter(
             lambda name: not (
@@ -273,9 +286,107 @@ class Model(builtins.object):
 ## python3.3
 ##             pass
             if builtins.isinstance(result[key], builtins.unicode):
-                result[key] = result[key].encode('utf_8')
+                result[key] = result[key].encode(
+                    FileHandler.DEFAULT_ENCODING)
 ##
         return result
+
+            # endregion
+
+        # endregion
+
+    # endregion
+
+
+class AuthenticationModel(Model):
+
+    '''Represents a model with authentication methods.'''
+
+    # region properties
+
+    _password_salt_length = 100
+    _password_pepper = 'a1b2c3d4e3f5g6h7i8j9k0l1m2n3o4p5x6y7z'
+    password_salt = ''
+    password_hash = ''
+
+    # endregion
+
+    # region dynamic methods
+
+        # region public
+
+            # region password handler
+
+    @JointPoint(Class.pseudo_property)
+    def get_password(self):
+        '''
+            Getter for the password hash.
+
+            Examples:
+
+            >>> authentication_model = AuthenticationModel()
+
+            >>> authentication_model.get_password()
+            ''
+
+            >>> authentication_model.set_password('hans')
+            >>> authentication_model.get_password() # doctest: +ELLIPSIS
+            '...'
+        '''
+        return self.password_hash
+
+    @JointPoint
+    def set_password(self, value):
+        '''
+            Password setter which provides automatic salt and hash generation.
+        '''
+## python3.3
+##         from boostNode.extension.file import Handler as FileHandler
+##
+##         self.password_salt = base64encode(os.urandom(
+##             self._password_salt_length
+##         )).decode(FileHandler.DEFAULT_ENCODING)
+##         self.password_hash = sha224(
+##             ('%s%s%s' % (
+##                 value, self._password_pepper, self.password_salt
+##             )).encode(FileHandler.DEFAULT_ENCODING)
+##         ).hexdigest()
+        self.password_salt = os.urandom(
+            self._password_salt_length
+        ).encode('base_64')
+        self.password_hash = sha224(
+            '%s%s%s' % (value, self._password_pepper, self.password_salt)
+        ).hexdigest()
+##
+
+    @JointPoint
+    def has_password(self, value):
+        '''
+            Checks if given password matches the saved hashed one.
+
+            Examples:
+
+            >>> authentication_model = AuthenticationModel()
+            >>> authentication_model.set_password('hans')
+
+            >>> authentication_model.has_password('hans')
+            True
+
+            >>> authentication_model.has_password('peter')
+            False
+        '''
+## python3.3
+##         from boostNode.extension.file import Handler as FileHandler
+##
+##         return self.password_hash == sha224(
+##             ('%s%s%s' % (
+##                 value, self._password_pepper, self.password_salt
+##             )).encode(FileHandler.DEFAULT_ENCODING)
+##         ).hexdigest()
+        return self.password_hash == sha224(
+            '%s%s%s' % (value, self._password_pepper, self.password_salt)
+        ).hexdigest()
+##
 
             # endregion
 
@@ -1813,6 +1924,14 @@ class Dictionary(Object, builtins.dict):
             ... ).content == {
             ...     '_a_': {'_b_'}, '_b_': {'_a_': [{'_a_': '_b_'}, ['_a_']]}}
             True
+
+            >>> Dictionary(
+            ...     {'a': {'b'}, 'b': range(2)}
+            ... ).convert(
+            ...     key_wrapper=lambda key, value: '_%s_' % key,
+            ...     value_wrapper=lambda key, value: '_%s_' % value
+            ... ).content == {'_a_': {'_b_'}, '_b_': ['_0_', '_1_']}
+            True
         '''
         for key, value in copy.copy(self.content).items():
             del self.content[key]
@@ -1860,7 +1979,7 @@ class Dictionary(Object, builtins.dict):
             return cls._convert_set(iterable, key_wrapper, value_wrapper)
 ## python3.3
 ##         if builtins.isinstance(iterable, builtins.range):
-##             return iterable
+##             iterable = builtins.list(iterable)
         pass
 ##
         for key, value in builtins.enumerate(iterable):
