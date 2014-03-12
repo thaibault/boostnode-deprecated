@@ -76,6 +76,12 @@
 <span class="go">&#39;...&#39;</span>
 </pre></div>
 </div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">authentication_model</span><span class="o">.</span><span class="n">set_password</span><span class="p">(</span><span class="s">&#39;han&#39;</span><span class="p">)</span> 
+<span class="gt">Traceback (most recent call last):</span>
+<span class="c">...</span>
+<span class="gr">ValueError</span>: <span class="n">Property &quot;password&quot; of model &quot;...&quot; has minimum lengt...</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="staticmethod">
@@ -268,6 +274,44 @@
 </div>
 </dd></dl>
 
+<dl class="staticmethod">
+<dt id="boostNode.extension.native.Model.validate_property">
+<em class="property">static </em><tt class="descname">validate_property</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Model.validate_property" title="Permalink to this definition">¶</a></dt>
+<dd><p>Intercepts each property set of any derived model.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">A</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">_a_info</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>        <span class="s">&#39;minimum_length&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s">&#39;maximum_length&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s">&#39;pattern&#39;</span><span class="p">:</span> <span class="s">&#39;[^a]+$&#39;</span><span class="p">}</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">set_a</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate_property</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">A</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">set_a</span><span class="p">(</span><span class="s">&#39;peter&#39;</span><span class="p">)</span>
+<span class="go">&#39;peter&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">set_a</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">)</span> 
+<span class="gt">Traceback (most recent call last):</span>
+<span class="c">...</span>
+<span class="gr">ValueError</span>: <span class="n">Property &quot;a&quot; of model &quot;A&quot; has minimum length 5 ...</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">set_a</span><span class="p">(</span><span class="s">&#39;hansHans&#39;</span><span class="p">)</span> 
+<span class="gt">Traceback (most recent call last):</span>
+<span class="c">...</span>
+<span class="gr">ValueError</span>: <span class="n">Property &quot;a&quot; of model &quot;A&quot; has pattern &quot;...</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">set_a</span><span class="p">(</span><span class="s">&#39;hansHansHans&#39;</span><span class="p">)</span> 
+<span class="gt">Traceback (most recent call last):</span>
+<span class="c">...</span>
+<span class="gr">ValueError</span>: <span class="n">Property &quot;a&quot; of model &quot;A&quot; has maximum length 10 but...</span>
+</pre></div>
+</div>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -446,7 +490,7 @@
 
 <dl class="classmethod">
 <dt id="boostNode.extension.native.Module.get_context_path">
-<em class="property">classmethod </em><tt class="descname">get_context_path</tt><big>(</big><em>path=None</em>, <em>frame=&lt;frame object at 0x3618c90&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_context_path" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><tt class="descname">get_context_path</tt><big>(</big><em>path=None</em>, <em>frame=&lt;frame object at 0x2915d00&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_context_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines the package and module level context path to a given             context or file.</p>
 <p><strong>path</strong>  - relative or absolute context or file path to normalize</p>
 <p><strong>frame</strong> - stack frame to analyse again context</p>
