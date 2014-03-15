@@ -13,7 +13,6 @@
 # serve to show the default.
 
 import sys
-import os
 
 ## Manually added
 sys.path.append('../../')
@@ -183,7 +182,7 @@ html_static_path = ['asset']
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'boostNodedoc'
+htmlhelp_basename = 'boostNodeDocumentation'
 
 
 # -- Options for LaTeX output ---------------------------------------------
@@ -233,7 +232,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'boostnode', 'boostNode Documentation',
+    ('index', 'boostNode', 'boostNode Documentation',
      ['Torben Sickert'], 1)
 ]
 
