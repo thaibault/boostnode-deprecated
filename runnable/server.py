@@ -71,8 +71,7 @@ import urlparse
 ##
 
 '''Make boostNode packages and modules importable via relative paths.'''
-for number in (3, 4):
-    sys.path.append(os.path.abspath(sys.path[0] + number * ('..' + os.sep)))
+sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
 from boostNode.extension.file import Handler as FileHandler
 from boostNode.extension.native import Module, Object, PropertyInitializer, \
@@ -913,18 +912,19 @@ class Web(Class, Runnable):
 ##         encoding=FileHandler.DEFAULT_ENCODING, request_whitelist=('*:/.*',),
 ##         request_blacklist=(), same_thread_request_whitelist=(),
 ##         # NOTE: Tuple for explicit web_server file reference validation.
-##         # ('^text/.+', '^image/.+', '^application/(x-)?javascript$')
-##         static_mime_type_pattern=('^.+/.+$',),
+##         # ('text/.+$', 'image/.+$', 'application/(x-)?javascript$')
+##         static_mime_type_pattern=('.+/.+$',),
 ##         dynamic_mime_type_pattern=(
-##             '^text/x-(python|sh|bash|shellscript)$',),
+##             'text/x-(python|sh|bash|shellscript)$',),
 ##         compressible_mime_type_pattern=(
-##             '^text/.+$', '^application/javascript$'),
+##             'text/.+$', 'application/javascript$'),
 ##         default_file_name_pattern=(
-##             '^((__main__)|(main)|(index)|(initialize))\.?(?!tpl$)'
-##             '[a-zA-Z0-9]{0,4}$',),
+##             '((__main__)|(main)|(index)|(initialize))(?!\.tpl$)'
+##             '(\.[a-zA-Z0-9]{0,4})?$',),
 ##         default_module_names=('__main__', 'main', 'index', 'initialize'),
 ##         authentication=True, authentication_file_name='.htpasswd',
-##         authentication_file_content_pattern='(?P<name>.+):(?P<password>.+)',
+##         authentication_file_content_pattern=
+##             '(?P<name>.+):(?P<password>.+)$',
 ##         authentication_handler=None, module_loading=None,
 ##         maximum_number_of_processes=0, shared_data=None,
 ##         request_parameter_delimiter='\?',
@@ -937,18 +937,19 @@ class Web(Class, Runnable):
         encoding=FileHandler.DEFAULT_ENCODING, request_whitelist=('*:/.*',),
         request_blacklist=(), same_thread_request_whitelist=(),
         # NOTE: Tuple for explicit web_server file reference validation.
-        # ('^text/.+', '^image/.+', '^application/(x-)?javascript$')
-        static_mime_type_pattern=('^.+/.+$',),
+        # ('text/.+$', 'image/.+$', 'application/(x-)?javascript$')
+        static_mime_type_pattern=('.+/.+$',),
         dynamic_mime_type_pattern=(
-            '^text/x-(python|sh|bash|shellscript)$',),
+            'text/x-(python|sh|bash|shellscript)$',),
         compressible_mime_type_pattern=(
-            '^text/.+$', '^application/javascript$'),
+            'text/.+$', '^application/javascript$'),
         default_file_name_pattern=(
-            '^((__main__)|(main)|(index)|(initialize))\.?(?!tpl$)'
-            '[a-zA-Z0-9]{0,4}$',),
+            '((__main__)|(main)|(index)|(initialize))(?!\.tpl$)'
+            '(\.[a-zA-Z0-9]{0,4})?$',),
         default_module_names=('__main__', 'main', 'index', 'initialize'),
         authentication=True, authentication_file_name='.htpasswd',
-        authentication_file_content_pattern='(?P<name>.+):(?P<password>.+)',
+        authentication_file_content_pattern=
+            '(?P<name>.+):(?P<password>.+)$',
         authentication_handler=None, module_loading=None,
         maximum_number_of_processes=0, shared_data=None,
         request_parameter_delimiter='\?',
@@ -1596,13 +1597,13 @@ class CGIHTTPRequestHandler(
 ##     def send_cookie(
 ##         self: Self,
 ##         cookie: (cookies.SimpleCookie, builtins.str, builtins.dict),
-##         header='Set-Cookie', max_age_in_seconds=60 * 60 * 24 * 7,
+##         header='Set-Cookie', maximum_age_in_seconds=60 * 60 * 24 * 7,
 ##         version=1, domain='', secure=False, httponly=False, comment='',
 ##         path='/', response_code=200
 ##     ) -> Self:
     def send_cookie(
         self, cookie, header='Set-Cookie',
-        max_age_in_seconds=60 * 60 * 24 * 7, version=1, domain='',
+        maximum_age_in_seconds=60 * 60 * 24 * 7, version=1, domain='',
         secure=False, httponly=False, comment='', path='/',
         response_code=200
     ):
@@ -1610,29 +1611,30 @@ class CGIHTTPRequestHandler(
         '''
             Sends a http cookie.
 
-            **cookie**             - Cookie object, dictionary or string.
+            **cookie**                 - Cookie object, dictionary or string.
 
-            **header**             - HTTP Header to use.
+            **header**                 - HTTP Header to use.
 
-            **max_age_in_seconds** - Maximum age of given cookie. Default is \
-                                     7 days.
+            **maximum_age_in_seconds** - Maximum age of given cookie. Default \
+                                         is 7 days.
 
-            **version**            - Given cookie version.
+            **version**                - Given cookie version.
 
-            **domain**             - The domain the cookie should bounded to.
+            **domain**                 - The domain the cookie should bounded \
+                                         to.
 
-            **secure**             - Indicates weather only secure \
-                                     connections should be associated with \
-                                     given cookie.
+            **secure**                 - Indicates weather only secure \
+                                         connections should be associated \
+                                         with given cookie.
 
-            **httponly**           - Disables JavaScript access to given \
-                                     cookie.
+            **httponly**               - Disables JavaScript access to given \
+                                         cookie.
 
-            **comment**            - A comment provided for given cookie.
+            **comment**                - A comment provided for given cookie.
 
-            **path**               - Web path the cookie should bounded to.
+            **path**                   - Web path the cookie should bounded to.
 
-            **response_code**      - Response code to send if not sent yet.
+            **response_code**          - Response code to send if not sent yet.
 
             Examples:
 
@@ -1666,13 +1668,13 @@ class CGIHTTPRequestHandler(
                 for key, value in cookie.items():
                     cookie_object[key] = value
             cookie = cookie_object
-        expires = self.date_time_string(time.time() + max_age_in_seconds)
+        expires = self.date_time_string(time.time() + maximum_age_in_seconds)
         cookie = re.compile('^[^:]+: *').sub(
             '', cookie.output()
         ) + (
             ';version="%s";expires=%s;Max-Age=%d;Path=%s;comment=%s;'
             'domain=%s%s%s' % (
-                builtins.str(version), expires, max_age_in_seconds, path,
+                builtins.str(version), expires, maximum_age_in_seconds, path,
                 comment, domain, ';secure' if secure else '',
                 ';httponly' if httponly else ''))
         if not __test_mode__:
@@ -2027,16 +2029,16 @@ class CGIHTTPRequestHandler(
             >>> handler._is_valid_reference()
             True
         '''
-        if self.requested_file:
-            if self._is_valid_requested_file():
-                return True
-        elif((self.server.web.module_loading is True or
-              self.server.web.module_loading == self.path) and (
+        if((self.server.web.module_loading is True or
+            self.server.web.module_loading == self.path) and (
             (self.path == '__main__' and __name__ != '__main__') or
             Module.get_file_path(context_path=self.path))
-        ):
+           ):
             self.load_module = True
             return True
+        elif self.requested_file:
+            if self._is_valid_requested_file():
+                return True
         return False
 
     @JointPoint
@@ -2045,13 +2047,12 @@ class CGIHTTPRequestHandler(
         '''Determines if the current requested file points to a valid file.'''
         patterns = self.server.web.dynamic_mime_type_pattern + \
             self.server.web.static_mime_type_pattern
-        if self.server.web.directory_listing and not '^$' in patterns:
-            patterns += '^$',
         return(
-            self.requested_file and self.requested_file.name !=
+            self.requested_file.is_file() and self.requested_file.name !=
             self.server.web.authentication_file_name and self._check_pattern(
                 patterns=patterns, subject=self.requested_file.mime_type
-            ) is not False)
+            ) is not False or self.server.web.directory_listing and
+            self.requested_file.is_directory())
 
     @JointPoint
 ## python3.3     def _is_dynamic(self: Self) -> builtins.bool:
@@ -2370,7 +2371,6 @@ class CGIHTTPRequestHandler(
 ## python3.3     def _is_valid_request(self: Self) -> builtins.bool:
     def _is_valid_request(self):
         '''Checks if given request fulfill all restrictions.'''
-
         return self._request_in_pattern_list(
             self.server.web.request_whitelist
         ) and not self._request_in_pattern_list(

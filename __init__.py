@@ -360,9 +360,9 @@ import sys
 
 '''Make boostNode packages and modules importable via relative paths.'''
 if sys.path[0]:
-    sys.path.append(os.path.abspath(sys.path[0] + 2 * ('..' + os.sep)))
+    sys.path.append(os.path.abspath(sys.path[0] + os.sep + '..'))
 else:
-    sys.path[0] = os.path.abspath(sys.path[0] + '..' + os.sep)
+    sys.path[0] = os.path.abspath(sys.path[0] + os.sep + '..')
 
 # endregion
 

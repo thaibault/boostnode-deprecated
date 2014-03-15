@@ -27,10 +27,9 @@ import os
 import sys
 
 '''Make boostNode packages and modules importable via relative paths.'''
-for number in (3, 4):
-    path = os.path.abspath(sys.path[0] + number * ('..' + os.sep))
-    if not path in sys.path:
-        sys.path.append(path)
+path = os.path.abspath(sys.path[0] + 2 * (os.sep + '..'))
+if not path in sys.path:
+    sys.path.append(path)
 if not sys.path[0]:
     sys.path[0] = os.getcwd()
 

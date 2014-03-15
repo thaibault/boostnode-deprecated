@@ -42,8 +42,7 @@ import traceback
 import urllib
 
 '''Make boostNode packages and modules importable via relative paths.'''
-for number in (3, 4):
-    sys.path.append(os.path.abspath(sys.path[0] + number * ('..' + os.sep)))
+sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
 from boostNode.extension.file import Handler as FileHandler
 from boostNode.extension.native import Dictionary, Module, \
@@ -1219,7 +1218,7 @@ class Parser(Class, Runnable):
             ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
-            TemplateError: No suitable template found with given name "...".
+            TemplateError:No suitable template found with given name "...".
         '''
         if self.string:
             self.content = self.template
@@ -1232,8 +1231,8 @@ class Parser(Class, Runnable):
                     encoding=self.file_encoding)
             if not self.file.is_file():
                 raise __exception__(
-                    'No suitable template found with given name "%s" in '
-                    '"%s".', self.template, self.file.directory_path)
+                    'No suitable template file found with given path "%s".',
+                    self.template)
             self.content = self.file.content
         self.native_template_object = native_string.Template(self.content)
         self.native_template_object.pattern = re.compile(

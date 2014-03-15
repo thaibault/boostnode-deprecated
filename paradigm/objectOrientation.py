@@ -105,8 +105,7 @@ import sys
 pass
 
 '''Make boostNode packages and modules importable via relative paths.'''
-for number in (3, 4):
-    sys.path.append(os.path.abspath(sys.path[0] + number * ('..' + os.sep)))
+sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
 # endregion
 

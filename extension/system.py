@@ -50,8 +50,7 @@ import time
 pass
 
 '''Make boostNode packages and modules importable via relative paths.'''
-for number in (3, 4):
-    sys.path.append(os.path.abspath(sys.path[0] + number * ('..' + os.sep)))
+sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
 from boostNode.extension.file import Handler as FileHandler
 from boostNode.extension.native import Dictionary, Module, Object, String
@@ -313,7 +312,7 @@ class Runnable(builtins.object):
            ):
             self._initial_arguments = arguments
             self._initial_keywords = keywords
-            self._handle_module_running(arguments, keywords, run)
+            self._handle_module_running(arguments, keywords)
         else:
             self._initialize(*arguments, **keywords)
 
@@ -485,9 +484,9 @@ class Runnable(builtins.object):
                 if context_module is joint_point_module or (
                     context[3] == reference_context[3] and
                     re.compile(
-                        '(^|[^a-z0-9])%s[ \t]*\(' % builtins.super.__name__,
+                        '(|[^a-z0-9])%s[ \t]*\(' % builtins.super.__name__,
                         re.IGNORECASE
-                    ).search(context[4][0])
+                    ).match(context[4][0])
                 ):
                     continue
                 break
@@ -600,10 +599,9 @@ class Runnable(builtins.object):
     @JointPoint
 ## python3.3
 ##     def _handle_module_running(
-##         self: Self, arguments: builtins.tuple, keywords: builtins.dict,
-##         run: builtins.bool
+##         self: Self, arguments: builtins.tuple, keywords: builtins.dict
 ##     ) -> Self:
-    def _handle_module_running(self, arguments, keywords, run):
+    def _handle_module_running(self, arguments, keywords):
 ##
         '''
             Handle the running interface for current module.
@@ -615,7 +613,7 @@ class Runnable(builtins.object):
             ...     def _initialize(self): pass
             >>> __test_globals__['__test_mode__'] = False
 
-            >>> A()._handle_module_running((), {}, False)
+            >>> A()._handle_module_running((), {})
             Traceback (most recent call last):
             ...
             SystemExit: 1
@@ -623,7 +621,7 @@ class Runnable(builtins.object):
             >>> class A(Runnable):
             ...     def _run(self): sys.exit(2)
             ...     def _initialize(self): pass
-            >>> A()._handle_module_running((), {}, False)
+            >>> A()._handle_module_running((), {})
             Traceback (most recent call last):
             ...
             SystemExit: 2
@@ -631,8 +629,7 @@ class Runnable(builtins.object):
             >>> __test_globals__['__test_mode__'] = True
         '''
         if not self._in_test_mode():
-            if not run:
-                self.__class__.__termination_lock.acquire()
+            self.__class__.__termination_lock.acquire()
             '''
                 NOTE: We have to reassign signal handlers, because old \
                 handlers are garbage collected after a soft restart.
@@ -1763,10 +1760,10 @@ class CommandLine(builtins.object):
             True
         '''
         objects = {}
+        '''Iterate classes and functions.'''
         for name, object in scope.__dict__.items():
             '''Exclude included objects.'''
             if not only_module_level or inspect.getmodule(object) is scope:
-                '''Iterate classes and functions.'''
                 if builtins.isinstance(object, FunctionDecorator):
                     objects[name] = object.__func__
                 objects = cls._determine_nested_wrapped_objects(
