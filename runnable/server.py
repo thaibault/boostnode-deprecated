@@ -74,8 +74,8 @@ import urlparse
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
 from boostNode.extension.file import Handler as FileHandler
-from boostNode.extension.native import Module, Object, PropertyInitializer, \
-    String
+from boostNode.extension.native import Module, Object, \
+    InstancePropertyInitializer, String
 from boostNode.extension.output import Buffer, Print
 from boostNode.extension.system import CommandLine, Platform, Runnable
 ## python3.3 from boostNode.extension.type import Self
@@ -904,7 +904,7 @@ class Web(Class, Runnable):
         return self._initialize(**self._command_line_arguments_to_dictionary(
             namespace=command_line_arguments))
 
-    @JointPoint(PropertyInitializer)
+    @JointPoint(InstancePropertyInitializer)
 ## python3.3
 ##     def _initialize(
 ##         self: Self, root=None, host_name='', port=0, default='',
@@ -2336,11 +2336,9 @@ class CGIHTTPRequestHandler(
                     'found' % '", "'.join(
                         self.server.web.default_file_name_pattern))
             if self.path:
-                error_message = (
-                    'No accessible file "%s" found' %
-                    FileHandler(
-                        location=self.server.web.root.path + self.path
-                    )._path)
+                error_message = ('No accessible file "%s" found' % FileHandler(
+                    location=self.server.web.root.path + self.path
+                )._path)
             if not valid_request:
                 error_message = (
                     "Given request isn't valid. Check your white- and "
@@ -2564,11 +2562,17 @@ class CGIHTTPRequestHandler(
             >>> handler._is_default_module_requested()
             False
         '''
-        for module_name in self.server.web.default_module_names:
-            if((self.server.web.module_loading is True or
-                module_name == self.server.web.module_loading) and
-               self._handle_default_modules_get(module_name)):
+        # TODO check branch.
+        if self.server.web.module_loading:
+            if builtins.isinstance(
+                self.server.web.module_loading, builtins.str
+            ) and self._handle_default_modules_get(
+                self.server.web.module_loading
+            ):
                 return True
+            for module_name in self.server.web.default_module_names:
+                if self._handle_default_modules_get(module_name):
+                    return True
         return False
 
     @JointPoint

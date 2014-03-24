@@ -214,6 +214,7 @@ class Runnable(builtins.object):
             ...         Runnable._run.__name__))
             True
         '''
+        # TODO Up python3.4 we can use "inspect.unwrap()"
         method = builtins.getattr(cls, method_name)
         while builtins.hasattr(method, '__wrapped__'):
             method = method.__wrapped__

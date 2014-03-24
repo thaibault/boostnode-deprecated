@@ -38,7 +38,8 @@ import sys
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
 from boostNode.extension.file import Handler as FileHandler
-from boostNode.extension.native import Module, PropertyInitializer, String
+from boostNode.extension.native import Module, InstancePropertyInitializer, \
+    String
 from boostNode.extension.system import CommandLine, Runnable
 ## python3.3 from boostNode.extension.type import Self
 pass
@@ -367,7 +368,7 @@ class Replace(Class, Runnable):
         return self._initialize(**self._command_line_arguments_to_dictionary(
             namespace=command_line_arguments))
 
-    @JointPoint(PropertyInitializer)
+    @JointPoint(InstancePropertyInitializer)
 ## python3.3
 ##     def _initialize(
 ##         self: Self, location=None, skip_self_file=False, extension='',

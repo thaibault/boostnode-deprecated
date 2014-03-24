@@ -36,7 +36,7 @@ import sys
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
 from boostNode.extension.file import Handler as FileHandler
-from boostNode.extension.native import Module, PropertyInitializer
+from boostNode.extension.native import Module, InstancePropertyInitializer
 from boostNode.extension.output import Logger, Print
 from boostNode.extension.system import CommandLine, Platform, Runnable
 ## python3.3 from boostNode.extension.type import Self
@@ -131,21 +131,15 @@ class Run(Class, Runnable):
             'delete_patterns': ('.*\.o$', '.*Main$', '.*Test$')
         },
         'bash': {
-            'commands': {
-                'run': '"<%code_file.path%>" <%arguments%>'
-            },
+            'commands': {'run': '"<%code_file.path%>" <%arguments%>'},
             'extensions': ('bash',)
         },
         'shell': {
-            'commands': {
-                'run': '"<%code_file.path%>" <%arguments%>'
-            },
+            'commands': {'run': '"<%code_file.path%>" <%arguments%>'},
             'extensions': ('sh', 'shell')
         },
         'python': {
-            'commands': {
-                'run': '"<%code_file.path%>" <%arguments%>'
-            },
+            'commands': {'run': '"<%code_file.path%>" <%arguments%>'},
             'code_manager': {
                 'file_path': '__init__.<%code_file.extension%>',
                 'commands': {
@@ -155,8 +149,7 @@ class Run(Class, Runnable):
                 }
             },
             'extensions': ('py', 'pyc', 'pyw', 'pyo', 'pyd'),
-            'delete_patterns': (
-                '.*\.py[cod]$', '^__pycache__$', '^temp_\.*')
+            'delete_patterns': ('.*\.py[cod]$', '^__pycache__$', '^temp_\.*')
         },
         'laTeX': {
             'commands': {
@@ -264,7 +257,7 @@ class Run(Class, Runnable):
         return self._initialize(**self._command_line_arguments_to_dictionary(
             namespace=command_line_arguments))
 
-    @JointPoint(PropertyInitializer)
+    @JointPoint(InstancePropertyInitializer)
 ## python3.3
 ##     def _initialize(
 ##         self: Self, code_file_path=None,

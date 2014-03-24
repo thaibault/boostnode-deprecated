@@ -51,7 +51,8 @@ else:
 '''Make boostNode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
-from boostNode.extension.native import Dictionary, Module, PropertyInitializer
+from boostNode.extension.native import Dictionary, Module, \
+    InstancePropertyInitializer
 from boostNode.extension.system import CommandLine, Runnable
 ## python3.3 from boostNode.extension.type import Self, SelfClass
 pass
@@ -415,7 +416,7 @@ class Browser(Class, Runnable):
                 module_name=__name__, scope={'self': self},
                 arguments=self.COMMAND_LINE_ARGUMENTS)))
 
-    @JointPoint(PropertyInitializer)
+    @JointPoint(InstancePropertyInitializer)
 ## python3.3
 ##     def _initialize(
 ##         self: Self, _url: builtins.str, width_in_pixel=800,

@@ -46,7 +46,7 @@ sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
 from boostNode.extension.file import Handler as FileHandler
 from boostNode.extension.native import Dictionary, Module, \
-    PropertyInitializer, String
+    InstancePropertyInitializer, String
 from boostNode.extension.output import Buffer, Print
 from boostNode.extension.system import CommandLine, Runnable
 ## python3.3 from boostNode.extension.type import Self, SelfClass
@@ -571,21 +571,23 @@ class Parser(Class, Runnable):
 ##         self._builtins.update({
 ##             '__indent__': self.indent, 'FileHandler': FileHandler,
 ##             'print': self._print, 'include': self._include,
-##             'str': builtins.str, 'len': builtins.len, 'json': json,
-##             'path_name_to_url': urllib.request.pathname2url, 'False': False,
-##             'True': True, 'locals': builtins.locals, 'type': builtins.type,
-##             'sorted': builtins.sorted, 'is_type_of': builtins.isinstance,
-##             'tuple': builtins.tuple, 'dict': builtins.dict,
-##             'String': String, 'list': builtins.list})
+##             'String': builtins.str, 'length': builtins.len, 'Json': json,
+##             'path_name_to_url': urllib.request.pathname2url, 'false': False,
+##             'true': True, 'locals': builtins.locals, 'type': builtins.type,
+##             'sort': builtins.sorted, 'is_type_of': builtins.isinstance,
+##             'Tuple': builtins.tuple, 'Dictionary': builtins.dict,
+##             'RegularExpression': re.ompile, 'StringExtension': String,
+##             'List': builtins.list})
         self._builtins.update({
             '__indent__': self.indent, 'FileHandler': FileHandler,
             'print': self._print, 'include': self._include,
-            'str': builtins.str, 'len': builtins.len, 'json': json,
-            'path_name_to_url': urllib.pathname2url, 'False': False,
-            'True': True, 'locals': builtins.locals, 'type': builtins.type,
-            'sorted': builtins.sorted, 'is_type_of': builtins.isinstance,
-            'tuple': builtins.tuple, 'dict': builtins.dict,
-            'String': String, 'list': builtins.list})
+            'String': builtins.str, 'length': builtins.len, 'Json': json,
+            'path_name_to_url': urllib.pathname2url, 'false': False,
+            'true': True, 'locals': builtins.locals, 'type': builtins.type,
+            'sort': builtins.sorted, 'is_type_of': builtins.isinstance,
+            'Tuple': builtins.tuple, 'Dictionary': builtins.dict,
+            'RegularExpression': re.compile, 'StringExtension': String,
+            'List': builtins.list})
 ##
         return self._builtins
 
@@ -616,15 +618,13 @@ class Parser(Class, Runnable):
             >>> template.output
             'hans also hans'
 
-            >>> template = Parser(
-            ...     template='hans', string=True)
+            >>> template = Parser(template='hans', string=True)
             >>> template.substitute()
             Object of "Parser" with template "hans".
             >>> template.output
             'hans'
 
-            >>> template = Parser(
-            ...     template='hans <%not_hans%>', string=True)
+            >>> template = Parser(template='hans <%not_hans%>', string=True)
             >>> template.substitute()
             Traceback (most recent call last):
             ...
@@ -650,20 +650,17 @@ class Parser(Class, Runnable):
 
             Examples:
 
-            >>> template = Parser(
-            ...     template='hans <%placeholder%>', string=True)
+            >>> template = Parser(template='hans <%placeholder%>', string=True)
             >>> template.safe_substitute(placeholder='also hans')
             Object of "Parser" with template "hans <%placeholder%>".
             >>> template.output
             'hans also hans'
 
-            >>> template = Parser(
-            ...     template='hans', string=True)
+            >>> template = Parser(template='hans', string=True)
             >>> template.safe_substitute()
             Object of "Parser" with template "hans".
 
-            >>> template = Parser(
-            ...     template='hans <%not_hans%>', string=True)
+            >>> template = Parser(template='hans <%not_hans%>', string=True)
             >>> template.safe_substitute()
             Object of "Parser" with template "hans <%not_hans%>".
         '''
@@ -837,13 +834,12 @@ class Parser(Class, Runnable):
             >>> Parser('', string=True).represent_rendered_python_code()
             ''
 
-            >>> Parser(
-            ...     '', string=True
-            ... ).render().represent_rendered_python_code()
+            >>> Parser('', string=True).render(
+            ... ).represent_rendered_python_code()
             ''
 
             >>> Parser('klaus', string=True).render(
-            ...     ).represent_rendered_python_code() # doctest: +ELLIPSIS
+            ... ).represent_rendered_python_code() # doctest: +ELLIPSIS
             "\\nrendered python code...-\\n\\n1 | print('klaus', end='')\\n"
         '''
         self._number_of_rendered_python_code_lines = builtins.len(
@@ -916,8 +912,8 @@ class Parser(Class, Runnable):
         initializer_arguments = self._command_line_arguments_to_dictionary(
             namespace=self._command_line_arguments)
         if(initializer_arguments['builtin_names'] and
-           builtins.isinstance(initializer_arguments['builtin_names'][0],
-                               builtins.str)):
+           builtins.isinstance(
+               initializer_arguments['builtin_names'][0], builtins.str)):
             initializer_arguments['builtin_names'] = builtins.tuple(
                 builtins.map(
                     lambda builtin: builtins.eval(builtin),
@@ -927,7 +923,7 @@ class Parser(Class, Runnable):
         Print(self.output)
         return self
 
-    @JointPoint(PropertyInitializer)
+    @JointPoint(InstancePropertyInitializer)
 ## python3.3
 ##     def _initialize(
 ##         self: Self, template: (builtins.str, FileHandler), string=None,
@@ -984,7 +980,7 @@ class Parser(Class, Runnable):
 ##         right_escaped='%',  # For example: "<%%" evaluates to "<%"
 ##         template_context_default_indent=4,
 ##         builtin_names=(builtins.all, builtins.filter, builtins.map,
-##                        builtins.enumerate, builtins.range, builtins.locals),
+##                        builtins.enumerate, builtins.range),
 ##         pretty_indent=False, **keywords: builtins.object
 ##     ) -> Self:
     def _initialize(
@@ -1042,7 +1038,7 @@ class Parser(Class, Runnable):
         right_escaped='%',  # For example: "<%%" evaluates to "<%"
         template_context_default_indent=4,
         builtin_names=(builtins.all, builtins.filter, builtins.map,
-                       builtins.enumerate, builtins.range, builtins.locals),
+                       builtins.enumerate, builtins.range),
         pretty_indent=False, **keywords
     ):
 ##
@@ -1267,7 +1263,7 @@ class Parser(Class, Runnable):
             >>> Parser(
             ...     '<% peter = 5\\n'
             ...     "<% include('" + nested_nested_file.path + "', hans=5, "
-            ...     "locals=('peter',), full_caching=False)",
+            ...     "locals=('peter',), full_caching=false)",
             ...     string=True
             ... ).render() # doctest: +ELLIPSIS
             Object of "Parser" with template "...<% include('...', hans=5, ...
@@ -1275,8 +1271,8 @@ class Parser(Class, Runnable):
             >>> Parser(
             ...     '<% peter = 5\\n'
             ...     "<% include('" + nested_nested_file.path + "', hans=5, "
-            ...     "locals=('peter',), full_caching=False, "
-            ...     "propagate_full_caching=False)",
+            ...     "locals=('peter',), full_caching=false, "
+            ...     "propagate_full_caching=false)",
             ...     string=True
             ... ).render() # doctest: +ELLIPSIS
             Object of "Parser" with template "...<% include('...', hans=5, ...
@@ -1284,7 +1280,7 @@ class Parser(Class, Runnable):
             >>> Parser(
             ...     '<% peter = 5\\n'
             ...     "<% include('" + nested_nested_file.path + "', hans=5, "
-            ...     "locals=('peter',), propagate_full_caching=True)",
+            ...     "locals=('peter',), propagate_full_caching=true)",
             ...     string=True
             ... ).render() # doctest: +ELLIPSIS
             Object of "Parser" with template "...<% include('...', hans=5, ...
@@ -1332,7 +1328,7 @@ class Parser(Class, Runnable):
         try:
 ## python3.3
 ##             builtins.exec(self.rendered_python_code, template_scope)
-            exec(self.rendered_python_code, template_scope)
+            exec self.rendered_python_code in template_scope
 ##
         except __exception__ as exception:
             '''Propagate nested template exceptions.'''
@@ -1413,16 +1409,19 @@ class Parser(Class, Runnable):
         native_exception_description = ''
         if(force_native_exception or sys.flags.debug or
            __logger__.isEnabledFor(logging.DEBUG)):
-            for property in builtins.dir(exception):
-                if not (property.startswith('__') and property.endswith('__')):
-                    value = builtins.getattr(exception, property)
+            for property_name in builtins.dir(exception):
+                if not (
+                    property_name.startswith('__') and
+                    property_name.endswith('__')
+                ):
+                    value = builtins.getattr(exception, property_name)
 ## python3.3
 ##                     pass
                     if builtins.isinstance(value, builtins.unicode):
                         value = value.encode('utf_8')
 ##
-                    native_exception_description += \
-                        property + ': "' + builtins.str(value) + '"\n'
+                    native_exception_description += '%s: "%s"\n' % (
+                        property_name, builtins.str(value))
             native_exception_description = (
                 '\n\nNative exception object:\n\n%s' %
                 native_exception_description)
@@ -1640,14 +1639,12 @@ class Parser(Class, Runnable):
 ##     def _include(
 ##         self: Self, template_file_path: builtins.str, scope={},
 ##         locals=(), end='\n', full_caching=None, propagate_full_caching=None,
-##         indent=True, indent_space='', scope_reference={},
-##         **keywords: builtins.object
+##         indent=True, indent_space='', **keywords: builtins.object
 ##     ) -> builtins.dict:
     def _include(
         self, template_file_path, scope={}, locals=(), end='\n',
         full_caching=None, propagate_full_caching=None, indent=True,
-        indent_space='', scope_reference={},
-        **keywords
+        indent_space='', **keywords
     ):
 ##
         '''
@@ -1721,13 +1718,13 @@ class Parser(Class, Runnable):
             ... ).output
             '5number:5'
             >>> Parser(
-            ...     '<% if True:\\n    <%hans%><%hans%>', string=True
+            ...     '<% if true:\\n    <%hans%><%hans%>', string=True
             ... ).render(hans=5).output
             '55'
             >>> Parser('\\n\\n<%hans%>', string=True).render(hans=5).output
             '\\n\\n5'
             >>> Parser(
-            ...     '<% if True:\\n<%hans%>', string=True
+            ...     '<% if true:\\n<%hans%>', string=True
             ... ).render(hans=5).output # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
@@ -1736,8 +1733,8 @@ class Parser(Class, Runnable):
             rendered python code ...:
             ---------------------...
             <BLANKLINE>
-            1 | if True:
-            2 | print(str(hans), end='')
+            1 | if true:
+            2 | print(String(hans), end='')
             <BLANKLINE>
 
             >>> Parser('<% print(hans)', string=True).render(hans=5).output
@@ -1755,7 +1752,7 @@ class Parser(Class, Runnable):
             1 | include(indent_space='')
             <BLANKLINE>
 
-            >>> Parser('<% if True:\\n    hans', string=True).render(
+            >>> Parser('<% if true:\\n    hans', string=True).render(
             ...     hans=5
             ... ).output
             'hans'
@@ -1835,7 +1832,7 @@ class Parser(Class, Runnable):
         last_empty_lines = self._flush_empty_lines(indent)
         was_new_line = self._new_line
         '''
-            NOTE: We can have zero one or two phantom lines for one
+            NOTE: We can have zero one or two phantom lines for one \
             placeholder.
         '''
         if match.group('before_placeholder'):
@@ -1865,9 +1862,9 @@ class Parser(Class, Runnable):
         self._line_shifts.append(
             (self._number_of_generated_lines,
              self._number_of_generated_phantom_lines))
-        return(
-            last_empty_lines + before_placeholder + indent + 'print(str(' +
-            match.group('placeholder').strip() + ")%s, end='')\n" %
+        return "%s%s%sprint(String(%s)%s, end='')\n" % (
+            last_empty_lines, before_placeholder, indent,
+            match.group('placeholder').strip(),
             ('+"\\n"' if self._get_new_line() else ''))
 
     @JointPoint

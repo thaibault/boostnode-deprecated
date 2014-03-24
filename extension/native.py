@@ -57,7 +57,7 @@ from boostNode.paradigm.objectOrientation import Class
 
 # region classes
 
-class PropertyInitializer(FunctionDecorator):
+class InstancePropertyInitializer(FunctionDecorator):
     '''
         Decorator class for automatically setting instance properties for \
         corresponding arguments of wrapped function.
@@ -93,7 +93,7 @@ class PropertyInitializer(FunctionDecorator):
             ...     def a(self): pass
             ...     def __init__(self): pass
             ...     __init__.__func__ = a
-            ...     __init__ = PropertyInitializer(__init__)
+            ...     __init__ = InstancePropertyInitializer(__init__)
 
             >>> A() # doctest: +ELLIPSIS
             <__main__.A ... at ...>
@@ -114,6 +114,74 @@ class PropertyInitializer(FunctionDecorator):
             ).items():
                 if not name in self.EXCLUDED_ARGUMENT_NAMES:
                     self.object.__dict__[name] = value
+            return self.__func__(*arguments, **keywords)
+## python3.3         pass
+        wrapper_function.__wrapped__ = self.__func__
+        return wrapper_function
+
+        # endregion
+
+    # endregion
+
+
+class ClassPropertyInitializer(FunctionDecorator):
+    '''
+        Decorator class for automatically setting instance properties for \
+        corresponding arguments of wrapped function.
+    '''
+
+    # region properties
+
+    EXCLUDED_ARGUMENT_NAMES = 'cls',
+    '''
+        Defines all argument names which will be ignored by generating \
+        instance properties.
+    '''
+
+    # endregion
+
+    # region dynamic methods
+
+        # region public
+
+    # TODO eliminate code redundance and improve tests.
+    @JointPoint
+## python3.3
+##     def get_wrapper_function(
+##         self: Self
+##     ) -> (types.FunctionType, types.MethodType):
+    def get_wrapper_function(self):
+##
+        '''
+            This methods returns the wrapped function.
+
+            Examples:
+
+            >>> class A:
+            ...     def a(self): pass
+            ...     def __init__(self): pass
+            ...     __init__.__func__ = a
+            ...     __init__ = ClassPropertyInitializer(__init__)
+
+            >>> A() # doctest: +ELLIPSIS
+            <__main__.A ... at ...>
+        '''
+        @functools.wraps(self.__func__)
+        def wrapper_function(*arguments, **keywords):
+            '''
+                Wrapper function for initializing instance properties.
+
+                Given arguments and keywords are forwarded to wrapped function.
+            '''
+            '''Unpack wrapper methods.'''
+            while builtins.hasattr(self.__func__, '__func__'):
+                self.__func__ = self.__func__.__func__
+            arguments = self._determine_arguments(arguments)
+            for name, value in inspect.getcallargs(
+                self.__func__, *arguments, **keywords
+            ).items():
+                if not name in self.EXCLUDED_ARGUMENT_NAMES:
+                    self.class_object.__dict__[name] = value
             return self.__func__(*arguments, **keywords)
 ## python3.3         pass
         wrapper_function.__wrapped__ = self.__func__
@@ -297,12 +365,12 @@ class Model(builtins.object):
 ##     def validate_property(
 ##         model_instance: builtins.object, name: builtins.str,
 ##         value: builtins.object,
-##         info_determiner=lambda model_instance, name: builtins.getattr(
-##             model_instance, '_%s_info' % name)):
+##         information_determiner=lambda model_instance,
+##         name: builtins.getattr(model_instance, '_%s_information' % name)):
     def validate_property(
         model_instance, name, value,
-        info_determiner=lambda model_instance, name: builtins.getattr(
-            model_instance, '_%s_info' % name)):
+        information_determiner=lambda model_instance, name: builtins.getattr(
+            model_instance, '_%s_information' % name)):
 ##
         '''
             Intercepts each property set of any derived model.
@@ -310,7 +378,7 @@ class Model(builtins.object):
             Examples:
 
             >>> class A(Model):
-            ...     _a_info = {
+            ...     _a_information = {
             ...         'minimum_length': 5, 'maximum_length': 10,
             ...         'pattern': '[^a]+$'}
             ...     def set_a(self, value):
@@ -335,46 +403,66 @@ class Model(builtins.object):
             ...
             ValueError: Property "a" of model "A" has maximum length 10 but...
         '''
+        if value is not None:
+            '''
+                NOTE: If value is none a database check again nullable values \
+                will handle this.
+            '''
 ## python3.3
-##         pass
-        encoding_was_unicode = False
-        if builtins.isinstance(value, builtins.unicode):
-            encoding_was_unicode = True
-            value = value.encode('utf_8')
+##             pass
+            encoding_was_unicode = False
+            if builtins.isinstance(value, builtins.unicode):
+                encoding_was_unicode = True
+                value = value.encode('utf_8')
 ##
-        property_information = info_determiner(model_instance, name)
-        if 'minimum_length' in property_information and builtins.len(
-            value
-        ) < property_information['minimum_length']:
-            raise ValueError(
-                'Property "%s" of model "%s" has minimum length %d but '
-                'given value ("%s") has length %d.' % (
-                    name, model_instance.__class__.__name__,
-                    property_information['minimum_length'], value,
-                    builtins.len(value)))
-        if 'maximum_length' in property_information and builtins.len(
-            value
-        ) > property_information['maximum_length']:
-            raise ValueError(
-                'Property "%s" of model "%s" has maximum length %d but '
-                'given value ("%s") has length %d.' % (
-                    name, model_instance.__class__.__name__,
-                    property_information['maximum_length'], value,
-                    builtins.len(value)))
-        if 'pattern' in property_information and re.compile(
-            property_information['pattern']
-        ).match(value) is None:
-            raise ValueError(
-                'Property "%s" of model "%s" has pattern "%s" but given '
-                'value ("%s") doesn\'t match.' % (
-                    name, model_instance.__class__.__name__,
-                    property_information['pattern'], value))
+            property_information = information_determiner(model_instance, name)
+            # TODO check new branches.
+            if('minimum' in property_information and
+               value < property_information['minimum']):
+                raise ValueError(
+                    'Property "%s" of model "%s" is too small (%d) %d is the '
+                    'smallest possible value.' % (
+                        name, model_instance.__class__.__name__, value,
+                        property_information['minimum']))
+            if('maximum' in property_information and
+               value > property_information['maximum']):
+                raise ValueError(
+                    'Property "%s" of model "%s" is too high (%d) %d is the '
+                    'highest possible value.' % (
+                        name, model_instance.__class__.__name__, value,
+                        property_information['maximum']))
+            if 'minimum_length' in property_information and builtins.len(
+                value
+            ) < property_information['minimum_length']:
+                raise ValueError(
+                    'Property "%s" of model "%s" has minimum length %d but '
+                    'given value ("%s") has length %d.' % (
+                        name, model_instance.__class__.__name__,
+                        property_information['minimum_length'], value,
+                        builtins.len(value)))
+            if 'maximum_length' in property_information and builtins.len(
+                value
+            ) > property_information['maximum_length']:
+                raise ValueError(
+                    'Property "%s" of model "%s" has maximum length %d but '
+                    'given value ("%s") has length %d.' % (
+                        name, model_instance.__class__.__name__,
+                        property_information['maximum_length'], value,
+                        builtins.len(value)))
+            if 'pattern' in property_information and re.compile(
+                property_information['pattern']
+            ).match(value) is None:
+                raise ValueError(
+                    'Property "%s" of model "%s" has pattern "%s" but given '
+                    'value ("%s") doesn\'t match.' % (
+                        name, model_instance.__class__.__name__,
+                        property_information['pattern'], value))
 ## python3.3
-##         pass
-        if encoding_was_unicode and builtins.isinstance(
-            value, builtins.str
-        ):
-            return builtins.unicode(value, 'utf_8')
+##             pass
+            if encoding_was_unicode and builtins.isinstance(
+                value, builtins.str
+            ):
+                return builtins.unicode(value, 'utf_8')
 ##
         return value
 
@@ -389,10 +477,10 @@ class AuthenticationModel(Model):
 
     # region properties
 
-    _password_salt_length = 100
-    _password_pepper = 'a1b2c3d4e3f5g6h7i8j9k0l1m2n3o4p5x6y7z'
-    _password_info = {
-        'minimum_length': 4, 'maximum_length': 100, 'pattern': '.{4}.*'
+    _password_information = {
+        'minimum_length': 4, 'maximum_length': 100, 'pattern': '.{4}.*',
+        'pepper': 'a1b2c3d4e3f5g6h7i8j9k0l1m2n3o4p5x6y7z',
+        'salt': {'length': 32}
     }
     password_salt = ''
     password_hash = ''
@@ -438,18 +526,21 @@ class AuthenticationModel(Model):
 ##         from boostNode.extension.file import Handler as FileHandler
 ##
 ##         self.password_salt = base64encode(os.urandom(
-##             self._password_salt_length
+##             self._password_information['salt']['length']
 ##         )).decode(FileHandler.DEFAULT_ENCODING)
 ##         self.password_hash = sha224(
 ##             ('%s%s%s' % (
-##                 value, self._password_pepper, self.password_salt
+##                 value, self._password_information['pepper'],
+##                 self.password_salt
 ##             )).encode(FileHandler.DEFAULT_ENCODING)
 ##         ).hexdigest()
         self.password_salt = os.urandom(
-            self._password_salt_length
+            self._password_information['salt']['length']
         ).encode('base_64')
         self.password_hash = sha224(
-            '%s%s%s' % (value, self._password_pepper, self.password_salt)
+            '%s%s%s' % (
+                value, self._password_information['pepper'],
+                self.password_salt)
         ).hexdigest()
 ##
 
@@ -474,11 +565,14 @@ class AuthenticationModel(Model):
 ##
 ##         return self.password_hash == sha224(
 ##             ('%s%s%s' % (
-##                 value, self._password_pepper, self.password_salt
+##                 value, self._password_information['pepper'],
+##                 self.password_salt
 ##             )).encode(FileHandler.DEFAULT_ENCODING)
 ##         ).hexdigest()
         return self.password_hash == sha224(
-            '%s%s%s' % (value, self._password_pepper, self.password_salt)
+            '%s%s%s' % (
+                value, self._password_information['pepper'],
+                self.password_salt)
         ).hexdigest()
 ##
 
@@ -502,7 +596,7 @@ class Object(Class):
 
             # region special
 
-    @JointPoint(PropertyInitializer)
+    @JointPoint(InstancePropertyInitializer)
 ## python3.3
 ##     def __init__(
 ##         self: Self, content=None,
@@ -2054,6 +2148,30 @@ class Dictionary(Object, builtins.dict):
                     value_wrapper=value_wrapper)
             else:
                 self.content[key] = value_wrapper(key, value)
+        return self
+
+    @JointPoint
+## python3.3
+##     def update(self: Self, other: (SelfClassObject, builtins.dict) -> Self:
+    def update(self, other):
+##
+        '''
+            Performs a recursive update.
+
+            Examples:
+
+            TODO
+        '''
+        for key, value in self.__class__(other).content.items():
+            if(builtins.isinstance(value, (builtins.dict, self.__class__)) and
+               key in self.content and builtins.isinstance(
+                   self.content[key], (builtins.dict, self.__class__)
+               )):
+                self.content[key] = builtins.getattr(
+                    self.__class__(self.content[key]), inspect.stack()[0][3]
+                )(other=value).content
+            else:
+                self.content[key] = value
         return self
 
         # endregion

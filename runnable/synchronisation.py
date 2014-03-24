@@ -34,7 +34,7 @@ import sys
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
 from boostNode.extension.file import Handler as FileHandler
-from boostNode.extension.native import Module, PropertyInitializer
+from boostNode.extension.native import Module, InstancePropertyInitializer
 from boostNode.extension.output import Logger
 from boostNode.extension.system import CommandLine, Platform, Runnable
 ## python3.3 from boostNode.extension.type import Self, SelfClass
@@ -882,7 +882,7 @@ class Reflector(Class, Runnable):
         return self._initialize(**self._command_line_arguments_to_dictionary(
             namespace=self._command_line_arguments))
 
-    @JointPoint(PropertyInitializer)
+    @JointPoint(InstancePropertyInitializer)
 ## python3.3
 ##     def _initialize(
 ##         self: Self, source_location: (FileHandler, builtins.str),
