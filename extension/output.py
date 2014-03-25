@@ -26,7 +26,7 @@ __version__ = '1.0'
 
 ## python3.3 import builtins
 import __builtin__ as builtins
-import copy
+from copy import copy
 import inspect
 import logging
 import multiprocessing
@@ -706,7 +706,7 @@ class Logger(Class):
         cls._set_properties(level, buffer, terminator, format)
         for logger in cls.instances:
 ## python3.3             new_handler = logger.handlers.copy()
-            new_handler = copy.copy(logger.handlers)
+            new_handler = copy(logger.handlers)
             if buffer:
                 new_handler = []
                 for new_buffer in cls.buffer:

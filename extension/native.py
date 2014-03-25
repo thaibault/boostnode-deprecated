@@ -30,7 +30,7 @@ __version__ = '1.0'
 import __builtin__ as builtins
 ##
 import collections
-import copy
+from copy import copy
 import encodings
 import functools
 from hashlib import sha224
@@ -417,46 +417,48 @@ class Model(builtins.object):
 ##
             property_information = information_determiner(model_instance, name)
             # TODO check new branches.
-            if('minimum' in property_information and
-               value < property_information['minimum']):
-                raise ValueError(
-                    'Property "%s" of model "%s" is too small (%d) %d is the '
-                    'smallest possible value.' % (
-                        name, model_instance.__class__.__name__, value,
-                        property_information['minimum']))
-            if('maximum' in property_information and
-               value > property_information['maximum']):
-                raise ValueError(
-                    'Property "%s" of model "%s" is too high (%d) %d is the '
-                    'highest possible value.' % (
-                        name, model_instance.__class__.__name__, value,
-                        property_information['maximum']))
-            if 'minimum_length' in property_information and builtins.len(
-                value
-            ) < property_information['minimum_length']:
-                raise ValueError(
-                    'Property "%s" of model "%s" has minimum length %d but '
-                    'given value ("%s") has length %d.' % (
-                        name, model_instance.__class__.__name__,
-                        property_information['minimum_length'], value,
-                        builtins.len(value)))
-            if 'maximum_length' in property_information and builtins.len(
-                value
-            ) > property_information['maximum_length']:
-                raise ValueError(
-                    'Property "%s" of model "%s" has maximum length %d but '
-                    'given value ("%s") has length %d.' % (
-                        name, model_instance.__class__.__name__,
-                        property_information['maximum_length'], value,
-                        builtins.len(value)))
-            if 'pattern' in property_information and re.compile(
-                property_information['pattern']
-            ).match(value) is None:
-                raise ValueError(
-                    'Property "%s" of model "%s" has pattern "%s" but given '
-                    'value ("%s") doesn\'t match.' % (
-                        name, model_instance.__class__.__name__,
-                        property_information['pattern'], value))
+            if builtins.isinstance(value, builtins.int):
+                if('minimum' in property_information and
+                   value < property_information['minimum']):
+                    raise ValueError(
+                        'Property "%s" of model "%s" is too small (%d) %d is the '
+                        'smallest possible value.' % (
+                            name, model_instance.__class__.__name__, value,
+                            property_information['minimum']))
+                if('maximum' in property_information and
+                   value > property_information['maximum']):
+                    raise ValueError(
+                        'Property "%s" of model "%s" is too high (%d) %d is the '
+                        'highest possible value.' % (
+                            name, model_instance.__class__.__name__, value,
+                            property_information['maximum']))
+            elif builtins.isinstance(value, builtins.str):
+                if 'minimum_length' in property_information and builtins.len(
+                    value
+                ) < property_information['minimum_length']:
+                    raise ValueError(
+                        'Property "%s" of model "%s" has minimum length %d but '
+                        'given value ("%s") has length %d.' % (
+                            name, model_instance.__class__.__name__,
+                            property_information['minimum_length'], value,
+                            builtins.len(value)))
+                if 'maximum_length' in property_information and builtins.len(
+                    value
+                ) > property_information['maximum_length']:
+                    raise ValueError(
+                        'Property "%s" of model "%s" has maximum length %d but '
+                        'given value ("%s") has length %d.' % (
+                            name, model_instance.__class__.__name__,
+                            property_information['maximum_length'], value,
+                            builtins.len(value)))
+                if 'pattern' in property_information and re.compile(
+                    property_information['pattern']
+                ).match(value) is None:
+                    raise ValueError(
+                        'Property "%s" of model "%s" has pattern "%s" but given '
+                        'value ("%s") doesn\'t match.' % (
+                            name, model_instance.__class__.__name__,
+                            property_information['pattern'], value))
 ## python3.3
 ##             pass
             if encoding_was_unicode and builtins.isinstance(
@@ -680,7 +682,7 @@ class Object(Class):
             if not ((attribute_name.startswith('__') and
                      attribute_name.endswith('__')) or
                     builtins.callable(attribute)):
-                self._content_copy[attribute_name] = copy.copy(
+                self._content_copy[attribute_name] = copy(
                     builtins.getattr(self.content, attribute_name))
         return self._content_copy
 
@@ -939,6 +941,8 @@ class String(Object, builtins.str):
         'ñ': '&ntilde;',
         'þ': '&thorn;'}
     '''All chars wich should be observed by handling with html sequences.'''
+    abbreviations = 'id', 'url'
+    '''Saves a mapping of typical shortcut words to improve camel casing.'''
 
     # endregion
 
@@ -1320,13 +1324,18 @@ class String(Object, builtins.str):
 
     @JointPoint(Class.pseudo_property)
 ## python3.3
-##     def delimited_to_camel_case(self: Self, delimiter='_') -> Self:
-    def delimited_to_camel_case(self, delimiter='_'):
+##     def delimited_to_camel_case(
+##         self: Self, delimiter='_', abbreviations=None
+##     ) -> Self:
+    def delimited_to_camel_case(self, delimiter='_', abbreviations=None):
 ##
         '''
             Converts a delimited string to its camel case representation.
 
-            **delimiter** - Delimiter string
+            **delimiter**     - Delimiter string
+
+            **abbreviations** - Collection of shortcut words to represent \
+                                upper cased.
 
             Examples:
 
@@ -1356,12 +1365,30 @@ class String(Object, builtins.str):
 
             >>> String('hans-peter').delimited_to_camel_case('-').content
             'hansPeter'
+
+            >>> String('hans-id').delimited_to_camel_case('-').content
+            'hansID'
+
+            >>> String('url-hans-id').delimited_to_camel_case(
+            ...     '-', abbreviations=('hans',)
+            ... ).content
+            'urlHANSId'
         '''
+        # TODO test new branch
+        if abbreviations is None:
+            abbreviations = self.abbreviations
         self.content = re.compile(
+            '(?P<before>[a-z])(?P<abbreviation>(%s))(?P<after>[A-Z]|$)' %
+            ')|('.join(builtins.map(
+                lambda abbreviation: abbreviation.capitalize(),
+                abbreviations))
+        ).sub(lambda match: '%s%s%s' % (match.group('before'), match.group(
+            'abbreviation'
+        ).upper(), match.group('after')), re.compile(
             '(?!^)%s(?P<first_letter>[a-zA-Z])' % self.__class__(
                 delimiter
             ).validate_regex().content
-        ).sub(lambda match: match.group('first_letter').upper(), self.content)
+        ).sub(lambda match: match.group('first_letter').upper(), self.content))
         return self
 
     @JointPoint
@@ -2011,7 +2038,7 @@ class Dictionary(Object, builtins.dict):
             >>> Dictionary({'a': 'A', 'b': 'B'}).get_immutable(exclude=('a',))
             (('b', 'B'),)
         '''
-        immutable = copy.copy(self.content)
+        immutable = copy(self.content)
         for key, value in self.content.items():
             if key in exclude:
                 del immutable[key]
@@ -2121,7 +2148,7 @@ class Dictionary(Object, builtins.dict):
             ... ).content == {'_a_': {'_b_'}, '_b_': ['_0_', '_1_']}
             True
         '''
-        for key, value in copy.copy(self.content).items():
+        for key, value in copy(self.content).items():
             del self.content[key]
             key = key_wrapper(key, value)
             if builtins.isinstance(value, builtins.dict):
@@ -2255,7 +2282,7 @@ class Dictionary(Object, builtins.dict):
             value = self.__class__(content=value).get_immutable(exclude)
         elif(builtins.isinstance(value, collections.Iterable) and
              not builtins.isinstance(value, builtins.str)):
-            value = builtins.list(copy.copy(value))
+            value = builtins.list(copy(value))
             for key, sub_value in builtins.enumerate(value):
                 value[key] = self._immutable_helper(
                     value=sub_value, exclude=exclude)
@@ -2885,7 +2912,7 @@ class Module(Object):
 
             Examples:
 
-            >>> command_line_arguments_save = copy.copy(sys.argv)
+            >>> command_line_arguments_save = copy(sys.argv)
             >>> sys.argv += ['--module-object', Module.__name__]
             >>> if not 'native' in sys.modules:
             ...     sys.modules['native'] = sys.modules[__name__]

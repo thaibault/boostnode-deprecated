@@ -849,8 +849,8 @@ class Reflector(Class, Runnable):
 
             Examples:
 
-            >>> import copy
-            >>> sys_argv_backup = copy.copy(sys.argv)
+            >>> from copy import copy
+            >>> sys_argv_backup = copy(sys.argv)
             >>> sys.argv[1:] = [__test_folder__.path, __test_folder__.path]
             >>> source = FileHandler(
             ...     __test_folder__.path + '_run_source', make_directory=True)

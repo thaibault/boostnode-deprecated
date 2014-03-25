@@ -402,8 +402,8 @@ class Browser(Class, Runnable):
 
             Examples:
 
-            >>> import copy
-            >>> sys_argv_backup = copy.copy(sys.argv)
+            >>> from copy import copy
+            >>> sys_argv_backup = copy(sys.argv)
 
             >>> sys.argv[1:] = ['google.de']
             >>> Browser.run() # doctest: +ELLIPSIS

@@ -26,7 +26,7 @@ __version__ = '1.0'
 ## import collections
 import __builtin__ as builtins
 ##
-import copy
+from copy import copy
 import inspect
 import logging
 import os
@@ -611,7 +611,7 @@ class Run(Class, Runnable):
             ...     'main.py'
             ... ).content = ''
             >>> run = Run()
-            >>> supported_codes_backup = copy.copy(run.SUPPORTED_CODES)
+            >>> supported_codes_backup = copy(run.SUPPORTED_CODES)
 
             >>> run._search_supported_file_in_current_working_directory(
             ...     ) # doctest: +ELLIPSIS
@@ -794,7 +794,7 @@ class Run(Class, Runnable):
             >>> run._render_properties({'hans': 'peter'}, code_file)
             {'hans': 'peter'}
         '''
-        rendered_properties = copy.copy(properties)
+        rendered_properties = copy(properties)
         for key, value in rendered_properties.items():
             if builtins.isinstance(value, builtins.dict):
                 rendered_properties[key] = self._render_properties(

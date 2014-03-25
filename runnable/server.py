@@ -28,11 +28,11 @@ import CGIHTTPServer
 import cgi
 ## python3.3
 ## import collections
-## import copy
+## from copy import copy, deepcopy
 ## from http import server
 ## import imp
 import Cookie as cookies
-import copy
+from copy import copy, deepcopy
 ##
 import gzip
 ## python3.3 from http import cookies
@@ -890,7 +890,7 @@ class Web(Class, Runnable):
 
             Examples:
 
-            >>> sys_argv_backup = copy.copy(sys.argv)
+            >>> sys_argv_backup = copy(sys.argv)
             >>> sys.argv = sys.argv[:1]
 
             >>> Web.run() # doctest: +ELLIPSIS
@@ -1394,7 +1394,7 @@ class CGIHTTPRequestHandler(
             Returns a tuple containing of the parse object and a dictionary \
             containing get parameter.
 
-            >>> sys_argv_backup = copy.copy(sys.argv)
+            >>> sys_argv_backup = copy(sys.argv)
             >>> handler = CGIHTTPRequestHandler()
             >>> handler.request_parameter_delimiter = '?'
             >>> sys.argv = sys.argv[:1]
@@ -2223,7 +2223,7 @@ class CGIHTTPRequestHandler(
         accept = []
         for line in self.headers.getallmatchingheaders('accept'):
             accept = accept + line[7:].split(',')
-        variables = copy.deepcopy(os.environ)
+        variables = deepcopy(os.environ)
 ## python3.3         content_type = self.headers.get_content_type()
         content_type = self.headers.getheader('content-type')
         variables.update({
@@ -2940,7 +2940,7 @@ class CGIHTTPRequestHandler(
         print_default_buffer_backup = Print.default_buffer
         Print.default_buffer = self.server.web.thread_buffer
 ## python3.3         sys_path_backup = sys.path.copy()
-        sys_path_backup = copy.copy(sys.path)
+        sys_path_backup = copy(sys.path)
         sys.path = [self.server.web.root.path] + sys.path
         self.server.web.number_of_running_threads += 1
         requested_module = builtins.__import__(

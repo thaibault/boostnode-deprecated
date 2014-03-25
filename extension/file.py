@@ -29,7 +29,7 @@ import __builtin__ as builtins
 import ctypes
 ## python3.3 import collections
 import codecs
-import copy
+from copy import copy, deepcopy
 import inspect
 import mimetypes
 import os
@@ -1106,7 +1106,7 @@ class Handler(Class):
             size = self.BLOCK_SIZE_IN_BYTE
             for file in self:
                 if not limit or size < limit:
-                    recursive_keywords = copy.deepcopy(keywords)
+                    recursive_keywords = deepcopy(keywords)
                     recursive_keywords['format'] = 'byte'
                     '''
                         Take this method type by another instance of this \
@@ -1208,9 +1208,8 @@ class Handler(Class):
             >>> Handler().get_human_readable_size(size=3 * (1024 ** 8) + 1)
             '3.0 yb'
 
-            >>> import copy
             >>> handler = Handler()
-            >>> formats_backup = copy.copy(handler.FORMATS)
+            >>> formats_backup = copy(handler.FORMATS)
             >>> handler.FORMATS = {}
             >>> handler.get_human_readable_size(size=3) # doctest: +ELLIPSIS
             '3... byte'

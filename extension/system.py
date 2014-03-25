@@ -1626,10 +1626,10 @@ class CommandLine(builtins.object):
 
             Examples:
 
-            >>> import copy
+            >>> from copy import copy
 
             >>> log_level = Logger.default_level
-            >>> sys_argv_backup = copy.copy(sys.argv)
+            >>> sys_argv_backup = copy(sys.argv)
             >>> del sys.argv[1:]
             >>> docstring_backup = sys.modules[__name__].__doc__
             >>> sys.argv += '--long', 'hans'
@@ -2667,9 +2667,9 @@ class CommandLine(builtins.object):
 
             Examples:
 
-            >>> import copy
+            >>> from copy import copy
 
-            >>> sys_argv_backup = copy.copy(sys.argv)
+            >>> sys_argv_backup = copy(sys.argv)
 
             >>> CommandLine._handle_packages_in_package(
             ...     os.getcwd(), inspect.currentframe(), (), ()
