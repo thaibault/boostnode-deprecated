@@ -147,11 +147,11 @@ positively.</p>
 <p><strong>default</strong>     - indicates weather some default arguments should                               be added</p>
 <p>Additional arguments are forwarded to python&#8217;s native             &#8220;argparse.ArgumentParser()&#8221; initializer.             Additional keywords are forwarded to             &#8220;_determine_argument_parser_keywords()&#8221; method.</p>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">copy</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">copy</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">log_level</span> <span class="o">=</span> <span class="n">Logger</span><span class="o">.</span><span class="n">default_level</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sys_argv_backup</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sys_argv_backup</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">del</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">docstring_backup</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">__name__</span><span class="p">]</span><span class="o">.</span><span class="n">__doc__</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span> <span class="o">+=</span> <span class="s">&#39;--long&#39;</span><span class="p">,</span> <span class="s">&#39;hans&#39;</span>

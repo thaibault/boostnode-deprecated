@@ -870,9 +870,8 @@
 <span class="go">&#39;3.0 yb&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">copy</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span> <span class="o">=</span> <span class="n">Handler</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">formats_backup</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">handler</span><span class="o">.</span><span class="n">FORMATS</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span> <span class="o">=</span> <span class="n">Handler</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">formats_backup</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">handler</span><span class="o">.</span><span class="n">FORMATS</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">FORMATS</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">get_human_readable_size</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span> 
 <span class="go">&#39;3... byte&#39;</span>
