@@ -54,6 +54,8 @@ from boostNode.paradigm.objectOrientation import Class
 
 # endregion
 
+# TODO check new branches.
+
 
 # region classes
 
@@ -416,7 +418,6 @@ class Model(builtins.object):
                 value = value.encode('utf_8')
 ##
             property_information = information_determiner(model_instance, name)
-            # TODO check new branches.
             if builtins.isinstance(value, builtins.int):
                 if('minimum' in property_information and
                    value < property_information['minimum']):
@@ -1374,7 +1375,6 @@ class String(Object, builtins.str):
             ... ).content
             'urlHANSId'
         '''
-        # TODO test new branch
         if abbreviations is None:
             abbreviations = self.abbreviations
         self.content = re.compile(
@@ -1966,6 +1966,8 @@ class Dictionary(Object, builtins.dict):
                 # region properties
 
         '''The main property. It saves the current dictionary.'''
+        if builtins.isinstance(content, self.__class__):
+            content = content.content
         self.content = builtins.dict(content)
 
                 # endregion
@@ -2179,7 +2181,7 @@ class Dictionary(Object, builtins.dict):
 
     @JointPoint
 ## python3.3
-##     def update(self: Self, other: (SelfClassObject, builtins.dict) -> Self:
+##     def update(self: Self, other: (SelfClassObject, builtins.dict)) -> Self:
     def update(self, other):
 ##
         '''
@@ -2187,7 +2189,37 @@ class Dictionary(Object, builtins.dict):
 
             Examples:
 
-            TODO
+            >>> Dictionary(
+            ...     {'a': 1}
+            ... ).update({'b': 2}).content == {'a': 1, 'b': 2}
+            True
+
+            >>> Dictionary(
+            ...     {'a': 1}
+            ... ).update(Dictionary({'b': 2})).content == {'a': 1, 'b': 2}
+            True
+
+            >>> Dictionary(
+            ...     {'a': 1}
+            ... ).update(Dictionary({'a': 2})).content == {'a': 2}
+            True
+
+            >>> Dictionary(
+            ...     {'a': {'a': 1}}
+            ... ).update(Dictionary({'a': 1})).content == {'a': 1}
+            True
+
+            >>> Dictionary(
+            ...     {'a': {'a': 1}}
+            ... ).update(Dictionary({'a': {'b': 2}})).content == {'a': {
+            ...     'a': 1, 'b': 2}}
+            True
+
+            >>> Dictionary(
+            ...     {'a': {'a': 1}}
+            ... ).update(Dictionary({'a': {'a': 2}})).content == {'a': {
+            ...     'a': 2}}
+            True
         '''
         for key, value in self.__class__(other).content.items():
             if(builtins.isinstance(value, (builtins.dict, self.__class__)) and

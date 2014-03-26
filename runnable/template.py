@@ -576,7 +576,7 @@ class Parser(Class, Runnable):
 ##             'true': True, 'locals': builtins.locals, 'type': builtins.type,
 ##             'sort': builtins.sorted, 'is_type_of': builtins.isinstance,
 ##             'Tuple': builtins.tuple, 'Dictionary': builtins.dict,
-##             'RegularExpression': re.ompile, 'StringExtension': String,
+##             'RegularExpression': re.compile, 'StringExtension': String,
 ##             'List': builtins.list})
         self._builtins.update({
             '__indent__': self.indent, 'FileHandler': FileHandler,
