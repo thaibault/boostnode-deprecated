@@ -17,12 +17,12 @@ Use case
 --------
 
 boostNode is a high level python library. This library supports python2.7+ and
-python3.3+ environments. And will always try to use every new cutting edge
+python3.4+ environments. And will always try to use every new cutting edge
 python features! The main goal of boostNode is to support all typical use cases
 for applications in a full generic, reusable and very solid way.
 <!--deDE:
     boostNode ist eine sehr einfach zu verwendende intuitive python Bibliothek.
-    Momentan unterstützt sie sowohl python2.7+ als auch python3.3+ Umgebungen.
+    Momentan unterstützt sie sowohl python2.7+ als auch python3.4+ Umgebungen.
     Konzept ist es durch Automatisierung immer die neusten cutting edge
     features der neusten Python Versionen in einer Bibliothek zu verwenden und
     dabei alle typischen Anwendungstypen durch rein generische Module durch
@@ -232,7 +232,7 @@ Copy this folder to your projects directory and write something like:
         PropertyInitializer, String
     from boostNode.extension.output import Buffer, Print
     from boostNode.extension.system import CommandLine, Runnable
-    ## python3.3 from boostNode.extension.type import Self, SelfClass
+    ## python3.4 from boostNode.extension.type import Self, SelfClass
     pass
     from boostNode.paradigm.aspectOrientation import JointPoint
     from boostNode.paradigm.objectOrientation import Class

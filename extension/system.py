@@ -23,7 +23,7 @@ __version__ = '1.0'
 
 import argparse
 import atexit
-## python3.3
+## python3.4
 ## import builtins
 ## import collections
 import __builtin__ as builtins
@@ -46,7 +46,7 @@ import subprocess
 import sys
 import tempfile
 import time
-## python3.3 import types
+## python3.4 import types
 pass
 
 '''Make boostNode packages and modules importable via relative paths.'''
@@ -55,7 +55,7 @@ sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 from boostNode.extension.file import Handler as FileHandler
 from boostNode.extension.native import Dictionary, Module, Object, String
 from boostNode.extension.output import Buffer, Logger, Print
-## python3.3
+## python3.4
 ## from boostNode.extension.type import Self, SelfClass, SelfClassObject
 pass
 ##
@@ -66,7 +66,7 @@ from boostNode.paradigm.aspectOrientation import FunctionDecorator, JointPoint
 
 # region abstract classes
 
-## python3.3 class Runnable:
+## python3.4 class Runnable:
 class Runnable(builtins.object):
 
     '''
@@ -95,7 +95,7 @@ class Runnable(builtins.object):
             # region special
 
     @JointPoint(builtins.classmethod)
-## python3.3     def __repr__(cls: SelfClass) -> builtins.str:
+## python3.4     def __repr__(cls: SelfClass) -> builtins.str:
     def __repr__(cls):
         '''
             Generic representation method.
@@ -114,7 +114,7 @@ class Runnable(builtins.object):
             # endregion
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def run(
 ##         cls: SelfClass, *arguments: builtins.object,
 ##         **keywords: builtins.object
@@ -156,7 +156,7 @@ class Runnable(builtins.object):
             # region has to be implemented
 
     @JointPoint(builtins.classmethod)
-## python3.3     def _run(cls: SelfClass) -> None:
+## python3.4     def _run(cls: SelfClass) -> None:
     def _run(cls):
         '''
             Abstract method to force runnable classes to implement their \
@@ -174,7 +174,7 @@ class Runnable(builtins.object):
             abstract_class_name=Runnable.__name__, class_name=cls.__name__)
 
     @JointPoint(builtins.classmethod)
-## python3.3     def _initialize(cls: SelfClass) -> None:
+## python3.4     def _initialize(cls: SelfClass) -> None:
     def _initialize(cls):
         '''
             Abstract methods to force runnable classes to implement their \
@@ -194,7 +194,7 @@ class Runnable(builtins.object):
             # endregion
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def _get_potential_wrapped_method(
 ##         cls: SelfClass, method_name: builtins.str
 ##     ) -> (types.MethodType, types.FunctionType):
@@ -221,7 +221,7 @@ class Runnable(builtins.object):
         return method
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def _command_line_arguments_to_dictionary(
 ##         cls: SelfClass, namespace: argparse.Namespace
 ##     ) -> builtins.dict:
@@ -264,7 +264,7 @@ class Runnable(builtins.object):
             # region special
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def __init__(
 ##         self: Self, *arguments: builtins.object, **keywords: builtins.object
 ##     ) -> None:
@@ -320,7 +320,7 @@ class Runnable(builtins.object):
             # endregion
 
     @JointPoint
-## python3.3     def wait_for_order(self: Self) -> Self:
+## python3.4     def wait_for_order(self: Self) -> Self:
     def wait_for_order(self):
         '''
             Handler for waiting till a server stop order comes through the \
@@ -334,7 +334,7 @@ class Runnable(builtins.object):
                 given_input_explanation = ''
                 if self._given_order:
                     given_input_explanation = ' (not "%s")' % self._given_order
-## python3.3
+## python3.4
 ##                 self._given_order = builtins.input(
 ##                     'Write "%s" or "%s"%s for shutting or restarting '
 ##                     '"%s":\n' %
@@ -359,7 +359,7 @@ class Runnable(builtins.object):
         return self
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def stop(
 ##         self: Self, signal_number=None, stack_frame=None, reason=''
 ##     ) -> Self:
@@ -397,7 +397,7 @@ class Runnable(builtins.object):
         return self
 
     @JointPoint(atexit.register)
-## python3.3
+## python3.4
 ##     def trigger_stop(
 ##         self=None, *arguments: builtins.object, exit=True,
 ##         force_stopping=False, **keywords: builtins.object
@@ -429,7 +429,7 @@ class Runnable(builtins.object):
             ... ) # doctest: +ELLIPSIS
             Object of "A" implementing a command line runnable interface to...
         '''
-## python3.3
+## python3.4
 ##         pass
         keywords_dictionary = Dictionary(keywords)
         exit, keywords = keywords_dictionary.pop(
@@ -455,7 +455,7 @@ class Runnable(builtins.object):
             # region boolean
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _called_through_generic_interface(
 ##         self: Self, reference_context: builtins.tuple
 ##     ) -> builtins.bool:
@@ -496,7 +496,7 @@ class Runnable(builtins.object):
         return False
 
     @JointPoint
-## python3.3     def _in_test_mode(self: Self) -> builtins.bool:
+## python3.4     def _in_test_mode(self: Self) -> builtins.bool:
     def _in_test_mode(self):
         '''
             Checks if this module is running in a testing context.
@@ -516,7 +516,7 @@ class Runnable(builtins.object):
             # endregion
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _handle_given_order(
 ##         self: Self, arguments: builtins.tuple, exit: builtins.bool,
 ##         force_stopping: builtins.bool
@@ -556,7 +556,7 @@ class Runnable(builtins.object):
         return self
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def _terminate(
 ##         cls: SelfClass, arguments: builtins.tuple, exit: builtins.bool
 ##     ) -> SelfClass:
@@ -598,7 +598,7 @@ class Runnable(builtins.object):
         return cls
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _handle_module_running(
 ##         self: Self, arguments: builtins.tuple, keywords: builtins.dict
 ##     ) -> Self:
@@ -652,7 +652,7 @@ class Runnable(builtins.object):
         return self
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _handle_module_exception(
 ##         self: Self, exception: builtins.BaseException
 ##     ) -> None:
@@ -701,7 +701,7 @@ class Runnable(builtins.object):
 
 # region classes
 
-## python3.3 class Platform:
+## python3.4 class Platform:
 class Platform(builtins.object):
 
     '''Handles issues dealing with the underlying operating system.'''
@@ -745,7 +745,7 @@ class Platform(builtins.object):
             # region special
 
     @JointPoint(builtins.classmethod)
-## python3.3     def __init__(cls: SelfClass) -> None:
+## python3.4     def __init__(cls: SelfClass) -> None:
     def __init__(cls):
         '''
             Determines the operating system.
@@ -774,7 +774,7 @@ class Platform(builtins.object):
             cls.operating_system = 'posix'
 
     @JointPoint(builtins.classmethod)
-## python3.3     def __repr__(cls: SelfClass) -> builtins.str:
+## python3.4     def __repr__(cls: SelfClass) -> builtins.str:
     def __repr__(cls):
         '''
             Invokes if this object should describe itself by a string.
@@ -794,7 +794,7 @@ class Platform(builtins.object):
             # region change computer status
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def check_computer_reachability(
 ##         cls: SelfClass, host: builtins.str, timeout_in_seconds=3, port=22
 ##     ) -> builtins.bool:
@@ -830,7 +830,7 @@ class Platform(builtins.object):
         return True
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def make_computer_ready(
 ##         cls: SelfClass, *arguments: builtins.object,
 ##         **keywords: builtins.object
@@ -865,7 +865,7 @@ class Platform(builtins.object):
             *arguments, handler=cls.wake_computer, **keywords)
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def change_computer_status(
 ##         cls: SelfClass, host: builtins.str, mac_address: builtins.str,
 ##         broadcast: builtins.str,
@@ -920,7 +920,7 @@ class Platform(builtins.object):
         return counter <= number_of_tries, counter > 1
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def wake_computer(
 ##         cls: SelfClass, mac_address: builtins.str, broadcast: builtins.str
 ##     ) -> builtins.bool:
@@ -994,7 +994,7 @@ class Platform(builtins.object):
         # region thread handling
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def check_thread(cls, waiting_delay_in_seconds=2) -> builtins.bool:
     def check_thread(cls, waiting_delay_in_seconds=2):
 ##
@@ -1040,7 +1040,7 @@ class Platform(builtins.object):
         # region process handling
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def set_process_lock(cls: SelfClass, description='') -> builtins.bool:
     def set_process_lock(cls, description=''):
 ##
@@ -1082,7 +1082,7 @@ class Platform(builtins.object):
         return True
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def clear_process_lock(cls: SelfClass, description='') -> builtins.bool:
     def clear_process_lock(cls, description=''):
 ##
@@ -1115,7 +1115,7 @@ class Platform(builtins.object):
         ).remove_file()
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def check_process_lock(cls: SelfClass, description='') -> builtins.bool:
     def check_process_lock(cls, description=''):
 ##
@@ -1140,7 +1140,7 @@ class Platform(builtins.object):
         ).is_file()
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def run(
 ##         cls: SelfClass, command: collections.Iterable,
 ##         command_arguments=None, secure=False, error=True, shell=None,
@@ -1253,7 +1253,7 @@ class Platform(builtins.object):
     @JointPoint(builtins.classmethod)
     # NOTE: "location" can't get file handler signature type. It isn't loaded
     # yet.
-## python3.3
+## python3.4
 ##     def open(cls: SelfClass, location: builtins.object) -> builtins.dict:
     def open(cls, location):
 ##
@@ -1297,7 +1297,7 @@ class Platform(builtins.object):
         # region protected
 
     @JointPoint(builtins.classmethod)
-## python3.3     def _initialize_process_lock(cls: SelfClass) -> SelfClass:
+## python3.4     def _initialize_process_lock(cls: SelfClass) -> SelfClass:
     def _initialize_process_lock(cls):
         '''Creates a unique temporary process lock file directory location.'''
         if Platform.process_lock_directory is None:
@@ -1306,7 +1306,7 @@ class Platform(builtins.object):
         return cls
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def _log_command_result(
 ##         cls: SelfClass, result: builtins.dict
 ##     ) -> builtins.dict:
@@ -1328,7 +1328,7 @@ class Platform(builtins.object):
         return result
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def _run_one_command(
 ##         cls: SelfClass, command: collections.Iterable,
 ##         command_arguments: collections.Iterable, secure: builtins.bool,
@@ -1357,7 +1357,7 @@ class Platform(builtins.object):
             if error and result['return_code'] != 0:
                 sys.exit(result['return_code'])
         else:
-## python3.3
+## python3.4
 ##             with subprocess.Popen(
 ##                 command, *arguments, shell=shell,
 ##                 stdin=subprocess.PIPE, stdout=subprocess.PIPE,
@@ -1379,7 +1379,7 @@ class Platform(builtins.object):
         return result
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def _communicate_to_process_handler(
 ##         cls: SelfClass, process_handler: subprocess.Popen,
 ##         no_blocking: builtins.bool
@@ -1400,7 +1400,7 @@ class Platform(builtins.object):
                 'error_output': process_handler.stderr}
         else:
             result = process_handler.communicate()
-## python3.3
+## python3.4
 ##             result = {
 ##                 'standard_output': result[0].decode(
 ##                     String(result[0]).encoding),
@@ -1414,7 +1414,7 @@ class Platform(builtins.object):
         return result
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def _run_multiple_commands(
 ##         cls: SelfClass, commands: collections.Iterable,
 ##         command_arguments: collections.Iterable, secure: builtins.bool,
@@ -1443,7 +1443,7 @@ class Platform(builtins.object):
     # endregion
 
 
-## python3.3 class CommandLine:
+## python3.4 class CommandLine:
 class CommandLine(builtins.object):
 
     '''
@@ -1567,7 +1567,7 @@ class CommandLine(builtins.object):
             # region special
 
     @JointPoint(builtins.classmethod)
-## python3.3     def __repr__(cls: SelfClass) -> builtins.str:
+## python3.4     def __repr__(cls: SelfClass) -> builtins.str:
     def __repr__(cls):
         '''
             Invokes if this object should describe itself by a string.
@@ -1585,7 +1585,7 @@ class CommandLine(builtins.object):
             # endregion
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def argument_parser(
 ##         cls: SelfClass, arguments=(), module_name=__name__, scope={},
 ##         meta=False, description='', version='', default=True,
@@ -1676,7 +1676,7 @@ class CommandLine(builtins.object):
         return arguments
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def handle_log_level(
 ##         cls: SelfClass, arguments: argparse.Namespace
 ##     ) -> SelfClass:
@@ -1695,7 +1695,7 @@ class CommandLine(builtins.object):
         return cls
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def boolean_input(
 ##         cls: SelfClass, question: builtins.str
 ##     ) -> builtins.bool:
@@ -1714,7 +1714,7 @@ class CommandLine(builtins.object):
             ... ) # doctest: +SKIP
             All right? (Choose one of: y, n...)
         '''
-## python3.3         input_string = builtins.input(question.format(
+## python3.4         input_string = builtins.input(question.format(
         input_string = builtins.raw_input(question.format(
             boolean_arguments='(Choose one of: {choices})'.format(
                 choices=', '.join(cls.POSITIVE_INPUTS + cls.NEGATIVE_INPUTS)))
@@ -1726,7 +1726,7 @@ class CommandLine(builtins.object):
         return cls.boolean_input(question)
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def determine_wrapped_objects(
 ##         cls: SelfClass, scope: (builtins.type, builtins.object),
 ##         only_module_level=True
@@ -1772,7 +1772,7 @@ class CommandLine(builtins.object):
         return objects
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def generic_package_interface(
 ##         cls: SelfClass, name=__name__, frame=inspect.currentframe(),
 ##         command_line_arguments=(),
@@ -1859,7 +1859,7 @@ class CommandLine(builtins.object):
         return False
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def generic_module_interface(
 ##         cls: SelfClass, module: builtins.dict,
 ##         temp_file_patterns=None, test=False, default_caller=None,
@@ -1920,7 +1920,7 @@ class CommandLine(builtins.object):
         return cls
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def test_module(
 ##         cls: SelfClass, module: builtins.dict,
 ##         temp_file_patterns: collections.Iterable, verbose=False
@@ -1953,11 +1953,11 @@ class CommandLine(builtins.object):
 ##         doctest.testmod(
 ##             module['scope'], verbose=verbose,
 ##             optionflags=doctest.DONT_ACCEPT_TRUE_FOR_1 |
-##             doctest.REPORT_ONLY_FIRST_FAILURE | doctest.FAIL_FAST)
+##             doctest.REPORT_ONLY_FIRST_FAILURE)
         doctest.testmod(
             module['scope'], verbose=verbose,
             optionflags=doctest.DONT_ACCEPT_TRUE_FOR_1 |
-            doctest.REPORT_ONLY_FIRST_FAILURE)
+            doctest.REPORT_ONLY_FIRST_FAILURE | doctest.FAIL_FAST)
 ##
         '''Recover old runtime environment.'''
         Logger.change_all(level=log_level_backup, buffer=logger_buffer_backup)
@@ -1974,7 +1974,7 @@ class CommandLine(builtins.object):
         # region protected
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def _extend_module_for_testing(
 ##         cls: SelfClass, module: builtins.dict
 ##     ) -> builtins.dict:
@@ -2006,7 +2006,7 @@ class CommandLine(builtins.object):
         return module
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def _determine_nested_wrapped_objects(
 ##         cls: SelfClass, object: (builtins.object, builtins.type),
 ##         objects: builtins.dict, name: builtins.str
@@ -2026,7 +2026,7 @@ class CommandLine(builtins.object):
         return objects
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def _determine_argument_parser_keywords(
 ##         cls: SelfClass, keywords: builtins.dict, meta: builtins.bool,
 ##         description: builtins.str
@@ -2052,7 +2052,7 @@ class CommandLine(builtins.object):
         return determined_keywords
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def _validate_command_line_argument(
 ##         cls: SelfClass, argument: builtins.dict,
 ##         arguments: collections.Iterable
@@ -2094,7 +2094,7 @@ class CommandLine(builtins.object):
             argument)
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def _validate_command_line_argument_again_help_argument(
 ##         cls: SelfClass, argument: builtins.dict
 ##     ) -> SelfClass:
@@ -2125,7 +2125,7 @@ class CommandLine(builtins.object):
         return cls
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def _handle_initializer_default_values(
 ##         cls: SelfClass, scope: builtins.dict
 ##     ) -> builtins.dict:
@@ -2173,7 +2173,7 @@ class CommandLine(builtins.object):
             initializer = scope['self']._initialize
             while builtins.hasattr(initializer, '__wrapped__'):
                 initializer = initializer.__wrapped__
-## python3.3
+## python3.4
 ##             parameters = inspect.signature(initializer).parameters
 ##             if scope['__name__'] in parameters:
 ##                 if(parameters[scope['__name__']].default is
@@ -2211,7 +2211,7 @@ class CommandLine(builtins.object):
         return scope
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def _add_command_line_arguments(
 ##         cls: SelfClass, arguments: collections.Iterable,
 ##         default_arguments: collections.Iterable, scope: builtins.dict
@@ -2254,7 +2254,7 @@ class CommandLine(builtins.object):
         return cls
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def _call_module_object(
 ##         cls: SelfClass, module: builtins.dict,
 ##         callable_object_names: collections.Iterable,
@@ -2299,7 +2299,7 @@ class CommandLine(builtins.object):
         return cls
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def _determine_callable_objects(
 ##         cls: SelfClass, module: builtins.dict,
 ##         default_caller: (builtins.str, builtins.bool, builtins.type(None)),
@@ -2355,7 +2355,7 @@ class CommandLine(builtins.object):
         ), default_caller
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def _test_lint_document_modules(
 ##         cls: SelfClass, all: builtins.bool, arguments: argparse.Namespace,
 ##         module_names: collections.Iterable,
@@ -2403,7 +2403,7 @@ class CommandLine(builtins.object):
         return cls
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def _get_modules(cls: SelfClass, name: builtins.str) -> builtins.list:
     def _get_modules(cls, name):
 ##
@@ -2429,7 +2429,7 @@ class CommandLine(builtins.object):
         return module_names
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def _get_version(
 ##         cls: SelfClass, version: builtins.str, module_name: builtins.str
 ##     ) -> builtins.str:
@@ -2457,7 +2457,7 @@ class CommandLine(builtins.object):
             status=sys.modules[module_name].__status__)
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def _get_description(
 ##         cls: SelfClass, description: (builtins.str, builtins.type(None)),
 ##         module_name: builtins.str, version: builtins.str
@@ -2494,7 +2494,7 @@ class CommandLine(builtins.object):
         return description.format(version=version)
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def _put_documentations_together(
 ##         cls: SelfClass, documentation_path: builtins.str,
 ##         frame: types.FrameType,
@@ -2541,7 +2541,7 @@ class CommandLine(builtins.object):
         return cls
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def _document_modules(
 ##         cls: SelfClass, documentation_path: builtins.str,
 ##         clear_old_documentation: builtins.bool,
@@ -2586,7 +2586,7 @@ class CommandLine(builtins.object):
         return cls
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def _lint_modules(
 ##         cls: SelfClass, linter: builtins.str,
 ##         module_names: collections.Iterable
@@ -2619,7 +2619,7 @@ class CommandLine(builtins.object):
         return cls
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def _test_modules(
 ##         cls: SelfClass, module_names: collections.Iterable,
 ##         temp_file_patterns: collections.Iterable
@@ -2650,7 +2650,7 @@ class CommandLine(builtins.object):
         return cls
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def _handle_packages_in_package(
 ##         cls: SelfClass, current_working_directory_backup: builtins.str,
 ##         frame: types.FrameType,
@@ -2715,7 +2715,7 @@ class CommandLine(builtins.object):
         return cls
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def _package_start_helper(
 ##         cls: SelfClass, name: builtins.str,
 ##         frame: types.FrameType, command_line_arguments: collections.Iterable
@@ -2747,7 +2747,7 @@ class CommandLine(builtins.object):
             current_working_directory_backup)
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def _restore_current_directory(
 ##         cls: SelfClass, clear: builtins.bool,
 ##         temp_file_patterns: collections.Iterable,
@@ -2805,7 +2805,7 @@ class CommandLine(builtins.object):
         return cls
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def _clear_temp_files(
 ##         cls: SelfClass, temp_file_patterns: collections.Iterable
 ##     ) -> SelfClass:
@@ -2827,7 +2827,7 @@ class CommandLine(builtins.object):
         return cls
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def _get_packages(
 ##         cls: SelfClass, current_working_directory_backup: builtins.str,
 ##         frame: types.FrameType
@@ -2863,7 +2863,7 @@ class CommandLine(builtins.object):
         return packages
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def _package_argument_parser(
 ##         cls: SelfClass, name: builtins.str, frame: types.FrameType,
 ##         command_line_arguments: collections.Iterable
@@ -2893,7 +2893,7 @@ class CommandLine(builtins.object):
             scope={'choices': choices})
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def _render_command_line_argument(
 ##         cls: SelfClass, argument: builtins.object, scope: builtins.dict,
 ##         keyword='keywords'

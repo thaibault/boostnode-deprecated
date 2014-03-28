@@ -22,7 +22,7 @@ __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-## python3.3 import builtins
+## python3.4 import builtins
 import __builtin__ as builtins
 import inspect
 import os
@@ -69,7 +69,7 @@ class Model(builtins.type):
 
             # region special
 
-## python3.3
+## python3.4
 ##     def __new__(
 ##         cls: SelfClass, class_name: builtins.str,
 ##         base_classes: builtins.tuple, class_scope: builtins.dict,

@@ -24,10 +24,10 @@ __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-## python3.3 import builtins
+## python3.4 import builtins
 import __builtin__ as builtins
 import ctypes
-## python3.3 import collections
+## python3.4 import collections
 import codecs
 from copy import copy, deepcopy
 import inspect
@@ -37,13 +37,13 @@ import re
 import shutil
 import stat
 import sys
-## python3.3 import types
+## python3.4 import types
 pass
 
 '''Make boostNode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
-## python3.3
+## python3.4
 ## from boostNode.extension.native import Object, String
 ## from boostNode.extension.type import Self, SelfClass, SelfClassObject
 from boostNode.extension.native import Dictionary, Object, String
@@ -207,7 +207,7 @@ class Handler(Class):
 
     @JointPoint(builtins.classmethod)
     @Class.pseudo_property
-## python3.3     def get_root(cls: SelfClass) -> SelfClassObject:
+## python3.4     def get_root(cls: SelfClass) -> SelfClassObject:
     def get_root(cls):
         '''Returns a file object referencing to the virtual root path.'''
         return cls(
@@ -220,7 +220,7 @@ class Handler(Class):
 
     @JointPoint(builtins.classmethod)
     @Class.pseudo_property
-## python3.3
+## python3.4
 ##     def set_root(
 ##         cls: SelfClass, location: (SelfClassObject, builtins.str),
 ##         make_directory=False
@@ -260,7 +260,7 @@ class Handler(Class):
             # endregion
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def convert_size_format(
 ##         cls: SelfClass, size: (builtins.int, builtins.float), format='byte',
 ##         decimal=None, formats=None
@@ -314,7 +314,7 @@ class Handler(Class):
         return size
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def determine_size_from_string(
 ##         cls: SelfClass, size_and_unit: builtins.str, format='byte',
 ##         decimal=None
@@ -368,7 +368,7 @@ class Handler(Class):
         return False
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def determine_byte_from_other(
 ##         cls: SelfClass, size: builtins.float, formats=None,
 ##         given_format='byte', decimal=None
@@ -411,7 +411,7 @@ class Handler(Class):
         return size
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def determine_regex_units(cls: SelfClass, formats=None) -> builtins.str:
     def determine_regex_units(cls, formats=None):
 ##
@@ -442,7 +442,7 @@ class Handler(Class):
         return units
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def determine_special_path_values(
 ##         cls: SelfClass, operating_system=''
 ##     ) -> builtins.tuple:
@@ -478,7 +478,7 @@ class Handler(Class):
         # region protected
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def _sort_by_file_types(
 ##         cls: SelfClass, files: collections.Iterable,
 ##         recursive_in_link: builtins.bool
@@ -524,7 +524,7 @@ class Handler(Class):
             # region special
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def __init__(
 ##         self: Self, location=None, make_directory=False, must_exist=False,
 ##         encoding='', respect_root_path=True, output_with_root_prefix=False,
@@ -663,7 +663,7 @@ class Handler(Class):
                 # endregion
 
     @JointPoint
-## python3.3     def __iter__(self: Self) -> types.GeneratorType:
+## python3.4     def __iter__(self: Self) -> types.GeneratorType:
     def __iter__(self):
         '''
             Invokes if the current object is tried to iterate.
@@ -679,7 +679,7 @@ class Handler(Class):
         return(element for element in self.list())
 
     @JointPoint
-## python3.3     def __bool__(self: Self) -> builtins.bool:
+## python3.4     def __bool__(self: Self) -> builtins.bool:
     def __nonzero__(self):
         '''
             Invokes when the object is tried to convert in a boolean value.
@@ -703,7 +703,7 @@ class Handler(Class):
         return self.is_element()
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def __eq__(self: Self, other: builtins.object) -> builtins.bool:
     def __eq__(self, other):
 ##
@@ -738,7 +738,7 @@ class Handler(Class):
         return False
 
     @JointPoint
-## python3.3     def __hash__(self: Self) -> builtins.int:
+## python3.4     def __hash__(self: Self) -> builtins.int:
     def __hash__(self):
         '''
             Returns a hash value for current path as string.
@@ -751,7 +751,7 @@ class Handler(Class):
         return builtins.hash(self._path)
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def __getitem__(self: Self, key: builtins.int) -> SelfClassObject:
     def __getitem__(self, key):
 ##
@@ -771,7 +771,7 @@ class Handler(Class):
         return builtins.tuple(self.list())[key]
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def __delitem__(self: Self, key: builtins.int) -> builtins.bool:
     def __delitem__(self, key):
 ##
@@ -794,7 +794,7 @@ class Handler(Class):
         return self[key].remove_deep()
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def __contains__(
 ##         self: Self, item: (SelfClassObject, builtins.str)
 ##     ) -> builtins.bool:
@@ -836,7 +836,7 @@ class Handler(Class):
         return False
 
     @JointPoint
-## python3.3     def __len__(self: Self) -> builtins.int:
+## python3.4     def __len__(self: Self) -> builtins.int:
     def __len__(self):
         '''
             Is triggered if you use the pythons native "builtins.len()" \
@@ -869,7 +869,7 @@ class Handler(Class):
         return 0
 
     @JointPoint
-## python3.3     def __str__(self: Self) -> builtins.str:
+## python3.4     def __str__(self: Self) -> builtins.str:
     def __str__(self):
         '''
             Is triggered if this object should be converted to string.
@@ -884,7 +884,7 @@ class Handler(Class):
         return self.path
 
     @JointPoint
-## python3.3     def __repr__(self: Self) -> builtins.str:
+## python3.4     def __repr__(self: Self) -> builtins.str:
     def __repr__(self):
         '''
             Invokes if this object should describe itself by a string.
@@ -922,7 +922,7 @@ class Handler(Class):
             # region getter
 
     @JointPoint
-## python3.3     def get_encoding(self: Self) -> builtins.str:
+## python3.4     def get_encoding(self: Self) -> builtins.str:
     def get_encoding(self):
         '''
             Returns encoding for current file handler. If no encoding was set \
@@ -945,7 +945,7 @@ class Handler(Class):
         return self._encoding
 
     @JointPoint(Class.pseudo_property)
-## python3.3     def get_extension(self: Self) -> builtins.str:
+## python3.4     def get_extension(self: Self) -> builtins.str:
     def get_extension(self):
         '''
             Returns the current file extension or an empty string if current \
@@ -968,7 +968,7 @@ class Handler(Class):
         return ''
 
     @JointPoint(Class.pseudo_property)
-## python3.3     def get_timestamp(self: Self) -> builtins.float:
+## python3.4     def get_timestamp(self: Self) -> builtins.float:
     def get_timestamp(self):
         '''
             Getter method for time of last modification of the file system \
@@ -982,7 +982,7 @@ class Handler(Class):
         return os.stat(self._path).st_mtime
 
     @JointPoint(Class.pseudo_property)
-## python3.3     def get_lines(self: Self) -> builtins.int:
+## python3.4     def get_lines(self: Self) -> builtins.int:
     def get_lines(self):
         '''
             Returns the number of lines in the file content referenced by the \
@@ -1015,7 +1015,7 @@ class Handler(Class):
         return lines
 
     @JointPoint(Class.pseudo_property)
-## python3.3
+## python3.4
 ##     def get_size(
 ##         self: Self, limit=0, follow_link=True,
 ##         *arguments: builtins.object, **keywords: builtins.object
@@ -1126,7 +1126,7 @@ class Handler(Class):
             size, *arguments, **keywords))
 
     @JointPoint(Class.pseudo_property)
-## python3.3     def get_dummy_size(self: Self, label='') -> builtins.int:
+## python3.4     def get_dummy_size(self: Self, label='') -> builtins.int:
     def get_dummy_size(self, label=''):
         '''
             Calculates the potential dummy size for a portable link pointing \
@@ -1154,7 +1154,7 @@ class Handler(Class):
         return 0
 
     @JointPoint(Class.pseudo_property)
-## python3.3
+## python3.4
 ##     def get_human_readable_size(self: Self, size=None) -> builtins.str:
     def get_human_readable_size(self, size=None):
 ##
@@ -1230,7 +1230,7 @@ class Handler(Class):
         return builtins.str(builtins.round(size, 2)) + ' byte'
 
     @JointPoint(Class.pseudo_property)
-## python3.3     def get_type(self: Self) -> builtins.str:
+## python3.4     def get_type(self: Self) -> builtins.str:
     def get_type(self):
         '''
             Determines the type of the current object.
@@ -1285,7 +1285,7 @@ class Handler(Class):
         return 'undefined'
 
     @JointPoint(Class.pseudo_property)
-## python3.3
+## python3.4
 ##     def get_mime_type(
 ##         self: Self, default_type='text', web=False
 ##     ) -> builtins.str:
@@ -1339,7 +1339,7 @@ class Handler(Class):
         return ''
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def get_path(
 ##         self: Self, location=None, respect_root_path=None,
 ##         output_with_root_prefix=None
@@ -1396,7 +1396,7 @@ class Handler(Class):
             output_with_root_prefix=taken_output_with_root_prefix)
 
     @JointPoint(Class.pseudo_property)
-## python3.3
+## python3.4
 ##     def get_relative_path(
 ##         self: Self, *arguments: builtins.object, context=None,
 ##         **keywords: builtins.object
@@ -1448,7 +1448,7 @@ class Handler(Class):
             )._path, **keywords)
 
     @JointPoint(Class.pseudo_property)
-## python3.3
+## python3.4
 ##     def get_directory_path(
 ##         self: Self, output_with_root_prefix=None
 ##     ) -> builtins.str:
@@ -1502,7 +1502,7 @@ class Handler(Class):
         return directory_path
 
     @JointPoint(Class.pseudo_property)
-## python3.3
+## python3.4
 ##     def get_name(
 ##         self: Self, *arguments: builtins.object,
 ##         output_with_root_prefix=None, force_windows_behavior=False,
@@ -1541,7 +1541,7 @@ class Handler(Class):
             'C:'
         '''
         from boostNode.extension.system import Platform
-## python3.3
+## python3.4
 ##         pass
         keywords_dictionary = Dictionary(content=keywords)
         output_with_root_prefix, keywords = keywords_dictionary.pop(
@@ -1558,7 +1558,7 @@ class Handler(Class):
         return os.path.basename(path, *arguments, **keywords)
 
     @JointPoint(Class.pseudo_property)
-## python3.3
+## python3.4
 ##     def get_basename(
 ##         self: Self, *arguments: builtins.object,
 ##         output_with_root_prefix=None, **keywords: builtins.object
@@ -1588,7 +1588,7 @@ class Handler(Class):
             >>> Handler().get_basename()
             'extension'
         '''
-## python3.3
+## python3.4
 ##         pass
         output_with_root_prefix, keywords = Dictionary(
             content=keywords
@@ -1603,7 +1603,7 @@ class Handler(Class):
         return self.name
 
     @JointPoint(Class.pseudo_property)
-## python3.3     def get_free_space(self: Self) -> builtins.int:
+## python3.4     def get_free_space(self: Self) -> builtins.int:
     def get_free_space(self):
         '''
             Return free space of folder or drive (in bytes).
@@ -1630,14 +1630,14 @@ class Handler(Class):
         return self._get_platform_dependent_free_and_total_space()[0]
 
     @JointPoint(Class.pseudo_property)
-## python3.3     def get_disk_used_space(self: Self) -> builtins.int:
+## python3.4     def get_disk_used_space(self: Self) -> builtins.int:
     def get_disk_used_space(self):
         '''Determines used space of current path containing disk.'''
         disk_status = self._get_platform_dependent_free_and_total_space()
         return disk_status[1] - disk_status[0]
 
     @JointPoint(Class.pseudo_property)
-## python3.3
+## python3.4
 ##     def get_content(
 ##         self: Self, mode='r', strict=False, *arguments: builtins.object,
 ##         **keywords: builtins.object
@@ -1729,7 +1729,7 @@ class Handler(Class):
                 else:
                     keywords['encoding'] = self._encoding
                 errors = 'strict' if strict else 'ignore'
-## python3.3
+## python3.4
 ##                 with builtins.open(
 ##                     self._path, mode, *arguments, errors=errors, **keywords
 ##                 ) as file:
@@ -1759,7 +1759,7 @@ class Handler(Class):
         return ''
 
     @JointPoint(Class.pseudo_property)
-## python3.3
+## python3.4
 ##     def get_portable_link_pattern(
 ##         self: Self, force_windows_behavior=False
 ##     ) -> builtins.str:
@@ -1804,7 +1804,7 @@ class Handler(Class):
             label='{label}', size='{size}', path='{path}')
 
     @JointPoint(Class.pseudo_property)
-## python3.3
+## python3.4
 ##     def get_portable_regex_link_pattern(self: Self) -> builtins.str:
     def get_portable_regex_link_pattern(self):
 ##
@@ -1830,7 +1830,7 @@ class Handler(Class):
             path='(?P<path>.*?)')
 
     @JointPoint(Class.pseudo_property)
-## python3.3
+## python3.4
 ##     def get_portable_link_content(
 ##         self: Self, label='%s', relative=None, target_path=''
 ##     ) -> builtins.str:
@@ -1874,7 +1874,7 @@ class Handler(Class):
             name=self.name.replace('%', '%%'))
 
     @JointPoint(Class.pseudo_property)
-## python3.3     def get_extension_suffix(self: Self) -> builtins.str:
+## python3.4     def get_extension_suffix(self: Self) -> builtins.str:
     def get_extension_suffix(self):
         '''
             Returns the extension of a file or directory (empty string). The \
@@ -1907,7 +1907,7 @@ class Handler(Class):
             # region setter
 
     @JointPoint(Class.pseudo_property)
-## python3.3
+## python3.4
 ##     def set_timestamp(
 ##         self: Self, *arguments: builtins.object, **keywords: builtins.object
 ##     ) -> builtins.bool:
@@ -1949,7 +1949,7 @@ class Handler(Class):
         return True
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def set_encoding(
 ##         self: Self, encoding: builtins.str, *arguments: builtins.object,
 ##         **keywords: builtins.object
@@ -1980,7 +1980,7 @@ class Handler(Class):
             content=self.content, encoding=encoding, *arguments, **keywords)
 
     @JointPoint(Class.pseudo_property)
-## python3.3
+## python3.4
 ##     def set_content(
 ##         self: Self, content: (builtins.str, builtins.bytes), mode=None,
 ##         *arguments: builtins.object, **keywords: builtins.object
@@ -2071,7 +2071,7 @@ class Handler(Class):
                 keywords['encoding'] = self._encoding
             else:
                 self._encoding = keywords['encoding']
-## python3.3
+## python3.4
 ##             with builtins.open(
 ##                 self._path, mode, *arguments, **keywords
 ##             ) as file_handler:
@@ -2087,7 +2087,7 @@ class Handler(Class):
         return self
 
     @JointPoint(Class.pseudo_property)
-## python3.3
+## python3.4
 ##     def set_directory_path(
 ##         self: Self, location: (SelfClassObject, builtins.str),
 ##         *arguments: builtins.object, respect_root_path=None,
@@ -2140,7 +2140,7 @@ class Handler(Class):
             >>> new_location.is_directory()
             True
         '''
-## python3.3
+## python3.4
 ##         pass
         respect_root_path, keywords = Dictionary(content=keywords).pop(
             name='respect_root_path')
@@ -2151,7 +2151,7 @@ class Handler(Class):
             ) + os.sep + self.name, *arguments, **keywords)
 
     @JointPoint(Class.pseudo_property)
-## python3.3
+## python3.4
 ##     def set_name(
 ##         self: Self, name: builtins.str, *arguments: builtins.object,
 ##         **keywords: builtins.object
@@ -2196,7 +2196,7 @@ class Handler(Class):
             target=self.directory_path + name, *arguments, **keywords)
 
     @JointPoint(Class.pseudo_property)
-## python3.3
+## python3.4
 ##     def set_basename(
 ##         self: Self, basename: builtins.str, *arguments: builtins.object,
 ##         **keywords: builtins.object
@@ -2241,7 +2241,7 @@ class Handler(Class):
             name=basename + self.extension_suffix, *arguments, **keywords)
 
     @JointPoint(Class.pseudo_property)
-## python3.3
+## python3.4
 ##     def set_extension(
 ##         self: Self, extension: builtins.str, *arguments: builtins.object,
 ##         **keywords: builtins.object
@@ -2286,7 +2286,7 @@ class Handler(Class):
         return self.is_element()
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def set_path(
 ##         self: Self, *arguments: builtins.object, **keywords: builtins.object
 ##     ) -> builtins.bool:
@@ -2326,7 +2326,7 @@ class Handler(Class):
             # region boolean
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def is_same_file(
 ##         self: Self, other_location: SelfClassObject
 ##     ) -> builtins.bool:
@@ -2358,7 +2358,7 @@ class Handler(Class):
             return self == other_location
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def is_directory(
 ##         self: Self, allow_link=True, *arguments: builtins.object,
 ##         **keywords: builtins.object
@@ -2388,7 +2388,7 @@ class Handler(Class):
             self.is_directory(allow_link=True, *arguments, **keywords)
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def is_file(
 ##         self: Self, allow_link=True, *arguments: builtins.object,
 ##         **keywords: builtins.object
@@ -2424,7 +2424,7 @@ class Handler(Class):
             self.is_file(allow_link=True, *arguments, **keywords))
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def is_symbolic_link(
 ##         self: Self, allow_portable_link=True, *arguments: builtins.object,
 ##         **keywords: builtins.object
@@ -2489,7 +2489,7 @@ class Handler(Class):
         return os.path.islink(path, *arguments, **keywords)
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def is_referenced_via_absolute_path(
 ##         self: Self, location=None
 ##     ) -> builtins.bool:
@@ -2530,7 +2530,7 @@ class Handler(Class):
         return os.path.isabs(location)
 
     @JointPoint
-## python3.3     def is_media(self: Self) -> builtins.bool:
+## python3.4     def is_media(self: Self) -> builtins.bool:
     def is_media(self):
         '''
             Determines if the current location referenced to a media file.
@@ -2557,7 +2557,7 @@ class Handler(Class):
         return False
 
     @JointPoint
-## python3.3     def is_portable_link(self: Self) -> builtins.bool:
+## python3.4     def is_portable_link(self: Self) -> builtins.bool:
     def is_portable_link(self):
         '''
             Checks if the current location points to a portable link.
@@ -2611,7 +2611,7 @@ class Handler(Class):
                 # Maximum label line length + Maximum name length.
                 120 + self.MAX_FILE_NAME_LENGTH)
             try:
-## python3.3
+## python3.4
 ##                 with builtins.open(
 ##                     path, mode='r', encoding=self.DEFAULT_ENCODING,
 ##                     errors='strict'
@@ -2634,7 +2634,7 @@ class Handler(Class):
         return False
 
     @JointPoint
-## python3.3     def is_element(self: Self) -> builtins.bool:
+## python3.4     def is_element(self: Self) -> builtins.bool:
     def is_element(self):
         '''
             Determines if the current object path is a valid resource on the \
@@ -2671,7 +2671,7 @@ class Handler(Class):
         return os.path.exists(self._path) or self.is_symbolic_link()
 
     @JointPoint
-## python3.3     def is_device_file(self: Self) -> builtins.bool:
+## python3.4     def is_device_file(self: Self) -> builtins.bool:
     def is_device_file(self):
         '''
             Determines if the current object path is a device file like a \
@@ -2705,7 +2705,7 @@ class Handler(Class):
             # endregion
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def backup(
 ##         self: Self, name_wrapper=(
 ##             '<%file.basename%>_backup<%file.extension_suffix%>'),
@@ -2783,7 +2783,7 @@ class Handler(Class):
             '''
             if not backup:
                 '''Check if a new created backup would be redundant.'''
-## python3.3
+## python3.4
 ##                 if(earlier_backup != self and not backup_if_exists and
 ##                    (not compare_content or self.is_equivalent(
 ##                        other=earlier_backup))):
@@ -2797,7 +2797,7 @@ class Handler(Class):
         return self
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def is_equivalent(
 ##         self: Self, other: (SelfClassObject, builtins.str)
 ##     ) -> builtins.bool:
@@ -2853,7 +2853,7 @@ class Handler(Class):
         return False
 
     @JointPoint
-## python3.3     def change_working_directory(self: Self) -> Self:
+## python3.4     def change_working_directory(self: Self) -> Self:
     def change_working_directory(self):
         '''
             Changes the current working directory to the instance saved \
@@ -2923,7 +2923,7 @@ class Handler(Class):
         return self
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def list(
 ##         self: Self, *arguments: builtins.object, **keywords: builtins.object
 ##     ) -> types.GeneratorType:
@@ -3006,7 +3006,7 @@ class Handler(Class):
                     pass
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def remove_directory(
 ##         self: Self, *arguments: builtins.object, **keywords: builtins.object
 ##     ) -> builtins.bool:
@@ -3073,14 +3073,14 @@ class Handler(Class):
         if self.is_directory():
             try:
                 os.rmdir(self._path, *arguments, **keywords)
-## python3.3             except (builtins.PermissionError, builtins.OSError):
+## python3.4             except (builtins.PermissionError, builtins.OSError):
             except builtins.OSError:
                 try:
                     self.change_right(
                         right=os.stat(self._path).st_mode | stat.S_IWRITE,
                         octal=False)
                     os.rmdir(self._path, *arguments, **keywords)
-## python3.3
+## python3.4
 ##                 except (builtins.PermissionError, builtins.OSError):
                 except builtins.OSError:
 ##
@@ -3092,7 +3092,7 @@ class Handler(Class):
         return False
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def move(
 ##         self: Self, target: (SelfClassObject, builtins.str),
 ##         *arguments: builtins.object, respect_root_path=None,
@@ -3140,7 +3140,7 @@ class Handler(Class):
             ... ).move(__test_folder__.path + 'move_target_not_existing2')
             False
         '''
-## python3.3
+## python3.4
 ##         pass
         respect_root_path, keywords = Dictionary(content=keywords).pop(
             name='respect_root_path')
@@ -3153,7 +3153,7 @@ class Handler(Class):
         return self._set_path(path=target)
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def remove_deep(
 ##         self: Self, *arguments: builtins.object, **keywords: builtins.object
 ##     ) -> builtins.bool:
@@ -3219,14 +3219,14 @@ class Handler(Class):
         if self.is_directory(allow_link=False):
             try:
                 shutil.rmtree(self._path, *arguments, **keywords)
-## python3.3             except builtins.PermissionError:
+## python3.4             except builtins.PermissionError:
             except builtins.OSError:
                 try:
                     self.change_right(
                         right=os.stat(self._path).st_mode | stat.S_IWRITE,
                         octal=False)
                     shutil.rmtree(self._path, *arguments, **keywords)
-## python3.3                 except builtins.PermissionError:
+## python3.4                 except builtins.PermissionError:
                 except builtins.OSError:
                     return False
                 else:
@@ -3236,7 +3236,7 @@ class Handler(Class):
         return self.remove_file()
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def remove_file(
 ##         self: Self, *arguments: builtins.object,
 ##         force_windows_behavior=False, **keywords: builtins.object
@@ -3308,7 +3308,7 @@ class Handler(Class):
             False
         '''
         from boostNode.extension.system import Platform
-## python3.3
+## python3.4
 ##         pass
         force_windows_behavior, keywords = Dictionary(content=keywords).pop(
             name='force_windows_behavior', default_value=False)
@@ -3322,14 +3322,14 @@ class Handler(Class):
             try:
                 self._path = self._get_ending_delimter_trimmed()
                 os.remove(self._path, *arguments, **keywords)
-## python3.3             except builtins.PermissionError:
+## python3.4             except builtins.PermissionError:
             except builtins.OSError:
                 try:
                     self.change_right(
                         right=os.stat(self._path).st_mode | stat.S_IWRITE,
                         octal=False)
                     os.remove(self._path, *arguments, **keywords)
-## python3.3                 except builtins.PermissionError:
+## python3.4                 except builtins.PermissionError:
                 except builtins.OSError:
                     return False
                 else:
@@ -3339,7 +3339,7 @@ class Handler(Class):
         return False
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def change_right(
 ##         self: Self, right, octal=True, recursive=False, allow_link=True
 ##     ) -> Self:
@@ -3408,7 +3408,7 @@ class Handler(Class):
         return self
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def copy(
 ##         self: Self, target: (SelfClassObject, builtins.str),
 ##         *arguments: builtins.object, right=None, octal=True,
@@ -3456,7 +3456,7 @@ class Handler(Class):
             ...     __test_folder__.path + 'copy_directory3', right=777)
             True
         '''
-## python3.3
+## python3.4
 ##         pass
         default_keywords = Dictionary(content=keywords)
         right, keywords = default_keywords.pop(name='right')
@@ -3473,7 +3473,7 @@ class Handler(Class):
         return target.type == self.type
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def make_new_directory(
 ##         self: Self, wrapper_pattern='{file_name}_temp'
 ##     ) -> SelfClassObject:
@@ -3520,7 +3520,7 @@ class Handler(Class):
         return location
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def make_directory(
 ##         self: Self, *arguments: builtins.object, right=700, octal=True,
 ##         **keywords: builtins.object
@@ -3563,7 +3563,7 @@ class Handler(Class):
             >>> handler.make_directory(right=777)
             True
         '''
-## python3.3
+## python3.4
 ##         pass
         default_keywords = Dictionary(content=keywords)
         right, keywords = default_keywords.pop(
@@ -3576,7 +3576,7 @@ class Handler(Class):
         return self.is_directory()
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def make_symbolic_link(
 ##         self: Self, *arguments: builtins.object, **keywords: builtins.object
 ##     ) -> builtins.bool:
@@ -3659,7 +3659,7 @@ class Handler(Class):
         return self._make_link(*arguments, symbolic=True, **keywords)
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def make_hardlink(
 ##         self: Self, *arguments: builtins.object, **keywords: builtins.object
 ##     ) -> builtins.bool:
@@ -3694,7 +3694,7 @@ class Handler(Class):
         return self._make_link(*arguments, symbolic=False, **keywords)
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def read_symbolic_link(
 ##         self: Self, as_object=False, *arguments: builtins.object,
 ##         **keywords: builtins.object
@@ -3774,7 +3774,7 @@ class Handler(Class):
         return link
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def deep_copy(
 ##         self: Self, target: (SelfClassObject, builtins.str),
 ##         symbolic_links=True, *arguments: builtins.object,
@@ -3852,7 +3852,7 @@ class Handler(Class):
             >>> Handler(target.path + '/second_sub_dir').is_directory()
             True
         '''
-## python3.3
+## python3.4
 ##         pass
         respect_root_path, keywords = Dictionary(content=keywords).pop(
             name='respect_root_path')
@@ -3865,7 +3865,7 @@ class Handler(Class):
         return self
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def make_directories(
 ##         self: Self, *arguments: builtins.object, **keywords: builtins.object
 ##     ) -> builtins.bool:
@@ -3913,7 +3913,7 @@ class Handler(Class):
         return self.is_directory()
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def make_portable_link(
 ##         self: Self, target: (SelfClassObject, builtins.str),
 ##         force=False, label='', *arguments: (builtins.object, builtins.type),
@@ -3975,7 +3975,7 @@ class Handler(Class):
         return target.is_portable_link()
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def read_portable_link(
 ##         self: Self, as_object=False
 ##     ) -> (builtins.str, SelfClassObject):
@@ -4026,7 +4026,7 @@ class Handler(Class):
         raise __exception__('"%s" isn\'t a portable link.', self._path)
 
     @JointPoint
-## python3.3     def clear_directory(self: Self) -> builtins.bool:
+## python3.4     def clear_directory(self: Self) -> builtins.bool:
     def clear_directory(self):
         '''
             Deletes the contents of the current directory location without \
@@ -4058,7 +4058,7 @@ class Handler(Class):
         return False
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def iterate_directory(
 ##         self: Self,
 ##         function: (builtins.str, types.FunctionType, types.MethodType,
@@ -4165,7 +4165,7 @@ class Handler(Class):
         return True
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def delete_file_patterns(self: Self, *patterns: builtins.str) -> Self:
     def delete_file_patterns(self, *patterns):
 ##
@@ -4214,7 +4214,7 @@ class Handler(Class):
         # region protected
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _prepare_content_status(
 ##         self: Self, mode: (builtins.str, builtins.type(None)),
 ##         content: (builtins.str, builtins.bytes)
@@ -4233,7 +4233,7 @@ class Handler(Class):
         return mode
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _get_ending_delimter_trimmed(self: Self) -> builtins.str:
     def _get_ending_delimter_trimmed(self):
 ##
@@ -4244,7 +4244,7 @@ class Handler(Class):
         return path
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _get_path(
 ##         self: Self, location: (SelfClassObject, builtins.str),
 ##         respect_root_path: (builtins.bool, builtins.type(None)),
@@ -4275,7 +4275,7 @@ class Handler(Class):
             output_with_root_prefix=output_with_root_prefix)
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _make_link(
 ##         self: Self, target: (SelfClassObject, builtins.str),
 ##         symbolic: builtins.bool, *arguments: builtins.object, force=False,
@@ -4295,7 +4295,7 @@ class Handler(Class):
             >>> Handler()._make_link(target, symbolic=True)
             False
         '''
-## python3.3
+## python3.4
 ##         pass
         keywords_dictionary = Dictionary(content=keywords)
         force, keywords = keywords_dictionary.pop(
@@ -4316,7 +4316,7 @@ class Handler(Class):
             symbolic, target, relative, *arguments, **keywords)
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _is_equivalent_folder(
 ##         self: Self, other: SelfClassObject, second_round=False
 ##     ) -> builtins.bool:
@@ -4363,7 +4363,7 @@ class Handler(Class):
             self, second_round=True)
 
     @JointPoint
-## python3.3     def _prepend_root_path(self: Self) -> builtins.str:
+## python3.4     def _prepend_root_path(self: Self) -> builtins.str:
     def _prepend_root_path(self):
         '''
             Prepends root path prefix to current file path.
@@ -4405,7 +4405,7 @@ class Handler(Class):
         return self._path
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _handle_path_existence(
 ##         self: Self,
 ##         location: (builtins.str, SelfClassObject, builtins.type(None)),
@@ -4445,7 +4445,7 @@ class Handler(Class):
         return self
 
     @JointPoint
-## python3.3     def _initialize_path(self: Self) -> builtins.str:
+## python3.4     def _initialize_path(self: Self) -> builtins.str:
     def _initialize_path(self):
         '''
             Normalizes reference to file object.
@@ -4475,7 +4475,7 @@ class Handler(Class):
         return self._path
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _initialize_location(
 ##         self: Self,
 ##         location: (SelfClassObject, builtins.str, builtins.type(None))
@@ -4504,7 +4504,7 @@ class Handler(Class):
         return location
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _set_path(self: Self, path: builtins.str) -> builtins.bool:
     def _set_path(self, path):
 ##
@@ -4537,7 +4537,7 @@ class Handler(Class):
         return self.is_element()
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _make_forced_link(
 ##         self: Self, symbolic: builtins.bool, target: SelfClassObject,
 ##         relative: (builtins.object, builtins.type),
@@ -4616,7 +4616,7 @@ class Handler(Class):
             # region handle platform dependencies
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _make_platform_dependent_link(
 ##         self: Self, symbolic: builtins.bool, target: SelfClassObject,
 ##         relative: (builtins.object, builtins.type),
@@ -4669,7 +4669,7 @@ class Handler(Class):
             True
         '''
         from boostNode.extension.system import Platform
-## python3.3
+## python3.4
 ##         pass
         force_windows_behavior, keywords = Dictionary(content=keywords).pop(
             name='force_windows_behavior', default_value=False)
@@ -4684,7 +4684,7 @@ class Handler(Class):
             try:
                 if(Platform().operating_system == 'windows' or
                    force_windows_behavior):
-## python3.3
+## python3.4
 ##                     os.symlink(
 ##                         source_path, target_path,
 ##                         target_is_directory=self.is_directory())
@@ -4708,7 +4708,7 @@ class Handler(Class):
         return target.is_file()
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _determine_relative_path(
 ##         self: Self, relative: (builtins.object, builtins.type),
 ##         target_path: builtins.str
@@ -4745,7 +4745,7 @@ class Handler(Class):
         return self._path
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _determine_get_windows_disk_free_space_function(
 ##         self: Self
 ##     ) -> ctypes._CFuncPtr:
@@ -4770,7 +4770,7 @@ class Handler(Class):
         return ctypes.windll.kernel32.GetDiskFreeSpaceExA
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _get_platform_dependent_free_and_total_space(
 ##         self: Self
 ##     ) -> (builtins.bool, builtins.tuple):
@@ -4813,7 +4813,7 @@ class Handler(Class):
     @JointPoint
 # NOTE return type only available in unix like systems:
 # -> (posix.statvfs_result, builtins.type(None))
-## python3.3
+## python3.4
 ##     def _initialize_platform_dependencies(
 ##         self: Self, force_macintosh_behavior=False
 ##     ):

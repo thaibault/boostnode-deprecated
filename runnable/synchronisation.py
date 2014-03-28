@@ -21,7 +21,7 @@ __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-## python3.3
+## python3.4
 ## import builtins
 ## import collections
 import __builtin__ as builtins
@@ -37,7 +37,7 @@ from boostNode.extension.file import Handler as FileHandler
 from boostNode.extension.native import Module, InstancePropertyInitializer
 from boostNode.extension.output import Logger
 from boostNode.extension.system import CommandLine, Platform, Runnable
-## python3.3 from boostNode.extension.type import Self, SelfClass
+## python3.4 from boostNode.extension.type import Self, SelfClass
 pass
 from boostNode.paradigm.aspectOrientation import JointPoint
 from boostNode.paradigm.objectOrientation import Class
@@ -304,7 +304,7 @@ class Reflector(Class, Runnable):
             # region boolean
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def is_location_in_paths(
 ##         cls: SelfClass, search: FileHandler, paths: collections.Iterable
 ##     ) -> builtins.bool:
@@ -345,7 +345,7 @@ class Reflector(Class, Runnable):
             # endregion
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def open(cls: SelfClass, files: collections.Iterable) -> SelfClass:
     def open(cls, files):
 ##
@@ -401,7 +401,7 @@ class Reflector(Class, Runnable):
             # region special
 
     @JointPoint
-## python3.3     def __repr__(self: Self) -> builtins.str:
+## python3.4     def __repr__(self: Self) -> builtins.str:
     def __repr__(self):
         '''
             Invokes if this object should describe itself by a string.
@@ -460,7 +460,7 @@ class Reflector(Class, Runnable):
             # region getter
 
     @JointPoint(Class.pseudo_property)
-## python3.3     def get_status_in_percent(self: Self) -> builtins.float:
+## python3.4     def get_status_in_percent(self: Self) -> builtins.float:
     def get_status_in_percent(self):
         '''
             Calculates the edited part of files in percent and returns the \
@@ -501,7 +501,7 @@ class Reflector(Class, Runnable):
             # endregion
 
     @JointPoint
-## python3.3     def create_cache(self: Self) -> Self:
+## python3.4     def create_cache(self: Self) -> Self:
     def create_cache(self):
         '''
             Creates a new reflection cache of the given source object.
@@ -685,7 +685,7 @@ class Reflector(Class, Runnable):
         return self._create_reflection_files()
 
     @JointPoint
-## python3.3     def synchronize_back_to_source(self: Self) -> Self:
+## python3.4     def synchronize_back_to_source(self: Self) -> Self:
     def synchronize_back_to_source(self):
         '''
             Syncs the current cache location back to the source.
@@ -841,7 +841,7 @@ class Reflector(Class, Runnable):
             # region runnable implementation
 
     @JointPoint
-## python3.3     def _run(self: Self) -> Self:
+## python3.4     def _run(self: Self) -> Self:
     def _run(self):
         '''
             Entry point for command line call of this program. Initializes a \
@@ -883,7 +883,7 @@ class Reflector(Class, Runnable):
             namespace=self._command_line_arguments))
 
     @JointPoint(InstancePropertyInitializer)
-## python3.3
+## python3.4
 ##     def _initialize(
 ##         self: Self, source_location: (FileHandler, builtins.str),
 ##         target_location=None, limit='100 MB', priority_locations=(),
@@ -947,7 +947,7 @@ class Reflector(Class, Runnable):
             # endregion
 
     @JointPoint
-## python3.3     def _synchronize_back(self: Self) -> Self:
+## python3.4     def _synchronize_back(self: Self) -> Self:
     def _synchronize_back(self):
         '''
             Synchronizes and/or creates a new reflection cache dependent on \
@@ -986,7 +986,7 @@ class Reflector(Class, Runnable):
         return self
 
     @JointPoint
-## python3.3     def _validate_inputs(self: Self) -> Self:
+## python3.4     def _validate_inputs(self: Self) -> Self:
     def _validate_inputs(self):
         '''
             Validates the given parameters to the "self.__init__()" method. \
@@ -1012,7 +1012,7 @@ class Reflector(Class, Runnable):
         return self._check_path_lists()
 
     @JointPoint
-## python3.3     def _check_path_lists(self: Self) -> Self:
+## python3.4     def _check_path_lists(self: Self) -> Self:
     def _check_path_lists(self):
         '''
             Checks if all given paths lists are in locations which makes \
@@ -1024,7 +1024,7 @@ class Reflector(Class, Runnable):
             paths=self.exclude_locations, path_type='Exclude')
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _check_path_in_source(
 ##         self: Self, paths: collections.Iterable, path_type='Given'
 ##     ) -> Self:
@@ -1072,7 +1072,7 @@ class Reflector(Class, Runnable):
         return self
 
     @JointPoint
-## python3.3     def _log_status(self: Self) -> Self:
+## python3.4     def _log_status(self: Self) -> Self:
     def _log_status(self):
         '''
             Logs the initial status of the current Reflector instance. Output \
@@ -1125,7 +1125,7 @@ class Reflector(Class, Runnable):
             # region core concern
 
     @JointPoint
-## python3.3     def _create_reflection_files(self: Self) -> Self:
+## python3.4     def _create_reflection_files(self: Self) -> Self:
     def _create_reflection_files(self):
         '''
             Iterates throw all files which should be included in the \
@@ -1174,7 +1174,7 @@ class Reflector(Class, Runnable):
         return self
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _copy_reflection_file(
 ##         self: Self, source: FileHandler, path: builtins.str,
 ##         size: builtins.float
@@ -1206,7 +1206,7 @@ class Reflector(Class, Runnable):
         return self
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _create_reflection_link(
 ##         self: Self, source: FileHandler, path: builtins.str
 ##     ) -> Self:
@@ -1254,7 +1254,7 @@ class Reflector(Class, Runnable):
         return self
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _relocate_moved_file(
 ##         self: Self, file: FileHandler
 ##     ) -> builtins.bool:
@@ -1304,7 +1304,7 @@ class Reflector(Class, Runnable):
         return True
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _relocate_missing_file(
 ##         self: Self, relocated_file: FileHandler, linked_file: FileHandler
 ##     ) -> builtins.bool:
@@ -1362,7 +1362,7 @@ class Reflector(Class, Runnable):
         return True
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _copy_cache_to_source(
 ##         self: Self, file: FileHandler
 ##     ) -> builtins.bool:
@@ -1425,7 +1425,7 @@ class Reflector(Class, Runnable):
         return False
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _copy_link_in_cache_to_source(
 ##         self: Self, source_file: FileHandler, link_file: FileHandler,
 ##         target_path_length: builtins.int
@@ -1546,7 +1546,7 @@ class Reflector(Class, Runnable):
             new_link = FileHandler(
                 location=self.source_location.path + linked_target.path[
                     target_path_length:])
-## python3.3
+## python3.4
 ##             if(not source_file.is_symbolic_link() or
 ##                source_file.read_symbolic_link(as_object=True) != new_link
 ##                ):
@@ -1568,7 +1568,7 @@ class Reflector(Class, Runnable):
         elif(linked_target.path[:builtins.len(self.source_location.path)] !=
              self.source_location.path):
             '''Given link doesn't point to a location in source location.'''
-## python3.3
+## python3.4
 ##             if(not source_file.is_symbolic_link() or
 ##                source_file.read_symbolic_link(as_object=True) !=
 ##                linked_target):
@@ -1588,7 +1588,7 @@ class Reflector(Class, Runnable):
         return True
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _copy_link_in_cache_to_source_as_link(
 ##         self: Self, source_file: FileHandler, link_file: FileHandler,
 ##         linked_target: FileHandler
@@ -1606,7 +1606,7 @@ class Reflector(Class, Runnable):
             target=source_file, force=True)
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _delete_source_file_not_existing_in_target(
 ##         self: Self, file: FileHandler
 ##     ) -> builtins.bool:
@@ -1633,7 +1633,7 @@ class Reflector(Class, Runnable):
         return True
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _create_reflection_structure(
 ##         self: Self, file: FileHandler, target: FileHandler, priority=False
 ##     ) -> builtins.bool:
@@ -1666,7 +1666,7 @@ class Reflector(Class, Runnable):
         return True
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _handle_source_element(
 ##         self: Self, source_file: FileHandler, target_file: FileHandler,
 ##         priority: builtins.bool
@@ -1714,7 +1714,7 @@ class Reflector(Class, Runnable):
         return True
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _handle_source_link(
 ##         self: Self, source_file: FileHandler, target_file: FileHandler
 ##     ) -> builtins.bool:

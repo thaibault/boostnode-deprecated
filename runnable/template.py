@@ -7,7 +7,7 @@
     This module provides classes to handle text-based files and string parsing.
 '''
 
-## python3.3 pass
+## python3.4 pass
 from __future__ import print_function
 
 '''
@@ -24,7 +24,7 @@ __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-## python3.3
+## python3.4
 ## import builtins
 ## import collections
 import __builtin__ as builtins
@@ -38,7 +38,7 @@ import re
 import string as native_string
 import sys
 import traceback
-## python3.3 import urllib.request
+## python3.4 import urllib.request
 import urllib
 
 '''Make boostNode packages and modules importable via relative paths.'''
@@ -49,7 +49,7 @@ from boostNode.extension.native import Dictionary, Module, \
     InstancePropertyInitializer, String
 from boostNode.extension.output import Buffer, Print
 from boostNode.extension.system import CommandLine, Runnable
-## python3.3 from boostNode.extension.type import Self, SelfClass
+## python3.4 from boostNode.extension.type import Self, SelfClass
 pass
 from boostNode.paradigm.aspectOrientation import JointPoint
 from boostNode.paradigm.objectOrientation import Class
@@ -399,7 +399,7 @@ class Parser(Class, Runnable):
             # region helper
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def _render_none_code(
 ##         cls: SelfClass, string: builtins.str, end='\n'
 ##     ) -> builtins.str:
@@ -464,7 +464,7 @@ class Parser(Class, Runnable):
             # region special
 
     @JointPoint
-## python3.3     def __repr__(self: Self) -> builtins.str:
+## python3.4     def __repr__(self: Self) -> builtins.str:
     def __repr__(self):
         '''
             Invokes if this object should describe itself by a string.
@@ -478,7 +478,7 @@ class Parser(Class, Runnable):
             class_name=self.__class__.__name__, template=self.content)
 
     @JointPoint
-## python3.3     def __str__(self: Self) -> builtins.str:
+## python3.4     def __str__(self: Self) -> builtins.str:
     def __str__(self):
         '''
             Triggers if an instance is tried to be interpreted as a string.
@@ -491,7 +491,7 @@ class Parser(Class, Runnable):
         return self.content
 
     @JointPoint
-## python3.3     def __len__(self: Self) -> builtins.int:
+## python3.4     def __len__(self: Self) -> builtins.int:
     def __len__(self):
         '''
             Triggers if the pythons native "builtins.len()" function tries to \
@@ -510,7 +510,7 @@ class Parser(Class, Runnable):
             # region getter
 
     @JointPoint
-## python3.3     def get_indent(self: Self) -> builtins.int:
+## python3.4     def get_indent(self: Self) -> builtins.int:
     def get_indent(self):
         '''
             Returns a string of white spaces representing current context.
@@ -536,7 +536,7 @@ class Parser(Class, Runnable):
         return self._indent
 
     @JointPoint
-## python3.3     def get_output(self: Self) -> builtins.str:
+## python3.4     def get_output(self: Self) -> builtins.str:
     def get_output(self):
         '''
             Gets the current output buffer. It consists everything printed \
@@ -553,7 +553,7 @@ class Parser(Class, Runnable):
         return self._output.content
 
     @JointPoint
-## python3.3     def get_builtins(self: Self) -> builtins.dict:
+## python3.4     def get_builtins(self: Self) -> builtins.dict:
     def get_builtins(self):
         '''
             Defines minimum needed native python features for each template \
@@ -567,7 +567,7 @@ class Parser(Class, Runnable):
             >>> template.builtins # doctest: +ELLIPSIS
             {...'print': ..._print...}
         '''
-## python3.3
+## python3.4
 ##         self._builtins.update({
 ##             '__indent__': self.indent, 'FileHandler': FileHandler,
 ##             'print': self._print, 'include': self._include,
@@ -596,7 +596,7 @@ class Parser(Class, Runnable):
             # region wrapper
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def substitute(
 ##         self: Self, *arguments: builtins.str, **keywords: builtins.object
 ##     ) -> Self:
@@ -635,7 +635,7 @@ class Parser(Class, Runnable):
         return self
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def safe_substitute(
 ##         self: Self, *arguments: builtins.str, **keywords: builtins.object
 ##     ) -> Self:
@@ -664,7 +664,7 @@ class Parser(Class, Runnable):
             >>> template.safe_substitute()
             Object of "Parser" with template "hans <%not_hans%>".
         '''
-## python3.3
+## python3.4
 ##         self._output.write(self.native_template_object.safe_substitute(
 ##             *arguments, **keywords))
         def substitute(match):
@@ -689,7 +689,7 @@ class Parser(Class, Runnable):
             # region parsing
 
     @JointPoint
-## python3.3     def substitute_all(self: Self, replacement='') -> Self:
+## python3.4     def substitute_all(self: Self, replacement='') -> Self:
     def substitute_all(self, replacement=''):
         '''
             Substitutes every placeholder in template with a given \
@@ -717,7 +717,7 @@ class Parser(Class, Runnable):
         return self
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def render(
 ##         self: Self, mapping={}, prevent_rendered_python_code=False,
 ##         **keywords: builtins.object
@@ -820,7 +820,7 @@ class Parser(Class, Runnable):
         return self
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def represent_rendered_python_code(self: Self) -> builtins.str:
     def represent_rendered_python_code(self):
 ##
@@ -846,7 +846,7 @@ class Parser(Class, Runnable):
             String(self.rendered_python_code).readlines())
 
         @JointPoint
-## python3.3
+## python3.4
 ##         def replace_rendered_python_code_line(
 ##             match: builtins.type(re.compile('').match(''))
 ##         ) -> builtins.str:
@@ -884,7 +884,7 @@ class Parser(Class, Runnable):
             # region runnable implementation
 
     @JointPoint
-## python3.3     def _run(self: Self) -> Self:
+## python3.4     def _run(self: Self) -> Self:
     def _run(self):
         '''
             Entry point for command line call of this program. Loads the \
@@ -924,7 +924,7 @@ class Parser(Class, Runnable):
         return self
 
     @JointPoint(InstancePropertyInitializer)
-## python3.3
+## python3.4
 ##     def _initialize(
 ##         self: Self, template: (builtins.str, FileHandler), string=None,
 ##         cache_path=None, full_caching=False, propagate_full_caching=False,
@@ -1111,7 +1111,7 @@ class Parser(Class, Runnable):
             # endregion
 
     @JointPoint
-## python3.3     def _render_content(self: Self) -> builtins.str:
+## python3.4     def _render_content(self: Self) -> builtins.str:
     def _render_content(self):
         '''Generates runnable python code from current template.'''
         return re.compile(
@@ -1127,7 +1127,7 @@ class Parser(Class, Runnable):
         ).sub(self._render_code, self.content).strip()
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _set_builtins(
 ##         self: Self, builtins: collections.Iterable
 ##     ) -> Self:
@@ -1142,7 +1142,7 @@ class Parser(Class, Runnable):
         return self
 
     @JointPoint
-## python3.3     def _generate_scope_variables(self: Self) -> builtins.dict:
+## python3.4     def _generate_scope_variables(self: Self) -> builtins.dict:
     def _generate_scope_variables(self):
         '''
             Generates scope variables given by the command line interface and \
@@ -1187,7 +1187,7 @@ class Parser(Class, Runnable):
         return keywords
 
     @JointPoint
-## python3.3     def _load_template(self: Self) -> Self:
+## python3.4     def _load_template(self: Self) -> Self:
     def _load_template(self):
         '''
             Load the given template into ram for rendering.
@@ -1237,7 +1237,7 @@ class Parser(Class, Runnable):
         return self
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _run_template(
 ##         self: Self, prevent_rendered_python_code: builtins.bool,
 ##         template_scope: builtins.dict
@@ -1326,7 +1326,7 @@ class Parser(Class, Runnable):
             <BLANKLINE>
         '''
         try:
-## python3.3
+## python3.4
 ##             builtins.exec(self.rendered_python_code, template_scope)
             exec self.rendered_python_code in template_scope
 ##
@@ -1342,7 +1342,7 @@ class Parser(Class, Runnable):
                 __logger__.isEnabledFor(logging.DEBUG)
             ):
                 rendered_python_code = self.represent_rendered_python_code()
-## python3.3
+## python3.4
 ##             exception = __exception__(
 ##                 'Error with %s in include statement in line %s '
 ##                 '(line in compiled template: %s).\n%s: %s%s',
@@ -1369,7 +1369,7 @@ class Parser(Class, Runnable):
         return self
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _handle_template_exception(
 ##         self: Self, exception: builtins.BaseException,
 ##         force_native_exception=False
@@ -1415,7 +1415,7 @@ class Parser(Class, Runnable):
                     property_name.endswith('__')
                 ):
                     value = builtins.getattr(exception, property_name)
-## python3.3
+## python3.4
 ##                     pass
                     if builtins.isinstance(value, builtins.unicode):
                         value = value.encode('utf_8')
@@ -1431,7 +1431,7 @@ class Parser(Class, Runnable):
             native_exception_description)
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _determine_template_description(self: Self) -> builtins.str:
     def _determine_template_description(self):
 ##
@@ -1441,7 +1441,7 @@ class Parser(Class, Runnable):
         return 'given template string'
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _raise_template_exception(
 ##         self: Self, line_info: builtins.str,
 ##         exception_message: builtins.str,
@@ -1475,7 +1475,7 @@ class Parser(Class, Runnable):
             __logger__.isEnabledFor(logging.DEBUG)
         ):
             rendered_python_code = self.represent_rendered_python_code()
-## python3.3
+## python3.4
 ##         exception = __exception__(
 ##             'Error with {template_description}{line_info}.\n'
 ##             '{exception_message}{native_exception_description}'
@@ -1499,7 +1499,7 @@ class Parser(Class, Runnable):
 ##
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _get_exception_line(
 ##         self: Self, exception: builtins.BaseException
 ##     ) -> builtins.tuple:
@@ -1548,7 +1548,7 @@ class Parser(Class, Runnable):
         return line_number, line_number
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _determine_exec_string_exception_line(
 ##         self: Self, exception: builtins.BaseException
 ##     ) -> builtins.int:
@@ -1558,7 +1558,7 @@ class Parser(Class, Runnable):
             Determines the line number where the exception (in exec \
             statement) occurs from the given exception.
         '''
-## python3.3
+## python3.4
 ##         exception_traceback = traceback.extract_tb(exception.__traceback__)
         exception_traceback = traceback.extract_tb(sys.exc_info()[2])
 ##
@@ -1579,7 +1579,7 @@ class Parser(Class, Runnable):
     # NOTE: This method is heavily used during rendering. It should be as fast
     # as possible. So the JointPoint is deactivated.
     # @JointPoint
-## python3.3
+## python3.4
 ##     def _print(
 ##         self: Self, *arguments: builtins.object, indent=True,
 ##         indent_space='', **keywords: builtins.object
@@ -1606,7 +1606,7 @@ class Parser(Class, Runnable):
             '  hans'
         '''
         if self.pretty_indent:
-## python3.3
+## python3.4
 ##             pass
             keywords_dictionary = Dictionary(content=keywords)
             indent, keywords = keywords_dictionary.pop(
@@ -1635,7 +1635,7 @@ class Parser(Class, Runnable):
             *arguments, file=self._output, end=keywords.get('end'))
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _include(
 ##         self: Self, template_file_path: builtins.str, scope={},
 ##         locals=(), end='\n', full_caching=None, propagate_full_caching=None,
@@ -1698,7 +1698,7 @@ class Parser(Class, Runnable):
             # region callback
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _render_code(
 ##         self: Self, match: builtins.type(re.compile('').match(''))
 ##     ) -> builtins.str:
@@ -1793,7 +1793,7 @@ class Parser(Class, Runnable):
                     # region line renderer
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _render_escaped_none_code_line(
 ##         self: Self, match: builtins.type(re.compile('').match(''))
 ##     ) -> builtins.str:
@@ -1820,7 +1820,7 @@ class Parser(Class, Runnable):
             string=content_before + self.left_code_delimiter, end='')
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _render_placeholder(
 ##         self: Self, match: builtins.type(re.compile('').match(''))
 ##     ) -> builtins.str:
@@ -1868,7 +1868,7 @@ class Parser(Class, Runnable):
             ('+"\\n"' if self._get_new_line() else ''))
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _render_empty_line(
 ##         self: Self, match: builtins.type(re.compile('').match(''))
 ##     ) -> builtins.str:
@@ -1882,7 +1882,7 @@ class Parser(Class, Runnable):
         return ''
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _render_none_code_line(
 ##         self: Self, match: builtins.type(re.compile('').match(''))
 ##     ) -> builtins.str:
@@ -1909,7 +1909,7 @@ class Parser(Class, Runnable):
             end=self._get_new_line())
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _render_code_line(
 ##         self: Self, match: builtins.type(re.compile('').match(''))
 ##     ) -> builtins.str:
@@ -1935,7 +1935,7 @@ class Parser(Class, Runnable):
                     # endregion
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _save_output_method_indent_level(
 ##         self: Self, code_line: builtins.str, was_new_line: builtins.bool,
 ##         match: builtins.type(re.compile('').match(''))
@@ -1957,7 +1957,7 @@ class Parser(Class, Runnable):
         return code_line
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _handle_include_output_indent_level(
 ##         self: Self, code_line: builtins.str,
 ##         match: builtins.type(re.compile('').match('')), slice: builtins.int
@@ -1986,7 +1986,7 @@ class Parser(Class, Runnable):
         return("include(indent_space='%s')%s" % (indent_space, post_code))
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _handle_print_output_indent_level(
 ##         self: Self, code_line: builtins.str,
 ##         match: builtins.type(re.compile('').match('')), slice: builtins.int
@@ -2011,7 +2011,7 @@ class Parser(Class, Runnable):
             "')" + code_line[slice_position + 1:])
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _flush_empty_lines(
 ##         self: Self, indent: builtins.str
 ##     ) -> builtins.str:
@@ -2028,7 +2028,7 @@ class Parser(Class, Runnable):
         return result
 
     @JointPoint
-## python3.3     def _get_new_line(self: Self) -> builtins.str:
+## python3.4     def _get_new_line(self: Self) -> builtins.str:
     def _get_new_line(self):
         '''
             Returns a new line string if necessary for the correct template \
@@ -2041,7 +2041,7 @@ class Parser(Class, Runnable):
         return ''
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _get_code_indent(
 ##         self: Self, current_indent: (builtins.type(None), builtins.str),
 ##         mode='passiv'

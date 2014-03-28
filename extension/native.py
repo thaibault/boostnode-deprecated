@@ -24,7 +24,7 @@ __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-## python3.3
+## python3.4
 ## from base64 import b64encode as base64encode
 ## import builtins
 import __builtin__ as builtins
@@ -38,14 +38,14 @@ import inspect
 import os
 import re
 import sys
-## python3.3 import types
+## python3.4 import types
 pass
 
 '''Make boostNode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
 import boostNode
-## python3.3
+## python3.4
 ## from boostNode.extension.type import Self, SelfClass, SelfClassObject
 pass
 ##
@@ -80,7 +80,7 @@ class InstancePropertyInitializer(FunctionDecorator):
         # region public
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def get_wrapper_function(
 ##         self: Self
 ##     ) -> (types.FunctionType, types.MethodType):
@@ -117,7 +117,7 @@ class InstancePropertyInitializer(FunctionDecorator):
                 if not name in self.EXCLUDED_ARGUMENT_NAMES:
                     self.object.__dict__[name] = value
             return self.__func__(*arguments, **keywords)
-## python3.3         pass
+## python3.4         pass
         wrapper_function.__wrapped__ = self.__func__
         return wrapper_function
 
@@ -148,7 +148,7 @@ class ClassPropertyInitializer(FunctionDecorator):
 
     # TODO eliminate code redundance and improve tests.
     @JointPoint
-## python3.3
+## python3.4
 ##     def get_wrapper_function(
 ##         self: Self
 ##     ) -> (types.FunctionType, types.MethodType):
@@ -185,7 +185,7 @@ class ClassPropertyInitializer(FunctionDecorator):
                 if not name in self.EXCLUDED_ARGUMENT_NAMES:
                     self.class_object.__dict__[name] = value
             return self.__func__(*arguments, **keywords)
-## python3.3         pass
+## python3.4         pass
         wrapper_function.__wrapped__ = self.__func__
         return wrapper_function
 
@@ -205,7 +205,7 @@ class Model(builtins.object):
             # region special
 
     @JointPoint
-## python3.3     def __repr__(self: Self) -> builtins.str:
+## python3.4     def __repr__(self: Self) -> builtins.str:
     def __repr__(self):
         '''
             Describes the model as string.
@@ -244,7 +244,7 @@ class Model(builtins.object):
                         property_descriptions += ' and '
                     else:
                         property_descriptions += ', '
-## python3.3
+## python3.4
 ##                 pass
                 if builtins.isinstance(value, builtins.unicode):
                     value = value.encode(FileHandler.DEFAULT_ENCODING)
@@ -262,7 +262,7 @@ class Model(builtins.object):
             # region getter
 
     @JointPoint(Class.pseudo_property)
-## python3.3
+## python3.4
 ##     def get_dictionary(
 ##         self: Self, key_wrapper=lambda key, value: String(
 ##             key
@@ -352,7 +352,7 @@ class Model(builtins.object):
             value = builtins.getattr(self, name)
             key = key_wrapper(key=name, value=value)
             result[key] = value_wrapper(key, value)
-## python3.3
+## python3.4
 ##             pass
             if builtins.isinstance(result[key], builtins.unicode):
                 result[key] = result[key].encode(
@@ -363,7 +363,7 @@ class Model(builtins.object):
             # endregion
 
     @JointPoint(builtins.staticmethod)
-## python3.3
+## python3.4
 ##     def validate_property(
 ##         model_instance: builtins.object, name: builtins.str,
 ##         value: builtins.object,
@@ -410,7 +410,7 @@ class Model(builtins.object):
                 NOTE: If value is none a database check again nullable values \
                 will handle this.
             '''
-## python3.3
+## python3.4
 ##             pass
             encoding_was_unicode = False
             if builtins.isinstance(value, builtins.unicode):
@@ -460,7 +460,7 @@ class Model(builtins.object):
                         'value ("%s") doesn\'t match.' % (
                             name, model_instance.__class__.__name__,
                             property_information['pattern'], value))
-## python3.3
+## python3.4
 ##             pass
             if encoding_was_unicode and builtins.isinstance(
                 value, builtins.str
@@ -525,7 +525,7 @@ class AuthenticationModel(Model):
             Password setter which provides automatic salt and hash generation.
         '''
         self.validate_property(self, 'password', value)
-## python3.3
+## python3.4
 ##         from boostNode.extension.file import Handler as FileHandler
 ##
 ##         self.password_salt = base64encode(os.urandom(
@@ -563,7 +563,7 @@ class AuthenticationModel(Model):
             >>> authentication_model.has_password('peter')
             False
         '''
-## python3.3
+## python3.4
 ##         from boostNode.extension.file import Handler as FileHandler
 ##
 ##         return self.password_hash == sha224(
@@ -600,7 +600,7 @@ class Object(Class):
             # region special
 
     @JointPoint(InstancePropertyInitializer)
-## python3.3
+## python3.4
 ##     def __init__(
 ##         self: Self, content=None,
 ##         *arguments: (builtins.object, builtins.type),
@@ -629,7 +629,7 @@ class Object(Class):
                 # endregion
 
     @JointPoint
-## python3.3     def __repr__(self: Self) -> builtins.str:
+## python3.4     def __repr__(self: Self) -> builtins.str:
     def __repr__(self):
         '''Invokes if this object should describe itself by a string.'''
         return 'Object of "{class_name}" ({content}).'.format(
@@ -637,7 +637,7 @@ class Object(Class):
             content=builtins.repr(self.content))
 
     @JointPoint
-## python3.3     def __str__(self: Self) -> builtins.str:
+## python3.4     def __str__(self: Self) -> builtins.str:
     def __str__(self):
         '''
             Is triggered if this object should be converted to string.
@@ -652,7 +652,7 @@ class Object(Class):
             # endregion
 
     @JointPoint
-## python3.3     def copy(self: Self) -> builtins.dict:
+## python3.4     def copy(self: Self) -> builtins.dict:
     def copy(self):
         '''
             Copies a given object's attributes and returns them.
@@ -688,7 +688,7 @@ class Object(Class):
         return self._content_copy
 
     @JointPoint
-## python3.3     def restore(self: Self) -> (builtins.object, builtins.type):
+## python3.4     def restore(self: Self) -> (builtins.object, builtins.type):
     def restore(self):
         '''
             Restores a given object's attributes by a given copy are last \
@@ -723,7 +723,7 @@ class Object(Class):
         return self.content
 
     @JointPoint
-## python3.3     def is_binary(self: Self) -> builtins.bool:
+## python3.4     def is_binary(self: Self) -> builtins.bool:
     def is_binary(self):
         '''
             Determines if given data is binary.
@@ -747,7 +747,7 @@ class Object(Class):
         '''
         # NOTE: This is a dirty workaround to handle python2.7 lack of
         # differentiation between "string" and "bytes" objects.
-## python3.3
+## python3.4
 ##         return builtins.isinstance(self.content, builtins.bytes)
         content = self.content
         if builtins.isinstance(self.content, builtins.unicode):
@@ -768,7 +768,7 @@ class Object(Class):
         # region public
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def determine_abstract_method_exception(
 ##         cls: SelfClass, abstract_class_name: builtins.str, class_name=None
 ##     ) -> builtins.NotImplementedError:
@@ -953,7 +953,7 @@ class String(Object, builtins.str):
 
     @JointPoint(builtins.classmethod)
     @Class.pseudo_property
-## python3.3
+## python3.4
 ##     def get_escaping_replace_dictionary(
 ##         cls: SelfClass, sequence: collections.Iterable,
 ##         escape_sequence='\{symbole}'
@@ -1003,7 +1003,7 @@ class String(Object, builtins.str):
             # region special
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def __init__(
 ##         self: Self, content=None, *arguments: builtins.object,
 ##         **keywords: builtins.object
@@ -1040,7 +1040,7 @@ class String(Object, builtins.str):
                 # endregion
 
     @JointPoint
-## python3.3     def __repr__(self: Self) -> builtins.str:
+## python3.4     def __repr__(self: Self) -> builtins.str:
     def __repr__(self):
         '''
             Invokes if this object should describe itself by a string.
@@ -1054,7 +1054,7 @@ class String(Object, builtins.str):
             class_name=self.__class__.__name__, content=self.content)
 
     @JointPoint
-## python3.3     def __len__(self: Self) -> builtins.int:
+## python3.4     def __len__(self: Self) -> builtins.int:
     def __len__(self):
         '''
             Triggers if the pythons native "builtins.len()" function tries to \
@@ -1072,7 +1072,7 @@ class String(Object, builtins.str):
         return builtins.len(self.__str__())
 
     @JointPoint
-## python3.3     def __str__(self: Self) -> builtins.str:
+## python3.4     def __str__(self: Self) -> builtins.str:
     def __str__(self):
         '''
             Triggers if the current object should be directly interpreted as \
@@ -1089,7 +1089,7 @@ class String(Object, builtins.str):
         return self.content
 
     @JointPoint
-## python3.3     def __bool__(self: Self) -> builtins.bool:
+## python3.4     def __bool__(self: Self) -> builtins.bool:
     def __nonzero__(self):
         '''
             Triggers if the current object should be interpreted as a boolean \
@@ -1113,7 +1113,7 @@ class String(Object, builtins.str):
             # region getter
 
     @JointPoint(Class.pseudo_property)
-## python3.3     def get_encoding(self: Self) -> builtins.str:
+## python3.4     def get_encoding(self: Self) -> builtins.str:
     def get_encoding(self):
         '''
             Guesses the encoding used in current string (bytes). Encodings \
@@ -1163,7 +1163,7 @@ class String(Object, builtins.str):
             # region validation
 
     @JointPoint
-## python3.3     def validate_shell(self: Self) -> Self:
+## python3.4     def validate_shell(self: Self) -> Self:
     def validate_shell(self):
         '''
             Validates the current string for using as a command in shell. \
@@ -1197,7 +1197,7 @@ class String(Object, builtins.str):
                 self.SPECIAL_SHELL_SEQUENCES))
 
     @JointPoint
-## python3.3     def validate_html(self: Self) -> Self:
+## python3.4     def validate_html(self: Self) -> Self:
     def validate_html(self):
 ##
         '''
@@ -1211,7 +1211,7 @@ class String(Object, builtins.str):
         return self.replace(self.SPECIAL_HTML_SEQUENCES)
 
     @JointPoint
-## python3.3     def validate_regex(self: Self, exclude_symbols=()) -> Self:
+## python3.4     def validate_regex(self: Self, exclude_symbols=()) -> Self:
     def validate_regex(self, exclude_symbols=()):
         '''
             Validates the current string for using in a regular expression \
@@ -1249,7 +1249,7 @@ class String(Object, builtins.str):
                     builtins.set(exclude_symbols))))
 
     @JointPoint
-## python3.3     def validate_format(self: Self) -> Self:
+## python3.4     def validate_format(self: Self) -> Self:
     def validate_format(self):
         '''
             Validates the current string for using in a string with \
@@ -1268,7 +1268,7 @@ class String(Object, builtins.str):
         return self
 
     @JointPoint
-## python3.3     def validate_url(self: Self) -> Self:
+## python3.4     def validate_url(self: Self) -> Self:
     def validate_url(self):
         '''
             Validates a given url by escaping special chars.
@@ -1305,7 +1305,7 @@ class String(Object, builtins.str):
             # endregion
 
     @JointPoint
-## python3.3     def camel_case_capitalize(self: Self) -> Self:
+## python3.4     def camel_case_capitalize(self: Self) -> Self:
     def camel_case_capitalize(self):
         '''
             Acts like pythons native "builtins.str.capitalize()" method but \
@@ -1324,7 +1324,7 @@ class String(Object, builtins.str):
         return self
 
     @JointPoint(Class.pseudo_property)
-## python3.3
+## python3.4
 ##     def delimited_to_camel_case(
 ##         self: Self, delimiter='_', abbreviations=None
 ##     ) -> Self:
@@ -1392,7 +1392,7 @@ class String(Object, builtins.str):
         return self
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def camel_case_to_delimited(self: Self, delimiter='_') -> Self:
     def camel_case_to_delimited(self, delimiter='_'):
 ##
@@ -1429,7 +1429,7 @@ class String(Object, builtins.str):
         return self
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def delimit(self: Self, delimiter='-', search_pattern='a-zA-Z') -> Self:
     def delimit(self, delimiter='-', search_pattern='a-zA-Z'):
 ##
@@ -1481,7 +1481,7 @@ class String(Object, builtins.str):
         ).sub('[^%s]+' % search_pattern, delimiter)
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def find_python_code_end_bracket(
 ##         self: Self
 ##     ) -> (builtins.int, builtins.bool):
@@ -1513,7 +1513,7 @@ class String(Object, builtins.str):
         return False
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def replace(
 ##         self: Self, search: (builtins.str, builtins.dict),
 ##         replace='', *arguments: builtins.object, **keywords: builtins.object
@@ -1563,7 +1563,7 @@ class String(Object, builtins.str):
         return self
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def sub(
 ##         self: Self, search: (builtins.str, builtins.dict), replace='',
 ##         *arguments: builtins.object, **keywords: builtins.object
@@ -1653,7 +1653,7 @@ class String(Object, builtins.str):
         return self
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def subn(
 ##         self: Self, search: (builtins.str, builtins.dict), replace='',
 ##         *arguments: builtins.object, **keywords: builtins.object
@@ -1708,7 +1708,7 @@ class String(Object, builtins.str):
         return self, number_of_replaces
 
     @JointPoint
-## python3.3     def readline(self: Self) -> (SelfClassObject, builtins.bool):
+## python3.4     def readline(self: Self) -> (SelfClassObject, builtins.bool):
     def readline(self):
         '''
             Implements the pythons native "bz2.BZ2File.readline()" method in \
@@ -1747,7 +1747,7 @@ class String(Object, builtins.str):
         return False
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def readlines(
 ##         self: Self, *arguments: builtins.object, **keywords: builtins.object
 ##     ) -> builtins.list:
@@ -1782,7 +1782,7 @@ class String(Object, builtins.str):
         return self.content.splitlines(*arguments, **keywords)
 
     @JointPoint
-## python3.3     def delete_variables_from_regex(self: Self) -> Self:
+## python3.4     def delete_variables_from_regex(self: Self) -> Self:
     def delete_variables_from_regex(self):
         '''
             Removes python supported variables in regular expression strings. \
@@ -1809,7 +1809,7 @@ class String(Object, builtins.str):
             # region find python code end bracket helper
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _handle_char_to_find_end_bracket(
 ##         self: Self, index: builtins.int, char: builtins.str,
 ##         quote: (builtins.str, builtins.bool), skip: builtins.int,
@@ -1871,7 +1871,7 @@ class String(Object, builtins.str):
         return index + 1, char, quote, skip, brackets
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _handle_start_quotes_to_find_end_bracket(
 ##         self: Self, index: builtins.int, char: builtins.str,
 ##         quote: (builtins.str, builtins.bool), skip: builtins.int
@@ -1897,7 +1897,7 @@ class String(Object, builtins.str):
         return quote, skip
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _handle_quotes_to_find_end_bracket(
 ##         self: Self, index: builtins.int, char: builtins.str,
 ##         quote: (builtins.str, builtins.bool), skip: builtins.int
@@ -1947,7 +1947,7 @@ class Dictionary(Object, builtins.dict):
             # region special
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def __init__(
 ##         self: Self, content: collections.Iterable,
 ##         *arguments: builtins.object, **keywords: builtins.object
@@ -1973,7 +1973,7 @@ class Dictionary(Object, builtins.dict):
                 # endregion
 
     @JointPoint
-## python3.3     def __repr__(self: Self) -> builtins.str:
+## python3.4     def __repr__(self: Self) -> builtins.str:
     def __repr__(self):
         '''
             Invokes if this object should describe itself by a string.
@@ -1988,7 +1988,7 @@ class Dictionary(Object, builtins.dict):
             content=builtins.repr(self.content))
 
     @JointPoint
-## python3.3     def __hash__(self: Self) -> builtins.int:
+## python3.4     def __hash__(self: Self) -> builtins.int:
     def __hash__(self):
         '''
             Invokes if this object should describe itself by a hash value.
@@ -2001,7 +2001,7 @@ class Dictionary(Object, builtins.dict):
         return builtins.hash(self.immutable)
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def __getitem__(
 ##         self: Self, key: (builtins.object, builtins.type)
 ##     ) -> (builtins.object, builtins.type):
@@ -2027,7 +2027,7 @@ class Dictionary(Object, builtins.dict):
             # region getter methods
 
     @JointPoint(Class.pseudo_property)
-## python3.3     def get_immutable(self: Self, exclude=()) -> builtins.tuple:
+## python3.4     def get_immutable(self: Self, exclude=()) -> builtins.tuple:
     def get_immutable(self, exclude=()):
         '''
             Generates an immutable copy of the current dictionary. Mutable \
@@ -2052,7 +2052,7 @@ class Dictionary(Object, builtins.dict):
             # endregion
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def pop(
 ##         self: Self, name: builtins.str, default_value=None
 ##     ) -> builtins.tuple:
@@ -2088,7 +2088,7 @@ class Dictionary(Object, builtins.dict):
         return default_value, self.content
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def convert(
 ##         self: Self, key_wrapper=lambda key, value: key,
 ##         value_wrapper=lambda key, value: value
@@ -2161,7 +2161,7 @@ class Dictionary(Object, builtins.dict):
                 self.content[key] = builtins.getattr(
                     self.__class__(value), inspect.stack()[0][3]
                 )(key_wrapper, value_wrapper).content
-## python3.3
+## python3.4
 ##             elif(builtins.isinstance(value, collections.Iterable) and
 ##                  not builtins.isinstance(value, builtins.str)):
             elif(builtins.isinstance(value, collections.Iterable) and
@@ -2180,7 +2180,7 @@ class Dictionary(Object, builtins.dict):
         return self
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def update(self: Self, other: (SelfClassObject, builtins.dict)) -> Self:
     def update(self, other):
 ##
@@ -2238,7 +2238,7 @@ class Dictionary(Object, builtins.dict):
         # region protected methods
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def _convert_iterable(cls, iterable, key_wrapper, value_wrapper):
     def _convert_iterable(cls, iterable, key_wrapper, value_wrapper):
 ##
@@ -2248,7 +2248,7 @@ class Dictionary(Object, builtins.dict):
         '''
         if builtins.isinstance(iterable, builtins.set):
             return cls._convert_set(iterable, key_wrapper, value_wrapper)
-## python3.3
+## python3.4
 ##         if builtins.isinstance(iterable, builtins.range):
 ##             iterable = builtins.list(iterable)
         pass
@@ -2258,7 +2258,7 @@ class Dictionary(Object, builtins.dict):
                 iterable[key] = cls(value).convert(
                     key_wrapper, value_wrapper
                 ).content
-## python3.3
+## python3.4
 ##             elif(builtins.isinstance(value, collections.Iterable) and
 ##                  not builtins.isinstance(value, builtins.str)):
             elif(builtins.isinstance(value, collections.Iterable) and
@@ -2277,7 +2277,7 @@ class Dictionary(Object, builtins.dict):
         return iterable
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def _convert_set(cls, set, key_wrapper, value_wrapper):
     def _convert_set(cls, set, key_wrapper, value_wrapper):
 ##
@@ -2292,7 +2292,7 @@ class Dictionary(Object, builtins.dict):
         return new_set
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _immutable_helper(
 ##         self: Self, value: (builtins.object, builtins.type),
 ##         exclude: builtins.tuple
@@ -2334,7 +2334,7 @@ class Module(Object):
 
     # region properties
 
-## python3.3
+## python3.4
 ##     HIDDEN_BUILTIN_CALLABLES = ()
     HIDDEN_BUILTIN_CALLABLES = (
         'GFileDescriptorBased', 'GInitiallyUnowned', 'GPollableInputStream',
@@ -2357,7 +2357,7 @@ class Module(Object):
             # region special
 
     @JointPoint(builtins.classmethod)
-## python3.3     def __repr__(cls: SelfClass) -> builtins.str:
+## python3.4     def __repr__(cls: SelfClass) -> builtins.str:
     def __repr__(cls):
         '''
             Invokes if this object should describe itself by a string.
@@ -2381,7 +2381,7 @@ class Module(Object):
     # dependencies.
     @builtins.classmethod
     @Class.pseudo_property
-## python3.3
+## python3.4
 ##     def get_context_path(
 ##         cls: SelfClass, path=None, frame=inspect.currentframe(),
 ##     ) -> builtins.str:
@@ -2423,7 +2423,7 @@ class Module(Object):
 
     @JointPoint(builtins.classmethod)
     @Class.pseudo_property
-## python3.3
+## python3.4
 ##     def get_name(
 ##         cls: SelfClass, frame=None, module=None, extension=False, path=False
 ##     ) -> builtins.str:
@@ -2469,7 +2469,7 @@ class Module(Object):
 
     @JointPoint(builtins.classmethod)
     @Class.pseudo_property
-## python3.3
+## python3.4
 ##     def get_package_name(
 ##         cls: SelfClass, frame=inspect.currentframe(), path=False
 ##     ) -> builtins.str:
@@ -2514,7 +2514,7 @@ class Module(Object):
 
     @JointPoint(builtins.classmethod)
     @Class.pseudo_property
-## python3.3
+## python3.4
 ##     def get_file_path(
 ##         cls: SelfClass, context_path: builtins.str, only_source_files=False
 ##     ) -> (builtins.str, builtins.bool):
@@ -2561,7 +2561,7 @@ class Module(Object):
             # region boolean
 
     @builtins.classmethod
-## python3.3
+## python3.4
 ##     def is_package(cls: SelfClass, path: builtins.str) -> builtins.bool:
     def is_package(cls, path):
 ##
@@ -2590,7 +2590,7 @@ class Module(Object):
             # endregion
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def determine_caller(
 ##         cls: SelfClass, callable_objects: collections.Iterable, caller=None
 ##     ) -> (builtins.bool, builtins.str, builtins.tuple, builtins.type(None)):
@@ -2645,7 +2645,7 @@ class Module(Object):
 
     @JointPoint(builtins.classmethod)
     @Class.pseudo_property
-## python3.3
+## python3.4
 ##     def get_defined_callables(
 ##         cls: SelfClass, *arguments: (builtins.type, builtins.object),
 ##         **keywords: (builtins.type, builtins.object)
@@ -2691,7 +2691,7 @@ class Module(Object):
 
     @JointPoint(builtins.classmethod)
     @Class.pseudo_property
-## python3.3
+## python3.4
 ##     def get_defined_objects(
 ##         cls: SelfClass, scope: (builtins.type, builtins.object),
 ##         only_module_level=True
@@ -2750,7 +2750,7 @@ class Module(Object):
                 yield object_name, object
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def execute_program_for_modules(
 ##         cls: SelfClass, program_type: builtins.str, program: builtins.str,
 ##         modules: collections.Iterable, arguments=(), extension='py',
@@ -2831,7 +2831,7 @@ class Module(Object):
         return builtins.tuple(result)
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def extend(
 ##         cls: SelfClass, name=__name__, frame=None, module=None,
 ##         post_extend_others=True
@@ -2914,7 +2914,7 @@ class Module(Object):
         return {'name': name, 'scope': module}
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def default(
 ##         cls: SelfClass, name: builtins.str, frame: types.FrameType,
 ##         default_caller=None, caller_arguments=(), caller_keywords={}
@@ -2962,7 +2962,7 @@ class Module(Object):
         return cls
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def default_package(
 ##         cls: SelfClass, name: builtins.str, frame: types.FrameType,
 ##         *arguments: builtins.object, **keywords: builtins.object
@@ -3006,7 +3006,7 @@ class Module(Object):
         # region protected
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def _determine_object(
 ##         cls: SelfClass, object: (builtins.type, builtins.object)
 ##     ) -> (builtins.object, builtins.type):
@@ -3019,7 +3019,7 @@ class Module(Object):
         return object
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def _get_module_file(
 ##         cls: SelfClass, frame: (builtins.type(None), types.FrameType),
 ##         module: (builtins.type(None), types.ModuleType)
@@ -3053,7 +3053,7 @@ class Module(Object):
         return file
 
     @JointPoint(builtins.classmethod)
-## python3.3
+## python3.4
 ##     def _search_library_file(
 ##         cls: SelfClass, location: Class, context_path: builtins.str,
 ##         only_source_files: builtins.bool

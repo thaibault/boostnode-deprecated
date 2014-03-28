@@ -263,7 +263,7 @@
     Module pattern (see bc16)
     -------------------------
 
-    >>> #!/usr/bin/env python3.3
+    >>> #!/usr/bin/env python3.4
     ... # -*- coding: utf-8 -*-
     ...
     ... # region header
@@ -351,7 +351,7 @@ __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-## python3.3 import builtins
+## python3.4 import builtins
 import __builtin__ as builtins
 import inspect
 import logging
@@ -369,7 +369,7 @@ else:
 # region functions
 
 
-## python3.3 def __get_all_modules__(path=sys.path[0]) -> builtins.list:
+## python3.4 def __get_all_modules__(path=sys.path[0]) -> builtins.list:
 def __get_all_modules__(path=sys.path[0]):
     '''
         This method provides a generic way to determine all modules in \

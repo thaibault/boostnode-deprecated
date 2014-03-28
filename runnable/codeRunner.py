@@ -21,7 +21,7 @@ __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-## python3.3
+## python3.4
 ## import builtins
 ## import collections
 import __builtin__ as builtins
@@ -39,7 +39,7 @@ from boostNode.extension.file import Handler as FileHandler
 from boostNode.extension.native import Module, InstancePropertyInitializer
 from boostNode.extension.output import Logger, Print
 from boostNode.extension.system import CommandLine, Platform, Runnable
-## python3.3 from boostNode.extension.type import Self
+## python3.4 from boostNode.extension.type import Self
 pass
 from boostNode.paradigm.aspectOrientation import JointPoint
 from boostNode.paradigm.objectOrientation import Class
@@ -197,7 +197,7 @@ class Run(Class, Runnable):
             # region special
 
     @JointPoint
-## python3.3     def __repr__(self: Self) -> builtins.str:
+## python3.4     def __repr__(self: Self) -> builtins.str:
     def __repr__(self):
         '''
             Invokes if this object should describe itself by a string.
@@ -223,7 +223,7 @@ class Run(Class, Runnable):
             # region runnable implementation
 
     @JointPoint
-## python3.3     def _run(self: Self) -> Self:
+## python3.4     def _run(self: Self) -> Self:
     def _run(self):
         '''
             Entry point for command line call of this program. Determines a \
@@ -258,7 +258,7 @@ class Run(Class, Runnable):
             namespace=command_line_arguments))
 
     @JointPoint(InstancePropertyInitializer)
-## python3.3
+## python3.4
 ##     def _initialize(
 ##         self: Self, code_file_path=None,
 ##         default_command_sequence=('compile', 'run', 'clean'),
@@ -304,7 +304,7 @@ class Run(Class, Runnable):
             # endregion
 
     @JointPoint
-## python3.3     def _tidy_up(self: Self) -> Self:
+## python3.4     def _tidy_up(self: Self) -> Self:
     def _tidy_up(self):
         '''
             Tidies up the current working directory after running the given \
@@ -342,7 +342,7 @@ class Run(Class, Runnable):
         return self
 
     @JointPoint
-## python3.3     def _run_commands(self: Self) -> Self:
+## python3.4     def _run_commands(self: Self) -> Self:
     def _run_commands(self):
         '''
             Run currently needed commands.
@@ -375,7 +375,7 @@ class Run(Class, Runnable):
         return self
 
     @JointPoint
-## python3.3     def _check_code_manager(self: Self) -> Self:
+## python3.4     def _check_code_manager(self: Self) -> Self:
     def _check_code_manager(self):
         '''
             Checks if a code manager file exists for the current detected \
@@ -417,7 +417,7 @@ class Run(Class, Runnable):
         return self
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _determine_code_file(
 ##         self: Self, path: (builtins.str, builtins.type(None), FileHandler)
 ##     ) -> (FileHandler, builtins.bool):
@@ -459,7 +459,7 @@ class Run(Class, Runnable):
         return self._search_supported_file_in_current_working_directory()
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _find_informations_by_extension(
 ##         self: Self, extension: builtins.str, code_file: FileHandler
 ##     ) -> (builtins.dict, builtins.bool):
@@ -496,7 +496,7 @@ class Run(Class, Runnable):
         return False
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _search_supported_file_by_path(
 ##         self: Self, path: builtins.str
 ##     ) -> (FileHandler, builtins.bool):
@@ -540,7 +540,7 @@ class Run(Class, Runnable):
                         location=location.path + '.' + extension),
                     FileHandler(location=location.path + extension)
                 ):
-## python3.3
+## python3.4
 ##                     if code_file.is_file() and code_file != self_file:
                     if code_file.is_file() and not (code_file == self_file):
 ##
@@ -552,7 +552,7 @@ class Run(Class, Runnable):
         return False
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _search_supported_file_by_directory(
 ##         self: Self, location: FileHandler, extension: builtins.str,
 ##     ) -> (FileHandler, builtins.bool):
@@ -594,7 +594,7 @@ class Run(Class, Runnable):
         return False
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _search_supported_file_in_current_working_directory(
 ##         self: Self
 ##     ) -> (FileHandler, builtins.bool):
@@ -633,7 +633,7 @@ class Run(Class, Runnable):
         return False
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _run_command(
 ##         self: Self, command_name: builtins.str, command: builtins.str
 ##     ) -> Self:
@@ -671,7 +671,7 @@ class Run(Class, Runnable):
         return self
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _log_command_run(
 ##         self: Self, command_name: builtins.str, command: builtins.str,
 ##         result: builtins.dict
@@ -700,7 +700,7 @@ class Run(Class, Runnable):
         '''
         terminator_save = Logger.terminator
         Logger.change_all(terminator=('',))
-## python3.3
+## python3.4
 ##         __logger__.info(
 ##             '%s with "%s".\nstandard output:\n[',
 ##             command_name.capitalize(), command.strip())
@@ -712,7 +712,7 @@ class Run(Class, Runnable):
                 end='', flush=True)
 ##
         Print(result['standard_output'], end='', flush=True)
-## python3.3
+## python3.4
 ##         __logger__.info(']\nerror output:\n[')
 ##         Logger.flush()
         if __logger__.isEnabledFor(logging.INFO):
@@ -726,7 +726,7 @@ class Run(Class, Runnable):
         return result['return_code']
 
     @JointPoint
-## python3.3     def _run_code_file(self: Self) -> Self:
+## python3.4     def _run_code_file(self: Self) -> Self:
     def _run_code_file(self):
         '''
             Runs all commands needed to run the current type of code.
@@ -761,7 +761,7 @@ class Run(Class, Runnable):
         return self
 
     @JointPoint
-## python3.3
+## python3.4
 ##     def _render_properties(
 ##         self: Self, properties: builtins.dict, code_file: FileHandler
 ##     ) -> builtins.dict:
