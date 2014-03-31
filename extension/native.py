@@ -59,77 +59,21 @@ from boostNode.paradigm.objectOrientation import Class
 
 # region classes
 
-class InstancePropertyInitializer(FunctionDecorator):
-    '''
-        Decorator class for automatically setting instance properties for \
-        corresponding arguments of wrapped function.
-    '''
-
-    # region properties
-
-    EXCLUDED_ARGUMENT_NAMES = 'self',
-    '''
-        Defines all argument names which will be ignored by generating \
-        instance properties.
-    '''
-
-    # endregion
-
-    # region dynamic methods
-
-        # region public
-
-    @JointPoint
-## python3.4
-##     def get_wrapper_function(
-##         self: Self
-##     ) -> (types.FunctionType, types.MethodType):
-    def get_wrapper_function(self):
-##
-        '''
-            This methods returns the wrapped function.
-
-            Examples:
-
-            >>> class A:
-            ...     def a(self): pass
-            ...     def __init__(self): pass
-            ...     __init__.__func__ = a
-            ...     __init__ = InstancePropertyInitializer(__init__)
-
-            >>> A() # doctest: +ELLIPSIS
-            <__main__.A ... at ...>
-        '''
-        @functools.wraps(self.__func__)
-        def wrapper_function(*arguments, **keywords):
-            '''
-                Wrapper function for initializing instance properties.
-
-                Given arguments and keywords are forwarded to wrapped function.
-            '''
-            '''Unpack wrapper methods.'''
-            while builtins.hasattr(self.__func__, '__func__'):
-                self.__func__ = self.__func__.__func__
-            arguments = self._determine_arguments(arguments)
-            for name, value in inspect.getcallargs(
-                self.__func__, *arguments, **keywords
-            ).items():
-                if not name in self.EXCLUDED_ARGUMENT_NAMES:
-                    self.object.__dict__[name] = value
-            return self.__func__(*arguments, **keywords)
-## python3.4         pass
-        wrapper_function.__wrapped__ = self.__func__
-        return wrapper_function
-
-        # endregion
-
-    # endregion
-
-
 class ClassPropertyInitializer(FunctionDecorator):
     '''
         Decorator class for automatically setting instance properties for \
         corresponding arguments of wrapped function.
+
+        Examples:
+
+        >>> class A:
+        ...     def a(self): pass
+        ...     def __init__(self): pass
+        ...     __init__.__func__ = a
+        ...     __init__ = ClassPropertyInitializer(__init__)
+
+        >>> A() # doctest: +ELLIPSIS
+        <__main__.A ... at ...>
     '''
 
     # region properties
@@ -146,7 +90,6 @@ class ClassPropertyInitializer(FunctionDecorator):
 
         # region public
 
-    # TODO eliminate code redundance and improve tests.
     @JointPoint
 ## python3.4
 ##     def get_wrapper_function(
@@ -154,20 +97,7 @@ class ClassPropertyInitializer(FunctionDecorator):
 ##     ) -> (types.FunctionType, types.MethodType):
     def get_wrapper_function(self):
 ##
-        '''
-            This methods returns the wrapped function.
-
-            Examples:
-
-            >>> class A:
-            ...     def a(self): pass
-            ...     def __init__(self): pass
-            ...     __init__.__func__ = a
-            ...     __init__ = ClassPropertyInitializer(__init__)
-
-            >>> A() # doctest: +ELLIPSIS
-            <__main__.A ... at ...>
-        '''
+        '''This methods returns the wrapped function.'''
         @functools.wraps(self.__func__)
         def wrapper_function(*arguments, **keywords):
             '''
@@ -183,13 +113,46 @@ class ClassPropertyInitializer(FunctionDecorator):
                 self.__func__, *arguments, **keywords
             ).items():
                 if not name in self.EXCLUDED_ARGUMENT_NAMES:
-                    self.class_object.__dict__[name] = value
+                    if 'self' in self.EXCLUDED_ARGUMENT_NAMES:
+                        self.object.__dict__[name] = value
+                    else:
+                        self.class_object.__dict__[name] = value
             return self.__func__(*arguments, **keywords)
 ## python3.4         pass
         wrapper_function.__wrapped__ = self.__func__
         return wrapper_function
 
         # endregion
+
+    # endregion
+
+
+class InstancePropertyInitializer(ClassPropertyInitializer):
+    '''
+        Decorator class for automatically setting instance properties for \
+        corresponding arguments of wrapped function.
+
+        This methods returns the wrapped function.
+
+        Examples:
+
+        >>> class A:
+        ...     def a(self): pass
+        ...     def __init__(self): pass
+        ...     __init__.__func__ = a
+        ...     __init__ = InstancePropertyInitializer(__init__)
+
+        >>> A() # doctest: +ELLIPSIS
+        <__main__.A ... at ...>
+    '''
+
+    # region properties
+
+    EXCLUDED_ARGUMENT_NAMES = 'self',
+    '''
+        Defines all argument names which will be ignored by generating \
+        instance properties.
+    '''
 
     # endregion
 

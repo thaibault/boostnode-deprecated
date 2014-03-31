@@ -146,7 +146,10 @@ class Runnable(builtins.object):
             >>> __test_buffer__.content
             'A\\nB\\n'
         '''
+## python3.4
+##         arguments += inspect.unwrap(cls._run.__name__),
         arguments += cls._get_potential_wrapped_method(cls._run.__name__),
+##
         return cls(*arguments, **keywords)
 
         # endregion
@@ -193,13 +196,10 @@ class Runnable(builtins.object):
 
             # endregion
 
-    @JointPoint(builtins.classmethod)
 ## python3.4
-##     def _get_potential_wrapped_method(
-##         cls: SelfClass, method_name: builtins.str
-##     ) -> (types.MethodType, types.FunctionType):
+##     pass
+    @JointPoint(builtins.classmethod)
     def _get_potential_wrapped_method(cls, method_name):
-##
         '''
             Unpacks a wrapped method if necessary.
 
@@ -214,11 +214,11 @@ class Runnable(builtins.object):
             ...         Runnable._run.__name__))
             True
         '''
-        # TODO Up python3.4 we can use "inspect.unwrap()"
         method = builtins.getattr(cls, method_name)
         while builtins.hasattr(method, '__wrapped__'):
             method = method.__wrapped__
         return method
+##
 
     @JointPoint(builtins.classmethod)
 ## python3.4
@@ -302,8 +302,13 @@ class Runnable(builtins.object):
                 # endregion
 
         run = False
+## python3.4
+##         if builtins.len(arguments) and arguments[-1] == inspect.unwrap(
+##             self._run
+##         ):
         if(builtins.len(arguments) and arguments[-1] ==
            self._get_potential_wrapped_method(self._run.__name__)):
+##
             arguments = arguments[:-1]
             run = True
         if((self._called_through_generic_interface(
