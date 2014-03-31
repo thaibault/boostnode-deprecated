@@ -115,16 +115,6 @@
 <dt id="boostNode.extension.native.ClassPropertyInitializer">
 <em class="property">class </em><tt class="descclassname">boostNode.extension.native.</tt><tt class="descname">ClassPropertyInitializer</tt><big>(</big><em>method</em>, <em>function=None</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.ClassPropertyInitializer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decorator class for automatically setting instance properties for         corresponding arguments of wrapped function.</p>
-<dl class="attribute">
-<dt id="boostNode.extension.native.ClassPropertyInitializer.EXCLUDED_ARGUMENT_NAMES">
-<tt class="descname">EXCLUDED_ARGUMENT_NAMES</tt><em class="property"> = ('cls',)</em><a class="headerlink" href="#boostNode.extension.native.ClassPropertyInitializer.EXCLUDED_ARGUMENT_NAMES" title="Permalink to this definition">¶</a></dt>
-<dd><p>Defines all argument names which will be ignored by generating instance properties.</p>
-</dd></dl>
-
-<dl class="staticmethod">
-<dt id="boostNode.extension.native.ClassPropertyInitializer.get_wrapper_function">
-<em class="property">static </em><tt class="descname">get_wrapper_function</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.ClassPropertyInitializer.get_wrapper_function" title="Permalink to this definition">¶</a></dt>
-<dd><p>This methods returns the wrapped function.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">a</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">pass</span>
@@ -137,6 +127,16 @@
 <span class="go">&lt;__main__.A ... at ...&gt;</span>
 </pre></div>
 </div>
+<dl class="attribute">
+<dt id="boostNode.extension.native.ClassPropertyInitializer.EXCLUDED_ARGUMENT_NAMES">
+<tt class="descname">EXCLUDED_ARGUMENT_NAMES</tt><em class="property"> = ('cls',)</em><a class="headerlink" href="#boostNode.extension.native.ClassPropertyInitializer.EXCLUDED_ARGUMENT_NAMES" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines all argument names which will be ignored by generating instance properties.</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="boostNode.extension.native.ClassPropertyInitializer.get_wrapper_function">
+<em class="property">static </em><tt class="descname">get_wrapper_function</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.ClassPropertyInitializer.get_wrapper_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>This methods returns the wrapped function.</p>
 </dd></dl>
 
 </dd></dl>
@@ -294,16 +294,7 @@
 <dt id="boostNode.extension.native.InstancePropertyInitializer">
 <em class="property">class </em><tt class="descclassname">boostNode.extension.native.</tt><tt class="descname">InstancePropertyInitializer</tt><big>(</big><em>method</em>, <em>function=None</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.InstancePropertyInitializer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decorator class for automatically setting instance properties for         corresponding arguments of wrapped function.</p>
-<dl class="attribute">
-<dt id="boostNode.extension.native.InstancePropertyInitializer.EXCLUDED_ARGUMENT_NAMES">
-<tt class="descname">EXCLUDED_ARGUMENT_NAMES</tt><em class="property"> = ('self',)</em><a class="headerlink" href="#boostNode.extension.native.InstancePropertyInitializer.EXCLUDED_ARGUMENT_NAMES" title="Permalink to this definition">¶</a></dt>
-<dd><p>Defines all argument names which will be ignored by generating instance properties.</p>
-</dd></dl>
-
-<dl class="staticmethod">
-<dt id="boostNode.extension.native.InstancePropertyInitializer.get_wrapper_function">
-<em class="property">static </em><tt class="descname">get_wrapper_function</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.InstancePropertyInitializer.get_wrapper_function" title="Permalink to this definition">¶</a></dt>
-<dd><p>This methods returns the wrapped function.</p>
+<p>This methods returns the wrapped function.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">a</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">pass</span>
@@ -316,6 +307,10 @@
 <span class="go">&lt;__main__.A ... at ...&gt;</span>
 </pre></div>
 </div>
+<dl class="attribute">
+<dt id="boostNode.extension.native.InstancePropertyInitializer.EXCLUDED_ARGUMENT_NAMES">
+<tt class="descname">EXCLUDED_ARGUMENT_NAMES</tt><em class="property"> = ('self',)</em><a class="headerlink" href="#boostNode.extension.native.InstancePropertyInitializer.EXCLUDED_ARGUMENT_NAMES" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines all argument names which will be ignored by generating instance properties.</p>
 </dd></dl>
 
 </dd></dl>
@@ -595,7 +590,7 @@
 
 <dl class="classmethod">
 <dt id="boostNode.extension.native.Module.get_context_path">
-<em class="property">classmethod </em><tt class="descname">get_context_path</tt><big>(</big><em>path=None</em>, <em>frame=&lt;frame object at 0x2eb4b80&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_context_path" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><tt class="descname">get_context_path</tt><big>(</big><em>path=None</em>, <em>frame=&lt;frame object at 0x1ac2af0&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_context_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines the package and module level context path to a given             context or file.</p>
 <p><strong>path</strong>  - relative or absolute context or file path to normalize</p>
 <p><strong>frame</strong> - stack frame to analyse again context</p>
