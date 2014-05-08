@@ -71,10 +71,36 @@
 <dd><p>Saves the error message format.</p>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="boostNode.runnable.server.CGIHTTPRequestHandler.data_type">
+<tt class="descname">data_type</tt><em class="property"> = None</em><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.data_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves the last started worker thread instance.</p>
+</dd></dl>
+
 <dl class="staticmethod">
 <dt id="boostNode.runnable.server.CGIHTTPRequestHandler.do_DELETE">
 <em class="property">static </em><tt class="descname">do_DELETE</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.do_DELETE" title="Permalink to this definition">¶</a></dt>
 <dd><p>Is triggered if a delete request is coming.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span> <span class="o">=</span> <span class="n">CGIHTTPRequestHandler</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s">&#39;/&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span> <span class="o">=</span> <span class="n">Class</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">web</span> <span class="o">=</span> <span class="n">Web</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">__test_folder__</span><span class="p">,</span> <span class="n">request_whitelist</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;*:/?&#39;</span><span class="p">,))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># # python2.7</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">(</span>
+<span class="gp">... </span>        <span class="n">String</span><span class="p">(</span><span class="s">&#39;test: hans&#39;</span><span class="p">),</span> <span class="n">seekable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">else</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">()</span>
+<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">,</span> <span class="s">&#39;hans&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># #</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">do_DELETE</span><span class="p">()</span> 
+<span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;/&quot; and param...</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="staticmethod">
@@ -87,6 +113,14 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span> <span class="o">=</span> <span class="n">Class</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">web</span> <span class="o">=</span> <span class="n">Web</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">__test_folder__</span><span class="p">,</span> <span class="n">request_whitelist</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;*:/?&#39;</span><span class="p">,))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># # python2.7</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">(</span>
+<span class="gp">... </span>        <span class="n">String</span><span class="p">(</span><span class="s">&#39;test: hans&#39;</span><span class="p">),</span> <span class="n">seekable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">else</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">()</span>
+<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">,</span> <span class="s">&#39;hans&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># #</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">do_GET</span><span class="p">()</span> 
@@ -102,14 +136,14 @@
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">authentication</span> <span class="o">=</span> <span class="bp">True</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">authentication_handler</span> <span class="o">=</span> <span class="p">(</span>
 <span class="gp">... </span>    <span class="k">lambda</span> <span class="n">header</span><span class="p">,</span> <span class="n">request_uri</span><span class="p">,</span> <span class="n">request_handler</span><span class="p">:</span> <span class="bp">False</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c">## python2.7</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># # python2.7</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">(</span>
 <span class="gp">... </span>        <span class="n">String</span><span class="p">(</span><span class="s">&#39;key: value&#39;</span><span class="p">),</span> <span class="n">seekable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="gp">... </span><span class="k">else</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">()</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s">&#39;key&#39;</span><span class="p">,</span> <span class="s">&#39;value&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c">##</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># #</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">do_GET</span><span class="p">()</span> 
 <span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;&quot; and parame...</span>
 </pre></div>
@@ -141,18 +175,78 @@
 <dt id="boostNode.runnable.server.CGIHTTPRequestHandler.do_PATCH">
 <em class="property">static </em><tt class="descname">do_PATCH</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.do_PATCH" title="Permalink to this definition">¶</a></dt>
 <dd><p>Is triggered if a patch request is coming.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span> <span class="o">=</span> <span class="n">CGIHTTPRequestHandler</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s">&#39;/&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span> <span class="o">=</span> <span class="n">Class</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">web</span> <span class="o">=</span> <span class="n">Web</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">__test_folder__</span><span class="p">,</span> <span class="n">request_whitelist</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;*:/?&#39;</span><span class="p">,))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># # python2.7</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">(</span>
+<span class="gp">... </span>        <span class="n">String</span><span class="p">(</span><span class="s">&#39;test: hans&#39;</span><span class="p">),</span> <span class="n">seekable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">else</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">()</span>
+<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">,</span> <span class="s">&#39;hans&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># #</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">do_PATCH</span><span class="p">()</span> 
+<span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;/&quot; and param...</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="staticmethod">
 <dt id="boostNode.runnable.server.CGIHTTPRequestHandler.do_POST">
 <em class="property">static </em><tt class="descname">do_POST</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.do_POST" title="Permalink to this definition">¶</a></dt>
 <dd><p>Is triggered if a post request is coming.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span> <span class="o">=</span> <span class="n">CGIHTTPRequestHandler</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s">&#39;/&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span> <span class="o">=</span> <span class="n">Class</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">web</span> <span class="o">=</span> <span class="n">Web</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">__test_folder__</span><span class="p">,</span> <span class="n">request_whitelist</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;*:/?&#39;</span><span class="p">,))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># # python2.7</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">(</span>
+<span class="gp">... </span>        <span class="n">String</span><span class="p">(</span><span class="s">&#39;test: hans&#39;</span><span class="p">),</span> <span class="n">seekable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">else</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">()</span>
+<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">,</span> <span class="s">&#39;hans&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># #</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">do_POST</span><span class="p">()</span> 
+<span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;/&quot; and param...</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="staticmethod">
 <dt id="boostNode.runnable.server.CGIHTTPRequestHandler.do_PUT">
 <em class="property">static </em><tt class="descname">do_PUT</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.do_PUT" title="Permalink to this definition">¶</a></dt>
 <dd><p>Is triggered if a put request is coming.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span> <span class="o">=</span> <span class="n">CGIHTTPRequestHandler</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s">&#39;/&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span> <span class="o">=</span> <span class="n">Class</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">web</span> <span class="o">=</span> <span class="n">Web</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">__test_folder__</span><span class="p">,</span> <span class="n">request_whitelist</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;*:/?&#39;</span><span class="p">,))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># # python2.7</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">(</span>
+<span class="gp">... </span>        <span class="n">String</span><span class="p">(</span><span class="s">&#39;test: hans&#39;</span><span class="p">),</span> <span class="n">seekable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">else</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">()</span>
+<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">,</span> <span class="s">&#39;hans&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># #</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">do_PUT</span><span class="p">()</span> 
+<span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;/&quot; and param...</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="staticmethod">
@@ -190,6 +284,19 @@
 <dt id="boostNode.runnable.server.CGIHTTPRequestHandler.list_directory">
 <em class="property">static </em><tt class="descname">list_directory</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.list_directory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates a simple html web page listing requested directory             content.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span> <span class="o">=</span> <span class="n">CGIHTTPRequestHandler</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s">&#39;/&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span> <span class="o">=</span> <span class="n">Class</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">web</span> <span class="o">=</span> <span class="n">Web</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">__test_folder__</span><span class="p">,</span> <span class="n">request_whitelist</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;*:/?&#39;</span><span class="p">,))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">requested_file</span> <span class="o">=</span> <span class="n">FileHandler</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">list_directory</span><span class="p">()</span> 
+<span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;&quot; and param...</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="attribute">
@@ -229,32 +336,32 @@
 <span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;&quot; and parame...</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c">## python2.7</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># # python2.7</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">(</span>
 <span class="gp">... </span>        <span class="n">String</span><span class="p">(</span><span class="s">&#39;key: value&#39;</span><span class="p">),</span> <span class="n">seekable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="gp">... </span><span class="k">else</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">()</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s">&#39;key&#39;</span><span class="p">,</span> <span class="s">&#39;value&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c">##</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># #</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">log_message</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="mi">404</span><span class="p">)</span> 
 <span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;&quot; and parame...</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c">## python2.7</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># # python2.7</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">(</span><span class="n">String</span><span class="p">(</span>
-<span class="gp">... </span>        <span class="s">&#39;X-Forwarded-For: 192.168.0.1</span><span class="se">\n</span><span class="s">&#39;</span>
-<span class="gp">... </span>        <span class="s">&#39;X-Forwarded-Host: 192.168.0.1</span><span class="se">\n</span><span class="s">&#39;</span>
-<span class="gp">... </span>        <span class="s">&#39;X-Forwarded-Server: 192.168.0.1&#39;</span><span class="p">),</span> <span class="n">seekable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="s">&#39;x-forwarded-for: 192.168.0.1</span><span class="se">\n</span><span class="s">&#39;</span>
+<span class="gp">... </span>        <span class="s">&#39;x-forwarded-host: 192.168.0.1</span><span class="se">\n</span><span class="s">&#39;</span>
+<span class="gp">... </span>        <span class="s">&#39;x-forwarded-server: 192.168.0.1&#39;</span><span class="p">),</span> <span class="n">seekable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="gp">... </span><span class="k">else</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">()</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span>
-<span class="gp">... </span>        <span class="s">&#39;X-Forwarded-For&#39;</span><span class="p">,</span> <span class="s">&#39;192.168.0.1&#39;</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="s">&#39;x-forwarded-for&#39;</span><span class="p">,</span> <span class="s">&#39;192.168.0.1&#39;</span><span class="p">)</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span>
-<span class="gp">... </span>        <span class="s">&#39;X-Forwarded-Host&#39;</span><span class="p">,</span> <span class="s">&#39;192.168.0.1&#39;</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="s">&#39;x-forwarded-host&#39;</span><span class="p">,</span> <span class="s">&#39;192.168.0.1&#39;</span><span class="p">)</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span>
-<span class="gp">... </span>        <span class="s">&#39;X-Forwarded-Server&#39;</span><span class="p">,</span> <span class="s">&#39;192.168.0.1&#39;</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="s">&#39;x-forwarded-server&#39;</span><span class="p">,</span> <span class="s">&#39;192.168.0.1&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">__test_buffer__</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span> 
 <span class="go">&#39;...&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">log_message</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="mi">404</span><span class="p">)</span> 
@@ -315,12 +422,6 @@
 <dt id="boostNode.runnable.server.CGIHTTPRequestHandler.request_arguments">
 <tt class="descname">request_arguments</tt><em class="property"> = None</em><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.request_arguments" title="Permalink to this definition">¶</a></dt>
 <dd><p>Indicates if an answer is expected from the requested file.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="boostNode.runnable.server.CGIHTTPRequestHandler.request_type">
-<tt class="descname">request_type</tt><em class="property"> = None</em><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.request_type" title="Permalink to this definition">¶</a></dt>
-<dd><p>Saves the last started worker thread instance.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -568,6 +669,12 @@
 <dt id="boostNode.runnable.server.Web.DETERMINE_IP_SOCKET">
 <tt class="descname">DETERMINE_IP_SOCKET</tt><em class="property"> = ('8.8.8.8', 80)</em><a class="headerlink" href="#boostNode.runnable.server.Web.DETERMINE_IP_SOCKET" title="Permalink to this definition">¶</a></dt>
 <dd><p>Globally accessible socket to ask for currently useful ip determining.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="boostNode.runnable.server.Web.HIGHEST_AVAILABLE_PORT">
+<tt class="descname">HIGHEST_AVAILABLE_PORT</tt><em class="property"> = 65535</em><a class="headerlink" href="#boostNode.runnable.server.Web.HIGHEST_AVAILABLE_PORT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves the highest available port to launch server.</p>
 </dd></dl>
 
 <dl class="attribute">

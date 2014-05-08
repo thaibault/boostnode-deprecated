@@ -81,7 +81,7 @@
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">__test_globals__</span><span class="p">[</span><span class="s">&#39;__test_mode__&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">file</span> <span class="o">=</span> <span class="n">FileHandler</span><span class="p">(</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;_initialize&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">file</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="s">&#39;#!/bin/python2.7</span><span class="se">\n\n</span><span class="s">## python3.4 a</span><span class="se">\n</span><span class="s">b</span><span class="se">\n</span><span class="s">&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">file</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="s">&#39;#!/bin/python2.7</span><span class="se">\n\n</span><span class="s"># # python3.4 a</span><span class="se">\n</span><span class="s">b</span><span class="se">\n</span><span class="s">&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Replace</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span> 
 <span class="go">Object of &quot;Replace&quot; with file &quot;..._initialize&quot; to convert to &quot;py...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">__test_globals__</span><span class="p">[</span><span class="s">&#39;__test_mode__&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
@@ -133,7 +133,7 @@
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">file</span> <span class="o">=</span> <span class="n">FileHandler</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">location</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;set_new_version&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">file</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="p">(</span>
-<span class="gp">... </span>    <span class="s">&#39;#!/usr/bin/env version</span><span class="se">\n\n</span><span class="s">## alternate_version hans</span><span class="se">\n</span><span class="s">&#39;</span>
+<span class="gp">... </span>    <span class="s">&#39;#!/usr/bin/env version</span><span class="se">\n\n</span><span class="s"># # alternate_version hans</span><span class="se">\n</span><span class="s">&#39;</span>
 <span class="gp">... </span>    <span class="s">&#39;peter</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">replace</span> <span class="o">=</span> <span class="n">Replace</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span><span class="o">.</span><span class="n">_convert_path</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">replace</span><span class="o">.</span><span class="n">new_version</span> <span class="o">=</span> <span class="s">&#39;__determine_useful__&#39;</span>

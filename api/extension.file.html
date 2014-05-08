@@ -2256,13 +2256,13 @@
 <span class="go">Object of &quot;Handler&quot; with path &quot;...&quot; ...</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c">## python2.7</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># # python2.7</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">set_content</span><span class="p">(</span><span class="nb">unicode</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">))</span>
 <span class="gp">... </span><span class="k">else</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">set_content</span><span class="p">(</span><span class="n">b</span><span class="s">&#39;hans&#39;</span><span class="p">)</span> 
 <span class="go">Object of &quot;Handler&quot; with path &quot;...&quot; ...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c">##</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># #</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;hans&#39;</span>
 </pre></div>
@@ -2273,14 +2273,14 @@
 <span class="gr">boostNode.extension.native.FileError</span>: <span class="n">Set content is only ...</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c">## python2.7</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># # python2.7</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
 <span class="gp">... </span><span class="k">else</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">(</span>
 <span class="gp">... </span>        <span class="nb">chr</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">handler</span><span class="o">.</span><span class="n">DEFAULT_ENCODING</span>
 <span class="gp">... </span>    <span class="p">)</span> 
-<span class="gp">&gt;&gt;&gt; </span><span class="c">##</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># #</span>
 </pre></div>
 </div>
 </dd></dl>
