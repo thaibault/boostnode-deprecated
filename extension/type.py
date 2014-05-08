@@ -22,7 +22,7 @@ __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-## python3.4 import builtins
+# # python3.4 import builtins
 import __builtin__ as builtins
 import inspect
 import os
@@ -65,21 +65,21 @@ class Model(builtins.type):
 
     # region static methods
 
-        # region public
+    # # region public
 
-            # region special
+    # # # region special
 
-## python3.4
-##     def __new__(
-##         cls: SelfClass, class_name: builtins.str,
-##         base_classes: builtins.tuple, class_scope: builtins.dict,
-##         *arguments: (builtins.type, builtins.object),
-##         **keywords: (builtins.type, builtins.object)
-##     ) -> builtins.type:
+# # python3.4
+# #     def __new__(
+# #         cls: SelfClass, class_name: builtins.str,
+# #         base_classes: builtins.tuple, class_scope: builtins.dict,
+# #         *arguments: (builtins.type, builtins.object),
+# #         **keywords: (builtins.type, builtins.object)
+# #     ) -> builtins.type:
     def __new__(
         cls, class_name, base_classes, class_scope, *arguments, **keywords
     ):
-##
+# #
         '''
             Triggers if a new instance is created. Set the default name for \
             an orm instance.
@@ -105,16 +105,17 @@ class Model(builtins.type):
         '''
         from boostNode.extension.native import String
 
-        class_scope['__tablename__'] = class_scope['__table_name__'] = \
-            class_scope['db_table'] = String(
-                class_name
-            ).camel_case_to_delimited().content
+        class_scope['__table_name__'] = String(
+            class_name
+        ).camel_case_to_delimited().content
+        class_scope['__tablename__'] = class_scope['__table_name__']
+        class_scope['db_table'] = class_scope['__table_name__']
         '''Take this method name via introspection.'''
         return builtins.getattr(
             builtins.super(Model, cls), inspect.stack()[0][3]
         )(cls, class_name, base_classes, class_scope, *arguments, **keywords)
 
-            # endregion
+        # # endregion
 
         # endregion
 

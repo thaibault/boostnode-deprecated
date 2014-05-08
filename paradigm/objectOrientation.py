@@ -96,12 +96,12 @@ __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-## python3.4 import builtins
+# # python3.4 import builtins
 import __builtin__ as builtins
 import inspect
 import os
 import sys
-## python3.4 import types
+# # python3.4 import types
 pass
 
 '''Make boostNode packages and modules importable via relative paths.'''
@@ -112,7 +112,7 @@ sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
 # region abstract classes
 
-## python3.4 class Class:
+# # python3.4 class Class:
 class Class(builtins.object):
 
     '''
@@ -123,12 +123,12 @@ class Class(builtins.object):
 
     # region static methods
 
-        # region public
+    # # region public
 
-            # region special
+    # # # region special
 
     @builtins.classmethod
-## python3.4     def __repr__(cls: builtins.type) -> builtins.str:
+# # python3.4     def __repr__(cls: builtins.type) -> builtins.str:
     def __repr__(cls):
         '''
             Invokes if this object should describe itself by a string.
@@ -141,7 +141,7 @@ class Class(builtins.object):
         return 'Object of "%s".' % cls.__name__
 
     @builtins.classmethod
-## python3.4     def __str__(cls: builtins.type) -> builtins.str:
+# # python3.4     def __str__(cls: builtins.type) -> builtins.str:
     def __str__(cls):
         '''
             Is triggered if the current object is tried to be converted into \
@@ -156,17 +156,17 @@ class Class(builtins.object):
         '''
         return cls.__name__
 
-            # endregion
+        # # endregion
 
-            # region decorator
+        # # region decorator
 
     @builtins.classmethod
-## python3.4
-##     def pseudo_property(
-##         cls: builtins.object, function: types.MethodType
-##     ) -> types.MethodType:
+# # python3.4
+# #     def pseudo_property(
+# #         cls: builtins.object, function: types.MethodType
+# #     ) -> types.MethodType:
     def pseudo_property(cls, function):
-##
+# #
         '''
             Attaches a property to given function for indicating that given \
             function handles read access to corresponding property.
@@ -178,7 +178,7 @@ class Class(builtins.object):
         function.pseudo_property = True
         return function
 
-            # endregion
+        # # endregion
 
         # endregion
 
@@ -188,14 +188,14 @@ class Class(builtins.object):
 
         # region public method
 
-            # region special
+        # # region special
 
-## python3.4
-##     def __getattr__(
-##         self: builtins.object, name: builtins.str
-##     ) -> builtins.object:
+# # python3.4
+# #     def __getattr__(
+# #         self: builtins.object, name: builtins.str
+# #     ) -> builtins.object:
     def __getattr__(self, name):
-##
+# #
         '''
             Is triggered if a property was tried to be read but is \
             inaccessible.
@@ -254,12 +254,12 @@ class Class(builtins.object):
             'Property "%s" doesn\'t exist in given instance of "%s".' %
             (name[1:], self.__class__.__name__))
 
-## python3.4
-##     def __setattr__(
-##         self, name: builtins.str, value: builtins.object
-##     ) -> builtins.object:
+# # python3.4
+# #     def __setattr__(
+# #         self, name: builtins.str, value: builtins.object
+# #     ) -> builtins.object:
     def __setattr__(self, name, value):
-##
+# #
         '''
             Is triggered if a property was tried to overwrite but is \
             inaccessible.
@@ -302,11 +302,11 @@ class Class(builtins.object):
                 self.__dict__[name] = value
         return value
 
-            # endregion
+        # # endregion
 
-            # region boolean
+        # # region boolean
 
-## python3.4     def is_method(self, name: builtins.str) -> builtins.bool:
+# # python3.4     def is_method(self, name: builtins.str) -> builtins.bool:
     def is_method(self, name):
         '''
             Determines if the given class attribute is a callable method or \
@@ -339,7 +339,7 @@ class Class(builtins.object):
             return False
         return True
 
-## python3.4     def is_property(self, name: builtins.str) -> builtins.bool:
+# # python3.4     def is_property(self, name: builtins.str) -> builtins.bool:
     def is_property(self, name):
         '''
             Determines if the given class attribute is a property or \
@@ -369,28 +369,28 @@ class Class(builtins.object):
             return False
         return not self.is_method(name)
 
-            # endregion
+        # # endregion
 
         # endregion
 
         # region protected
 
-## python3.4
-##     def _is_callable(self, object: builtins.object) -> builtins.bool:
+# # python3.4
+# #     def _is_callable(self, object: builtins.object) -> builtins.bool:
     def _is_callable(self, object):
-##
+# #
         '''Indicates if given method is a callable or a callable wrapper.'''
         return(
             builtins.callable(object) or
             builtins.isinstance(object, builtins.classmethod) or
             builtins.isinstance(object, builtins.staticmethod))
 
-## python3.4
-##     def _setattr_helper(
-##         self, name: builtins.str, value: builtins.object
-##     ) -> builtins.bool:
+# # python3.4
+# #     def _setattr_helper(
+# #         self, name: builtins.str, value: builtins.object
+# #     ) -> builtins.bool:
     def _setattr_helper(self, name, value):
-##
+# #
         '''
             Helper method for "self.__setattr__()". Does the actual overwrite \
             process on the given property.

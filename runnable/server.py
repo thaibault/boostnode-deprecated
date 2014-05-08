@@ -19,36 +19,36 @@ __status__ = 'stable'
 __version__ = '1.0'
 
 import base64
-## python3.4
-## import builtins
+# # python3.4
+# # import builtins
 import __builtin__ as builtins
 import BaseHTTPServer as server
 import CGIHTTPServer
-##
+# #
 import cgi
-## python3.4
-## import collections
-## from copy import copy, deepcopy
-## from http import server
-## import imp
+# # python3.4
+# # import collections
+# # from copy import copy, deepcopy
+# # from http import server
+# # import imp
 import Cookie as cookies
 from copy import copy, deepcopy
-##
+# #
 import gzip
-## python3.4 from http import cookies
+# # python3.4 from http import cookies
 pass
 import inspect
-## python3.4
-## import _io
-## import io
+# # python3.4
+# # import _io
+# # import io
 pass
-##
+# #
 import json
 import logging
 import multiprocessing
 import os
 import posixpath
-## python3.4 import socketserver
+# # python3.4 import socketserver
 pass
 import ssl
 import re
@@ -56,19 +56,19 @@ import signal
 import socket
 import subprocess
 import sys
-## python3.4
-## pass
+# # python3.4
+# # pass
 import SocketServer
 import StringIO
-##
+# #
 import threading
 import time
-## python3.4
-## import types
-## from urllib import parse as urlparse
+# # python3.4
+# # import types
+# # from urllib import parse as urlparse
 import urllib
 import urlparse
-##
+# #
 
 '''Make boostNode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
@@ -78,7 +78,7 @@ from boostNode.extension.native import Module, Object, \
     InstancePropertyInitializer, String
 from boostNode.extension.output import Buffer, Print
 from boostNode.extension.system import CommandLine, Platform, Runnable
-## python3.4 from boostNode.extension.type import Self
+# # python3.4 from boostNode.extension.type import Self
 pass
 from boostNode.paradigm.aspectOrientation import JointPoint
 from boostNode.paradigm.objectOrientation import Class
@@ -88,8 +88,8 @@ from boostNode.paradigm.objectOrientation import Class
 
 # region classes
 
-## python3.4
-## pass
+# # python3.4
+# # pass
 class SocketFileObjectWrapper(socket._fileobject):
 
     '''
@@ -102,30 +102,30 @@ class SocketFileObjectWrapper(socket._fileobject):
 
     # region dynamic methods
 
-        # region public
+    # # region public
 
-            # region special
+    # # # region special
 
     @JointPoint
     def __init__(self, *arguments, **keywords):
         '''
-            This methods wraps the initializer to make the first read line \
-            variable instance bounded.
+            This methods wraps the initializer to make the first read \
+            line variable instance bounded.
         '''
 
-                # region properties
+        # # # region properties
 
         '''Indicates and saves the first line read of the socket.'''
         self.first_read_line = False
 
-                # endregion
+        # # # endregion
 
         '''Take this method via introspection.'''
         return builtins.getattr(
             builtins.super(self.__class__, self), inspect.stack()[0][3]
         )(*arguments, **keywords)
 
-            # endregion
+        # # endregion
 
     @JointPoint
     def readline(self, *arguments, **keywords):
@@ -139,7 +139,8 @@ class SocketFileObjectWrapper(socket._fileobject):
                 )(*arguments, **keywords)
                 return self.first_read_line
             except (
-                socket.herror, socket.gaierror, socket.timeout, socket.error
+                socket.herror, socket.gaierror, socket.timeout,
+                socket.error
             ) as exception:
                 __logger__.info(
                     'Connection interrupted. %s: %s',
@@ -153,7 +154,8 @@ class SocketFileObjectWrapper(socket._fileobject):
                     inspect.stack()[0][3]
                 )(*arguments, **keywords)
             except (
-                socket.herror, socket.gaierror, socket.timeout, socket.error
+                socket.herror, socket.gaierror, socket.timeout,
+                socket.error
             ) as exception:
                 __logger__.info(
                     'Connection interrupted. %s: %s',
@@ -167,39 +169,40 @@ class SocketFileObjectWrapper(socket._fileobject):
 
     # endregion
 
-##
+# #
 
 
-## python3.4
-## class MultiProcessingHTTPServer(
-##     socketserver.ThreadingMixIn, server.HTTPServer
-## ):
+# # python3.4
+# # class MultiProcessingHTTPServer(
+# #     socketserver.ThreadingMixIn, server.HTTPServer
+# # ):
 class MultiProcessingHTTPServer(
     SocketServer.ThreadingMixIn, server.HTTPServer, builtins.object
 ):
-##
+# #
 
     '''The Class implements a partial multiprocessing supported web server.'''
 
     # region dynamic methods
 
-        # region public
+    # # region public
 
-            # region special
+    # # # region special
 
     @JointPoint
-## python3.4
-##     def __init__(
-##         self: Self, *arguments: builtins.object, **keywords: builtins.object
-##     ) -> None:
+# # python3.4
+# #     def __init__(
+# #         self: Self, *arguments: builtins.object,
+# #         **keywords: builtins.object
+# #     ) -> None:
     def __init__(self, *arguments, **keywords):
-##
+# #
         '''
             This initializer wrapper makes sure that the special wrapped file \
             socket is instance bounded.
         '''
 
-                # region properties
+        # # # region properties
 
         '''
             This attribute saves the modified read file socket to apply it in \
@@ -207,24 +210,24 @@ class MultiProcessingHTTPServer(
         '''
         self.read_file_socket = None
 
-                # endregion
+        # # # endregion
 
         '''Take this method via introspection.'''
         return builtins.getattr(
             builtins.super(self.__class__, self), inspect.stack()[0][3]
         )(*arguments, **keywords)
 
-            # endregion
+        # # endregion
 
         # endregion
 
     @JointPoint
-## python3.4
-##     def is_same_thread_request(
-##         self: Self, request: socket.socket
-##     ) -> builtins.bool:
+# # python3.4
+# #     def is_same_thread_request(
+# #         self: Self, request: socket.socket
+# #     ) -> builtins.bool:
     def is_same_thread_request(self, request):
-##
+# #
         '''
             Determines if the given request could be run in its own dedicated \
             process.
@@ -233,24 +236,24 @@ class MultiProcessingHTTPServer(
             Web.MAXIMUM_FIRST_GET_REQUEST_LINE_IN_CHARS
         ).strip()
         for pattern in self.web.same_thread_request_whitelist:
-## python3.4
-##             if re.compile(pattern).match(first_request_line.decode()):
+# # python3.4
+# #             if re.compile(pattern).match(first_request_line.decode()):
             if re.compile(pattern).match(first_request_line):
-##
+# #
                 return True
         return False
 
     @JointPoint
-## python3.4
-##     def process_request_no_termination_wrapper(
-##         self: Self, parent_function: types.FunctionType,
-##         request: socket.socket, arguments: builtins.tuple,
-##         keywords: builtins.dict
-##     ) -> None:
+# # python3.4
+# #     def process_request_no_termination_wrapper(
+# #         self: Self, parent_function: types.FunctionType,
+# #         request: socket.socket, arguments: builtins.tuple,
+# #         keywords: builtins.dict
+# #     ) -> None:
     def process_request_no_termination_wrapper(
         self, parent_function, request, arguments, keywords
     ):
-##
+# #
         '''
             Wraps the normal "process_request" method. To manage the process \
             forking stuff.
@@ -260,27 +263,27 @@ class MultiProcessingHTTPServer(
             for signal_number in signal_numbers:
                 signal.signal(signal_number, signal.SIG_IGN)
             parent_function(self, request, *arguments, **keywords)
-## python3.4
-##         except (
-##             builtins.BrokenPipeError, socket.gaierror,
-##             socket.herror, socket.timeout, socket.error
-##         ) as exception:
+# # python3.4
+# #         except (
+# #             builtins.BrokenPipeError, socket.gaierror,
+# #             socket.herror, socket.timeout, socket.error
+# #         ) as exception:
         except (
             socket.herror, socket.gaierror, socket.timeout, socket.error
         ) as exception:
-##
+# #
             __logger__.info(
                 'Connection interrupted. %s: %s', exception.__class__.__name__,
                 builtins.str(exception))
 
     @JointPoint
-## python3.4
-##     def process_request(
-##         self: Self, request_socket: socket.socket,
-##         *arguments: builtins.object, **keywords: builtins.object
-##     ) -> None:
+# # python3.4
+# #     def process_request(
+# #         self: Self, request_socket: socket.socket,
+# #         *arguments: builtins.object, **keywords: builtins.object
+# #     ) -> None:
     def process_request(self, request_socket, *arguments, **keywords):
-##
+# #
         '''
             This method indicates weather the request is a read only or not. \
             Read only requests will be forked if enough free processors are \
@@ -288,37 +291,37 @@ class MultiProcessingHTTPServer(
         '''
         if self.web.block_new_worker:
             return None
-## python3.4
-##         self.read_file_socket = request_socket.makefile('rb', -1)
-##         read_file_socket = self.read_file_socket
-##
-##         @JointPoint
-##         def readline(
-##             *arguments: builtins.object, **keywords: builtins.object
-##         ) -> builtins.bytes:
-##             '''Wraps the native file object method version.'''
-##             self = read_file_socket
-##             if not builtins.hasattr(self, 'first_read_line'):
-##                 self.first_read_line = builtins.getattr(
-##                     io.BufferedReader, inspect.stack()[0][3]
-##                 )(self, *arguments, **keywords)
-##                 return self.first_read_line
-##             elif self.first_read_line is True:
-##                 '''Take this method via introspection.'''
-##                 return builtins.getattr(
-##                     io.BufferedReader, inspect.stack()[0][3]
-##                 )(self, *arguments, **keywords)
-##             result = self.first_read_line
-##             self.first_read_line = True
-##             return result
-##         self.read_file_socket.readline = readline
+# # python3.4
+# #         self.read_file_socket = request_socket.makefile('rb', -1)
+# #         read_file_socket = self.read_file_socket
+# #
+# #         @JointPoint
+# #         def readline(
+# #             *arguments: builtins.object, **keywords: builtins.object
+# #         ) -> builtins.bytes:
+# #             '''Wraps the native file object method version.'''
+# #             self = read_file_socket
+# #             if not builtins.hasattr(self, 'first_read_line'):
+# #                 self.first_read_line = builtins.getattr(
+# #                     io.BufferedReader, inspect.stack()[0][3]
+# #                 )(self, *arguments, **keywords)
+# #                 return self.first_read_line
+# #             elif self.first_read_line is True:
+# #                 '''Take this method via introspection.'''
+# #                 return builtins.getattr(
+# #                     io.BufferedReader, inspect.stack()[0][3]
+# #                 )(self, *arguments, **keywords)
+# #             result = self.first_read_line
+# #             self.first_read_line = True
+# #             return result
+# #         self.read_file_socket.readline = readline
         '''
             This assignment replace the python's native \
             "socket.socket.makefile('rb', -1)" behavior.
         '''
         self.read_file_socket = SocketFileObjectWrapper(
             request_socket, 'rb', -1)
-##
+# #
         '''NOTE: We have to add 1 for the server processes itself.'''
         self.web.number_of_running_processes = \
             builtins.len(multiprocessing.active_children()) + 1
@@ -329,33 +332,35 @@ class MultiProcessingHTTPServer(
            self.web.maximum_number_of_processes):
             self.web.number_of_running_processes += 1
             '''Takes this method via introspection from now on.'''
-## python3.4
-##             multiprocessing.Process(
-##                 target=self.process_request_no_termination_wrapper,
-##                 daemon=True,
-##                 args=(parent_function, request_socket, arguments, keywords)
-##             ).start()
+# # python3.4
+# #             multiprocessing.Process(
+# #                 target=self.process_request_no_termination_wrapper,
+# #                 daemon=True,
+# #                 args=(parent_function, request_socket, arguments, keywords)
+# #             ).start()
             forked_request_process = multiprocessing.Process(
                 target=self.process_request_no_termination_wrapper,
-                args=(parent_function, request_socket, arguments, keywords))
+                args=(
+                    parent_function, request_socket, arguments, keywords))
             forked_request_process.daemon = True
             forked_request_process.start()
-##
+# #
         else:
             try:
-## python3.4
-##                 return parent_function(
-##                     self, request_socket, *arguments, **keywords)
-##             except (
-##                 builtins.BrokenPipeError, socket.gaierror, socket.herror,
-##                 socket.timeout, socket.error
-##             ) as exception:
+# # python3.4
+# #                 return parent_function(
+# #                     self, request_socket, *arguments, **keywords)
+# #             except (
+# #                 builtins.BrokenPipeError, socket.gaierror, socket.herror,
+# #                 socket.timeout, socket.error
+# #             ) as exception:
                 return parent_function(
                     self, request_socket, *arguments, **keywords)
             except (
-                socket.herror, socket.gaierror, socket.timeout, socket.error
+                socket.herror, socket.gaierror, socket.timeout,
+                socket.error
             ) as exception:
-##
+# #
                 __logger__.info(
                     'Connection interrupted. %s: %s',
                     exception.__class__.__name__, builtins.str(exception))
@@ -769,6 +774,8 @@ class Web(Class, Runnable):
              'dest': 'maximum_number_of_processes',
              'metavar': 'NUMBER'}})
     '''Holds all command line interface argument informations.'''
+    HIGHEST_AVAILABLE_PORT = 2 ** 16 - 1
+    '''Saves the highest available port to launch server.'''
     DETERMINE_IP_SOCKET = '8.8.8.8', 80
     '''
         Globally accessible socket to ask for currently useful ip determining.
@@ -787,15 +794,15 @@ class Web(Class, Runnable):
 
     # region dynamic methods
 
-        # region public
+    # # region public
 
-            # region special
+    # # # region special
 
     @JointPoint
-## python3.4
-##     def __repr__(self: Self) -> builtins.str:
+# # python3.4
+# #     def __repr__(self: Self) -> builtins.str:
     def __repr__(self):
-##
+# #
         '''
             Invokes if this object should describe itself by a string.
 
@@ -814,15 +821,16 @@ class Web(Class, Runnable):
                 number_of_running_threads=self.number_of_running_threads,
                 number_of_running_processes=self.number_of_running_processes))
 
-            # endregion
+        # # endregion
 
     @JointPoint
-## python3.4
-##     def stop(
-##         self: Self, *arguments: builtins.object, **keywords: builtins.object
-##     ) -> Self:
+# # python3.4
+# #     def stop(
+# #         self: Self, *arguments: builtins.object,
+# #         **keywords: builtins.object
+# #     ) -> Self:
     def stop(self, *arguments, **keywords):
-##
+# #
         '''
             Waits for running workers and shuts the server down.
 
@@ -879,10 +887,10 @@ class Web(Class, Runnable):
 
         # region protected
 
-            # region runnable implementation
+        # # region runnable implementation
 
     @JointPoint
-## python3.4     def _run(self: Self) -> Self:
+# # python3.4     def _run(self: Self) -> Self:
     def _run(self):
         '''
             Entry point for command line call of this program. Starts the \
@@ -891,12 +899,15 @@ class Web(Class, Runnable):
             Examples:
 
             >>> sys_argv_backup = copy(sys.argv)
-            >>> sys.argv = sys.argv[:1]
+            >>> sys.argv[1:] = ['--port', '8080']
+
+            >>> Web()._run() # doctest: +ELLIPSIS
+            Object of "Web" with root path "...", port "8080" and stop order...
+
+            >>> sys.argv = sys_argv_backup
 
             >>> Web.run() # doctest: +ELLIPSIS
             Object of "Web" with root path "...", port "0" and stop order ...
-
-            >>> sys.argv = sys_argv_backup
         '''
         command_line_arguments = CommandLine.argument_parser(
             arguments=self.COMMAND_LINE_ARGUMENTS,
@@ -905,37 +916,39 @@ class Web(Class, Runnable):
             namespace=command_line_arguments))
 
     @JointPoint(InstancePropertyInitializer)
-## python3.4
-##     def _initialize(
-##         self: Self, root=None, host_name='', port=0, default='',
-##         public_key_file=None, stop_order='stop',
-##         encoding=FileHandler.DEFAULT_ENCODING, request_whitelist=('*:/.*',),
-##         request_blacklist=(), same_thread_request_whitelist=(),
-##         # NOTE: Tuple for explicit web_server file reference validation.
-##         # ('text/.+$', 'image/.+$', 'application/(x-)?javascript$')
-##         static_mime_type_pattern=('.+/.+$',),
-##         dynamic_mime_type_pattern=(
-##             'text/x-(python|sh|bash|shellscript)$',),
-##         compressible_mime_type_pattern=(
-##             'text/.+$', 'application/javascript$'),
-##         default_file_name_pattern=(
-##             '((__main__)|(main)|(index)|(initialize))(?!\.tpl$)'
-##             '(\.[a-zA-Z0-9]{0,4})?$',),
-##         default_module_names=('__main__', 'main', 'index', 'initialize'),
-##         authentication=True, authentication_file_name='.htpasswd',
-##         authentication_file_content_pattern=
-##             '(?P<name>.+):(?P<password>.+)$',
-##         authentication_handler=None, module_loading=None,
-##         maximum_number_of_processes=0, shared_data=None,
-##         request_parameter_delimiter='\?',
-##         file_size_stream_threshold_in_byte=1048576,  # 1 MB
-##         directory_listing=True, **keywords: builtins.object
-##     ) -> Self:
+# # python3.4
+# #     def _initialize(
+# #         self: Self, root=None, host_name='', port=0, default='',
+# #         public_key_file=None, stop_order='stop',
+# #         encoding=FileHandler.DEFAULT_ENCODING,
+# #         request_whitelist=('*:/.*',), request_blacklist=(),
+# #         same_thread_request_whitelist=(),
+# #         # NOTE: Tuple for explicit web_server file reference validation.
+# #         # ('text/.+$', 'image/.+$', 'application/(x-)?javascript$')
+# #         static_mime_type_pattern=('.+/.+$',),
+# #         dynamic_mime_type_pattern=(
+# #             'text/x-(python|sh|bash|shellscript)$',),
+# #         compressible_mime_type_pattern=(
+# #             'text/.+$', 'application/javascript$'),
+# #         default_file_name_pattern=(
+# #             '((__main__)|(main)|(index)|(initialize))(?!\.tpl$)'
+# #             '(\.[a-zA-Z0-9]{0,4})?$',),
+# #         default_module_names=('__main__', 'main', 'index', 'initialize'),
+# #         authentication=True, authentication_file_name='.htpasswd',
+# #         authentication_file_content_pattern=
+# #             '(?P<name>.+):(?P<password>.+)$',
+# #         authentication_handler=None, module_loading=None,
+# #         maximum_number_of_processes=0, shared_data=None,
+# #         request_parameter_delimiter='\?',
+# #         file_size_stream_threshold_in_byte=1048576,  # 1 MB
+# #         directory_listing=True, **keywords: builtins.object
+# #     ) -> Self:
     def _initialize(
         self, root=None, host_name='', port=0, default='',
         public_key_file=None, stop_order='stop',
-        encoding=FileHandler.DEFAULT_ENCODING, request_whitelist=('*:/.*',),
-        request_blacklist=(), same_thread_request_whitelist=(),
+        encoding=FileHandler.DEFAULT_ENCODING,
+        request_whitelist=('*:/.*',), request_blacklist=(),
+        same_thread_request_whitelist=(),
         # NOTE: Tuple for explicit web_server file reference validation.
         # ('text/.+$', 'image/.+$', 'application/(x-)?javascript$')
         static_mime_type_pattern=('.+/.+$',),
@@ -956,14 +969,14 @@ class Web(Class, Runnable):
         file_size_stream_threshold_in_byte=2097152,  # 2 MB
         directory_listing=True, **keywords
     ):
-##
+# #
         '''
             Sets root path of web server and all properties. Although the \
             server thread will be started.
         '''
         self.__class__.instances.append(self)
 
-                # region properties
+        # # # region properties
 
         '''Indicates if new worker are currently allowed to spawn.'''
         self.block_new_worker = False
@@ -1002,41 +1015,40 @@ class Web(Class, Runnable):
 
         return self._start_server_thread()
 
-            # endregion
+        # # endregion
 
     @JointPoint
-## python3.4     def _start_server_thread(self: Self) -> Self:
+# # python3.4     def _start_server_thread(self: Self) -> Self:
     def _start_server_thread(self):
         '''
             Starts the server's request handler instance and listens for \
             shutting-down-command.
         '''
-        if not __test_mode__:
-            if self.port:
-                self._start_with_static_port()
-            else:
-                self._start_with_dynamic_port()
+        if self.port:
+            self._start_with_static_port()
+        else:
+            self._start_with_dynamic_port()
         self._log_server_status()
         if not __test_mode__ and self.stop_order:
             self.wait_for_order()
         return self
 
     @JointPoint
-## python3.4     def _log_server_status(self: Self) -> Self:
+# # python3.4     def _log_server_status(self: Self) -> Self:
     def _log_server_status(self):
         '''Prints some information about the way the server was started.'''
         determineIPSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         try:
             determineIPSocket.connect(self.DETERMINE_IP_SOCKET)
-## python3.4
-##         except (
-##             builtins.BrokenPipeError, socket.gaierror, socket.herror,
-##             socket.timeout, socket.error
-##         ) as exception:
+# # python3.4
+# #         except (
+# #             builtins.BrokenPipeError, socket.gaierror, socket.herror,
+# #             socket.timeout, socket.error
+# #         ) as exception:
         except (
             socket.herror, socket.gaierror, socket.timeout, socket.error
         ):
-##
+# #
             ip = socket.gethostbyname(socket.gethostname())
         else:
             ip = determineIPSocket.getsockname()[0]
@@ -1057,7 +1069,7 @@ class Web(Class, Runnable):
         return self
 
     @JointPoint
-## python3.4     def _start_with_dynamic_port(self: Self) -> Self:
+# # python3.4     def _start_with_dynamic_port(self: Self) -> Self:
     def _start_with_dynamic_port(self):
         '''Searches for the highest free port for listing.'''
         ports = [
@@ -1066,56 +1078,59 @@ class Web(Class, Runnable):
         if self.public_key_file:
             ports = [443] + ports
         ports += builtins.list(builtins.set(
-            builtins.range(2 ** 16 - 1)
+            builtins.range(self.HIGHEST_AVAILABLE_PORT)
         ).difference(ports))
-        for port in ports:
-            try:
-                self._initialize_server_thread(port)
-            except socket.error:
-                if not port:
-## python3.4
-##                     raise __exception__(
-##                         'No port is available to run the web-server with '
-##                         'given rights.'
-##                     ) from None
-                    raise __exception__(
-                        'No port is available to run the web-server with '
-                        'given rights.')
-##
-            else:
-                self.port = port
-                return self
-
-    @JointPoint
-## python3.4     def _start_with_static_port(self: Self) -> Self:
-    def _start_with_static_port(self):
-        '''Starts the server listing on the given port, if it is free.'''
-        try:
-            self._initialize_server_thread(port=self.port)
-        except socket.error:
-## python3.4
-##             raise __exception__(
-##                 "Port %d isn't available to run the web-server with given "
-##                 'rights.', self.port
-##             ) from None
-            raise __exception__(
-                "Port %d isn't available to run the web-server with given "
-                'rights.', self.port)
-##
+        if not __test_mode__:
+            for port in ports:
+                try:
+                    self._initialize_server_thread(port)
+                except socket.error:
+                    if port == self.HIGHEST_AVAILABLE_PORT:
+# # python3.4
+# #                         raise __exception__(
+# #                             'No port is available to run the web-server '
+# #                             'with given rights.'
+# #                         ) from None
+                        raise __exception__(
+                            'No port is available to run the web-server '
+                            'with given rights.')
+# #
+                else:
+                    self.port = port
+                    return self
         return self
 
     @JointPoint
-## python3.4
-##     def _serve_service_forever_exception_catcher(self: Self) -> Self:
+# # python3.4     def _start_with_static_port(self: Self) -> Self:
+    def _start_with_static_port(self):
+        '''Starts the server listing on the given port, if it is free.'''
+        if not __test_mode__:
+            try:
+                self._initialize_server_thread(port=self.port)
+            except socket.error:
+# # python3.4
+# #                 raise __exception__(
+# #                     "Port %d isn't available to run the web-server with "
+# #                     'given rights.', self.port
+# #                 ) from None
+                raise __exception__(
+                    "Port %d isn't available to run the web-server with "
+                    'given rights.', self.port)
+# #
+        return self
+
+    @JointPoint
+# # python3.4
+# #     def _serve_service_forever_exception_catcher(self: Self) -> Self:
     def _serve_service_forever_exception_catcher(self):
-##
+# #
         '''
             This method wraps the python's native server "serve_forever()" \
             method to handle incoming exceptions in a separat thread.
         '''
         try:
             return self.service.serve_forever()
-## python3.4         except builtins.ValueError as exception:
+# # python3.4         except builtins.ValueError as exception:
         except socket.error as exception:
             __logger__.info(
                 '%s: %s', exception.__class__.__name__,
@@ -1123,12 +1138,12 @@ class Web(Class, Runnable):
         return self
 
     @JointPoint
-## python3.4
-##     def _initialize_server_thread(
-##         self: Self, port: builtins.int
-##     ) -> Self:
+# # python3.4
+# #     def _initialize_server_thread(
+# #         self: Self, port: builtins.int
+# #     ) -> Self:
     def _initialize_server_thread(self, port):
-##
+# #
         '''Initializes a new request-handler and starts its own thread.'''
         if self.public_key_file:
             self.service = MultiProcessingHTTPServer(
@@ -1140,16 +1155,16 @@ class Web(Class, Runnable):
             self.service = MultiProcessingHTTPServer(
                 (self.host_name, port), CGIHTTPRequestHandler)
         self.service.web = self
-## python3.4
-##         threading.Thread(
-##             target=self._serve_service_forever_exception_catcher,
-##             daemon=True
-##         ).start()
+# # python3.4
+# #         threading.Thread(
+# #             target=self._serve_service_forever_exception_catcher,
+# #             daemon=True
+# #         ).start()
         server_thread = threading.Thread(
             target=self._serve_service_forever_exception_catcher)
         server_thread.daemon = True
         server_thread.start()
-##
+# #
         return self
 
         # endregion
@@ -1157,12 +1172,12 @@ class Web(Class, Runnable):
     # endregion
 
 
-## python3.4
-## class CGIHTTPRequestHandler(server.CGIHTTPRequestHandler):
+# # python3.4
+# # class CGIHTTPRequestHandler(server.CGIHTTPRequestHandler):
 class CGIHTTPRequestHandler(
     CGIHTTPServer.CGIHTTPRequestHandler, builtins.object
 ):
-##
+# #
 
     '''
         A small request-handler dealing with incoming file requests. It can \
@@ -1172,21 +1187,21 @@ class CGIHTTPRequestHandler(
 
     # region dynamic methods
 
-        # region public
+    # # region public
 
-            # region special
+    # # # region special
 
     @JointPoint
-## python3.4
-##     def __init__(
-##         self, *arguments: builtins.object, **keywords: builtins.object
-##     ) -> None:
-##         '''
-##             This method calls is parent. It's necessary to make some class
-##             properties instance properties.
-##         '''
+# # python3.4
+# #     def __init__(
+# #         self, *arguments: builtins.object, **keywords: builtins.object
+# #     ) -> None:
+# #         '''
+# #             This method calls is parent. It's necessary to make some class
+# #             properties instance properties.
+# #         '''
     def __init__(self, *arguments, **keywords):
-##
+# #
         '''
             Initializes all used properties and calls the super method.
 
@@ -1196,7 +1211,7 @@ class CGIHTTPRequestHandler(
             Object of "CGIHTTPRequestHandler" with request uri "" and parame...
         '''
 
-                # region properties
+        # # # region properties
 
         '''Properties defined by incoming request.'''
         self.host = ''
@@ -1204,6 +1219,7 @@ class CGIHTTPRequestHandler(
         self.parameter = ''
         self.data = {}
         self.request_type = ''
+        self.data_type = ''
         '''Saves the last started worker thread instance.'''
         self.last_running_worker = None
         '''
@@ -1258,7 +1274,7 @@ class CGIHTTPRequestHandler(
         '''
         self._authentication_location = None
 
-                # endregion
+        # # # endregion
 
         if not __test_mode__:
             '''Take this method via introspection.'''
@@ -1267,7 +1283,7 @@ class CGIHTTPRequestHandler(
             )(*arguments, **keywords)
 
     @JointPoint
-## python3.4     def __repr__(self: Self) -> builtins.str:
+# # python3.4     def __repr__(self: Self) -> builtins.str:
     def __repr__(self):
         '''
             Invokes if this object should describe itself by a string.
@@ -1282,12 +1298,12 @@ class CGIHTTPRequestHandler(
                    class_name=self.__class__.__name__, url=self.request_uri,
                    parameter=self.parameter)
 
-            # endregion
+        # # endregion
 
-            # region event
+        # # region event
 
     @JointPoint
-## python3.4     def do_GET(self: Self) -> Self:
+# # python3.4     def do_GET(self: Self) -> Self:
     def do_GET(self):
         '''
             Is triggered if an incoming get request is detected. Decides if \
@@ -1301,6 +1317,14 @@ class CGIHTTPRequestHandler(
             >>> handler.server = Class()
             >>> handler.server.web = Web(
             ...     __test_folder__, request_whitelist=('*:/?',))
+            >>> # # python2.7
+            >>> if sys.version_info.major < 3:
+            ...     handler.headers = handler.MessageClass(
+            ...         String('test: hans'), seekable=False)
+            ... else:
+            ...     handler.headers = handler.MessageClass()
+            ...     handler.headers.add_header('test', 'hans')
+            >>> # #
 
             >>> handler.do_GET() # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "/" and param...
@@ -1313,14 +1337,14 @@ class CGIHTTPRequestHandler(
             >>> handler.server.web.authentication = True
             >>> handler.server.web.authentication_handler = (
             ...     lambda header, request_uri, request_handler: False)
-            >>> ## python2.7
+            >>> # # python2.7
             >>> if sys.version_info.major < 3:
             ...     handler.headers = handler.MessageClass(
             ...         String('key: value'), seekable=False)
             ... else:
             ...     handler.headers = handler.MessageClass()
             ...     handler.headers.add_header('key', 'value')
-            >>> ##
+            >>> # #
             >>> handler.do_GET() # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "" and parame...
 
@@ -1357,33 +1381,117 @@ class CGIHTTPRequestHandler(
         return self._send_no_authentication_error()
 
     @JointPoint
-## python3.4     def do_POST(self: Self) -> Self:
+# # python3.4     def do_POST(self: Self) -> Self:
     def do_POST(self):
-        '''Is triggered if a post request is coming.'''
+        '''
+            Is triggered if a post request is coming.
+
+            Examples:
+
+            >>> handler = CGIHTTPRequestHandler()
+            >>> handler.path = '/'
+            >>> handler.server = Class()
+            >>> handler.server.web = Web(
+            ...     __test_folder__, request_whitelist=('*:/?',))
+            >>> # # python2.7
+            >>> if sys.version_info.major < 3:
+            ...     handler.headers = handler.MessageClass(
+            ...         String('test: hans'), seekable=False)
+            ... else:
+            ...     handler.headers = handler.MessageClass()
+            ...     handler.headers.add_header('test', 'hans')
+            >>> # #
+
+            >>> handler.do_POST() # doctest: +ELLIPSIS
+            Object of "CGIHTTPRequestHandler" with request uri "/" and param...
+        '''
         return self._do_special_request(type=inspect.stack()[0][3])
 
     @JointPoint
-## python3.4     def do_PATCH(self: Self) -> Self:
+# # python3.4     def do_PATCH(self: Self) -> Self:
     def do_PATCH(self):
-        '''Is triggered if a patch request is coming.'''
+        '''
+            Is triggered if a patch request is coming.
+
+            Examples:
+
+            >>> handler = CGIHTTPRequestHandler()
+            >>> handler.path = '/'
+            >>> handler.server = Class()
+            >>> handler.server.web = Web(
+            ...     __test_folder__, request_whitelist=('*:/?',))
+            >>> # # python2.7
+            >>> if sys.version_info.major < 3:
+            ...     handler.headers = handler.MessageClass(
+            ...         String('test: hans'), seekable=False)
+            ... else:
+            ...     handler.headers = handler.MessageClass()
+            ...     handler.headers.add_header('test', 'hans')
+            >>> # #
+
+            >>> handler.do_PATCH() # doctest: +ELLIPSIS
+            Object of "CGIHTTPRequestHandler" with request uri "/" and param...
+        '''
         return self._do_special_request(type=inspect.stack()[0][3])
 
     @JointPoint
-## python3.4     def do_DELETE(self: Self) -> Self:
+# # python3.4     def do_DELETE(self: Self) -> Self:
     def do_DELETE(self):
-        '''Is triggered if a delete request is coming.'''
+        '''
+            Is triggered if a delete request is coming.
+
+            Examples:
+
+            >>> handler = CGIHTTPRequestHandler()
+            >>> handler.path = '/'
+            >>> handler.server = Class()
+            >>> handler.server.web = Web(
+            ...     __test_folder__, request_whitelist=('*:/?',))
+            >>> # # python2.7
+            >>> if sys.version_info.major < 3:
+            ...     handler.headers = handler.MessageClass(
+            ...         String('test: hans'), seekable=False)
+            ... else:
+            ...     handler.headers = handler.MessageClass()
+            ...     handler.headers.add_header('test', 'hans')
+            >>> # #
+
+            >>> handler.do_DELETE() # doctest: +ELLIPSIS
+            Object of "CGIHTTPRequestHandler" with request uri "/" and param...
+        '''
         return self._do_special_request(type=inspect.stack()[0][3])
 
     @JointPoint
-## python3.4     def do_PUT(self: Self) -> Self:
+# # python3.4     def do_PUT(self: Self) -> Self:
     def do_PUT(self):
-        '''Is triggered if a put request is coming.'''
+        '''
+            Is triggered if a put request is coming.
+
+            Examples:
+
+            >>> handler = CGIHTTPRequestHandler()
+            >>> handler.path = '/'
+            >>> handler.server = Class()
+            >>> handler.server.web = Web(
+            ...     __test_folder__, request_whitelist=('*:/?',))
+            >>> # # python2.7
+            >>> if sys.version_info.major < 3:
+            ...     handler.headers = handler.MessageClass(
+            ...         String('test: hans'), seekable=False)
+            ... else:
+            ...     handler.headers = handler.MessageClass()
+            ...     handler.headers.add_header('test', 'hans')
+            >>> # #
+
+            >>> handler.do_PUT() # doctest: +ELLIPSIS
+            Object of "CGIHTTPRequestHandler" with request uri "/" and param...
+        '''
         return self._do_special_request(type=inspect.stack()[0][3])
 
-            # endregion
+        # # endregion
 
     @JointPoint
-## python3.4     def parse_url(self: Self, url=None) -> builtins.tuple:
+# # python3.4     def parse_url(self: Self, url=None) -> builtins.tuple:
     def parse_url(self, url=None):
         '''
             This method provides an easy way to split a http request string \
@@ -1435,13 +1543,16 @@ class CGIHTTPRequestHandler(
             get = urlparse.urlparse(url).query
             if get:
                 try:
-## python3.4
-##                     get = urlparse.parse_qs(
-##                         qs=get, keep_blank_values=True, strict_parsing=True,
-##                         encoding=self.server.web.encoding, errors='replace')
+# # python3.4
+# #                     get = urlparse.parse_qs(
+# #                         qs=get, keep_blank_values=True,
+# #                         strict_parsing=True,
+# #                         encoding=self.server.web.encoding,
+# #                         errors='replace')
                     get = urlparse.parse_qs(
-                        qs=get, keep_blank_values=True, strict_parsing=True)
-##
+                        qs=get, keep_blank_values=True, strict_parsing=True
+                    )
+# #
                 except builtins.ValueError:
                     get = {}
                     __logger__.info(
@@ -1454,12 +1565,13 @@ class CGIHTTPRequestHandler(
         return None, {}
 
     @JointPoint
-## python3.4
-##     def send_response(
-##         self: Self, *arguments: builtins.object, **keywords: builtins.object
-##     ) -> Self:
+# # python3.4
+# #     def send_response(
+# #         self: Self, *arguments: builtins.object,
+# #         **keywords: builtins.object
+# #     ) -> Self:
     def send_response(self, *arguments, **keywords):
-##
+# #
         '''
             Send the given response code to client if no response code was \
             sent yet.
@@ -1478,21 +1590,21 @@ class CGIHTTPRequestHandler(
         return self
 
     @JointPoint
-## python3.4
-##     def send_error(
-##         self: Self, code: builtins.int, *arguments: builtins.object,
-##         **keywords: builtins.object
-##     ) -> Self:
+# # python3.4
+# #     def send_error(
+# #         self: Self, code: builtins.int, *arguments: builtins.object,
+# #         **keywords: builtins.object
+# #     ) -> Self:
     def send_error(self, code, *arguments, **keywords):
-##
+# #
         '''
             Send the given error to client if no response code was sent yet.
 
             **code** - Error code to send.
         '''
         if not (self.response_sent or __test_mode__):
-            self.send_response(code)
             self.content_type_sent = self.content_length_sent = True
+            self.send_response(code)
             '''Take this method via introspection.'''
             builtins.getattr(
                 builtins.super(self.__class__, self), inspect.stack()[0][3]
@@ -1500,15 +1612,28 @@ class CGIHTTPRequestHandler(
         return self
 
     @JointPoint
-## python3.4
-##     def list_directory(
-##         self: Self, *arguments: builtins.object, **keywords: builtins.object
-##     ) -> Self:
+# # python3.4
+# #     def list_directory(
+# #         self: Self, *arguments: builtins.object,
+# #         **keywords: builtins.object
+# #     ) -> Self:
     def list_directory(self, *arguments, **keywords):
-##
+# #
         '''
             Generates a simple html web page listing requested directory \
             content.
+
+            Examples:
+
+            >>> handler = CGIHTTPRequestHandler()
+            >>> handler.path = '/'
+            >>> handler.server = Class()
+            >>> handler.server.web = Web(
+            ...     __test_folder__, request_whitelist=('*:/?',))
+            >>> handler.requested_file = FileHandler()
+
+            >>> handler.list_directory() # doctest: +ELLIPSIS
+            Object of "CGIHTTPRequestHandler" with request uri "" and param...
         '''
         path_backup = self.path
         self.path = self.requested_file.path[builtins.len(
@@ -1524,12 +1649,13 @@ class CGIHTTPRequestHandler(
         return self
 
     @JointPoint
-## python3.4
-##     def end_headers(
-##         self: Self, *arguments: builtins.object, **keywords: builtins.object
-##     ) -> Self:
+# # python3.4
+# #     def end_headers(
+# #         self: Self, *arguments: builtins.object,
+# #         **keywords: builtins.object
+# #     ) -> Self:
     def end_headers(self, *arguments, **keywords):
-##
+# #
         '''Finishes all sent headers by a trailing new empty line.'''
         if not (self.headers_ended or __test_mode__):
             self.headers_ended = True
@@ -1540,16 +1666,16 @@ class CGIHTTPRequestHandler(
         return self
 
     @JointPoint
-## python3.4
-##     def send_static_file_cache_header(
-##         self: Self, timestamp=time.time(), response_code=200,
-##         cache_control='public, max-age=0', expire_time_in_seconds=0
-##     ) -> Self:
+# # python3.4
+# #     def send_static_file_cache_header(
+# #         self: Self, timestamp=time.time(), response_code=200,
+# #         cache_control='public, max-age=0', expire_time_in_seconds=0
+# #     ) -> Self:
     def send_static_file_cache_header(
         self, timestamp=time.time(), response_code=200,
         cache_control='public, max-age=0', expire_time_in_seconds=0
     ):
-##
+# #
         '''
             Response a static file-request header.
 
@@ -1572,42 +1698,41 @@ class CGIHTTPRequestHandler(
         return self
 
     @JointPoint
-## python3.4
-##     def get_cookie(
-##         self: Self, name=None
-##     ) -> (builtins.str, cookies.SimpleCookie, builtins.type(None)):
+# # python3.4
+# #     def get_cookie(
+# #         self: Self, name=None
+# #     ) -> (builtins.str, cookies.SimpleCookie, builtins.type(None)):
     def get_cookie(self, name=None):
-##
+# #
         '''
             Retrieves a http cookie.
 
             **name** - If provided only the matching value will be returned \
                        instead of the whole cookie object.
         '''
-## python3.4         if not __test_mode__ and self.headers.get('Cookie'):
-        if not __test_mode__ and self.headers.getheader('Cookie'):
+# # python3.4         if 'cookie' in self.headers:
+        if self.headers.get('cookie'):
             cookie = cookies.SimpleCookie()
-## python3.4             cookie.load(self.headers.get('Cookie'))
-            cookie.load(self.headers.getheader('Cookie'))
+            cookie.load(self.headers.get('cookie'))
             return cookie[name].value if name and name in cookie else cookie
         return None
 
     @JointPoint
-## python3.4
-##     def send_cookie(
-##         self: Self,
-##         cookie: (cookies.SimpleCookie, builtins.str, builtins.dict),
-##         header='Set-Cookie', maximum_age_in_seconds=60 * 60 * 24 * 7,
-##         version=1, domain='', secure=False, httponly=False, comment='',
-##         path='/', response_code=200
-##     ) -> Self:
+# # python3.4
+# #     def send_cookie(
+# #         self: Self,
+# #         cookie: (cookies.SimpleCookie, builtins.str, builtins.dict),
+# #         header='Set-Cookie', maximum_age_in_seconds=60 * 60 * 24 * 7,
+# #         version=1, domain='', secure=False, httponly=False, comment='',
+# #         path='/', response_code=200
+# #     ) -> Self:
     def send_cookie(
         self, cookie, header='Set-Cookie',
         maximum_age_in_seconds=60 * 60 * 24 * 7, version=1, domain='',
         secure=False, httponly=False, comment='', path='/',
         response_code=200
     ):
-##
+# #
         '''
             Sends a http cookie.
 
@@ -1682,15 +1807,15 @@ class CGIHTTPRequestHandler(
         return self
 
     @JointPoint
-## python3.4
-##     def send_content_type_header(
-##         self: Self, mime_type='text/html', encoding='UTF-8',
-##         response_code=200
-##     ) -> Self:
+# # python3.4
+# #     def send_content_type_header(
+# #         self: Self, mime_type='text/html', encoding='UTF-8',
+# #         response_code=200
+# #     ) -> Self:
     def send_content_type_header(
         self, mime_type='text/html', encoding='UTF-8', response_code=200
     ):
-##
+# #
         '''
             Sends a content type header to client if not sent yet.
 
@@ -1704,20 +1829,22 @@ class CGIHTTPRequestHandler(
             "self.send_header()" method.
         '''
         if not (self.content_type_sent or __test_mode__):
-            self.send_response(response_code).content_type_sent = True
+            self.content_type_sent = True
+            self.send_response(response_code)
             self.send_header(
                 'Content-Type', '%s; charset=%s' % (mime_type, encoding))
         return self
 
     @JointPoint
-## python3.4
-##     def send_content_length_header(
-##         self: Self, size: builtins.int, dynamic_output='', response_code=200
-##     ) -> Self:
+# # python3.4
+# #     def send_content_length_header(
+# #         self: Self, size: builtins.int, dynamic_output='',
+# #         response_code=200
+# #     ) -> Self:
     def send_content_length_header(
         self, size, dynamic_output='', response_code=200
     ):
-##
+# #
         '''
             Sends the content length header to client if not sent yet.
 
@@ -1730,25 +1857,26 @@ class CGIHTTPRequestHandler(
             **response_code** - HTTP Response code to send.
         '''
         if not (self.content_length_sent or __test_mode__):
-            self.send_response(response_code).content_length_sent = True
+            self.content_length_sent = True
+            self.send_response(response_code)
             threshold = self.server.web.file_size_stream_threshold_in_byte
-## python3.4
-##             if(size < threshold and
-##                self.headers.get('Accept-Encoding') and
-##                gzip.__name__ in self.headers.get('Accept-Encoding').split(
-##                    ','
-##                ) and (dynamic_output or self._check_pattern(
-##                    patterns=self.server.web.compressible_mime_type_pattern,
-##                    subject=self.requested_file.mime_type))):
+# # python3.4
+# #             if(size < threshold and
+# #                'accept-encoding' in self.headers and
+# #                gzip.__name__ in self.headers.get('accept-encoding').split(
+# #                    ','
+# #                ) and (dynamic_output or self._check_pattern(
+# #                    patterns=self.server.web.compressible_mime_type_pattern,
+# #                    subject=self.requested_file.mime_type))):
             if(size < threshold and
-               self.headers.getheader('Accept-Encoding') and
-               gzip.__name__ in self.headers.getheader(
-                   'Accept-Encoding'
+               self.headers.get('accept-encoding', False) and
+               gzip.__name__ in self.headers.get(
+                   'accept-encoding'
                ).split(',') and
                (dynamic_output or self._check_pattern(
                    patterns=self.server.web.compressible_mime_type_pattern,
                    subject=self.requested_file.mime_type))):
-##
+# #
                 self.send_header('Content-Encoding', gzip.__name__)
                 if dynamic_output:
                     self._encoded_output = self._gzip(content=dynamic_output)
@@ -1762,18 +1890,18 @@ class CGIHTTPRequestHandler(
         return self
 
     @JointPoint
-## python3.4
-##     def log_message(
-##         self: Self, format: builtins.str,
-##         message_or_error_code: (builtins.int, builtins.str),
-##         response_code_or_message: (builtins.str, builtins.int),
-##         message_end=None
-##     ) -> Self:
+# # python3.4
+# #     def log_message(
+# #         self: Self, format: builtins.str,
+# #         message_or_error_code: (builtins.int, builtins.str),
+# #         response_code_or_message: (builtins.str, builtins.int),
+# #         message_end=None
+# #     ) -> Self:
     def log_message(
         self, format, message_or_error_code, response_code_or_message,
         message_end=None
     ):
-##
+# #
         '''
             Wrapper method for all logging output coming through the server \
             thread.
@@ -1814,31 +1942,31 @@ class CGIHTTPRequestHandler(
             >>> handler.log_message('', '', 404) # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "" and parame...
 
-            >>> ## python2.7
+            >>> # # python2.7
             >>> if sys.version_info.major < 3:
             ...     handler.headers = handler.MessageClass(
             ...         String('key: value'), seekable=False)
             ... else:
             ...     handler.headers = handler.MessageClass()
             ...     handler.headers.add_header('key', 'value')
-            >>> ##
+            >>> # #
             >>> handler.log_message('', '', 404) # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "" and parame...
 
-            >>> ## python2.7
+            >>> # # python2.7
             >>> if sys.version_info.major < 3:
             ...     handler.headers = handler.MessageClass(String(
-            ...         'X-Forwarded-For: 192.168.0.1\\n'
-            ...         'X-Forwarded-Host: 192.168.0.1\\n'
-            ...         'X-Forwarded-Server: 192.168.0.1'), seekable=False)
+            ...         'x-forwarded-for: 192.168.0.1\\n'
+            ...         'x-forwarded-host: 192.168.0.1\\n'
+            ...         'x-forwarded-server: 192.168.0.1'), seekable=False)
             ... else:
             ...     handler.headers = handler.MessageClass()
             ...     handler.headers.add_header(
-            ...         'X-Forwarded-For', '192.168.0.1')
+            ...         'x-forwarded-for', '192.168.0.1')
             ...     handler.headers.add_header(
-            ...         'X-Forwarded-Host', '192.168.0.1')
+            ...         'x-forwarded-host', '192.168.0.1')
             ...     handler.headers.add_header(
-            ...         'X-Forwarded-Server', '192.168.0.1')
+            ...         'x-forwarded-server', '192.168.0.1')
             >>> __test_buffer__.clear() # doctest: +ELLIPSIS
             '...'
             >>> handler.log_message('', '', 404) # doctest: +ELLIPSIS
@@ -1851,14 +1979,9 @@ class CGIHTTPRequestHandler(
             '{response_code}')
         forwarded_ip = forwarded_host = forwarded_server = None
         if 'headers' in self.__dict__:
-## python3.4
-##             forwarded_ip = self.headers.get('X-Forwarded-For')
-##             forwarded_host = self.headers.get('X-Forwarded-Host')
-##             forwarded_server = self.headers.get('X-Forwarded-Server')
-            forwarded_ip = self.headers.getheader('X-Forwarded-For')
-            forwarded_host = self.headers.getheader('X-Forwarded-Host')
-            forwarded_server = self.headers.getheader('X-Forwarded-Server')
-##
+            forwarded_ip = self.headers.get('x-forwarded-for')
+            forwarded_host = self.headers.get('x-forwarded-host')
+            forwarded_server = self.headers.get('x-forwarded-server')
             if forwarded_ip:
                 format += ' - forwarded for: {forwarded_ip}'
             if forwarded_host:
@@ -1882,12 +2005,13 @@ class CGIHTTPRequestHandler(
         return self
 
     @JointPoint
-## python3.4
-##     def setup(
-##         self: Self, *arguments: builtins.object, **keywords: builtins.object
-##     ) -> None:
+# # python3.4
+# #     def setup(
+# #         self: Self, *arguments: builtins.object,
+# #         **keywords: builtins.object
+# #     ) -> None:
     def setup(self, *arguments, **keywords):
-##
+# #
         '''
             This method wraps the python's native request handler to provide \
             our wrapped file socket buffer.
@@ -1903,10 +2027,10 @@ class CGIHTTPRequestHandler(
 
         # region protected
 
-            # region boolean
+        # # region boolean
 
     @JointPoint
-## python3.4     def _is_authenticated(self: Self) -> builtins.bool:
+# # python3.4     def _is_authenticated(self: Self) -> builtins.bool:
     def _is_authenticated(self):
         '''
             Determines weather current request is authenticated.
@@ -1916,6 +2040,14 @@ class CGIHTTPRequestHandler(
             >>> handler = CGIHTTPRequestHandler()
             >>> handler.server = Class()
             >>> handler.server.web = Web(__test_folder__)
+            >>> # # python2.7
+            >>> if sys.version_info.major < 3:
+            ...     handler.headers = handler.MessageClass(
+            ...         String('test: hans'), seekable=False)
+            ... else:
+            ...     handler.headers = handler.MessageClass()
+            ...     handler.headers.add_header('test', 'hans')
+            >>> # #
 
             >>> handler._authentication_location = __test_folder__
             >>> handler._is_authenticated()
@@ -1931,20 +2063,17 @@ class CGIHTTPRequestHandler(
             True
 
             >>> FileHandler(file.path + '.htpasswd').content = 'login:password'
-            >>> handler = CGIHTTPRequestHandler()
-            >>> handler.server = Class()
-            >>> handler.server.web = Web(__test_folder__)
             >>> handler.path = '/' + file.name
             >>> handler._create_environment_variables()
             '_is_authenticated'
-            >>> ## python2.7
+            >>> # # python2.7
             >>> if sys.version_info.major < 3:
             ...     handler.headers = handler.MessageClass(
             ...         String('key: value'), seekable=False)
             ... else:
             ...     handler.headers = handler.MessageClass()
             ...     handler.headers.add_header('key', 'value')
-            >>> ##
+            >>> # #
             >>> handler._is_authenticated()
             False
 
@@ -1963,36 +2092,23 @@ class CGIHTTPRequestHandler(
                     self.server.web.authentication_file_name)
                 authentication_file = FileHandler(location=file_path)
                 if authentication_file:
-## python3.4
-##                     return(
-##                         self.headers.get('authorization') ==
-##                         'Basic %s' % self._get_login_data(
-##                             authentication_file))
                     return(
-                        self.headers.getheader('authorization') ==
+                        self.headers.get('authorization') ==
                         'Basic %s' % self._get_login_data(
                             authentication_file))
-##
                 if self._authentication_location == self.server.web.root:
                     break
                 self._authentication_location = FileHandler(
                     location=self._authentication_location.directory_path)
-## python3.4
-##             return builtins.bool(
-##                 self.server.web.authentication_handler is None or
-##                 self.server.web.authentication_handler(
-##                     self.headers.get('authorization'), self.request_uri,
-##                     self))
             return builtins.bool(
                 self.server.web.authentication_handler is None or
                 self.server.web.authentication_handler(
-                    self.headers.getheader('authorization'),
-                    self.request_uri, self))
-##
+                    self.headers.get('authorization'), self.request_uri,
+                    self))
         return True
 
     @JointPoint
-## python3.4     def _is_valid_reference(self: Self) -> builtins.bool:
+# # python3.4     def _is_valid_reference(self: Self) -> builtins.bool:
     def _is_valid_reference(self):
         '''
             Checks weather the requested is one of a python module-, static- \
@@ -2042,7 +2158,7 @@ class CGIHTTPRequestHandler(
         return False
 
     @JointPoint
-## python3.4     def _is_valid_requested_file(self: Self) -> builtins.bool:
+# # python3.4     def _is_valid_requested_file(self: Self) -> builtins.bool:
     def _is_valid_requested_file(self):
         '''Determines if the current requested file points to a valid file.'''
         patterns = self.server.web.dynamic_mime_type_pattern + \
@@ -2055,7 +2171,7 @@ class CGIHTTPRequestHandler(
             self.requested_file.is_directory())
 
     @JointPoint
-## python3.4     def _is_dynamic(self: Self) -> builtins.bool:
+# # python3.4     def _is_dynamic(self: Self) -> builtins.bool:
     def _is_dynamic(self):
         '''
             Determines if the current request points to a dynamic executable \
@@ -2065,90 +2181,91 @@ class CGIHTTPRequestHandler(
             self.server.web.dynamic_mime_type_pattern,
             self.requested_file.mime_type))
 
-            # endregion
+        # # endregion
 
     @JointPoint
-## python3.4
-##     def _do_special_request(self: Self, type: builtins.str) -> Self:
+# # python3.4
+# #     def _do_special_request(self: Self, type: builtins.str) -> Self:
     def _do_special_request(self, type):
-##
+# #
         '''Is triggered if a special request is coming.'''
         self.request_type = type[builtins.len('do_'):].lower()
-## python3.4
-##         data_type, post_data = cgi.parse_header(
-##             self.headers.get_content_type())
-##         given_content_length = self.headers.get('content-length')
-        data_type, post_data = cgi.parse_header(self.headers.gettype())
-        given_content_length = self.headers.getheader('content-length')
-##
-        content_length = 0
-        if builtins.isinstance(given_content_length, builtins.str):
-            content_length = builtins.int(given_content_length)
-        if data_type == 'application/x-www-form-urlencoded':
-## python3.4
-##             self.data = urlparse.parse_qs(self.rfile.read(
-##                 content_length
-##             ).decode(self.server.web.encoding))
-            self.data = cgi.parse_qs(
-                self.rfile.read(content_length), keep_blank_values=True)
-##
-            for name, value in self.data.items():
-                if Object(content=value).is_binary():
-                    self.data[name] = {'content': value}
-        elif data_type == 'multipart/form-data':
-            self.data = self._determine_data()
-        elif data_type == 'application/json':
-## python3.4
-##             self.data = json.loads(self.rfile.read(content_length).decode(
-##                 self.server.web.encoding))
-            self.data = json.loads(
-                self.rfile.read(content_length),
-                encoding=self.server.web.encoding)
-##
-        else:
-            self.data = {
-                'type': data_type, 'content': self.rfile.read(content_length)}
+# # python3.4
+# #         self.data_type, post_data = cgi.parse_header(
+# #             self.headers.get_content_type())
+        self.data_type, post_data = cgi.parse_header(
+            self.headers.gettype())
+# #
+        content_length = builtins.int(self.headers.get('content-length', 0))
+        if not __test_mode__:
+            if self.data_type == 'application/x-www-form-urlencoded':
+# # python3.4
+# #                 self.data = urlparse.parse_qs(self.rfile.read(
+# #                     content_length
+# #                 ).decode(self.server.web.encoding))
+                self.data = cgi.parse_qs(
+                    self.rfile.read(content_length), keep_blank_values=True
+                )
+# #
+                for name, value in self.data.items():
+                    if Object(content=value).is_binary():
+                        self.data[name] = {'content': value}
+            elif self.data_type == 'multipart/form-data':
+                self.data = self._determine_data()
+            elif self.data_type == 'application/json':
+# # python3.4
+# #                 self.data = json.loads(self.rfile.read(
+# #                     content_length
+# #                 ).decode(self.server.web.encoding))
+                self.data = json.loads(
+                    self.rfile.read(content_length),
+                    encoding=self.server.web.encoding)
+# #
+            else:
+                self.data = {
+                    'type': self.data_type,
+                    'content': self.rfile.read(content_length)}
         return self.do_GET()
 
     @JointPoint
-## python3.4
-##     def _get_login_data(
-##         self: Self, authentication_file: FileHandler
-##     ) -> builtins.str:
+# # python3.4
+# #     def _get_login_data(
+# #         self: Self, authentication_file: FileHandler
+# #     ) -> builtins.str:
     def _get_login_data(self, authentication_file):
-##
+# #
         '''Determines needed login data for current request.'''
         __logger__.info(
             'Use authentication file "%s".', authentication_file._path)
         match = re.compile(
             self.server.web.authentication_file_content_pattern
         ).match(authentication_file.content.strip())
-## python3.4
-##         return base64.b64encode(('%s:%s' % (
-##             match.group('name'), match.group('password')
-##         )).encode(self.server.web.encoding)).decode()
+# # python3.4
+# #         return base64.b64encode(('%s:%s' % (
+# #             match.group('name'), match.group('password')
+# #         )).encode(self.server.web.encoding)).decode()
         return base64.b64encode(
             '%s:%s' % (match.group('name'), match.group('password')))
-##
+# #
 
     @JointPoint
-## python3.4     def _determine_data(self: Self) -> builtins.dict:
+# # python3.4     def _determine_data(self: Self) -> builtins.dict:
     def _determine_data(self):
         '''
             Determines the post values given by an html form. File uploads \
             are includes as bytes.
         '''
-## python3.4
-##         form = cgi.FieldStorage(
-##             fp=self.rfile, headers=self.headers, keep_blank_values=True,
-##             strict_parsing=True,
-##             environ=self._determine_environment_variables(),
-##             encoding=self.server.web.encoding)
+# # python3.4
+# #         form = cgi.FieldStorage(
+# #             fp=self.rfile, headers=self.headers, keep_blank_values=True,
+# #             strict_parsing=True,
+# #             environ=self._determine_environment_variables(),
+# #             encoding=self.server.web.encoding)
         form = cgi.FieldStorage(
             fp=self.rfile, headers=self.headers, keep_blank_values=True,
             strict_parsing=True,
             environ=self._determine_environment_variables())
-##
+# #
         data = {}
         for name in form:
             data[name] = []
@@ -2160,27 +2277,27 @@ class CGIHTTPRequestHandler(
                     value_reference = form[name][index]
                 if(builtins.isinstance(value_reference.file, builtins.file) or
                    value_reference.filename):
-## python3.4
-##                     data[name].append({
-##                         'content': value,
-##                         'name': value_reference.filename,
-##                         'disposition': value_reference.disposition,
-##                         'encoding': value_reference.encoding})
+# # python3.4
+# #                     data[name].append({
+# #                         'content': value,
+# #                         'name': value_reference.filename,
+# #                         'disposition': value_reference.disposition,
+# #                         'encoding': value_reference.encoding})
                     data[name].append({
                         'content': value,
                         'name': value_reference.filename,
                         'disposition': value_reference.disposition})
-##
+# #
                 else:
                     data[name].append(value)
                 index += 1
         return data
 
     @JointPoint
-## python3.4
-##     def _determine_environment_variables(self: Self) -> os._Environ:
+# # python3.4
+# #     def _determine_environment_variables(self: Self) -> os._Environ:
     def _determine_environment_variables(self):
-##
+# #
         '''
             Determines all needed environment variables needed to determine \
             given post data with cgi module.
@@ -2190,14 +2307,14 @@ class CGIHTTPRequestHandler(
             >>> handler = CGIHTTPRequestHandler()
             >>> handler.server = Class()
             >>> handler.server.web = Web(__test_folder__)
-            >>> ## python2.7
+            >>> # # python2.7
             >>> if sys.version_info.major < 3:
             ...     handler.headers = handler.MessageClass(
-            ...         String('Content-Type: text/plain'), seekable=False)
+            ...         String('content-type: text/plain'), seekable=False)
             ... else:
             ...     handler.headers = handler.MessageClass()
-            ...     handler.headers.add_header('Content-Type', 'text/plain')
-            >>> ##
+            ...     handler.headers.add_header('content-type', 'text/plain')
+            >>> # #
             >>> handler.command = ''
 
             >>> dict(
@@ -2205,7 +2322,7 @@ class CGIHTTPRequestHandler(
             ... ) # doctest: +ELLIPSIS
             {'...': '...'}
 
-            >>> ## python2.7
+            >>> # # python2.7
             >>> if sys.version_info.major < 3:
             ...     handler.headers = handler.MessageClass(
             ...         String(
@@ -2214,72 +2331,89 @@ class CGIHTTPRequestHandler(
             ... else:
             ...     handler.headers = handler.MessageClass()
             ...     handler.headers.add_header('accept', 'text/plain')
-            >>> ##
+            >>> # #
+            >>> dict(
+            ...     handler._determine_environment_variables()
+            ... ) # doctest: +ELLIPSIS
+            {'...': '...'}
+
+            >>> # # python2.7
+            >>> if sys.version_info.major < 3:
+            ...     handler.headers = handler.MessageClass(
+            ...         String('cookie: hans=peter'), seekable=False)
+            ... else:
+            ...     handler.headers = handler.MessageClass()
+            ...     handler.headers.add_header('cookie', 'hans=peter')
+            >>> # #
             >>> dict(
             ...     handler._determine_environment_variables()
             ... ) # doctest: +ELLIPSIS
             {'...': '...'}
         '''
         accept = []
-        for line in self.headers.getallmatchingheaders('accept'):
-            accept = accept + line[7:].split(',')
+        if 'accept' in self.headers:
+            for line in self.headers['accept'].split('\n'):
+                accept += line.split(',')
         variables = deepcopy(os.environ)
-## python3.4         content_type = self.headers.get_content_type()
-        content_type = self.headers.getheader('content-type')
+# # python3.4
+# #         content_type = self.headers.get_content_type()
+        content_type = self.headers.get('content-type', 'text/plain')
+# #
         variables.update({
             'HTTP_ACCEPT': ','.join(accept),
             'REQUEST_METHOD': self.command,
             'CONTENT_TYPE': content_type,
-            'QUERY_STRING': '',
-            'REMOTE_HOST': '',
+            'QUERY_STRING': self.parameter,
+            'REMOTE_HOST': self.host,
             'CONTENT_LENGTH': '',
             'HTTP_USER_AGENT': '',
             'HTTP_COOKIE': '',
             'HTTP_REFERER': ''})
         for variable_name in variables:
-## python3.4
-##             if self.headers.get(variable_name.replace('_', '-').lower()):
-##                 variables[variable_name] = self.headers.get(
-##                     variable_name.replace('_', '-').lower())
-##         cookie_content = ', '.join(builtins.filter(
-##             None, self.headers.get_all('cookie', [])))
-##         if cookie_content:
-##             variables['HTTP_COOKIE'] = cookie_content
-            if self.headers.getheader(
-                variable_name.replace('_', '-').lower()
+# # python3.4
+# #             if variable_name.replace('_', '-').lower() in self.headers:
+# #                 variables[variable_name] = self.headers.get(
+# #                     variable_name.replace('_', '-').lower())
+# #         cookie_content = ', '.join(builtins.filter(
+# #             None, self.headers.get_all('cookie', [])))
+# #         if cookie_content:
+# #             variables['HTTP_COOKIE'] = cookie_content
+            if self.headers.get(
+                variable_name.replace('_', '-').lower(), False
             ):
-                variables[variable_name] = self.headers.getheader(
+                variables[variable_name] = self.headers.get(
                     variable_name.replace('_', '-').lower())
-##
+# #
         return variables
 
     @JointPoint
-## python3.4
-##     def _send_no_authentication_error(self: Self) -> Self:
+# # python3.4
+# #     def _send_no_authentication_error(self: Self) -> Self:
     def _send_no_authentication_error(self):
-##
+# #
         '''This method is called if authentication failed.'''
+        self.send_response(401)
+        message = 'You request a protected location'
+# # python3.4
+# #         if 'authorization' in self.headers:
+        if self.headers.get('authorization', False):
+# #
+            # TODO reach branch
+            message = 'The authentication failed'
         if not __test_mode__:
-            self.send_response(401)
-            message = 'You request a protected location'
-## python3.4
-##             if self.headers.get('authorization'):
-            if self.headers.getheader('authorization'):
-##
-                message = 'The authentication failed'
             self.send_header(
                 'WWW-Authenticate', 'Basic realm=\"%s\"' % message)
             self.send_header('Content-Type', 'text/html; charset=UTF-8')
-            self.end_headers()
+        self.end_headers()
         return self
 
     @JointPoint
-## python3.4
-##     def _send_no_file_error(
-##         self: Self, valid_request=True, debug=False
-##     ) -> Self:
+# # python3.4
+# #     def _send_no_file_error(
+# #         self: Self, valid_request=True, debug=False
+# #     ) -> Self:
     def _send_no_file_error(self, valid_request=True, debug=False):
-##
+# #
         '''
             Generates a http-404-error if no useful file was found for \
             responding.
@@ -2350,12 +2484,12 @@ class CGIHTTPRequestHandler(
         return self
 
     @JointPoint
-## python3.4
-##     def _check_pattern(
-##         self: Self, patterns: collections.Iterable, subject: builtins.str
-##     ) -> (builtins.str, builtins.bool):
+# # python3.4
+# #     def _check_pattern(
+# #         self: Self, patterns: collections.Iterable, subject: builtins.str
+# #     ) -> (builtins.str, builtins.bool):
     def _check_pattern(self, patterns, subject):
-##
+# #
         '''
             Checks if one of a list of given regular expression patterns \
             matches the given subject.
@@ -2366,7 +2500,7 @@ class CGIHTTPRequestHandler(
         return False
 
     @JointPoint
-## python3.4     def _is_valid_request(self: Self) -> builtins.bool:
+# # python3.4     def _is_valid_request(self: Self) -> builtins.bool:
     def _is_valid_request(self):
         '''Checks if given request fulfill all restrictions.'''
         return self._request_in_pattern_list(
@@ -2375,12 +2509,12 @@ class CGIHTTPRequestHandler(
             self.server.web.request_blacklist)
 
     @JointPoint
-## python3.4
-##     def _request_in_pattern_list(
-##         self: Self, pattern_list: collections.Iterable
-##     ) -> builtins.bool:
+# # python3.4
+# #     def _request_in_pattern_list(
+# #         self: Self, pattern_list: collections.Iterable
+# #     ) -> builtins.bool:
     def _request_in_pattern_list(self, pattern_list):
-##
+# #
         '''Checks if current request matches on of the given pattern.'''
         patterns = re.compile('(?P<request_type>.+?):(?P<request_uri>.*)')
         request_type_uppercase = self.request_type.upper()
@@ -2396,7 +2530,7 @@ class CGIHTTPRequestHandler(
         return False
 
     @JointPoint
-## python3.4     def _determine_host(self: Self) -> Self:
+# # python3.4     def _determine_host(self: Self) -> Self:
     def _determine_host(self):
         '''
             Determines the full host name with port included (if it's not \
@@ -2408,6 +2542,14 @@ class CGIHTTPRequestHandler(
             >>> handler.server = Class()
             >>> handler.server.web = Web(__test_folder__)
             >>> handler.server.web.host_name = 'test'
+            >>> # # python2.7
+            >>> if sys.version_info.major < 3:
+            ...     handler.headers = handler.MessageClass(
+            ...         String('test: hans'), seekable=False)
+            ... else:
+            ...     handler.headers = handler.MessageClass()
+            ...     handler.headers.add_header('test', 'hans')
+            >>> # #
 
             >>> handler.server.web.port = 80
             >>> handler._determine_host() # doctest: +ELLIPSIS
@@ -2416,30 +2558,67 @@ class CGIHTTPRequestHandler(
             'test'
 
             >>> handler.server.web.port = 8080
+            >>> # # python2.7
+            >>> if sys.version_info.major < 3:
+            ...     handler.headers = handler.MessageClass(
+            ...         String('accept: text/plain'), seekable=False)
+            ... else:
+            ...     handler.headers = handler.MessageClass()
+            ...     handler.headers.add_header('accept', 'text/plain')
+            >>> # #
             >>> handler._determine_host() # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "" and parame...
             >>> handler.host
             'test:8080'
+
+            >>> # # python2.7
+            >>> if sys.version_info.major < 3:
+            ...     handler.headers = handler.MessageClass(
+            ...         String('x-forwarded-host: hans\\nHost: hans'),
+            ...         seekable=False)
+            ... else:
+            ...     handler.headers = handler.MessageClass()
+            ...     handler.headers.add_header('x-forwarded-host', 'hans')
+            ...     handler.headers.add_header('host', 'hans')
+            >>> # #
+            >>> handler._determine_host() # doctest: +ELLIPSIS
+            Object of "CGIHTTPRequestHandler" with request uri "" and parame...
+            >>> handler.host
+            'hans'
+
+            >>> # # python2.7
+            >>> if sys.version_info.major < 3:
+            ...     handler.headers = handler.MessageClass(
+            ...         String('Host: hans'), seekable=False)
+            ... else:
+            ...     handler.headers = handler.MessageClass()
+            ...     handler.headers.add_header('host', 'hans')
+            >>> # #
+            >>> handler._determine_host() # doctest: +ELLIPSIS
+            Object of "CGIHTTPRequestHandler" with request uri "" and parame...
+            >>> handler.host
+            'hans'
         '''
         self.host = self.server.web.host_name
         if self.server.web.port != 80:
             self.host += ':%d' % self.server.web.port
-        if not __test_mode__:
-## python3.4
-##             if self.headers.get('X-Forwarded-Host'):
-##                 self.host = self.headers.get('X-Forwarded-Host')
-##             elif self.headers.get('Host'):
-##                 self.host = self.headers.get('Host')
-            if self.headers.getheader('X-Forwarded-Host'):
-                self.host = self.headers.getheader('X-Forwarded-Host')
-            elif self.headers.get('Host'):
-                self.host = self.headers.getheader('Host')
-##
+# # python3.4
+# #         if 'x-forwarded-host' in self.headers:
+# #             self.host = self.headers.get('x-forwarded-host')
+# #         elif 'host' in self.headers:
+# #             self.host = self.headers.get('host')
+        if self.headers.get('x-forwarded-host', False):
+            self.host = self.headers.get('x-forwarded-host')
+        elif self.headers.get('host', False):
+            self.host = self.headers.get('host')
+# #
         return self
 
     @JointPoint
-## python3.4     def _create_environment_variables(self: Self) -> builtins.str:
+# # python3.4
+# #     def _create_environment_variables(self: Self) -> builtins.str:
     def _create_environment_variables(self):
+# #
         '''Creates all request specified environment-variables.'''
         self._determine_host().request_uri = self.path
         match = re.compile(
@@ -2448,12 +2627,12 @@ class CGIHTTPRequestHandler(
         ).match(self.request_uri)
         self.path = ''
         if match:
-## python3.4
-##             self.path = posixpath.normpath(urlparse.unquote(match.group(
-##                 'path')))
+# # python3.4
+# #             self.path = posixpath.normpath(urlparse.unquote(match.group(
+# #                 'path')))
             self.path = posixpath.normpath(urllib.unquote(match.group(
                 'path')))
-##
+# #
             if self.path == '.':
                 self.path = ''
             self.parameter = match.group('parameter')
@@ -2468,12 +2647,12 @@ class CGIHTTPRequestHandler(
         return self.path
 
     @JointPoint
-## python3.4
-##     def _set_dynamic_or_static_get(
-##         self: Self, file_name: builtins.str
-##     ) -> Self:
+# # python3.4
+# #     def _set_dynamic_or_static_get(
+# #         self: Self, file_name: builtins.str
+# #     ) -> Self:
     def _set_dynamic_or_static_get(self, file_name):
-##
+# #
         '''
             Makes a dynamic or static respond depending on incoming request.
 
@@ -2482,6 +2661,14 @@ class CGIHTTPRequestHandler(
             >>> handler = CGIHTTPRequestHandler()
             >>> handler.server = Class()
             >>> handler.server.web = Web(__test_folder__)
+            >>> # # python2.7
+            >>> if sys.version_info.major < 3:
+            ...     handler.headers = handler.MessageClass(
+            ...         String('test: hans'), seekable=False)
+            ... else:
+            ...     handler.headers = handler.MessageClass()
+            ...     handler.headers.add_header('test', 'hans')
+            >>> # #
 
             >>> handler.load_module = True
             >>> handler._set_dynamic_or_static_get('test') # doctest: +ELLIPSIS
@@ -2493,7 +2680,7 @@ class CGIHTTPRequestHandler(
         return self._static_get()
 
     @JointPoint
-## python3.4     def _default_get(self: Self) -> builtins.bool:
+# # python3.4     def _default_get(self: Self) -> builtins.bool:
     def _default_get(self):
         '''
             Handles every request which doesn't takes a file or python module \
@@ -2504,6 +2691,29 @@ class CGIHTTPRequestHandler(
             >>> handler = CGIHTTPRequestHandler()
             >>> handler.server = Class()
             >>> handler.server.web = Web(__test_folder__)
+            >>> # # python2.7
+            >>> if sys.version_info.major < 3:
+            ...     handler.headers = handler.MessageClass(
+            ...         String('cookie: hans'), seekable=False)
+            ... else:
+            ...     handler.headers = handler.MessageClass()
+            ...     handler.headers.add_header('cookie', 'hans')
+            >>> # #
+
+            >>> handler.requested_file = FileHandler(
+            ...     __test_folder__.path + 'index.py')
+            >>> handler.requested_file.content = ''
+            >>> handler._default_get()
+            True
+
+            >>> # # python2.7
+            >>> if sys.version_info.major < 3:
+            ...     handler.headers = handler.MessageClass(
+            ...         String('cookie: hans=peter'), seekable=False)
+            ... else:
+            ...     handler.headers = handler.MessageClass()
+            ...     handler.headers.add_header('cookie', 'hans=peter')
+            >>> # #
 
             >>> handler.requested_file = FileHandler(
             ...     __test_folder__.path + 'index.py')
@@ -2548,8 +2758,10 @@ class CGIHTTPRequestHandler(
         return False
 
     @JointPoint
-## python3.4     def _is_default_module_requested(self: Self) -> builtins.bool:
+# # python3.4
+# #     def _is_default_module_requested(self: Self) -> builtins.bool:
     def _is_default_module_requested(self):
+# #
         '''
             Handle a default module request if possible.
 
@@ -2558,11 +2770,23 @@ class CGIHTTPRequestHandler(
             >>> handler = CGIHTTPRequestHandler()
             >>> handler.server = Class()
             >>> handler.server.web = Web(__test_folder__)
+            >>> # # python2.7
+            >>> if sys.version_info.major < 3:
+            ...     handler.headers = handler.MessageClass(
+            ...         String('test: hans'), seekable=False)
+            ... else:
+            ...     handler.headers = handler.MessageClass()
+            ...     handler.headers.add_header('test', 'hans')
+            >>> # #
 
             >>> handler._is_default_module_requested()
             False
+
+            >>> handler.server.web = Web(
+            ...     __test_folder__, module_loading='doctest')
+            >>> handler._is_default_module_requested()
+            True
         '''
-        # TODO check branch.
         if self.server.web.module_loading:
             if builtins.isinstance(
                 self.server.web.module_loading, builtins.str
@@ -2576,12 +2800,12 @@ class CGIHTTPRequestHandler(
         return False
 
     @JointPoint
-## python3.4
-##     def _handle_default_modules_get(
-##         self: Self, module_name: builtins.str
-##     ) -> (Self, builtins.bool):
+# # python3.4
+# #     def _handle_default_modules_get(
+# #         self: Self, module_name: builtins.str
+# #     ) -> (Self, builtins.bool):
     def _handle_default_modules_get(self, module_name):
-##
+# #
         '''
             Handles requests which wants the current defaults modules \
             (initially called module) run for a server thread.
@@ -2593,6 +2817,14 @@ class CGIHTTPRequestHandler(
             >>> handler = CGIHTTPRequestHandler()
             >>> handler.server = Class()
             >>> handler.server.web = Web(__test_folder__)
+            >>> # # python2.7
+            >>> if sys.version_info.major < 3:
+            ...     handler.headers = handler.MessageClass(
+            ...         String('test: hans'), seekable=False)
+            ... else:
+            ...     handler.headers = handler.MessageClass()
+            ...     handler.headers.add_header('test', 'hans')
+            >>> # #
 
             >>> handler._handle_default_modules_get('not_existing')
             False
@@ -2618,7 +2850,7 @@ class CGIHTTPRequestHandler(
         return False
 
     @JointPoint
-## python3.4     def _handle_given_default_get(self: Self) -> Self:
+# # python3.4     def _handle_given_default_get(self: Self) -> Self:
     def _handle_given_default_get(self):
         '''
             Handles request with no explicit file or module to run.
@@ -2629,6 +2861,14 @@ class CGIHTTPRequestHandler(
             >>> handler.server = Class()
             >>> handler.server.web = Web(__test_folder__)
             >>> handler.path = '/'
+            >>> # # python2.7
+            >>> if sys.version_info.major < 3:
+            ...     handler.headers = handler.MessageClass(
+            ...         String('cookie: hans'), seekable=False)
+            ... else:
+            ...     handler.headers = handler.MessageClass()
+            ...     handler.headers.add_header('cookie', 'hans')
+            >>> # #
 
             >>> __test_buffer__.clear() # doctest: +ELLIPSIS
             '...'
@@ -2659,7 +2899,7 @@ class CGIHTTPRequestHandler(
             file_name=self.server.web.default)
 
     @JointPoint
-## python3.4     def _static_get(self: Self) -> Self:
+# # python3.4     def _static_get(self: Self) -> Self:
     def _static_get(self):
         '''
             Handles a static file-request.
@@ -2672,24 +2912,46 @@ class CGIHTTPRequestHandler(
             >>> handler.requested_file = FileHandler(
             ...     __test_folder__.path + '_static_get')
             >>> handler.requested_file.content = ''
-            >>> ## python2.7
+            >>> # # python2.7
             >>> if sys.version_info.major < 3:
             ...     handler.headers = handler.MessageClass(
             ...         String(
-            ...             'If-Modified-Since: %s' % handler.date_time_string(
+            ...             'if-modified-since: %s' % handler.date_time_string(
             ...                 int(handler.requested_file.timestamp))
             ...         ), seekable=False)
             ... else:
             ...     handler.headers = handler.MessageClass()
             ...     handler.headers.add_header(
-            ...         'If-Modified-Since', handler.date_time_string(
+            ...         'if-modified-since', handler.date_time_string(
             ...             int(handler.requested_file.timestamp)))
-            >>> ##
+            >>> # #
 
             >>> handler._static_get() # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "" and parame...
         '''
         if not __test_mode__ and self.requested_file.is_directory():
+            if self.data_type == 'multipart/form-data':
+                '''Uploaded data to a directory are saved automatically.'''
+                for items in self.data.values():
+                    for item in items:
+# # python3.4
+# #                         if(builtins.len(item) == 4 and
+# #                            'content' in item and 'name' in item and
+# #                            'disposition' in item and
+# #                            'disposition' in item and 'encoding' in item):
+# #                             FileHandler(
+# #                                 self.requested_file.path + item['name'],
+# #                                 encoding=item['encoding']
+# #                             ).set_content(
+# #                                 content=item['content'], mode='w+b')
+                        if(builtins.len(item) == 3 and
+                           'content' in item and
+                           'name' in item and 'disposition' in item):
+                            FileHandler(
+                                self.requested_file.path + item['name']
+                            ).set_content(
+                                content=item['content'], mode='w+b')
+# #
             '''
                 If a directory was requested and no trailing slash where \
                 given a 301 redirect will be returned to same request with \
@@ -2709,24 +2971,24 @@ class CGIHTTPRequestHandler(
         except builtins.IOError:
             self._send_no_file_error()
             return self
-## python3.4
-##         if(self.headers.get('If-Modified-Since') ==
-##            self.date_time_string(
-##                builtins.int(self.requested_file.timestamp))):
-        if(self.headers.getheader('If-Modified-Since') ==
+# # python3.4
+# #         if(self.headers.get('if-modified-since') ==
+# #            self.date_time_string(
+# #                builtins.int(self.requested_file.timestamp))):
+        if(self.headers.get('if-modified-since') ==
            self.date_time_string(
                builtins.int(self.requested_file.timestamp))):
-##
+# #
             return self._send_not_modified_header()
         return self._send_static_file(output=file_handler)
 
     @JointPoint
-## python3.4
-##     def _send_static_file(
-##         self: Self, output: (builtins.str, _io.BufferedReader)
-##     ) -> Self:
+# # python3.4
+# #     def _send_static_file(
+# #         self: Self, output: (builtins.str, _io.BufferedReader)
+# #     ) -> Self:
     def _send_static_file(self, output):
-##
+# #
         '''
             Sends given output to client.
 
@@ -2746,8 +3008,7 @@ class CGIHTTPRequestHandler(
         threshold = self.server.web.file_size_stream_threshold_in_byte
         if threshold < self.requested_file.size:
             self.send_content_type_header(mime_type='application/octet-stream')
-            if not __test_mode__:
-                self.send_header('Content-Transfer-Encoding', 'binary')
+            self.send_header('Content-Transfer-Encoding', 'binary')
         else:
             self.send_content_type_header(
                 mime_type=self.requested_file.get_mime_type(web=True))
@@ -2759,7 +3020,7 @@ class CGIHTTPRequestHandler(
         return self._send_output(output)
 
     @JointPoint
-## python3.4     def _send_not_modified_header(self: Self) -> Self:
+# # python3.4     def _send_not_modified_header(self: Self) -> Self:
     def _send_not_modified_header(self):
         '''Sends a header to client indicating cached file hasn't changed.'''
         self.send_content_type_header(
@@ -2772,12 +3033,12 @@ class CGIHTTPRequestHandler(
         return self
 
     @JointPoint
-## python3.4
-##     def _send_output(
-##         self: Self, output: (builtins.str, _io.BufferedReader)
-##     ) -> Self:
+# # python3.4
+# #     def _send_output(
+# #         self: Self, output: (builtins.str, _io.BufferedReader)
+# #     ) -> Self:
     def _send_output(self, output):
-##
+# #
         '''Sends the final given output to client.'''
         if not __test_mode__:
             if self._encoded_output:
@@ -2790,12 +3051,12 @@ class CGIHTTPRequestHandler(
         return self
 
     @JointPoint
-## python3.4
-##     def _gzip(
-##         self: Self, content: (builtins.str, builtins.bytes)
-##     ) -> builtins.bytes:
+# # python3.4
+# #     def _gzip(
+# #         self: Self, content: (builtins.str, builtins.bytes)
+# #     ) -> builtins.bytes:
     def _gzip(self, content):
-##
+# #
         '''
             Compresses the given content and returns the encoded result.
 
@@ -2808,23 +3069,24 @@ class CGIHTTPRequestHandler(
             >>> isinstance(handler._gzip(''), bytes)
             True
         '''
-## python3.4         output = io.BytesIO()
+# # python3.4         output = io.BytesIO()
         output = StringIO.StringIO()
         gzip_file_handler = gzip.GzipFile(
             fileobj=output, mode='w', compresslevel=5)
-## python3.4
-##         if builtins.isinstance(content, builtins.bytes):
-##             gzip_file_handler.write(content)
-##         else:
-##             gzip_file_handler.write(content.encode(
-##                 encoding=self.server.web.encoding))
+# # python3.4
+# #         if builtins.isinstance(content, builtins.bytes):
+# #             # TODO reach branch
+# #             gzip_file_handler.write(content)
+# #         else:
+# #             gzip_file_handler.write(content.encode(
+# #                 encoding=self.server.web.encoding))
         gzip_file_handler.write(content)
-##
+# #
         gzip_file_handler.close()
         return output.getvalue()
 
     @JointPoint
-## python3.4     def _dynamic_get(self: Self) -> Self:
+# # python3.4     def _dynamic_get(self: Self) -> Self:
     def _dynamic_get(self):
         '''
             Handles a dynamic file or python module request. It initializes \
@@ -2834,8 +3096,9 @@ class CGIHTTPRequestHandler(
             environment.
         '''
         cookie = {}
-        if self.get_cookie() is not None:
-            for key, morsel in self.get_cookie().items():
+        cookie_handler = self.get_cookie()
+        if cookie_handler is not None:
+            for key, morsel in cookie_handler.items():
                 cookie[key] = morsel.value
         self.request_arguments = (
             ('requested_file_name', self.requested_file_name),
@@ -2852,7 +3115,7 @@ class CGIHTTPRequestHandler(
         return self
 
     @JointPoint
-## python3.4     def _run_request(self: Self) -> Self:
+# # python3.4     def _run_request(self: Self) -> Self:
     def _run_request(self):
         '''
             Decides to run the given script as python-module or standalone \
@@ -2863,8 +3126,8 @@ class CGIHTTPRequestHandler(
         return self._run_requested_file()
 
     @JointPoint
-## python3.4     def _run_requested_file(self: Self) -> Self:
-    def _run_requested_file(self):
+# # python3.4     def _run_requested_file(self: Self, debug=False) -> Self:
+    def _run_requested_file(self, debug=False):
         '''
             Runs a given external process in a subprocess. Output and errors \
             are piped to requested client.
@@ -2881,6 +3144,10 @@ class CGIHTTPRequestHandler(
 
             >>> handler.respond = False
             >>> handler._run_requested_file() # doctest: +ELLIPSIS
+            Object of "CGIHTTPRequestHandler" with request uri "" and parame...
+
+            >>> handler.request_arguments = ('hans', 'peter'),
+            >>> handler._run_requested_file(True) # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "" and parame...
         '''
         self.request_arguments = builtins.list(builtins.map(
@@ -2906,7 +3173,8 @@ class CGIHTTPRequestHandler(
         if self.respond:
             if errors:
                 program_description = ''
-                if sys.flags.debug or __logger__.isEnabledFor(logging.DEBUG):
+                if(sys.flags.debug or __logger__.isEnabledFor(logging.DEBUG) or
+                   debug):
                     program_description = ' "%s"' % self.request_arguments[0]
                 self.send_error(
                     500, 'Internal server error with cgi program%s: "%s"' %
@@ -2929,7 +3197,7 @@ class CGIHTTPRequestHandler(
         return self
 
     @JointPoint
-## python3.4     def _run_requested_module(self: Self) -> Self:
+# # python3.4     def _run_requested_module(self: Self) -> Self:
     def _run_requested_module(self):
         '''
             Imports and runs a given python module. Errors and output are \
@@ -2939,7 +3207,7 @@ class CGIHTTPRequestHandler(
         '''Redirect output buffer.'''
         print_default_buffer_backup = Print.default_buffer
         Print.default_buffer = self.server.web.thread_buffer
-## python3.4         sys_path_backup = sys.path.copy()
+# # python3.4         sys_path_backup = sys.path.copy()
         sys_path_backup = copy(sys.path)
         sys.path = [self.server.web.root.path] + sys.path
         self.server.web.number_of_running_threads += 1
@@ -2953,16 +3221,17 @@ class CGIHTTPRequestHandler(
             requested_module, print_default_buffer_backup, sys_path_backup)
 
     @JointPoint
-## python3.4
-##     def _handle_module_running(
-##         self: Self, requested_module: types.ModuleType,
-##         print_default_buffer_backup: builtins.object,
-##         sys_path_backup: collections.Iterable
-##     ) -> Self:
+# # python3.4
+# #     def _handle_module_running(
+# #         self: Self, requested_module: types.ModuleType,
+# #         print_default_buffer_backup: builtins.object,
+# #         sys_path_backup: collections.Iterable
+# #     ) -> Self:
     def _handle_module_running(
-        self, requested_module, print_default_buffer_backup, sys_path_backup
+        self, requested_module, print_default_buffer_backup,
+        sys_path_backup
     ):
-##
+# #
         '''Handles exceptions raising in requested modules.'''
         try:
             if not __test_mode__:
@@ -2987,15 +3256,15 @@ class CGIHTTPRequestHandler(
         return self
 
     @JointPoint
-## python3.4
-##     def _handle_module_exception(
-##         self: Self, requested_module: types.ModuleType,
-##         exception: builtins.BaseException, debug=False
-##     ) -> Self:
+# # python3.4
+# #     def _handle_module_exception(
+# #         self: Self, requested_module: types.ModuleType,
+# #         exception: builtins.BaseException, debug=False
+# #     ) -> Self:
     def _handle_module_exception(
         self, requested_module, exception, debug=False
     ):
-##
+# #
         '''
             This method handles each exception raised by running a module \
             which was requested by client.
@@ -3024,6 +3293,18 @@ class CGIHTTPRequestHandler(
             Traceback (most recent call last):
             ...
             OSError: hans
+
+            >>> __test_buffer__.clear() # doctest: +ELLIPSIS
+            '...'
+            >>> try:
+            ...     raise OSError('hans')
+            ... except BaseException as exception:
+            ...     handler._handle_module_exception(
+            ...         __import__('doctest'), exception
+            ...     ) # doctest: +ELLIPSIS
+            Object of "CGIHTTPRequestHandler" with request uri "" and parame...
+            >>> __test_buffer__.clear() # doctest: +ELLIPSIS
+            '... - CRITICAL - Error in module "doctest" OSError: hans...'
         '''
         if self.respond:
             if(sys.flags.debug or __logger__.isEnabledFor(logging.DEBUG) or

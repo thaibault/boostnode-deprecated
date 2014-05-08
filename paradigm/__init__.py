@@ -35,7 +35,7 @@ from boostNode import __get_all_modules__
 __all__ = __get_all_modules__()
 '''Determine all modules in this folder via introspection.'''
 
- # region footer
+# region footer
 
 '''
     Preset some variables given by introspection letting the linter know what \
@@ -53,7 +53,7 @@ if __name__ == '__main__':
     CommandLine.generic_package_interface(
         name=__name__, frame=inspect.currentframe())
 
-# ednregion
+# endregion
 
 # region vim modline
 

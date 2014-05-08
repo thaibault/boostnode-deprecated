@@ -28,7 +28,7 @@ import sys
 
 '''Make boostNode packages and modules importable via relative paths.'''
 path = os.path.abspath(sys.path[0] + 2 * (os.sep + '..'))
-if not path in sys.path:
+if path not in sys.path:
     sys.path.append(path)
 if not sys.path[0]:
     sys.path[0] = os.getcwd()
@@ -40,7 +40,7 @@ from boostNode import __get_all_modules__
 __all__ = __get_all_modules__()
 '''Determine all modules in this folder via introspection.'''
 
- # region footer
+# region footer
 
 '''
     Preset some variables given by introspection letting the linter know what \
