@@ -1774,15 +1774,14 @@ class CommandLine(builtins.object):
 # #     def generic_package_interface(
 # #         cls: SelfClass, name=__name__, frame=inspect.currentframe(),
 # #         command_line_arguments=(),
-# #         linter='pep8 --repeat --ignore=E225,E701',
-# #         documenter='pydoc3.3', documenter_arguments=('-w',),
-# #         documentation_path='documentation', clear_old_documentation=True,
-# #         documentation_file_extension='html', temp_file_patterns=None,
-# #         exclude_packages=()
+# #         linter='pep8 --repeat --ignore=E112', documenter='pydoc3.4',
+# #         documenter_arguments=('-w',), documentation_path='documentation',
+# #         clear_old_documentation=True, documentation_file_extension='html',
+# #         temp_file_patterns=None, exclude_packages=()
 # #     ) -> (builtins.tuple, builtins.bool):
     def generic_package_interface(
         cls, name=__name__, frame=inspect.currentframe(),
-        command_line_arguments=(), linter='pep8 --repeat --ignore=E225',
+        command_line_arguments=(), linter='pep8 --repeat --ignore=E112',
         documenter='pydoc2', documenter_arguments=('-w',),
         documentation_path='documentation', clear_old_documentation=True,
         documentation_file_extension='html', temp_file_patterns=None,

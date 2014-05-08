@@ -355,11 +355,9 @@ class Replace(Class, Runnable):
             >>> from copy import copy
             >>> sys_argv_backup = copy(sys.argv)
 
-            >>> sys.argv[1:] = []
-            >>> Replace.run(
-            ...     __file_path__, True
-            ... ) # doctest: +ELLIPSIS
-            Object of "Replace" with file "..." to convert to "".
+            >>> sys.argv[1:] = ['--path', __file_path__, '--skip-self-file']
+            >>> Replace.run() # doctest: +ELLIPSIS
+            Object of "Replace" with file "..." to convert to "...".
 
             >>> sys.arv = sys_argv_backup
         '''

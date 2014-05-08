@@ -904,10 +904,10 @@ class Web(Class, Runnable):
             >>> Web()._run() # doctest: +ELLIPSIS
             Object of "Web" with root path "...", port "8080" and stop order...
 
-            >>> sys.argv = sys_argv_backup
-
             >>> Web.run() # doctest: +ELLIPSIS
-            Object of "Web" with root path "...", port "0" and stop order ...
+            Object of "Web" with root path "...", port "8080" and stop order...
+
+            >>> sys.argv = sys_argv_backup
         '''
         command_line_arguments = CommandLine.argument_parser(
             arguments=self.COMMAND_LINE_ARGUMENTS,

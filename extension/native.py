@@ -117,7 +117,7 @@ class ClassPropertyInitializer(FunctionDecorator):
                     if 'self' in self.EXCLUDED_ARGUMENT_NAMES:
                         self.object.__dict__[name] = value
                     else:
-                        self.class_object.__dict__[name] = value
+                        builtins.setattr(self.class_object, name, value)
             return self.__func__(*arguments, **keywords)
 # # python3.4         pass
         wrapper_function.__wrapped__ = self.__func__
@@ -1919,10 +1919,9 @@ class Dictionary(Object, builtins.dict):
     @JointPoint
 # # python3.4
 # #     def __init__(
-# #         self: Self, content: collections.Iterable,
-# #         *arguments: builtins.object, **keywords: builtins.object
+# #         self: Self, content=None, **keywords: builtins.object
 # #     ) -> None:
-    def __init__(self, content, *arguments, **keywords):
+    def __init__(self, content=None, **keywords):
 # #
         '''
             Generates a new high level wrapper around given object.
@@ -1938,6 +1937,9 @@ class Dictionary(Object, builtins.dict):
         '''The main property. It saves the current dictionary.'''
         if builtins.isinstance(content, self.__class__):
             content = content.content
+        elif content is None:
+            # TODO check branch
+            content = {}
         self.content = builtins.dict(content)
 
         # # # endregion
