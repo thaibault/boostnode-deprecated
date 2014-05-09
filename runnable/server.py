@@ -1378,7 +1378,7 @@ class CGIHTTPRequestHandler(
                 elif self._default_get():
                     return self
             return self._send_no_file_error(valid_request)
-        return self._send_no_authentication_error()
+        return self._send_no_authorization_error()
 
     @JointPoint
 # # python3.4     def do_POST(self: Self) -> Self:
@@ -1809,11 +1809,11 @@ class CGIHTTPRequestHandler(
     @JointPoint
 # # python3.4
 # #     def send_content_type_header(
-# #         self: Self, mime_type='text/html', encoding='UTF-8',
+# #         self: Self, mime_type='text/html', encoding=None,
 # #         response_code=200
 # #     ) -> Self:
     def send_content_type_header(
-        self, mime_type='text/html', encoding='UTF-8', response_code=200
+        self, mime_type='text/html', encoding=None, response_code=200
     ):
 # #
         '''
@@ -1831,8 +1831,9 @@ class CGIHTTPRequestHandler(
         if not (self.content_type_sent or __test_mode__):
             self.content_type_sent = True
             self.send_response(response_code)
-            self.send_header(
-                'Content-Type', '%s; charset=%s' % (mime_type, encoding))
+            self.send_header('Content-Type', '%s; charset=%s' % (
+                mime_type,
+                self.server.web.encoding if encoding is None else encoding))
         return self
 
     @JointPoint
@@ -2388,8 +2389,8 @@ class CGIHTTPRequestHandler(
 
     @JointPoint
 # # python3.4
-# #     def _send_no_authentication_error(self: Self) -> Self:
-    def _send_no_authentication_error(self):
+# #     def _send_no_authorization_error(self: Self) -> Self:
+    def _send_no_authorization_error(self):
 # #
         '''This method is called if authentication failed.'''
         self.send_response(401)
@@ -2399,11 +2400,13 @@ class CGIHTTPRequestHandler(
         if self.headers.get('authorization', False):
 # #
             # TODO reach branch
-            message = 'The authentication failed'
+            message = 'Requested authentication failed'
         if not __test_mode__:
             self.send_header(
                 'WWW-Authenticate', 'Basic realm=\"%s\"' % message)
-            self.send_header('Content-Type', 'text/html; charset=UTF-8')
+            self.send_header(
+                'Content-Type',
+                'text/html; charset=%s' % self.server.web.encoding)
         self.end_headers()
         return self
 
