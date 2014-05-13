@@ -65,12 +65,12 @@
 <span class="gp">... </span>                 <span class="s">&#39;event&#39;</span><span class="p">:</span> <span class="s">&#39;call&#39;</span><span class="p">},</span>
 <span class="gp">... </span>                <span class="p">{</span><span class="s">&#39;callback&#39;</span><span class="p">:</span> <span class="n">check_return_value</span><span class="p">,</span>
 <span class="gp">... </span>                 <span class="s">&#39;event&#39;</span><span class="p">:</span> <span class="s">&#39;return&#39;</span><span class="p">}),</span>
-<span class="gp">... </span>     <span class="s">&#39;point_cut&#39;</span><span class="p">:</span> <span class="s">&#39;^library\..+$&#39;</span><span class="p">},</span>
+<span class="gp">... </span>     <span class="s">&#39;point_cut&#39;</span><span class="p">:</span> <span class="s">&#39;library\..+&#39;</span><span class="p">},</span>
 <span class="gp">... </span>    <span class="p">{</span><span class="s">&#39;advice&#39;</span><span class="p">:</span> <span class="p">({</span><span class="s">&#39;callback&#39;</span><span class="p">:</span> <span class="n">log_call</span><span class="p">,</span>
 <span class="gp">... </span>                 <span class="s">&#39;event&#39;</span><span class="p">:</span> <span class="s">&#39;call&#39;</span><span class="p">},</span>
 <span class="gp">... </span>                <span class="p">{</span><span class="s">&#39;callback&#39;</span><span class="p">:</span> <span class="n">log_return</span><span class="p">,</span>
 <span class="gp">... </span>                 <span class="s">&#39;event&#39;</span><span class="p">:</span> <span class="s">&#39;return&#39;</span><span class="p">}),</span>
-<span class="gp">... </span>     <span class="s">&#39;point_cut&#39;</span><span class="p">:</span> <span class="s">&#39;^.+$&#39;</span><span class="p">})</span>
+<span class="gp">... </span>     <span class="s">&#39;point_cut&#39;</span><span class="p">:</span> <span class="s">&#39;.+&#39;</span><span class="p">})</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -89,7 +89,7 @@
 <p><strong>function</strong> - If not &#8220;None&#8221; this contains the real function and                        &#8220;method&#8221; contains a special type of function (like                        &#8220;builtins.classmethod&#8221; or &#8220;builtins.staticmethod&#8221;). In                        this case the method type influences the behavior                        during calling the real function.</p>
 <dl class="attribute">
 <dt id="boostNode.paradigm.aspectOrientation.FunctionDecorator.COMMON_DECORATORS">
-<tt class="descname">COMMON_DECORATORS</tt><em class="property"> = [&lt;type 'property'&gt;, &lt;type 'super'&gt;, &lt;function register at 0x16bb320&gt;, &lt;bound method type.pseudo_property of &lt;class 'boostNode.paradigm.objectOrientation.Class'&gt;&gt;]</em><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.FunctionDecorator.COMMON_DECORATORS" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">COMMON_DECORATORS</tt><em class="property"> = [&lt;type 'property'&gt;, &lt;type 'super'&gt;, &lt;function register at 0x1c42320&gt;, &lt;bound method type.pseudo_property of &lt;class 'boostNode.paradigm.objectOrientation.Class'&gt;&gt;]</em><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.FunctionDecorator.COMMON_DECORATORS" title="Permalink to this definition">¶</a></dt>
 <dd><p>This property hold a list of common python&#8217;s native decorators.</p>
 </dd></dl>
 
@@ -167,7 +167,7 @@ already determined.</p>
 <span class="gp">... </span>    <span class="s">&#39;advice&#39;</span><span class="p">:</span> <span class="p">(</span>
 <span class="gp">... </span>        <span class="p">{</span><span class="s">&#39;callback&#39;</span><span class="p">:</span> <span class="n">call_handler</span><span class="p">,</span> <span class="s">&#39;event&#39;</span><span class="p">:</span> <span class="s">&#39;call&#39;</span><span class="p">},</span>
 <span class="gp">... </span>        <span class="p">{</span><span class="s">&#39;callback&#39;</span><span class="p">:</span> <span class="n">return_handler</span><span class="p">,</span> <span class="s">&#39;event&#39;</span><span class="p">:</span> <span class="s">&#39;return&#39;</span><span class="p">}),</span>
-<span class="gp">... </span>    <span class="s">&#39;point_cut&#39;</span><span class="p">:</span> <span class="s">&#39;^.+\.((A\.b)|a)$&#39;</span><span class="p">}]</span>
+<span class="gp">... </span>    <span class="s">&#39;point_cut&#39;</span><span class="p">:</span> <span class="s">&#39;.+\.((A\.b)|a)&#39;</span><span class="p">}]</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
