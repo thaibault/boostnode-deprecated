@@ -330,6 +330,14 @@ class Model(builtins.object):
 
         # # endregion
 
+        # endregion
+
+    # endregion
+
+    # region static
+
+        # region public
+
     @JointPoint(builtins.staticmethod)
 # # python3.4
 # #     def validate_property(
@@ -413,47 +421,11 @@ class Model(builtins.object):
 # #
             property_information = information_determiner(model_instance, name)
             if builtins.isinstance(value, builtins.int):
-                if('minimum' in property_information and
-                   value < property_information['minimum']):
-                    raise ValueError(
-                        'Property "%s" of model "%s" is too small (%d) %d is '
-                        'the smallest possible value.' % (
-                            name, model_instance.__class__.__name__, value,
-                            property_information['minimum']))
-                if('maximum' in property_information and
-                   value > property_information['maximum']):
-                    raise ValueError(
-                        'Property "%s" of model "%s" is too high (%d) %d is '
-                        'the highest possible value.' % (
-                            name, model_instance.__class__.__name__, value,
-                            property_information['maximum']))
+                model_instance._validate_number_property(
+                    name, value, property_information)
             elif builtins.isinstance(value, builtins.str):
-                if 'minimum_length' in property_information and builtins.len(
-                    value
-                ) < property_information['minimum_length']:
-                    raise ValueError(
-                        'Property "%s" of model "%s" has minimum length %d '
-                        'but given value ("%s") has length %d.' % (
-                            name, model_instance.__class__.__name__,
-                            property_information['minimum_length'], value,
-                            builtins.len(value)))
-                if 'maximum_length' in property_information and builtins.len(
-                    value
-                ) > property_information['maximum_length']:
-                    raise ValueError(
-                        'Property "%s" of model "%s" has maximum length %d '
-                        'but given value ("%s") has length %d.' % (
-                            name, model_instance.__class__.__name__,
-                            property_information['maximum_length'], value,
-                            builtins.len(value)))
-                if 'pattern' in property_information and re.compile(
-                    property_information['pattern']
-                ).match(value) is None:
-                    raise ValueError(
-                        'Property "%s" of model "%s" has pattern "%s" but '
-                        'given value ("%s") doesn\'t match.' % (
-                            name, model_instance.__class__.__name__,
-                            property_information['pattern'], value))
+                model_instance._validate_string_property(
+                    name, value, property_information)
 # # python3.4
 # #             pass
             if encoding_was_unicode and builtins.isinstance(
@@ -462,6 +434,58 @@ class Model(builtins.object):
                 return builtins.unicode(value, 'utf_8')
 # #
         return value
+
+        # endregion
+
+        # region protected
+
+    @JointPoint(builtins.classmethod)
+    def _validate_number_property(cls, name, value, property_information):
+        '''Validates a model property witch represents a number.'''
+        if('minimum' in property_information and
+           value < property_information['minimum']):
+            raise ValueError(
+                'Property "%s" of model "%s" is too small (%d) %d is '
+                'the smallest possible value.' % (
+                    name, cls.__name__, value,
+                    property_information['minimum']))
+        if('maximum' in property_information and
+           value > property_information['maximum']):
+            raise ValueError(
+                'Property "%s" of model "%s" is too high (%d) %d is '
+                'the highest possible value.' % (
+                    name, cls.__name__, value,
+                    property_information['maximum']))
+        return cls
+
+    @JointPoint(builtins.classmethod)
+    def _validate_string_property(cls, name, value, property_information):
+        '''Validates a model property witch represents a string.'''
+        if 'minimum_length' in property_information and builtins.len(
+            value
+        ) < property_information['minimum_length']:
+            raise ValueError(
+                'Property "%s" of model "%s" has minimum length %d '
+                'but given value ("%s") has length %d.' % (
+                    name, cls.__name__, property_information['minimum_length'],
+                    value, builtins.len(value)))
+        if 'maximum_length' in property_information and builtins.len(
+            value
+        ) > property_information['maximum_length']:
+            raise ValueError(
+                'Property "%s" of model "%s" has maximum length %d '
+                'but given value ("%s") has length %d.' % (
+                    name, cls.__name__, property_information['maximum_length'],
+                    value, builtins.len(value)))
+        if 'pattern' in property_information and re.compile(
+            property_information['pattern']
+        ).match(value) is None:
+            raise ValueError(
+                'Property "%s" of model "%s" has pattern "%s" but '
+                'given value ("%s") doesn\'t match.' % (
+                    name, cls.__name__, property_information['pattern'],
+                    value))
+        return cls
 
         # endregion
 
@@ -581,6 +605,7 @@ class AuthenticationModel(Model):
 
 
 class Object(Class):
+
     '''
         This class extends all native python classes.
 
@@ -825,6 +850,7 @@ class Object(Class):
 
 
 class String(Object, builtins.str):
+
     '''
         The string class inherits besides the interface class all pythons \
         native string methods. NOTE: This class has to implement inherited \
@@ -1929,6 +1955,7 @@ class String(Object, builtins.str):
 
 
 class Dictionary(Object, builtins.dict):
+
     '''
         This class extends the native dictionary object.
 
@@ -2333,6 +2360,7 @@ class Dictionary(Object, builtins.dict):
 
 
 class Module(Object):
+
     '''This class add some features for dealing with modules.'''
 
     # region properties

@@ -2943,27 +2943,7 @@ class CGIHTTPRequestHandler(
         '''
         if not __test_mode__ and self.requested_file.is_directory():
             if self.data_type == 'multipart/form-data':
-                '''Uploaded data to a directory are saved automatically.'''
-                for items in self.data.values():
-                    for item in items:
-# # python3.4
-# #                         if(builtins.len(item) == 4 and
-# #                            'content' in item and 'name' in item and
-# #                            'disposition' in item and
-# #                            'disposition' in item and 'encoding' in item):
-# #                             FileHandler(
-# #                                 self.requested_file.path + item['name'],
-# #                                 encoding=item['encoding']
-# #                             ).set_content(
-# #                                 content=item['content'], mode='w+b')
-                        if(builtins.len(item) == 3 and
-                           'content' in item and
-                           'name' in item and 'disposition' in item):
-                            FileHandler(
-                                self.requested_file.path + item['name']
-                            ).set_content(
-                                content=item['content'], mode='w+b')
-# #
+                self._save_uploaded_files()
             '''
                 If a directory was requested and no trailing slash where \
                 given a 301 redirect will be returned to same request with \
@@ -2993,6 +2973,33 @@ class CGIHTTPRequestHandler(
 # #
             return self._send_not_modified_header()
         return self._send_static_file(output=file_handler)
+
+    @JointPoint
+# # python3.4     def _save_uploaded_files(self: Self) -> Self:
+    def _save_uploaded_files(self):
+        '''
+            Uploaded data to a directory are saved automatically by this \
+            method.
+        '''
+        for items in self.data.values():
+            for item in items:
+# # python3.4
+# #                 if(builtins.len(item) == 4 and
+# #                    'content' in item and 'name' in item and
+# #                    'disposition' in item and 'disposition' in item and
+# #                    'encoding' in item):
+# #                     FileHandler(
+# #                         self.requested_file.path + item['name'],
+# #                         encoding=item['encoding']
+# #                     ).set_content(content=item['content'], mode='w+b')
+                if(builtins.len(item) == 3 and
+                   'content' in item and 'name' in item and
+                   'disposition' in item):
+                    FileHandler(
+                        self.requested_file.path + item['name']
+                    ).set_content(content=item['content'], mode='w+b')
+# #
+        return self
 
     @JointPoint
 # # python3.4
