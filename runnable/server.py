@@ -1348,6 +1348,16 @@ class CGIHTTPRequestHandler(
             >>> handler.do_GET() # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "" and parame...
 
+            >>> # # python2.7
+            >>> if sys.version_info.major < 3:
+            ...     handler.headers = handler.MessageClass(
+            ...         String('authorization: value'), seekable=False)
+            ... else:
+            ...     handler.headers = handler.MessageClass()
+            ...     handler.headers.add_header('authorization', 'value')
+            >>> # #
+            >>> handler.do_GET() # doctest: +ELLIPSIS
+            Object of "CGIHTTPRequestHandler" with request uri "" and parame...
             >>> handler.path = '/not_existing_file'
             >>> handler.server.web.request_whitelist = '*:/not_existing_file',
             >>> handler.server.web.authentication_handler = (
@@ -2399,7 +2409,6 @@ class CGIHTTPRequestHandler(
 # #         if 'authorization' in self.headers:
         if self.headers.get('authorization', False):
 # #
-            # TODO reach branch
             message = 'Requested authentication failed'
         if not __test_mode__:
             self.send_header(
@@ -3071,6 +3080,9 @@ class CGIHTTPRequestHandler(
 
             >>> isinstance(handler._gzip(''), bytes)
             True
+
+            >>> isinstance(handler._gzip(bytes()), bytes)
+            True
         '''
 # # python3.4         output = io.BytesIO()
         output = StringIO.StringIO()
@@ -3078,7 +3090,6 @@ class CGIHTTPRequestHandler(
             fileobj=output, mode='w', compresslevel=5)
 # # python3.4
 # #         if builtins.isinstance(content, builtins.bytes):
-# #             # TODO reach branch
 # #             gzip_file_handler.write(content)
 # #         else:
 # #             gzip_file_handler.write(content.encode(

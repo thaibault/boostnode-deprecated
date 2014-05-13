@@ -441,7 +441,7 @@ if __name__ != '__main__':
             Add signature checking for all functions and methods with joint \
             points in this package.
         '''
-        add_signature_check(point_cut='^%s\..*$' % Module.get_package_name(
+        add_signature_check(point_cut='%s\..*' % Module.get_package_name(
             frame=inspect.currentframe()))
     except WindowsError as exception:
         logging.error(

@@ -61,7 +61,7 @@ def add_check(point_cut):
 
         Examples:
 
-        >>> add_check(point_cut='^.*test$') # doctest: +ELLIPSIS
+        >>> add_check(point_cut='.*test') # doctest: +ELLIPSIS
         [...]
         >>> @JointPoint
         ... def test():

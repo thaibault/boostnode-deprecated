@@ -54,8 +54,6 @@ from boostNode.paradigm.objectOrientation import Class
 
 # endregion
 
-# TODO check new branches.
-
 
 # region classes
 
@@ -286,6 +284,12 @@ class Model(builtins.object):
             True
 
             >>> user = User()
+            >>> user.a = 1
+            >>> user.b = 2
+            >>> user.get_dictionary(property_names=('a',)) == {'a': 1}
+            True
+
+            >>> user = User()
             >>> user.hans_peter = 5
             >>> user.get_dictionary() == {'hans_peter': 5}
             True
@@ -370,6 +374,30 @@ class Model(builtins.object):
             Traceback (most recent call last):
             ...
             ValueError: Property "a" of model "A" has maximum length 10 but...
+
+            >>> class A(Model):
+            ...     _a_information = {'minimum': 3, 'maximum': 10}
+            ...     def set_a(self, value):
+            ...         return self.validate_property(self, 'a', value)
+            >>> a = A()
+
+            >>> a.set_a(5)
+            5
+
+            >>> a.set_a(2) # doctest: +ELLIPSIS
+            Traceback (most recent call last):
+            ...
+            ValueError: Property "a" of model "A" is too small (2) 3 is the ...
+
+            >>> a.set_a(11) # doctest: +ELLIPSIS
+            Traceback (most recent call last):
+            ...
+            ValueError: Property "a" of model "A" is too high (11) 10 is the...
+
+            >>> a.set_a(None)
+
+            >>> a.set_a({})
+            {}
         '''
         if value is not None:
             '''
@@ -1930,6 +1958,9 @@ class Dictionary(Object, builtins.dict):
 
             >>> Dictionary((('hans', 5), (4, 3))) # doctest: +ELLIPSIS
             Object of "Dictionary" (...hans...5...).
+
+            >>> Dictionary() # doctest: +ELLIPSIS
+            Object of "Dictionary" ({}).
         '''
 
         # # # region properties
@@ -1938,7 +1969,6 @@ class Dictionary(Object, builtins.dict):
         if builtins.isinstance(content, self.__class__):
             content = content.content
         elif content is None:
-            # TODO check branch
             content = {}
         self.content = builtins.dict(content)
 

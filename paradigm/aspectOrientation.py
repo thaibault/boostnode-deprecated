@@ -59,12 +59,12 @@ ASPECTS = []
     ...                  'event': 'call'},
     ...                 {'callback': check_return_value,
     ...                  'event': 'return'}),
-    ...      'point_cut': '^library\..+$'},
+    ...      'point_cut': 'library\..+'},
     ...     {'advice': ({'callback': log_call,
     ...                  'event': 'call'},
     ...                 {'callback': log_return,
     ...                  'event': 'return'}),
-    ...      'point_cut': '^.+$'})
+    ...      'point_cut': '.+'})
 '''
 
 # # endregion
@@ -908,8 +908,13 @@ class PointCut(ReturnAspect):
         context_path += '.' + self.__func__.__name__
         result = True
         for aspect in ASPECTS:
-            if('point_cut' not in aspect or
-               re.compile(aspect['point_cut']).match(context_path)):
+# # python3.4
+# #             if('point_cut' not in aspect or
+# #                re.compile(aspect['point_cut']).fullmatch(context_path)):
+            if('point_cut' not in aspect or re.compile(
+                aspect['point_cut']
+            ).match('^%s$' % context_path)):
+# #
                 for advice in aspect['advice']:
                     if handler(advice) is False:
                         result = False
@@ -960,7 +965,7 @@ else:
             ...     'advice': (
             ...         {'callback': call_handler, 'event': 'call'},
             ...         {'callback': return_handler, 'event': 'return'}),
-            ...     'point_cut': '^.+\.((A\.b)|a)$'}]
+            ...     'point_cut': '.+\.((A\.b)|a)'}]
 
             >>> class A:
             ...     @JointPoint
