@@ -1381,6 +1381,8 @@ class CGIHTTPRequestHandler(
         if self._is_authenticated():
             valid_request = self._is_valid_request()
             if valid_request:
+                if self._handle_external_redirect():
+                    return self
                 if self.path:
                     if self._is_valid_reference():
                         return self._set_dynamic_or_static_get(
@@ -2528,16 +2530,28 @@ class CGIHTTPRequestHandler(
     def _request_in_pattern_list(self, pattern_list):
 # #
         '''Checks if current request matches on of the given pattern.'''
-        patterns = re.compile('(?P<request_type>.+?):(?P<request_uri>.*)')
+# # python3.4
+# #         patterns = re.compile('(?P<request_type>.+?):(?P<request_uri>.*)')
+        patterns = re.compile(
+            '^(?P<request_type>.+?):(?P<request_uri>.*)$')
+# #
         request_type_uppercase = self.request_type.upper()
         for pattern in pattern_list:
+# # python3.4             match = patterns.fullmatch(pattern)
             match = patterns.match(pattern)
             request_types = match.group('request_type').split('|')
+# # python3.4
+# #             if(request_type_uppercase in request_types or
+# #                '*' in request_types
+# #                ) and re.compile(match.group('request_uri')).fullmatch(
+# #                    self.request_uri
+# #                ) is not None:
             if(request_type_uppercase in request_types or
                '*' in request_types
-               ) and re.compile(match.group('request_uri')).match(
-                self.request_uri
-            ) is not None:
+               ) and re.compile('^%s$' % match.group('request_uri')).match(
+                   self.request_uri
+               ) is not None:
+# #
                 return True
         return False
 
@@ -2626,6 +2640,35 @@ class CGIHTTPRequestHandler(
 # #
         return self
 
+    # TODO
+    def _handle_internal_redirect(self):
+        redirects = {'/admin/': '/'}
+        for source, target in redirects.items():
+# # python3.4
+# #             pattern = re.compile(source)
+# #             if pattern.fullmatch(self.request_uri):
+            pattern = re.compile('^%s$' % source)
+            if pattern.match(self.request_uri):
+# #
+                self.request_uri = pattern.sub(source, target)
+                return True
+        return False
+
+    # TODO
+    def _handle_external_redirect(self):
+        redirects = {'/admin': '/admin/'}
+        for source, target in redirects.items():
+# # python3.4
+# #             pattern = re.compile(source)
+# #             if pattern.fullmatch(self.request_uri):
+            pattern = re.compile('^%s$' % source)
+            if pattern.match(self.request_uri):
+# #
+                self.send_response(301)
+                self.send_header('Location', pattern.sub(source, target))
+                return True
+        return False
+
     @JointPoint
 # # python3.4
 # #     def _create_environment_variables(self: Self) -> builtins.str:
@@ -2633,6 +2676,7 @@ class CGIHTTPRequestHandler(
 # #
         '''Creates all request specified environment-variables.'''
         self._determine_host().request_uri = self.path
+        self._handle_internal_redirect()
         match = re.compile(
             '[^/]*/+(?P<path>.*?)(?:{delimiter}(?P<parameter>.*))?$'.format(
                 delimiter=self.server.web.request_parameter_delimiter)
