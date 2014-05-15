@@ -73,13 +73,13 @@
 
 <dl class="attribute">
 <dt id="boostNode.extension.system.CommandLine.DEFAULT_ARGUMENTS">
-<tt class="descname">DEFAULT_ARGUMENTS</tt><em class="property"> = ({'keywords': {'action': 'version', 'dest': 'version', 'version': {'execute': '__version_string__'}, 'help': 'Show current program version.'}, 'arguments': ('-x', '--version')}, {'keywords': {'help': {'execute': '&quot;Defines log level of current program instance. (Level: \\&quot;%s\\&quot;)&quot; % &quot;\\&quot;, \\&quot;&quot;.join(__default_arguments__[1][&quot;keywords&quot;][&quot;choices&quot;])'}, 'default': 'critical', 'choices': ('debug', 'info', 'warning', 'error', 'critical'), 'dest': 'log_level', 'action': 'store', 'type': &lt;type 'str'&gt;, 'metavar': 'LOG_LEVEL'}, 'arguments': ('-l', '--log-level')})</em><a class="headerlink" href="#boostNode.extension.system.CommandLine.DEFAULT_ARGUMENTS" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">DEFAULT_ARGUMENTS</tt><em class="property"> = ({'keywords': {'version': {'execute': '__version_string__'}, 'action': 'version', 'dest': 'version', 'help': 'Show current program version.'}, 'arguments': ('-x', '--version')}, {'keywords': {'help': {'execute': '&quot;Defines log level of current program instance. (Level: \\&quot;%s\\&quot;)&quot; % &quot;\\&quot;, \\&quot;&quot;.join(__default_arguments__[1][&quot;keywords&quot;][&quot;choices&quot;])'}, 'default': 'critical', 'action': 'store', 'type': &lt;class 'str'&gt;, 'dest': 'log_level', 'choices': ('debug', 'info', 'warning', 'error', 'critical'), 'metavar': 'LOG_LEVEL'}, 'arguments': ('-l', '--log-level')})</em><a class="headerlink" href="#boostNode.extension.system.CommandLine.DEFAULT_ARGUMENTS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines standard arguments for every command line interface program.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="boostNode.extension.system.CommandLine.DEFAULT_CALLER_ARGUMENTS">
-<tt class="descname">DEFAULT_CALLER_ARGUMENTS</tt><em class="property"> = ({'keywords': {'help': {'execute': '&quot;Select a callable module object to run. (Objects: \\&quot;%s\\&quot;)&quot; % &quot;\\&quot;, \\&quot;&quot;.join(objects)'}, 'default': {'execute': 'default_caller'}, 'choices': {'execute': 'objects'}, 'dest': 'module_object', 'action': 'store', 'type': &lt;type 'str'&gt;, 'metavar': 'CALLABLE_MODULE_OBJECT'}, 'arguments': ('-c', '--module-object')}, {'keywords': {'action': 'store_true', 'default': False, 'dest': 'test', 'help': 'Test current library.'}, 'arguments': ('-t', '--test')}, {'keywords': {'action': 'store_true', 'default': False, 'dest': 'verbose_test', 'help': 'Test current library verbosely.'}, 'arguments': ('-v', '--verbose-test')}, {'keywords': {'action': 'store_true', 'default': False, 'dest': 'meta_help', 'help': 'Shows this help message.'}, 'arguments': ('-m', '--meta-help')})</em><a class="headerlink" href="#boostNode.extension.system.CommandLine.DEFAULT_CALLER_ARGUMENTS" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">DEFAULT_CALLER_ARGUMENTS</tt><em class="property"> = ({'keywords': {'help': {'execute': '&quot;Select a callable module object to run. (Objects: \\&quot;%s\\&quot;)&quot; % &quot;\\&quot;, \\&quot;&quot;.join(objects)'}, 'default': {'execute': 'default_caller'}, 'action': 'store', 'type': &lt;class 'str'&gt;, 'dest': 'module_object', 'choices': {'execute': 'objects'}, 'metavar': 'CALLABLE_MODULE_OBJECT'}, 'arguments': ('-c', '--module-object')}, {'keywords': {'help': 'Test current library.', 'default': False, 'action': 'store_true', 'dest': 'test'}, 'arguments': ('-t', '--test')}, {'keywords': {'help': 'Test current library verbosely.', 'default': False, 'action': 'store_true', 'dest': 'verbose_test'}, 'arguments': ('-v', '--verbose-test')}, {'keywords': {'help': 'Shows this help message.', 'default': False, 'action': 'store_true', 'dest': 'meta_help'}, 'arguments': ('-m', '--meta-help')})</em><a class="headerlink" href="#boostNode.extension.system.CommandLine.DEFAULT_CALLER_ARGUMENTS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines standard arguments for every meta command line interface.</p>
 </dd></dl>
 
@@ -111,7 +111,7 @@ negatively.</p>
 
 <dl class="attribute">
 <dt id="boostNode.extension.system.CommandLine.PACKAGE_INTERFACE_ARGUMENTS">
-<tt class="descname">PACKAGE_INTERFACE_ARGUMENTS</tt><em class="property"> = ({'keywords': {'help': {'execute': '&quot;Select commands for performing action with this package. (Command: \\&quot;%s\\&quot;)&quot; % &quot;\\&quot;, \\&quot;&quot;.join(choices)'}, 'default': '', 'choices': ('all', 'test', 'clear', 'document', 'lint'), 'action': 'store', 'type': &lt;type 'str'&gt;, 'metavar': 'COMMAND'}, 'arguments': ('commands',)},)</em><a class="headerlink" href="#boostNode.extension.system.CommandLine.PACKAGE_INTERFACE_ARGUMENTS" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">PACKAGE_INTERFACE_ARGUMENTS</tt><em class="property"> = ({'keywords': {'help': {'execute': '&quot;Select commands for performing action with this package. (Command: \\&quot;%s\\&quot;)&quot; % &quot;\\&quot;, \\&quot;&quot;.join(choices)'}, 'default': '', 'action': 'store', 'type': &lt;class 'str'&gt;, 'choices': ('all', 'test', 'clear', 'document', 'lint'), 'metavar': 'COMMAND'}, 'arguments': ('commands',)},)</em><a class="headerlink" href="#boostNode.extension.system.CommandLine.PACKAGE_INTERFACE_ARGUMENTS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines arguments for performing actions on python packages.</p>
 </dd></dl>
 
@@ -134,9 +134,9 @@ positively.</p>
 <dd><p>Small overview about the right using of this program.</p>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="boostNode.extension.system.CommandLine.argument_parser">
-<em class="property">static </em><tt class="descname">argument_parser</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.system.CommandLine.argument_parser" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">argument_parser</tt><big>(</big><em>arguments=()</em>, <em>module_name='boostNode.extension.system'</em>, <em>scope={}</em>, <em>meta=False</em>, <em>description=''</em>, <em>version=''</em>, <em>default=True</em>, <em>*additional_arguments: object</em>, <em>**keywords: object</em><big>)</big> &rarr; argparse.Namespace<a class="headerlink" href="#boostNode.extension.system.CommandLine.argument_parser" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represents a basic argument parsing for command line interface             inputs. It&#8217;s used as default pattern for many interface concepts.</p>
 <p><strong>arguments</strong>   - arguments for the command line</p>
 <p><strong>module_name</strong> - module name wich provides the command line</p>
@@ -178,9 +178,9 @@ positively.</p>
 </div>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="boostNode.extension.system.CommandLine.boolean_input">
-<em class="property">static </em><tt class="descname">boolean_input</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.system.CommandLine.boolean_input" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">boolean_input</tt><big>(</big><em>question: str</em><big>)</big> &rarr; bool<a class="headerlink" href="#boostNode.extension.system.CommandLine.boolean_input" title="Permalink to this definition">¶</a></dt>
 <dd><p>This methods implements a handy way to get &#8220;yes&#8221; or &#8220;no&#8221; answers             from the user via command line.</p>
 <p><strong>question</strong> - question to ask via command line interface</p>
 <p>Examples:</p>
@@ -198,9 +198,9 @@ positively.</p>
 <dd><p>Saves the newest command line argument parser instance.</p>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="boostNode.extension.system.CommandLine.determine_wrapped_objects">
-<em class="property">static </em><tt class="descname">determine_wrapped_objects</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.system.CommandLine.determine_wrapped_objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">determine_wrapped_objects</tt><big>(</big><em>scope: (&lt;class 'type'&gt;</em>, <em>&lt;class 'object'&gt;)</em>, <em>only_module_level=True</em><big>)</big> &rarr; dict<a class="headerlink" href="#boostNode.extension.system.CommandLine.determine_wrapped_objects" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns all aspect orientated wrapped methods in given module.</p>
 <p><strong>scope</strong>             - scope to check again objects</p>
 <p><strong>only_module_level</strong> - indicates weather imported object should                                     be ignored</p>
@@ -227,9 +227,9 @@ positively.</p>
 </div>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="boostNode.extension.system.CommandLine.generic_module_interface">
-<em class="property">static </em><tt class="descname">generic_module_interface</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.system.CommandLine.generic_module_interface" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">generic_module_interface</tt><big>(</big><em>module: dict</em>, <em>temp_file_patterns=None</em>, <em>test=False</em>, <em>default_caller=None</em>, <em>caller_arguments=()</em>, <em>caller_keywords={}</em><big>)</big> &rarr; boostNode.extension.type.SelfClass<a class="headerlink" href="#boostNode.extension.system.CommandLine.generic_module_interface" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provides a generic command line interface for modules. Things             like unit testing or calling objects in module are provided.</p>
 <p><strong>module</strong>             - module object to provide an interface for</p>
 <p><strong>temp_file_patterns</strong> - temporary file patterns to delete</p>
@@ -246,9 +246,9 @@ positively.</p>
 </div>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="boostNode.extension.system.CommandLine.generic_package_interface">
-<em class="property">static </em><tt class="descname">generic_package_interface</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.system.CommandLine.generic_package_interface" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">generic_package_interface</tt><big>(</big><em>name='boostNode.extension.system'</em>, <em>frame=&lt;frame object at 0x19cdd88&gt;</em>, <em>command_line_arguments=()</em>, <em>linter='pep8 --repeat --ignore=E112'</em>, <em>documenter='pydoc3.4'</em>, <em>documenter_arguments=('-w'</em>, <em>)</em>, <em>documentation_path='documentation'</em>, <em>clear_old_documentation=True</em>, <em>documentation_file_extension='html'</em>, <em>temp_file_patterns=None</em>, <em>exclude_packages=()) -&gt; (&lt;class 'tuple'&gt;</em>, <em>&lt;class 'bool'&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.system.CommandLine.generic_package_interface" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provides a command-line interface like a makefile. Supported             features are linting, generate documentation, testing and             removing temporary files.</p>
 <p><strong>name</strong>                         - package name</p>
 <p><strong>frame</strong>                        - frame bounded to package scope</p>
@@ -275,16 +275,16 @@ positively.</p>
 </div>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="boostNode.extension.system.CommandLine.handle_log_level">
-<em class="property">static </em><tt class="descname">handle_log_level</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.system.CommandLine.handle_log_level" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">handle_log_level</tt><big>(</big><em>arguments: argparse.Namespace</em><big>)</big> &rarr; boostNode.extension.type.SelfClass<a class="headerlink" href="#boostNode.extension.system.CommandLine.handle_log_level" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handles log level in a generic way. If given command line             arguments contains a log level all logger levels will be setted             to this level.</p>
 <p><strong>arguments</strong> - command line arguments</p>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="boostNode.extension.system.CommandLine.test_module">
-<em class="property">static </em><tt class="descname">test_module</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.system.CommandLine.test_module" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">test_module</tt><big>(</big><em>module: dict</em>, <em>temp_file_patterns: collections.abc.Iterable</em>, <em>verbose=False</em><big>)</big> &rarr; boostNode.extension.type.SelfClass<a class="headerlink" href="#boostNode.extension.system.CommandLine.test_module" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test a given module&#8217;s doctests.</p>
 <p><strong>module</strong>             - module object to test</p>
 <p><strong>temp_file_patterns</strong> - temporary file patterns to delete</p>
@@ -295,7 +295,7 @@ positively.</p>
 
 <dl class="class">
 <dt id="boostNode.extension.system.Platform">
-<em class="property">class </em><tt class="descclassname">boostNode.extension.system.</tt><tt class="descname">Platform</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.system.Platform" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">boostNode.extension.system.</tt><tt class="descname">Platform</tt> &rarr; None<a class="headerlink" href="#boostNode.extension.system.Platform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handles issues dealing with the underlying operating system.</p>
 <dl class="attribute">
 <dt id="boostNode.extension.system.Platform.TERMINATION_SIGNALS">
@@ -309,9 +309,9 @@ positively.</p>
 <dd><p>Saves a list of known unix commands to open a specified file.</p>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="boostNode.extension.system.Platform.change_computer_status">
-<em class="property">static </em><tt class="descname">change_computer_status</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.system.Platform.change_computer_status" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">change_computer_status</tt><big>(</big><em>host: str</em>, <em>mac_address: str</em>, <em>broadcast: str</em>, <em>handler: (&lt;class 'method'&gt;</em>, <em>&lt;class 'function'&gt;)</em>, <em>down=False</em>, <em>number_of_tries=10</em><big>)</big> &rarr; tuple<a class="headerlink" href="#boostNode.extension.system.Platform.change_computer_status" title="Permalink to this definition">¶</a></dt>
 <dd><p>Shuts down or boot a computer and ensure that is is available             after boot or not available if it should be shut down.</p>
 <p><strong>host</strong>            - host to change</p>
 <p><strong>mac_address</strong>     - mac address of host to change</p>
@@ -322,9 +322,9 @@ positively.</p>
 <p>Returns a tuple: first value indicates weather it was successful             and second is &#8220;True&#8221; if computer status was needed to be changed             and &#8220;False&#8221; otherwise.</p>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="boostNode.extension.system.Platform.check_computer_reachability">
-<em class="property">static </em><tt class="descname">check_computer_reachability</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.system.Platform.check_computer_reachability" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">check_computer_reachability</tt><big>(</big><em>host: str</em>, <em>timeout_in_seconds=3</em>, <em>port=22</em><big>)</big> &rarr; bool<a class="headerlink" href="#boostNode.extension.system.Platform.check_computer_reachability" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if a remote computer is available by pinging it.</p>
 <p><strong>host</strong>               - host to check</p>
 <p><strong>timeout_in_seconds</strong> - timeout until an unreachable host will                                      be assumed</p>
@@ -337,9 +337,9 @@ positively.</p>
 </div>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="boostNode.extension.system.Platform.check_process_lock">
-<em class="property">static </em><tt class="descname">check_process_lock</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.system.Platform.check_process_lock" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">check_process_lock</tt><big>(</big><em>description=''</em><big>)</big> &rarr; bool<a class="headerlink" href="#boostNode.extension.system.Platform.check_process_lock" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if a lock file with given description exists. NOTE:             Calling this function doesn&#8217;t prevent you from race conditions.</p>
 <p><strong>description</strong> - the process identification</p>
 <p>Examples:</p>
@@ -353,9 +353,9 @@ positively.</p>
 </div>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="boostNode.extension.system.Platform.check_thread">
-<em class="property">static </em><tt class="descname">check_thread</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.system.Platform.check_thread" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">check_thread</tt><big>(</big><em>waiting_delay_in_seconds=2</em><big>)</big> &rarr; bool<a class="headerlink" href="#boostNode.extension.system.Platform.check_thread" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks weather the current thread should be paused or terminated.</p>
 <p><strong>waiting_delay_in_seconds</strong> - time between checking if thread is                                            currently running</p>
 <p>If thread should be terminated &#8220;True&#8221; will be given back. In case             of pausing the current thread stay in the current function call             still a continue event is triggered and &#8220;False&#8221; will be given back.</p>
@@ -386,9 +386,9 @@ positively.</p>
 </div>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="boostNode.extension.system.Platform.clear_process_lock">
-<em class="property">static </em><tt class="descname">clear_process_lock</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.system.Platform.clear_process_lock" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">clear_process_lock</tt><big>(</big><em>description=''</em><big>)</big> &rarr; bool<a class="headerlink" href="#boostNode.extension.system.Platform.clear_process_lock" title="Permalink to this definition">¶</a></dt>
 <dd><p>Removes a prior setted lock file.</p>
 <p><strong>description</strong> - the process identification</p>
 <p>Examples:</p>
@@ -412,9 +412,9 @@ positively.</p>
 </div>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="boostNode.extension.system.Platform.make_computer_ready">
-<em class="property">static </em><tt class="descname">make_computer_ready</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.system.Platform.make_computer_ready" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">make_computer_ready</tt><big>(</big><em>*arguments: object</em>, <em>**keywords: object</em><big>)</big> &rarr; tuple<a class="headerlink" href="#boostNode.extension.system.Platform.make_computer_ready" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wakes a remote computer and ensure that it is ready by pinging             till it answers.</p>
 <p>Arguments and keywords are forwarded to &#8220;change_computer_status()&#8221;
 method.</p>
@@ -439,9 +439,9 @@ method.</p>
 </div>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="boostNode.extension.system.Platform.open">
-<em class="property">static </em><tt class="descname">open</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.system.Platform.open" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">open</tt><big>(</big><em>location: object</em><big>)</big> &rarr; dict<a class="headerlink" href="#boostNode.extension.system.Platform.open" title="Permalink to this definition">¶</a></dt>
 <dd><p>Opens the current file with its default user preference             application.</p>
 <p>On Unix, the return value is the exit state of the process             encoded in the format specified for wait(). Note that &#8220;POSIX&#8221;             does not specify the meaning of the return value of the C             system() function, so the return value of the Python function is             system-dependent. On Windows, the return value is that returned             by the system shell after running command. The shell is given by             the Windows environment variable &#8220;COMSPEC&#8221;: it is usually             &#8220;cmd.exe&#8221;, which returns the exit status of the command run; on             systems using a non-native shell, consult your shell documentation.</p>
 <p><strong>location</strong> - location to open</p>
@@ -472,9 +472,9 @@ method.</p>
 <dd><p>Saves a location for storing files indicating process locks.</p>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="boostNode.extension.system.Platform.run">
-<em class="property">static </em><tt class="descname">run</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.system.Platform.run" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">run</tt><big>(</big><em>command: collections.abc.Iterable</em>, <em>command_arguments=None</em>, <em>secure=False</em>, <em>error=True</em>, <em>shell=None</em>, <em>log=False</em>, <em>no_blocking=False</em>, <em>*arguments: object</em>, <em>**keywords: object</em><big>)</big> &rarr; dict<a class="headerlink" href="#boostNode.extension.system.Platform.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Runs a command natively on the current operating system using the             command line. Result will be given back as tuple. First element             is standard and second error output.</p>
 <p><strong>command</strong>           - A command line interface command                                     optionally with arguments.</p>
 <p><strong>command_arguments</strong> - A list of arguments passing through the                                     command line interface.</p>
@@ -539,9 +539,9 @@ method.</p>
 </div>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="boostNode.extension.system.Platform.set_process_lock">
-<em class="property">static </em><tt class="descname">set_process_lock</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.system.Platform.set_process_lock" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">set_process_lock</tt><big>(</big><em>description=''</em><big>)</big> &rarr; bool<a class="headerlink" href="#boostNode.extension.system.Platform.set_process_lock" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets a global lock. Creates a file with given name prefix of             &#8220;description&#8221;.</p>
 <p><strong>description</strong> - an identifying description</p>
 <p>Examples:</p>
@@ -582,9 +582,9 @@ method.</p>
 <dd><p>Holds all process termination signal numbers.</p>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="boostNode.extension.system.Platform.wake_computer">
-<em class="property">static </em><tt class="descname">wake_computer</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.system.Platform.wake_computer" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">wake_computer</tt><big>(</big><em>mac_address: str</em>, <em>broadcast: str</em><big>)</big> &rarr; bool<a class="headerlink" href="#boostNode.extension.system.Platform.wake_computer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wakes up a remote computer using a magic package             (wake-on-lan-package).</p>
 <p><strong>mac_address</strong> - physical address of computer to wake</p>
 <p><strong>broadcast</strong>    - broadcast address</p>
@@ -628,7 +628,7 @@ method.</p>
 
 <dl class="class">
 <dt id="boostNode.extension.system.Runnable">
-<em class="property">class </em><tt class="descclassname">boostNode.extension.system.</tt><tt class="descname">Runnable</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.system.Runnable" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">boostNode.extension.system.</tt><tt class="descname">Runnable</tt><big>(</big><em>*arguments: object</em>, <em>**keywords: object</em><big>)</big> &rarr; None<a class="headerlink" href="#boostNode.extension.system.Runnable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Abstract class (interface) for implementing reusable classes which         acts directly as an command line interface to provide their features         platform independent.</p>
 <p>Arguments and keywords are forwarded to the protected &#8220;_initialize()&#8221;         method.</p>
 <dl class="attribute">
@@ -637,9 +637,9 @@ method.</p>
 <dd><p>Currently given inputs via command line during &#8220;wait_for_order()&#8221; is running.</p>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="boostNode.extension.system.Runnable.run">
-<em class="property">static </em><tt class="descname">run</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.system.Runnable.run" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">run</tt><big>(</big><em>*arguments: object</em>, <em>**keywords: object</em><big>)</big> &rarr; boostNode.extension.type.SelfClassObject<a class="headerlink" href="#boostNode.extension.system.Runnable.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Method for an explicit run of a class implementing this abstract             class (interface).</p>
 <p>Arguments and keywords are forwarded to current instance
 initializer.</p>
@@ -665,9 +665,9 @@ initializer.</p>
 </div>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="boostNode.extension.system.Runnable.stop">
-<em class="property">static </em><tt class="descname">stop</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.system.Runnable.stop" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">stop</tt><big>(</big><em>signal_number=None</em>, <em>stack_frame=None</em>, <em>reason=''</em><big>)</big> &rarr; boostNode.extension.type.Self<a class="headerlink" href="#boostNode.extension.system.Runnable.stop" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method should usually be overwritten to handle cleanup jobs.</p>
 <p><strong>signal_number</strong> - signal number to end with</p>
 <p><strong>stack_frame</strong>   - frame of last executed stack</p>
@@ -697,9 +697,9 @@ initializer.</p>
 <dd><p>Saves a cli-command for restarting the runnable implementation.</p>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="boostNode.extension.system.Runnable.trigger_stop">
-<em class="property">static </em><tt class="descname">trigger_stop</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.system.Runnable.trigger_stop" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">trigger_stop</tt><big>(</big><em>*arguments: object</em>, <em>exit=True</em>, <em>force_stopping=False</em>, <em>**keywords: object</em><big>)</big> &rarr; boostNode.extension.type.Self<a class="headerlink" href="#boostNode.extension.system.Runnable.trigger_stop" title="Permalink to this definition">¶</a></dt>
 <dd><p>Method for cleaning up running workers.</p>
 <p>Arguments and keywords are forwarded to the &#8220;stop()&#8221; method.</p>
 <p>Examples:</p>
@@ -727,9 +727,9 @@ initializer.</p>
 </div>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="boostNode.extension.system.Runnable.wait_for_order">
-<em class="property">static </em><tt class="descname">wait_for_order</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.system.Runnable.wait_for_order" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">wait_for_order</tt><big>(</big><big>)</big> &rarr; boostNode.extension.type.Self<a class="headerlink" href="#boostNode.extension.system.Runnable.wait_for_order" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handler for waiting till a server stop order comes through the             command line interface.</p>
 </dd></dl>
 
