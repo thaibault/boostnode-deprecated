@@ -29,7 +29,7 @@ import __builtin__ as builtins
 import ctypes
 # # python3.4 import collections
 import codecs
-from copy import copy, deepcopy
+from copy import deepcopy
 import inspect
 import mimetypes
 import os
@@ -66,7 +66,7 @@ class Handler(Class):
 
     # region properties
 
-    REGEX_FORMAT = '^([0-9]+\.?[0-9]{{0,2}})\s*({units})$'
+    REGEX_FORMAT = '([0-9]+\.?[0-9]{{0,2}})\s*({units})'
     '''Pattern for supported formats to handle size of file system elements.'''
     FORMATS = {
         'Byte': {
@@ -355,9 +355,14 @@ class Handler(Class):
         '''
         if decimal is None:
             decimal = cls.DECIMAL
-        match = re.compile(cls.REGEX_FORMAT.format(
+# # python3.4
+# #         match = re.compile(cls.REGEX_FORMAT.format(
+# #             units=cls.determine_regex_units(formats=cls.FORMATS)
+# #         )).fullmatch(size_and_unit.lower())
+        match = re.compile('%s$' % cls.REGEX_FORMAT.format(
             units=cls.determine_regex_units(formats=cls.FORMATS)
         )).match(size_and_unit.lower())
+# #
         if match:
             return cls.convert_size_format(
                 size=cls.determine_byte_from_other(
@@ -1211,6 +1216,7 @@ class Handler(Class):
             '3.0 yb'
 
             >>> handler = Handler()
+            >>> import copy
             >>> formats_backup = copy(handler.FORMATS)
             >>> handler.FORMATS = {}
             >>> handler.get_human_readable_size(size=3) # doctest: +ELLIPSIS
@@ -1554,8 +1560,12 @@ class Handler(Class):
         path = self.get_path(output_with_root_prefix=output_with_root_prefix)
         if builtins.len(path) and path.endswith(os.sep):
             path = path[:-builtins.len(os.sep)]
+# # python3.4
+# #         if((Platform().operating_system == 'windows' or force_windows_behavior)
+# #            and re.compile('[A-Za-z]:').fullmatch(path)):
         if((Platform().operating_system == 'windows' or force_windows_behavior)
            and re.compile('[A-Za-z]:$').match(path)):
+# #
             return path
         return os.path.basename(path, *arguments, **keywords)
 
@@ -1947,7 +1957,7 @@ class Handler(Class):
             arguments = (None,)
         try:
             os.utime(self._path, *arguments, **keywords)
-        except:
+        except builtins.NotImplementedError:
             return False
         return True
 
@@ -2630,11 +2640,18 @@ class Handler(Class):
                    builtins.UnicodeDecodeError):
                 pass
             else:
+# # python3.4
+# #                 return(
+# #                     builtins.len(file_content) <= maximum_length and
+# #                     builtins.bool(re.compile(
+# #                         self.portable_regex_link_pattern
+# #                     ).fullmatch(file_content)))
                 return(
                     builtins.len(file_content) <= maximum_length and
                     builtins.bool(re.compile(
-                        self.portable_regex_link_pattern
+                        '%s$' % self.portable_regex_link_pattern
                     ).match(file_content)))
+# #
         return False
 
     @JointPoint
@@ -4027,9 +4044,14 @@ class Handler(Class):
             boostNode.extension.native.FileError: ...
         '''
         if self.is_portable_link():
-            path = re.compile(self.portable_regex_link_pattern).match(
-                self.content.strip()
-            ).group('path')
+# # python3.4
+# #             path = re.compile(self.portable_regex_link_pattern).fullmatch(
+# #                 self.content.strip()
+# #             ).group('path')
+            path = re.compile(
+                '%s$' % self.portable_regex_link_pattern
+            ).match(self.content.strip()).group('path')
+# #
             path = path[builtins.len(
                 self.__class__._root_path
             ) - builtins.len(os.sep):]
@@ -4218,7 +4240,8 @@ class Handler(Class):
         '''
         for file in self:
             for pattern in patterns:
-                if re.compile(pattern).match(file.name):
+# # python3.4                 if re.compile(pattern).fullmatch(file.name):
+                if re.compile('%s$' % pattern).match(file.name):
                     file.remove_deep()
         return self
 
@@ -4408,7 +4431,7 @@ class Handler(Class):
             not self._path.startswith(
                 self.__class__._root_path[:-builtins.len(os.sep)])) and not
             ('windows' == Platform().operating_system and
-             re.compile('[a-zA-Z]:\\.*').match(self._path) and
+             re.compile('[a-zA-Z]:\\').match(self._path) and
              self.__class__._root_path == os.sep)):
             if self._path.startswith(os.sep):
                 self._path = self.__class__._root_path[:-builtins.len(
@@ -4481,7 +4504,10 @@ class Handler(Class):
         '''
         self._path = self._initialized_path
         self._path = os.path.normpath(os.path.expanduser(self._path))
+# # python3.4
+# #         if re.compile('[a-zA-Z]:').fullmatch(self._initialized_path):
         if re.compile('[a-zA-Z]:$').match(self._initialized_path):
+# #
             self._path += os.sep
         if not self.is_referenced_via_absolute_path():
             self._path = os.path.abspath(self._path)

@@ -2486,8 +2486,12 @@ class CommandLine(builtins.object):
             description = '{version}'
             if sys.modules[module_name].__doc__ is not None:
                 description += ' - ' + sys.modules[module_name].__doc__
+# # python3.4
+# #         match = re.compile('((?:.|\n)*)\n.+\n *=+\n(?:.|\n)*').fullmatch(
+# #             description)
         match = re.compile('((?:.|\n)*)\n.+\n *=+\n(?:.|\n)*$').match(
             description)
+# #
         description = match.group(1) if match else description
         return description.format(version=version)
 

@@ -444,14 +444,14 @@ class Model(builtins.object):
         '''Validates a model property witch represents a number.'''
         if('minimum' in property_information and
            value < property_information['minimum']):
-            raise ValueError(
+            raise builtins.ValueError(
                 'Property "%s" of model "%s" is too small (%d) %d is '
                 'the smallest possible value.' % (
                     name, cls.__name__, value,
                     property_information['minimum']))
         if('maximum' in property_information and
            value > property_information['maximum']):
-            raise ValueError(
+            raise builtins.ValueError(
                 'Property "%s" of model "%s" is too high (%d) %d is '
                 'the highest possible value.' % (
                     name, cls.__name__, value,
@@ -464,7 +464,7 @@ class Model(builtins.object):
         if 'minimum_length' in property_information and builtins.len(
             value
         ) < property_information['minimum_length']:
-            raise ValueError(
+            raise builtins.ValueError(
                 'Property "%s" of model "%s" has minimum length %d '
                 'but given value ("%s") has length %d.' % (
                     name, cls.__name__, property_information['minimum_length'],
@@ -472,15 +472,20 @@ class Model(builtins.object):
         if 'maximum_length' in property_information and builtins.len(
             value
         ) > property_information['maximum_length']:
-            raise ValueError(
+            raise builtins.ValueError(
                 'Property "%s" of model "%s" has maximum length %d '
                 'but given value ("%s") has length %d.' % (
                     name, cls.__name__, property_information['maximum_length'],
                     value, builtins.len(value)))
+# # python3.4
+# #         if 'pattern' in property_information and re.compile(
+# #             property_information['pattern']
+# #         ).fullmatch(value) is None:
         if 'pattern' in property_information and re.compile(
-            property_information['pattern']
+            '%s$' % property_information['pattern']
         ).match(value) is None:
-            raise ValueError(
+# #
+            raise builtins.ValueError(
                 'Property "%s" of model "%s" has pattern "%s" but '
                 'given value ("%s") doesn\'t match.' % (
                     name, cls.__name__, property_information['pattern'],
@@ -1284,7 +1289,7 @@ class String(Object, builtins.str):
             >>> String().validate_format().content
             ''
         '''
-        self.content = re.compile('{([a-z]+)}').sub(r'\\{\1\\}', self.content)
+        self.content = re.compile('{([a-z]+)}').sub('\\{\1\\}', self.content)
         return self
 
     @JointPoint

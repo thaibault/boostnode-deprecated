@@ -913,7 +913,7 @@ class PointCut(ReturnAspect):
 # #                re.compile(aspect['point_cut']).fullmatch(context_path)):
             if('point_cut' not in aspect or re.compile(
                 aspect['point_cut']
-            ).match('^%s$' % context_path)):
+            ).match('%s$' % context_path)):
 # #
                 for advice in aspect['advice']:
                     if handler(advice) is False:

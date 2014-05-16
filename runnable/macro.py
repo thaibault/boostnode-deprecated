@@ -785,8 +785,13 @@ class Replace(Class, Runnable):
                     'Can\'t decode file "%s" with given encoding "%s".',
                     file.path, self.encoding)
                 return self
-            match = re.compile(self.first_line_regex_pattern).match(
-                first_line)
+# # python3.4
+# #             match = re.compile(self.first_line_regex_pattern).fullmatch(
+# #                 first_line)
+            match = re.compile(
+                '%s$' % self.first_line_regex_pattern
+            ).match(first_line)
+# #
             if match is None:
                 __logger__.warning(
                     '"%s" hasn\'t path to version in first line.', file.path)
@@ -817,8 +822,7 @@ class Replace(Class, Runnable):
                 new_version=self._new_version))
         file_content = first_line + re.compile(
             self.more_line_regex_pattern
-        ).sub(
-            self._replace_alternate_lines, file_content)
+        ).sub(self._replace_alternate_lines, file_content)
         if not self.dry:
             file.content = re.compile(self.one_line_regex_pattern).sub(
                 self._replace_alternate_line, file_content)

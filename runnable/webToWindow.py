@@ -332,6 +332,7 @@ class Browser(Class, Runnable):
 
             **url** - URL to set.
         '''
+# # python3.4         if re.compile('[a-zA-Z]+://.*').fullmatch(url):
         if re.compile('[a-zA-Z]+://.*$').match(url):
             self._url = url
         else:

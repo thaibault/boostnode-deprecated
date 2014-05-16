@@ -526,12 +526,20 @@ class Parser(Class, Runnable):
         '''
         if not self._indent and self.content:
             self._indent = self.template_context_default_indent
+# # python3.4
+# #             match = re.compile(
+# #                 '(.*\n)?%s *__indent__ *= *'
+# #                 '(?P<number_of_indents>[1-9][0-9]*) *(?:;+|\n).*' %
+# #                 String(self.left_code_delimiter).validate_regex().content,
+# #                 re.DOTALL
+# #             ).fullmatch(self.content)
             match = re.compile(
-                '(.*\n)?%s *__indent__ *= *(?P<number_of_indents>[1-9][0-9]*)'
-                ' *(?:;+|\n).*$' %
+                '(.*\n)?%s *__indent__ *= *'
+                '(?P<number_of_indents>[1-9][0-9]*) *(?:;+|\n).*$' %
                 String(self.left_code_delimiter).validate_regex().content,
                 re.DOTALL
             ).match(self.content)
+# #
             if match:
                 self._indent = builtins.int(match.group('number_of_indents'))
         return self._indent
@@ -937,7 +945,7 @@ class Parser(Class, Runnable):
 # #                                               '[a-zA-Z0-9_\[\]\.(),\-+]+',
 # #         command_line_placeholder_pattern=(
 # #             '^(?P<variable_name>{placeholder})'
-# #             '(?P<separator>.)(?P<value>.*)$'),
+# #             '(?P<separator>.)(?P<value>.*)'),
 # #         placeholder_pattern='{left_delimiter}[ \t]*'
 # #                             '(?P<variable_name>{placeholder})'
 # #                             '[ \t]*{right_delimiter}',
@@ -998,7 +1006,7 @@ class Parser(Class, Runnable):
                                               '[a-zA-Z0-9_\[\]\.(),\-+]+',
         command_line_placeholder_pattern='^(?P<variable_name>'
                                          '{placeholder})'
-                                         '(?P<separator>.)(?P<value>.*)$',
+                                         '(?P<separator>.)(?P<value>.*)',
         placeholder_pattern='{left_delimiter}[ \t]*'
                             '(?P<variable_name>{placeholder})[ \t]'
                             '*{right_delimiter}',
@@ -1185,7 +1193,8 @@ class Parser(Class, Runnable):
         for variable in self._command_line_arguments.scope_variables:
             pattern = self.command_line_placeholder_pattern.format(
                 placeholder=self.command_line_placeholder_name_pattern)
-            match = re.compile(pattern).match(variable)
+# # python3.4             match = re.compile(pattern).fullmatch(variable)
+            match = re.compile('%s$' % pattern).match(variable)
             if match:
                 keywords.update(
                     {match.group('variable_name'): match.group('value')})

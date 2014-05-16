@@ -237,8 +237,8 @@ class MultiProcessingHTTPServer(
         ).strip()
         for pattern in self.web.same_thread_request_whitelist:
 # # python3.4
-# #             if re.compile(pattern).match(first_request_line.decode()):
-            if re.compile(pattern).match(first_request_line):
+# #             if re.compile(pattern).fullmatch(first_request_line.decode()):
+            if re.compile('%s$' % pattern).match(first_request_line):
 # #
                 return True
         return False
@@ -970,7 +970,7 @@ class Web(Class, Runnable):
 # #         default_module_names=('__main__', 'main', 'index', 'initialize'),
 # #         authentication=True, authentication_file_name='.htpasswd',
 # #         authentication_file_content_pattern=
-# #             '(?P<name>.+):(?P<password>.+)$',
+# #             '(?P<name>.+):(?P<password>.+)',
 # #         authentication_handler=None, module_loading=None,
 # #         maximum_number_of_processes=0, shared_data=None,
 # #         request_parameter_delimiter='\?',
@@ -997,7 +997,7 @@ class Web(Class, Runnable):
         default_module_names=('__main__', 'main', 'index', 'initialize'),
         authentication=True, authentication_file_name='.htpasswd',
         authentication_file_content_pattern=
-            '(?P<name>.+):(?P<password>.+)$',
+            '(?P<name>.+):(?P<password>.+)',
         authentication_handler=None, module_loading=None,
         maximum_number_of_processes=0, shared_data=None,
         request_parameter_delimiter='\?',
@@ -1858,9 +1858,7 @@ class CGIHTTPRequestHandler(
                     cookie_object[key] = value
             cookie = cookie_object
         expires = self.date_time_string(time.time() + maximum_age_in_seconds)
-        cookie = re.compile('^[^:]+: *').sub(
-            '', cookie.output()
-        ) + (
+        cookie = re.compile('^[^:]+: *').sub('', cookie.output()) + (
             ';version="%s";expires=%s;Max-Age=%d;Path=%s;comment=%s;'
             'domain=%s%s%s' % (
                 builtins.str(version), expires, maximum_age_in_seconds, path,
@@ -2302,13 +2300,16 @@ class CGIHTTPRequestHandler(
         '''Determines needed login data for current request.'''
         __logger__.info(
             'Use authentication file "%s".', authentication_file._path)
-        match = re.compile(
-            self.server.web.authentication_file_content_pattern
-        ).match(authentication_file.content.strip())
 # # python3.4
+# #         match = re.compile(
+# #             self.server.web.authentication_file_content_pattern
+# #         ).fullmatch(authentication_file.content.strip())
 # #         return base64.b64encode(('%s:%s' % (
 # #             match.group('name'), match.group('password')
 # #         )).encode(self.server.web.encoding)).decode()
+        match = re.compile(
+            '%s$' % self.server.web.authentication_file_content_pattern
+        ).match(authentication_file.content.strip())
         return base64.b64encode(
             '%s:%s' % (match.group('name'), match.group('password')))
 # #
@@ -2561,7 +2562,8 @@ class CGIHTTPRequestHandler(
             matches the given subject.
         '''
         for pattern in patterns:
-            if re.compile(pattern).match(subject):
+# # python3.4             if re.compile(pattern).fullmatch(subject):
+            if re.compile('%s$' % pattern).match(subject):
                 return subject
         return False
 
@@ -2599,7 +2601,7 @@ class CGIHTTPRequestHandler(
 # #                    self.request_uri) is not None:
             if(request_type_uppercase in request_types or
                '*' in request_types
-               ) and re.compile('^%s$' % match.group('request_uri')).match(
+               ) and re.compile('%s$' % match.group('request_uri')).match(
                    self.request_uri) is not None:
 # #
                 return True
@@ -2706,7 +2708,7 @@ class CGIHTTPRequestHandler(
 # # python3.4
 # #             pattern = re.compile(source)
 # #             if pattern.fullmatch(self.request_uri):
-            pattern = re.compile('^%s$' % source)
+            pattern = re.compile('%s$' % source)
             if pattern.match(self.request_uri):
 # #
                 if external:
@@ -2727,10 +2729,16 @@ class CGIHTTPRequestHandler(
         '''Creates all request specified environment-variables.'''
         self._determine_host().request_uri = self.path
         self._handle_redirect(external=False)
+# # python3.4
+# #         match = re.compile(
+# #             '[^/]*/+(?P<path>.*?)(?:{delimiter}(?P<parameter>.*))?'.format(
+# #                 delimiter=self.server.web.request_parameter_delimiter)
+# #         ).fullmatch(self.request_uri)
         match = re.compile(
             '[^/]*/+(?P<path>.*?)(?:{delimiter}(?P<parameter>.*))?$'.format(
                 delimiter=self.server.web.request_parameter_delimiter)
         ).match(self.request_uri)
+# #
         self.path = ''
         if match:
 # # python3.4
