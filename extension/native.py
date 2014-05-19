@@ -482,7 +482,7 @@ class Model(builtins.object):
 # #             property_information['pattern']
 # #         ).fullmatch(value) is None:
         if 'pattern' in property_information and re.compile(
-            '%s$' % property_information['pattern']
+            '(?:%s)$' % property_information['pattern']
         ).match(value) is None:
 # #
             raise builtins.ValueError(

@@ -789,7 +789,7 @@ class Replace(Class, Runnable):
 # #             match = re.compile(self.first_line_regex_pattern).fullmatch(
 # #                 first_line)
             match = re.compile(
-                '%s$' % self.first_line_regex_pattern
+                '(?:%s)$' % self.first_line_regex_pattern
             ).match(first_line)
 # #
             if match is None:

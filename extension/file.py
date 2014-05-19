@@ -359,7 +359,7 @@ class Handler(Class):
 # #         match = re.compile(cls.REGEX_FORMAT.format(
 # #             units=cls.determine_regex_units(formats=cls.FORMATS)
 # #         )).fullmatch(size_and_unit.lower())
-        match = re.compile('%s$' % cls.REGEX_FORMAT.format(
+        match = re.compile('(?:%s)$' % cls.REGEX_FORMAT.format(
             units=cls.determine_regex_units(formats=cls.FORMATS)
         )).match(size_and_unit.lower())
 # #
@@ -2649,7 +2649,7 @@ class Handler(Class):
                 return(
                     builtins.len(file_content) <= maximum_length and
                     builtins.bool(re.compile(
-                        '%s$' % self.portable_regex_link_pattern
+                        '(?:%s)$' % self.portable_regex_link_pattern
                     ).match(file_content)))
 # #
         return False
@@ -4049,7 +4049,7 @@ class Handler(Class):
 # #                 self.content.strip()
 # #             ).group('path')
             path = re.compile(
-                '%s$' % self.portable_regex_link_pattern
+                '(?:%s)$' % self.portable_regex_link_pattern
             ).match(self.content.strip()).group('path')
 # #
             path = path[builtins.len(
@@ -4241,7 +4241,7 @@ class Handler(Class):
         for file in self:
             for pattern in patterns:
 # # python3.4                 if re.compile(pattern).fullmatch(file.name):
-                if re.compile('%s$' % pattern).match(file.name):
+                if re.compile('(?:%s)$' % pattern).match(file.name):
                     file.remove_deep()
         return self
 

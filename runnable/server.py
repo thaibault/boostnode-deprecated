@@ -238,7 +238,7 @@ class MultiProcessingHTTPServer(
         for pattern in self.web.same_thread_request_whitelist:
 # # python3.4
 # #             if re.compile(pattern).fullmatch(first_request_line.decode()):
-            if re.compile('%s$' % pattern).match(first_request_line):
+            if re.compile('(?:%s)$' % pattern).match(first_request_line):
 # #
                 return True
         return False
@@ -940,12 +940,14 @@ class Web(Class, Runnable):
         command_line_arguments = CommandLine.argument_parser(
             arguments=self.COMMAND_LINE_ARGUMENTS,
             module_name=__name__, scope={'self': self})
-        command_line_arguments.internal_redirects = builtins.dict(builtins.map(
-            lambda redirect: redirect.split('#'),
-            command_line_arguments.internal_redirects))
-        command_line_arguments.external_redirects = builtins.dict(builtins.map(
-            lambda redirect: redirect.split('#'),
-            command_line_arguments.external_redirects))
+        command_line_arguments.internal_redirects = builtins.tuple(
+            builtins.map(
+                lambda redirect: redirect.split('#'),
+                command_line_arguments.internal_redirects))
+        command_line_arguments.external_redirects = builtins.tuple(
+            builtins.map(
+                lambda redirect: redirect.split('#'),
+                command_line_arguments.external_redirects))
         return self._initialize(**self._command_line_arguments_to_dictionary(
             namespace=command_line_arguments))
 
@@ -975,8 +977,8 @@ class Web(Class, Runnable):
 # #         maximum_number_of_processes=0, shared_data=None,
 # #         request_parameter_delimiter='\?',
 # #         file_size_stream_threshold_in_byte=1048576,  # 1 MB
-# #         directory_listing=True, internal_redirects={},
-# #         external_redirects={}, **keywords: builtins.object
+# #         directory_listing=True, internal_redirects=None,
+# #         external_redirects=None, **keywords: builtins.object
 # #     ) -> Self:
     def _initialize(
         self, root=None, host_name='', port=0, default='',
@@ -1002,8 +1004,8 @@ class Web(Class, Runnable):
         maximum_number_of_processes=0, shared_data=None,
         request_parameter_delimiter='\?',
         file_size_stream_threshold_in_byte=2097152,  # 2 MB
-        directory_listing=True, internal_redirects={},
-        external_redirects={}, **keywords
+        directory_listing=True, internal_redirects=None,
+        external_redirects=None, **keywords
     ):
 # #
         '''
@@ -1014,6 +1016,10 @@ class Web(Class, Runnable):
 
         # # # region properties
 
+        if self.internal_redirects is None:
+            self.internal_redirects = ()
+        if self.external_redirects is None:
+            self.external_redirects = ()
         '''Indicates if new worker are currently allowed to spawn.'''
         self.block_new_worker = False
         '''Saves server runtime properties.'''
@@ -1252,9 +1258,11 @@ class CGIHTTPRequestHandler(
         '''Properties defined by incoming request.'''
         self.host = ''
         self.request_uri = ''
+        self.external_request_uri = ''
         self.parameter = ''
         self.data = {}
         self.request_type = ''
+        self.external_request_type = ''
         self.data_type = ''
         '''Saves the last started worker thread instance.'''
         self.last_running_worker = None
@@ -1372,7 +1380,8 @@ class CGIHTTPRequestHandler(
 
             >>> handler.server.web.authentication = True
             >>> handler.server.web.authentication_handler = (
-            ...     lambda header, request_uri, request_handler: False)
+            ...     lambda header, request_uri, external_request_uri,
+            ...     request_handler: False)
             >>> # # python2.7
             >>> if sys.version_info.major < 3:
             ...     handler.headers = handler.MessageClass(
@@ -1397,7 +1406,8 @@ class CGIHTTPRequestHandler(
             >>> handler.path = '/not_existing_file'
             >>> handler.server.web.request_whitelist = '*:/not_existing_file',
             >>> handler.server.web.authentication_handler = (
-            ...     lambda header, request_uri, request_handler: True)
+            ...     lambda header, request_uri, external_request_uri,
+            ...     request_handler: True)
             >>> handler.do_GET() # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "/not_existin...
 
@@ -1414,21 +1424,24 @@ class CGIHTTPRequestHandler(
 
             >>> handler.server.web.request_whitelist = '*:/%s' % file.name,
             >>> handler.path = '/do_GET'
-            >>> handler.server.web.external_redirects = {'': ''}
+            >>> handler.server.web.external_redirects = (('GET:.*', ''),)
             >>> handler.do_GET() # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "/do_GET" ...
 
-            >>> handler.server.web.external_redirects = {'(.+)': '/\\\\1/'}
+            >>> handler.server.web.external_redirects = (
+            ...     ('*:(.+)', '/\\\\1/'),)
             >>> handler.path = '/do_GET'
             >>> handler.do_GET() # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "/do_GET" ...
 
-            >>> handler.server.web.internal_redirects = {'(.+)': '\\\\1/'}
+            >>> handler.server.web.internal_redirects = (
+            ...     ('*:(.+)', '-:\\\\1/'),)
             >>> handler.path = '/do_GET'
             >>> handler.do_GET() # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "/do_GET/" ...
         '''
-        self.request_type = self.request_type if self.request_type else 'get'
+        self.external_request_type = self.request_type = \
+            self.request_type if self.request_type else 'get'
         self._create_environment_variables()
         if self._is_authenticated():
             valid_request = self._is_valid_request()
@@ -2167,7 +2180,7 @@ class CGIHTTPRequestHandler(
                 self.server.web.authentication_handler is None or
                 self.server.web.authentication_handler(
                     self.headers.get('authorization'), self.request_uri,
-                    self))
+                    self.external_request_uri, self))
         return True
 
     @JointPoint
@@ -2308,7 +2321,7 @@ class CGIHTTPRequestHandler(
 # #             match.group('name'), match.group('password')
 # #         )).encode(self.server.web.encoding)).decode()
         match = re.compile(
-            '%s$' % self.server.web.authentication_file_content_pattern
+            '(?:%s)$' % self.server.web.authentication_file_content_pattern
         ).match(authentication_file.content.strip())
         return base64.b64encode(
             '%s:%s' % (match.group('name'), match.group('password')))
@@ -2563,14 +2576,14 @@ class CGIHTTPRequestHandler(
         '''
         for pattern in patterns:
 # # python3.4             if re.compile(pattern).fullmatch(subject):
-            if re.compile('%s$' % pattern).match(subject):
+            if re.compile('(?:%s)$' % pattern).match(subject):
                 return subject
         return False
 
     @JointPoint
 # # python3.4     def _is_valid_request(self: Self) -> builtins.bool:
     def _is_valid_request(self):
-        '''Checks if given request fulfill all restrictions.'''
+        '''Checks if given request fulfills all restrictions.'''
         return self._request_in_pattern_list(
             self.server.web.request_whitelist
         ) and not self._request_in_pattern_list(
@@ -2589,7 +2602,7 @@ class CGIHTTPRequestHandler(
         patterns = re.compile(
             '^(?P<request_type>.+?):(?P<request_uri>.*)$')
 # #
-        request_type_uppercase = self.request_type.upper()
+        request_type_uppercase = self.external_request_type.upper()
         for pattern in pattern_list:
 # # python3.4             match = patterns.fullmatch(pattern)
             match = patterns.match(pattern)
@@ -2598,11 +2611,11 @@ class CGIHTTPRequestHandler(
 # #             if(request_type_uppercase in request_types or
 # #                '*' in request_types
 # #                ) and re.compile(match.group('request_uri')).fullmatch(
-# #                    self.request_uri) is not None:
+# #                    self.external_request_uri) is not None:
             if(request_type_uppercase in request_types or
                '*' in request_types
-               ) and re.compile('%s$' % match.group('request_uri')).match(
-                   self.request_uri) is not None:
+               ) and re.compile('(?:%s)$' % match.group('request_uri')).match(
+                   self.external_request_uri) is not None:
 # #
                 return True
         return False
@@ -2701,24 +2714,45 @@ class CGIHTTPRequestHandler(
             Deals with specified redirects. External Redirects will send an \
             http redirection code.
         '''
+        # TODO check
+        patterns = re.compile(
+            '^(?P<request_type>.+?):(?P<request_uri>.*)$')
+        request_type_uppercase = self.request_type.upper()
         redirects = self.server.web.internal_redirects
         if external:
             redirects = self.server.web.external_redirects
-        for source, target in redirects.items():
+        for source, target in redirects:
+            source_match = patterns.match(source)
+            request_types = source_match.group('request_type').split('|')
 # # python3.4
-# #             pattern = re.compile(source)
-# #             if pattern.fullmatch(self.request_uri):
-            pattern = re.compile('%s$' % source)
-            if pattern.match(self.request_uri):
+# #             pattern = re.compile(source_match.group('request_uri'))
+# #             if(request_type_uppercase in request_types or
+# #                '*' in request_types
+# #                ) and pattern.fullmatch(
+# #                    self.external_request_uri) is not None:
+            pattern = re.compile('(?:%s)$' % source_match.group(
+                'request_uri'))
+            if(request_type_uppercase in request_types or
+               '*' in request_types
+               ) and pattern.match(self.external_request_uri) is not None:
 # #
                 if external:
                     if not __test_mode__:
+                        self.external_request_uri = pattern.sub(
+                            target, self.external_request_uri)
                         self.send_response(301).send_header(
-                            'Location', pattern.sub(target, self.request_uri))
+                            'Location', self.external_request_uri)
                         self.end_headers()
                 else:
-                    self.request_uri = pattern.sub(target, self.request_uri)
+                    target_match = patterns.match(target)
+                    if target_match.group('request_type') != '-':
+                        self.request_type = target_match.group('request_type')
+                    self.request_uri = pattern.sub(
+                        target_match.group('request_uri'),
+                        self.external_request_uri)
                 return True
+        return False
+
         return False
 
     @JointPoint
@@ -2727,7 +2761,8 @@ class CGIHTTPRequestHandler(
     def _create_environment_variables(self):
 # #
         '''Creates all request specified environment-variables.'''
-        self._determine_host().request_uri = self.path
+        self._determine_host().request_uri = self.external_request_uri = \
+            self.path
         self._handle_redirect(external=False)
 # # python3.4
 # #         match = re.compile(
@@ -3053,10 +3088,10 @@ class CGIHTTPRequestHandler(
             '''
             if not re.compile(
                 '/(%s.*)?$' % self.server.web.request_parameter_delimiter
-            ).search(self.request_uri):
+            ).search(self.external_request_uri):
                 self.send_response(301).send_header('Location', re.compile(
                     '((%s.*)?)$' % self.server.web.request_parameter_delimiter
-                ).sub('/\\1', self.request_uri))
+                ).sub('/\\1', self.external_request_uri))
                 return self.end_headers()
             return self.list_directory()
         try:
@@ -3225,8 +3260,10 @@ class CGIHTTPRequestHandler(
         self.request_arguments = (
             ('requested_file_name', self.requested_file_name),
             ('host', self.host), ('request_uri', self.request_uri),
+            ('external_request_uri', self.external_request_uri),
             ('get', self.parse_url(self.request_uri)[1]), ('data', self.data),
             ('cookie', cookie), ('request_type', self.request_type),
+            ('external_request_type', self.external_request_type),
             ('shared_data', self.server.web.shared_data), ('handler', self))
         if '__no_respond__' not in self.data:
             self.respond = True
