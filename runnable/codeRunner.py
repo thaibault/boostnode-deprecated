@@ -128,7 +128,7 @@ class Run(Class, Runnable):
                 }
             },
             'extensions': ('cpp', 'c', 'cc'),
-            'delete_patterns': ('.*\.o$', '.*Main$', '.*Test$')
+            'delete_patterns': ('.*\.o', '.*Main', '.*Test')
         },
         'bash': {
             'commands': {'run': '"<%code_file.path%>" <%arguments%>'},
@@ -149,7 +149,7 @@ class Run(Class, Runnable):
                 }
             },
             'extensions': ('py', 'pyc', 'pyw', 'pyo', 'pyd'),
-            'delete_patterns': ('.*\.py[cod]$', '^__pycache__$', '^temp_\.*')
+            'delete_patterns': ('.*\.py[cod]', '__pycache__', 'temp_.*')
         },
         'laTeX': {
             'commands': {
@@ -174,8 +174,8 @@ class Run(Class, Runnable):
             },
             'extensions': ('tex',),
             'delete_patterns': (
-                '^.+\.aux$', '^.+\.log$', '^.+\.toc$', '^.+\.out$',
-                '^.+\.blg$', '^.+\.bbl$', '^.+\.lol$')
+                '.+\.aux', '.+\.log', '.+\.toc', '.+\.out', '.+\.blg',
+                '.+\.bbl', '.+\.lol')
         },
         'java': {
             'commands': {
@@ -183,7 +183,7 @@ class Run(Class, Runnable):
                 'run': 'java "<%code_file.basename%>" <%arguments%>'
             },
             'extensions': ('java',),
-            'delete_patterns': ('.*\.class$',)
+            'delete_patterns': ('.*\.class',)
         }
     }
     '''Holds all supported code types and there methods to do common stuff.'''

@@ -1289,7 +1289,7 @@ class String(Object, builtins.str):
             >>> String().validate_format().content
             ''
         '''
-        self.content = re.compile('{([a-z]+)}').sub('\\{\1\\}', self.content)
+        self.content = re.compile('{([a-z]+)}').sub('\{\\1\}', self.content)
         return self
 
     @JointPoint

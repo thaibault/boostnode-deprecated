@@ -1216,7 +1216,7 @@ class Handler(Class):
             '3.0 yb'
 
             >>> handler = Handler()
-            >>> import copy
+            >>> from copy import copy
             >>> formats_backup = copy(handler.FORMATS)
             >>> handler.FORMATS = {}
             >>> handler.get_human_readable_size(size=3) # doctest: +ELLIPSIS
@@ -1561,10 +1561,12 @@ class Handler(Class):
         if builtins.len(path) and path.endswith(os.sep):
             path = path[:-builtins.len(os.sep)]
 # # python3.4
-# #         if((Platform().operating_system == 'windows' or force_windows_behavior)
-# #            and re.compile('[A-Za-z]:').fullmatch(path)):
-        if((Platform().operating_system == 'windows' or force_windows_behavior)
-           and re.compile('[A-Za-z]:$').match(path)):
+# #         if((Platform().operating_system == 'windows' or
+# #             force_windows_behavior) and re.compile('[A-Za-z]:').fullmatch(
+# #                 path)):
+        if((Platform().operating_system == 'windows' or
+            force_windows_behavior) and re.compile('[A-Za-z]:$').match(
+                path)):
 # #
             return path
         return os.path.basename(path, *arguments, **keywords)
@@ -1947,14 +1949,17 @@ class Handler(Class):
 
             >>> directory.timestamp = 1330, 1332
 
-            >>> directory.set_timestamp(False)
-            False
+            >>> directory.set_timestamp(None)
+            True
 
             >>> directory.set_timestamp()
             True
         '''
+# # python3.4
+# #         pass
         if not arguments:
-            arguments = (None,)
+            arguments = None,
+# #
         try:
             os.utime(self._path, *arguments, **keywords)
         except builtins.NotImplementedError:
