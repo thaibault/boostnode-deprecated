@@ -3798,14 +3798,12 @@ class Handler(Class):
             link = self.read_portable_link()
         if not link.endswith(os.sep) and os.path.isdir(link):
             link += os.sep
-        link = link[builtins.len(
-            self.__class__._root_path
-        ) - builtins.len(os.sep):]
+        if not self.is_referenced_via_absolute_path(location=link):
+            link = self.__class__(location=self.directory_path + link)
+        link = self.__class__(location=link)
         if as_object:
-            if not self.is_referenced_via_absolute_path(location=link):
-                return self.__class__(location=self.directory_path + link)
-            return self.__class__(location=link)
-        return link
+            return link
+        return link.path
 
     @JointPoint
 # # python3.4
@@ -4785,7 +4783,7 @@ class Handler(Class):
             if relative is Self:
                 '''
                     NOTE: "target_path" is one level to deep because \
-                    references are save in parent directory.
+                    references are saved in parent directory.
                 '''
                 return self.get_relative_path(
                     context=self.__class__(
