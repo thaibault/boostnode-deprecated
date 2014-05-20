@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.4
 # -*- coding: utf-8 -*-
 
 # region header
@@ -21,10 +21,10 @@ __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-# # python3.4
-# # import builtins
-# # import collections
-import __builtin__ as builtins
+# # python2.7
+# # import __builtin__ as builtins
+import builtins
+import collections
 # #
 from copy import copy
 import inspect
@@ -39,8 +39,8 @@ from boostNode.extension.file import Handler as FileHandler
 from boostNode.extension.native import Module, InstancePropertyInitializer
 from boostNode.extension.output import Logger, Print
 from boostNode.extension.system import CommandLine, Platform, Runnable
-# # python3.4 from boostNode.extension.type import Self
-pass
+# # python2.7 pass
+from boostNode.extension.type import Self
 from boostNode.paradigm.aspectOrientation import JointPoint
 from boostNode.paradigm.objectOrientation import Class
 from boostNode.runnable.template import Parser as TemplateParser
@@ -197,8 +197,8 @@ class Run(Class, Runnable):
     # # # region special
 
     @JointPoint
-# # python3.4     def __repr__(self: Self) -> builtins.str:
-    def __repr__(self):
+# # python2.7     def __repr__(self):
+    def __repr__(self: Self) -> builtins.str:
         '''
             Invokes if this object should describe itself by a string.
 
@@ -223,8 +223,8 @@ class Run(Class, Runnable):
         # # region runnable implementation
 
     @JointPoint
-# # python3.4     def _run(self: Self) -> Self:
-    def _run(self):
+# # python2.7     def _run(self):
+    def _run(self: Self) -> Self:
         '''
             Entry point for command line call of this program. Determines a \
             meaningful file for running. Set the right code dependent \
@@ -258,16 +258,16 @@ class Run(Class, Runnable):
             namespace=command_line_arguments))
 
     @JointPoint(InstancePropertyInitializer)
-# # python3.4
+# # python2.7
 # #     def _initialize(
-# #         self: Self, code_file_path=None,
-# #         default_command_sequence=('compile', 'run', 'clean'),
-# #         **keywords: builtins.object
-# #     ) -> Self:
+# #         self, code_file_path=None,
+# #         default_command_sequence=('compile', 'run', 'clean'), **keywords
+# #     ):
     def _initialize(
-        self, code_file_path=None,
-        default_command_sequence=('compile', 'run', 'clean'), **keywords
-    ):
+        self: Self, code_file_path=None,
+        default_command_sequence=('compile', 'run', 'clean'),
+        **keywords: builtins.object
+    ) -> Self:
 # #
         '''Sets some instance properties.'''
 
@@ -304,8 +304,8 @@ class Run(Class, Runnable):
         # # endregion
 
     @JointPoint
-# # python3.4     def _tidy_up(self: Self) -> Self:
-    def _tidy_up(self):
+# # python2.7     def _tidy_up(self):
+    def _tidy_up(self: Self) -> Self:
         '''
             Tidies up the current working directory after running the given \
             file.
@@ -342,8 +342,8 @@ class Run(Class, Runnable):
         return self
 
     @JointPoint
-# # python3.4     def _run_commands(self: Self) -> Self:
-    def _run_commands(self):
+# # python2.7     def _run_commands(self):
+    def _run_commands(self: Self) -> Self:
         '''
             Run currently needed commands.
 
@@ -375,8 +375,8 @@ class Run(Class, Runnable):
         return self
 
     @JointPoint
-# # python3.4     def _check_code_manager(self: Self) -> Self:
-    def _check_code_manager(self):
+# # python2.7     def _check_code_manager(self):
+    def _check_code_manager(self: Self) -> Self:
         '''
             Checks if a code manager file exists for the current detected \
             code file. For example it can find a makefile for a detected c++ \
@@ -417,11 +417,11 @@ class Run(Class, Runnable):
         return self
 
     @JointPoint
-# # python3.4
-# #     def _determine_code_file(
-# #         self: Self, path: (builtins.str, builtins.type(None), FileHandler)
-# #     ) -> (FileHandler, builtins.bool):
-    def _determine_code_file(self, path):
+# # python2.7
+# #     def _determine_code_file(self, path):
+    def _determine_code_file(
+        self: Self, path: (builtins.str, builtins.type(None), FileHandler)
+    ) -> (FileHandler, builtins.bool):
 # #
         '''
             Determines a code file which could make sense to run. It could \
@@ -459,11 +459,11 @@ class Run(Class, Runnable):
         return self._search_supported_file_in_current_working_directory()
 
     @JointPoint
-# # python3.4
-# #     def _find_informations_by_extension(
-# #         self: Self, extension: builtins.str, code_file: FileHandler
-# #     ) -> (builtins.dict, builtins.bool):
-    def _find_informations_by_extension(self, extension, code_file):
+# # python2.7
+# #     def _find_informations_by_extension(self, extension, code_file):
+    def _find_informations_by_extension(
+        self: Self, extension: builtins.str, code_file: FileHandler
+    ) -> (builtins.dict, builtins.bool):
 # #
         '''
             Tries to find the necessary informations for running code with \
@@ -496,11 +496,11 @@ class Run(Class, Runnable):
         return False
 
     @JointPoint
-# # python3.4
-# #     def _search_supported_file_by_path(
-# #         self: Self, path: builtins.str
-# #     ) -> (FileHandler, builtins.bool):
-    def _search_supported_file_by_path(self, path):
+# # python2.7
+# #     def _search_supported_file_by_path(self, path):
+    def _search_supported_file_by_path(
+        self: Self, path: builtins.str
+    ) -> (FileHandler, builtins.bool):
 # #
         '''
             Tries to find a useful file in current working directory by \
@@ -540,11 +540,11 @@ class Run(Class, Runnable):
                         location=location.path + '.' + extension),
                     FileHandler(location=location.path + extension)
                 ):
-# # python3.4
-# #                     if code_file.is_file() and code_file != self_file:
-                    if code_file.is_file() and not (
-                        code_file == self_file
-                    ):
+# # python2.7
+# #                     if code_file.is_file() and not (
+# #                         code_file == self_file
+# #                     ):
+                    if code_file.is_file() and code_file != self_file:
 # #
                         return code_file
                 file = self._search_supported_file_by_directory(
@@ -554,11 +554,11 @@ class Run(Class, Runnable):
         return False
 
     @JointPoint
-# # python3.4
-# #     def _search_supported_file_by_directory(
-# #         self: Self, location: FileHandler, extension: builtins.str,
-# #     ) -> (FileHandler, builtins.bool):
-    def _search_supported_file_by_directory(self, location, extension):
+# # python2.7
+# #     def _search_supported_file_by_directory(self, location, extension):
+    def _search_supported_file_by_directory(
+        self: Self, location: FileHandler, extension: builtins.str,
+    ) -> (FileHandler, builtins.bool):
 # #
         '''
             Searches in a directory for a suitable code file to run.
@@ -596,11 +596,11 @@ class Run(Class, Runnable):
         return False
 
     @JointPoint
-# # python3.4
-# #     def _search_supported_file_in_current_working_directory(
-# #         self: Self
-# #     ) -> (FileHandler, builtins.bool):
-    def _search_supported_file_in_current_working_directory(self):
+# # python2.7
+# #     def _search_supported_file_in_current_working_directory(self):
+    def _search_supported_file_in_current_working_directory(
+        self: Self
+    ) -> (FileHandler, builtins.bool):
 # #
         '''
             Tries to find a useful file in current working directory with a \
@@ -635,11 +635,11 @@ class Run(Class, Runnable):
         return False
 
     @JointPoint
-# # python3.4
-# #     def _run_command(
-# #         self: Self, command_name: builtins.str, command: builtins.str
-# #     ) -> Self:
-    def _run_command(self, command_name, command):
+# # python2.7
+# #     def _run_command(self, command_name, command):
+    def _run_command(
+        self: Self, command_name: builtins.str, command: builtins.str
+    ) -> Self:
 # #
         '''
             Runs the given command by printing out what is running by \
@@ -673,12 +673,12 @@ class Run(Class, Runnable):
         return self
 
     @JointPoint
-# # python3.4
-# #     def _log_command_run(
-# #         self: Self, command_name: builtins.str, command: builtins.str,
-# #         result: builtins.dict
-# #     ) -> builtins.int:
-    def _log_command_run(self, command_name, command, result):
+# # python2.7
+# #     def _log_command_run(self, command_name, command, result):
+    def _log_command_run(
+        self: Self, command_name: builtins.str, command: builtins.str,
+        result: builtins.dict
+    ) -> builtins.int:
 # #
         '''
             Generates logging output for wrapping around generated output by \
@@ -702,23 +702,23 @@ class Run(Class, Runnable):
         '''
         terminator_save = Logger.terminator
         Logger.change_all(terminator=('',))
-# # python3.4
-# #         __logger__.info(
-# #             '%s with "%s".\nstandard output:\n[',
-# #             command_name.capitalize(), command.strip())
-# #         Logger.flush()
-        if __logger__.isEnabledFor(logging.INFO):
-            Print(
-                '%s with "%s".\nstandard output:\n[' %
-                (command_name.capitalize(), command.strip()),
-                end='', flush=True)
+# # python2.7
+# #         if __logger__.isEnabledFor(logging.INFO):
+# #             Print(
+# #                 '%s with "%s".\nstandard output:\n[' %
+# #                 (command_name.capitalize(), command.strip()),
+# #                 end='', flush=True)
+        __logger__.info(
+            '%s with "%s".\nstandard output:\n[',
+            command_name.capitalize(), command.strip())
+        Logger.flush()
 # #
         Print(result['standard_output'], end='', flush=True)
-# # python3.4
-# #         __logger__.info(']\nerror output:\n[')
-# #         Logger.flush()
-        if __logger__.isEnabledFor(logging.INFO):
-            Print(']\nerror output:\n[', end='', flush=True)
+# # python2.7
+# #         if __logger__.isEnabledFor(logging.INFO):
+# #             Print(']\nerror output:\n[', end='', flush=True)
+        __logger__.info(']\nerror output:\n[')
+        Logger.flush()
 # #
         Logger.change_all(terminator=terminator_save)
         Print(result['error_output'], end='')
@@ -728,8 +728,8 @@ class Run(Class, Runnable):
         return result['return_code']
 
     @JointPoint
-# # python3.4     def _run_code_file(self: Self) -> Self:
-    def _run_code_file(self):
+# # python2.7     def _run_code_file(self):
+    def _run_code_file(self: Self) -> Self:
         '''
             Runs all commands needed to run the current type of code.
 
@@ -763,11 +763,11 @@ class Run(Class, Runnable):
         return self
 
     @JointPoint
-# # python3.4
-# #     def _render_properties(
-# #         self: Self, properties: builtins.dict, code_file: FileHandler
-# #     ) -> builtins.dict:
-    def _render_properties(self, properties, code_file):
+# # python2.7
+# #     def _render_properties(self, properties, code_file):
+    def _render_properties(
+        self: Self, properties: builtins.dict, code_file: FileHandler
+    ) -> builtins.dict:
 # #
         '''
             If a given code property is marked as executable respectively \
