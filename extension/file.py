@@ -559,7 +559,7 @@ class Handler(Class):
             **encoding**                - Define encoding for reading and \
                                           writing files.
 
-            *+respect_root_path**       - Defines if a previous statically \
+            **respect_root_path**       - Defines if a previous statically \
                                           defined virtual root path should be \
                                           considered.
 
@@ -623,7 +623,7 @@ class Handler(Class):
             ...     __test_folder__.path  + '__init__root_directory/a',
             ...     respect_root_path=False)
             >>> location.path # doctest: +ELLIPSIS
-            '...__init__root_directory...a...'
+            '...a'
             >>> location._path # doctest: +ELLIPSIS
             '...__init__root_directory...a...'
 
@@ -1388,13 +1388,14 @@ class Handler(Class):
             if not self._path.endswith(os.sep) and self.is_directory():
                 self._path += os.sep
             '''
-                NOTE: If the given file isn't present the "_path" could be \
-                smaller than the root path. So simply return the internal \
-                path in this case.
+                NOTE: If the given file was initialized without respect to \
+                current root path the content of "_path" could be smaller \
+                than the root path. So simply return the internal path in \
+                this case.
             '''
-            if(taken_output_with_root_prefix or
-               not (self and self._path.startswith(
-                    self.__class__._root_path))):
+            if(taken_output_with_root_prefix or not self._path.startswith(
+                self.__class__._root_path)
+               ):
                 return self._path
             return self._path[builtins.len(
                 self.__class__._root_path
@@ -4425,6 +4426,11 @@ class Handler(Class):
 
             >>> Handler()._prepend_root_path() # doctest: +ELLIPSIS
             '...'
+
+            >>> handler = Handler()
+            >>> handler._path = 'hans'
+            >>> handler._prepend_root_path() # doctest: +ELLIPSIS
+            '/hans'
         '''
         from boostNode.extension.system import Platform
         '''
