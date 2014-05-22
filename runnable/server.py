@@ -1942,7 +1942,7 @@ class CGIHTTPRequestHandler(
                                  compressed because it is simply a computed \
                                  string.
 
-            **response_code** - HTTP Response code to send.
+            **response_code**  - HTTP Response code to send.
         '''
         if not (self.content_length_sent or __test_mode__):
             self.content_length_sent = True
@@ -2001,7 +2001,8 @@ class CGIHTTPRequestHandler(
                                            "response_code", "forwarded_ip", \
                                            "forwarded_host", \
                                            "forwarded_server", \
-                                          "forwarded_server" and "server_port".
+                                           "forwarded_server" and \
+                                           "server_port".
 
             **message_or_error_code**    - Logging message or resulting HTTP \
                                            code.

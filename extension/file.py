@@ -1125,7 +1125,7 @@ class Handler(Class):
                         limit, follow_link=False, *arguments,
                         **recursive_keywords
                     ) + self.BLOCK_SIZE_IN_BYTE
-        elif self.is_symbolic_link():
+        elif self.is_symbolic_link() and not follow_link:
             size = self.BLOCK_SIZE_IN_BYTE
         else:
             size = os.path.getsize(self._path)
