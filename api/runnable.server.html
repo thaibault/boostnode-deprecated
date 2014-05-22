@@ -356,7 +356,7 @@
 <dt id="boostNode.runnable.server.CGIHTTPRequestHandler.log_message">
 <em class="property">static </em><tt class="descname">log_message</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.log_message" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wrapper method for all logging output coming through the server             thread.</p>
-<p><strong>format</strong>                   - Logging format. Allowed                                            placeholder are: &#8220;client_ip&#8221;,                                            &#8220;client_port&#8221;,                                            &#8220;request_description&#8221;,                                            &#8220;response_code&#8221;, &#8220;forwarded_ip&#8221;,                                            &#8220;forwarded_host&#8221;,                                            &#8220;forwarded_server&#8221;,                                           &#8220;forwarded_server&#8221; and &#8220;server_port&#8221;.</p>
+<p><strong>format</strong>                   - Logging format. Allowed                                            placeholder are: &#8220;client_ip&#8221;,                                            &#8220;client_port&#8221;,                                            &#8220;request_description&#8221;,                                            &#8220;response_code&#8221;, &#8220;forwarded_ip&#8221;,                                            &#8220;forwarded_host&#8221;,                                            &#8220;forwarded_server&#8221;,                                            &#8220;forwarded_server&#8221; and                                            &#8220;server_port&#8221;.</p>
 <p><strong>message_or_error_code</strong>    - Logging message or resulting HTTP                                            code.</p>
 <p><strong>response_code_or_message</strong> - Resulting HTTP code or response                                            message.</p>
 <p>Examples:</p>
@@ -501,7 +501,7 @@
 <dd><p>Sends the content length header to client if not sent yet.</p>
 <p><strong>size</strong>           - Content length to send.</p>
 <p><strong>dynamic_output</strong> - Indicates weather output should be forced to                                  compressed because it is simply a computed                                  string.</p>
-<p><strong>response_code</strong> - HTTP Response code to send.</p>
+<p><strong>response_code</strong>  - HTTP Response code to send.</p>
 </dd></dl>
 
 <dl class="staticmethod">
