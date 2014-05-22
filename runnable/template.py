@@ -578,9 +578,10 @@ class Parser(Class, Runnable):
         '''
 # # python3.4
 # #         self._builtins.update({
-# #             '__indent__': self.indent, 'FileHandler': FileHandler,
-# #             'print': self._print, 'include': self._include,
-# #             'String': builtins.str, 'length': builtins.len, 'Json': json,
+# #             '__indent__': self.indent, '__file__': self.file,
+# #             'FileHandler': FileHandler, 'print': self._print,
+# #             'include': self._include, 'String': builtins.str,
+# #             'length': builtins.len, 'Json': json,
 # #             'path_name_to_url': urllib.request.pathname2url,
 # #             'false': False, 'true': True, 'locals': builtins.locals,
 # #             'type': builtins.type, 'sort': builtins.sorted,
@@ -589,9 +590,10 @@ class Parser(Class, Runnable):
 # #             'DictionaryExtension': Dictionary, 'StringExtension': String,
 # #             'List': builtins.list})
         self._builtins.update({
-            '__indent__': self.indent, 'FileHandler': FileHandler,
-            'print': self._print, 'include': self._include,
-            'String': builtins.str, 'length': builtins.len, 'Json': json,
+            '__indent__': self.indent, '__file__': self.file,
+            'FileHandler': FileHandler, 'print': self._print,
+            'include': self._include, 'String': builtins.str,
+            'length': builtins.len, 'Json': json,
             'path_name_to_url': urllib.pathname2url, 'false': False,
             'true': True, 'locals': builtins.locals, 'type': builtins.type,
             'sort': builtins.sorted, 'is_type_of': builtins.isinstance,
