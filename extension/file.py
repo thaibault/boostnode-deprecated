@@ -1503,8 +1503,9 @@ class Handler(Class):
             output_with_root_prefix=output_with_root_prefix)
         subtrahend = builtins.len(self.get_name(
             output_with_root_prefix=output_with_root_prefix))
-        if(self.is_directory() and
-           (builtins.len(directory_path) - builtins.len(os.sep)) > 0):
+        if directory_path.endswith(os.sep) and builtins.len(
+            directory_path
+        ) > builtins.len(os.sep):
             subtrahend += builtins.len(os.sep)
         if subtrahend:
             return directory_path[:-subtrahend]
