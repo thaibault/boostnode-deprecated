@@ -30,6 +30,8 @@ __version__ = '1.0'
 import __builtin__ as builtins
 # #
 from copy import copy
+from datetime import datetime as DateTime
+import time
 import inspect
 import json
 import logging
@@ -576,10 +578,14 @@ class Parser(Class, Runnable):
             >>> template.builtins # doctest: +ELLIPSIS
             {...'print': ..._print...}
         '''
+        now = DateTime.now()
 # # python3.4
 # #         self._builtins.update({
 # #             '__indent__': self.indent, '__file__': self.file,
-# #             'FileHandler': FileHandler, 'print': self._print,
+# #             '__time_stamp__': time.mktime(
+# #                 now.timetuple()
+# #             ) + now.microsecond / 1000 ** 2, 'DateTime': DateTime,
+# #             'time': time, 'FileHandler': FileHandler, 'print': self._print,
 # #             'include': self._include, 'String': builtins.str,
 # #             'length': builtins.len, 'Json': json,
 # #             'path_name_to_url': urllib.request.pathname2url,
@@ -591,7 +597,10 @@ class Parser(Class, Runnable):
 # #             'List': builtins.list})
         self._builtins.update({
             '__indent__': self.indent, '__file__': self.file,
-            'FileHandler': FileHandler, 'print': self._print,
+            '__time_stamp__': time.mktime(
+                now.timetuple()
+            ) + now.microsecond / 1000 ** 2, 'DateTime': DateTime,
+            'time': time, 'FileHandler': FileHandler, 'print': self._print,
             'include': self._include, 'String': builtins.str,
             'length': builtins.len, 'Json': json,
             'path_name_to_url': urllib.pathname2url, 'false': False,
