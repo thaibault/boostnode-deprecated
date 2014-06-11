@@ -2293,8 +2293,7 @@ class CGIHTTPRequestHandler(
 # #                     content_length
 # #                 ).decode(self.server.web.encoding))
                 self.data = cgi.parse_qs(
-                    self.rfile.read(content_length), keep_blank_values=True
-                )
+                    self.rfile.read(content_length), keep_blank_values=True)
 # #
                 for name, value in self.data.items():
                     if Object(content=value).is_binary():
@@ -2361,28 +2360,13 @@ class CGIHTTPRequestHandler(
         data = {}
         for name in form:
             data[name] = []
-            index = 0
-            for value in form.getlist(name):
-                # NOTE: This definition handles a cgi module bug.
-                value_reference = form[name]
-                if builtins.isinstance(form[name], builtins.list):
-                    value_reference = form[name][index]
-                if(builtins.isinstance(value_reference.file, builtins.file) or
-                   value_reference.filename):
-# # python3.4
-# #                     data[name].append({
-# #                         'content': value,
-# #                         'name': value_reference.filename,
-# #                         'disposition': value_reference.disposition,
-# #                         'encoding': value_reference.encoding})
-                    data[name].append({
-                        'content': value,
-                        'name': value_reference.filename,
-                        'disposition': value_reference.disposition})
-# #
-                else:
+            if isinstance(form[name], list):
+                data[name] += form[name]
+            elif form[name].file:
+                data[name].append(form[name])
+            else:
+                for value in form.getlist(name):
                     data[name].append(value)
-                index += 1
         return data
 
     @JointPoint
@@ -2457,7 +2441,7 @@ class CGIHTTPRequestHandler(
             'CONTENT_TYPE': content_type,
             'QUERY_STRING': self.parameter,
             'REMOTE_HOST': self.host,
-            'CONTENT_LENGTH': '',
+            'CONTENT_LENGTH': self.headers.get('content-length', 0),
             'HTTP_USER_AGENT': '',
             'HTTP_COOKIE': '',
             'HTTP_REFERER': ''})
@@ -2779,9 +2763,13 @@ class CGIHTTPRequestHandler(
             target_match = patterns.match(target)
             if target_match.group('request_type') != '-':
                 self.request_type = target_match.group('request_type')
-            self.request_uri = pattern.sub(
-                target_match.group('request_uri'),
-                self.external_request_uri)
+            # TODO check branches.
+            for request in target_match.group('request_uri').split('#'):
+                self.request_uri = pattern.sub(
+                    request, self.external_request_uri
+                ).format(host_name=re.compile(':[0-9]+$').sub('', self.host))
+                if FileHandler(location=self.request_uri):
+                    break
         return self
 
     @JointPoint

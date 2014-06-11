@@ -2288,27 +2288,31 @@ class Dictionary(Object, builtins.dict):
 # #             iterable = builtins.list(iterable)
         pass
 # #
-        for key, value in builtins.enumerate(iterable):
-            if builtins.isinstance(value, builtins.dict):
-                iterable[key] = cls(value).convert(
-                    key_wrapper, value_wrapper
-                ).content
+        try:
+            for key, value in builtins.enumerate(iterable):
+                if builtins.isinstance(value, builtins.dict):
+                    iterable[key] = cls(value).convert(
+                        key_wrapper, value_wrapper
+                    ).content
 # # python3.4
-# #             elif(builtins.isinstance(value, collections.Iterable) and
-# #                  not builtins.isinstance(value, builtins.str)):
-            elif(builtins.isinstance(value, collections.Iterable) and
-                 not builtins.isinstance(value, (
-                     builtins.unicode, builtins.str))):
+# #                 elif(builtins.isinstance(value, collections.Iterable) and
+# #                      not builtins.isinstance(value, builtins.str)):
+                elif(builtins.isinstance(value, collections.Iterable) and
+                     not builtins.isinstance(value, (
+                         builtins.unicode, builtins.str))):
 # #
-                '''
-                    Take this method type by the abstract class via \
-                    introspection.
-                '''
-                iterable[key] = builtins.getattr(cls, inspect.stack()[0][3])(
-                    iterable=value, key_wrapper=key_wrapper,
-                    value_wrapper=value_wrapper)
-            else:
-                iterable[key] = value_wrapper(key, value)
+                    '''
+                        Take this method type by the abstract class via \
+                        introspection.
+                    '''
+                    iterable[key] = builtins.getattr(cls, inspect.stack()[0][3])(
+                        iterable=value, key_wrapper=key_wrapper,
+                        value_wrapper=value_wrapper)
+                else:
+                    iterable[key] = value_wrapper(key, value)
+        except:
+            # TODO reach branch.
+            pass
         return iterable
 
     @JointPoint(builtins.classmethod)
