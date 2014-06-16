@@ -1919,8 +1919,9 @@ class CGIHTTPRequestHandler(
             self.content_type_sent = True
             self.send_response(response_code)
             self.send_header('Content-Type', '%s; charset=%s' % (
-                mime_type,
-                self.server.web.encoding if encoding is None else encoding))
+                mime_type, (
+                    self.server.web.encoding if encoding is None else encoding
+                ).replace('_', '-')))
         return self
 
     @JointPoint
