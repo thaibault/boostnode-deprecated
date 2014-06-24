@@ -2363,9 +2363,14 @@ class CGIHTTPRequestHandler(
             data[name] = []
             if builtins.hasattr(form[name], 'file') and form[name].filename:
                 data[name].append(form[name])
+            elif builtins.isinstance(form[name], builtins.list):
+                for value in form[name]:
+                    if builtins.hasattr(value, 'file') and value.filename:
+                        data[name].append(value)
+                    else:
+                        data[name].append(value.value)
             else:
-                for value in form.getlist(name):
-                    data[name].append(value)
+                data[name].append(form[name].value)
         return data
 
     @JointPoint
