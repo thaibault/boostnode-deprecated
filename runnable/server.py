@@ -2361,9 +2361,7 @@ class CGIHTTPRequestHandler(
         data = {}
         for name in form:
             data[name] = []
-            if isinstance(form[name], list):
-                data[name] += form[name]
-            elif form[name].file:
+            if builtins.hasattr(form[name], 'file') and form[name].filename:
                 data[name].append(form[name])
             else:
                 for value in form.getlist(name):

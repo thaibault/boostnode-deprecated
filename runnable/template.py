@@ -594,7 +594,7 @@ class Parser(Class, Runnable):
 # #             'is_type_of': builtins.isinstance, 'Tuple': builtins.tuple,
 # #             'Dictionary': builtins.dict, 'RegularExpression': re.compile,
 # #             'DictionaryExtension': Dictionary, 'StringExtension': String,
-# #             'List': builtins.list})
+# #             'List': builtins.list, 'hasAttribute': builtins.hasattr})
         self._builtins.update({
             '__indent__': self.indent, '__file__': self.file,
             '__time_stamp__': time.mktime(
@@ -609,7 +609,7 @@ class Parser(Class, Runnable):
             'Tuple': builtins.tuple, 'Dictionary': builtins.dict,
             'RegularExpression': re.compile,
             'DictionaryExtension': Dictionary, 'StringExtension': String,
-            'List': builtins.list})
+            'List': builtins.list, 'hasAttribute': builtins.hasattr})
 # #
         return self._builtins
 

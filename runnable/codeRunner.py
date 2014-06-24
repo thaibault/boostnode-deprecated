@@ -101,22 +101,22 @@ class Run(Class, Runnable):
         'template': {
             'commands': {
                 'compile': "bash --login -c '"
-                           'template "<%code_file.path%>" 1>'
-                           '"<%code_file.directory_path%>'
-                           '<%code_file.basename%>.html"\'',
+                           'template "<% code_file.path %>" 1>'
+                           '"<% code_file.directory_path %>'
+                           '<% code_file.basename %>.html"\'',
                 'run': 'bash --login -c \'webbrowser '
-                       '"<%code_file.directory_path%>'
-                       '<%code_file.basename%>.html"\''
+                       '"<% code_file.directory_path %>'
+                       '<% code_file.basename %>.html"\''
             },
             'extensions': ('tpl',)
         },
         'c': {
             'commands': {
-                'compile': 'g++ "<%code_file.path%>" -o '
-                           '"<%code_file.directory_path%>'
-                           '<%code_file.basename%>"',
-                'run': '"<%code_file.directory_path%><%code_file.basename%>" '
-                       '<%arguments%>',
+                'compile': 'g++ "<% code_file.path %>" -o '
+                           '"<% code_file.directory_path %>'
+                           '<% code_file.basename %>"',
+                'run': '"<% code_file.directory_path %>'
+                       '<% code_file.basename %>" <%arguments%>',
             },
             'code_manager': {
                 'file_path': 'Makefile',
@@ -131,21 +131,21 @@ class Run(Class, Runnable):
             'delete_patterns': ('.*\.o', '.*Main', '.*Test')
         },
         'bash': {
-            'commands': {'run': '"<%code_file.path%>" <%arguments%>'},
+            'commands': {'run': '"<% code_file.path %>" <% arguments %>'},
             'extensions': ('bash',)
         },
         'shell': {
-            'commands': {'run': '"<%code_file.path%>" <%arguments%>'},
+            'commands': {'run': '"<% code_file.path %>" <% arguments %>'},
             'extensions': ('sh', 'shell')
         },
         'python': {
-            'commands': {'run': '"<%code_file.path%>" <%arguments%>'},
+            'commands': {'run': '"<% code_file.path %>" <% arguments %>'},
             'code_manager': {
-                'file_path': '__init__.<%code_file.extension%>',
+                'file_path': '__init__.<% code_file.extension %>',
                 'commands': {
-                    'clean': '__init__.<%code_file.extension%> clear',
-                    'test': '__init__.<%code_file.extension%> test',
-                    'all': '__init__.<%code_file.extension%> all'
+                    'clean': '__init__.<% code_file.extension %> clear',
+                    'test': '__init__.<% code_file.extension %> test',
+                    'all': '__init__.<% code_file.extension %> all'
                 }
             },
             'extensions': ('py', 'pyc', 'pyw', 'pyo', 'pyd'),
@@ -153,13 +153,13 @@ class Run(Class, Runnable):
         },
         'laTeX': {
             'commands': {
-                'compile': 'pdflatex "<%code_file.path%>" && '
-                           'cd "<%code_file.directory_path%>" && bibtex '
-                           '"<%code_file.basename%>.aux"; '
-                           'pdflatex "<%code_file.path%>" && '
-                           'pdflatex "<%code_file.path%>"',
+                'compile': 'pdflatex "<% code_file.path %>" && '
+                           'cd "<% code_file.directory_path %>" && bibtex '
+                           '"<% code_file.basename %>.aux"; '
+                           'pdflatex "<% code_file.path %>" && '
+                           'pdflatex "<% code_file.path %>"',
                 'run': ' || '.join(builtins.map(
-                    lambda name: name + ' "<%code_file.basename%>.pdf"',
+                    lambda name: name + ' "<% code_file.basename %>.pdf"',
                     Platform.UNIX_OPEN_APPLICATIONS)
                 )
             },
@@ -179,8 +179,9 @@ class Run(Class, Runnable):
         },
         'java': {
             'commands': {
-                'compile': 'javac "<%code_file.path%>"',
-                'run': 'java "<%code_file.basename%>" <%arguments%>'
+                'compile': 'javac "<% code_file.path %>"',
+                'run': 'java "<% code_file.basename.capitalize() %>" '
+                       '<% arguments %>'
             },
             'extensions': ('java',),
             'delete_patterns': ('.*\.class',)
