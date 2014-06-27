@@ -3,13 +3,14 @@
 
 # region header
 
-# # python3.4 pass
-from __future__ import print_function
-
 '''
     This module provides classes for dealing with python's way to transport \
     strings to any output stream.
 '''
+
+# # python3.4 pass
+from __future__ import print_function
+
 '''
     For conventions see "boostNode/__init__.py" on \
     https://github.com/thaibault/boostNode

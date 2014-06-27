@@ -482,6 +482,18 @@ class Web(Class, Runnable):
                                                   directory listing for \
                                                   requested directories.
 
+        **internal_redirects**                  - A mapping of request url \
+                                                  patterns to corresponding \
+                                                  internal version. Regular \
+                                                  expression replacements are \
+                                                  supported.
+
+        **external_redirects**                  - A mapping of request url \
+                                                  patterns to corresponding \
+                                                  external version. Regular \
+                                                  expression replacements are \
+                                                  supported.
+
         Examples:
 
         >>> Web(
@@ -978,7 +990,7 @@ class Web(Class, Runnable):
 # #         request_parameter_delimiter='\?',
 # #         file_size_stream_threshold_in_byte=1048576,  # 1 MB
 # #         directory_listing=True, internal_redirects=None,
-# #         external_redirects=None, **keywords: builtins.object
+# #         external_redirects=None**keywords: builtins.object
 # #     ) -> Self:
     def _initialize(
         self, root=None, host_name='', port=0, default='',
@@ -1101,13 +1113,13 @@ class Web(Class, Runnable):
                 pass
             determineIPSocket.close()
         __logger__.info(
-            'Web server is starting %sand listens at port "%d" and webroot '
+            'Web server is starting%s, listens at port "%d" and webroot is '
             '"%s". Currently reachable ip is "%s". Maximum parallel processes '
             'is limited to %d.', (
-                'a secure connection with public key "%s" ' %
+                ' a secure connection with public key "%s" ' %
                 self.public_key_file._path
-            ) if self.public_key_file else '',
-            self.port, self.root._path, ip, self.maximum_number_of_processes)
+            ) if self.public_key_file else '', self.port, self.root._path,
+            ip, self.maximum_number_of_processes)
         return self
 
     @JointPoint
@@ -1187,15 +1199,12 @@ class Web(Class, Runnable):
     def _initialize_server_thread(self, port):
 # #
         '''Initializes a new request-handler and starts its own thread.'''
+        self.service = MultiProcessingHTTPServer(
+            (self.host_name, port), CGIHTTPRequestHandler)
         if self.public_key_file:
-            self.service = MultiProcessingHTTPServer(
-                (self.host_name, port), CGIHTTPRequestHandler)
             self.service.socket = ssl.wrap_socket(
                 self.service.socket, certfile=self.public_key_file._path,
                 server_side=True)
-        else:
-            self.service = MultiProcessingHTTPServer(
-                (self.host_name, port), CGIHTTPRequestHandler)
         self.service.web = self
 # # python3.4
 # #         threading.Thread(
@@ -2361,7 +2370,7 @@ class CGIHTTPRequestHandler(
         data = {}
         for name in form:
             data[name] = []
-            if builtins.hasattr(form[name], 'file') and form[name].filename:
+            if hasattr(form[name], 'file') and form[name].filename:
                 data[name].append(form[name])
             elif builtins.isinstance(form[name], builtins.list):
                 for value in form[name]:
@@ -2771,7 +2780,8 @@ class CGIHTTPRequestHandler(
             for request in target_match.group('request_uri').split('#'):
                 self.request_uri = pattern.sub(
                     request, self.external_request_uri
-                ).format(host_name=re.compile(':[0-9]+$').sub('', self.host))
+                ).format(host_name=re.compile(':[0-9]+$').sub(
+                    '', self.host))
                 if FileHandler(location=self.request_uri):
                     break
         return self
