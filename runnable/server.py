@@ -1091,9 +1091,9 @@ class Web(Class, Runnable):
 # # python3.4     def _log_server_status(self: Self) -> Self:
     def _log_server_status(self):
         '''Prints some information about the way the server was started.'''
-        determineIPSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        determine_ip_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         try:
-            determineIPSocket.connect(self.DETERMINE_IP_SOCKET)
+            determine_ip_socket.connect(self.DETERMINE_IP_SOCKET)
 # # python3.4
 # #         except (
 # #             builtins.BrokenPipeError, socket.gaierror, socket.herror,
@@ -1105,13 +1105,13 @@ class Web(Class, Runnable):
 # #
             ip = socket.gethostbyname(socket.gethostname())
         else:
-            ip = determineIPSocket.getsockname()[0]
+            ip = determine_ip_socket.getsockname()[0]
         finally:
             try:
-                determineIPSocket.shutdown(socket.SHUT_RDWR)
+                determine_ip_socket.shutdown(socket.SHUT_RDWR)
             except socket.error:
                 pass
-            determineIPSocket.close()
+            determine_ip_socket.close()
         __logger__.info(
             'Web server is starting%s, listens at port "%d" and webroot is '
             '"%s". Currently reachable ip is "%s". Maximum parallel processes '
