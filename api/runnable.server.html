@@ -606,8 +606,8 @@
 <em class="property">class </em><tt class="descclassname">boostNode.runnable.server.</tt><tt class="descname">MultiProcessingHTTPServer</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.server.MultiProcessingHTTPServer" title="Permalink to this definition">¶</a></dt>
 <dd><p>The Class implements a partial multiprocessing supported web server.</p>
 <dl class="staticmethod">
-<dt id="boostNode.runnable.server.MultiProcessingHTTPServer.is_same_thread_request">
-<em class="property">static </em><tt class="descname">is_same_thread_request</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.server.MultiProcessingHTTPServer.is_same_thread_request" title="Permalink to this definition">¶</a></dt>
+<dt id="boostNode.runnable.server.MultiProcessingHTTPServer.is_same_process_request">
+<em class="property">static </em><tt class="descname">is_same_process_request</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.server.MultiProcessingHTTPServer.is_same_process_request" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines if the given request could be run in its own dedicated             process.</p>
 </dd></dl>
 
@@ -662,7 +662,7 @@
 <p><strong>encoding</strong>                            - Encoding to use for                                                   incoming requests and                                                   outgoing data.</p>
 <p><strong>request_whitelist</strong>                   - A whitelist for requests.                                                   All requests which doesn&#8217;t                                                   match to one of these will                                                   be answered with an 404                                                   error code.</p>
 <p><strong>request_blacklist</strong>                   - A blacklist for requests to                                                   answer with a 404 error code.</p>
-<p><strong>same_thread_request_whitelist</strong>       - Requests which matches one                                                   one of theses patterns                                                   should be run in same                                                   thread as the server                                                   itself. This is usually                                                   necessary if you plan to                                                   write in inter thread                                                   shared data.</p>
+<p><strong>same_process_request_whitelist</strong>      - Requests which matches one                                                   one of theses patterns                                                   should be run in same                                                   process as the server                                                   itself. This is usually                                                   necessary if you plan to                                                   write in inter thread                                                   shared data.</p>
 <p><strong>static_mime_type_pattern</strong>            - Defines which mime types                                                   should be interpreted as                                                   static.</p>
 <p><strong>dynamic_mime_type_pattern</strong>           - Defines which mime types                                                   should be interpreted as                                                   dynamic.</p>
 <p><strong>compressible_mime_type_pattern</strong>      - Defines which mime types                                                   could be returned in a                                                   compressed way.</p>
