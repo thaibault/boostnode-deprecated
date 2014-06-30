@@ -223,10 +223,10 @@ class MultiProcessingHTTPServer(
 
     @JointPoint
 # # python3.4
-# #     def is_same_thread_request(
+# #     def is_same_process_request(
 # #         self: Self, request: socket.socket
 # #     ) -> builtins.bool:
-    def is_same_thread_request(self, request):
+    def is_same_process_request(self, request):
 # #
         '''
             Determines if the given request could be run in its own dedicated \
@@ -235,7 +235,7 @@ class MultiProcessingHTTPServer(
         first_request_line = self.read_file_socket.readline(
             Web.MAXIMUM_FIRST_GET_REQUEST_LINE_IN_CHARS
         ).strip()
-        for pattern in self.web.same_thread_request_whitelist:
+        for pattern in self.web.same_process_request_whitelist:
 # # python3.4
 # #             if re.compile(pattern).fullmatch(first_request_line.decode()):
             if re.compile('(?:%s)$' % pattern).match(first_request_line):
@@ -327,7 +327,7 @@ class MultiProcessingHTTPServer(
             builtins.len(multiprocessing.active_children()) + 1
         parent_function = builtins.getattr(
             server.HTTPServer, inspect.stack()[0][3])
-        if(not self.is_same_thread_request(request_socket) and
+        if(not self.is_same_process_request(request_socket) and
            self.web.number_of_running_processes <
            self.web.maximum_number_of_processes):
             self.web.number_of_running_processes += 1
@@ -409,10 +409,10 @@ class Web(Class, Runnable):
         **request_blacklist**                   - A blacklist for requests to \
                                                   answer with a 404 error code.
 
-        **same_thread_request_whitelist**       - Requests which matches one \
+        **same_process_request_whitelist**      - Requests which matches one \
                                                   one of theses patterns \
                                                   should be run in same \
-                                                  thread as the server \
+                                                  process as the server \
                                                   itself. This is usually \
                                                   necessary if you plan to \
                                                   write in inter thread \
@@ -970,7 +970,7 @@ class Web(Class, Runnable):
 # #         public_key_file=None, stop_order='stop',
 # #         encoding=FileHandler.DEFAULT_ENCODING,
 # #         request_whitelist=('*:/.*',), request_blacklist=(),
-# #         same_thread_request_whitelist=(),
+# #         same_process_request_whitelist=(),
 # #         # NOTE: Tuple for explicit web_server file reference validation.
 # #         # ('text/.+$', 'image/.+$', 'application/(x-)?javascript$')
 # #         static_mime_type_pattern=('.+/.+$',),
@@ -990,14 +990,14 @@ class Web(Class, Runnable):
 # #         request_parameter_delimiter='\?',
 # #         file_size_stream_threshold_in_byte=1048576,  # 1 MB
 # #         directory_listing=True, internal_redirects=None,
-# #         external_redirects=None**keywords: builtins.object
+# #         external_redirects=None, **keywords: builtins.object
 # #     ) -> Self:
     def _initialize(
         self, root=None, host_name='', port=0, default='',
         public_key_file=None, stop_order='stop',
         encoding=FileHandler.DEFAULT_ENCODING,
         request_whitelist=('*:/.*',), request_blacklist=(),
-        same_thread_request_whitelist=(),
+        same_process_request_whitelist=(),
         # NOTE: Tuple for explicit web_server file reference validation.
         # ('text/.+$', 'image/.+$', 'application/(x-)?javascript$')
         static_mime_type_pattern=('.+/.+$',),
