@@ -4245,8 +4245,10 @@ class Handler(Class):
         '''
         for file in self:
             for pattern in patterns:
-# # python3.4                 if re.compile(pattern).fullmatch(file.name):
+# # python3.4
+# #                 if re.compile(pattern).fullmatch(file.name):
                 if re.compile('(?:%s)$' % pattern).match(file.name):
+# #
                     file.remove_deep()
         return self
 

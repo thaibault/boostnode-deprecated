@@ -2305,13 +2305,17 @@ class Dictionary(Object, builtins.dict):
                         Take this method type by the abstract class via \
                         introspection.
                     '''
-                    iterable[key] = builtins.getattr(cls, inspect.stack()[0][3])(
-                        iterable=value, key_wrapper=key_wrapper,
-                        value_wrapper=value_wrapper)
+                    iterable[key] = builtins.getattr(
+                        cls, inspect.stack()[0][3]
+                    )(iterable=value, key_wrapper=key_wrapper,
+                      value_wrapper=value_wrapper)
                 else:
                     iterable[key] = value_wrapper(key, value)
-        except:
-            # TODO reach branch.
+        except builtins.TypeError:
+            '''
+                NOTE: We have visited a non indexable value (e.g. an uploaded
+                file).
+            '''
             pass
         return iterable
 

@@ -1204,8 +1204,10 @@ class Parser(Class, Runnable):
         for variable in self._command_line_arguments.scope_variables:
             pattern = self.command_line_placeholder_pattern.format(
                 placeholder=self.command_line_placeholder_name_pattern)
-# # python3.4             match = re.compile(pattern).fullmatch(variable)
+# # python3.4
+# #             match = re.compile(pattern).fullmatch(variable)
             match = re.compile('(?:%s)$' % pattern).match(variable)
+# #
             if match:
                 keywords.update(
                     {match.group('variable_name'): match.group('value')})

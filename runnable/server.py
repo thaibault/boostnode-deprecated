@@ -2307,7 +2307,8 @@ class CGIHTTPRequestHandler(
 # #                     content_length
 # #                 ).decode(self.server.web.encoding))
                 self.data = cgi.parse_qs(
-                    self.rfile.read(content_length), keep_blank_values=True)
+                    self.rfile.read(content_length),
+                    keep_blank_values=True)
 # #
                 for name, value in self.data.items():
                     if Object(content=value).is_binary():
@@ -2630,7 +2631,7 @@ class CGIHTTPRequestHandler(
             if(request_type_uppercase in request_types or
                '*' in request_types
                ) and re.compile('(?:%s)$' % match.group('request_uri')).match(
-                   self.external_request_uri) is not None:
+                    self.external_request_uri) is not None:
 # #
                 return True
         return False
@@ -2805,7 +2806,8 @@ class CGIHTTPRequestHandler(
 # #                 delimiter=self.server.web.request_parameter_delimiter)
 # #         ).fullmatch(self.request_uri)
         match = re.compile(
-            '[^/]*/+(?P<path>.*?)(?:{delimiter}(?P<parameter>.*))?$'.format(
+            '[^/]*/+(?P<path>.*?)'
+            '(?:{delimiter}(?P<parameter>.*))?$'.format(
                 delimiter=self.server.web.request_parameter_delimiter)
         ).match(self.request_uri)
 # #
