@@ -234,7 +234,7 @@ class Model(builtins.object):
     def get_dictionary(
         self, key_wrapper=lambda key, value: key,
         value_wrapper=lambda key, value: value, prefix_filter='password',
-        property_names=()
+        property_names=(), preserve_unicode=False
     ):
 # #
         '''
@@ -322,7 +322,9 @@ class Model(builtins.object):
             result[key] = value_wrapper(key, value)
 # # python3.4
 # #             pass
-            if builtins.isinstance(result[key], builtins.unicode):
+            if not preserve_unicode and builtins.isinstance(
+                result[key], builtins.unicode
+            ):
                 result[key] = result[key].encode(
                     FileHandler.DEFAULT_ENCODING)
 # #
