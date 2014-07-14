@@ -1338,6 +1338,9 @@ class Handler(Class):
         if builtins.isinstance(mime_type, builtins.str):
             return mime_type
         if web:
+            # TODO check branch.
+            if self.name in ('.html', '.htm'):
+                return 'text/html'
             return 'application/octet-stream'
         if self.is_file():
             subtype = 'plain'

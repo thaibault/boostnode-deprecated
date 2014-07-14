@@ -18,7 +18,8 @@ __maintainer_email__ = 't.sickert@gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-import base64
+from base64 import b64encode as base64_encode
+from base64 import b64decode as base64_decode
 # # python3.4
 # # import builtins
 import __builtin__ as builtins
@@ -1269,7 +1270,9 @@ class CGIHTTPRequestHandler(
         self.request_uri = ''
         self.external_request_uri = ''
         self.parameter = ''
+        self.get = {}
         self.data = {}
+        self.cookie = {}
         self.request_type = ''
         self.external_request_type = ''
         self.data_type = ''
@@ -2203,11 +2206,19 @@ class CGIHTTPRequestHandler(
                     break
                 self._authentication_location = FileHandler(
                     location=self._authentication_location.directory_path)
+            login_data_match = re.compile(
+                '(?P<name>[^:]+):(?P<password>.+)$'
+            ).match(base64_decode(self.headers.get('authorization', '')[len(
+                'Basic '):]))
+            login_data = None
+            if login_data_match:
+                # TODO check branch
+                login_data = {
+                    'name': login_data_match.group('name'),
+                    'password': login_data_match.group('password')}
             return builtins.bool(
                 self.server.web.authentication_handler is None or
-                self.server.web.authentication_handler(
-                    self.headers.get('authorization'), self.request_uri,
-                    self.external_request_uri, self))
+                self.server.web.authentication_handler(login_data, self))
         return True
 
     @JointPoint
@@ -2344,13 +2355,13 @@ class CGIHTTPRequestHandler(
 # #         match = re.compile(
 # #             self.server.web.authentication_file_content_pattern
 # #         ).fullmatch(authentication_file.content.strip())
-# #         return base64.b64encode(('%s:%s' % (
+# #         return base64_encode(('%s:%s' % (
 # #             match.group('name'), match.group('password')
 # #         )).encode(self.server.web.encoding)).decode()
         match = re.compile(
             '(?:%s)$' % self.server.web.authentication_file_content_pattern
         ).match(authentication_file.content.strip())
-        return base64.b64encode(
+        return base64_encode(
             '%s:%s' % (match.group('name'), match.group('password')))
 # #
 
@@ -2830,6 +2841,11 @@ class CGIHTTPRequestHandler(
             if self.requested_file.is_file():
                 self._authentication_location = FileHandler(
                     location=self.requested_file.directory_path)
+        cookie_handler = self.get_cookie()
+        if cookie_handler is not None:
+            for key, morsel in cookie_handler.items():
+                self.cookie[key] = morsel.value
+        self.get = self.parse_url(self.request_uri)[1]
         return self.path
 
     @JointPoint
@@ -3289,17 +3305,12 @@ class CGIHTTPRequestHandler(
             expected from client it could be run without its own thread \
             environment.
         '''
-        cookie = {}
-        cookie_handler = self.get_cookie()
-        if cookie_handler is not None:
-            for key, morsel in cookie_handler.items():
-                cookie[key] = morsel.value
         self.request_arguments = (
             ('requested_file_name', self.requested_file_name),
             ('host', self.host), ('request_uri', self.request_uri),
             ('external_request_uri', self.external_request_uri),
-            ('get', self.parse_url(self.request_uri)[1]), ('data', self.data),
-            ('cookie', cookie), ('request_type', self.request_type),
+            ('get', self.get), ('data', self.data), ('cookie', self.cookie),
+            ('request_type', self.request_type),
             ('external_request_type', self.external_request_type),
             ('shared_data', self.server.web.shared_data), ('handler', self))
         if '__no_respond__' not in self.data:
