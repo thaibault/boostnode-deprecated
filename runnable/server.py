@@ -908,10 +908,18 @@ class Web(Class, Runnable):
                 time.sleep(2)
             __logger__.info('Shutting down web server.')
             self.__class__.instances.remove(self)
+            '''Terminates the serve forever loop.'''
+            self.service.shutdown()
             try:
+                '''Tells client site to stop writing data into the socket.'''
                 self.service.socket.shutdown(socket.SHUT_RDWR)
-            except socket.error:
-                pass
+            except socket.error as exception:
+                __logging__.warning(
+                    'Connection couldn\'t be released on both sites. %s: %s',
+                    exception.__class__.__name__, str(exception))
+            '''Tells the kernel to free binded port.'''
+            self.service.socket.setsockopt(
+                socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             self.service.socket.close()
         '''Take this method type by the abstract class via introspection.'''
         return builtins.getattr(
@@ -1187,7 +1195,7 @@ class Web(Class, Runnable):
             return self.service.serve_forever()
 # # python3.4         except builtins.ValueError as exception:
         except socket.error as exception:
-            __logger__.info(
+            __logger__.warning(
                 '%s: %s', exception.__class__.__name__,
                 builtins.str(exception))
         return self
