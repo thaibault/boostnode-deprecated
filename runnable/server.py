@@ -880,10 +880,8 @@ class Web(Class, Runnable):
             Object of "Web" with root path "...", port "0" and stop order "...
 
             >>> web.service = True
-            >>> web.stop()
-            Traceback (most recent call last):
-            ...
-            AttributeError: 'bool' object has no attribute 'socket'
+            >>> web.stop() # doctest: +ELLIPSIS
+            Object of "Web" with root path "...", port "0" and stop order "s...
         '''
         if self.__dict__.get('service'):
             self.block_new_worker = True
@@ -908,19 +906,22 @@ class Web(Class, Runnable):
                 time.sleep(2)
             __logger__.info('Shutting down web server.')
             self.__class__.instances.remove(self)
-            '''Terminates the serve forever loop.'''
-            self.service.shutdown()
-            try:
-                '''Tells client site to stop writing data into the socket.'''
-                self.service.socket.shutdown(socket.SHUT_RDWR)
-            except socket.error as exception:
-                __logging__.warning(
-                    'Connection couldn\'t be released on both sites. %s: %s',
-                    exception.__class__.__name__, str(exception))
-            '''Tells the kernel to free binded port.'''
-            self.service.socket.setsockopt(
-                socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-            self.service.socket.close()
+            if not __test_mode__:
+                '''Terminates the serve forever loop.'''
+                self.service.shutdown()
+                try:
+                    '''
+                        Tells client site to stop writing data into the socket.
+                    '''
+                    self.service.socket.shutdown(socket.SHUT_RDWR)
+                except socket.error as exception:
+                    __logging__.warning(
+                        'Connection couldn\'t be released on both sites. %s: '
+                        '%s', exception.__class__.__name__, str(exception))
+                '''Tells the kernel to free binded port.'''
+                self.service.socket.setsockopt(
+                    socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+                self.service.socket.close()
         '''Take this method type by the abstract class via introspection.'''
         return builtins.getattr(
             builtins.super(self.__class__, self), inspect.stack()[0][3]
@@ -1400,8 +1401,7 @@ class CGIHTTPRequestHandler(
 
             >>> handler.server.web.authentication = True
             >>> handler.server.web.authentication_handler = (
-            ...     lambda header, request_uri, external_request_uri,
-            ...     request_handler: False)
+            ...     lambda login_data, request_handler: False)
             >>> # # python2.7
             >>> if sys.version_info.major < 3:
             ...     handler.headers = handler.MessageClass(
@@ -1409,6 +1409,21 @@ class CGIHTTPRequestHandler(
             ... else:
             ...     handler.headers = handler.MessageClass()
             ...     handler.headers.add_header('key', 'value')
+            >>> # #
+            >>> handler.do_GET() # doctest: +ELLIPSIS
+            Object of "CGIHTTPRequestHandler" with request uri "" and parame...
+
+            >>> # # python2.7
+            >>> if sys.version_info.major < 3:
+            ...     handler.headers = handler.MessageClass(
+            ...         String(
+            ...             'Authorization: Basic ' +
+            ...             base64_encode('hans:hans')
+            ...         ), seekable=False)
+            ... else:
+            ...     handler.headers = handler.MessageClass()
+            ...     handler.headers.add_header(
+            ...         'Authorization', 'Basic ' + base64_encode('hans:hans'))
             >>> # #
             >>> handler.do_GET() # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "" and parame...
@@ -1426,8 +1441,7 @@ class CGIHTTPRequestHandler(
             >>> handler.path = '/not_existing_file'
             >>> handler.server.web.request_whitelist = '*:/not_existing_file',
             >>> handler.server.web.authentication_handler = (
-            ...     lambda header, request_uri, external_request_uri,
-            ...     request_handler: True)
+            ...     lambda login_data, request_handler: True)
             >>> handler.do_GET() # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "/not_existin...
 
@@ -1822,11 +1836,121 @@ class CGIHTTPRequestHandler(
 
             **name** - If provided only the matching value will be returned \
                        instead of the whole cookie object.
+
+            Examples:
+
+            >>> handler = CGIHTTPRequestHandler()
+            >>> # # python2.7
+            >>> if sys.version_info.major < 3:
+            ...     handler.headers = handler.MessageClass(
+            ...         String('hans: hans'), seekable=False)
+            ... else:
+            ...     handler.headers = handler.MessageClass()
+            ...     handler.headers.add_header('hans', 'hans')
+            >>> # #
+
+            >>> handler.get_cookie() # doctest: +ELLIPSIS
+
+            >>> # # python2.7
+            >>> if sys.version_info.major < 3:
+            ...     handler.headers = handler.MessageClass(
+            ...         String('Cookie: hans=hans'), seekable=False)
+            ... else:
+            ...     handler.headers = handler.MessageClass()
+            ...     handler.headers.add_header('Cookie', 'hans=hans')
+            >>> # #
+
+            >>> handler.get_cookie() # doctest: +ELLIPSIS
+            <SimpleCookie: hans='hans'>
+
+            >>> __test_buffer__.clear() # doctest: +ELLIPSIS
+            '...'
+
+            >>> # # python2.7
+            >>> if sys.version_info.major < 3:
+            ...     handler.headers = handler.MessageClass(
+            ...         String('Cookie: ha/ns=hans'), seekable=False)
+            ... else:
+            ...     handler.headers = handler.MessageClass()
+            ...     handler.headers.add_header('Cookie', 'ha/ns=hans')
+            >>> # #
+
+            >>> handler.get_cookie() # doctest: +ELLIPSIS
+            <SimpleCookie: hans='hans'>
+
+            >>> __test_buffer__.clear() # doctest: +ELLIPSIS
+            '...WARNING - Invalid cookie detected "ha/ns=hans". ...'
+
+            >>> # # python2.7
+            >>> if sys.version_info.major < 3:
+            ...     handler.headers = handler.MessageClass(
+            ...         String('Cookie: hans'), seekable=False)
+            ... else:
+            ...     handler.headers = handler.MessageClass()
+            ...     handler.headers.add_header('Cookie', 'hans')
+            >>> # #
+
+            >>> handler.get_cookie() # doctest: +ELLIPSIS
+            <SimpleCookie: >
+
+            >>> __test_buffer__.clear() # doctest: +ELLIPSIS
+            ''
+
+            >>> # # python2.7
+            >>> if sys.version_info.major < 3:
+            ...     handler.headers = handler.MessageClass(
+            ...         String('Cookie: hans='), seekable=False)
+            ... else:
+            ...     handler.headers = handler.MessageClass()
+            ...     handler.headers.add_header('Cookie', 'hans=')
+            >>> # #
+
+            >>> handler.get_cookie() # doctest: +ELLIPSIS
+            <SimpleCookie: hans=''>
+
+            >>> __test_buffer__.clear() # doctest: +ELLIPSIS
+            ''
+
+            >>> # # python2.7
+            >>> if sys.version_info.major < 3:
+            ...     handler.headers = handler.MessageClass(
+            ...         String('Cookie: h/a//ns////=ha/ns'), seekable=False)
+            ... else:
+            ...     handler.headers = handler.MessageClass()
+            ...     handler.headers.add_header('Cookie', 'h/a//ns////=ha/ns')
+            >>> # #
+
+            >>> handler.get_cookie() # doctest: +ELLIPSIS
+            <SimpleCookie: hans='ha/ns'>
+
+            >>> __test_buffer__.clear() # doctest: +ELLIPSIS
+            '...WARNING - Invalid cookie detected ...'
         '''
 # # python3.4         if 'cookie' in self.headers:
         if self.headers.get('cookie'):
             cookie = cookies.SimpleCookie()
-            cookie.load(self.headers.get('cookie'))
+            cookie_content = self.headers.get('cookie')
+            while True:
+                try:
+                    cookie.load(cookie_content)
+                except cookies.CookieError as exception:
+                    new_cookie_content = re.compile(
+                        '([^=]*)/+([^=]*=[^;]*(?:;|$))'
+                    ).sub('\\1\\2', cookie_content)
+                    if cookie_content == new_cookie_content:
+                        __logger__.critical(
+                            'Invalid cookie detected "%s". %s: %s',
+                            cookie_content, exception.__class__.__name__, str(
+                                exception))
+                        return None
+                    else:
+                        __logger__.warning(
+                            'Invalid cookie detected "%s". %s: %s. Trying "%s"'
+                            '.', cookie_content, exception.__class__.__name__,
+                            builtins.str(exception), new_cookie_content)
+                        cookie_content = new_cookie_content
+                else:
+                    break
             return cookie[name].value if name and name in cookie else cookie
         return None
 
@@ -2220,7 +2344,6 @@ class CGIHTTPRequestHandler(
                 'Basic '):]))
             login_data = None
             if login_data_match:
-                # TODO check branch
                 login_data = {
                     'name': login_data_match.group('name'),
                     'password': login_data_match.group('password')}

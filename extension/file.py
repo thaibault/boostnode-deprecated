@@ -1295,9 +1295,11 @@ class Handler(Class):
     @JointPoint(Class.pseudo_property)
 # # python3.4
 # #     def get_mime_type(
-# #         self: Self, default_type='text', web=False
+# #         self: Self, default_type='text', default_subtype='plain', web=False
 # #     ) -> builtins.str:
-    def get_mime_type(self, default_type='text', web=False):
+    def get_mime_type(
+        self, default_type='text', default_subtype='plain', web=False
+    ):
 # #
         '''
             Determines the mime-type of the current object.
@@ -1333,17 +1335,26 @@ class Handler(Class):
 
             >>> handler.get_mime_type(web=True)
             'application/octet-stream'
+
+            >>> handler = Handler(
+            ...     location=__test_folder__.path + 'get_mime_type.html')
+            >>> handler.content = ''
+            >>> handler.mime_type
+            'text/html'
+
+            >>> handler = Handler(location=__test_folder__.path + '.html')
+            >>> handler.get_mime_type(web=True)
+            'text/html'
         '''
         mime_type = mimetypes.guess_type(self._path)[0]
         if builtins.isinstance(mime_type, builtins.str):
             return mime_type
         if web:
-            # TODO check branch.
             if self.name in ('.html', '.htm'):
                 return 'text/html'
             return 'application/octet-stream'
         if self.is_file():
-            subtype = 'plain'
+            subtype = default_subtype
             if self.extension:
                 subtype = 'x-' + self.extension
             return default_type + '/' + subtype
