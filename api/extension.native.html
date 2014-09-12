@@ -628,7 +628,7 @@
 
 <dl class="classmethod">
 <dt id="boostNode.extension.native.Module.get_context_path">
-<em class="property">classmethod </em><tt class="descname">get_context_path</tt><big>(</big><em>path=None</em>, <em>frame=&lt;frame object at 0x7f434e390b60&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_context_path" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><tt class="descname">get_context_path</tt><big>(</big><em>path=None</em>, <em>frame=&lt;frame object at 0x7fa6451555d8&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_context_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines the package and module level context path to a given             context or file.</p>
 <p><strong>path</strong>  - relative or absolute context or file path to normalize</p>
 <p><strong>frame</strong> - stack frame to analyse again context</p>
@@ -1147,6 +1147,10 @@
 <span class="go">&#39;urlHANSId&#39;</span>
 </pre></div>
 </div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;url-hans-1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delimited_to_camel_case</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;urlHans1&#39;</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="staticmethod">
@@ -1352,7 +1356,7 @@
 <dt id="boostNode.extension.native.String.subn">
 <em class="property">static </em><tt class="descname">subn</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.subn" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implements the pythons native &#8220;re.subn()&#8221; method in an object             oriented way. This method serves additionally dictionaries as             &#8220;search&#8221; parameter for multiple replacements. If you use             dictionaries, the second parameter &#8220;replace&#8221; becomes useless.</p>
-<p>Perform the same operation as &#8220;re.sub()&#8221;, but returns a tuple:             (&#8220;new_string&#8221;, &#8220;number_of_subs_made&#8221;&#8221;).</p>
+<p>Perform the same operation as &#8220;re.sub()&#8221;, but returns a tuple:             (&#8220;new_string&#8221;, &#8220;number_of_subs_made&#8221;).</p>
 <p><strong>search</strong>  - regular expression search pattern</p>
 <p><strong>replace</strong> - string to replace with given search sequence</p>
 <p>Additional arguments and keywords are forwarded to pythons&#8217;s native
@@ -1551,7 +1555,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 16.12.2012, Torben Sickert.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>
