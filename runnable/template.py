@@ -29,7 +29,7 @@ __version__ = '1.0'
 # # import collections
 import __builtin__ as builtins
 # #
-from copy import copy
+from copy import copy, deepcopy
 from datetime import datetime as DateTime
 import time
 import inspect
@@ -593,6 +593,7 @@ class Parser(Class, Runnable):
 # #             'type': builtins.type, 'sort': builtins.sorted,
 # #             'is_type_of': builtins.isinstance, 'Tuple': builtins.tuple,
 # #             'Dictionary': builtins.dict, 'RegularExpression': re.compile,
+# #             'copy': copy, 'deepCopy': deepcopy,
 # #             'DictionaryExtension': Dictionary, 'StringExtension': String,
 # #             'List': builtins.list, 'hasAttribute': builtins.hasattr})
         self._builtins.update({
@@ -607,9 +608,10 @@ class Parser(Class, Runnable):
             'true': True, 'locals': builtins.locals, 'type': builtins.type,
             'sort': builtins.sorted, 'is_type_of': builtins.isinstance,
             'Tuple': builtins.tuple, 'Dictionary': builtins.dict,
-            'RegularExpression': re.compile,
-            'DictionaryExtension': Dictionary, 'StringExtension': String,
-            'List': builtins.list, 'hasAttribute': builtins.hasattr})
+            'RegularExpression': re.compile, 'copy': copy,
+            'deepCopy': deepcopy, 'DictionaryExtension': Dictionary,
+            'StringExtension': String, 'List': builtins.list,
+            'hasAttribute': builtins.hasattr})
 # #
         return self._builtins
 

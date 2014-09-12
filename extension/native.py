@@ -468,7 +468,7 @@ class Model(builtins.object):
         ) < property_information['minimum_length']:
             raise builtins.ValueError(
                 'Property "%s" of model "%s" has minimum length %d '
-                'but given value ("%s") has length %d.' % (
+                'but given value "%s" has length %d.' % (
                     name, cls.__name__, property_information['minimum_length'],
                     value, builtins.len(value)))
         if 'maximum_length' in property_information and builtins.len(
@@ -476,7 +476,7 @@ class Model(builtins.object):
         ) > property_information['maximum_length']:
             raise builtins.ValueError(
                 'Property "%s" of model "%s" has maximum length %d '
-                'but given value ("%s") has length %d.' % (
+                'but given value "%s" has length %d.' % (
                     name, cls.__name__, property_information['maximum_length'],
                     value, builtins.len(value)))
 # # python3.4
@@ -489,7 +489,7 @@ class Model(builtins.object):
 # #
             raise builtins.ValueError(
                 'Property "%s" of model "%s" has pattern "%s" but '
-                'given value ("%s") doesn\'t match.' % (
+                'given value "%s" doesn\'t match.' % (
                     name, cls.__name__, property_information['pattern'],
                     value))
         return cls
@@ -1401,18 +1401,21 @@ class String(Object, builtins.str):
             ...     '-', abbreviations=('hans',)
             ... ).content
             'urlHANSId'
+
+            >>> String('url-hans-1').delimited_to_camel_case('-').content
+            'urlHans1'
         '''
         if abbreviations is None:
             abbreviations = self.abbreviations
         self.content = re.compile(
-            '(?P<before>[a-z])(?P<abbreviation>(%s))(?P<after>[A-Z]|$)' %
+            '(?P<before>[a-z0-9])(?P<abbreviation>(%s))(?P<after>[A-Z0-9]|$)' %
             ')|('.join(builtins.map(
                 lambda abbreviation: abbreviation.capitalize(),
                 abbreviations))
         ).sub(lambda match: '%s%s%s' % (match.group('before'), match.group(
             'abbreviation'
         ).upper(), match.group('after')), re.compile(
-            '(?!^)%s(?P<first_letter>[a-zA-Z])' % self.__class__(
+            '(?!^)%s(?P<first_letter>[a-zA-Z0-9])' % self.__class__(
                 delimiter
             ).validate_regex().content
         ).sub(lambda match: match.group('first_letter').upper(), self.content))
@@ -1697,7 +1700,7 @@ class String(Object, builtins.str):
             dictionaries, the second parameter "replace" becomes useless.
 
             Perform the same operation as "re.sub()", but returns a tuple: \
-            ("new_string", "number_of_subs_made"").
+            ("new_string", "number_of_subs_made").
 
             **search**  - regular expression search pattern
 

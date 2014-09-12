@@ -4147,7 +4147,7 @@ class Handler(Class):
                                     first recursive tree traversal should be \
                                     used.
 
-            Additional arguments of keywords will be forwarded to given \
+            Additional arguments or keywords will be forwarded to given \
             function.
 
             Returns "False" if any call of "function" returns "False" or \

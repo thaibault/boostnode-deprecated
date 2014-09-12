@@ -1709,6 +1709,12 @@ class CGIHTTPRequestHandler(
             Object of "CGIHTTPRequestHandler" with request uri "" and parame...
         '''
         if not (self.response_sent or __test_mode__):
+            if builtins.len(arguments) > 1 and builtins.isinstance(
+                arguments[1], builtins.str
+            ):
+                arguments = builtins.list(arguments)
+                arguments[1] = arguments[1].replace('\n', '\\n')
+                arguments = builtins.tuple(arguments)
             self.response_sent = True
             '''Take this method via introspection.'''
             builtins.getattr(
@@ -1796,11 +1802,11 @@ class CGIHTTPRequestHandler(
 # # python3.4
 # #     def send_static_file_cache_header(
 # #         self: Self, timestamp=time.time(), response_code=200,
-# #         cache_control='public, max-age=0', expire_time_in_seconds=0
+# #         cache_control_header='public, max-age=0', expire_time_in_seconds=0
 # #     ) -> Self:
     def send_static_file_cache_header(
         self, timestamp=time.time(), response_code=200,
-        cache_control='public, max-age=0', expire_time_in_seconds=0
+        cache_control_header='public, max-age=0', expire_time_in_seconds=0
     ):
 # #
         '''
@@ -1811,14 +1817,14 @@ class CGIHTTPRequestHandler(
 
             **response_code**          - Response code to send if not sent yet.
 
-            **cache_control**          - Cache control header string.
+            **cache_control_header**   - Cache control header string.
 
             **expire_time_in_seconds** - Additional time to current timestamp \
                                          for expires header.
         '''
         if not __test_mode__:
             self.send_response(response_code).send_header(
-                'Cache-Control', cache_control)
+                'Cache-Control', cache_control_header)
             self.send_header('Last-Modified', self.date_time_string(timestamp))
             self.send_header('Expires', self.date_time_string(
                 timestamp + expire_time_in_seconds))

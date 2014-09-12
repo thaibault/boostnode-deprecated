@@ -47,6 +47,7 @@ import subprocess
 import sys
 import tempfile
 import time
+import traceback
 # # python3.4 import types
 pass
 
@@ -343,8 +344,9 @@ class Runnable(builtins.object):
 # #
         except (builtins.IOError, builtins.EOFError):
             __logger__.info(
-                "We have lost standard input. stop order couldn't be received."
-                ' Use a termination signal instead.')
+                'We have lost standard input. Receiving a stop order via '
+                'standard input is impossible from now on. Use a termination '
+                'signal instead.')
             try:
                 self.__class__.__termination_lock.acquire()
             except builtins.OSError:
@@ -639,8 +641,8 @@ class Runnable(builtins.object):
             self._handle_module_exception(exception)
         finally:
             '''
-                NOTE: we have to let the exception stop all contexts to make \
-                sure that the whole traceback could be printed before \
+                NOTE: We have to wait until exception stop all contexts to \
+                make sure that the whole traceback could be printed before \
                 termination.
             '''
             self.trigger_stop(exit=False)
@@ -676,10 +678,23 @@ class Runnable(builtins.object):
              ):
             raise
         else:
+# # python3.4
+# #             exception_traceback = traceback.extract_tb(
+# #                 exception.__traceback__)
+            exception_traceback = traceback.extract_tb(sys.exc_info()[2])
+# #
+            exception_traceback.reverse()
+            for context in exception_traceback:
+                if FileHandler(
+                    context[0]
+                )._path == self._childrens_module.__file_path__:
+                    break
             __logger__.critical(
-                '{exception_name}: {exception_message}\nType "'
+                'Line {line_number}: {exception_name}: {exception_message}\n'
+                'Type "'
                 '{program_file_path} --help" for additional '
                 'informations.'.format(
+                    line_number=context[1],
                     exception_name=exception.__class__.__name__,
                     exception_message=builtins.str(exception),
                     program_file_path=sys.argv[0]))
