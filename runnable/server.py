@@ -529,6 +529,20 @@ class Web(Class, Runnable):
                      'current working directory).',
              'dest': 'root',
              'metavar': 'PATH'}},
+        {'arguments': ('-H', '--host-name'),
+         'keywords': {
+             'action': 'store',
+             'default': {'execute': '__initializer_default_value__'},
+             'type': {'execute': 'type(__initializer_default_value__)'},
+             'required': {'execute': '__initializer_default_value__ is None'},
+             'help': 'Defines the host to bind the server to. If an empty '
+                     'string (default) is given, the underlying socket will '
+                     'listen on all network interfaces. E.g. a binding to the'
+                     ' internal loop device "localhost" will only accept local'
+                     ' requests. This makes sense if a local proxy server is '
+                     'configured.',
+             'dest': 'host_name',
+             'metavar': 'NAME'}},
         {'arguments': ('-p', '--port'),
          'keywords': {
              'action': 'store',
@@ -1102,26 +1116,28 @@ class Web(Class, Runnable):
     def _log_server_status(self):
         '''Prints some information about the way the server was started.'''
         determine_ip_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        try:
-            determine_ip_socket.connect(self.DETERMINE_IP_SOCKET)
-# # python3.4
-# #         except (
-# #             builtins.BrokenPipeError, socket.gaierror, socket.herror,
-# #             socket.timeout, socket.error
-# #         ) as exception:
-        except (
-            socket.herror, socket.gaierror, socket.timeout, socket.error
-        ):
-# #
-            ip = socket.gethostbyname(socket.gethostname())
-        else:
-            ip = determine_ip_socket.getsockname()[0]
-        finally:
+        ip = socket.gethostbyname(socket.gethostname())
+        if self.host_name == '':
             try:
-                determine_ip_socket.shutdown(socket.SHUT_RDWR)
-            except socket.error:
+                determine_ip_socket.connect(self.DETERMINE_IP_SOCKET)
+# # python3.4
+# #             except (
+# #                 builtins.BrokenPipeError, socket.gaierror, socket.herror,
+# #                 socket.timeout, socket.error
+# #             ) as exception:
+            except (
+                socket.herror, socket.gaierror, socket.timeout, socket.error
+            ):
+# #
                 pass
-            determine_ip_socket.close()
+            else:
+                ip = determine_ip_socket.getsockname()[0]
+            finally:
+                try:
+                    determine_ip_socket.shutdown(socket.SHUT_RDWR)
+                except socket.error:
+                    pass
+                determine_ip_socket.close()
         __logger__.info(
             'Web server is starting%s, listens at port "%d" and webroot is '
             '"%s". Currently reachable ip is "%s". Maximum parallel processes '
@@ -2704,10 +2720,10 @@ class CGIHTTPRequestHandler(
                 self.server.web.module_loading, builtins.str
             ):
                 error_message = (
-                    'Eather default module name "%s" nor '
-                    'none of the following default file name pattern "%s" '
-                    'found' % (self.server.web.module_loading, '", "'.join(
-                        self.server.web.default_file_name_pattern)))
+                    'Eather default module name "%s" nor none of the following'
+                    ' default file name pattern "%s" found' % (
+                        self.server.web.module_loading, '", "'.join(
+                            self.server.web.default_file_name_pattern)))
             elif not self.server.web.module_loading:
                 error_message = (
                     'None of the following default file name pattern "%s" '
