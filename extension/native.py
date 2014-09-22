@@ -31,6 +31,7 @@ import __builtin__ as builtins
 # #
 import collections
 from copy import copy
+from datetime import time as NativeTime
 import encodings
 import functools
 from hashlib import sha224
@@ -1139,6 +1140,44 @@ class String(Object, builtins.str):
 
         # # region getter
 
+    @JointPoint
+# # python3.4     def get_number(self: Self, default=None):
+    def get_number(self, default=None):
+        '''
+            Returns a number representation of current string content if \
+            possible. If no conversion is possible given default value will \
+            be returned. If given default value is "None" current string \
+            will be returned.
+
+            **default** - Fall-back value
+
+            Examples:
+
+            >>> String().get_number()
+            ''
+
+            >>> String('hans').get_number()
+            'hans'
+
+            >>> String('5').get_number()
+            5
+
+            >>> String('5.5').get_number()
+            5.5
+
+            >>> String('hans').get_number(default=5)
+            5
+        '''
+        try:
+            return builtins.int(self.content)
+        except(builtins.TypeError, builtins.ValueError):
+            try:
+                return builtins.float(self.content)
+            except(builtins.TypeError, builtins.ValueError):
+                if default is None:
+                    return self.content
+                return default
+
     @JointPoint(Class.pseudo_property)
 # # python3.4     def get_encoding(self: Self) -> builtins.str:
     def get_encoding(self):
@@ -1184,6 +1223,189 @@ class String(Object, builtins.str):
                 else:
                     return encoding
         return self.IMPORTANT_ENCODINGS[0]
+
+    @JointPoint
+# # python3.4     def get_camel_case_capitalize(self: Self) -> Self:
+    def get_camel_case_capitalize(self):
+        '''
+            Acts like pythons native "builtins.str.capitalize()" method but \
+            preserves camel case characters.
+
+            Examples:
+
+            >>> String().get_camel_case_capitalize().content
+            ''
+
+            >>> String('haNs').get_camel_case_capitalize().content
+            'HaNs'
+        '''
+        if self.content:
+            self.content = self.content[0].upper() + self.content[1:]
+        return self
+
+    @JointPoint(Class.pseudo_property)
+# # python3.4
+# #     def get_delimited_to_camel_case(
+# #         self: Self, delimiter='_', abbreviations=None
+# #     ) -> Self:
+    def get_delimited_to_camel_case(
+        self, delimiter='_', abbreviations=None
+    ):
+# #
+        '''
+            Converts a delimited string to its camel case representation.
+
+            **delimiter**     - Delimiter string
+
+            **abbreviations** - Collection of shortcut words to represent \
+                                upper cased.
+
+            Examples:
+
+            >>> String().get_delimited_to_camel_case().content
+            ''
+
+            >>> String('hans_peter').get_delimited_to_camel_case().content
+            'hansPeter'
+
+            >>> String('hans__peter').get_delimited_to_camel_case().content
+            'hans_Peter'
+
+            >>> String('HansPeter').get_delimited_to_camel_case().content
+            'HansPeter'
+
+            >>> String('Hans_Peter').get_delimited_to_camel_case().content
+            'HansPeter'
+
+            >>> String('_Hans_Peter').get_delimited_to_camel_case().content
+            '_HansPeter'
+
+            >>> String('_').get_delimited_to_camel_case().content
+            '_'
+
+            >>> String('hans_peter').get_delimited_to_camel_case('-').content
+            'hans_peter'
+
+            >>> String('hans-peter').get_delimited_to_camel_case('-').content
+            'hansPeter'
+
+            >>> String('hans-id').get_delimited_to_camel_case('-').content
+            'hansID'
+
+            >>> String('url-hans-id').get_delimited_to_camel_case(
+            ...     '-', abbreviations=('hans',)
+            ... ).content
+            'urlHANSId'
+
+            >>> String('url-hans-1').get_delimited_to_camel_case('-').content
+            'urlHans1'
+        '''
+        if abbreviations is None:
+            abbreviations = self.abbreviations
+        self.content = re.compile(
+            '(?P<before>[a-z0-9])(?P<abbreviation>(%s))(?P<after>[A-Z0-9]|$)' %
+            ')|('.join(builtins.map(
+                lambda abbreviation: abbreviation.capitalize(),
+                abbreviations))
+        ).sub(lambda match: '%s%s%s' % (match.group('before'), match.group(
+            'abbreviation'
+        ).upper(), match.group('after')), re.compile(
+            '(?!^)%s(?P<first_letter>[a-zA-Z0-9])' % self.__class__(
+                delimiter
+            ).validate_regex().content
+        ).sub(lambda match: match.group('first_letter').upper(), self.content))
+        return self
+
+    @JointPoint
+# # python3.4
+# #     def get_camel_case_to_delimited(self: Self, delimiter='_') -> Self:
+    def get_camel_case_to_delimited(self, delimiter='_'):
+# #
+        '''
+            Converts a camel cased string to its delimited string version.
+
+            **delimiter** - Delimiter string
+
+            Examples:
+
+            >>> String().get_camel_case_to_delimited().content
+            ''
+
+            >>> String('hansPeter').get_camel_case_to_delimited().content
+            'hans_peter'
+
+            >>> String('hans_peter').get_camel_case_to_delimited().content
+            'hans_peter'
+
+            >>> String('hansPeter').get_camel_case_to_delimited('-').content
+            'hans-peter'
+
+            >>> String('hansPeter').get_camel_case_to_delimited('+').content
+            'hans+peter'
+
+            >>> String('Hans').get_camel_case_to_delimited().content
+            'hans'
+        '''
+        self.content = re.sub(
+            '([a-z0-9])([A-Z])', '\\1%s\\2' % delimiter, re.sub(
+                '(.)([A-Z][a-z]+)', '\\1%s\\2' % delimiter, self.content
+            )
+        ).lower()
+        return self
+
+    @JointPoint
+# # python3.4
+# #     def get_delimited(
+# #         self: Self, delimiter='-', search_pattern='a-zA-Z'
+# #     ) -> Self:
+    def get_delimited(self, delimiter='-', search_pattern='a-zA-Z'):
+# #
+        '''
+            Replaces all typical delimiting chars with given delimiter.
+
+            **delimiter**      - Delimiter string
+
+            **search_pattern** - Patterns not to delimit
+
+            Returns the modified string instance.
+
+            Examples:
+
+            >>> String().get_delimited().content
+            ''
+
+            >>> String('a b').get_delimited().content
+            'a-b'
+
+            >>> String('a b_').get_delimited().content
+            'a-b'
+
+            >>> String('ab').get_delimited().content
+            'ab'
+
+            >>> String(' ').get_delimited().content
+            ''
+
+            >>> String('   a ').get_delimited().content
+            'a'
+
+            >>> String(' -  a _').get_delimited().content
+            'a'
+
+            >>> String('\\na').get_delimited().content
+            'a'
+
+            >>> String('Get in touch').get_delimited().content
+            'Get-in-touch'
+
+            >>> String("I'm cool").get_delimited().content
+            'I-m-cool'
+        '''
+        return self.sub(
+            '^[^{pattern}]*(.*?)[^{pattern}]*$'.format(
+                pattern=search_pattern
+            ), '\\1'
+        ).sub('[^%s]+' % search_pattern, delimiter)
 
         # # endregion
 
@@ -1330,187 +1552,6 @@ class String(Object, builtins.str):
         return self.replace(search)
 
         # # endregion
-
-    @JointPoint
-# # python3.4     def camel_case_capitalize(self: Self) -> Self:
-    def camel_case_capitalize(self):
-        '''
-            Acts like pythons native "builtins.str.capitalize()" method but \
-            preserves camel case characters.
-
-            Examples:
-
-            >>> String().camel_case_capitalize().content
-            ''
-
-            >>> String('haNs').camel_case_capitalize().content
-            'HaNs'
-        '''
-        if self.content:
-            self.content = self.content[0].upper() + self.content[1:]
-        return self
-
-    @JointPoint(Class.pseudo_property)
-# # python3.4
-# #     def delimited_to_camel_case(
-# #         self: Self, delimiter='_', abbreviations=None
-# #     ) -> Self:
-    def delimited_to_camel_case(self, delimiter='_', abbreviations=None):
-# #
-        '''
-            Converts a delimited string to its camel case representation.
-
-            **delimiter**     - Delimiter string
-
-            **abbreviations** - Collection of shortcut words to represent \
-                                upper cased.
-
-            Examples:
-
-            >>> String().delimited_to_camel_case().content
-            ''
-
-            >>> String('hans_peter').delimited_to_camel_case().content
-            'hansPeter'
-
-            >>> String('hans__peter').delimited_to_camel_case().content
-            'hans_Peter'
-
-            >>> String('HansPeter').delimited_to_camel_case().content
-            'HansPeter'
-
-            >>> String('Hans_Peter').delimited_to_camel_case().content
-            'HansPeter'
-
-            >>> String('_Hans_Peter').delimited_to_camel_case().content
-            '_HansPeter'
-
-            >>> String('_').delimited_to_camel_case().content
-            '_'
-
-            >>> String('hans_peter').delimited_to_camel_case('-').content
-            'hans_peter'
-
-            >>> String('hans-peter').delimited_to_camel_case('-').content
-            'hansPeter'
-
-            >>> String('hans-id').delimited_to_camel_case('-').content
-            'hansID'
-
-            >>> String('url-hans-id').delimited_to_camel_case(
-            ...     '-', abbreviations=('hans',)
-            ... ).content
-            'urlHANSId'
-
-            >>> String('url-hans-1').delimited_to_camel_case('-').content
-            'urlHans1'
-        '''
-        if abbreviations is None:
-            abbreviations = self.abbreviations
-        self.content = re.compile(
-            '(?P<before>[a-z0-9])(?P<abbreviation>(%s))(?P<after>[A-Z0-9]|$)' %
-            ')|('.join(builtins.map(
-                lambda abbreviation: abbreviation.capitalize(),
-                abbreviations))
-        ).sub(lambda match: '%s%s%s' % (match.group('before'), match.group(
-            'abbreviation'
-        ).upper(), match.group('after')), re.compile(
-            '(?!^)%s(?P<first_letter>[a-zA-Z0-9])' % self.__class__(
-                delimiter
-            ).validate_regex().content
-        ).sub(lambda match: match.group('first_letter').upper(), self.content))
-        return self
-
-    @JointPoint
-# # python3.4
-# #     def camel_case_to_delimited(self: Self, delimiter='_') -> Self:
-    def camel_case_to_delimited(self, delimiter='_'):
-# #
-        '''
-            Converts a camel cased string to its delimited string version.
-
-            **delimiter** - Delimiter string
-
-            Examples:
-
-            >>> String().camel_case_to_delimited().content
-            ''
-
-            >>> String('hansPeter').camel_case_to_delimited().content
-            'hans_peter'
-
-            >>> String('hans_peter').camel_case_to_delimited().content
-            'hans_peter'
-
-            >>> String('hansPeter').camel_case_to_delimited('-').content
-            'hans-peter'
-
-            >>> String('hansPeter').camel_case_to_delimited('+').content
-            'hans+peter'
-
-            >>> String('Hans').camel_case_to_delimited().content
-            'hans'
-        '''
-        self.content = re.sub(
-            '([a-z0-9])([A-Z])', '\\1%s\\2' % delimiter, re.sub(
-                '(.)([A-Z][a-z]+)', '\\1%s\\2' % delimiter, self.content
-            )
-        ).lower()
-        return self
-
-    @JointPoint
-# # python3.4
-# #     def delimit(
-# #         self: Self, delimiter='-', search_pattern='a-zA-Z'
-# #     ) -> Self:
-    def delimit(self, delimiter='-', search_pattern='a-zA-Z'):
-# #
-        '''
-            Replaces all typical delimiting chars with given delimiter.
-
-            **delimiter**      - Delimiter string
-
-            **search_pattern** - Patterns not to delimit
-
-            Returns the modified string instance.
-
-            Examples:
-
-            >>> String().delimit().content
-            ''
-
-            >>> String('a b').delimit().content
-            'a-b'
-
-            >>> String('a b_').delimit().content
-            'a-b'
-
-            >>> String('ab').delimit().content
-            'ab'
-
-            >>> String(' ').delimit().content
-            ''
-
-            >>> String('   a ').delimit().content
-            'a'
-
-            >>> String(' -  a _').delimit().content
-            'a'
-
-            >>> String('\\na').delimit().content
-            'a'
-
-            >>> String('Get in touch').delimit().content
-            'Get-in-touch'
-
-            >>> String("I'm cool").delimit().content
-            'I-m-cool'
-        '''
-        return self.sub(
-            '^[^{pattern}]*(.*?)[^{pattern}]*$'.format(
-                pattern=search_pattern
-            ), '\\1'
-        ).sub('[^%s]+' % search_pattern, delimiter)
 
     @JointPoint
 # # python3.4
@@ -2379,7 +2420,7 @@ class Dictionary(Object, builtins.dict):
 
 class Module(Object):
 
-    '''This class add some features for dealing with modules.'''
+    '''This class adds some features for dealing with modules.'''
 
     # region properties
 
@@ -2947,8 +2988,8 @@ class Module(Object):
            module.__module_name__ is None):
             module.__module_name__ = cls.get_name(frame, module)
         module.__exception__ = builtins.type(
-            String(module.__module_name__).camel_case_capitalize().content +
-            'Error', (builtins.Exception,),
+            String(module.__module_name__).get_camel_case_capitalize(
+            ).content + 'Error', (builtins.Exception,),
             {'__init__': lambda self, message,
                 *arguments: builtins.Exception.__init__(
                     self, message % arguments
@@ -3135,6 +3176,75 @@ class Module(Object):
         return sub_location.path
 
         # endregion
+
+    # endregion
+
+
+class Time(Object):
+
+    '''This class adds some features for dealing with times.'''
+
+    # region dynamic methods
+
+    # # region public
+
+    # # # region special
+
+    @JointPoint
+# # python3.4
+# #     def __init__(
+# #         self: Self, content=0, **keywords: builtins.object
+# #     ) -> None:
+    def __init__(self, content=0, **keywords):
+# #
+        '''
+            Generates a new high level wrapper for times.
+
+            Examples:
+
+            >>> Time(5)
+            Object of "Time" datetime.time(0, 0, 5).
+
+            >>> Time()
+            Object of "Time" datetime.time(0, 0).
+        '''
+
+        # # # region properties
+
+        '''The main property. It saves the current time data.'''
+        content = String(content).get_number(default=0)
+        hours = builtins.int(content / 60 ** 2)
+        hours_in_seconds = hours * 60 ** 2
+        minutes = builtins.int((content - hours_in_seconds) / 60)
+        minutes_in_seconds = minutes * 60
+        seconds = builtins.int(content - hours_in_seconds - minutes_in_seconds)
+        microseconds = builtins.int((
+            content - hours_in_seconds - minutes_in_seconds - seconds
+        ) * 1000 ** 2)
+        self.content = NativeTime(
+            hour=hours, minute=minutes, second=seconds,
+            microsecond=microseconds)
+
+        # # # endregion
+
+    @JointPoint
+# # python3.4     def __repr__(self: Self) -> builtins.str:
+    def __repr__(self):
+        '''
+            Invokes if this object should describe itself by a string.
+
+            Examples:
+
+            >>> repr(Time(5))
+            'Object of "Time" datetime.time(0, 0, 5).'
+        '''
+        return 'Object of "{class_name}" {content}.'.format(
+            class_name=self.__class__.__name__,
+            content=builtins.repr(self.content))
+
+    # # # endregion
+
+    # # endregion
 
     # endregion
 

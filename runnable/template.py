@@ -1436,7 +1436,7 @@ class Parser(Class, Runnable):
         '''
         exception_message = '%s: %s' % (
             exception.__class__.__name__,
-            String(exception).camel_case_capitalize().replace(
+            String(exception).get_camel_case_capitalize().replace(
                 "'", '"'
             ).content)
         native_exception_description = ''

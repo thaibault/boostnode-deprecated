@@ -2465,7 +2465,7 @@ class CommandLine(builtins.object):
         return '{program} {version} {status}'.format(
             program=String(
                 sys.modules[module_name].__module_name__
-            ).camel_case_capitalize().content,
+            ).get_camel_case_capitalize().content,
             version=sys.modules[module_name].__version__,
             status=sys.modules[module_name].__status__)
 
@@ -2902,8 +2902,8 @@ class CommandLine(builtins.object):
         choices = cls.PACKAGE_INTERFACE_ARGUMENTS[0]['keywords']['choices']
         return cls.argument_parser(
             version='{package} {version} {status}'.format(
-                package=String(package_name).camel_case_capitalize().content,
-                version=sys.modules[name].__version__,
+                package=String(package_name).get_camel_case_capitalize(
+                ).content, version=sys.modules[name].__version__,
                 status=sys.modules[name].__status__),
             module_name=name,
             arguments=cls.PACKAGE_INTERFACE_ARGUMENTS + command_line_arguments,

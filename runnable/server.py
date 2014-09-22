@@ -1344,9 +1344,8 @@ class CGIHTTPRequestHandler(
             included in every response.
         '''
         self.server_version = '{program} {version} {status}'.format(
-            program=String(__module_name__).camel_case_capitalize().content,
-            version=__version__,
-            status=__status__)
+            program=String(__module_name__).get_camel_case_capitalize(
+            ).content, version=__version__, status=__status__)
         '''Saves gziped encoded output.'''
         self._encoded_output = None
         '''
