@@ -455,7 +455,7 @@
 <dl class="class">
 <dt id="boostNode.extension.native.Module">
 <em class="property">class </em><tt class="descclassname">boostNode.extension.native.</tt><tt class="descname">Module</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module" title="Permalink to this definition">¶</a></dt>
-<dd><p>This class add some features for dealing with modules.</p>
+<dd><p>This class adds some features for dealing with modules.</p>
 <dl class="attribute">
 <dt id="boostNode.extension.native.Module.HIDDEN_BUILTIN_CALLABLES">
 <tt class="descname">HIDDEN_BUILTIN_CALLABLES</tt><em class="property"> = ('GFileDescriptorBased', 'GInitiallyUnowned', 'GPollableInputStream', 'GPollableOutputStream')</em><a class="headerlink" href="#boostNode.extension.native.Module.HIDDEN_BUILTIN_CALLABLES" title="Permalink to this definition">¶</a></dt>
@@ -628,7 +628,7 @@
 
 <dl class="classmethod">
 <dt id="boostNode.extension.native.Module.get_context_path">
-<em class="property">classmethod </em><tt class="descname">get_context_path</tt><big>(</big><em>path=None</em>, <em>frame=&lt;frame object at 0x7fe75537e5d8&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_context_path" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><tt class="descname">get_context_path</tt><big>(</big><em>path=None</em>, <em>frame=&lt;frame object at 0x7fb958c9b5d8&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_context_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines the package and module level context path to a given             context or file.</p>
 <p><strong>path</strong>  - relative or absolute context or file path to normalize</p>
 <p><strong>frame</strong> - stack frame to analyse again context</p>
@@ -981,53 +981,6 @@
 </dd></dl>
 
 <dl class="staticmethod">
-<dt id="boostNode.extension.native.String.camel_case_capitalize">
-<em class="property">static </em><tt class="descname">camel_case_capitalize</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.camel_case_capitalize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Acts like pythons native &#8220;builtins.str.capitalize()&#8221; method but             preserves camel case characters.</p>
-<p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">()</span><span class="o">.</span><span class="n">camel_case_capitalize</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
-<span class="go">&#39;&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;haNs&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">camel_case_capitalize</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
-<span class="go">&#39;HaNs&#39;</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="staticmethod">
-<dt id="boostNode.extension.native.String.camel_case_to_delimited">
-<em class="property">static </em><tt class="descname">camel_case_to_delimited</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.camel_case_to_delimited" title="Permalink to this definition">¶</a></dt>
-<dd><p>Converts a camel cased string to its delimited string version.</p>
-<p><strong>delimiter</strong> - Delimiter string</p>
-<p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">()</span><span class="o">.</span><span class="n">camel_case_to_delimited</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
-<span class="go">&#39;&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hansPeter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">camel_case_to_delimited</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
-<span class="go">&#39;hans_peter&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans_peter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">camel_case_to_delimited</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
-<span class="go">&#39;hans_peter&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hansPeter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">camel_case_to_delimited</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
-<span class="go">&#39;hans-peter&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hansPeter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">camel_case_to_delimited</span><span class="p">(</span><span class="s">&#39;+&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
-<span class="go">&#39;hans+peter&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;Hans&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">camel_case_to_delimited</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
-<span class="go">&#39;hans&#39;</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="staticmethod">
 <dt id="boostNode.extension.native.String.delete_variables_from_regex">
 <em class="property">static </em><tt class="descname">delete_variables_from_regex</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.delete_variables_from_regex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Removes python supported variables in regular expression strings.             This method is useful if a python regular expression should be             given to another regular expression engine which doesn&#8217;t support             variables.</p>
@@ -1040,115 +993,6 @@
 <span class="gp">... </span>    <span class="s">&#39;^--(?P&lt;a&gt;.+)--(?P&lt;b&gt;.+)--$&#39;</span>
 <span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">delete_variables_from_regex</span><span class="p">()</span>
 <span class="go">Object of &quot;String&quot; with &quot;^--(.+)--(.+)--$&quot; saved.</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="staticmethod">
-<dt id="boostNode.extension.native.String.delimit">
-<em class="property">static </em><tt class="descname">delimit</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.delimit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Replaces all typical delimiting chars with given delimiter.</p>
-<p><strong>delimiter</strong>      - Delimiter string</p>
-<p><strong>search_pattern</strong> - Patterns not to delimit</p>
-<p>Returns the modified string instance.</p>
-<p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">()</span><span class="o">.</span><span class="n">delimit</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
-<span class="go">&#39;&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;a b&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delimit</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
-<span class="go">&#39;a-b&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;a b_&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delimit</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
-<span class="go">&#39;a-b&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;ab&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delimit</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
-<span class="go">&#39;ab&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delimit</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
-<span class="go">&#39;&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;   a &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delimit</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
-<span class="go">&#39;a&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39; -  a _&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delimit</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
-<span class="go">&#39;a&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">a&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delimit</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
-<span class="go">&#39;a&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;Get in touch&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delimit</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
-<span class="go">&#39;Get-in-touch&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&quot;I&#39;m cool&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">delimit</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
-<span class="go">&#39;I-m-cool&#39;</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="staticmethod">
-<dt id="boostNode.extension.native.String.delimited_to_camel_case">
-<em class="property">static </em><tt class="descname">delimited_to_camel_case</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.delimited_to_camel_case" title="Permalink to this definition">¶</a></dt>
-<dd><p>Converts a delimited string to its camel case representation.</p>
-<p><strong>delimiter</strong>     - Delimiter string</p>
-<p><strong>abbreviations</strong> - Collection of shortcut words to represent                                 upper cased.</p>
-<p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">()</span><span class="o">.</span><span class="n">delimited_to_camel_case</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
-<span class="go">&#39;&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans_peter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delimited_to_camel_case</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
-<span class="go">&#39;hansPeter&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans__peter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delimited_to_camel_case</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
-<span class="go">&#39;hans_Peter&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;HansPeter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delimited_to_camel_case</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
-<span class="go">&#39;HansPeter&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;Hans_Peter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delimited_to_camel_case</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
-<span class="go">&#39;HansPeter&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;_Hans_Peter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delimited_to_camel_case</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
-<span class="go">&#39;_HansPeter&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delimited_to_camel_case</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
-<span class="go">&#39;_&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans_peter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delimited_to_camel_case</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
-<span class="go">&#39;hans_peter&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans-peter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delimited_to_camel_case</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
-<span class="go">&#39;hansPeter&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans-id&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delimited_to_camel_case</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
-<span class="go">&#39;hansID&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;url-hans-id&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delimited_to_camel_case</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="s">&#39;-&#39;</span><span class="p">,</span> <span class="n">abbreviations</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">,)</span>
-<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
-<span class="go">&#39;urlHANSId&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;url-hans-1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delimited_to_camel_case</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
-<span class="go">&#39;urlHans1&#39;</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1167,6 +1011,162 @@
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">()</span><span class="o">.</span><span class="n">find_python_code_end_bracket</span><span class="p">()</span>
 <span class="go">False</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="boostNode.extension.native.String.get_camel_case_capitalize">
+<em class="property">static </em><tt class="descname">get_camel_case_capitalize</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.get_camel_case_capitalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Acts like pythons native &#8220;builtins.str.capitalize()&#8221; method but             preserves camel case characters.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">()</span><span class="o">.</span><span class="n">get_camel_case_capitalize</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;haNs&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_camel_case_capitalize</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;HaNs&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="boostNode.extension.native.String.get_camel_case_to_delimited">
+<em class="property">static </em><tt class="descname">get_camel_case_to_delimited</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.get_camel_case_to_delimited" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a camel cased string to its delimited string version.</p>
+<p><strong>delimiter</strong> - Delimiter string</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">()</span><span class="o">.</span><span class="n">get_camel_case_to_delimited</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hansPeter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_camel_case_to_delimited</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;hans_peter&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans_peter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_camel_case_to_delimited</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;hans_peter&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hansPeter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_camel_case_to_delimited</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;hans-peter&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hansPeter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_camel_case_to_delimited</span><span class="p">(</span><span class="s">&#39;+&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;hans+peter&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;Hans&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_camel_case_to_delimited</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;hans&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="boostNode.extension.native.String.get_delimited">
+<em class="property">static </em><tt class="descname">get_delimited</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.get_delimited" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replaces all typical delimiting chars with given delimiter.</p>
+<p><strong>delimiter</strong>      - Delimiter string</p>
+<p><strong>search_pattern</strong> - Patterns not to delimit</p>
+<p>Returns the modified string instance.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">()</span><span class="o">.</span><span class="n">get_delimited</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;a b&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_delimited</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;a-b&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;a b_&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_delimited</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;a-b&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;ab&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_delimited</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;ab&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_delimited</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;   a &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_delimited</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;a&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39; -  a _&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_delimited</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;a&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">a&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_delimited</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;a&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;Get in touch&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_delimited</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;Get-in-touch&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&quot;I&#39;m cool&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get_delimited</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;I-m-cool&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="boostNode.extension.native.String.get_delimited_to_camel_case">
+<em class="property">static </em><tt class="descname">get_delimited_to_camel_case</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.get_delimited_to_camel_case" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a delimited string to its camel case representation.</p>
+<p><strong>delimiter</strong>     - Delimiter string</p>
+<p><strong>abbreviations</strong> - Collection of shortcut words to represent                                 upper cased.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">()</span><span class="o">.</span><span class="n">get_delimited_to_camel_case</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans_peter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_delimited_to_camel_case</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;hansPeter&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans__peter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_delimited_to_camel_case</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;hans_Peter&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;HansPeter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_delimited_to_camel_case</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;HansPeter&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;Hans_Peter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_delimited_to_camel_case</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;HansPeter&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;_Hans_Peter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_delimited_to_camel_case</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;_HansPeter&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_delimited_to_camel_case</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;_&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans_peter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_delimited_to_camel_case</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;hans_peter&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans-peter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_delimited_to_camel_case</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;hansPeter&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans-id&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_delimited_to_camel_case</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;hansID&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;url-hans-id&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_delimited_to_camel_case</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="s">&#39;-&#39;</span><span class="p">,</span> <span class="n">abbreviations</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">,)</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;urlHANSId&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;url-hans-1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_delimited_to_camel_case</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;urlHans1&#39;</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1223,6 +1223,34 @@
 <span class="gp">... </span>    <span class="p">(</span><span class="s">&#39;A&#39;</span><span class="p">,</span> <span class="s">&#39;B&#39;</span><span class="p">,</span> <span class="s">&#39;C&#39;</span><span class="p">),</span> <span class="n">escape_sequence</span><span class="o">=</span><span class="s">&#39;[{symbole}]&#39;</span>
 <span class="gp">... </span><span class="p">)</span> <span class="o">==</span> <span class="p">{</span><span class="s">&#39;A&#39;</span><span class="p">:</span> <span class="s">&#39;[A]&#39;</span><span class="p">,</span> <span class="s">&#39;B&#39;</span><span class="p">:</span> <span class="s">&#39;[B]&#39;</span><span class="p">,</span> <span class="s">&#39;C&#39;</span><span class="p">:</span> <span class="s">&#39;[C]&#39;</span><span class="p">}</span>
 <span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="boostNode.extension.native.String.get_number">
+<em class="property">static </em><tt class="descname">get_number</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.get_number" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a number representation of current string content if             possible. If no conversion is possible given default value will             be returned. If given default value is &#8220;None&#8221; current string             will be returned.</p>
+<p><strong>default</strong> - Fall-back value</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">()</span><span class="o">.</span><span class="n">get_number</span><span class="p">()</span>
+<span class="go">&#39;&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_number</span><span class="p">()</span>
+<span class="go">&#39;hans&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;5&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_number</span><span class="p">()</span>
+<span class="go">5</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;5.5&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_number</span><span class="p">()</span>
+<span class="go">5.5</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_number</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="go">5</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1497,6 +1525,12 @@
 </div>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="class">
+<dt id="boostNode.extension.native.Time">
+<em class="property">class </em><tt class="descclassname">boostNode.extension.native.</tt><tt class="descname">Time</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Time" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class adds some features for dealing with times.</p>
 </dd></dl>
 
 </div>
