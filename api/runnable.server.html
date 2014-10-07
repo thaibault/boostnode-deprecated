@@ -158,7 +158,9 @@
 <span class="gp">... </span><span class="k">else</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">()</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span>
-<span class="gp">... </span>        <span class="s">&#39;Authorization&#39;</span><span class="p">,</span> <span class="s">&#39;Basic &#39;</span> <span class="o">+</span> <span class="n">base64_encode</span><span class="p">(</span><span class="s">&#39;hans:hans&#39;</span><span class="p">))</span>
+<span class="gp">... </span>        <span class="s">&#39;Authorization&#39;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s">&#39;Basic &#39;</span> <span class="o">+</span> <span class="n">base64_encode</span><span class="p">(</span><span class="n">b</span><span class="s">&#39;hans:hans&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span>
+<span class="gp">... </span>            <span class="n">handler</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">encoding</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c"># #</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">do_GET</span><span class="p">()</span> 
 <span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;&quot; and parame...</span>

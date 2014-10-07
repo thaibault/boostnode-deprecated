@@ -248,42 +248,48 @@
 <em class="property">static </em><tt class="descname">update</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Dictionary.update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Performs a recursive update.</p>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Dictionary</span><span class="p">(</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Dictionary</span><span class="p">({</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">})</span><span class="o">.</span><span class="n">content</span> <span class="o">==</span> <span class="p">{</span>
+<span class="gp">... </span>    <span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Dictionary</span><span class="p">({</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">Dictionary</span><span class="p">({</span><span class="s">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}))</span><span class="o">.</span><span class="n">content</span> <span class="o">==</span> <span class="p">{</span>
+<span class="gp">... </span>    <span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Dictionary</span><span class="p">({</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">Dictionary</span><span class="p">({</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}))</span><span class="o">.</span><span class="n">content</span>
+<span class="go">{&#39;a&#39;: 2}</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Dictionary</span><span class="p">({</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}})</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">Dictionary</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
-<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">})</span><span class="o">.</span><span class="n">content</span> <span class="o">==</span> <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span>
+<span class="gp">... </span><span class="p">))</span><span class="o">.</span><span class="n">content</span>
+<span class="go">{&#39;a&#39;: 1}</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Dictionary</span><span class="p">({</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}})</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">Dictionary</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}}</span>
+<span class="gp">... </span><span class="p">))</span><span class="o">.</span><span class="n">content</span> <span class="o">==</span> <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}}</span>
 <span class="go">True</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Dictionary</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
-<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">Dictionary</span><span class="p">({</span><span class="s">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}))</span><span class="o">.</span><span class="n">content</span> <span class="o">==</span> <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span>
-<span class="go">True</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Dictionary</span><span class="p">({</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}})</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">Dictionary</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}}</span>
+<span class="gp">... </span><span class="p">))</span><span class="o">.</span><span class="n">content</span>
+<span class="go">{&#39;a&#39;: {&#39;a&#39;: 2}}</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Dictionary</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
-<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">Dictionary</span><span class="p">({</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}))</span><span class="o">.</span><span class="n">content</span> <span class="o">==</span> <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span>
-<span class="go">True</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Dictionary</span><span class="p">({</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]})</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">other</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;__append__&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">4</span><span class="p">]}}</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
+<span class="go">{&#39;a&#39;: [1, 2, 3, 4]}</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Dictionary</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}}</span>
-<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">Dictionary</span><span class="p">({</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}))</span><span class="o">.</span><span class="n">content</span> <span class="o">==</span> <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
-<span class="go">True</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Dictionary</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}}</span>
-<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">Dictionary</span><span class="p">({</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}}))</span><span class="o">.</span><span class="n">content</span> <span class="o">==</span> <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span>
-<span class="gp">... </span>    <span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}}</span>
-<span class="go">True</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Dictionary</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}}</span>
-<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">Dictionary</span><span class="p">({</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}}))</span><span class="o">.</span><span class="n">content</span> <span class="o">==</span> <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span>
-<span class="gp">... </span>    <span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}}</span>
-<span class="go">True</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Dictionary</span><span class="p">({</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">other</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;__append__&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">4</span><span class="p">]}}</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
+<span class="go">{&#39;a&#39;: {&#39;__append__&#39;: [4]}}</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -628,7 +634,7 @@
 
 <dl class="classmethod">
 <dt id="boostNode.extension.native.Module.get_context_path">
-<em class="property">classmethod </em><tt class="descname">get_context_path</tt><big>(</big><em>path=None</em>, <em>frame=&lt;frame object at 0x7fb958c9b5d8&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_context_path" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><tt class="descname">get_context_path</tt><big>(</big><em>path=None</em>, <em>frame=&lt;frame object at 0x7f7a34bd25d8&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_context_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines the package and module level context path to a given             context or file.</p>
 <p><strong>path</strong>  - relative or absolute context or file path to normalize</p>
 <p><strong>frame</strong> - stack frame to analyse again context</p>
@@ -976,7 +982,7 @@
 
 <dl class="attribute">
 <dt id="boostNode.extension.native.String.abbreviations">
-<tt class="descname">abbreviations</tt><em class="property"> = ('id', 'url')</em><a class="headerlink" href="#boostNode.extension.native.String.abbreviations" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">abbreviations</tt><em class="property"> = ('html', 'id', 'url', 'us', 'de', 'api')</em><a class="headerlink" href="#boostNode.extension.native.String.abbreviations" title="Permalink to this definition">¶</a></dt>
 <dd><p>Saves a mapping of typical shortcut words to improve camel casing.</p>
 </dd></dl>
 
@@ -1034,7 +1040,9 @@
 <dt id="boostNode.extension.native.String.get_camel_case_to_delimited">
 <em class="property">static </em><tt class="descname">get_camel_case_to_delimited</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.get_camel_case_to_delimited" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts a camel cased string to its delimited string version.</p>
-<p><strong>delimiter</strong> - Delimiter string</p>
+<p><strong>delimiter</strong>     - Delimiter string</p>
+<p><strong>abbreviations</strong> - Collection of shortcut words to represent                                 upper cased.</p>
+<p>Returns the modified string instance.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">()</span><span class="o">.</span><span class="n">get_camel_case_to_delimited</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;&#39;</span>
@@ -1058,6 +1066,12 @@
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;Hans&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_camel_case_to_delimited</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;hans&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hansAPIURL&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_camel_case_to_delimited</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">abbreviations</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;api&#39;</span><span class="p">,</span> <span class="s">&#39;url&#39;</span><span class="p">)</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;hans_api_url&#39;</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1116,8 +1130,10 @@
 <dt id="boostNode.extension.native.String.get_delimited_to_camel_case">
 <em class="property">static </em><tt class="descname">get_delimited_to_camel_case</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.get_delimited_to_camel_case" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts a delimited string to its camel case representation.</p>
-<p><strong>delimiter</strong>     - Delimiter string</p>
-<p><strong>abbreviations</strong> - Collection of shortcut words to represent                                 upper cased.</p>
+<p><strong>delimiter</strong>                              - Delimiter string</p>
+<p><strong>abbreviations</strong>                          - Collection of                                                          shortcut words to                                                          represent upper cased.</p>
+<p><strong>preserve_wrong_formatted_abbreviations</strong> - If set to &#8220;True&#8221;                                                          wrong formatted                                                          camel case                                                          abbreviations will                                                          be ignored.</p>
+<p>Returns the modified string instance.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">()</span><span class="o">.</span><span class="n">get_delimited_to_camel_case</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;&#39;</span>
@@ -1167,6 +1183,34 @@
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;url-hans-1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_delimited_to_camel_case</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;urlHans1&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hansUrl1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_delimited_to_camel_case</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">abbreviations</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;url&#39;</span><span class="p">,),</span>
+<span class="gp">... </span>    <span class="n">preserve_wrong_formatted_abbreviations</span><span class="o">=</span><span class="bp">True</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;hansUrl1&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans_url&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_delimited_to_camel_case</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">abbreviations</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;url&#39;</span><span class="p">,),</span>
+<span class="gp">... </span>    <span class="n">preserve_wrong_formatted_abbreviations</span><span class="o">=</span><span class="bp">True</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;hansURL&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans_Url&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_delimited_to_camel_case</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">abbreviations</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;url&#39;</span><span class="p">,),</span>
+<span class="gp">... </span>    <span class="n">preserve_wrong_formatted_abbreviations</span><span class="o">=</span><span class="bp">True</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;hansUrl&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans_Url&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_delimited_to_camel_case</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">abbreviations</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;url&#39;</span><span class="p">,),</span>
+<span class="gp">... </span>    <span class="n">preserve_wrong_formatted_abbreviations</span><span class="o">=</span><span class="bp">False</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;hansURL&#39;</span>
 </pre></div>
 </div>
 </dd></dl>
