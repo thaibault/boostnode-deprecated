@@ -1126,7 +1126,8 @@ class Web(Class, Runnable):
 # #                 socket.timeout, socket.error
 # #             ) as exception:
             except (
-                socket.herror, socket.gaierror, socket.timeout, socket.error
+                socket.herror, socket.gaierror, socket.timeout,
+                socket.error
             ):
 # #
                 pass
@@ -1438,7 +1439,9 @@ class CGIHTTPRequestHandler(
             ... else:
             ...     handler.headers = handler.MessageClass()
             ...     handler.headers.add_header(
-            ...         'Authorization', 'Basic ' + base64_encode('hans:hans'))
+            ...         'Authorization',
+            ...         'Basic ' + base64_encode(b'hans:hans').decode(
+            ...             handler.server.web.encoding))
             >>> # #
             >>> handler.do_GET() # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "" and parame...
@@ -2359,10 +2362,20 @@ class CGIHTTPRequestHandler(
                     break
                 self._authentication_location = FileHandler(
                     location=self._authentication_location.directory_path)
+# # python3.4
+# #             login_data_match = re.compile(
+# #                 '(?P<name>[^:]+):(?P<password>.+)$'
+# #             ).match(base64_decode(
+# #                 self.headers.get('authorization', '')[builtins.len(
+# #                     'Basic '
+# #                 ):]
+# #             ).decode(self.server.web.encoding))
             login_data_match = re.compile(
                 '(?P<name>[^:]+):(?P<password>.+)$'
-            ).match(base64_decode(self.headers.get('authorization', '')[len(
-                'Basic '):]))
+            ).match(base64_decode(self.headers.get(
+                'authorization', ''
+            )[builtins.len('Basic '):]))
+# #
             login_data = None
             if login_data_match:
                 login_data = {
@@ -2793,8 +2806,9 @@ class CGIHTTPRequestHandler(
 # #                    self.external_request_uri) is not None:
             if(request_type_uppercase in request_types or
                '*' in request_types
-               ) and re.compile('(?:%s)$' % match.group('request_uri')).match(
-                    self.external_request_uri) is not None:
+               ) and re.compile('(?:%s)$' % match.group(
+                   'request_uri'
+               )).match(self.external_request_uri) is not None:
 # #
                 return True
         return False

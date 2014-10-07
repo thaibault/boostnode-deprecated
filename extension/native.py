@@ -970,7 +970,7 @@ class String(Object, builtins.str):
         'ñ': '&ntilde;',
         'þ': '&thorn;'}
     '''All chars wich should be observed by handling with html sequences.'''
-    abbreviations = 'id', 'url'
+    abbreviations = 'html', 'id', 'url', 'us', 'de', 'api'
     '''Saves a mapping of typical shortcut words to improve camel casing.'''
 
     # endregion
@@ -1246,19 +1246,30 @@ class String(Object, builtins.str):
     @JointPoint(Class.pseudo_property)
 # # python3.4
 # #     def get_delimited_to_camel_case(
-# #         self: Self, delimiter='_', abbreviations=None
+# #         self: Self, delimiter='_', abbreviations=None,
+# #         preserve_wrong_formatted_abbreviations=False
 # #     ) -> Self:
     def get_delimited_to_camel_case(
-        self, delimiter='_', abbreviations=None
+        self, delimiter='_', abbreviations=None,
+        preserve_wrong_formatted_abbreviations=False
     ):
 # #
         '''
             Converts a delimited string to its camel case representation.
 
-            **delimiter**     - Delimiter string
+            **delimiter**                              - Delimiter string
 
-            **abbreviations** - Collection of shortcut words to represent \
-                                upper cased.
+            **abbreviations**                          - Collection of \
+                                                         shortcut words to \
+                                                         represent upper cased.
+
+            **preserve_wrong_formatted_abbreviations** - If set to "True" \
+                                                         wrong formatted \
+                                                         camel case \
+                                                         abbreviations will \
+                                                         be ignored.
+
+            Returns the modified string instance.
 
             Examples:
 
@@ -1299,32 +1310,70 @@ class String(Object, builtins.str):
 
             >>> String('url-hans-1').get_delimited_to_camel_case('-').content
             'urlHans1'
+
+            >>> String('hansUrl1').get_delimited_to_camel_case(
+            ...     abbreviations=('url',),
+            ...     preserve_wrong_formatted_abbreviations=True
+            ... ).content
+            'hansUrl1'
+
+            >>> String('hans_url').get_delimited_to_camel_case(
+            ...     abbreviations=('url',),
+            ...     preserve_wrong_formatted_abbreviations=True
+            ... ).content
+            'hansURL'
+
+            >>> String('hans_Url').get_delimited_to_camel_case(
+            ...     abbreviations=('url',),
+            ...     preserve_wrong_formatted_abbreviations=True
+            ... ).content
+            'hansUrl'
+
+            >>> String('hans_Url').get_delimited_to_camel_case(
+            ...     abbreviations=('url',),
+            ...     preserve_wrong_formatted_abbreviations=False
+            ... ).content
+            'hansURL'
         '''
         if abbreviations is None:
             abbreviations = self.abbreviations
-        self.content = re.compile(
-            '(?P<before>[a-z0-9])(?P<abbreviation>(%s))(?P<after>[A-Z0-9]|$)' %
-            ')|('.join(builtins.map(
-                lambda abbreviation: abbreviation.capitalize(),
+        delimiter = self.__class__(delimiter).validate_regex().content
+        if preserve_wrong_formatted_abbreviations:
+            abbreviations = ')|(?:'.join(abbreviations)
+        else:
+            abbreviations = ')|(?:'.join(builtins.map(
+                lambda abbreviation: '%s)|(?:%s' % (
+                    abbreviation.capitalize(), abbreviation),
                 abbreviations))
+        self.content = re.compile(
+            '(?!^)(?P<before>%s)(?P<abbreviation>(?:%s))(?P<after>%s|$)' % (
+                delimiter, abbreviations, delimiter)
         ).sub(lambda match: '%s%s%s' % (match.group('before'), match.group(
             'abbreviation'
-        ).upper(), match.group('after')), re.compile(
-            '(?!^)%s(?P<first_letter>[a-zA-Z0-9])' % self.__class__(
-                delimiter
-            ).validate_regex().content
-        ).sub(lambda match: match.group('first_letter').upper(), self.content))
+        ).upper(), match.group('after')), self.content)
+        self.content = re.compile(
+            '(?!^)%s(?P<first_letter>[a-zA-Z0-9])' % delimiter
+        ).sub(lambda match: match.group('first_letter').upper(), self.content)
         return self
 
     @JointPoint
 # # python3.4
-# #     def get_camel_case_to_delimited(self: Self, delimiter='_') -> Self:
-    def get_camel_case_to_delimited(self, delimiter='_'):
+# #     def get_camel_case_to_delimited(
+# #         self: Self, delimiter='_', abbreviations=None
+# #     ) -> Self:
+    def get_camel_case_to_delimited(
+        self, delimiter='_', abbreviations=None
+    ):
 # #
         '''
             Converts a camel cased string to its delimited string version.
 
-            **delimiter** - Delimiter string
+            **delimiter**     - Delimiter string
+
+            **abbreviations** - Collection of shortcut words to represent \
+                                upper cased.
+
+            Returns the modified string instance.
 
             Examples:
 
@@ -1345,12 +1394,26 @@ class String(Object, builtins.str):
 
             >>> String('Hans').get_camel_case_to_delimited().content
             'hans'
+
+            >>> String('hansAPIURL').get_camel_case_to_delimited(
+            ...     abbreviations=('api', 'url')
+            ... ).content
+            'hans_api_url'
         '''
-        self.content = re.sub(
-            '([a-z0-9])([A-Z])', '\\1%s\\2' % delimiter, re.sub(
-                '(.)([A-Z][a-z]+)', '\\1%s\\2' % delimiter, self.content
-            )
-        ).lower()
+        if abbreviations is None:
+            abbreviations = self.abbreviations
+        escaped_delimiter = self.__class__(delimiter).validate_regex().content
+        abbreviations = ')|(?:'.join(builtins.map(
+            lambda abbreviation: abbreviation.upper(), abbreviations))
+        self.content = re.compile(
+            '((?:%s))((?:%s))' % (abbreviations, abbreviations)
+        ).sub('\\1%s\\2' % delimiter, self.content)
+        self.content = re.compile(
+            '([^%s])([A-Z][a-z]+)' % escaped_delimiter
+        ).sub('\\1%s\\2' % delimiter, self.content)
+        self.content = re.compile(
+            '([a-z0-9])([A-Z])'
+        ).sub('\\1%s\\2' % delimiter, self.content).lower()
         return self
 
     @JointPoint
@@ -2262,54 +2325,68 @@ class Dictionary(Object, builtins.dict):
     @JointPoint
 # # python3.4
 # #     def update(
-# #         self: Self, other: (SelfClassObject, builtins.dict)
+# #         self: Self, other: (SelfClassObject, builtins.dict),
+# #         append_list_indicator='__append__'
 # #     ) -> Self:
-    def update(self, other):
+    def update(self, other, append_list_indicator='__append__'):
 # #
         '''
             Performs a recursive update.
 
             Examples:
 
-            >>> Dictionary(
+            >>> Dictionary({'a': 1}).update({'b': 2}).content == {
+            ...     'a': 1, 'b': 2}
+            True
+
+            >>> Dictionary({'a': 1}).update(Dictionary({'b': 2})).content == {
+            ...     'a': 1, 'b': 2}
+            True
+
+            >>> Dictionary({'a': 1}).update(Dictionary({'a': 2})).content
+            {'a': 2}
+
+            >>> Dictionary({'a': {'a': 1}}).update(Dictionary(
             ...     {'a': 1}
-            ... ).update({'b': 2}).content == {'a': 1, 'b': 2}
+            ... )).content
+            {'a': 1}
+
+            >>> Dictionary({'a': {'a': 1}}).update(Dictionary(
+            ...     {'a': {'b': 2}}
+            ... )).content == {'a': {'a': 1, 'b': 2}}
             True
 
-            >>> Dictionary(
-            ...     {'a': 1}
-            ... ).update(Dictionary({'b': 2})).content == {'a': 1, 'b': 2}
-            True
+            >>> Dictionary({'a': {'a': 1}}).update(Dictionary(
+            ...     {'a': {'a': 2}}
+            ... )).content
+            {'a': {'a': 2}}
 
-            >>> Dictionary(
-            ...     {'a': 1}
-            ... ).update(Dictionary({'a': 2})).content == {'a': 2}
-            True
+            >>> Dictionary({'a': [1, 2, 3]}).update(
+            ...     other={'a': {'__append__': [4]}}
+            ... ).content
+            {'a': [1, 2, 3, 4]}
 
-            >>> Dictionary(
-            ...     {'a': {'a': 1}}
-            ... ).update(Dictionary({'a': 1})).content == {'a': 1}
-            True
-
-            >>> Dictionary(
-            ...     {'a': {'a': 1}}
-            ... ).update(Dictionary({'a': {'b': 2}})).content == {'a': {
-            ...     'a': 1, 'b': 2}}
-            True
-
-            >>> Dictionary(
-            ...     {'a': {'a': 1}}
-            ... ).update(Dictionary({'a': {'a': 2}})).content == {'a': {
-            ...     'a': 2}}
-            True
+            >>> Dictionary({'a': 1}).update(
+            ...     other={'a': {'__append__': [4]}}
+            ... ).content
+            {'a': {'__append__': [4]}}
         '''
         for key, value in self.__class__(other).content.items():
             if(builtins.isinstance(value, (builtins.dict, self.__class__)) and
-               key in self.content and builtins.isinstance(
-                   self.content[key], (builtins.dict, self.__class__))):
-                self.content[key] = builtins.getattr(
-                    self.__class__(self.content[key]), inspect.stack()[0][3]
-                )(other=value).content
+               key in self.content):
+                nested_value = value.get(append_list_indicator)
+                if builtins.isinstance(
+                    nested_value, builtins.list
+                ) and builtins.isinstance(self.content[key], builtins.list):
+                    self.content[key] = self.content[key] + nested_value
+                elif builtins.isinstance(self.content[key], (
+                    builtins.dict, self.__class__
+                )):
+                    self.content[key] = builtins.getattr(self.__class__(
+                        self.content[key]
+                    ), inspect.stack()[0][3])(other=value).content
+                else:
+                    self.content[key] = value
             else:
                 self.content[key] = value
         return self
