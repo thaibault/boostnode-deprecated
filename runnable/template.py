@@ -389,9 +389,11 @@ class Parser(Class, Runnable):
         '#!/usr/bin/env python%d.%d\n# -*- coding: utf-8 -*-\n\n%%s' %
         sys.version_info[:2])
     '''
-        Saves a generic python code template used for saving python code
+        Saves a generic python code template used for saving python code \
         caches.
     '''
+    DEFAULT_FILE_EXTENSION_SUFFIX = 'tpl'
+    '''Saves the default template file extension suffix.'''
 
     # endregion
 
@@ -1256,7 +1258,9 @@ class Parser(Class, Runnable):
                 location=self.template, encoding=self.file_encoding)
             if not self.file.is_file():
                 self.file = FileHandler(
-                    location=self.file.path + '.tpl',
+                    location='%s%s%s' % (
+                        self.file.path + os.extsep +
+                        self.DEFAULT_FILE_EXTENSION_SUFFIX),
                     encoding=self.file_encoding)
             if not self.file.is_file():
                 raise __exception__(

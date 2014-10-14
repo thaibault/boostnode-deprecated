@@ -1550,7 +1550,7 @@ class CGIHTTPRequestHandler(
             >>> handler.do_POST() # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "/" and param...
         '''
-        return self._do_special_request(type=inspect.stack()[0][3])
+        return self._do_data_request(type=inspect.stack()[0][3])
 
     @JointPoint
 # # python3.4     def do_PATCH(self: Self) -> Self:
@@ -1577,7 +1577,7 @@ class CGIHTTPRequestHandler(
             >>> handler.do_PATCH() # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "/" and param...
         '''
-        return self._do_special_request(type=inspect.stack()[0][3])
+        return self._do_data_request(type=inspect.stack()[0][3])
 
     @JointPoint
 # # python3.4     def do_DELETE(self: Self) -> Self:
@@ -1604,7 +1604,7 @@ class CGIHTTPRequestHandler(
             >>> handler.do_DELETE() # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "/" and param...
         '''
-        return self._do_special_request(type=inspect.stack()[0][3])
+        return self._do_data_request(type=inspect.stack()[0][3])
 
     @JointPoint
 # # python3.4     def do_PUT(self: Self) -> Self:
@@ -1631,7 +1631,35 @@ class CGIHTTPRequestHandler(
             >>> handler.do_PUT() # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "/" and param...
         '''
-        return self._do_special_request(type=inspect.stack()[0][3])
+        return self._do_data_request(type=inspect.stack()[0][3])
+
+    @JointPoint
+# # python3.4     def do_HEAD(self: Self) -> Self:
+    def do_HEAD(self):
+        '''
+            Is triggered if a head request is coming.
+
+            Examples:
+
+            >>> handler = CGIHTTPRequestHandler()
+            >>> handler.path = '/'
+            >>> handler.server = Class()
+            >>> handler.server.web = Web(
+            ...     __test_folder__, request_whitelist=('*:/?',))
+            >>> # # python2.7
+            >>> if sys.version_info.major < 3:
+            ...     handler.headers = handler.MessageClass(
+            ...         String('test: hans'), seekable=False)
+            ... else:
+            ...     handler.headers = handler.MessageClass()
+            ...     handler.headers.add_header('test', 'hans')
+            >>> # #
+
+            >>> handler.do_HEAD() # doctest: +ELLIPSIS
+            Object of "CGIHTTPRequestHandler" with request uri "/" and param...
+        '''
+        self.request_type = inspect.stack()[0][3][builtins.len('do_'):].lower()
+        return self.do_GET()
 
         # # endregion
 
@@ -2464,8 +2492,8 @@ class CGIHTTPRequestHandler(
 
     @JointPoint
 # # python3.4
-# #     def _do_special_request(self: Self, type: builtins.str) -> Self:
-    def _do_special_request(self, type):
+# #     def _do_data_request(self: Self, type: builtins.str) -> Self:
+    def _do_data_request(self, type):
 # #
         '''Is triggered if a special request is coming.'''
         self.request_type = type[builtins.len('do_'):].lower()
@@ -3414,7 +3442,7 @@ class CGIHTTPRequestHandler(
     def _send_output(self, output):
 # #
         '''Sends the final given output to client.'''
-        if not __test_mode__:
+        if not (__test_mode__ or self.request_type == 'head'):
             if self._encoded_output:
                 self.wfile.write(self._encoded_output)
             elif builtins.isinstance(output, builtins.str):
@@ -3565,7 +3593,7 @@ class CGIHTTPRequestHandler(
                 self._send_output(output)
         if errors:
             __logger__.critical(
-                'Error in common getaway interface program "%s": %s',
+                'Error in common gateway interface program "%s": %s',
                 self.request_arguments[0], errors)
         return self
 

@@ -1702,10 +1702,10 @@ class String(Object, builtins.str):
     @JointPoint
 # # python3.4
 # #     def sub(
-# #         self: Self, search: (builtins.str, builtins.dict), replace='',
+# #         self: Self, search: (builtins.str, builtins.dict), replace=None,
 # #         *arguments: builtins.object, **keywords: builtins.object
 # #     ) -> Self:
-    def sub(self, search, replace='', *arguments, **keywords):
+    def sub(self, search, replace=None, *arguments, **keywords):
 # #
         '''
             Implements the pythons native "re.sub()" method in an object \
@@ -1715,7 +1715,8 @@ class String(Object, builtins.str):
 
             **search**  - regular expression search pattern
 
-            **replace** - string to replace with given search sequence
+            **replace** - string or function to replace with given search
+                          sequence
 
             Additional arguments and keywords are forwarded to python's \
             native "re.sub()" method.
@@ -1774,19 +1775,16 @@ class String(Object, builtins.str):
             for search_string, replacement in search.items():
                 '''Take this method name via introspection.'''
                 self.content = builtins.getattr(
-                    re.compile(builtins.str(search_string)),
-                    inspect.stack()[0][3]
-                )(
-                    builtins.str(replacement), self.content, *arguments,
-                    **keywords)
+                    re.compile(search_string), inspect.stack()[0][3]
+                )(replacement, self.content, *arguments, **keywords)
         else:
             '''
                 Take this method name from regular expression object via \
                 introspection.
             '''
             self.content = builtins.getattr(
-                re.compile(builtins.str(search)), inspect.stack()[0][3]
-            )(builtins.str(replace), self.content, *arguments, **keywords)
+                re.compile(search), inspect.stack()[0][3]
+            )(replace, self.content, *arguments, **keywords)
         return self
 
     @JointPoint

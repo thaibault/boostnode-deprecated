@@ -1957,7 +1957,7 @@ class Handler(Class):
             >>> directory = Handler(
             ...     __test_folder__.path + 'touch', make_directory=True)
             >>> old_timestamp = directory.timestamp
-            >>> time.sleep(0.01)
+            >>> time.sleep(0.01) # doctest: +SKIP
 
             >>> directory.timestamp = None
             >>> old_timestamp != directory.timestamp # doctest: +SKIP
