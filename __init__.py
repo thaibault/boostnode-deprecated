@@ -347,7 +347,7 @@ __copyright__ = 'see module level docstring'
 __credits__ = 'Torben Sickert',
 __license__ = 'see module level docstring'
 __maintainer__ = 'Torben Sickert'
-__maintainer_email__ = 't.sickert@gmail.com'
+__maintainer_email__ = 't.sickert["~at~"]gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
