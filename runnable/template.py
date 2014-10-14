@@ -1259,7 +1259,7 @@ class Parser(Class, Runnable):
             if not self.file.is_file():
                 self.file = FileHandler(
                     location='%s%s%s' % (
-                        self.file.path + os.extsep +
+                        self.file.path, os.extsep,
                         self.DEFAULT_FILE_EXTENSION_SUFFIX),
                     encoding=self.file_encoding)
             if not self.file.is_file():
