@@ -482,9 +482,9 @@ class Runnable(builtins.object):
                 if context_module is joint_point_module or (
                     context[3] == reference_context[3] and
                     re.compile(
-                        '(|[^a-z0-9])%s[ \t]*\(' % builtins.super.__name__,
+                        '(?:|[^a-z0-9])%s[ \t]*\(' % builtins.super.__name__,
                         re.IGNORECASE
-                    ).match(context[4][0])
+                    ).search(context[4][0])
                 ):
                     continue
                 break
