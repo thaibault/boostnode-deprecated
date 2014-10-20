@@ -8,6 +8,13 @@
     things like underlying operating system, file objects, python modules, or \
     I/O operations.
 '''
+
+# # python3.4
+# # pass
+from __future__ import absolute_import, division, print_function, \
+    unicode_literals
+# #
+
 '''
     For conventions see "boostNode/__init__.py" on \
     https://github.com/thaibault/boostNode

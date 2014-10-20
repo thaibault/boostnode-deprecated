@@ -10,6 +10,13 @@
     offers all core file system methods by the pythons native "builtins.str" \
     object.
 '''
+
+# # python3.4
+# # pass
+from __future__ import absolute_import, division, print_function, \
+    unicode_literals
+# #
+
 '''
     For conventions see "boostNode/__init__.py" on \
     https://github.com/thaibault/boostNode
@@ -211,9 +218,12 @@ class Model(builtins.object):
 # # python3.4
 # #                 pass
                 if builtins.isinstance(value, builtins.unicode):
-                    value = value.encode(FileHandler.DEFAULT_ENCODING)
+                    value = builtins.str(value.encode(
+                        FileHandler.DEFAULT_ENCODING))
+                if not builtins.isinstance(value, (
+                    builtins.unicode, builtins.str
+                )):
 # #
-                if not builtins.isinstance(value, builtins.str):
                     value = builtins.repr(value)
                 property_descriptions += '"%s": "%s"' % (name, value)
                 index += 1
@@ -235,7 +245,7 @@ class Model(builtins.object):
     def get_dictionary(
         self, key_wrapper=lambda key, value: key,
         value_wrapper=lambda key, value: value, prefix_filter='password',
-        property_names=(), preserve_unicode=False
+        property_names=()
     ):
 # #
         '''
@@ -321,14 +331,6 @@ class Model(builtins.object):
             value = builtins.getattr(self, name)
             key = key_wrapper(key=name, value=value)
             result[key] = value_wrapper(key, value)
-# # python3.4
-# #             pass
-            if not preserve_unicode and builtins.isinstance(
-                result[key], builtins.unicode
-            ):
-                result[key] = result[key].encode(
-                    FileHandler.DEFAULT_ENCODING)
-# #
         return result
 
         # # endregion
@@ -415,27 +417,18 @@ class Model(builtins.object):
                 NOTE: If value is none a database check again nullable values \
                 will handle this.
             '''
-# # python3.4
-# #             pass
-            encoding_was_unicode = False
-            if builtins.isinstance(value, builtins.unicode):
-                encoding_was_unicode = True
-                value = value.encode('utf_8')
-# #
             property_information = information_determiner(model_instance, name)
             if builtins.isinstance(value, builtins.int):
                 model_instance._validate_number_property(
                     name, value, property_information)
-            elif builtins.isinstance(value, builtins.str):
+# # python3.4
+# #             elif builtins.isinstance(value, builtins.str):
+            elif builtins.isinstance(value, (
+                builtins.unicode, builtins.str
+            )):
+# #
                 model_instance._validate_string_property(
                     name, value, property_information)
-# # python3.4
-# #             pass
-            if encoding_was_unicode and builtins.isinstance(
-                value, builtins.str
-            ):
-                return builtins.unicode(value, 'utf_8')
-# #
         return value
 
         # endregion
@@ -772,14 +765,19 @@ class Object(Class):
             ...     Object('hans').is_binary()
             False
         '''
-        # NOTE: This is a dirty workaround to handle python2.7 lack of
-        # differentiation between "string" and "bytes" objects.
 # # python3.4
 # #         return builtins.isinstance(self.content, builtins.bytes)
+        '''
+            NOTE: This is a dirty workaround to handle python2.7 lack of \
+            differentiation between "string" and "bytes" objects.
+        '''
+        from boostNode.extension.file import Handler as FileHandler
+
         content = self.content
-        if builtins.isinstance(self.content, builtins.unicode):
-            content = self.content.encode(encoding='utf_8')
-        text_chars = ''.join(builtins.map(
+        if builtins.isinstance(content, builtins.unicode):
+            content = builtins.str(content.encode(
+                FileHandler.DEFAULT_ENCODING))
+        text_chars = str().join(builtins.map(
             builtins.chr,
             builtins.range(7, 14) + [27] + builtins.range(0x20, 0x100)))
         return builtins.hasattr(content, 'translate') and builtins.bool(
@@ -857,7 +855,8 @@ class Object(Class):
     # endregion
 
 
-class String(Object, builtins.str):
+# # python3.4 class String(Object, builtins.str):
+class String(Object):
 
     '''
         The string class inherits besides the interface class all pythons \
@@ -892,9 +891,9 @@ class String(Object, builtins.str):
     '''
     SPECIAL_URL_SEQUENCES = {
         '+': ' ', '%20': ' ', '%22': '"', '%2F': '/', '%7E': '~',
-        '%C3%A4': 'ä', '%C3%84': 'Ä',
-        '%C3%B6': 'ö', '%C3%96': 'Ö',
-        '%C3%BC': 'ü', '%C3%9C': 'Ü'}
+        '%C3%A4': 'Ã¤', '%C3%84': 'Ã',
+        '%C3%B6': 'Ã¶', '%C3%96': 'Ã',
+        '%C3%BC': 'Ã¼', '%C3%9C': 'Ã'}
     '''All chars wich should be observed by handling with url sequences.'''
     SPECIAL_HTML_SEQUENCES = {
         # Note only needed in very old browsers.
@@ -902,73 +901,73 @@ class String(Object, builtins.str):
         # ' ': '&nbsp;',
         # Note: is only shown if word is to long.
         # '"soft hyphen"': '&shy;',
-        "'": '&apos;', '´': '&acute;', '¯': '&macr;',
+        "'": '&apos;', 'Â´': '&acute;', 'Â¯': '&macr;',
 
         '<': '&lt;', '>': '&gt;',
 
-        'º': '&ordm;', '¹': '&sup1;', '²': '&sup2;', '³': '&sup3;',
+        'Âº': '&ordm;', 'Â¹': '&sup1;', 'Â²': '&sup2;', 'Â³': '&sup3;',
 
-        '¼': '&frac14;', '½': '&frac12;', '¾': '&frac34;',
+        'Â¼': '&frac14;', 'Â½': '&frac12;', 'Â¾': '&frac34;',
 
-        'À': '&Agrave;', 'Á': '&Aacute;', 'Â': '&Acirc;', 'Ã': '&Atilde;',
-        'Ä': '&Auml;', 'Å': '&Aring;', 'Æ': '&AElig;',
+        'Ã': '&Agrave;', 'Ã': '&Aacute;', 'Ã': '&Acirc;', 'Ã': '&Atilde;',
+        'Ã': '&Auml;', 'Ã': '&Aring;', 'Ã': '&AElig;',
 
-        'È': '&Egrave;', 'É': '&Eacute;', 'Ê': '&Ecirc;', 'Ë': '&Euml;',
+        'Ã': '&Egrave;', 'Ã': '&Eacute;', 'Ã': '&Ecirc;', 'Ã': '&Euml;',
 
-        'Ì': '&Igrave;', 'Í': '&Iacute;', 'Î': '&Icirc;', 'Ï': '&Iuml;',
+        'Ã': '&Igrave;', 'Ã': '&Iacute;', 'Ã': '&Icirc;', 'Ã': '&Iuml;',
 
-        'Ò': '&Ograve;', 'Ó': '&Oacute;', 'Ô': '&Ocirc;', 'Õ': '&Otilde;',
-        'Ö': '&Ouml;', 'Ø': '&Oslash;',
+        'Ã': '&Ograve;', 'Ã': '&Oacute;', 'Ã': '&Ocirc;', 'Ã': '&Otilde;',
+        'Ã': '&Ouml;', 'Ã': '&Oslash;',
 
-        'Ù': '&Ugrave;', 'Ú': '&Uacute;', 'Û': '&Ucirc;', 'Ü': '&Uuml;',
+        'Ã': '&Ugrave;', 'Ã': '&Uacute;', 'Ã': '&Ucirc;', 'Ã': '&Uuml;',
 
-        'à': '&agrave;', 'á': '&aacute;', 'â': '&acirc;', 'ã': '&atilde;',
-        'ä': '&auml;', 'å': '&aring;', 'æ': '&aelig;',
+        'Ã ': '&agrave;', 'Ã¡': '&aacute;', 'Ã¢': '&acirc;', 'Ã£': '&atilde;',
+        'Ã¤': '&auml;', 'Ã¥': '&aring;', 'Ã¦': '&aelig;',
 
-        'è': '&egrave;', 'é': '&eacute;', 'ê': '&ecirc;', 'ë': '&euml;',
+        'Ã¨': '&egrave;', 'Ã©': '&eacute;', 'Ãª': '&ecirc;', 'Ã«': '&euml;',
 
-        'ì': '&igrave;', 'í': '&iacute;', 'î': '&icirc;', 'ï': '&iuml;',
+        'Ã¬': '&igrave;', 'Ã­': '&iacute;', 'Ã®': '&icirc;', 'Ã¯': '&iuml;',
 
-        'ò': '&ograve;', 'ó': '&oacute;', 'ô': '&ocirc;', 'õ': '&otilde;',
-        'ö': '&ouml;', 'ø': '&oslash;',
+        'Ã²': '&ograve;', 'Ã³': '&oacute;', 'Ã´': '&ocirc;', 'Ãµ': '&otilde;',
+        'Ã¶': '&ouml;', 'Ã¸': '&oslash;',
 
-        'ù': '&ugrave;', 'ú': '&uacute;', 'û': '&ucirc;', 'ü': '&uuml;',
+        'Ã¹': '&ugrave;', 'Ãº': '&uacute;', 'Ã»': '&ucirc;', 'Ã¼': '&uuml;',
 
-        'ý': '&yacute;', 'ÿ': '&yuml;',
+        'Ã½': '&yacute;', 'Ã¿': '&yuml;',
 
-        '¡': '&iexcl;',
-        '¢': '&cent;',
-        '£': '&pound;',
-        '¤': '&curren;',
-        '¥': '&yen;',
-        '¦': '&brvbar;',
-        '§': '&sect;',
-        '¨': '&uml;',
-        '©': '&copy;',
-        'ª': '&ordf;',
-        '«': '&laquo;',
-        '¬': '&not;',
-        '®': '&reg;',
-        '°': '&deg;',
-        '±': '&plusmn;',
-        'µ': '&micro;',
-        '¶': '&para;',
-        '·': '&middot;',
-        '¸': '&cedil;',
-        '»': '&raquo;',
-        '¿': '&iquest;',
-        '×': '&times;',
-        '÷': '&divide;',
-        'Ç': '&Ccedil;',
-        'Ð': '&ETH;',
-        'Ñ': '&Ntilde;',
-        'Ý': '&Yacute;',
-        'Þ': '&THORN;',
-        'ß': '&szlig;',
-        'ç': '&ccedil;',
-        'ð': '&eth;',
-        'ñ': '&ntilde;',
-        'þ': '&thorn;'}
+        'Â¡': '&iexcl;',
+        'Â¢': '&cent;',
+        'Â£': '&pound;',
+        'Â¤': '&curren;',
+        'Â¥': '&yen;',
+        'Â¦': '&brvbar;',
+        'Â§': '&sect;',
+        'Â¨': '&uml;',
+        'Â©': '&copy;',
+        'Âª': '&ordf;',
+        'Â«': '&laquo;',
+        'Â¬': '&not;',
+        'Â®': '&reg;',
+        'Â°': '&deg;',
+        'Â±': '&plusmn;',
+        'Âµ': '&micro;',
+        'Â¶': '&para;',
+        'Â·': '&middot;',
+        'Â¸': '&cedil;',
+        'Â»': '&raquo;',
+        'Â¿': '&iquest;',
+        'Ã': '&times;',
+        'Ã·': '&divide;',
+        'Ã': '&Ccedil;',
+        'Ã': '&ETH;',
+        'Ã': '&Ntilde;',
+        'Ã': '&Yacute;',
+        'Ã': '&THORN;',
+        'Ã': '&szlig;',
+        'Ã§': '&ccedil;',
+        'Ã°': '&eth;',
+        'Ã±': '&ntilde;',
+        'Ã¾': '&thorn;'}
     '''All chars wich should be observed by handling with html sequences.'''
     abbreviations = 'html', 'id', 'url', 'us', 'de', 'api'
     '''Saves a mapping of typical shortcut words to improve camel casing.'''
@@ -1052,6 +1051,7 @@ class String(Object, builtins.str):
             >>> String(['A', 5]).content
             "['A', 5]"
         '''
+        from boostNode.extension.file import Handler as FileHandler
 
         # # # region properties
 
@@ -1060,8 +1060,16 @@ class String(Object, builtins.str):
         '''The main string property. It saves the current string.'''
         if content is None:
             content = ''
-        if(not builtins.isinstance(content, (builtins.str, builtins.bytes)) or
-           builtins.isinstance(content, String)):
+# # python3.4
+# #         if(not builtins.isinstance(content, (
+# #             builtins.str, builtins.bytes
+# #         )) or builtins.isinstance(content, String)):
+        if not builtins.isinstance(
+            content, builtins.str
+        ) or builtins.isinstance(content, String):
+            if builtins.isinstance(content, builtins.unicode):
+                content = content.encode(FileHandler.DEFAULT_ENCODING)
+# #
             content = builtins.str(content)
         self.content = content
 
@@ -1201,11 +1209,11 @@ class String(Object, builtins.str):
 
             >>> if sys.version_info.major < 3:
             ...     String(
-            ...         u'ä'.encode('latin1')
+            ...         u'Ã¤'.encode('latin1')
             ...     ).encoding == String.IMPORTANT_ENCODINGS[0]
             ... else:
             ...     String(
-            ...         'ä'.encode('latin1')
+            ...         'Ã¤'.encode('latin1')
             ...     ).encoding  == String.IMPORTANT_ENCODINGS[0]
             False
         '''
@@ -1600,14 +1608,14 @@ class String(Object, builtins.str):
             ... else:
             ...     String(
             ...         '[+%20%22%2F%7E%C3%A4%C3%84%C3%B6]'
-            ...     ).validate_url().content == '[  "/~äÄö]'
+            ...     ).validate_url().content == '[  "/~Ã¤ÃÃ¶]'
             True
 
             >>> if sys.version_info.major < 3:
             ...     True
             ... else:
             ...     String('[%C3%96%C3%BC%C3%9C]').validate_url(
-            ...         ).content == '[ÖüÜ]'
+            ...         ).content == '[ÃÃ¼Ã]'
             True
         '''
         search = self.SPECIAL_URL_SEQUENCES
@@ -1691,9 +1699,27 @@ class String(Object, builtins.str):
         '''
         if builtins.isinstance(search, builtins.dict):
             for search_string, replacement in search.items():
+# # python2.7
+# #                 self.content = self.content.replace(
+# #                     builtins.str(search_string), builtins.str(replacement),
+# #                     *arguments, **keywords)
+                if not builtins.isinstance(
+                    search_string, builtins.unicode
+                ):
+                    if builtins.isinstance(search_string, builtins.str):
+                        search_string = builtins.unicode(
+                            search_string, FileHandler.DEFAULT_ENCODING)
+                    else:
+                        search_string = builtins.str(search_string)
+                if not builtins.isinstance(replacement, builtins.unicode):
+                    if builtins.isinstance(replacement, builtins.str):
+                        replacement = builtins.unicode(
+                            replacement, FileHandler.DEFAULT_ENCODING)
+                    else:
+                        replacement = builtins.str(replacement)
                 self.content = self.content.replace(
-                    builtins.str(search_string), builtins.str(replacement),
-                    *arguments, **keywords)
+                    search_string, replacement, *arguments, **keywords)
+# #
         else:
             self.content = self.content.replace(
                 search, replace, *arguments, **keywords)
@@ -1723,7 +1749,7 @@ class String(Object, builtins.str):
 
             Return the string obtained by replacing the leftmost \
             non-overlapping occurrences of pattern in string by the \
-            replacement "replace". If the pattern isn’t found, string is \
+            replacement "replace". If the pattern isnât found, string is \
             returned unchanged. "replace" can be a string or a function;
 
             If "replace" is a string, any backslash escapes in it are \
@@ -1748,7 +1774,7 @@ class String(Object, builtins.str):
             above, "\g<name>" will use the substring matched by the group \
             named name, as defined by the "(?P<name>...)" syntax. \
             "\g<number>" uses the corresponding group number; "\g<2>" is \
-            therefore equivalent to "\2", but isn’t ambiguous in a \
+            therefore equivalent to "\2", but isnât ambiguous in a \
             replacement such as "\g<2>0". "\20" would be interpreted as a \
             reference to group 20, not a reference to group 2 followed by the \
             literal character "0". The backreference "\g<0>" substitutes in \
@@ -2291,6 +2317,8 @@ class Dictionary(Object, builtins.dict):
             ... ).content == {'_a_': {'_b_'}, '_b_': ['_0_', '_1_']}
             True
         '''
+        from boostNode.extension.file import Handler as FileHandler
+
         for key, value in copy(self.content).items():
             del self.content[key]
             key = key_wrapper(key, value)
@@ -2304,7 +2332,9 @@ class Dictionary(Object, builtins.dict):
                 )(key_wrapper, value_wrapper).content
 # # python3.4
 # #             elif(builtins.isinstance(value, collections.Iterable) and
-# #                  not builtins.isinstance(value, builtins.str)):
+# #                  not builtins.isinstance(
+# #                      value, builtins.bytes, builtins.str
+# #                  )):
             elif(builtins.isinstance(value, collections.Iterable) and
                  not builtins.isinstance(value, (
                      builtins.unicode, builtins.str))):
@@ -2317,6 +2347,12 @@ class Dictionary(Object, builtins.dict):
                     iterable=value, key_wrapper=key_wrapper,
                     value_wrapper=value_wrapper)
             else:
+# # python3.3
+# # pass
+                if builtins.isinstance(value, builtins.str):
+                    value = builtins.unicode(
+                        value, FileHandler.DEFAULT_ENCODING)
+# #
                 self.content[key] = value_wrapper(key, value)
         return self
 
@@ -2402,6 +2438,8 @@ class Dictionary(Object, builtins.dict):
             Converts all keys or values and nested keys or values with given \
             callback function in a given iterable.
         '''
+        from boostNode.extension.file import Handler as FileHandler
+
         if builtins.isinstance(iterable, builtins.set):
             return cls._convert_set(iterable, key_wrapper, value_wrapper)
 # # python3.4
@@ -2417,7 +2455,9 @@ class Dictionary(Object, builtins.dict):
                     ).content
 # # python3.4
 # #                 elif(builtins.isinstance(value, collections.Iterable) and
-# #                      not builtins.isinstance(value, builtins.str)):
+# #                      not builtins.isinstance(
+# #                          value, builtins.bytes, builtins.str
+# #                      )):
                 elif(builtins.isinstance(value, collections.Iterable) and
                      not builtins.isinstance(value, (
                          builtins.unicode, builtins.str))):
@@ -2431,6 +2471,12 @@ class Dictionary(Object, builtins.dict):
                     )(iterable=value, key_wrapper=key_wrapper,
                       value_wrapper=value_wrapper)
                 else:
+# # python3.4
+# #                     pass
+                    if builtins.isinstance(value, builtins.str):
+                        value = builtins.unicode(
+                            value, FileHandler.DEFAULT_ENCODING)
+# #
                     iterable[key] = value_wrapper(key, value)
         except builtins.TypeError:
             '''
@@ -2476,8 +2522,14 @@ class Dictionary(Object, builtins.dict):
         '''
         if builtins.isinstance(value, builtins.dict):
             value = self.__class__(content=value).get_immutable(exclude)
+# # python3.4
+# #         elif(builtins.isinstance(value, collections.Iterable) and
+# #              not builtins.isinstance(value, builtins.str)):
         elif(builtins.isinstance(value, collections.Iterable) and
-             not builtins.isinstance(value, builtins.str)):
+             not builtins.isinstance(value, (
+                builtins.unicode, builtins.str
+             ))):
+# #
             value = builtins.list(copy(value))
             for key, sub_value in builtins.enumerate(value):
                 value[key] = self._immutable_helper(
@@ -2665,12 +2717,13 @@ class Module(Object):
             '...boostNode...extension...'
         '''
         from boostNode.extension.file import Handler as FileHandler
-        '''
-            NOTE: "must_exist=False" is necessary for supporting frozen \
-            executables.
-        '''
+
         file = FileHandler(
             location=frame.f_code.co_filename, respect_root_path=True)
+        '''
+            NOTE: If file doesn't exists we could be in a frozen executable \
+            context.
+        '''
         if cls.is_package(path=file.directory_path) or not file:
             if not file:
                 file = FileHandler(
@@ -2713,6 +2766,7 @@ class Module(Object):
             False
         '''
         from boostNode.extension.file import Handler as FileHandler
+
         if context_path:
             for search_path in sys.path:
                 location = FileHandler(
@@ -2977,6 +3031,7 @@ class Module(Object):
         '''
         from boostNode.extension.file import Handler as FileHandler
         from boostNode.extension.system import Platform
+
         results = []
         for module in modules:
             module_file = FileHandler(location=module + os.extsep + extension)
@@ -3062,14 +3117,26 @@ class Module(Object):
         if(not builtins.hasattr(module, '__module_name__') or
            module.__module_name__ is None):
             module.__module_name__ = cls.get_name(frame, module)
+# # python3.4
+# #         module.__exception__ = builtins.type(
+# #             '%sError' % String(
+# #                 module.__module_name__
+# #             ).get_camel_case_capitalize().content, (builtins.Exception,),
+# #             {'__init__': lambda self, message, *arguments:
+# #                 builtins.Exception.__init__(
+# #                     self, message % arguments
+# #                 ) if arguments else builtins.Exception.__init__(
+# #                     self, message)})
         module.__exception__ = builtins.type(
-            String(module.__module_name__).get_camel_case_capitalize(
-            ).content + 'Error', (builtins.Exception,),
-            {'__init__': lambda self, message,
-                *arguments: builtins.Exception.__init__(
+            builtins.str('%sError' % String(
+                module.__module_name__
+            ).get_camel_case_capitalize().content), (builtins.Exception,),
+            {'__init__': lambda self, message, *arguments:
+                builtins.Exception.__init__(
                     self, message % arguments
                 ) if arguments else builtins.Exception.__init__(
                     self, message)})
+# #
         module.__test_mode__ = False
         module.__file_path__ = cls.get_name(
             frame, module, path=True, extension=True)
@@ -3209,6 +3276,7 @@ class Module(Object):
             Object of "Handler" with path "..." and initially given path "...
         '''
         from boostNode.extension.file import Handler as FileHandler
+
         file = False
         if module:
             file = FileHandler(

@@ -7,6 +7,13 @@
     This module is the main element of the "Reflector". The Reflector's \
     public methods implements the general features of the whole application.
 '''
+
+# # python3.4
+# # pass
+from __future__ import absolute_import, division, print_function, \
+    unicode_literals
+# #
+
 '''
     For conventions see "boostNode/__init__.py" on \
     https://github.com/thaibault/boostNode

@@ -8,6 +8,13 @@
     call's against a given signature. Dynamic classes means they depend on \
     their context.
 '''
+
+# # python3.4
+# # pass
+from __future__ import absolute_import, division, print_function, \
+    unicode_literals
+# #
+
 '''
     For conventions see "boostNode/__init__.py" on \
     https://github.com/thaibault/boostNode

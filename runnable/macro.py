@@ -9,6 +9,13 @@
     snippets in given location to another given version. This code \
     transformation can always be made in both directions.
 '''
+
+# # python3.4
+# # pass
+from __future__ import absolute_import, division, print_function, \
+    unicode_literals
+# #
+
 '''
     For conventions see "boostNode/__init__.py" on \
     https://github.com/thaibault/boostNode
@@ -776,10 +783,7 @@ class Replace(Class, Runnable):
             file.path, mode='r', encoding=self.encoding
         ) as file_handler:
             try:
-# # python3.4
-# #                 first_line = file_handler.readline()
-                first_line = file_handler.readline().encode(self.encoding)
-# #
+                first_line = file_handler.readline()
             except builtins.UnicodeDecodeError:
                 __logger__.warning(
                     'Can\'t decode file "%s" with given encoding "%s".',
@@ -809,12 +813,7 @@ class Replace(Class, Runnable):
                 because former "readline()" call has already loaded the full \
                 file into buffer. An encoding error would already be throne.
             '''
-# # python3.4
-# #             file_content = file_handler.read() + file_handler.read()
-            file_content = (
-                file_handler.read() + file_handler.read()
-            ).encode(self.encoding)
-# #
+            file_content = file_handler.read() + file_handler.read()
         __logger__.info(
             'Convert "{path}" from "{current_version}" to '
             '"{new_version}".'.format(

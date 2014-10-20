@@ -7,6 +7,13 @@
     This module provides classes for handling issues with the operating \
     system or command line.
 '''
+
+# # python3.4
+# # pass
+from __future__ import absolute_import, division, print_function, \
+    unicode_literals
+# #
+
 '''
     For conventions see "boostNode/__init__.py" on \
     https://github.com/thaibault/boostNode
@@ -982,7 +989,8 @@ class Platform(builtins.object):
         elif builtins.len(mac_address) != 12:
             raise __exception__('Incorrect MAC-address format given.')
         '''Pad the synchronization stream.'''
-        data = b'FFFFFFFFFFFF' + (mac_address * 20).encode()
+        data = b'FFFFFFFFFFFF' + (mac_address * 20).encode(
+            FileHandler.DEFAULT_ENCODING)
         send_data = b''
         '''Split up the hex values and pack.'''
         for counter in builtins.range(0, builtins.len(data), 2):
@@ -1251,7 +1259,10 @@ class Platform(builtins.object):
             shell = False if shell is None else shell
         elif shell is None:
             shell = True
-        if builtins.isinstance(command, builtins.str):
+# # python3.4
+# #         if builtins.isinstance(command, builtins.str):
+        if builtins.isinstance(command, (builtins.str, builtins.unicode)):
+# #
             result = cls._run_one_command(
                 command, command_arguments, secure, error, shell, no_blocking,
                 *arguments, **keywords)
@@ -1967,6 +1978,25 @@ class CommandLine(builtins.object):
 # #             module['scope'], verbose=verbose,
 # #             optionflags=doctest.DONT_ACCEPT_TRUE_FOR_1 |
 # #             doctest.REPORT_ONLY_FIRST_FAILURE | doctest.FAIL_FAST)
+        native_output_checker = doctest.OutputChecker.check_output
+
+        def check_output(
+            output_checker_instance, want, got, *arguments, **keywords
+        ):
+            '''
+                Monkey patch to support sames unicode string representing in \
+                python2.X and python3.X.
+            '''
+            '''
+                NOTE: This only works for trivial outputs and can destroy \
+                valid outputs.
+            '''
+            for suffix in ("'", '"', '\\"', "\\'"):
+                got = got.replace('u%s' % suffix, '%s' % suffix)
+            got = got.replace('"unicode"', '"str"')
+            return native_output_checker(
+                output_checker_instance, want, got, *arguments, **keywords)
+        doctest.OutputChecker.check_output = check_output
         doctest.testmod(
             module['scope'], verbose=verbose,
             optionflags=doctest.DONT_ACCEPT_TRUE_FOR_1 |
@@ -2013,7 +2043,8 @@ class CommandLine(builtins.object):
         module['scope'].__test_buffer__ = Buffer()
         module['scope'].__test__ = cls.determine_wrapped_objects(
             scope=module['scope'])
-        module['scope'].__name__ = '__main__'
+# # python3.4         module['scope'].__name__ = '__main__'
+        module['scope'].__name__ = builtins.str('__main__')
         module['scope'].__test_mode__ = True
         module['scope'].__test_globals__ = module['scope'].__dict__
         return module
@@ -2330,20 +2361,31 @@ class CommandLine(builtins.object):
 
             >>> class A(types.ModuleType): pass
 
-            >>> CommandLine._determine_callable_objects(
-            ...     {'scope': A('A'), 'name': 'A'}, None, True)
+            >>> if sys.version_info.major < 3:
+            ...     CommandLine._determine_callable_objects(
+            ...         {'scope': A(str('A')), 'name': 'A'}, None, True)
+            ... else:
+            ...     CommandLine._determine_callable_objects(
+            ...         {'scope': A('A'), 'name': 'A'}, None, True)
             ((), None)
 
-            >>> CommandLine._determine_callable_objects(
-            ...     {'scope': A('A'), 'name': 'A'}, None, False
-            ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
+            >>> if sys.version_info.major < 3:
+            ...     CommandLine._determine_callable_objects(
+            ...         {'scope': A(str('A')), 'name': 'A'}, None, False)
+            ... else:
+            ...     CommandLine._determine_callable_objects(
+            ...         {'scope': A('A'), 'name': 'A'}, None, False
+            ...     ) # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
             boosteNode.extension.system.SystemError: No callable objects in ...
 
             >>> class A(types.ModuleType):
             ...     def a(self): pass
-            >>> a = A('A')
+            >>> if sys.version_info.major < 3:
+            ...     a = A(str('A'))
+            ... else:
+            ...     a = A('A')
             >>> CommandLine._determine_callable_objects(
             ...     {'scope': a, 'name': 'A'}, 'a', True
             ... ) == ((), 'a')
@@ -2591,15 +2633,18 @@ class CommandLine(builtins.object):
             location=documentation_path, make_directory=True)
         if clear_old_documentation:
             documentation.clear_directory()
-        __logger__.info(
-            'Document modules "{modules}" with "{documenter}".'.format(
-                modules='", "'.join(module_names), documenter=documenter))
-        Module.execute_program_for_modules(
-            program_type='documenter', program=documenter,
-            modules=module_names, arguments=documenter_arguments, error=False)
+# # python3.4
+# #         __logger__.info(
+# #             'Document modules "{modules}" with "{documenter}".'.format(
+# #                 modules='", "'.join(module_names), documenter=documenter))
+# #         Module.execute_program_for_modules(
+# #             program_type='documenter', program=documenter,
+# #             modules=module_names, arguments=documenter_arguments,
+# #             error=False)
         for file in FileHandler():
             if file.extension == documentation_file_extension:
                 file.directory_path = documentation.path
+# #
         return cls
 
     @JointPoint(builtins.classmethod)

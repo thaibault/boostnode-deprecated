@@ -7,6 +7,13 @@
     This module implements features like joint points, point cuts and advices \
     for implementing aspect orientated code.
 '''
+
+# # python3.4
+# # pass
+from __future__ import absolute_import, division, print_function, \
+    unicode_literals
+# #
+
 '''
     For conventions see "boostNode/__init__.py" on \
     https://github.com/thaibault/boostNode

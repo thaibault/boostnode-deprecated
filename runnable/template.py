@@ -7,8 +7,11 @@
     This module provides classes to handle text-based files and string parsing.
 '''
 
-# # python3.4 pass
-from __future__ import print_function
+# # python3.4
+# # pass
+from __future__ import absolute_import, division, print_function, \
+    unicode_literals
+# #
 
 '''
     For conventions see "boostNode/__init__.py" on \
@@ -30,6 +33,7 @@ __version__ = '1.0'
 import __builtin__ as builtins
 # #
 from copy import copy, deepcopy
+from crypt import crypt
 from datetime import datetime as DateTime
 import time
 import inspect
@@ -597,14 +601,15 @@ class Parser(Class, Runnable):
 # #             'Dictionary': builtins.dict, 'RegularExpression': re.compile,
 # #             'copy': copy, 'deepCopy': deepcopy,
 # #             'DictionaryExtension': Dictionary, 'StringExtension': String,
-# #             'List': builtins.list, 'hasAttribute': builtins.hasattr})
+# #             'List': builtins.list, 'hasAttribute': builtins.hasattr,
+# #             'TemplateParser': self.__class__, 'crypt': crypt})
         self._builtins.update({
             '__indent__': self.indent, '__file__': self.file,
             '__time_stamp__': time.mktime(
                 now.timetuple()
             ) + now.microsecond / 1000 ** 2, 'DateTime': DateTime,
             'time': time, 'FileHandler': FileHandler, 'print': self._print,
-            'include': self._include, 'String': builtins.str,
+            'include': self._include, 'String': builtins.unicode,
             'length': builtins.len, 'Json': json,
             'path_name_to_url': urllib.pathname2url, 'false': False,
             'true': True, 'locals': builtins.locals, 'type': builtins.type,
@@ -613,7 +618,8 @@ class Parser(Class, Runnable):
             'RegularExpression': re.compile, 'copy': copy,
             'deepCopy': deepcopy, 'DictionaryExtension': Dictionary,
             'StringExtension': String, 'List': builtins.list,
-            'hasAttribute': builtins.hasattr})
+            'hasAttribute': builtins.hasattr,
+            'TemplateParser': self.__class__, 'crypt': crypt})
 # #
         return self._builtins
 
@@ -937,9 +943,14 @@ class Parser(Class, Runnable):
             scope={'self': self})
         initializer_arguments = self._command_line_arguments_to_dictionary(
             namespace=self._command_line_arguments)
+# # python3.4
+# #         if(initializer_arguments['builtin_names'] and
+# #            builtins.isinstance(
+# #                initializer_arguments['builtin_names'][0], builtins.str)):
         if(initializer_arguments['builtin_names'] and
-           builtins.isinstance(
-               initializer_arguments['builtin_names'][0], builtins.str)):
+           builtins.isinstance(initializer_arguments['builtin_names'][0], (
+                builtins.str, builtins.unicode))):
+# #
             initializer_arguments['builtin_names'] = builtins.tuple(
                 builtins.map(
                     lambda builtin: builtins.eval(builtin),
@@ -1429,10 +1440,15 @@ class Parser(Class, Runnable):
             ... ) # doctest: +ELLIPSIS
             (...Native exception object:...)
 
-            >>> if sys.version_info.major > 2:
-            ...     def unicode(value, dummy): return value
             >>> class TestException(Exception):
-            ...     property = unicode('ä', 'utf_8')
+            ...     property = 'ä'
+            >>> parser._handle_template_exception(
+            ...     TestException('test'), force_native_exception=True
+            ... ) # doctest: +ELLIPSIS
+            (...Native exception object:...)
+
+            >>> class TestException(Exception):
+            ...     property = ('ä', 'ö')
             >>> parser._handle_template_exception(
             ...     TestException('test'), force_native_exception=True
             ... ) # doctest: +ELLIPSIS
@@ -1453,12 +1469,17 @@ class Parser(Class, Runnable):
                 ):
                     value = builtins.getattr(exception, property_name)
 # # python3.4
-# #                     pass
-                    if builtins.isinstance(value, builtins.unicode):
-                        value = value.encode('utf_8')
-# #
+# #                     native_exception_description += '%s: "%s"\n' % (
+# #                         property_name, builtins.str(value))
+                    if not builtins.isinstance(value, builtins.unicode):
+                        if builtins.isinstance(value, builtins.str):
+                            value = builtins.unicode(
+                                value, FileHandler.DEFAULT_ENCODING)
+                        else:
+                            value = builtins.str(value)
                     native_exception_description += '%s: "%s"\n' % (
-                        property_name, builtins.str(value))
+                        property_name, value)
+# #
             native_exception_description = (
                 '\n\nNative exception object:\n\n%s' %
                 native_exception_description)

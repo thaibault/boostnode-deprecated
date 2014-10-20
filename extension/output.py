@@ -8,8 +8,11 @@
     strings to any output stream.
 '''
 
-# # python3.4 pass
-from __future__ import print_function
+# # python3.4
+# # pass
+from __future__ import absolute_import, division, print_function, \
+    unicode_literals
+# #
 
 '''
     For conventions see "boostNode/__init__.py" on \

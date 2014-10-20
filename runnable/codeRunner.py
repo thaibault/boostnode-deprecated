@@ -7,6 +7,13 @@
     This module provides an easy way to compile, run and clean up a various \
     number of scripts.
 '''
+
+# # python3.4
+# # pass
+from __future__ import absolute_import, division, print_function, \
+    unicode_literals
+# #
+
 '''
     For conventions see "boostNode/__init__.py" on \
     https://github.com/thaibault/boostNode
@@ -802,7 +809,12 @@ class Run(Class, Runnable):
             if builtins.isinstance(value, builtins.dict):
                 rendered_properties[key] = self._render_properties(
                     properties=value, code_file=code_file)
-            elif builtins.isinstance(value, builtins.str):
+# # python3.4
+# #             elif builtins.isinstance(value, builtins.str):
+            elif builtins.isinstance(value, (
+                builtins.str, builtins.unicode
+            )):
+# #
                 rendered_properties[key] = TemplateParser(
                     template=value, string=True
                 ).render(

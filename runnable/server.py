@@ -4,6 +4,13 @@
 # region header
 
 '''Provides server and request handler classes.'''
+
+# # python3.4
+# # pass
+from __future__ import absolute_import, division, print_function, \
+    unicode_literals
+# #
+
 '''
     For conventions see "boostNode/__init__.py" on \
     https://github.com/thaibault/boostNode
@@ -2063,20 +2070,32 @@ class CGIHTTPRequestHandler(
             >>> handler.send_cookie({}) # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "" and parame...
 
-            >>> handler.send_cookie(
-            ...     {'key': 'value', 'a': 1}
-            ... ) # doctest: +ELLIPSIS
+            >>> if sys.version_info.major < 3:
+            ...     handler.send_cookie(
+            ...         {str('key'): str('value'), str('a'): 1}
+            ...     ) # doctest: +ELLIPSIS
+            ... else:
+            ...     handler.send_cookie({'key': 'value', 'a': 1})
             Object of "CGIHTTPRequestHandler" with request uri "" and parame...
 
             >>> cookie = cookies.SimpleCookie()
-            >>> cookie['key'] = 'value'
-            >>> cookie['a'] = 1
+            >>> if sys.version_info.major < 3:
+            ...     cookie[str('key')] = str('value')
+            ...     cookie[str('a')] = 1
+            ... else:
+            ...     cookie['key'] = 'value'
+            ...     cookie['a'] = 1
             >>> handler.send_cookie(cookie) # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "" and parame...
         '''
         if not builtins.isinstance(cookie, cookies.SimpleCookie):
             cookie_object = cookies.SimpleCookie()
-            if builtins.isinstance(cookie, builtins.str):
+# # python3.4
+# #             if builtins.isinstance(cookie, builtins.str):
+            if builtins.isinstance(cookie, (
+                builtins.unicode, builtins.str
+            )):
+# #
                 cookie_object.load(cookie_object)
             else:
                 for key, value in cookie.items():
@@ -2550,7 +2569,8 @@ class CGIHTTPRequestHandler(
 # #         ).fullmatch(authentication_file.content.strip())
 # #         return base64_encode(('%s:%s' % (
 # #             match.group('name'), match.group('password')
-# #         )).encode(self.server.web.encoding)).decode()
+# #         )).encode(self.server.web.encoding)).decode(
+# #             self.server.web.encoding)
         match = re.compile(
             '(?:%s)$' % self.server.web.authentication_file_content_pattern
         ).match(authentication_file.content.strip())
@@ -3184,11 +3204,18 @@ class CGIHTTPRequestHandler(
             True
         '''
         if self.server.web.module_loading:
-            if builtins.isinstance(
-                self.server.web.module_loading, builtins.str
-            ) and self._handle_default_modules_get(
+# # python3.4
+# #             if builtins.isinstance(
+# #                 self.server.web.module_loading, builtins.str
+# #             ) and self._handle_default_modules_get(
+# #                 self.server.web.module_loading
+# #             ):
+            if builtins.isinstance(self.server.web.module_loading, (
+                builtins.unicode, builtins.str
+            )) and self._handle_default_modules_get(
                 self.server.web.module_loading
             ):
+# #
                 return True
             for module_name in self.server.web.default_module_names:
                 if self._handle_default_modules_get(module_name):
@@ -3568,7 +3595,12 @@ class CGIHTTPRequestHandler(
                 exception.__class__.__name__, builtins.str(exception))
         self.server.web.number_of_running_threads -= 1
         size = builtins.len(output)
-        if not builtins.isinstance(errors, builtins.str):
+# # python3.4
+# #         if not builtins.isinstance(errors, builtins.str):
+        if not builtins.isinstance(errors, (
+            builtins.unicode, builtins.str
+        )):
+# #
             errors = errors.decode(
                 encoding=self.server.web.encoding, errors='strict')
         if self.respond:

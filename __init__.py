@@ -342,6 +342,12 @@
     '\\n    Module documentation which should be useable as help message fo...'
 """
 
+# # python3.4
+# # pass
+from __future__ import absolute_import, division, print_function, \
+    unicode_literals
+# #
+
 __author__ = 'Torben Sickert'
 __copyright__ = 'see module level docstring'
 __credits__ = 'Torben Sickert',

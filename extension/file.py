@@ -10,6 +10,13 @@
     systems it offers all core file-system methods by the pythons native \
     "shutil" and "os" module as wrapper methods.
 '''
+
+# # python3.4
+# # pass
+from __future__ import absolute_import, division, print_function, \
+    unicode_literals
+# #
+
 '''
     For conventions see "boostNode/__init__.py" on \
     https://github.com/thaibault/boostNode
@@ -159,7 +166,8 @@ class Handler(Class):
         Defines the default format of current operating system for \
         calculating with file sizes.
     '''
-    DEFAULT_ENCODING = 'utf_8'
+# # python3.4      DEFAULT_ENCODING = 'utf_8'
+    DEFAULT_ENCODING = builtins.str('utf_8')
     '''Defines char set for handling text-based files internally.'''
     MAX_PATH_LENGTH = 32767
     '''Defines the maximum number of signs in a file path.'''
@@ -1230,12 +1238,12 @@ class Handler(Class):
                (properties['useful_range'][1] is None or
                 size <= properties['useful_range'][1])
                ):
-                return builtins.str(builtins.round(
+                return '%s %s' % (builtins.str(builtins.round(
                     self.__class__.convert_size_format(
                         size, format=properties['notations'][0]
                     ), 2)
-                ) + ' ' + properties['notations'][0]
-        return builtins.str(builtins.round(size, 2)) + ' byte'
+                ), properties['notations'][0])
+        return '%s byte' % builtins.str(builtins.round(size, 2))
 
     @JointPoint(Class.pseudo_property)
 # # python3.4     def get_type(self: Self) -> builtins.str:
@@ -1347,7 +1355,12 @@ class Handler(Class):
             'text/html'
         '''
         mime_type = mimetypes.guess_type(self._path)[0]
-        if builtins.isinstance(mime_type, builtins.str):
+# # python3.4
+# #         if builtins.isinstance(mime_type, builtins.str):
+        if builtins.isinstance(mime_type, (
+            builtins.unicode, builtins.str
+        )):
+# #
             return mime_type
         if web:
             if self.name in ('.html', '.htm'):
@@ -1763,23 +1776,16 @@ class Handler(Class):
 # #                 with builtins.open(
 # #                     self._path, mode, *arguments, errors=errors, **keywords
 # #                 ) as file:
-# #                     '''
-# #                         NOTE: Double call of "read()" is a workaround for \
-# #                         python bug when finishing reading file without \
-# #                         end reached.
-# #                     '''
-# #                     return file.read() + file.read()
                 with codecs.open(
                     self._path, mode, *arguments, errors=errors, **keywords
                 ) as file:
+# #
                     '''
                         NOTE: Double call of "read()" is a workaround for \
                         python bug when finishing reading file without \
                         end reached.
                     '''
-                    return builtins.str((file.read() + file.read()).encode(
-                        encoding=self.DEFAULT_ENCODING))
-# #
+                    return file.read() + file.read()
         elif self.is_directory():
             return self.list()
         if strict:
@@ -3033,7 +3039,7 @@ class Handler(Class):
             if self._path == '\\' and Platform().operating_system == 'windows':
                 for letter_number in builtins.range(
                         builtins.ord('A'), builtins.ord('Z') + 1):
-                    path = builtins.chr(letter_number) + ':\\'
+                    path = '%s:\\' % builtins.chr(letter_number)
                     if os.path.exists(path):
                         yield self.__class__(location=path)
             else:
@@ -3041,6 +3047,14 @@ class Handler(Class):
                     for file_name in os.listdir(
                         self._path, *arguments, **keywords
                     ):
+# # python3.4
+# #                         pass
+                        if not builtins.isinstance(
+                            file_name, builtins.unicode
+                        ):
+                            file_name = builtins.unicode(
+                                file_name, self.DEFAULT_ENCODING)
+# #
                         try:
                             yield self.__class__(
                                 location=self.path + file_name)
@@ -4200,7 +4214,12 @@ class Handler(Class):
         for file in files:
             if Platform.check_thread():
                 return False
-            if builtins.isinstance(function, builtins.str):
+# # python3.4
+# #             if builtins.isinstance(function, builtins.str):
+            if builtins.isinstance(function, (
+                builtins.unicode, builtins.str
+            )):
+# #
                 result = builtins.getattr(file, function)(
                     *arguments, **keywords)
             else:
@@ -4806,7 +4825,14 @@ class Handler(Class):
                     context=self.__class__(
                         location=target_path, respect_root_path=False
                     ).directory_path)
-            if builtins.isinstance(relative, (builtins.str, self.__class__)):
+# # python3.4
+# #             if builtins.isinstance(relative, (
+# #                 builtins.str, self.__class__
+# #             )):
+            if builtins.isinstance(relative, (
+                builtins.str, builtins.unicode, self.__class__
+            )):
+# #
                 return self.get_relative_path(context=relative)
             return self.relative_path
         return self._path
@@ -4905,7 +4931,11 @@ class Handler(Class):
         os_statvfs = None
         if((os.path.isfile(self._path) or os.path.isdir(self._path)) and
            builtins.hasattr(os, 'statvfs')):
-            os_statvfs = os.statvfs(self._path)
+# # python3.4
+# #             os_statvfs = os.statvfs(self._path)
+            os_statvfs = os.statvfs(builtins.str(self._path.encode(
+                self.DEFAULT_ENCODING)))
+# #
             self.__class__.BLOCK_SIZE_IN_BYTE = os_statvfs.f_bsize
             self.__class__.MAX_FILE_NAME_LENGTH = os_statvfs.f_namemax
             if(Platform().operating_system == 'macintosh' or

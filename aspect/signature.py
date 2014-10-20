@@ -7,6 +7,13 @@
     This module provides functions for checking function call's against a \
     given signature.
 '''
+
+# # python3.4
+# # pass
+from __future__ import absolute_import, division, print_function, \
+    unicode_literals
+# #
+
 '''
     For conventions see "boostNode/__init__.py" on \
     https://github.com/thaibault/boostNode
@@ -679,19 +686,18 @@ class CheckObject(builtins.object):
             >>> A()._join_types((5, 'hans', 3), False)
             '"5", "hans" or "3"'
 
-            >>> A()._join_types([5], False)
+            >>> A()._join_types([5], meta_type=False)
             '"5"'
 
-            >>> A()._join_types([5, 5], False)
+            >>> A()._join_types([5, 5], meta_type=False)
             '"5"'
         '''
         for index, type in builtins.enumerate(types):
             if types.count(type) > 1:
                 del types[index]
         if builtins.len(types) < 2:
-            return '"' + (
-                types[0].__name__ if meta_type else builtins.str(types[0])
-            ) + '"'
+            return '"%s"' % (types[0].__name__ if meta_type else builtins.str(
+                types[0]))
         return self._join_distinct_types(types, meta_type)
 
     @JointPoint
@@ -705,16 +711,16 @@ class CheckObject(builtins.object):
         result = ''
         for type in types:
             if type is Self:
-                result += '"' + builtins.str(self.object) + ' (self)"'
+                result += '"%s (self)"' % builtins.str(self.object)
             elif type is SelfClass:
-                result += '"' + self.class_object.__name__ + ' (self class)"'
+                result += '"%s (self class)"' % self.class_object.__name__
             elif type is SelfClassObject:
-                result += '"' + self.class_object.__name__ +\
-                    ' (self class object)"'
+                result += '"%s (self class object)"' % \
+                    self.class_object.__name__
             elif meta_type:
-                result += '"' + type.__name__ + '"'
+                result += '"%s"' % type.__name__
             else:
-                result += '"' + builtins.str(type) + '"'
+                result += '"%s"' % builtins.str(type)
             if type is types[-2]:
                 result += ' or '
             elif type is not types[-1]:
