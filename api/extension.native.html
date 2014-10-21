@@ -150,7 +150,7 @@
 &#8220;dict()&#8221; method.</p>
 <dl class="method">
 <dt id="boostNode.extension.native.Dictionary.convert">
-<tt class="descname">convert</tt><big>(</big><em>key_wrapper=&lt;function Dictionary.&lt;lambda&gt; at 0x7f002a6f4f28&gt;</em>, <em>value_wrapper=&lt;function Dictionary.&lt;lambda&gt; at 0x7f002a6f6048&gt;</em><big>)</big> &rarr; boostNode.extension.type.Self<a class="headerlink" href="#boostNode.extension.native.Dictionary.convert" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">convert</tt><big>(</big><em>key_wrapper=&lt;function Dictionary.&lt;lambda&gt; at 0x7f48a7162f28&gt;</em>, <em>value_wrapper=&lt;function Dictionary.&lt;lambda&gt; at 0x7f48a7159048&gt;</em><big>)</big> &rarr; boostNode.extension.type.Self<a class="headerlink" href="#boostNode.extension.native.Dictionary.convert" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts all keys or values and nested keys or values with given             callback functions.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Dictionary</span><span class="p">({})</span><span class="o">.</span><span class="n">convert</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
@@ -327,7 +327,7 @@
 <dd><p>Represents an abstract data holding class for an orm based model.</p>
 <dl class="method">
 <dt id="boostNode.extension.native.Model.get_dictionary">
-<tt class="descname">get_dictionary</tt><big>(</big><em>key_wrapper=&lt;function Model.&lt;lambda&gt; at 0x7f002a5c8400&gt;</em>, <em>value_wrapper=&lt;function Model.&lt;lambda&gt; at 0x7f002a5c8488&gt;</em>, <em>prefix_filter='password'</em>, <em>property_names=()</em><big>)</big> &rarr; dict<a class="headerlink" href="#boostNode.extension.native.Model.get_dictionary" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">get_dictionary</tt><big>(</big><em>key_wrapper=&lt;function Model.&lt;lambda&gt; at 0x7f48a702f400&gt;</em>, <em>value_wrapper=&lt;function Model.&lt;lambda&gt; at 0x7f48a702f488&gt;</em>, <em>prefix_filter='password'</em>, <em>property_names=()</em><big>)</big> &rarr; dict<a class="headerlink" href="#boostNode.extension.native.Model.get_dictionary" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the dictionary representation of the model instance. All             properties with prefixed underscore will be ignored.</p>
 <p><strong>key_wrapper</strong>    - A function to call for manipulating each                                  key in returned dictionary.</p>
 <p><strong>value_wrapper</strong>  - A function to call for manipulating each                                  value in returned dictionary.</p>
@@ -390,7 +390,7 @@
 
 <dl class="method">
 <dt id="boostNode.extension.native.Model.validate_property">
-<tt class="descname">validate_property</tt><big>(</big><em>model_instance: object</em>, <em>name: str</em>, <em>value: object</em>, <em>information_determiner=&lt;function Model.&lt;lambda&gt; at 0x7f002a5c8598&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Model.validate_property" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">validate_property</tt><big>(</big><em>model_instance: object</em>, <em>name: str</em>, <em>value: object</em>, <em>information_determiner=&lt;function Model.&lt;lambda&gt; at 0x7f48a702f598&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Model.validate_property" title="Permalink to this definition">¶</a></dt>
 <dd><p>Intercepts each property set of any derived model.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">A</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
@@ -634,7 +634,7 @@
 
 <dl class="classmethod">
 <dt id="boostNode.extension.native.Module.get_context_path">
-<em class="property">classmethod </em><tt class="descname">get_context_path</tt><big>(</big><em>path=None</em>, <em>frame=&lt;frame object at 0x1859d78&gt;</em><big>)</big> &rarr; str<a class="headerlink" href="#boostNode.extension.native.Module.get_context_path" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><tt class="descname">get_context_path</tt><big>(</big><em>path=None</em>, <em>frame=&lt;frame object at 0x1c57ba8&gt;</em><big>)</big> &rarr; str<a class="headerlink" href="#boostNode.extension.native.Module.get_context_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines the package and module level context path to a given             context or file.</p>
 <p><strong>path</strong>  - relative or absolute context or file path to normalize</p>
 <p><strong>frame</strong> - stack frame to analyse again context</p>
@@ -780,7 +780,7 @@
 
 <dl class="method">
 <dt id="boostNode.extension.native.Module.get_package_name">
-<tt class="descname">get_package_name</tt><big>(</big><em>frame=&lt;frame object at 0x1859d78&gt;</em>, <em>path=False</em><big>)</big> &rarr; str<a class="headerlink" href="#boostNode.extension.native.Module.get_package_name" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">get_package_name</tt><big>(</big><em>frame=&lt;frame object at 0x1c57ba8&gt;</em>, <em>path=False</em><big>)</big> &rarr; str<a class="headerlink" href="#boostNode.extension.native.Module.get_package_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines package context of given frame. If current context             isn&#8217;t in any package context an empty string is given back.</p>
 <p><strong>frame</strong> - frame of the package name to inspect</p>
 <p><strong>path</strong>  - path to package</p>
@@ -952,13 +952,13 @@
 
 <dl class="attribute">
 <dt id="boostNode.extension.native.String.NON_STANDARD_SPECIAL_URL_SEQUENCES">
-<tt class="descname">NON_STANDARD_SPECIAL_URL_SEQUENCES</tt><em class="property"> = {'%1001': '&amp;', '%1004': '+', '%1002': '=', '%1003': '%', '%1000': '#'}</em><a class="headerlink" href="#boostNode.extension.native.String.NON_STANDARD_SPECIAL_URL_SEQUENCES" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">NON_STANDARD_SPECIAL_URL_SEQUENCES</tt><em class="property"> = {'%1001': '&amp;', '%1003': '%', '%1000': '#', '%1002': '=', '%1004': '+'}</em><a class="headerlink" href="#boostNode.extension.native.String.NON_STANDARD_SPECIAL_URL_SEQUENCES" title="Permalink to this definition">¶</a></dt>
 <dd><p>All chars wich should be handle during dealing with web urls.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="boostNode.extension.native.String.SPECIAL_HTML_SEQUENCES">
-<tt class="descname">SPECIAL_HTML_SEQUENCES</tt><em class="property"> = {'Ã¨': '&amp;egrave;', 'Ã\x96': '&amp;Ouml;', 'Â¿': '&amp;iquest;', 'Ã\x80': '&amp;Agrave;', 'Ã£': '&amp;atilde;', 'Ã¸': '&amp;oslash;', 'Â£': '&amp;pound;', 'Ã\x91': '&amp;Ntilde;', 'Ã\x8f': '&amp;Iuml;', 'Ãª': '&amp;ecirc;', 'Â¹': '&amp;sup1;', 'Âµ': '&amp;micro;', 'Ã\x93': '&amp;Oacute;', 'Ã\xa0': '&amp;agrave;', 'Ã\x8c': '&amp;Igrave;', 'Â¾': '&amp;frac34;', 'Ã\xad': '&amp;iacute;', 'Ã¯': '&amp;iuml;', 'Â¬': '&amp;not;', 'Â§': '&amp;sect;', 'Ã¬': '&amp;igrave;', 'Â©': '&amp;copy;', 'Ã²': '&amp;ograve;', 'Ã\x95': '&amp;Otilde;', 'Â¥': '&amp;yen;', 'Ã´': '&amp;ocirc;', 'Ã\x87': '&amp;Ccedil;', 'Ã¶': '&amp;ouml;', 'Ã¤': '&amp;auml;', 'Ã¼': '&amp;uuml;', 'Â¼': '&amp;frac14;', 'Ã³': '&amp;oacute;', 'Ã\x82': '&amp;Acirc;', 'Ãº': '&amp;uacute;', 'Â±': '&amp;plusmn;', 'Ã\x8e': '&amp;Icirc;', 'Ã¿': '&amp;yuml;', 'Â»': '&amp;raquo;', 'Ã·': '&amp;divide;', 'Ã¾': '&amp;thorn;', 'Ã\x8a': '&amp;Ecirc;', 'Ã\x8b': '&amp;Euml;', 'Ã\x84': '&amp;Auml;', 'Ã\x9e': '&amp;THORN;', 'Ã\x9a': '&amp;Uacute;', 'Ã\x99': '&amp;Ugrave;', 'Ã»': '&amp;ucirc;', 'Ã¥': '&amp;aring;', 'Âº': '&amp;ordm;', 'Ã½': '&amp;yacute;', 'Â¯': '&amp;macr;', 'Â·': '&amp;middot;', 'Ã¦': '&amp;aelig;', 'Ã¢': '&amp;acirc;', 'Â½': '&amp;frac12;', 'Ã\x89': '&amp;Eacute;', 'Ã\x88': '&amp;Egrave;', 'Ãµ': '&amp;otilde;', 'Ã\x98': '&amp;Oslash;', 'Â¶': '&amp;para;', 'Â¡': '&amp;iexcl;', 'Â¨': '&amp;uml;', 'Ã\x8d': '&amp;Iacute;', 'Ã«': '&amp;euml;', 'Ã\x92': '&amp;Ograve;', '&gt;': '&amp;gt;', 'Ã\x81': '&amp;Aacute;', 'Ã¹': '&amp;ugrave;', 'Ã\x9b': '&amp;Ucirc;', 'Ã\x9d': '&amp;Yacute;', 'Ã®': '&amp;icirc;', 'Â®': '&amp;reg;', 'Ã\x90': '&amp;ETH;', 'Ã\x97': '&amp;times;', 'Ã\x85': '&amp;Aring;', 'Ã\x9c': '&amp;Uuml;', 'Ã©': '&amp;eacute;', 'Â«': '&amp;laquo;', 'Ã°': '&amp;eth;', 'Ã\x94': '&amp;Ocirc;', '&lt;': '&amp;lt;', 'Â²': '&amp;sup2;', 'Â¸': '&amp;cedil;', 'Ã§': '&amp;ccedil;', 'Ã¡': '&amp;aacute;', 'Âª': '&amp;ordf;', 'Ã\x86': '&amp;AElig;', 'Ã\x9f': '&amp;szlig;', 'Â¦': '&amp;brvbar;', &quot;'&quot;: '&amp;apos;', 'Â³': '&amp;sup3;', 'Â°': '&amp;deg;', 'Â¤': '&amp;curren;', 'Ã\x83': '&amp;Atilde;', 'Ã±': '&amp;ntilde;', 'Â¢': '&amp;cent;', 'Â´': '&amp;acute;'}</em><a class="headerlink" href="#boostNode.extension.native.String.SPECIAL_HTML_SEQUENCES" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">SPECIAL_HTML_SEQUENCES</tt><em class="property"> = {'Â¾': '&amp;frac34;', 'Ã³': '&amp;oacute;', 'Ã\x8c': '&amp;Igrave;', 'Ã\x87': '&amp;Ccedil;', 'Ã\xa0': '&amp;agrave;', 'Ã´': '&amp;ocirc;', 'Ã°': '&amp;eth;', 'Â·': '&amp;middot;', 'Ã·': '&amp;divide;', 'Â¤': '&amp;curren;', 'Ã¢': '&amp;acirc;', 'Ã¡': '&amp;aacute;', 'Â¨': '&amp;uml;', 'Ã\x9b': '&amp;Ucirc;', 'Ã½': '&amp;yacute;', 'Ã\x96': '&amp;Ouml;', 'Â§': '&amp;sect;', 'Â½': '&amp;frac12;', 'Ã\x8f': '&amp;Iuml;', 'Â¯': '&amp;macr;', 'Âµ': '&amp;micro;', 'Â»': '&amp;raquo;', 'Ã\x89': '&amp;Eacute;', 'Ã\x82': '&amp;Acirc;', 'Â£': '&amp;pound;', 'Ã®': '&amp;icirc;', 'Â±': '&amp;plusmn;', 'Â¼': '&amp;frac14;', 'Âº': '&amp;ordm;', '&gt;': '&amp;gt;', 'Ã¬': '&amp;igrave;', 'Ã\x90': '&amp;ETH;', 'Ã²': '&amp;ograve;', 'Â¬': '&amp;not;', 'Â¿': '&amp;iquest;', 'Â¹': '&amp;sup1;', 'Ã\x86': '&amp;AElig;', 'Ã\x84': '&amp;Auml;', 'Ã\x80': '&amp;Agrave;', 'Â¸': '&amp;cedil;', 'Â«': '&amp;laquo;', 'Ã¸': '&amp;oslash;', 'Â¦': '&amp;brvbar;', 'Ã\x9c': '&amp;Uuml;', 'Ã\x81': '&amp;Aacute;', 'Â³': '&amp;sup3;', 'Ã\x97': '&amp;times;', 'Â´': '&amp;acute;', 'Ã¯': '&amp;iuml;', 'Ã¤': '&amp;auml;', 'Ãµ': '&amp;otilde;', 'Ã»': '&amp;ucirc;', 'Â²': '&amp;sup2;', 'Ã\x99': '&amp;Ugrave;', 'Ã±': '&amp;ntilde;', 'Ã¾': '&amp;thorn;', 'Ã\xad': '&amp;iacute;', 'Â°': '&amp;deg;', 'Â®': '&amp;reg;', 'Ã¥': '&amp;aring;', 'Ã\x8d': '&amp;Iacute;', 'Ã\x92': '&amp;Ograve;', 'Ã\x9a': '&amp;Uacute;', 'Ã£': '&amp;atilde;', 'Â¡': '&amp;iexcl;', 'Ã\x8a': '&amp;Ecirc;', 'Ã\x85': '&amp;Aring;', 'Âª': '&amp;ordf;', 'Ã\x9f': '&amp;szlig;', 'Ãª': '&amp;ecirc;', 'Ã\x91': '&amp;Ntilde;', 'Ã\x83': '&amp;Atilde;', 'Ã¦': '&amp;aelig;', 'Ã\x9e': '&amp;THORN;', 'Ã\x8e': '&amp;Icirc;', 'Ã\x9d': '&amp;Yacute;', 'Ã¨': '&amp;egrave;', 'Â¶': '&amp;para;', 'Ã§': '&amp;ccedil;', 'Ã\x95': '&amp;Otilde;', 'Ã«': '&amp;euml;', 'Â©': '&amp;copy;', 'Ã¿': '&amp;yuml;', 'Ã\x98': '&amp;Oslash;', 'Ã\x93': '&amp;Oacute;', 'Â¢': '&amp;cent;', 'Ãº': '&amp;uacute;', &quot;'&quot;: '&amp;apos;', 'Ã¼': '&amp;uuml;', 'Ã\x8b': '&amp;Euml;', 'Ã©': '&amp;eacute;', 'Ã¹': '&amp;ugrave;', 'Ã\x94': '&amp;Ocirc;', 'Ã¶': '&amp;ouml;', 'Ã\x88': '&amp;Egrave;', '&lt;': '&amp;lt;', 'Â¥': '&amp;yen;'}</em><a class="headerlink" href="#boostNode.extension.native.String.SPECIAL_HTML_SEQUENCES" title="Permalink to this definition">¶</a></dt>
 <dd><p>All chars wich should be observed by handling with html sequences.</p>
 </dd></dl>
 
@@ -976,7 +976,7 @@
 
 <dl class="attribute">
 <dt id="boostNode.extension.native.String.SPECIAL_URL_SEQUENCES">
-<tt class="descname">SPECIAL_URL_SEQUENCES</tt><em class="property"> = {'%22': '&quot;', '+': ' ', '%C3%96': 'Ã\x96', '%20': ' ', '%7E': '~', '%C3%9C': 'Ã\x9c', '%2F': '/', '%C3%BC': 'Ã¼', '%C3%A4': 'Ã¤', '%C3%B6': 'Ã¶', '%C3%84': 'Ã\x84'}</em><a class="headerlink" href="#boostNode.extension.native.String.SPECIAL_URL_SEQUENCES" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">SPECIAL_URL_SEQUENCES</tt><em class="property"> = {'%C3%84': 'Ã\x84', '%C3%96': 'Ã\x96', '%20': ' ', '%C3%9C': 'Ã\x9c', '%2F': '/', '%22': '&quot;', '%C3%BC': 'Ã¼', '+': ' ', '%C3%B6': 'Ã¶', '%7E': '~', '%C3%A4': 'Ã¤'}</em><a class="headerlink" href="#boostNode.extension.native.String.SPECIAL_URL_SEQUENCES" title="Permalink to this definition">¶</a></dt>
 <dd><p>All chars wich should be observed by handling with url sequences.</p>
 </dd></dl>
 

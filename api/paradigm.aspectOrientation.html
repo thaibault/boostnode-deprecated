@@ -57,7 +57,7 @@
 <p>This module implements features like joint points, point cuts and advices     for implementing aspect orientated code.</p>
 <dl class="data">
 <dt id="boostNode.paradigm.aspectOrientation.ASPECTS">
-<tt class="descclassname">boostNode.paradigm.aspectOrientation.</tt><tt class="descname">ASPECTS</tt><em class="property"> = [{'advice': ({'callback': &lt;class 'boostNode.aspect.signature.CheckArguments'&gt;, 'event': 'call'}, {'callback': &lt;class 'boostNode.aspect.signature.CheckReturnValue'&gt;, 'event': 'return'}), 'point_cut': 'boostNode\\..*'}]</em><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.ASPECTS" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">boostNode.paradigm.aspectOrientation.</tt><tt class="descname">ASPECTS</tt><em class="property"> = [{'advice': ({'event': 'call', 'callback': &lt;class 'boostNode.aspect.signature.CheckArguments'&gt;}, {'event': 'return', 'callback': &lt;class 'boostNode.aspect.signature.CheckReturnValue'&gt;}), 'point_cut': 'boostNode\\..*'}]</em><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.ASPECTS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Saves all aspects for cross cutting concerns for whole library and program code that uses this feature.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ASPECTS</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
