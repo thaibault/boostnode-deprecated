@@ -2353,9 +2353,9 @@ class Dictionary(Object, builtins.dict):
                     iterable=value, key_wrapper=key_wrapper,
                     value_wrapper=value_wrapper)
             else:
-# # python3.4
+# # python2.7
 # #                 if builtins.isinstance(value, builtins.str):
-# #                     value = builtins.unicode(
+# #                    value = builtins.unicode(
 # #                         value, FileHandler.DEFAULT_ENCODING)
                 pass
 # #
