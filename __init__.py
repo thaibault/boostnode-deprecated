@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.4
+#!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 
 # region header
@@ -342,10 +342,10 @@
     '\\n    Module documentation which should be useable as help message fo...'
 """
 
-# # python2.7
-# # from __future__ import absolute_import, division, print_function, \
-# #     unicode_literals
-pass
+# # python3.4
+# # pass
+from __future__ import absolute_import, division, print_function, \
+    unicode_literals
 # #
 
 __author__ = 'Torben Sickert'
@@ -357,8 +357,8 @@ __maintainer_email__ = 't.sickert["~at~"]gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-# # python2.7 import __builtin__ as builtins
-import builtins
+# # python3.4 import builtins
+import __builtin__ as builtins
 import inspect
 import logging
 import os
@@ -375,8 +375,8 @@ else:
 # region functions
 
 
-# # python2.7 def __get_all_modules__(path=sys.path[0]):
-def __get_all_modules__(path=sys.path[0]) -> builtins.list:
+# # python3.4 def __get_all_modules__(path=sys.path[0]) -> builtins.list:
+def __get_all_modules__(path=sys.path[0]):
     '''
         This method provides a generic way to determine all modules in \
         current package or folder. It is useful for "__init__.py" files.
