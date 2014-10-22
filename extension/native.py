@@ -52,10 +52,9 @@ pass
 '''Make boostNode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
-import boostNode
 # # python3.4
 # # from boostNode.extension.type import Self, SelfClass, SelfClassObject
-pass
+import boostNode
 # #
 from boostNode.paradigm.aspectOrientation import FunctionDecorator, JointPoint
 from boostNode.paradigm.objectOrientation import Class
@@ -1067,6 +1066,8 @@ class String(Object, builtins.str):
 # #
             content = builtins.str(content)
         self.content = content
+        if isinstance(self.content, unicode):
+            raise IOError(self.content)
 
         # # # endregion
 
@@ -1618,7 +1619,8 @@ class String(Object, builtins.str):
             ''
         '''
 # # python3.4
-# #         self.content = re.compile('{([a-z]+)}').sub('\{\\1\}', self.content)
+# #         self.content = re.compile('{([a-z]+)}').sub(
+# #             '\{\\1\}', self.content)
         self.content = re.compile('{([a-z]+)}').sub(
             '\{\\1\}', builtins.unicode(self.content, boostNode.ENCODING)
         ).encode(boostNode.ENCODING)
@@ -1737,8 +1739,15 @@ class String(Object, builtins.str):
         '''
         if builtins.isinstance(search, builtins.dict):
             for search_string, replacement in search.items():
-                self.content = self.content.replace(
-                    search_string, replacement, *arguments, **keywords)
+                # NOTE: We don't use introspection here because this method is
+                # under heavy use.
+                #'''Take this method name via introspection.'''
+                #self.content = builtins.getattr(
+                #    self.__class__(self.content), inspect.stack()[0][3]
+                #)(search_string, replacement, *arguments, **keywords).content
+                self.content = self.__class__(self.content).replace(
+                    search_string, replacement, *arguments, **keywords
+                ).content
         else:
             # TODO use stringify
             # TODO grap encoding from central point not FileHandler
@@ -1752,8 +1761,10 @@ class String(Object, builtins.str):
             if builtins.isinstance(replace, builtins.str):
                 replace = builtins.unicode(
                     replace, boostNode.ENCODING)
-            self.content = self.content.replace(
-                search, replace, *arguments, **keywords)
+            self.content = builtins.unicode(
+                self.content, boostNode.ENCODING
+            ).replace(search, replace, *arguments, **keywords).encode(
+                boostNode.ENCODING)
 # #
         return self
 

@@ -81,6 +81,7 @@ import urlparse
 '''Make boostNode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
+# # python3.4 pass
 import boostNode
 from boostNode.extension.file import Handler as FileHandler
 from boostNode.extension.native import Module, Object, \

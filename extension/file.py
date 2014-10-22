@@ -50,10 +50,10 @@ pass
 '''Make boostNode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
-import boostNode
 # # python3.4
 # # from boostNode.extension.native import Object, String
 # # from boostNode.extension.type import Self, SelfClass, SelfClassObject
+import boostNode
 from boostNode.extension.native import Dictionary, Object, String
 from boostNode.extension.type import Self
 # #
