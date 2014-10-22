@@ -50,6 +50,7 @@ pass
 '''Make boostNode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
+import boostNode
 # # python3.4
 # # from boostNode.extension.native import Object, String
 # # from boostNode.extension.type import Self, SelfClass, SelfClassObject
@@ -166,9 +167,6 @@ class Handler(Class):
         Defines the default format of current operating system for \
         calculating with file sizes.
     '''
-# # python3.4     DEFAULT_ENCODING = 'utf_8'
-    DEFAULT_ENCODING = builtins.str('utf_8')
-    '''Defines char set for handling text-based files internally.'''
     MAX_PATH_LENGTH = 32767
     '''Defines the maximum number of signs in a file path.'''
     MAX_SIZE_NUMBER_LENGTH = 24  # 10^21 byte = 1 Yottabyte (-1 byte)
@@ -656,7 +654,7 @@ class Handler(Class):
         self._next_element_index = 0
         '''Defines the encoding for writing and reading text-based files.'''
         if not encoding:
-            encoding = self.DEFAULT_ENCODING
+            encoding = boostNode.ENCODING
         self._encoding = encoding
         self._respect_root_path = respect_root_path
         self._output_with_root_prefix = output_with_root_prefix
@@ -940,7 +938,7 @@ class Handler(Class):
     def get_encoding(self):
         '''
             Returns encoding for current file handler. If no encoding was set \
-            "Handler.DEFAULT_ENCODING" is default.
+            "boostNode.ENCODING" is default.
 
             Examples:
 
@@ -2094,7 +2092,7 @@ class Handler(Class):
             ...     handler.content = str(chr(1))
             ... else:
             ...     handler.content = bytes(
-            ...         chr(1), handler.DEFAULT_ENCODING
+            ...         chr(1), boostNode.ENCODING
             ...     ) # doctest: +ELLIPSIS
             >>> # #
         '''
@@ -2653,11 +2651,11 @@ class Handler(Class):
             try:
 # # python3.4
 # #                 with builtins.open(
-# #                     path, mode='r', encoding=self.DEFAULT_ENCODING,
+# #                     path, mode='r', encoding=boostNode.ENCODING,
 # #                     errors='strict'
 # #                 ) as file:
                 with codecs.open(
-                    path, mode='r', encoding=self.DEFAULT_ENCODING,
+                    path, mode='r', encoding=boostNode.ENCODING,
                     errors='strict'
                 ) as file:
 # #
@@ -3052,7 +3050,7 @@ class Handler(Class):
                             file_name, builtins.unicode
                         ):
                             file_name = builtins.unicode(
-                                file_name, self.DEFAULT_ENCODING)
+                                file_name, boostNode.ENCODING)
 # #
                         try:
                             yield self.__class__(
@@ -4933,7 +4931,7 @@ class Handler(Class):
 # # python3.4
 # #             os_statvfs = os.statvfs(self._path)
             os_statvfs = os.statvfs(builtins.str(self._path.encode(
-                self.DEFAULT_ENCODING)))
+                boostNode.ENCODING)))
 # #
             self.__class__.BLOCK_SIZE_IN_BYTE = os_statvfs.f_bsize
             self.__class__.MAX_FILE_NAME_LENGTH = os_statvfs.f_namemax

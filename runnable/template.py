@@ -50,6 +50,7 @@ import urllib
 '''Make boostNode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
+import boostNode
 from boostNode.extension.file import Handler as FileHandler
 from boostNode.extension.native import Dictionary, Module, \
     InstancePropertyInitializer, String
@@ -967,7 +968,7 @@ class Parser(Class, Runnable):
 # #     def _initialize(
 # #         self: Self, template: (builtins.str, FileHandler), string=None,
 # #         cache_path=None, full_caching=False, propagate_full_caching=False,
-# #         file_encoding=FileHandler.DEFAULT_ENCODING,
+# #         file_encoding=boostNode.ENCODING,
 # #         placeholder_name_pattern='[a-zA-Z0-9_\[\]\'"\.()\\\\,\-+ :/={}$]+',
 # #         command_line_placeholder_name_pattern='(?s)'
 # #                                               '[a-zA-Z0-9_\[\]\.(),\-+]+',
@@ -1028,7 +1029,7 @@ class Parser(Class, Runnable):
     def _initialize(
         self, template, string=None, cache_path=None, full_caching=False,
         propagate_full_caching=False,
-        file_encoding=FileHandler.DEFAULT_ENCODING,
+        file_encoding=boostNode.ENCODING,
         placeholder_name_pattern='[a-zA-Z0-9_\[\]\'"\.()\\\\,\-+ :/={}$]+',
         command_line_placeholder_name_pattern='(?s)'
                                               '[a-zA-Z0-9_\[\]\.(),\-+]+',
@@ -1404,7 +1405,7 @@ class Parser(Class, Runnable):
                 'in compiled template: %s).\n%s: %s%s',
                 self._determine_template_description(), source_line,
                 mapped_line, __exception__.__name__, builtins.unicode(
-                    builtins.str(exception), FileHandler.DEFAULT_ENCODING
+                    builtins.str(exception), boostNode.ENCODING
                 ), rendered_python_code)
             raise exception
 # #
@@ -1475,8 +1476,7 @@ class Parser(Class, Runnable):
 # #                         property_name, builtins.str(value))
                     native_exception_description += '%s: "%s"\n' % (
                         property_name, builtins.unicode(
-                            builtins.repr(value),
-                            FileHandler.DEFAULT_ENCODING))
+                            builtins.repr(value), boostNode.ENCODING))
 # #
             native_exception_description = (
                 '\n\nNative exception object:\n\n%s' %
@@ -1551,7 +1551,7 @@ class Parser(Class, Runnable):
                 exception_message=exception_message,
                 native_exception_description=native_exception_description,
                 rendered_python_code=rendered_python_code.encode(
-                    FileHandler.DEFAULT_ENCODING)))
+                    boostNode.ENCODING)))
         raise exception
 # #
 
@@ -1763,12 +1763,12 @@ class Parser(Class, Runnable):
                 return '"%s"' % object
             return object
         if builtins.isinstance(object, builtins.str):
-            result = builtins.unicode(object, FileHandler.DEFAULT_ENCODING)
+            result = builtins.unicode(object, boostNode.ENCODING)
             if mark_string:
                 return '"%s"' % result
             return result
         return builtins.unicode(
-            builtins.str(object), FileHandler.DEFAULT_ENCODING)
+            builtins.str(object), boostNode.ENCODING)
 # #
 
     @JointPoint

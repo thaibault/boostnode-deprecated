@@ -61,6 +61,7 @@ pass
 '''Make boostNode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
+import boostNode
 from boostNode.extension.file import Handler as FileHandler
 from boostNode.extension.native import Dictionary, Module, Object, String
 from boostNode.extension.output import Buffer, Logger, Print
@@ -989,8 +990,7 @@ class Platform(builtins.object):
         elif builtins.len(mac_address) != 12:
             raise __exception__('Incorrect MAC-address format given.')
         '''Pad the synchronization stream.'''
-        data = b'FFFFFFFFFFFF' + (mac_address * 20).encode(
-            FileHandler.DEFAULT_ENCODING)
+        data = b'FFFFFFFFFFFF' + (mac_address * 20).encode(boostNode.ENCODING)
         send_data = b''
         '''Split up the hex values and pack.'''
         for counter in builtins.range(0, builtins.len(data), 2):

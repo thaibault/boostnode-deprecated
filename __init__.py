@@ -372,8 +372,15 @@ else:
 
 # endregion
 
-# region functions
+# region flags
 
+sys.dont_write_bytecode = True
+'''Don't generate cached byte code files for imported modules.'''
+
+# endregion
+
+
+# region functions
 
 # # python3.4 def __get_all_modules__(path=sys.path[0]) -> builtins.list:
 def __get_all_modules__(path=sys.path[0]):
@@ -431,10 +438,18 @@ if not builtins.getattr(builtins, "WindowsError", None):
 
 # endregion
 
-sys.dont_write_bytecode = True
-'''Don't generate cached byte code files for imported modules.'''
+
+# region constants
+
+ENCODING = 'utf_8'
+'''Defines the global default encoding.'''
 __all__ = __get_all_modules__()
 '''Determine all modules in this folder via introspection.'''
+
+# endregion
+
+# region aspects
+
 '''
     The function "__get_all_modules__()" has to be defined before importing \
     any modules from this package.
@@ -455,6 +470,8 @@ if __name__ != '__main__':
             ' possible. %s: %s', exception.__class__.__name__,
             builtins.str(exception))
         sys.exit(1)
+
+# endregion
 
 # region footer
 

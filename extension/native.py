@@ -203,8 +203,6 @@ class Model(builtins.object):
             >>> repr(UserModel()) # doctest: +ELLIPSIS
             '... with properties "a": "...hans...", "b": "5" and "c": "True".'
         '''
-        from boostNode.extension.file import Handler as FileHandler
-
         if self.__dict__:
             property_descriptions = ''
             index = 1
@@ -220,8 +218,7 @@ class Model(builtins.object):
 # # python3.4
 # #                 value = builtins.repr(value)
                 if builtins.isinstance(value, builtins.unicode):
-                    value = builtins.str(value.encode(
-                        FileHandler.DEFAULT_ENCODING))
+                    value = builtins.str(value.encode(boostNode.ENCODING))
                 if not builtins.isinstance(value, (
                     builtins.unicode, builtins.str
                 )):
@@ -316,8 +313,6 @@ class Model(builtins.object):
             >>> user.get_dictionary() == {'a': 3}
             True
         '''
-        from boostNode.extension.file import Handler as FileHandler
-
         result = {}
         if not property_names:
             if '__table__' in self.__dict__:
@@ -334,10 +329,10 @@ class Model(builtins.object):
 # # python3.4
 # #             pass
             if builtins.isinstance(name, builtins.str):
-                name = builtins.unicode(name, FileHandler.DEFAULT_ENCODING)
+                name = builtins.unicode(name, boostNode.ENCODING)
             if builtins.isinstance(value, builtins.str):
                 value = builtins.unicode(
-                    value, FileHandler.DEFAULT_ENCODING)
+                    value, boostNode.ENCODING)
 # #
             key = key_wrapper(key=name, value=value)
             result[key] = value_wrapper(key, value)
@@ -555,16 +550,14 @@ class AuthenticationModel(Model):
         '''
         self.validate_property(self, 'password', value)
 # # python3.4
-# #         from boostNode.extension.file import Handler as FileHandler
-# #
 # #         self.password_salt = base64encode(os.urandom(
 # #             self._password_information['salt']['length']
-# #         )).decode(FileHandler.DEFAULT_ENCODING)
+# #         )).decode(boostNode.ENCODING)
 # #         self.password_hash = sha224(
 # #             ('%s%s%s' % (
 # #                 value, self._password_information['pepper'],
 # #                 self.password_salt
-# #             )).encode(FileHandler.DEFAULT_ENCODING)
+# #             )).encode(boostNode.ENCODING)
 # #         ).hexdigest()
         self.password_salt = os.urandom(
             self._password_information['salt']['length']
@@ -593,13 +586,11 @@ class AuthenticationModel(Model):
             False
         '''
 # # python3.4
-# #         from boostNode.extension.file import Handler as FileHandler
-# #
 # #         return self.password_hash == sha224(
 # #             ('%s%s%s' % (
 # #                 value, self._password_information['pepper'],
 # #                 self.password_salt
-# #             )).encode(FileHandler.DEFAULT_ENCODING)
+# #             )).encode(boostNode.ENCODING)
 # #         ).hexdigest()
         return self.password_hash == sha224(
             '%s%s%s' % (
@@ -781,12 +772,9 @@ class Object(Class):
             NOTE: This is a dirty workaround to handle python2.7 lack of \
             differentiation between "string" and "bytes" objects.
         '''
-        from boostNode.extension.file import Handler as FileHandler
-
         content = self.content
         if builtins.isinstance(content, builtins.unicode):
-            content = builtins.str(content.encode(
-                FileHandler.DEFAULT_ENCODING))
+            content = builtins.str(content.encode(boostNode.ENCODING))
         text_chars = builtins.str().join(builtins.map(
             builtins.chr,
             builtins.range(7, 14) + [27] + builtins.range(0x20, 0x100)))
@@ -1059,7 +1047,6 @@ class String(Object, builtins.str):
             >>> String(['A', 5]).content
             "['A', 5]"
         '''
-        from boostNode.extension.file import Handler as FileHandler
 
         # # # region properties
 
@@ -1076,7 +1063,7 @@ class String(Object, builtins.str):
             content, builtins.str
         ) or builtins.isinstance(content, String):
             if builtins.isinstance(content, builtins.unicode):
-                content = content.encode(FileHandler.DEFAULT_ENCODING)
+                content = content.encode(boostNode.ENCODING)
 # #
             content = builtins.str(content)
         self.content = content
@@ -1094,8 +1081,13 @@ class String(Object, builtins.str):
             >>> repr(String('hans'))
             'Object of "String" with "hans" saved.'
         '''
+# # python3.4
+# #         return 'Object of "{class_name}" with "{content}" saved.'.format(
+# #             class_name=self.__class__.__name__, content=self.content)
         return 'Object of "{class_name}" with "{content}" saved.'.format(
-            class_name=self.__class__.__name__, content=self.content)
+            class_name=self.__class__.__name__, content=builtins.unicode(
+                self.content, boostNode.ENCODING))
+# #
 
     @JointPoint
 # # python3.4     def __len__(self: Self) -> builtins.int:
@@ -1361,15 +1353,36 @@ class String(Object, builtins.str):
                 lambda abbreviation: '%s)|(?:%s' % (
                     abbreviation.capitalize(), abbreviation),
                 abbreviations))
+# # python3.4
+# #         self.content = re.compile(
+# #             '(?!^)(?P<before>%s)(?P<abbreviation>(?:%s))'
+# #             '(?P<after>%s|$)' % (delimiter, abbreviations, delimiter)
+# #         ).sub(
+# #             lambda match: '%s%s%s' % (
+# #                 match.group('before'),
+# #                 match.group('abbreviation').upper(),
+# #                 match.group('after')
+# #             ), self.content)
+# #         self.content = re.compile(
+# #             '(?!^)%s(?P<first_letter>[a-zA-Z0-9])' % delimiter
+# #         ).sub(
+# #             lambda match: match.group('first_letter').upper(),
+# #             self.content)
         self.content = re.compile(
-            '(?!^)(?P<before>%s)(?P<abbreviation>(?:%s))(?P<after>%s|$)' % (
-                delimiter, abbreviations, delimiter)
-        ).sub(lambda match: '%s%s%s' % (match.group('before'), match.group(
-            'abbreviation'
-        ).upper(), match.group('after')), self.content)
+            '(?!^)(?P<before>%s)(?P<abbreviation>(?:%s))'
+            '(?P<after>%s|$)' % (delimiter, abbreviations, delimiter)
+        ).sub(
+            lambda match: '%s%s%s' % (
+                match.group('before'), match.group('abbreviation').upper(),
+                match.group('after')
+            ), builtins.unicode(self.content, boostNode.ENCODING))
         self.content = re.compile(
             '(?!^)%s(?P<first_letter>[a-zA-Z0-9])' % delimiter
-        ).sub(lambda match: match.group('first_letter').upper(), self.content)
+        ).sub(
+            lambda match: match.group('first_letter').upper(),
+            self.content
+        ).encode(boostNode.ENCODING)
+# #
         return self
 
     @JointPoint
@@ -1421,15 +1434,27 @@ class String(Object, builtins.str):
         escaped_delimiter = self.__class__(delimiter).validate_regex().content
         abbreviations = ')|(?:'.join(builtins.map(
             lambda abbreviation: abbreviation.upper(), abbreviations))
+# # python3.4
+# #         self.content = re.compile(
+# #             '((?:%s))((?:%s))' % (abbreviations, abbreviations)
+# #         ).sub('\\1%s\\2' % delimiter, self.content)
         self.content = re.compile(
             '((?:%s))((?:%s))' % (abbreviations, abbreviations)
-        ).sub('\\1%s\\2' % delimiter, self.content)
+        ).sub('\\1%s\\2' % delimiter, builtins.unicode(
+            self.content, boostNode.ENCODING))
+# #
         self.content = re.compile(
             '([^%s])([A-Z][a-z]+)' % escaped_delimiter
         ).sub('\\1%s\\2' % delimiter, self.content)
+# # python3.4
+# #         self.content = re.compile(
+# #             '([a-z0-9])([A-Z])'
+# #         ).sub('\\1%s\\2' % delimiter, self.content).lower()
         self.content = re.compile(
             '([a-z0-9])([A-Z])'
-        ).sub('\\1%s\\2' % delimiter, self.content).lower()
+        ).sub('\\1%s\\2' % delimiter, self.content).lower().encode(
+            boostNode.ENCODING)
+# #
         return self
 
     @JointPoint
@@ -1592,7 +1617,12 @@ class String(Object, builtins.str):
             >>> String().validate_format().content
             ''
         '''
-        self.content = re.compile('{([a-z]+)}').sub('\{\\1\}', self.content)
+# # python3.4
+# #         self.content = re.compile('{([a-z]+)}').sub('\{\\1\}', self.content)
+        self.content = re.compile('{([a-z]+)}').sub(
+            '\{\\1\}', builtins.unicode(self.content, boostNode.ENCODING)
+        ).encode(boostNode.ENCODING)
+# #
         return self
 
     @JointPoint
@@ -1707,30 +1737,24 @@ class String(Object, builtins.str):
         '''
         if builtins.isinstance(search, builtins.dict):
             for search_string, replacement in search.items():
-# # python3.4
-# #                 self.content = self.content.replace(
-# #                     builtins.str(search_string), builtins.str(replacement),
-# #                     *arguments, **keywords)
-                if not builtins.isinstance(
-                    search_string, builtins.unicode
-                ):
-                    if builtins.isinstance(search_string, builtins.str):
-                        search_string = builtins.unicode(
-                            search_string, FileHandler.DEFAULT_ENCODING)
-                    else:
-                        search_string = builtins.str(search_string)
-                if not builtins.isinstance(replacement, builtins.unicode):
-                    if builtins.isinstance(replacement, builtins.str):
-                        replacement = builtins.unicode(
-                            replacement, FileHandler.DEFAULT_ENCODING)
-                    else:
-                        replacement = builtins.str(replacement)
                 self.content = self.content.replace(
                     search_string, replacement, *arguments, **keywords)
-# #
         else:
+            # TODO use stringify
+            # TODO grap encoding from central point not FileHandler
+# # python3.4
+# #             self.content = self.content.replace(
+# #                 builtins.str(search), builtins.str(replace),
+# #                 *arguments, **keywords)
+            if builtins.isinstance(search, builtins.str):
+                search = builtins.unicode(
+                    search, boostNode.ENCODING)
+            if builtins.isinstance(replace, builtins.str):
+                replace = builtins.unicode(
+                    replace, boostNode.ENCODING)
             self.content = self.content.replace(
                 search, replace, *arguments, **keywords)
+# #
         return self
 
     @JointPoint
@@ -1816,9 +1840,16 @@ class String(Object, builtins.str):
                 Take this method name from regular expression object via \
                 introspection.
             '''
+# # python3.4
+# #             self.content = builtins.getattr(
+# #                 re.compile(search), inspect.stack()[0][3]
+# #             )(replace, self.content, *arguments, **keywords)
             self.content = builtins.getattr(
                 re.compile(search), inspect.stack()[0][3]
-            )(replace, self.content, *arguments, **keywords)
+            )(replace, builtins.unicode(
+                self.content, boostNode.ENCODING
+            ), *arguments, **keywords).encode(boostNode.ENCODING)
+# #
         return self
 
     @JointPoint
@@ -1859,6 +1890,7 @@ class String(Object, builtins.str):
             >>> result[1]
             2
         '''
+        # TODO handle for right unicode handling
         if builtins.isinstance(search, builtins.dict):
             number_of_replaces = 0
             for search_string, replacement in search.items():
@@ -2325,8 +2357,6 @@ class Dictionary(Object, builtins.dict):
             ... ).content == {'_a_': {'_b_'}, '_b_': ['_0_', '_1_']}
             True
         '''
-        from boostNode.extension.file import Handler as FileHandler
-
         for key, value in copy(self.content).items():
             del self.content[key]
             key = key_wrapper(key, value)
@@ -2357,8 +2387,7 @@ class Dictionary(Object, builtins.dict):
 # # python3.4
 # #                 pass
                 if builtins.isinstance(value, builtins.str):
-                    value = builtins.unicode(
-                        value, FileHandler.DEFAULT_ENCODING)
+                    value = builtins.unicode(value, boostNode.ENCODING)
 # #
                 self.content[key] = value_wrapper(key, value)
         return self
@@ -2447,8 +2476,6 @@ class Dictionary(Object, builtins.dict):
             Converts all keys or values and nested keys or values with given \
             callback function in a given iterable.
         '''
-        from boostNode.extension.file import Handler as FileHandler
-
         if builtins.isinstance(iterable, builtins.set):
             return cls._convert_set(iterable, key_wrapper, value_wrapper)
 # # python3.4
@@ -2482,8 +2509,7 @@ class Dictionary(Object, builtins.dict):
 # # python3.4
 # #                     pass
                     if builtins.isinstance(value, builtins.str):
-                        value = builtins.unicode(
-                            value, FileHandler.DEFAULT_ENCODING)
+                        value = builtins.unicode(value, boostNode.ENCODING)
 # #
                     iterable[key] = value_wrapper(key, value)
         except builtins.TypeError as exception:

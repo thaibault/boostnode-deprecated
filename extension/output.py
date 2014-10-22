@@ -43,6 +43,7 @@ import Queue as native_queue
 '''Make boostNode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
+import boostNode
 from boostNode.extension.file import Handler as FileHandler
 from boostNode.extension.native import Module
 # # python3.4 from boostNode.extension.type import Self, SelfClass
@@ -186,7 +187,7 @@ class Buffer(Class, logging.StreamHandler):
                     class_name=self.__class__.__name__,
                     type=buffer_type, type_addition=type_addition,
                     content=builtins.unicode(
-                        self.content, FileHandler.DEFAULT_ENCODING)))
+                        self.content, boostNode.ENCODING)))
 # #
         return(
             'Object of "{class_name}" ({type} buffered{type_addition}) '
@@ -259,8 +260,7 @@ class Buffer(Class, logging.StreamHandler):
         if self.force_string and builtins.isinstance(
             self._content, builtins.unicode
         ):
-            self._content = self._content.encode(
-                FileHandler.DEFAULT_ENCODING)
+            self._content = self._content.encode(boostNode.ENCODING)
 # #
         return self._content
 
@@ -296,7 +296,7 @@ class Buffer(Class, logging.StreamHandler):
         if self.force_string and builtins.isinstance(
             content, builtins.unicode
         ):
-            content = content.encode(FileHandler.DEFAULT_ENCODING)
+            content = content.encode(boostNode.ENCODING)
 # #
         with self._lock:
             self.last_written = content
@@ -386,7 +386,7 @@ class Buffer(Class, logging.StreamHandler):
 # #         pass
         if self.force_string:
             self._content = builtins.str()
-            content = content.encode(FileHandler.DEFAULT_ENCODING)
+            content = content.encode(boostNode.ENCODING)
 # #
         return content
 

@@ -81,6 +81,7 @@ import urlparse
 '''Make boostNode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
+import boostNode
 from boostNode.extension.file import Handler as FileHandler
 from boostNode.extension.native import Module, Object, \
     InstancePropertyInitializer, String
@@ -999,9 +1000,8 @@ class Web(Class, Runnable):
 # #     def _initialize(
 # #         self: Self, root=None, host_name='', port=0, default='',
 # #         public_key_file=None, stop_order='stop',
-# #         encoding=FileHandler.DEFAULT_ENCODING,
-# #         request_whitelist=('*:/.*',), request_blacklist=(),
-# #         same_process_request_whitelist=(),
+# #         encoding=boostNode.ENCODING, request_whitelist=('*:/.*',),
+# #         request_blacklist=(), same_process_request_whitelist=(),
 # #         # NOTE: Tuple for explicit web_server file reference validation.
 # #         # ('text/.+$', 'image/.+$', 'application/(x-)?javascript$')
 # #         static_mime_type_pattern=('.+/.+$',),
@@ -1026,9 +1026,8 @@ class Web(Class, Runnable):
     def _initialize(
         self, root=None, host_name='', port=0, default='',
         public_key_file=None, stop_order='stop',
-        encoding=FileHandler.DEFAULT_ENCODING,
-        request_whitelist=('*:/.*',), request_blacklist=(),
-        same_process_request_whitelist=(),
+        encoding=boostNode.ENCODING, request_whitelist=('*:/.*',),
+        request_blacklist=(), same_process_request_whitelist=(),
         # NOTE: Tuple for explicit web_server file reference validation.
         # ('text/.+$', 'image/.+$', 'application/(x-)?javascript$')
         static_mime_type_pattern=('.+/.+$',),
@@ -2308,7 +2307,7 @@ class CGIHTTPRequestHandler(
 # #         pass
         if builtins.isinstance(request_description, builtins.str):
             request_description = builtins.unicode(
-                request_description, FileHandler.DEFAULT_ENCODING)
+                request_description, boostNode.ENCODING)
 # #
         __logger__.info(format.format(
             client_ip=self.client_address[0],
@@ -3764,8 +3763,7 @@ class CGIHTTPRequestHandler(
                     500, '%s: %s' %
                     (exception.__class__.__name__,
                      re.compile('\n+').sub('\n', builtins.unicode(
-                         builtins.str(exception),
-                         FileHandler.DEFAULT_ENCODING))))
+                         builtins.str(exception), boostNode.ENCODING))))
 # #
             else:
                 self.send_error(500, 'Internal server error')
