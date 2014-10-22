@@ -72,12 +72,6 @@
 </dd></dl>
 
 <dl class="attribute">
-<dt id="boostNode.extension.file.Handler.DEFAULT_ENCODING">
-<tt class="descname">DEFAULT_ENCODING</tt><em class="property"> = 'utf_8'</em><a class="headerlink" href="#boostNode.extension.file.Handler.DEFAULT_ENCODING" title="Permalink to this definition">¶</a></dt>
-<dd><p>Defines char set for handling text-based files internally.</p>
-</dd></dl>
-
-<dl class="attribute">
 <dt id="boostNode.extension.file.Handler.FORMATS">
 <tt class="descname">FORMATS</tt><em class="property"> = {u'Terabyte': {u'notations': (u'tb', u'tib', u'terabyte', u'tebibyte', u'tbyte', u'tibyte', u'terab', u'tebib'), u'useful_range': (1099511627777, 1125899906842624), u'binary_factor': 1099511627776, u'decimal_factor': 1000000000000}, u'Exabyte': {u'notations': (u'eb', u'eib', u'exabyte', u'exbibyte', u'ebyte', u'eibyte', u'exab', u'exib'), u'useful_range': (1152921504606846977, 1180591620717411303424L), u'binary_factor': 1152921504606846976, u'decimal_factor': 1000000000000000000}, u'Petabyte': {u'notations': (u'pb', u'pib', u'petabyte', u'pebibyte', u'pbyte', u'pibyte', u'petab', u'pebib'), u'useful_range': (1125899906842625, 1152921504606846976), u'binary_factor': 1125899906842624, u'decimal_factor': 1000000000000000}, u'Zettabyte': {u'notations': (u'zb', u'zib', u'zettabyte', u'zebibyte', u'zbyte', u'zibyte', u'zettab', u'zebib'), u'useful_range': (1180591620717411303425L, 1208925819614629174706176L), u'binary_factor': 1180591620717411303424L, u'decimal_factor': 1000000000000000000000L}, u'Kilobyte': {u'notations': (u'kb', u'kib', u'kilobyte', u'kibibyte', u'kbyte', u'kibyte', u'kilob', u'kibib'), u'useful_range': (1025, 1048576), u'binary_factor': 1024, u'decimal_factor': 1000}, u'Byte': {u'notations': (u'byte', u'b'), u'useful_range': (0, 1024), u'binary_factor': 1, u'decimal_factor': 1}, u'Megabyte': {u'notations': (u'mb', u'mib', u'megabyte', u'mebibyte', u'mbyte', u'mibyte', u'megab', u'mebib'), u'useful_range': (1048577, 1073741824), u'binary_factor': 1048576, u'decimal_factor': 1000000}, u'Yottabyte': {u'notations': (u'yb', u'yib', u'yottabyte', u'yobibyte', u'ybyte', u'yibyte', u'yottab', u'yobib'), u'useful_range': (1208925819614629174706177L, None), u'binary_factor': 1208925819614629174706176L, u'decimal_factor': 1000000000000000000000000L}, u'Gigabyte': {u'notations': (u'gb', u'gib', u'gigabyte', u'gibibyte', u'gbyte', u'gibyte', u'gigab', u'gibib'), u'useful_range': (1073741825, 1099511627776), u'binary_factor': 1073741824, u'decimal_factor': 1000000000}}</em><a class="headerlink" href="#boostNode.extension.file.Handler.FORMATS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Supported formats to handle the size of file.</p>
@@ -715,7 +709,7 @@
 <dl class="staticmethod">
 <dt id="boostNode.extension.file.Handler.get_encoding">
 <em class="property">static </em><tt class="descname">get_encoding</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.get_encoding" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns encoding for current file handler. If no encoding was set             &#8220;Handler.DEFAULT_ENCODING&#8221; is default.</p>
+<dd><p>Returns encoding for current file handler. If no encoding was set             &#8220;boostNode.ENCODING&#8221; is default.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Handler</span><span class="p">()</span><span class="o">.</span><span class="n">encoding</span>
 <span class="go">&#39;utf_8&#39;</span>
@@ -2291,7 +2285,7 @@
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
 <span class="gp">... </span><span class="k">else</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">(</span>
-<span class="gp">... </span>        <span class="nb">chr</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">handler</span><span class="o">.</span><span class="n">DEFAULT_ENCODING</span>
+<span class="gp">... </span>        <span class="nb">chr</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">boostNode</span><span class="o">.</span><span class="n">ENCODING</span>
 <span class="gp">... </span>    <span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="c"># #</span>
 </pre></div>
