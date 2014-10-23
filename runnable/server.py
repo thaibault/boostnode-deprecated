@@ -3524,7 +3524,7 @@ class CGIHTTPRequestHandler(
 # #         else:
 # #             gzip_file_handler.write(content.encode(
 # #                 encoding=self.server.web.encoding))
-        gzip_file_handler.write(content)
+        gzip_file_handler.write(content.encode(self.server.web.encoding))
 # #
         gzip_file_handler.close()
         return output.getvalue()

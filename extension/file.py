@@ -3007,6 +3007,24 @@ class Handler(Class):
             >>> list(not_existing_file.list())
             []
 
+            >>> existing_file = Handler(__test_folder__.path + 'list_file')
+            >>> existing_file.content = ''
+            >>> existing_file.list() # doctest: +ELLIPSIS
+            <generator object list at ...>
+            >>> len(existing_file)
+            0
+            >>> list(existing_file.list())
+            []
+            >>> existing_file.content = 'a\\nb\\nc'
+            >>> existing_file.list() # doctest: +ELLIPSIS
+            <generator object list at ...>
+            >>> len(existing_file) == len(existing_file.content)
+            True
+            >>> len(list(existing_file))
+            3
+            >>> list(existing_file.list())
+            ['a\\n', 'b\\n', 'c']
+
             >>> not_accessible_file = Handler(
             ...     __test_folder__.path + 'list_not_accessible',
             ...     make_directory=True)
@@ -3039,7 +3057,7 @@ class Handler(Class):
                     path = '%s:\\' % builtins.chr(letter_number)
                     if os.path.exists(path):
                         yield self.__class__(location=path)
-            else:
+            elif self.is_directory():
                 try:
                     for file_name in os.listdir(
                         self._path, *arguments, **keywords
@@ -3059,6 +3077,10 @@ class Handler(Class):
                             pass
                 except builtins.OSError:
                     pass
+            else:
+                with builtins.open(self._path, 'r') as file:
+                    for line in file:
+                        yield line
 
     @JointPoint
 # # python3.4
