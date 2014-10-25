@@ -1741,10 +1741,10 @@ class String(Object, builtins.str):
             for search_string, replacement in search.items():
                 # NOTE: We don't use introspection here because this method is
                 # under heavy use.
-                #'''Take this method name via introspection.'''
-                #self.content = builtins.getattr(
-                #    self.__class__(self.content), inspect.stack()[0][3]
-                #)(search_string, replacement, *arguments, **keywords).content
+                # '''Take this method name via introspection.'''
+                # self.content = builtins.getattr(
+                #     self.__class__(self.content), inspect.stack()[0][3]
+                # )(search_string, replacement, *arguments, **keywords).content
                 self.content = self.__class__(self.content).replace(
                     search_string, replacement, *arguments, **keywords
                 ).content
@@ -2528,9 +2528,14 @@ class Dictionary(Object, builtins.dict):
                 NOTE: We have visited a non indexable value (e.g. an uploaded
                 file).
             '''
+# # python3.4
+# #             __logger__.warning(
+# #                 '%s: %s', exception.__class__.__name__,
+# #                 builtins.str(exception))
             __logger__.warning(
                 '%s: %s', exception.__class__.__name__,
-                builtins.str(exception))
+                exception.message)
+# #
         return iterable
 
     @JointPoint(builtins.classmethod)

@@ -152,9 +152,14 @@ class SocketFileObjectWrapper(socket._fileobject):
                 socket.herror, socket.gaierror, socket.timeout,
                 socket.error
             ) as exception:
+# # python3.4
+# #                 __logger__.info(
+# #                     'Connection interrupted. %s: %s',
+# #                     exception.__class__.__name__, builtins.str(exception))
                 __logger__.info(
                     'Connection interrupted. %s: %s',
-                    exception.__class__.__name__, builtins.str(exception))
+                    exception.__class__.__name__, exception.message)
+# #
                 return ''
         elif self.first_read_line is True:
             try:
@@ -167,9 +172,14 @@ class SocketFileObjectWrapper(socket._fileobject):
                 socket.herror, socket.gaierror, socket.timeout,
                 socket.error
             ) as exception:
+# # python3.4
+# #                 __logger__.info(
+# #                     'Connection interrupted. %s: %s',
+# #                     exception.__class__.__name__, builtins.str(exception))
                 __logger__.info(
                     'Connection interrupted. %s: %s',
-                    exception.__class__.__name__, builtins.str(exception))
+                    exception.__class__.__name__, exception.message)
+# #
                 return ''
         result = self.first_read_line
         self.first_read_line = True
@@ -278,13 +288,16 @@ class MultiProcessingHTTPServer(
 # #             builtins.BrokenPipeError, socket.gaierror,
 # #             socket.herror, socket.timeout, socket.error
 # #         ) as exception:
+# #             __logger__.info(
+# #                 'Connection interrupted. %s: %s',
+# #                 exception.__class__.__name__, builtins.str(exception))
         except (
             socket.herror, socket.gaierror, socket.timeout, socket.error
         ) as exception:
-# #
             __logger__.info(
-                'Connection interrupted. %s: %s', exception.__class__.__name__,
-                builtins.str(exception))
+                'Connection interrupted. %s: %s',
+                exception.__class__.__name__, exception.message)
+# #
 
     @JointPoint
 # # python3.4
@@ -364,16 +377,19 @@ class MultiProcessingHTTPServer(
 # #                 builtins.BrokenPipeError, socket.gaierror, socket.herror,
 # #                 socket.timeout, socket.error
 # #             ) as exception:
+# #                 __logger__.info(
+# #                     'Connection interrupted. %s: %s',
+# #                     exception.__class__.__name__, builtins.str(exception))
                 return parent_function(
                     self, request_socket, *arguments, **keywords)
             except (
                 socket.herror, socket.gaierror, socket.timeout,
                 socket.error
             ) as exception:
-# #
                 __logger__.info(
                     'Connection interrupted. %s: %s',
-                    exception.__class__.__name__, builtins.str(exception))
+                    exception.__class__.__name__, exception.message)
+# #
 
     # endregion
 
@@ -938,9 +954,16 @@ class Web(Class, Runnable):
                     '''
                     self.service.socket.shutdown(socket.SHUT_RDWR)
                 except socket.error as exception:
+# # python3.4
+# #                     __logging__.warning(
+# #                         'Connection couldn\'t be released on both sites. '
+# #                         '%s: %s', exception.__class__.__name__,
+# #                         str(exception))
                     __logging__.warning(
-                        'Connection couldn\'t be released on both sites. %s: '
-                        '%s', exception.__class__.__name__, str(exception))
+                        'Connection couldn\'t be released on both sites. '
+                        '%s: %s', exception.__class__.__name__,
+                        exception.message)
+# #
                 '''Tells the kernel to free binded port.'''
                 self.service.socket.setsockopt(
                     socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -1218,11 +1241,16 @@ class Web(Class, Runnable):
         '''
         try:
             return self.service.serve_forever()
-# # python3.4         except builtins.ValueError as exception:
+# # python3.4
+# #         except builtins.ValueError as exception:
+# #             __logger__.warning(
+# #                 '%s: %s', exception.__class__.__name__,
+# #                 builtins.str(exception))
         except socket.error as exception:
             __logger__.warning(
                 '%s: %s', exception.__class__.__name__,
-                builtins.str(exception))
+                exception.message)
+# #
         return self
 
     @JointPoint
@@ -1997,16 +2025,29 @@ class CGIHTTPRequestHandler(
                         '([^=]*)/+([^=]*=[^;]*(?:;|$))'
                     ).sub('\\1\\2', cookie_content)
                     if cookie_content == new_cookie_content:
+# # python3.4
+# #                         __logger__.critical(
+# #                             'Invalid cookie detected "%s". %s: %s',
+# #                             cookie_content,
+# #                             exception.__class__.__name__, str(exception))
                         __logger__.critical(
                             'Invalid cookie detected "%s". %s: %s',
-                            cookie_content, exception.__class__.__name__, str(
-                                exception))
+                            cookie_content, exception.__class__.__name__,
+                            exception.message)
+# #
                         return None
                     else:
+# # python3.4
+# #                         __logger__.warning(
+# #                             'Invalid cookie detected "%s". %s: %s. Trying '
+# #                             '"%s".', cookie_content,
+# #                             exception.__class__.__name__,
+# #                             builtins.str(exception), new_cookie_content)
                         __logger__.warning(
                             'Invalid cookie detected "%s". %s: %s. Trying "%s"'
                             '.', cookie_content, exception.__class__.__name__,
-                            builtins.str(exception), new_cookie_content)
+                            exception.message, new_cookie_content)
+# #
                         cookie_content = new_cookie_content
                 else:
                     break
@@ -3604,8 +3645,12 @@ class CGIHTTPRequestHandler(
             ).communicate()
         except builtins.OSError as exception:
             output = ''
+# # python3.4
+# #             errors = '%s: %s' % (
+# #                 exception.__class__.__name__, builtins.str(exception))
             errors = '%s: %s' % (
-                exception.__class__.__name__, builtins.str(exception))
+                exception.__class__.__name__, exception.message)
+# #
         self.server.web.number_of_running_threads -= 1
         size = builtins.len(output)
 # # python3.4
@@ -3756,24 +3801,26 @@ class CGIHTTPRequestHandler(
             if(sys.flags.debug or __logger__.isEnabledFor(logging.DEBUG) or
                debug):
 # # python3.4
-# #                 self.send_error(
-# #                     500, '%s: %s' %
-# #                     (exception.__class__.__name__,
-# #                      re.compile('\n+').sub('\n', builtins.str(exception))))
-                self.send_error(
-                    500, '%s: %s' %
-                    (exception.__class__.__name__,
-                     re.compile('\n+').sub('\n', builtins.unicode(
-                         builtins.str(exception), boostNode.ENCODING))))
+# #                 self.send_error(500, '%s: %s' % (
+# #                     exception.__class__.__name__, re.compile('\n+').sub(
+# #                         '\n', builtins.str(exception))))
+                self.send_error(500, '%s: %s' % (
+                    exception.__class__.__name__, re.compile('\n+').sub(
+                        '\n', exception.message)))
 # #
             else:
                 self.send_error(500, 'Internal server error')
         if sys.flags.debug or __logger__.isEnabledFor(logging.DEBUG) or debug:
             raise
         else:
+# # python3.4
+# #             __logger__.critical(
+# #                 'Error in module "%s" %s: %s', requested_module.__name__,
+# #                 exception.__class__.__name__, builtins.str(exception))
             __logger__.critical(
                 'Error in module "%s" %s: %s', requested_module.__name__,
-                exception.__class__.__name__, builtins.str(exception))
+                exception.__class__.__name__, exception.message)
+# #
         return self
 
         # endregion

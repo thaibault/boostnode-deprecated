@@ -465,10 +465,16 @@ if __name__ != '__main__':
         add_signature_check(point_cut='%s\..*' % Module.get_package_name(
             frame=inspect.currentframe()))
     except WindowsError as exception:
+# # python3.4
+# #         logging.error(
+# #             'Running subprocesses on windows without being administrator '
+# #             "isn't possible. %s: %s", exception.__class__.__name__,
+# #             builtins.str(exception))
         logging.error(
-            "Running subprocesses on windows without being administrator isn't"
-            ' possible. %s: %s', exception.__class__.__name__,
-            builtins.str(exception))
+            'Running subprocesses on windows without being administrator '
+            "isn't possible. %s: %s", exception.__class__.__name__,
+            exception.message)
+# #
         sys.exit(1)
 
 # endregion

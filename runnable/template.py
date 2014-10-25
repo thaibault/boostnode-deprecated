@@ -1405,9 +1405,8 @@ class Parser(Class, Runnable):
                 'Error with %s in include statement in line %s (line '
                 'in compiled template: %s).\n%s: %s%s',
                 self._determine_template_description(), source_line,
-                mapped_line, __exception__.__name__, builtins.unicode(
-                    builtins.str(exception), boostNode.ENCODING
-                ), rendered_python_code)
+                mapped_line, __exception__.__name__, exception.message,
+                rendered_python_code)
             raise exception
 # #
         except builtins.BaseException as exception:
@@ -1458,11 +1457,18 @@ class Parser(Class, Runnable):
             ... ) # doctest: +ELLIPSIS
             (...Native exception object:...)
         '''
+# # python3.4
+# #         exception_message = '%s: %s' % (
+# #             exception.__class__.__name__, String(
+# #                 exception
+# #             ).get_camel_case_capitalize().replace("'", '"').content)
         exception_message = '%s: %s' % (
-            exception.__class__.__name__,
-            String(exception).get_camel_case_capitalize().replace(
-                "'", '"'
-            ).content)
+            exception.__class__.__name__, builtins.unicode(
+                String(exception.message.encode(
+                    boostNode.ENCODING
+                )).get_camel_case_capitalize().replace("'", '"').content,
+                boostNode.ENCODING))
+# #
         native_exception_description = ''
         if(force_native_exception or sys.flags.debug or
            __logger__.isEnabledFor(logging.DEBUG)):
@@ -1474,7 +1480,7 @@ class Parser(Class, Runnable):
                     value = builtins.getattr(exception, property_name)
 # # python3.4
 # #                     native_exception_description += '%s: "%s"\n' % (
-# #                         property_name, builtins.str(value))
+# #                         property_name, builtins.repr(value))
                     native_exception_description += '%s: "%s"\n' % (
                         property_name, builtins.unicode(
                             builtins.repr(value), boostNode.ENCODING))
@@ -1768,8 +1774,7 @@ class Parser(Class, Runnable):
             if mark_string:
                 return '"%s"' % result
             return result
-        return builtins.unicode(
-            builtins.str(object), boostNode.ENCODING)
+        return builtins.unicode(builtins.str(object), boostNode.ENCODING)
 # #
 
     @JointPoint
