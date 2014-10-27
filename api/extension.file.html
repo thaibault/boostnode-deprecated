@@ -235,7 +235,7 @@
 <span class="go">&#39;...change...&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">test_folder</span><span class="o">.</span><span class="n">path</span><span class="p">[:</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)]</span> <span class="o">==</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
 <span class="go">True</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">test_folder</span><span class="o">.</span><span class="n">directory_path</span><span class="p">[:</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)]</span> <span class="o">!=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">test_folder</span><span class="o">.</span><span class="n">directory</span><span class="o">.</span><span class="n">path</span><span class="p">[:</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)]</span> <span class="o">!=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
 <span class="go">True</span>
 </pre></div>
 </div>
@@ -251,7 +251,7 @@
 <span class="go">Object of &quot;Handler&quot; with path &quot;...change...&quot; (type: undefined)...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span> 
 <span class="go">&#39;...change...&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">undefined_object</span><span class="o">.</span><span class="n">directory_path</span><span class="p">[:</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)]</span> <span class="o">==</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">undefined_object</span><span class="o">.</span><span class="n">directory</span><span class="o">.</span><span class="n">path</span><span class="p">[:</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)]</span> <span class="o">==</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
 <span class="go">True</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">undefined_object</span><span class="o">.</span><span class="n">path</span><span class="p">[:</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)]</span> <span class="o">!=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
 <span class="go">True</span>
@@ -269,7 +269,7 @@
 <span class="go">Object of &quot;Handler&quot; with path &quot;...change...&quot; (type: file)...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span> 
 <span class="go">&#39;...change...&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">file</span><span class="o">.</span><span class="n">directory_path</span><span class="p">[:</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)]</span> <span class="o">==</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">file</span><span class="o">.</span><span class="n">directory</span><span class="o">.</span><span class="n">path</span><span class="p">[:</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)]</span> <span class="o">==</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
 <span class="go">True</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">file</span><span class="o">.</span><span class="n">path</span><span class="p">[:</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)]</span> <span class="o">!=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
 <span class="go">True</span>
@@ -636,8 +636,8 @@
 </dd></dl>
 
 <dl class="staticmethod">
-<dt id="boostNode.extension.file.Handler.get_directory_path">
-<em class="property">static </em><tt class="descname">get_directory_path</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.get_directory_path" title="Permalink to this definition">¶</a></dt>
+<dt id="boostNode.extension.file.Handler.get_directory">
+<em class="property">static </em><tt class="descname">get_directory</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.get_directory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines the current path of the Directory object without file.</p>
 <p><strong>output_with_root_prefix</strong> - Indicates weather the path to                                           sandbox should set as prefix.</p>
 <p>Examples:</p>
@@ -646,19 +646,19 @@
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Handler</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">location</span><span class="o">=</span><span class="n">__file_path__</span>
-<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">directory_path</span> 
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">directory</span><span class="o">.</span><span class="n">path</span> 
 <span class="go">&#39;...boostNode...extension...&#39;</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Handler</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">location</span><span class="o">=</span><span class="n">__file_path__</span>
-<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">get_directory_path</span><span class="p">()</span> 
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">get_directory</span><span class="p">()</span><span class="o">.</span><span class="n">path</span> 
 <span class="go">&#39;...boostNode...extension...&#39;</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">same</span> <span class="o">=</span> <span class="bp">True</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">handler</span> <span class="ow">in</span> <span class="n">Handler</span><span class="p">():</span>
-<span class="gp">... </span>    <span class="k">if</span> <span class="n">handler</span><span class="o">.</span><span class="n">directory_path</span> <span class="o">!=</span> <span class="n">Handler</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">directory_path</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">if</span> <span class="n">handler</span><span class="o">.</span><span class="n">directory</span><span class="o">.</span><span class="n">path</span> <span class="o">!=</span> <span class="n">Handler</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">directory</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
 <span class="gp">... </span>        <span class="n">same</span> <span class="o">=</span> <span class="bp">False</span>
 <span class="gp">... </span>        <span class="k">break</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">same</span>
@@ -667,7 +667,7 @@
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Handler</span><span class="o">.</span><span class="n">set_root</span><span class="p">(</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span><span class="p">)</span> 
 <span class="go">&lt;class &#39;...Handler&#39;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Handler</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">directory_path</span> <span class="o">==</span> <span class="n">os</span><span class="o">.</span><span class="n">sep</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Handler</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">directory</span><span class="o">.</span><span class="n">path</span> <span class="o">==</span> <span class="n">os</span><span class="o">.</span><span class="n">sep</span>
 <span class="go">True</span>
 </pre></div>
 </div>
@@ -1631,7 +1631,7 @@
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Handler</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">Handler</span><span class="p">(</span><span class="n">__file_path__</span><span class="p">)</span><span class="o">.</span><span class="n">directory_path</span> <span class="o">+</span> <span class="s">&#39;../&#39;</span>
+<span class="gp">... </span>    <span class="n">Handler</span><span class="p">(</span><span class="n">__file_path__</span><span class="p">)</span><span class="o">.</span><span class="n">directory</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;../&#39;</span>
 <span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">iterate_directory</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="k">lambda</span> <span class="nb">file</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="n">deep_first</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="n">recursive</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
@@ -2284,7 +2284,7 @@
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># # python2.7</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">set_content</span><span class="p">(</span><span class="nb">unicode</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">))</span>
+<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">set_content</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">)</span>
 <span class="gp">... </span><span class="k">else</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">set_content</span><span class="p">(</span><span class="n">b</span><span class="s">&#39;hans&#39;</span><span class="p">)</span> 
 <span class="go">Object of &quot;Handler&quot; with path &quot;...&quot; ...</span>
@@ -2304,7 +2304,7 @@
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
 <span class="gp">... </span><span class="k">else</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">(</span>
-<span class="gp">... </span>        <span class="nb">chr</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">boostNode</span><span class="o">.</span><span class="n">ENCODING</span>
+<span class="gp">... </span>        <span class="nb">chr</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">ENCODING</span>
 <span class="gp">... </span>    <span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="c"># #</span>
 </pre></div>
@@ -2312,48 +2312,48 @@
 </dd></dl>
 
 <dl class="staticmethod">
-<dt id="boostNode.extension.file.Handler.set_directory_path">
-<em class="property">static </em><tt class="descname">set_directory_path</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.set_directory_path" title="Permalink to this definition">¶</a></dt>
+<dt id="boostNode.extension.file.Handler.set_directory">
+<em class="property">static </em><tt class="descname">set_directory</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.set_directory" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function could be understand as wrapper method for &#8220;move()&#8221;.</p>
 <p><strong>location</strong> - New directory location for current file object.</p>
 <p>Additional arguments and keywords are forwarded to &#8220;self.move()&#8221;.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span> <span class="o">=</span> <span class="n">Handler</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">location</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;set_directory_path&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">location</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;set_directory&#39;</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="n">make_directory</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">directory_path</span> <span class="o">=</span> <span class="p">(</span>
-<span class="gp">... </span>    <span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;set_directory_path_edited&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">directory</span> <span class="o">=</span> <span class="p">(</span>
+<span class="gp">... </span>    <span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;set_directory_edited&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">is_directory</span><span class="p">()</span>
 <span class="go">True</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">name</span>
-<span class="go">&#39;set_directory_path&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">directory_path</span> 
-<span class="go">&#39;...set_directory_path_edited...&#39;</span>
+<span class="go">&#39;set_directory&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">directory</span><span class="o">.</span><span class="n">path</span> 
+<span class="go">&#39;...set_directory_edited...&#39;</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">new_location</span> <span class="o">=</span> <span class="n">Handler</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">location</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;set_directory_path2&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">directory_path</span> <span class="o">=</span> <span class="n">new_location</span>
+<span class="gp">... </span>    <span class="n">location</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;set_directory2&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">directory</span> <span class="o">=</span> <span class="n">new_location</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">is_directory</span><span class="p">()</span>
 <span class="go">True</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">name</span>
-<span class="go">&#39;set_directory_path&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">directory_path</span> 
-<span class="go">&#39;...set_directory_path2...&#39;</span>
+<span class="go">&#39;set_directory&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">directory</span><span class="o">.</span><span class="n">path</span> 
+<span class="go">&#39;...set_directory2...&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">new_location</span><span class="o">.</span><span class="n">is_directory</span><span class="p">()</span>
 <span class="go">True</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">new_location</span> <span class="o">=</span> <span class="n">Handler</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">location</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;set_directory_path3&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">set_directory_path</span><span class="p">(</span><span class="n">new_location</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">location</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;set_directory3&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">set_directory</span><span class="p">(</span><span class="n">new_location</span><span class="p">)</span>
 <span class="go">True</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">name</span>
-<span class="go">&#39;set_directory_path&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">directory_path</span> 
-<span class="go">&#39;...set_directory_path3...&#39;</span>
+<span class="go">&#39;set_directory&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">directory</span><span class="o">.</span><span class="n">path</span> 
+<span class="go">&#39;...set_directory3...&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">new_location</span><span class="o">.</span><span class="n">is_directory</span><span class="p">()</span>
 <span class="go">True</span>
 </pre></div>
