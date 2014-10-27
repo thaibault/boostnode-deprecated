@@ -44,9 +44,9 @@ import types
 '''Make boostNode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
-from boostNode.paradigm.objectOrientation import Class
 # # python3.4 from boostNode.extension.type import Self, SelfClass
-pass
+from boostNode import convert_to_unicode
+from boostNode.paradigm.objectOrientation import Class
 
 # endregion
 
@@ -218,23 +218,46 @@ class FunctionDecorator(Class):
         if self.__func__ is not None:
             function_name = self.__func__.__name__
         if self.class_object:
+# # python3.4
+# #             return(
+# #                 'Object of "{class_name}" with class object '
+# #                 '"{class_object}", 'object "{object}", wrapped function '
+# #                 "{wrapped_function}" and return value "{value}" '
+# #                 '({type}).'.format(
+# #                     class_name=self.__class__.__name__,
+# #                     class_object=self.class_object.__name__,
+# #                     object=builtins.repr(self.object),
+# #                     wrapped_function=function_name,
+# #                     value=builtins.str(self.return_value),
+# #                     type=builtins.type(self.return_value).__name__))
+# #         return(
+# #             'Object of "{class_name}" with wrapped function '
+# #             '"{wrapped_function}" and return value "{value}" '
+# #             '({type}).'.format(
+# #                 class_name=self.__class__.__name__,
+# #                 wrapped_function=function_name,
+# #                 value=builtins.str(self.return_value),
+# #                 type=builtins.type(self.return_value).__name__))
             return(
-                'Object of "{class_name}" with class object "{class_object}", '
-                'object "{object}", wrapped function "{wrapped_function}" and '
-                'return value "{value}" ({type}).'.format(
+                'Object of "{class_name}" with class object '
+                '"{class_object}", object "{object}", wrapped function '
+                '"{wrapped_function}" and return value "{value}" '
+                '({type}).'.format(
                     class_name=self.__class__.__name__,
                     class_object=self.class_object.__name__,
                     object=builtins.repr(self.object),
                     wrapped_function=function_name,
-                    value=builtins.str(self.return_value),
+                    value=convert_to_unicode(self.return_value),
                     type=builtins.type(self.return_value).__name__))
         return(
             'Object of "{class_name}" with wrapped function '
-            '"{wrapped_function}" and return value "{value}" ({type}).'.format(
+            '"{wrapped_function}" and return value "{value}" '
+            '({type}).'.format(
                 class_name=self.__class__.__name__,
                 wrapped_function=function_name,
-                value=builtins.str(self.return_value),
+                value=convert_to_unicode(self.return_value),
                 type=builtins.type(self.return_value).__name__))
+# #
 
 # # python3.4
 # #     def __call__(
@@ -556,6 +579,20 @@ class ReturnAspect(Class):
             >>> repr(return_aspect) # doctest: +ELLIPSIS
             'Object of "ReturnAspect" with class object "A", object "...'
         '''
+# # python2.7
+# #         return(
+# #             'Object of "{class_name}" with class object "{class_object}", '
+# #             'object "{object}", function "{function}", arguments '
+# #             '"{arguments}", keywords "{keywords}" and return value '
+# #             '"{value}" ({type}).'.format(
+# #                 class_name=self.__class__.__name__,
+# #                 class_object=self.class_object.__name__,
+# #                 object=builtins.repr(self.object),
+# #                 function=self.__func__.__name__,
+# #                 arguments='", "'.join(self.arguments),
+# #                 keywords=builtins.str(self.keywords),
+# #                 value=builtins.str(self.return_value),
+# #                 type=builtins.str(builtins.type(self.return_value))))
         return(
             'Object of "{class_name}" with class object "{class_object}", '
             'object "{object}", function "{function}", arguments '
@@ -567,8 +604,9 @@ class ReturnAspect(Class):
                 function=self.__func__.__name__,
                 arguments='", "'.join(self.arguments),
                 keywords=builtins.str(self.keywords),
-                value=builtins.str(self.return_value),
+                value=convert_to_unicode(self.return_value),
                 type=builtins.str(builtins.type(self.return_value))))
+# #
 
         # # endregion
 
@@ -747,21 +785,38 @@ class Argument(Class):
             ... ) # doctest: +ELLIPSIS
             Object of "Argument" (POSITIONAL_OR_KEYWORD) bounded to "mocup"...
         '''
-        default_value = 'default value "%s", ' % builtins.str(self.default)
+# # python3.4
+# #         default_value = 'default value "%s", ' % builtins.str(self.default)
+        default_value = 'default value "%s", ' % convert_to_unicode(
+            self.default)
+# #
         if self.default is inspect.Signature.empty:
             default_value = ''
-# # python3.4         function_path = self.__func__.__qualname__
+# # python3.4
+# #         function_path = self.__func__.__qualname__
+# #         return(
+# #             'Object of "{name}" ({kind}) bounded to "{function_path}" '
+# #             'with name "{argument_name}", {default_value}annotation '
+# #             '"{annotation}" and value "{value}".'
+# #         ).format(
+# #             name=self.__class__.__name__, kind=builtins.str(self.kind),
+# #             function_path=function_path, argument_name=self.name,
+# #             default_value=default_value,
+# #             annotation=builtins.str(self.annotation),
+# #             value=builtins.str(self.value))
         function_path = self.__func__.__name__
         return(
             'Object of "{name}" ({kind}) bounded to "{function_path}" '
             'with name "{argument_name}", {default_value}annotation '
             '"{annotation}" and value "{value}".'
         ).format(
-            name=self.__class__.__name__, kind=builtins.str(self.kind),
+            name=self.__class__.__name__,
+            kind=convert_to_unicode(self.kind),
             function_path=function_path, argument_name=self.name,
             default_value=default_value,
-            annotation=builtins.str(self.annotation),
-            value=builtins.str(self.value))
+            annotation=convert_to_unicode(self.annotation),
+            value=convert_to_unicode(self.value))
+# #
 
         # # endregion
 

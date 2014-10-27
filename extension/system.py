@@ -39,7 +39,7 @@ from copy import copy
 import doctest
 try:
     import fcntl
-except ImportError:
+except builtins.ImportError:
     fcntl = None
 import importlib
 import inspect
@@ -62,7 +62,7 @@ pass
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
 # # python3.4 pass
-import boostNode
+from boostNode import ENCODING, convert_to_unicode
 from boostNode.extension.file import Handler as FileHandler
 from boostNode.extension.native import Dictionary, Module, Object, String
 from boostNode.extension.output import Buffer, Logger, Print
@@ -698,6 +698,17 @@ class Runnable(builtins.object):
                     context[0]
                 )._path == self._childrens_module.__file_path__:
                     break
+# # python3.4
+# #             __logger__.critical(
+# #                 'Line {line_number}: {exception_name}: '
+# #                 '{exception_message}\n
+# #                 'Type "'
+# #                 '{program_file_path} --help" for additional '
+# #                 'informations.'.format(
+# #                     line_number=context[1],
+# #                     exception_name=exception.__class__.__name__,
+# #                     exception_message=builtins.str(exception),
+# #                     program_file_path=sys.argv[0]))
             __logger__.critical(
                 'Line {line_number}: {exception_name}: {exception_message}\n'
                 'Type "'
@@ -705,8 +716,9 @@ class Runnable(builtins.object):
                 'informations.'.format(
                     line_number=context[1],
                     exception_name=exception.__class__.__name__,
-                    exception_message=builtins.str(exception),
+                    exception_message=convert_to_unicode(exception),
                     program_file_path=sys.argv[0]))
+# #
             if builtins.hasattr(exception, 'code'):
                 sys.exit(exception.code)
             sys.exit(1)
@@ -991,7 +1003,7 @@ class Platform(builtins.object):
         elif builtins.len(mac_address) != 12:
             raise __exception__('Incorrect MAC-address format given.')
         '''Pad the synchronization stream.'''
-        data = b'FFFFFFFFFFFF' + (mac_address * 20).encode(boostNode.ENCODING)
+        data = b'FFFFFFFFFFFF' + (mac_address * 20).encode(ENCODING)
         send_data = b''
         '''Split up the hex values and pack.'''
         for counter in builtins.range(0, builtins.len(data), 2):
@@ -2589,7 +2601,7 @@ class CommandLine(builtins.object):
                             prevent overwriting files.
                         '''
                         file.name = package.basename + '.' + file.name
-                        file.directory_path = meta_documentation.path
+                        file.directory = meta_documentation
                 package_documentation.remove_directory()
         return cls
 
@@ -2636,7 +2648,7 @@ class CommandLine(builtins.object):
 # #             error=False)
         for file in FileHandler():
             if file.extension == documentation_file_extension:
-                file.directory_path = documentation.path
+                file.directory = documentation.path
 # #
         return cls
 
@@ -2906,7 +2918,7 @@ class CommandLine(builtins.object):
             frame.f_code.co_filename, respect_root_path=False)
         packages = []
         for file in FileHandler(
-            location=initialize_file.directory_path, must_exist=True
+            location=initialize_file.directory, must_exist=True
         ):
             if Module.is_package(path=file.path):
                 packages.append((file, FileHandler(
@@ -2978,11 +2990,16 @@ class CommandLine(builtins.object):
             try:
                 return builtins.eval(argument['execute'], scope)
             except builtins.BaseException as exception:
+# # python3.4
+# #                 raise __exception__(
+# #                     'During rendering argument "%s". Error "%s" occurs for'
+# #                     ' "%s".', builtins.str(argument['execute']),
+# #                     builtins.str(exception), keyword)
                 raise __exception__(
                     'During rendering argument "%s". Error "%s" occurs for '
-                    '"%s".', builtins.str(argument['execute']), builtins.str(
-                        exception),
-                    keyword)
+                    '"%s".', convert_to_unicode(argument['execute']),
+                    convert_to_unicode(exception), keyword)
+# #
         return argument
 
         # endregion

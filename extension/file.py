@@ -53,7 +53,7 @@ sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 # # python3.4
 # # from boostNode.extension.native import Object, String
 # # from boostNode.extension.type import Self, SelfClass, SelfClassObject
-import boostNode
+from boostNode import ENCODING, convert_to_unicode
 from boostNode.extension.native import Dictionary, Object, String
 from boostNode.extension.type import Self
 # #
@@ -654,7 +654,7 @@ class Handler(Class):
         self._next_element_index = 0
         '''Defines the encoding for writing and reading text-based files.'''
         if not encoding:
-            encoding = boostNode.ENCODING
+            encoding = ENCODING
         self._encoding = encoding
         self._respect_root_path = respect_root_path
         self._output_with_root_prefix = output_with_root_prefix
@@ -823,9 +823,9 @@ class Handler(Class):
 
             Examples:
 
-            >>> Handler(location=__file_path__) in Handler(location=Handler(
+            >>> Handler(location=__file_path__) in Handler(
             ...     location=__file_path__
-            ... ).directory_path)
+            ... ).directory
             True
 
             >>> Handler(
@@ -867,7 +867,7 @@ class Handler(Class):
             >>> len(Handler(location=__file_path__)) > 1
             True
 
-            >>> len(Handler(Handler().directory_path)) > 1
+            >>> len(Handler(Handler().directory.path)) > 1
             True
         '''
         if self.is_directory():
@@ -1482,10 +1482,10 @@ class Handler(Class):
 
     @JointPoint(Class.pseudo_property)
 # # python3.4
-# #     def get_directory_path(
+# #     def get_directory(
 # #         self: Self, output_with_root_prefix=None
 # #     ) -> builtins.str:
-    def get_directory_path(self, output_with_root_prefix=None):
+    def get_directory(self, output_with_root_prefix=None):
 # #
         '''
             Determines the current path of the Directory object without file.
@@ -1499,17 +1499,17 @@ class Handler(Class):
 
             >>> Handler(
             ...     location=__file_path__
-            ... ).directory_path # doctest: +ELLIPSIS
+            ... ).directory.path # doctest: +ELLIPSIS
             '...boostNode...extension...'
 
             >>> Handler(
             ...     location=__file_path__
-            ... ).get_directory_path() # doctest: +ELLIPSIS
+            ... ).get_directory().path # doctest: +ELLIPSIS
             '...boostNode...extension...'
 
             >>> same = True
             >>> for handler in Handler():
-            ...     if handler.directory_path != Handler()[0].directory_path:
+            ...     if handler.directory.path != Handler()[0].directory.path:
             ...         same = False
             ...         break
             >>> same
@@ -1517,7 +1517,7 @@ class Handler(Class):
 
             >>> Handler.set_root(__test_folder__.path) # doctest: +ELLIPSIS
             <class '...Handler'>
-            >>> Handler('/').directory_path == os.sep
+            >>> Handler('/').directory.path == os.sep
             True
 
             >>> Handler.set_root(root_backup) # doctest: +ELLIPSIS
@@ -1532,8 +1532,8 @@ class Handler(Class):
         ) > builtins.len(os.sep):
             subtrahend += builtins.len(os.sep)
         if subtrahend:
-            return directory_path[:-subtrahend]
-        return directory_path
+            return self.__class__(location=directory_path[:-subtrahend])
+        return self.__class__(location=directory_path)
 
     @JointPoint(Class.pseudo_property)
 # # python3.4
@@ -2074,7 +2074,7 @@ class Handler(Class):
 
             >>> # # python2.7
             >>> if sys.version_info.major < 3:
-            ...     handler.set_content(unicode('hans'))
+            ...     handler.set_content('hans')
             ... else:
             ...     handler.set_content(b'hans') # doctest: +ELLIPSIS
             Object of "Handler" with path "..." ...
@@ -2092,7 +2092,7 @@ class Handler(Class):
             ...     handler.content = str(chr(1))
             ... else:
             ...     handler.content = bytes(
-            ...         chr(1), boostNode.ENCODING
+            ...         chr(1), ENCODING
             ...     ) # doctest: +ELLIPSIS
             >>> # #
         '''
@@ -2117,20 +2117,19 @@ class Handler(Class):
                 self._path, mode, *arguments, **keywords
             ) as file_handler:
                 if not builtins.isinstance(content, builtins.unicode):
-                    content = builtins.unicode(
-                        content, String(content).encoding)
+                    content = convert_to_unicode(content)
                 file_handler.write(content)
 # #
         return self
 
     @JointPoint(Class.pseudo_property)
 # # python3.4
-# #     def set_directory_path(
+# #     def set_directory(
 # #         self: Self, location: (SelfClassObject, builtins.str),
 # #         *arguments: builtins.object, respect_root_path=None,
 # #         **keywords: builtins.object
 # #     ) -> builtins.bool:
-    def set_directory_path(self, location, *arguments, **keywords):
+    def set_directory(self, location, *arguments, **keywords):
 # #
         '''
             This function could be understand as wrapper method for "move()".
@@ -2142,38 +2141,38 @@ class Handler(Class):
             Examples:
 
             >>> handler = Handler(
-            ...     location=__test_folder__.path + 'set_directory_path',
+            ...     location=__test_folder__.path + 'set_directory',
             ...     make_directory=True)
 
-            >>> handler.directory_path = (
-            ...     __test_folder__.path + 'set_directory_path_edited')
+            >>> handler.directory = (
+            ...     __test_folder__.path + 'set_directory_edited')
             >>> handler.is_directory()
             True
             >>> handler.name
-            'set_directory_path'
-            >>> handler.directory_path # doctest: +ELLIPSIS
-            '...set_directory_path_edited...'
+            'set_directory'
+            >>> handler.directory.path # doctest: +ELLIPSIS
+            '...set_directory_edited...'
 
             >>> new_location = Handler(
-            ...     location=__test_folder__.path + 'set_directory_path2')
-            >>> handler.directory_path = new_location
+            ...     location=__test_folder__.path + 'set_directory2')
+            >>> handler.directory = new_location
             >>> handler.is_directory()
             True
             >>> handler.name
-            'set_directory_path'
-            >>> handler.directory_path # doctest: +ELLIPSIS
-            '...set_directory_path2...'
+            'set_directory'
+            >>> handler.directory.path # doctest: +ELLIPSIS
+            '...set_directory2...'
             >>> new_location.is_directory()
             True
 
             >>> new_location = Handler(
-            ...     location=__test_folder__.path + 'set_directory_path3')
-            >>> handler.set_directory_path(new_location)
+            ...     location=__test_folder__.path + 'set_directory3')
+            >>> handler.set_directory(new_location)
             True
             >>> handler.name
-            'set_directory_path'
-            >>> handler.directory_path # doctest: +ELLIPSIS
-            '...set_directory_path3...'
+            'set_directory'
+            >>> handler.directory.path # doctest: +ELLIPSIS
+            '...set_directory3...'
             >>> new_location.is_directory()
             True
         '''
@@ -2230,7 +2229,7 @@ class Handler(Class):
             'set_name'
         '''
         return self.move(
-            target=self.directory_path + name, *arguments, **keywords)
+            target=self.directory.path + name, *arguments, **keywords)
 
     @JointPoint(Class.pseudo_property)
 # # python3.4
@@ -2651,12 +2650,10 @@ class Handler(Class):
             try:
 # # python3.4
 # #                 with builtins.open(
-# #                     path, mode='r', encoding=boostNode.ENCODING,
-# #                     errors='strict'
+# #                     path, mode='r', encoding=ENCODING, errors='strict'
 # #                 ) as file:
                 with codecs.open(
-                    path, mode='r', encoding=boostNode.ENCODING,
-                    errors='strict'
+                    path, mode='r', encoding=ENCODING, errors='strict'
                 ) as file:
 # #
                     file_content = file.read(maximum_length + 1).strip()
@@ -2820,7 +2817,7 @@ class Handler(Class):
         while True:
             earlier_backup = backup
             backup = self.__class__(
-                location=self.directory_path + TemplateParser(
+                location=self.directory.path + TemplateParser(
                     template=name_wrapper, string=True
                 ).render(file=backup).output)
             '''
@@ -2919,7 +2916,7 @@ class Handler(Class):
             '...change...'
             >>> test_folder.path[:-len(os.sep)] == os.getcwd()
             True
-            >>> test_folder.directory_path[:-len(os.sep)] != os.getcwd()
+            >>> test_folder.directory.path[:-len(os.sep)] != os.getcwd()
             True
 
             >>> Handler(
@@ -2933,7 +2930,7 @@ class Handler(Class):
             Object of "Handler" with path "...change..." (type: undefined)...
             >>> os.getcwd() # doctest: +ELLIPSIS
             '...change...'
-            >>> undefined_object.directory_path[:-len(os.sep)] == os.getcwd()
+            >>> undefined_object.directory.path[:-len(os.sep)] == os.getcwd()
             True
             >>> undefined_object.path[:-len(os.sep)] != os.getcwd()
             True
@@ -2949,7 +2946,7 @@ class Handler(Class):
             Object of "Handler" with path "...change..." (type: file)...
             >>> os.getcwd() # doctest: +ELLIPSIS
             '...change...'
-            >>> file.directory_path[:-len(os.sep)] == os.getcwd()
+            >>> file.directory.path[:-len(os.sep)] == os.getcwd()
             True
             >>> file.path[:-len(os.sep)] != os.getcwd()
             True
@@ -2963,9 +2960,7 @@ class Handler(Class):
             os.chdir(self._path)
         else:
             '''Take this method name via introspection.'''
-            builtins.getattr(
-                self.__class__(self.directory_path), inspect.stack()[0][3]
-            )()
+            builtins.getattr(self.directory, inspect.stack()[0][3])()
         return self
 
     @JointPoint
@@ -3050,6 +3045,7 @@ class Handler(Class):
             True
         '''
         from boostNode.extension.system import Platform
+
         if self:
             if self._path == '\\' and Platform().operating_system == 'windows':
                 for letter_number in builtins.range(
@@ -3064,15 +3060,11 @@ class Handler(Class):
                     ):
 # # python3.4
 # #                         pass
-                        if not builtins.isinstance(
-                            file_name, builtins.unicode
-                        ):
-                            file_name = builtins.unicode(
-                                file_name, boostNode.ENCODING)
+                        file_name = convert_to_unicode(file_name)
 # #
                         try:
                             yield self.__class__(
-                                location=self.path + file_name)
+                                location='%s%s' % (self.path, file_name))
                         except (builtins.IOError, builtins.OSError):
                             pass
                 except builtins.OSError:
@@ -3593,7 +3585,7 @@ class Handler(Class):
         '''
         location = self.__class__(self)
         while location:
-            path = location.directory_path + wrapper_pattern.format(
+            path = location.directory.path + wrapper_pattern.format(
                 file_name=location.name)
             location = self.__class__(location=path)
         location.make_directory()
@@ -3847,7 +3839,7 @@ class Handler(Class):
         if not link.endswith(os.sep) and os.path.isdir(link):
             link += os.sep
         if not self.is_referenced_via_absolute_path(location=link):
-            link = self.__class__(location=self.directory_path + link)
+            link = self.__class__(location=self.directory.path + link)
         link = self.__class__(location=link)
         if as_object:
             return link
@@ -4219,7 +4211,7 @@ class Handler(Class):
             >>> Platform.terminate_thread = False
 
             >>> Handler(
-            ...     Handler(__file_path__).directory_path + '../'
+            ...     Handler(__file_path__).directory.path + '../'
             ... ).iterate_directory(
             ...     lambda file: True, deep_first=False,
             ...     recursive=True)
@@ -4843,7 +4835,7 @@ class Handler(Class):
                 return self.get_relative_path(
                     context=self.__class__(
                         location=target_path, respect_root_path=False
-                    ).directory_path)
+                    ).directory.path)
 # # python3.4
 # #             if builtins.isinstance(relative, (
 # #                 builtins.str, self.__class__
@@ -4913,7 +4905,7 @@ class Handler(Class):
             if builtins.hasattr(ctypes, 'windll'):
                 path = self._path
                 if self.is_file():
-                    path = self.directory_path
+                    path = self.directory.path
                 free_bytes = ctypes.c_ulonglong(0)
                 total_bytes = ctypes.c_ulonglong(0)
                 self._determine_get_windows_disk_free_space_function()(
@@ -4953,7 +4945,7 @@ class Handler(Class):
 # # python3.4
 # #             os_statvfs = os.statvfs(self._path)
             os_statvfs = os.statvfs(builtins.str(self._path.encode(
-                boostNode.ENCODING)))
+                ENCODING)))
 # #
             self.__class__.BLOCK_SIZE_IN_BYTE = os_statvfs.f_bsize
             self.__class__.MAX_FILE_NAME_LENGTH = os_statvfs.f_namemax

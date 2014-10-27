@@ -109,10 +109,10 @@ class Run(Class, Runnable):
             'commands': {
                 'compile': "bash --login -c '"
                            'template "<% code_file.path %>" 1>'
-                           '"<% code_file.directory_path %>'
+                           '"<% code_file.directory.path %>'
                            '<% code_file.basename %>.html"\'',
                 'run': 'bash --login -c \'webbrowser '
-                       '"<% code_file.directory_path %>'
+                       '"<% code_file.directory.path %>'
                        '<% code_file.basename %>.html"\''
             },
             'extensions': ('tpl',)
@@ -120,9 +120,9 @@ class Run(Class, Runnable):
         'c': {
             'commands': {
                 'compile': 'g++ "<% code_file.path %>" -o '
-                           '"<% code_file.directory_path %>'
+                           '"<% code_file.directory.path %>'
                            '<% code_file.basename %>"',
-                'run': '"<% code_file.directory_path %>'
+                'run': '"<% code_file.directory.path %>'
                        '<% code_file.basename %>" <%arguments%>',
             },
             'code_manager': {
@@ -161,7 +161,7 @@ class Run(Class, Runnable):
         'laTeX': {
             'commands': {
                 'compile': 'pdflatex "<% code_file.path %>" && '
-                           'cd "<% code_file.directory_path %>" && bibtex '
+                           'cd "<% code_file.directory.path %>" && bibtex '
                            '"<% code_file.basename %>.aux"; '
                            'pdflatex "<% code_file.path %>" && '
                            'pdflatex "<% code_file.path %>"',
@@ -344,7 +344,7 @@ class Run(Class, Runnable):
                 '", "'.join(
                     self._current_code['properties']['delete_patterns']))
             FileHandler(
-                location=self._code_file.directory_path
+                location=self._code_file.directory.path
             ).delete_file_patterns(
                 *self._current_code['properties']['delete_patterns'])
         return self
@@ -415,7 +415,7 @@ class Run(Class, Runnable):
             file_path = self\
                 ._current_code['properties']['code_manager']['file_path']
             self.code_manager_file = FileHandler(
-                location=self._code_file.directory_path + file_path)
+                location=self._code_file.directory.path + file_path)
             if self.code_manager_file:
                 self._current_commands.update(
                     self._current_code['properties']['code_manager'][
@@ -526,7 +526,7 @@ class Run(Class, Runnable):
             >>> run = Run()
 
             >>> run._search_supported_file_by_path(
-            ...     path=file.directory_path + file.basename
+            ...     path=file.directory.path + file.basename
             ... ) # doctest: +ELLIPSIS
             Object of "Handler" with pat..._search_supported_file_by_path.py...
 

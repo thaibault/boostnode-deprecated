@@ -52,9 +52,10 @@ pass
 '''Make boostNode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
+import boostNode
 # # python3.4
 # # from boostNode.extension.type import Self, SelfClass, SelfClassObject
-import boostNode
+from boostNode import ENCODING, convert_to_string, convert_to_unicode
 # #
 from boostNode.paradigm.aspectOrientation import FunctionDecorator, JointPoint
 from boostNode.paradigm.objectOrientation import Class
@@ -214,15 +215,7 @@ class Model(builtins.object):
                         property_descriptions += ' and '
                     else:
                         property_descriptions += ', '
-# # python3.4
-# #                 value = builtins.repr(value)
-                if builtins.isinstance(value, builtins.unicode):
-                    value = builtins.str(value.encode(boostNode.ENCODING))
-                if not builtins.isinstance(value, (
-                    builtins.unicode, builtins.str
-                )):
                     value = builtins.repr(value)
-# #
                 property_descriptions += '"%s": "%s"' % (name, value)
                 index += 1
             return '%s with properties %s.' % (
@@ -325,14 +318,6 @@ class Model(builtins.object):
                     ), self.__dict__))
         for name in property_names:
             value = builtins.getattr(self, name)
-# # python3.4
-# #             pass
-            if builtins.isinstance(name, builtins.str):
-                name = builtins.unicode(name, boostNode.ENCODING)
-            if builtins.isinstance(value, builtins.str):
-                value = builtins.unicode(
-                    value, boostNode.ENCODING)
-# #
             key = key_wrapper(key=name, value=value)
             result[key] = value_wrapper(key, value)
         return result
@@ -551,12 +536,12 @@ class AuthenticationModel(Model):
 # # python3.4
 # #         self.password_salt = base64encode(os.urandom(
 # #             self._password_information['salt']['length']
-# #         )).decode(boostNode.ENCODING)
+# #         )).decode(ENCODING)
 # #         self.password_hash = sha224(
 # #             ('%s%s%s' % (
 # #                 value, self._password_information['pepper'],
 # #                 self.password_salt
-# #             )).encode(boostNode.ENCODING)
+# #             )).encode(ENCODING)
 # #         ).hexdigest()
         self.password_salt = os.urandom(
             self._password_information['salt']['length']
@@ -589,7 +574,7 @@ class AuthenticationModel(Model):
 # #             ('%s%s%s' % (
 # #                 value, self._password_information['pepper'],
 # #                 self.password_salt
-# #             )).encode(boostNode.ENCODING)
+# #             )).encode(ENCODING)
 # #         ).hexdigest()
         return self.password_hash == sha224(
             '%s%s%s' % (
@@ -667,7 +652,8 @@ class Object(Class):
             >>> str(Object(['hans']))
             "['hans']"
         '''
-        return builtins.str(self.content)
+# # python3.4         return builtins.str(self.content)
+        return convert_to_unicode(self.content)
 
         # # endregion
 
@@ -773,7 +759,7 @@ class Object(Class):
         '''
         content = self.content
         if builtins.isinstance(content, builtins.unicode):
-            content = builtins.str(content.encode(boostNode.ENCODING))
+            content = content.encode(ENCODING)
         text_chars = builtins.str().join(builtins.map(
             builtins.chr,
             builtins.range(7, 14) + [27] + builtins.range(0x20, 0x100)))
@@ -1055,19 +1041,12 @@ class String(Object, builtins.str):
         if content is None:
             content = ''
 # # python3.4
-# #         if(not builtins.isinstance(content, (
-# #             builtins.str, builtins.bytes
-# #         )) or builtins.isinstance(content, String)):
-        if not builtins.isinstance(
-            content, builtins.str
-        ) or builtins.isinstance(content, String):
-            if builtins.isinstance(content, builtins.unicode):
-                content = content.encode(boostNode.ENCODING)
+# #         if not builtins.isinstance(content, builtins.str):
+# #             content = builtins.str(content)
+        if not builtins.isinstance(content, builtins.str):
+            content = convert_to_string(content)
 # #
-            content = builtins.str(content)
         self.content = content
-        if isinstance(self.content, unicode):
-            raise IOError(self.content)
 
         # # # endregion
 
@@ -1086,8 +1065,8 @@ class String(Object, builtins.str):
 # #         return 'Object of "{class_name}" with "{content}" saved.'.format(
 # #             class_name=self.__class__.__name__, content=self.content)
         return 'Object of "{class_name}" with "{content}" saved.'.format(
-            class_name=self.__class__.__name__, content=builtins.unicode(
-                self.content, boostNode.ENCODING))
+            class_name=self.__class__.__name__,
+            content=convert_to_unicode(self.content))
 # #
 
     @JointPoint
@@ -1376,13 +1355,13 @@ class String(Object, builtins.str):
             lambda match: '%s%s%s' % (
                 match.group('before'), match.group('abbreviation').upper(),
                 match.group('after')
-            ), builtins.unicode(self.content, boostNode.ENCODING))
+            ), convert_to_unicode(self.content))
         self.content = re.compile(
             '(?!^)%s(?P<first_letter>[a-zA-Z0-9])' % delimiter
         ).sub(
             lambda match: match.group('first_letter').upper(),
             self.content
-        ).encode(boostNode.ENCODING)
+        ).encode(ENCODING)
 # #
         return self
 
@@ -1441,8 +1420,7 @@ class String(Object, builtins.str):
 # #         ).sub('\\1%s\\2' % delimiter, self.content)
         self.content = re.compile(
             '((?:%s))((?:%s))' % (abbreviations, abbreviations)
-        ).sub('\\1%s\\2' % delimiter, builtins.unicode(
-            self.content, boostNode.ENCODING))
+        ).sub('\\1%s\\2' % delimiter, convert_to_unicode(self.content))
 # #
         self.content = re.compile(
             '([^%s])([A-Z][a-z]+)' % escaped_delimiter
@@ -1454,7 +1432,7 @@ class String(Object, builtins.str):
         self.content = re.compile(
             '([a-z0-9])([A-Z])'
         ).sub('\\1%s\\2' % delimiter, self.content).lower().encode(
-            boostNode.ENCODING)
+            ENCODING)
 # #
         return self
 
@@ -1622,8 +1600,8 @@ class String(Object, builtins.str):
 # #         self.content = re.compile('{([a-z]+)}').sub(
 # #             '\{\\1\}', self.content)
         self.content = re.compile('{([a-z]+)}').sub(
-            '\{\\1\}', builtins.unicode(self.content, boostNode.ENCODING)
-        ).encode(boostNode.ENCODING)
+            '\{\\1\}', convert_to_unicode(self.content)
+        ).encode(ENCODING)
 # #
         return self
 
@@ -1749,22 +1727,15 @@ class String(Object, builtins.str):
                     search_string, replacement, *arguments, **keywords
                 ).content
         else:
-            # TODO use stringify
-            # TODO grap encoding from central point not FileHandler
 # # python3.4
 # #             self.content = self.content.replace(
 # #                 builtins.str(search), builtins.str(replace),
 # #                 *arguments, **keywords)
-            if builtins.isinstance(search, builtins.str):
-                search = builtins.unicode(
-                    search, boostNode.ENCODING)
-            if builtins.isinstance(replace, builtins.str):
-                replace = builtins.unicode(
-                    replace, boostNode.ENCODING)
-            self.content = builtins.unicode(
-                self.content, boostNode.ENCODING
-            ).replace(search, replace, *arguments, **keywords).encode(
-                boostNode.ENCODING)
+            self.content = convert_to_unicode(
+                self.content
+            ).replace(convert_to_unicode(search), convert_to_unicode(
+                replace
+            ), *arguments, **keywords).encode(ENCODING)
 # #
         return self
 
@@ -1857,9 +1828,9 @@ class String(Object, builtins.str):
 # #             )(replace, self.content, *arguments, **keywords)
             self.content = builtins.getattr(
                 re.compile(search), inspect.stack()[0][3]
-            )(replace, builtins.unicode(
-                self.content, boostNode.ENCODING
-            ), *arguments, **keywords).encode(boostNode.ENCODING)
+            )(replace, convert_to_unicode(
+                self.content
+            ), *arguments, **keywords).encode(ENCODING)
 # #
         return self
 
@@ -1901,22 +1872,37 @@ class String(Object, builtins.str):
             >>> result[1]
             2
         '''
-        # TODO handle for right unicode handling
         if builtins.isinstance(search, builtins.dict):
             number_of_replaces = 0
             for search_string, replacement in search.items():
+# # python3.4
+# #                 self.content, temp_number_of_replaces = \
+# #                 builtins.getattr(
+# #                     re.compile(builtins.str(search_string)),
+# #                     inspect.stack()[0][3]
+# #                 )(
+# #                     builtins.str(replacement), self.content,
+# #                     *arguments, **keywords)
                 self.content, temp_number_of_replaces = builtins.getattr(
-                    re.compile(builtins.str(search_string)),
+                    re.compile(convert_to_unicode(search_string)),
                     inspect.stack()[0][3]
-                )(
-                    builtins.str(replacement), self.content, *arguments,
-                    **keywords)
+                )(convert_to_unicode(replacement), self.content,
+                  *arguments, **keywords)
+# #
                 number_of_replaces += temp_number_of_replaces
         else:
+# # python3.4
+# #             self.content, number_of_replaces = builtins.getattr(
+# #                 re.compile(builtins.str(search)),
+# #                 inspect.stack()[0][3]
+# #             )(builtins.str(replace), self.content, *arguments,
+# #               **keywords)
             self.content, number_of_replaces = builtins.getattr(
-                re.compile(builtins.str(search)),
+                re.compile(convert_to_unicode(search)),
                 inspect.stack()[0][3]
-            )(builtins.str(replace), self.content, *arguments, **keywords)
+            )(convert_to_unicode(replace), self.content, *arguments,
+              **keywords)
+# #
         return self, number_of_replaces
 
     @JointPoint
@@ -2395,11 +2381,6 @@ class Dictionary(Object, builtins.dict):
                     iterable=value, key_wrapper=key_wrapper,
                     value_wrapper=value_wrapper)
             else:
-# # python3.4
-# #                 pass
-                if builtins.isinstance(value, builtins.str):
-                    value = builtins.unicode(value, boostNode.ENCODING)
-# #
                 self.content[key] = value_wrapper(key, value)
         return self
 
@@ -2517,11 +2498,6 @@ class Dictionary(Object, builtins.dict):
                     )(iterable=value, key_wrapper=key_wrapper,
                       value_wrapper=value_wrapper)
                 else:
-# # python3.4
-# #                     pass
-                    if builtins.isinstance(value, builtins.str):
-                        value = builtins.unicode(value, boostNode.ENCODING)
-# #
                     iterable[key] = value_wrapper(key, value)
         except builtins.TypeError as exception:
             '''
@@ -2534,7 +2510,7 @@ class Dictionary(Object, builtins.dict):
 # #                 builtins.str(exception))
             __logger__.warning(
                 '%s: %s', exception.__class__.__name__,
-                exception.message)
+                convert_to_unicode(exception))
 # #
         return iterable
 
@@ -2736,7 +2712,7 @@ class Module(Object):
         if extension:
             return file.name
         if path:
-            return file.directory_path + file.basename
+            return file.directory.path + file.basename
         return file.basename
 
     @JointPoint(builtins.classmethod)
@@ -2776,13 +2752,13 @@ class Module(Object):
             NOTE: If file doesn't exists we could be in a frozen executable \
             context.
         '''
-        if cls.is_package(path=file.directory_path) or not file:
+        if cls.is_package(path=file.directory.path) or not file:
             if not file:
                 file = FileHandler(
                     location=sys.argv[0], respect_root_path=True)
             if path:
-                return file.directory_path
-            return FileHandler(location=file.directory_path).name
+                return file.directory.path
+            return file.directory.name
         return ''
 
     @JointPoint(builtins.classmethod)
@@ -3168,26 +3144,15 @@ class Module(Object):
         if(not builtins.hasattr(module, '__module_name__') or
            module.__module_name__ is None):
             module.__module_name__ = cls.get_name(frame, module)
-# # python3.4
-# #         module.__exception__ = builtins.type(
-# #             '%sError' % String(
-# #                 module.__module_name__
-# #             ).get_camel_case_capitalize().content, (builtins.Exception,),
-# #             {'__init__': lambda self, message, *arguments:
-# #                 builtins.Exception.__init__(
-# #                     self, message % arguments
-# #                 ) if arguments else builtins.Exception.__init__(
-# #                     self, message)})
         module.__exception__ = builtins.type(
-            builtins.str('%sError' % String(
+            builtins.str('%sError') % String(
                 module.__module_name__
-            ).get_camel_case_capitalize().content), (builtins.Exception,),
+            ).get_camel_case_capitalize().content, (builtins.Exception,),
             {'__init__': lambda self, message, *arguments:
                 builtins.Exception.__init__(
                     self, message % arguments
                 ) if arguments else builtins.Exception.__init__(
                     self, message)})
-# #
         module.__test_mode__ = False
         module.__file_path__ = cls.get_name(
             frame, module, path=True, extension=True)

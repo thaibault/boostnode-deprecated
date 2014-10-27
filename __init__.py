@@ -287,17 +287,16 @@
     ... __status__ = 'e.g. "Beta"'
     ... __version__ = 'e.g. 0.9'
     ...
-    ... # # python2.7 pass
+    ... # # python2.7 import __builtin__ as builtins
     ... import builtins
     ... import inspect
-    ...
-    ... # # python2.7 builtins = sys.modules['__main__'].__builtins__
-    ... pass
     ...
     ... sys.path.append(os.path.abspath(sys.path[0] + 2 * ('..' + os.sep)))
     ... '''see bc18'''
     ...
-    ... import boostNode.extension.system
+    ... # # python2.7 from boostNode import convert_to_unicode
+    ... pass
+    ... from boostNode.extension.file import Handler as FileHandler
     ...
     ... # endregion
     ...
@@ -379,8 +378,69 @@ sys.dont_write_bytecode = True
 
 # endregion
 
+# region constants
+
+ENCODING = 'utf_8'
+'''Defines the global default encoding.'''
+
+# endregion
 
 # region functions
+
+# # python3.4
+# # pass
+'''
+    Handling "builtins.str" and "builtins.unicode" in python2.7.X needs some \
+    much attention. Because different API's uses different types. The main \
+    development goes to "builtins.unicode" so working with boostNode means \
+    you should use them.
+
+    Every content which could contain a "builtins.str" type and may have \
+    non ascii-characters should be converted via the \
+    "boostNode.convert_to_unicode()" method.
+'''
+
+
+def convert_to_unicode(object):
+    '''
+        Converts given object to its unicode string representation like \
+        python's native "builtins.str()" method.
+    '''
+    if builtins.isinstance(object, builtins.Exception) and builtins.hasattr(
+        object, 'message'
+    ):
+        object = object.message
+    if builtins.isinstance(object, builtins.unicode):
+        '''
+            NOTE: To force specified encoding we should encode and than \
+            decode here.
+        '''
+        return object
+    elif builtins.isinstance(object, builtins.str):
+        return builtins.unicode(object, ENCODING)
+    elif builtins.hasattr(object, '__unicode__'):
+        return object.__unicode__()
+    elif builtins.hasattr(object, '__str__'):
+        object = object.__str__()
+        if builtins.isinstance(object, builtins.unicode):
+            return object
+        return builtins.unicode(object, ENCODING)
+    '''
+        NOTE: We have to avoid using an explicit encoding to mimic python \
+        native "builtins.str()" method behavior for getting a string \
+        representation.
+    '''
+    return builtins.unicode(object)
+
+
+def convert_to_string(object):
+    '''
+        Converts given object to its str string representation like \
+        python's native "builtins.str()" method.
+    '''
+    return convert_to_unicode(object).encode(ENCODING)
+# #
+
 
 # # python3.4 def __get_all_modules__(path=sys.path[0]) -> builtins.list:
 def __get_all_modules__(path=sys.path[0]):
@@ -439,10 +499,8 @@ if not builtins.getattr(builtins, "WindowsError", None):
 # endregion
 
 
-# region constants
+# region variables
 
-ENCODING = 'utf_8'
-'''Defines the global default encoding.'''
 __all__ = __get_all_modules__()
 '''Determine all modules in this folder via introspection.'''
 

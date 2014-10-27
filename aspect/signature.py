@@ -44,6 +44,7 @@ pass
 '''Make boostNode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
+from boostNode import convert_to_unicode
 from boostNode.extension.type import Self, SelfClass, SelfClassObject
 # # python3.4
 # # from boostNode.paradigm.aspectOrientation import Argument, CallJointPoint
@@ -711,7 +712,10 @@ class CheckObject(builtins.object):
         result = ''
         for type in types:
             if type is Self:
-                result += '"%s (self)"' % builtins.str(self.object)
+# # python3.4
+# #                 result += '"%s (self)"' % builtins.str(self.object)
+                result += '"%s (self)"' % convert_to_unicode(self.object)
+# #
             elif type is SelfClass:
                 result += '"%s (self class)"' % self.class_object.__name__
             elif type is SelfClassObject:

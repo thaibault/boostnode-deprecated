@@ -45,7 +45,7 @@ import sys
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
 # # python3.4 pass
-import boostNode
+from boostNode import ENCODING
 from boostNode.extension.file import Handler as FileHandler
 from boostNode.extension.native import Module, InstancePropertyInitializer, \
     String
@@ -392,7 +392,7 @@ class Replace(Class, Runnable):
 # #                                 '(?:(?:# # .*?\n)|'  # in brackets
 # #                                 '(?:# #\n))+'  # in brackets
 # #                                 ')(?P<current_text>.*?\n)# #(?:\n|\Z)',
-# #         encoding=boostNode.ENCODING, dry=False, _exclude_locations=(),
+# #         encoding=ENCODING, dry=False, _exclude_locations=(),
 # #         _new_version='__determine_useful__', **keywords: builtins.object
 # #     ) -> Self:
     def _initialize(
@@ -409,7 +409,7 @@ class Replace(Class, Runnable):
                                 '(?:(?:# # .*?\n)|'  # in brackets
                                 '(?:# #\n))+'  # in brackets
                                 ')(?P<current_text>.*?\n)# #(?:\n|\Z)',
-        encoding=boostNode.ENCODING, dry=False, _exclude_locations=(),
+        encoding=ENCODING, dry=False, _exclude_locations=(),
         _new_version='__determine_useful__', **keywords
     ):
 # #

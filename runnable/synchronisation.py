@@ -1352,13 +1352,11 @@ class Reflector(Class, Runnable):
             >>> reflector._relocate_missing_file(relocated_file, linked_file)
             True
         '''
-        relocated_directory = FileHandler(
-            location=relocated_file.directory_path)
-        if not relocated_directory.is_directory():
+        if not relocated_file.directory.is_directory():
             __logger__.info(
                 'Create directory path "%s" for relocation of "%s".',
-                relocated_directory.path, linked_file.path)
-            relocated_directory.make_directories()
+                relocated_file.directory.path, linked_file.path)
+            relocated_file.directory.make_directories()
         if linked_file:
             __logger__.info(
                 'Relocate "%s" to "%s".', linked_file.path,

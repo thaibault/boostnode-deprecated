@@ -44,7 +44,7 @@ import Queue as native_queue
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
 # # python3.4 pass
-import boostNode
+from boostNode import ENCODING, convert_to_unicode
 from boostNode.extension.file import Handler as FileHandler
 from boostNode.extension.native import Module
 # # python3.4 from boostNode.extension.type import Self, SelfClass
@@ -187,8 +187,7 @@ class Buffer(Class, logging.StreamHandler):
                 ' with content "{content}".'.format(
                     class_name=self.__class__.__name__,
                     type=buffer_type, type_addition=type_addition,
-                    content=builtins.unicode(
-                        self.content, boostNode.ENCODING)))
+                    content=builtins.unicode(self.content, ENCODING)))
 # #
         return(
             'Object of "{class_name}" ({type} buffered{type_addition}) '
@@ -261,7 +260,7 @@ class Buffer(Class, logging.StreamHandler):
         if self.force_string and builtins.isinstance(
             self._content, builtins.unicode
         ):
-            self._content = self._content.encode(boostNode.ENCODING)
+            self._content = self._content.encode(ENCODING)
 # #
         return self._content
 
@@ -297,7 +296,7 @@ class Buffer(Class, logging.StreamHandler):
         if self.force_string and builtins.isinstance(
             content, builtins.unicode
         ):
-            content = content.encode(boostNode.ENCODING)
+            content = content.encode(ENCODING)
 # #
         with self._lock:
             self.last_written = content
@@ -387,7 +386,7 @@ class Buffer(Class, logging.StreamHandler):
 # #         pass
         if self.force_string:
             self._content = builtins.str()
-            content = content.encode(boostNode.ENCODING)
+            content = content.encode(ENCODING)
 # #
         return content
 
@@ -497,14 +496,26 @@ class Print(Class):
                 result = ''
                 while not out.empty():
                     if index != 0 and keywords['separator']:
-                        result += builtins.str(keywords['separator'])
-                    result += builtins.str(out.get())
+# # python3.4
+# #                         result += builtins.str(keywords['separator'])
+# #                     result += convert_to_unicode(out.get())
+                        result += convert_to_unicode(
+                            keywords['separator'])
+                    result += convert_to_unicode(out.get())
+# #
                 output[index] = result
             elif index == 0:
-                output[index] = builtins.str(out)
+# # python3.4                 output[index] = builtins.str(out)
+                output[index] = convert_to_unicode(out)
             else:
-                output[index] = builtins.str(keywords['separator']) +\
-                    builtins.str(out)
+# # python3.4
+# #                 output[index] = builtins.str(
+# #                     keywords['separator']
+# #                 ) + builtins.str(out)
+                output[index] = convert_to_unicode(
+                    keywords['separator']
+                ) + convert_to_unicode(out)
+# #
         output = [keywords['start']] + output + [keywords['end']]
 # # python3.4
 # #         builtins.print(
@@ -532,7 +543,8 @@ class Print(Class):
             ''
         '''
         if builtins.isinstance(self.buffer, Buffer):
-            return builtins.str(self.buffer)
+# # python3.4             return builtins.str(self.buffer)
+            return convert_to_unicode(self.buffer)
         return ''
 
     @JointPoint
@@ -607,7 +619,8 @@ class Logger(Class):
         result = ''
         for buffer in cls.buffer:
             if builtins.isinstance(buffer, Buffer):
-                result += builtins.str(buffer)
+# # python3.4                 result += builtins.str(buffer)
+                result += convert_to_unicode(buffer)
         return result
 
     @JointPoint(builtins.classmethod)
@@ -643,11 +656,20 @@ class Logger(Class):
             formatter_string += start + builtins.repr(
                 logger.handlers[0].formatter
             ) + end
+# # python3.4
+# #         return(
+# #             'Object of "{class_name}" with logger "{handler}", formatter '
+# #             '"{formatter}" and buffer "{buffer}".'.format(
+# #                 class_name=cls.__name__, handler=handler_string,
+# #                 formatter=formatter_string,
+# #                 buffer=builtins.str(cls.buffer)))
         return(
             'Object of "{class_name}" with logger "{handler}", formatter '
             '"{formatter}" and buffer "{buffer}".'.format(
                 class_name=cls.__name__, handler=handler_string,
-                formatter=formatter_string, buffer=builtins.str(cls.buffer)))
+                formatter=formatter_string,
+                buffer=convert_to_unicode(cls.buffer)))
+# #
 
         # # endregion
 

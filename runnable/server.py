@@ -82,7 +82,7 @@ import urlparse
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
 # # python3.4 pass
-import boostNode
+from boostNode import ENCODING, convert_to_unicode
 from boostNode.extension.file import Handler as FileHandler
 from boostNode.extension.native import Module, Object, \
     InstancePropertyInitializer, String
@@ -158,7 +158,8 @@ class SocketFileObjectWrapper(socket._fileobject):
 # #                     exception.__class__.__name__, builtins.str(exception))
                 __logger__.info(
                     'Connection interrupted. %s: %s',
-                    exception.__class__.__name__, exception.message)
+                    exception.__class__.__name__, convert_to_unicode(
+                        exception))
 # #
                 return ''
         elif self.first_read_line is True:
@@ -178,7 +179,8 @@ class SocketFileObjectWrapper(socket._fileobject):
 # #                     exception.__class__.__name__, builtins.str(exception))
                 __logger__.info(
                     'Connection interrupted. %s: %s',
-                    exception.__class__.__name__, exception.message)
+                    exception.__class__.__name__, convert_to_unicode(
+                        exception))
 # #
                 return ''
         result = self.first_read_line
@@ -296,7 +298,8 @@ class MultiProcessingHTTPServer(
         ) as exception:
             __logger__.info(
                 'Connection interrupted. %s: %s',
-                exception.__class__.__name__, exception.message)
+                exception.__class__.__name__, convert_to_unicode(
+                    exception))
 # #
 
     @JointPoint
@@ -388,7 +391,8 @@ class MultiProcessingHTTPServer(
             ) as exception:
                 __logger__.info(
                     'Connection interrupted. %s: %s',
-                    exception.__class__.__name__, exception.message)
+                    exception.__class__.__name__, convert_to_unicode(
+                        exception))
 # #
 
     # endregion
@@ -958,11 +962,11 @@ class Web(Class, Runnable):
 # #                     __logging__.warning(
 # #                         'Connection couldn\'t be released on both sites. '
 # #                         '%s: %s', exception.__class__.__name__,
-# #                         str(exception))
+# #                         builtins.str(exception))
                     __logging__.warning(
                         'Connection couldn\'t be released on both sites. '
                         '%s: %s', exception.__class__.__name__,
-                        exception.message)
+                        convert_to_unicode(exception))
 # #
                 '''Tells the kernel to free binded port.'''
                 self.service.socket.setsockopt(
@@ -1024,7 +1028,7 @@ class Web(Class, Runnable):
 # #     def _initialize(
 # #         self: Self, root=None, host_name='', port=0, default='',
 # #         public_key_file=None, stop_order='stop',
-# #         encoding=boostNode.ENCODING, request_whitelist=('*:/.*',),
+# #         encoding=ENCODING, request_whitelist=('*:/.*',),
 # #         request_blacklist=(), same_process_request_whitelist=(),
 # #         # NOTE: Tuple for explicit web_server file reference validation.
 # #         # ('text/.+$', 'image/.+$', 'application/(x-)?javascript$')
@@ -1050,7 +1054,7 @@ class Web(Class, Runnable):
     def _initialize(
         self, root=None, host_name='', port=0, default='',
         public_key_file=None, stop_order='stop',
-        encoding=boostNode.ENCODING, request_whitelist=('*:/.*',),
+        encoding=ENCODING, request_whitelist=('*:/.*',),
         request_blacklist=(), same_process_request_whitelist=(),
         # NOTE: Tuple for explicit web_server file reference validation.
         # ('text/.+$', 'image/.+$', 'application/(x-)?javascript$')
@@ -1249,7 +1253,7 @@ class Web(Class, Runnable):
         except socket.error as exception:
             __logger__.warning(
                 '%s: %s', exception.__class__.__name__,
-                exception.message)
+                convert_to_unicode(exception))
 # #
         return self
 
@@ -1362,18 +1366,18 @@ class CGIHTTPRequestHandler(
             self.content_length_sent = False
         '''Saves the error message format.'''
 # # python3.4         self.error_message_format = (
-        self.error_message_format = builtins.str(
+        self.error_message_format = convert_to_unicode(
             '<!DOCTYPE html>\n'
             '<html>\n'
-            '\t<head><title>Error response</title></head>\n'
-            '\t<body>\n'
-            '\t\t<h1>Error response</h1>\n'
-            '\t\t<p>Error code %(code)d.</p>\n'
-            '\t\t<p>Message:</p>\n'
-            '\t\t<pre>%(message)s.</pre>\n'
-            '\t\t<p>Error code explanation: %(code)s</p>\n'
-            '\t\t<p>%(explain)s.</p>\n'
-            '\t</body>\n'
+            '    <head><title>Error response</title></head>\n'
+            '    <body>\n'
+            '        <h1>Error response</h1>\n'
+            '        <p>Error code %(code)d.</p>\n'
+            '        <p>Message:</p>\n'
+            '        <pre>%(message)s.</pre>\n'
+            '        <p>Error code explanation: %(code)s</p>\n'
+            '        <p>%(explain)s.</p>\n'
+            '    </body>\n'
             '</html>')
         self.server_version = '{program} {version} {status}'.format(
             program=String(__module_name__).get_camel_case_capitalize(
@@ -2029,11 +2033,12 @@ class CGIHTTPRequestHandler(
 # #                         __logger__.critical(
 # #                             'Invalid cookie detected "%s". %s: %s',
 # #                             cookie_content,
-# #                             exception.__class__.__name__, str(exception))
+# #                             exception.__class__.__name__,
+# #                             builtins.str(exception))
                         __logger__.critical(
                             'Invalid cookie detected "%s". %s: %s',
                             cookie_content, exception.__class__.__name__,
-                            exception.message)
+                            convert_to_unicode(exception))
 # #
                         return None
                     else:
@@ -2044,9 +2049,11 @@ class CGIHTTPRequestHandler(
 # #                             exception.__class__.__name__,
 # #                             builtins.str(exception), new_cookie_content)
                         __logger__.warning(
-                            'Invalid cookie detected "%s". %s: %s. Trying "%s"'
-                            '.', cookie_content, exception.__class__.__name__,
-                            exception.message, new_cookie_content)
+                            'Invalid cookie detected "%s". %s: %s. '
+                            'Trying "%s" .', cookie_content,
+                            exception.__class__.__name__,
+                            convert_to_unicode(exception),
+                            new_cookie_content)
 # #
                         cookie_content = new_cookie_content
                 else:
@@ -2348,8 +2355,8 @@ class CGIHTTPRequestHandler(
 # # python3.4
 # #         pass
         if builtins.isinstance(request_description, builtins.str):
-            request_description = builtins.unicode(
-                request_description, boostNode.ENCODING)
+            request_description = convert_to_unicode(
+                request_description)
 # #
         __logger__.info(format.format(
             client_ip=self.client_address[0],
@@ -2454,8 +2461,8 @@ class CGIHTTPRequestHandler(
                             authentication_file))
                 if self._authentication_location == self.server.web.root:
                     break
-                self._authentication_location = FileHandler(
-                    location=self._authentication_location.directory_path)
+                self._authentication_location = \
+                    self._authentication_location.directory
 # # python3.4
 # #             login_data_match = re.compile(
 # #                 '(?P<name>[^:]+):(?P<password>.+)$'
@@ -2730,7 +2737,7 @@ class CGIHTTPRequestHandler(
             'CONTENT_TYPE': content_type,
             'QUERY_STRING': self.parameter,
             'REMOTE_HOST': self.host,
-            'CONTENT_LENGTH': builtins.str(self.headers.get(
+            'CONTENT_LENGTH': convert_to_unicode(self.headers.get(
                 'content-length', 0)),
             'HTTP_USER_AGENT': '',
             'HTTP_COOKIE': '',
@@ -3100,8 +3107,7 @@ class CGIHTTPRequestHandler(
         if self.requested_file:
             self._authentication_location = self.requested_file
             if self.requested_file.is_file():
-                self._authentication_location = FileHandler(
-                    location=self.requested_file.directory_path)
+                self._authentication_location = self.requested_file.directory
         cookie_handler = self.get_cookie()
         if cookie_handler is not None:
             for key, morsel in cookie_handler.items():
@@ -3632,8 +3638,15 @@ class CGIHTTPRequestHandler(
             >>> handler._run_requested_file(True) # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "" and parame...
         '''
+# # python3.4
+# #         self.request_arguments = builtins.list(builtins.map(
+# #             lambda element: builtins.str(
+# #                 element[1]
+# #             ), self.request_arguments))
         self.request_arguments = builtins.list(builtins.map(
-            lambda element: builtins.str(element[1]), self.request_arguments))
+            lambda element: convert_to_unicode(element[1]),
+            self.request_arguments))
+# #
         self.request_arguments[0] = self.server.web.root.path + \
             self.request_arguments[0][1]
         __logger__.debug('Execute file "%s".', self.request_arguments[0])
@@ -3649,7 +3662,8 @@ class CGIHTTPRequestHandler(
 # #             errors = '%s: %s' % (
 # #                 exception.__class__.__name__, builtins.str(exception))
             errors = '%s: %s' % (
-                exception.__class__.__name__, exception.message)
+                exception.__class__.__name__, convert_to_unicode(
+                    exception))
 # #
         self.server.web.number_of_running_threads -= 1
         size = builtins.len(output)
@@ -3806,7 +3820,7 @@ class CGIHTTPRequestHandler(
 # #                         '\n', builtins.str(exception))))
                 self.send_error(500, '%s: %s' % (
                     exception.__class__.__name__, re.compile('\n+').sub(
-                        '\n', exception.message)))
+                        '\n', convert_to_unicode(exception))))
 # #
             else:
                 self.send_error(500, 'Internal server error')
@@ -3819,7 +3833,8 @@ class CGIHTTPRequestHandler(
 # #                 exception.__class__.__name__, builtins.str(exception))
             __logger__.critical(
                 'Error in module "%s" %s: %s', requested_module.__name__,
-                exception.__class__.__name__, exception.message)
+                exception.__class__.__name__, convert_to_unicode(
+                    exception))
 # #
         return self
 

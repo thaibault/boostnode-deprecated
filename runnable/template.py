@@ -51,7 +51,7 @@ import urllib
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
 # # python3.4 pass
-import boostNode
+from boostNode import ENCODING, convert_to_unicode
 from boostNode.extension.file import Handler as FileHandler
 from boostNode.extension.native import Dictionary, Module, \
     InstancePropertyInitializer, String
@@ -708,8 +708,8 @@ class Parser(Class, Runnable):
                 exception raising.
             '''
             if match.group('variable_name') in keywords:
-                return builtins.str(
-                    keywords[match.group('variable_name')])
+                return builtins.str(keywords[match.group(
+                    'variable_name')])
             return match.group(0)
         self._output.write(re.compile(self.placeholder_pattern.format(
             left_delimiter=self.left_code_delimiter,
@@ -969,7 +969,7 @@ class Parser(Class, Runnable):
 # #     def _initialize(
 # #         self: Self, template: (builtins.str, FileHandler), string=None,
 # #         cache_path=None, full_caching=False, propagate_full_caching=False,
-# #         file_encoding=boostNode.ENCODING,
+# #         file_encoding=ENCODING,
 # #         placeholder_name_pattern='[a-zA-Z0-9_\[\]\'"\.()\\\\,\-+ :/={}$]+',
 # #         command_line_placeholder_name_pattern='(?s)'
 # #                                               '[a-zA-Z0-9_\[\]\.(),\-+]+',
@@ -1029,8 +1029,7 @@ class Parser(Class, Runnable):
 # #     ) -> Self:
     def _initialize(
         self, template, string=None, cache_path=None, full_caching=False,
-        propagate_full_caching=False,
-        file_encoding=boostNode.ENCODING,
+        propagate_full_caching=False, file_encoding=ENCODING,
         placeholder_name_pattern='[a-zA-Z0-9_\[\]\'"\.()\\\\,\-+ :/={}$]+',
         command_line_placeholder_name_pattern='(?s)'
                                               '[a-zA-Z0-9_\[\]\.(),\-+]+',
@@ -1255,7 +1254,7 @@ class Parser(Class, Runnable):
             >>> Parser(file).render().output
             'hans'
 
-            >>> Parser(file.directory_path + file.basename)
+            >>> Parser(file.directory.path + file.basename)
             Object of "Parser" with template "hans".
 
             >>> Parser(
@@ -1405,8 +1404,9 @@ class Parser(Class, Runnable):
                 'Error with %s in include statement in line %s (line '
                 'in compiled template: %s).\n%s: %s%s',
                 self._determine_template_description(), source_line,
-                mapped_line, __exception__.__name__, exception.message,
-                rendered_python_code)
+                mapped_line, __exception__.__name__, convert_to_unicode(
+                    exception
+                ), rendered_python_code)
             raise exception
 # #
         except builtins.BaseException as exception:
@@ -1457,18 +1457,10 @@ class Parser(Class, Runnable):
             ... ) # doctest: +ELLIPSIS
             (...Native exception object:...)
         '''
-# # python3.4
-# #         exception_message = '%s: %s' % (
-# #             exception.__class__.__name__, String(
-# #                 exception
-# #             ).get_camel_case_capitalize().replace("'", '"').content)
         exception_message = '%s: %s' % (
-            exception.__class__.__name__, builtins.unicode(
-                String(exception.message.encode(
-                    boostNode.ENCODING
-                )).get_camel_case_capitalize().replace("'", '"').content,
-                boostNode.ENCODING))
-# #
+            exception.__class__.__name__, String(
+                exception
+            ).get_camel_case_capitalize().replace("'", '"').content)
         native_exception_description = ''
         if(force_native_exception or sys.flags.debug or
            __logger__.isEnabledFor(logging.DEBUG)):
@@ -1480,10 +1472,9 @@ class Parser(Class, Runnable):
                     value = builtins.getattr(exception, property_name)
 # # python3.4
 # #                     native_exception_description += '%s: "%s"\n' % (
-# #                         property_name, builtins.repr(value))
+# #                         property_name, builtins.str(value))
                     native_exception_description += '%s: "%s"\n' % (
-                        property_name, builtins.unicode(
-                            builtins.repr(value), boostNode.ENCODING))
+                        property_name, convert_to_unicode(value))
 # #
             native_exception_description = (
                 '\n\nNative exception object:\n\n%s' %
@@ -1558,7 +1549,7 @@ class Parser(Class, Runnable):
                 exception_message=exception_message,
                 native_exception_description=native_exception_description,
                 rendered_python_code=rendered_python_code.encode(
-                    boostNode.ENCODING)))
+                    ENCODING)))
         raise exception
 # #
 
@@ -1714,10 +1705,8 @@ class Parser(Class, Runnable):
     # as possible. So the JointPoint is deactivated.
     # @JointPoint
 # # python3.4
-# #     def _convert_to_string(
-# #         self, object: Iterable, mark_string=False
-# #     ) -> builtins.list:
-    def _convert_to_string(self, object, mark_string=False):
+# #     def _convert_to_string(self, object: Iterable) -> builtins.list:
+    def _convert_to_string(self, object, quote_string=False):
 # #
         '''
             Represents given object as string representation in a way that it \
@@ -1745,8 +1734,7 @@ class Parser(Class, Runnable):
         if builtins.isinstance(object, builtins.dict):
             return json.dumps(object)
 # # python3.4
-# #         if builtins.isinstance(object, builtins.str):
-# #             return builtins.str(object)
+# #         return builtins.str(object)
         if builtins.isinstance(object, (
             builtins.tuple, builtins.list, builtins.set
         )):
@@ -1755,26 +1743,23 @@ class Parser(Class, Runnable):
                 if index:
                     result += ', '
                 '''
-                    Take this method type by another instance of this \
-                    class via introspection.
+                    Take this method type by another instance of this class \
+                    via introspection.
                 '''
                 result += builtins.getattr(self, inspect.stack()[0][3])(
-                    sub_object, mark_string=True)
+                    sub_object, quote_string=True)
             if builtins.isinstance(object, builtins.tuple):
                 return '(%s%s)' % (result, ',' if index < 1 else '')
             if builtins.isinstance(object, builtins.list):
                 return '[%s]' % result
             return '{%s}' % result
-        if builtins.isinstance(object, builtins.unicode):
-            if mark_string:
-                return '"%s"' % object
-            return object
-        if builtins.isinstance(object, builtins.str):
-            result = builtins.unicode(object, boostNode.ENCODING)
-            if mark_string:
-                return '"%s"' % result
-            return result
-        return builtins.unicode(builtins.str(object), boostNode.ENCODING)
+        is_string = False
+        if builtins.isinstance(object, (builtins.unicode, builtins.str)):
+            is_string = True
+        object = convert_to_unicode(object)
+        if is_string and quote_string:
+            return '"%s"' % object
+        return object
 # #
 
     @JointPoint
@@ -1810,7 +1795,7 @@ class Parser(Class, Runnable):
                     inspect.currentframe().f_back.f_back.f_locals[local]
         root_path = ''
         if self.file:
-            root_path = self.file.directory_path
+            root_path = self.file.directory.path
         shortcut = self.template_context_default_indent
         if propagate_full_caching is None:
             propagate_full_caching = self.propagate_full_caching
