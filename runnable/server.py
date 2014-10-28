@@ -82,7 +82,7 @@ import urlparse
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
 # # python3.4 pass
-from boostNode import ENCODING, convert_to_unicode
+from boostNode import ENCODING, convert_to_string, convert_to_unicode
 from boostNode.extension.file import Handler as FileHandler
 from boostNode.extension.native import Module, Object, \
     InstancePropertyInitializer, String
@@ -1810,10 +1810,10 @@ class CGIHTTPRequestHandler(
     @JointPoint
 # # python3.4
 # #     def send_error(
-# #         self: Self, code: builtins.int, *arguments: builtins.object,
-# #         **keywords: builtins.object
+# #         self: Self, code: builtins.int, message: builtins.str,
+# #         *arguments: builtins.object, **keywords: builtins.object
 # #     ) -> Self:
-    def send_error(self, code, *arguments, **keywords):
+    def send_error(self, code, message, *arguments, **keywords):
 # #
         '''
             Send the given error to client if no response code was sent yet.
@@ -1823,6 +1823,8 @@ class CGIHTTPRequestHandler(
         if not (self.response_sent or __test_mode__):
             self.content_type_sent = self.content_length_sent = True
             self.send_response(code)
+# # python3.4             pass
+            message = convert_to_string(message)
             '''Take this method via introspection.'''
             builtins.getattr(
                 builtins.super(self.__class__, self), inspect.stack()[0][3]
