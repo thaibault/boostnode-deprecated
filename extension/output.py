@@ -33,6 +33,9 @@ import __builtin__ as builtins
 from copy import copy
 import inspect
 import logging
+from logging import getLoggerClass, getLogger
+from logging import StreamHandler as LoggingStreamHandler
+from logging import Formatter as LoggingFormatter
 import multiprocessing
 import os
 import sys
@@ -54,10 +57,47 @@ from boostNode.paradigm.objectOrientation import Class
 
 # endregion
 
+# region constants
+
+SET_ATTRIBUTE_MODE = '\033[%sm'
+
+RESET = 0
+BRIGHT = 1
+DIM = 2
+UNDERSCORE = 4
+BLINK = 5
+REVERSE = 7
+HIDDEN = 8
+
+COLOR = {
+    'foreground': {
+        'black': 30,
+        'red': 31,
+        'green': 32,
+        'yellow': 33,
+        'blue': 34,
+        'magenta': 35,
+        'cyan': 36,
+        'white': 37,
+        'fallback': 39
+    }, 'background': {
+        'black': 40,
+        'red': 41,
+        'green': 42,
+        'yellow': 43,
+        'blue': 44,
+        'magenta': 45,
+        'cyan': 46,
+        'white': 47
+    }
+}
+
+# endregion
+
 
 # region classes
 
-class Buffer(Class, logging.StreamHandler):
+class Buffer(Class, LoggingStreamHandler):
 
     '''
         This class represents a layer for writing and reading to an output \
@@ -415,17 +455,19 @@ class Print(Class):
 
     # region properties
 
-    '''Print this string before every first argument to every "put()" call.'''
+    replace = False
+    '''Indicates weather last line should be replaced.'''
     start = ''
-    '''Print this string between every given element to one "put()" call.'''
+    '''Print this string before every first argument to every "put()" call.'''
     separator = ' '
-    '''Print this string after every last argument to every "put()" call.'''
+    '''Print this string between every given element to one "put()" call.'''
     end = '\n'
+    '''Print this string after every last argument to every "put()" call.'''
+    default_buffer = sys.stdout
     '''
         Redirect print output to this buffer if no buffer is defined for \
         current instance.
     '''
-    default_buffer = sys.stdout
 
     # endregion
 
@@ -477,10 +519,12 @@ class Print(Class):
             Object ... (memory buffered) with content "hans, peter and klaus".
         '''
         keywords = {
+            'replace': self.__class__.replace,
             'start': self.__class__.start,
             'separator': self.__class__.separator,
             'end': self.__class__.end,
-            'buffer': self.__class__.default_buffer, 'flush': False}
+            'buffer': self.__class__.default_buffer,
+            'flush': codewords.get('replace', False)}
         keywords.update(codewords)
 
         # # # region properties
@@ -516,7 +560,8 @@ class Print(Class):
                     keywords['separator']
                 ) + convert_to_unicode(out)
 # #
-        output = [keywords['start']] + output + [keywords['end']]
+        line_replace = '\033[1A\r\033[2K' if keywords['replace'] else ''
+        output = [keywords['start'], line_replace] + output + [keywords['end']]
 # # python3.4
 # #         builtins.print(
 # #             *output, sep='', end='', file=keywords['buffer'],
@@ -566,9 +611,47 @@ class Print(Class):
 
         # # endregion
 
-        # endregion
+    # # endregion
 
     # endregion
+
+
+class ColoredFormatter(LoggingFormatter):
+
+    '''
+        Wraps python's native logging formatter to support level specific \
+        colors.
+    '''
+
+    COLOR_TO_LEVEL_MAPPING = {
+        'DEBUG': 'blue',
+        'INFO': 'green',
+        'WARNING': 'yellow',
+        'CRITICAL': 'magenta',
+        'ERROR': 'red'
+    }
+    '''Defines the level to color mapping.'''
+
+    @JointPoint
+# # python3.4     def format_(self: Self, record: LogRecord) -> builtins.str:
+    def format(self, record):
+        '''Appends the level specified color to the logging output.'''
+        levelname = record.levelname
+        if levelname in self.COLOR_TO_LEVEL_MAPPING:
+            record.levelname = (
+                SET_ATTRIBUTE_MODE % RESET
+            ) + (
+                SET_ATTRIBUTE_MODE % COLOR['foreground'][
+                    self.COLOR_TO_LEVEL_MAPPING[levelname]
+                ]
+            ) + levelname + (SET_ATTRIBUTE_MODE % RESET)
+        '''
+            Take this method type by another instance of this class via \
+            introspection.
+        '''
+        return builtins.getattr(builtins.super(
+            self.__class__, self
+        ), inspect.stack()[0][3])(record)
 
 
 class Logger(Class):
@@ -582,7 +665,10 @@ class Logger(Class):
 
     default_level = 'critical',
     '''Defines the default logging level for new created logger handler.'''
-    format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    format = (SET_ATTRIBUTE_MODE % COLOR['foreground']['cyan']) + (
+        '%(asctime)s - %(name)s' + (
+            SET_ATTRIBUTE_MODE % RESET
+        ) + ' - %(levelname)s - %(message)s'),
     '''Output format.'''
     terminator = '\n',
     '''Suffix in each logging output.'''
@@ -694,7 +780,7 @@ class Logger(Class):
 # #     def get(
 # #         cls: SelfClass, name=__name__, level=(), buffer=(), terminator=(),
 # #         format=()
-# #     ) -> logging.getLoggerClass():
+# #     ) -> getLoggerClass():
     def get(
         cls, name=__name__, level=(), buffer=(), terminator=(), format=()
     ):
@@ -727,7 +813,7 @@ class Logger(Class):
             '...'
             >>> logger_a.critical('Log some information.')
             >>> __test_buffer__.clear() # doctest: +ELLIPSIS
-            '... - test - CRITICAL - Log some information.\\n'
+            '... - test... - ...CRITICAL... - Log some information.\\n'
         '''
         for logger in cls.instances:
             if logger.name == name:
@@ -778,12 +864,12 @@ class Logger(Class):
             if buffer:
                 new_handler = []
                 for new_buffer in cls.buffer:
-                    new_handler.append(logging.StreamHandler(
+                    new_handler.append(LoggingStreamHandler(
                         stream=new_buffer))
             for handler, level, terminator, format in builtins.zip(
                 new_handler, cls.default_level, cls.terminator, cls.format
             ):
-                handler.setFormatter(logging.Formatter(format))
+                handler.setFormatter(ColoredFormatter(format))
                 handler.terminator = terminator
                 handler.setLevel(level.upper())
             for handler in logger.handlers:
@@ -833,7 +919,7 @@ class Logger(Class):
 # #         cls: SelfClass, name: builtins.str, level: builtins.tuple,
 # #         buffer: builtins.tuple, terminator: builtins.tuple,
 # #         format: builtins.tuple
-# #     ) -> logging.getLoggerClass():
+# #     ) -> getLoggerClass():
     def _generate_logger(cls, name, level, buffer, terminator, format):
 # #
         '''
@@ -856,17 +942,17 @@ class Logger(Class):
             terminator = cls.terminator
         if not format:
             format = cls.format
-        for handler in logging.getLogger(name).handlers:
-            logging.getLogger(name).removeHandler(handler)
-        logger = logging.getLogger(name)
+        for handler in getLogger(name).handlers:
+            getLogger(name).removeHandler(handler)
+        logger = getLogger(name)
         logger.propagate = False
         for _buffer, _terminator, _level, _format in builtins.zip(
             buffer, terminator, level, format
         ):
-            handler = logging.StreamHandler(stream=_buffer)
+            handler = LoggingStreamHandler(stream=_buffer)
             handler.terminator = _terminator
             handler.setLevel(_level.upper())
-            handler.setFormatter(logging.Formatter(_format))
+            handler.setFormatter(ColoredFormatter(_format))
             logger.addHandler(handler)
         '''Set meta logger level to first given level.'''
         logger.setLevel(builtins.getattr(logging, level[0].upper()))

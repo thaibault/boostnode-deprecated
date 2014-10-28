@@ -1970,7 +1970,7 @@ class CGIHTTPRequestHandler(
             <SimpleCookie: hans='hans'>
 
             >>> __test_buffer__.clear() # doctest: +ELLIPSIS
-            '...WARNING - Invalid cookie detected "ha/ns=hans". ...'
+            '...WARNING... - Invalid cookie detected "ha/ns=hans". ...'
 
             >>> # # python2.7
             >>> if sys.version_info.major < 3:
@@ -2015,7 +2015,7 @@ class CGIHTTPRequestHandler(
             <SimpleCookie: hans='ha/ns'>
 
             >>> __test_buffer__.clear() # doctest: +ELLIPSIS
-            '...WARNING - Invalid cookie detected ...'
+            '...WARNING... - Invalid cookie detected ...'
         '''
 # # python3.4         if 'cookie' in self.headers:
         if self.headers.get('cookie'):
@@ -3809,7 +3809,7 @@ class CGIHTTPRequestHandler(
             ...     ) # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "" and parame...
             >>> __test_buffer__.clear() # doctest: +ELLIPSIS
-            '... - CRITICAL - Error in module "doctest" OSError: hans...'
+            '... - ...CRITICAL... - Error in module "doctest" OSError: hans...'
         '''
         if self.respond:
             if(sys.flags.debug or __logger__.isEnabledFor(logging.DEBUG) or

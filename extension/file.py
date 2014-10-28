@@ -53,7 +53,7 @@ sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 # # python3.4
 # # from boostNode.extension.native import Object, String
 # # from boostNode.extension.type import Self, SelfClass, SelfClassObject
-from boostNode import ENCODING, convert_to_unicode
+from boostNode import ENCODING, convert_to_string, convert_to_unicode
 from boostNode.extension.native import Dictionary, Object, String
 from boostNode.extension.type import Self
 # #
@@ -197,7 +197,8 @@ class Handler(Class):
         drop them into a media player's gui). Like in \
         "PORTABLE_DEFAULT_LINK_PATTERN" you shouldn't use placeholders twice.
     '''
-    _root_path = os.sep
+# # python3.4     _root_path = os.sep
+    _root_path = convert_to_string(os.sep)
     '''
         Defines a virtual root path for all methods. Through these class \
         objects aren't locations except in "_root_path" available.
@@ -991,11 +992,12 @@ class Handler(Class):
             >>> isinstance(Handler(location=__file_path__).timestamp, float)
             True
         '''
-        return os.stat(self._path).st_mtime
+# # python3.4         return os.stat(self._path).st_mtime
+        return os.stat(convert_to_string(self._path)).st_mtime
 
     @JointPoint(Class.pseudo_property)
-# # python3.4     def get_lines(self: Self) -> builtins.int:
-    def get_lines(self):
+# # python3.4     def get_number_of_lines(self: Self) -> builtins.int:
+    def get_number_of_lines(self):
         '''
             Returns the number of lines in the file content referenced by the \
             "Handler" object.
@@ -1005,19 +1007,19 @@ class Handler(Class):
             >>> file = Handler(__test_folder__.path + 'get_lines_test1')
 
             >>> file.content = 'a\\nb\\nc\\n'
-            >>> file.lines
+            >>> file.number_of_lines
             3
 
             >>> file.content = ' '
-            >>> file.lines
+            >>> file.number_of_lines
             1
 
             >>> file.content = ''
-            >>> file.lines
+            >>> file.number_of_lines
             0
 
             >>> file.content = 'a\\nb\\nca\\nb\\nc'
-            >>> file.get_lines()
+            >>> file.get_number_of_lines()
             5
         '''
         lines = 0
@@ -1112,7 +1114,8 @@ class Handler(Class):
             True
         '''
         size = 0
-        if os.path.ismount(self._path):
+# # python3.4         if os.path.ismount(self._path):
+        if os.path.ismount(convert_to_string(self._path)):
             size = self.disk_used_space
         elif self.is_directory(allow_link=follow_link):
             size = self.BLOCK_SIZE_IN_BYTE
@@ -1133,7 +1136,8 @@ class Handler(Class):
         elif self.is_symbolic_link() and not follow_link:
             size = self.BLOCK_SIZE_IN_BYTE
         else:
-            size = os.path.getsize(self._path)
+# # python3.4             size = os.path.getsize(self._path)
+            size = os.path.getsize(convert_to_string(self._path))
         return builtins.float(self.convert_size_format(
             size, *arguments, **keywords))
 
@@ -1352,13 +1356,9 @@ class Handler(Class):
             'text/html'
         '''
         mime_type = mimetypes.guess_type(self._path)[0]
-# # python3.4
-# #         if builtins.isinstance(mime_type, builtins.str):
-        if builtins.isinstance(mime_type, (
-            builtins.unicode, builtins.str
-        )):
-# #
-            return mime_type
+        if builtins.isinstance(mime_type, builtins.str):
+# # python3.4             return mime_type
+            return convert_to_unicode(mime_type)
         if web:
             if self.name in ('.html', '.htm'):
                 return 'text/html'
@@ -1474,11 +1474,15 @@ class Handler(Class):
             '..'
         '''
         if context is None:
-            return os.path.relpath(self._path, *arguments, **keywords)
-        return os.path.relpath(
-            self._path, *arguments, start=self.__class__(
-                location=context
-            )._path, **keywords)
+# # python3.4
+# #             return os.path.relpath(self._path, *arguments, **keywords)
+            return convert_to_unicode(os.path.relpath(convert_to_string(
+                self._path
+            ), *arguments, **keywords))
+        return convert_to_unicode(os.path.relpath(
+            convert_to_string(self._path), *arguments,
+            start=self.__class__(location=context)._path, **keywords))
+# #
 
     @JointPoint(Class.pseudo_property)
 # # python3.4
@@ -1595,7 +1599,12 @@ class Handler(Class):
                 path)):
 # #
             return path
-        return os.path.basename(path, *arguments, **keywords)
+# # python3.4
+# #         return os.path.basename(path, *arguments, **keywords)
+        return convert_to_unicode(os.path.basename(convert_to_string(
+            path
+        ), *arguments, **keywords))
+# #
 
     @JointPoint(Class.pseudo_property)
 # # python3.4
@@ -1635,11 +1644,18 @@ class Handler(Class):
         ).pop(name='output_with_root_prefix')
 # #
         if self._has_extension:
-            return os.path.splitext(os.path.basename(
-                self.get_path(
-                    output_with_root_prefix=output_with_root_prefix),
-                *arguments, **keywords)
-            )[0]
+# # python3.4
+# #             return os.path.splitext(os.path.basename(
+# #                 self.get_path(
+# #                     output_with_root_prefix=output_with_root_prefix
+# #                 ), *arguments, **keywords)
+# #             )[0]
+            return convert_to_unicode(os.path.splitext(os.path.basename(
+                convert_to_string(self.get_path(
+                    output_with_root_prefix=output_with_root_prefix
+                ), *arguments, **keywords)
+            ))[0])
+# #
         return self.name
 
     @JointPoint(Class.pseudo_property)
@@ -1782,7 +1798,10 @@ class Handler(Class):
                         python bug when finishing reading file without \
                         end reached.
                     '''
-                    return file.read() + file.read()
+# # python3.4
+# #                     return file.read() + file.read()
+                    return convert_to_unicode(file.read() + file.read())
+# #
         elif self.is_directory():
             return self.list()
         if strict:
@@ -1856,11 +1875,18 @@ class Handler(Class):
             ...     ) # doctest: +ELLIPSIS
             '...portable...'
         '''
-        return String(
+# # python3.4
+# #         return String(
+# #             self.portable_link_pattern
+# #         ).validate_regex(exclude_symbols=('{', '}', '-')).content.format(
+# #             size='(?P<size>[0-9]+)', label='(?P<label>.*?)',
+# #             path='(?P<path>.*?)')
+        return convert_to_unicode(String(
             self.portable_link_pattern
-        ).validate_regex(exclude_symbols=('{', '}', '-')).content.format(
+        ).validate_regex(exclude_symbols=('{', '}', '-')).content).format(
             size='(?P<size>[0-9]+)', label='(?P<label>.*?)',
             path='(?P<path>.*?)')
+# #
 
     @JointPoint(Class.pseudo_property)
 # # python3.4
@@ -1980,7 +2006,11 @@ class Handler(Class):
             arguments = None,
 # #
         try:
-            os.utime(self._path, *arguments, **keywords)
+# # python3.4
+# #             os.utime(self._path, *arguments, **keywords)
+            os.utime(
+                convert_to_string(self._path), *arguments, **keywords)
+# #
         except builtins.NotImplementedError:
             return False
         return True
@@ -2390,7 +2420,11 @@ class Handler(Class):
         '''
         other_location = self.__class__(location=other_location)
         try:
-            return os.path.samefile(self._path, other_location._path)
+# # python3.4
+# #             return os.path.samefile(self._path, other_location._path)
+            return os.path.samefile(
+                convert_to_string(self._path), other_location._path)
+# #
         except builtins.AttributeError:
             return self == other_location
 
@@ -2418,9 +2452,20 @@ class Handler(Class):
 
             >>> Handler(location=__file_path__).is_directory()
             False
+
+            >>> Handler(
+            ...     location=__test_folder__.path + 'ä_is_directory',
+            ...     make_directory=True
+            ... ).is_directory()
+            True
         '''
         if allow_link:
-            return os.path.isdir(self._path, *arguments, **keywords)
+# # python3.4
+# #             return os.path.isdir(self._path, *arguments, **keywords)
+            return os.path.isdir(convert_to_string(
+                self._path
+            ), *arguments, **keywords)
+# #
         return not self.is_symbolic_link() and\
             self.is_directory(allow_link=True, *arguments, **keywords)
 
@@ -2453,9 +2498,16 @@ class Handler(Class):
         '''
         path = self._get_ending_delimter_trimmed()
         if allow_link:
+# # python3.4
+# #             return(
+# #                 os.path.isfile(path, *arguments, **keywords) or
+# #                 os.path.islink(path, *arguments, **keywords))
             return(
-                os.path.isfile(path, *arguments, **keywords) or
-                os.path.islink(path, *arguments, **keywords))
+                os.path.isfile(
+                    convert_to_string(path), *arguments, **keywords
+                ) or os.path.islink(
+                    convert_to_string(path), *arguments, **keywords))
+# #
         return(
             not self.is_symbolic_link() and
             self.is_file(allow_link=True, *arguments, **keywords))
@@ -2523,7 +2575,12 @@ class Handler(Class):
             return(
                 self.is_symbolic_link(allow_portable_link=False) or
                 self.is_portable_link())
-        return os.path.islink(path, *arguments, **keywords)
+# # python3.4
+# #         return os.path.islink(path, *arguments, **keywords)
+        return os.path.islink(convert_to_string(
+            path
+        ), *arguments, **keywords)
+# #
 
     @JointPoint
 # # python3.4
@@ -2564,7 +2621,8 @@ class Handler(Class):
             location = self._initialized_path
         elif builtins.isinstance(location, self.__class__):
             return location.is_referenced_via_absolute_path()
-        return os.path.isabs(location)
+# # python3.4         return os.path.isabs(location)
+        return os.path.isabs(convert_to_string(location))
 
     @JointPoint
 # # python3.4     def is_media(self: Self) -> builtins.bool:
@@ -2641,7 +2699,8 @@ class Handler(Class):
             False
         '''
         path = self._get_ending_delimter_trimmed()
-        if os.path.isfile(path):
+# # python3.4         if os.path.isfile(path):
+        if os.path.isfile(convert_to_string(path)):
             maximum_length = (
                 builtins.len(self.portable_link_pattern) +
                 self.MAX_PATH_LENGTH + self.MAX_SIZE_NUMBER_LENGTH +
@@ -2710,7 +2769,12 @@ class Handler(Class):
             ... ).is_element()
             False
         '''
-        return os.path.exists(self._path) or self.is_symbolic_link()
+# # python3.4
+# #         return os.path.exists(self._path) or self.is_symbolic_link()
+        return os.path.exists(convert_to_string(
+            self._path
+        )) or self.is_symbolic_link()
+# #
 
     @JointPoint
 # # python3.4     def is_device_file(self: Self) -> builtins.bool:
@@ -2957,7 +3021,8 @@ class Handler(Class):
             Object of "Handler" with path "..." (type: directory).
         '''
         if self.is_directory():
-            os.chdir(self._path)
+# # python3.4             os.chdir(self._path)
+            os.chdir(convert_to_string(self._path))
         else:
             '''Take this method name via introspection.'''
             builtins.getattr(self.directory, inspect.stack()[0][3])()
@@ -3051,15 +3116,22 @@ class Handler(Class):
                 for letter_number in builtins.range(
                         builtins.ord('A'), builtins.ord('Z') + 1):
                     path = '%s:\\' % builtins.chr(letter_number)
-                    if os.path.exists(path):
+# # python3.4
+# #                      if os.path.exists(path):
+                    if os.path.exists(convert_to_string(path)):
+# #
                         yield self.__class__(location=path)
             elif self.is_directory():
                 try:
-                    for file_name in os.listdir(
-                        self._path, *arguments, **keywords
-                    ):
 # # python3.4
-# #                         pass
+# #                     for file_name in os.listdir(
+# #                         self._path, *arguments, **keywords
+# #                     ):
+                    for file_name in os.listdir(
+                        convert_to_string(
+                            self._path
+                        ), *arguments, **keywords
+                    ):
                         file_name = convert_to_unicode(file_name)
 # #
                         try:
@@ -3142,16 +3214,28 @@ class Handler(Class):
         '''
         if self.is_directory():
             try:
-                os.rmdir(self._path, *arguments, **keywords)
-# # python3.4             except (builtins.PermissionError, builtins.OSError):
+# # python3.4
+# #                 os.rmdir(self._path, *arguments, **keywords)
+# #             except (builtins.PermissionError, builtins.OSError):
+                os.rmdir(
+                    convert_to_string(self._path), *arguments, **keywords)
+# #
             except builtins.OSError:
                 try:
-                    self.change_right(
-                        right=os.stat(self._path).st_mode | stat.S_IWRITE,
-                        octal=False)
-                    os.rmdir(self._path, *arguments, **keywords)
 # # python3.4
+# #                     self.change_right(
+# #                         right=os.stat(self._path).st_mode | stat.S_IWRITE,
+# #                         octal=False)
+# #                     os.rmdir(self._path, *arguments, **keywords)
 # #                 except (builtins.PermissionError, builtins.OSError):
+                    self.change_right(
+                        right=os.stat(convert_to_string(
+                            self._path
+                        )).st_mode | stat.S_IWRITE,
+                        octal=False)
+                    os.rmdir(convert_to_string(
+                        self._path
+                    ), *arguments, **keywords)
                 except builtins.OSError:
 # #
                     return False
@@ -3293,12 +3377,22 @@ class Handler(Class):
 # # python3.4             except builtins.PermissionError:
             except builtins.OSError:
                 try:
+# # python3.4
+# #                     self.change_right(
+# #                         right=os.stat(self._path).st_mode | stat.S_IWRITE,
+# #                         octal=False)
+# #                     shutil.rmtree(self._path, *arguments, **keywords)
+# #                 except builtins.PermissionError:
                     self.change_right(
-                        right=os.stat(self._path).st_mode | stat.S_IWRITE,
+                        right=os.stat(convert_to_string(
+                            self._path
+                        )).st_mode | stat.S_IWRITE,
                         octal=False)
-                    shutil.rmtree(self._path, *arguments, **keywords)
-# # python3.4                 except builtins.PermissionError:
+                    shutil.rmtree(convert_to_string(
+                        self._path
+                    ), *arguments, **keywords)
                 except builtins.OSError:
+# #
                     return False
                 else:
                     return True
@@ -3393,16 +3487,30 @@ class Handler(Class):
                 return self.remove_directory()
             try:
                 self._path = self._get_ending_delimter_trimmed()
-                os.remove(self._path, *arguments, **keywords)
-# # python3.4             except builtins.PermissionError:
+# # python3.4
+# #                 os.remove(self._path, *arguments, **keywords)
+# #             except builtins.PermissionError:
+                os.remove(
+                    convert_to_string(self._path), *arguments, **keywords)
             except builtins.OSError:
+# #
                 try:
+# # python3.4
+# #                     self.change_right(
+# #                         right=os.stat(self._path).st_mode | stat.S_IWRITE,
+# #                         octal=False)
+# #                     os.remove(self._path, *arguments, **keywords)
+# #                 except builtins.PermissionError:
                     self.change_right(
-                        right=os.stat(self._path).st_mode | stat.S_IWRITE,
+                        right=os.stat(convert_to_string(
+                            self._path
+                        )).st_mode | stat.S_IWRITE,
                         octal=False)
-                    os.remove(self._path, *arguments, **keywords)
-# # python3.4                 except builtins.PermissionError:
+                    os.remove(convert_to_sting(
+                        self._path
+                    ), *arguments, **keywords)
                 except builtins.OSError:
+# #
                     return False
                 else:
                     return True
@@ -3469,9 +3577,16 @@ class Handler(Class):
             Object of "Handler" with path "...change_right...
         '''
         if octal:
-            os.chmod(self._path, builtins.eval('0o%d' % right))
+# # python3.4
+# #             os.chmod(self._path, builtins.eval('0o%d' % right))
+            os.chmod(convert_to_string(self._path), builtins.eval(
+                '0o%d' % right))
+# #
         else:
-            os.chmod(self._path, right)
+# # python3.4
+# #             os.chmod(self._path, right)
+            os.chmod(convert_to_string(self._path), right)
+# #
         if self.is_directory(allow_link) and recursive:
             '''Take this method name via introspection.'''
             self.iterate_directory(
@@ -3636,14 +3751,14 @@ class Handler(Class):
             True
         '''
 # # python3.4
-# #         pass
+# #         os.mkdir(self._path, *arguments, **keywords)
         default_keywords = Dictionary(content=keywords)
         right, keywords = default_keywords.pop(
             name='right', default_value=700)
         octal, keywords = default_keywords.pop(
             name='octal', default_value=True)
+        os.mkdir(convert_to_string(self._path), *arguments, **keywords)
 # #
-        os.mkdir(self._path, *arguments, **keywords)
         self.change_right(right, octal)
         return self.is_directory()
 
@@ -3833,10 +3948,20 @@ class Handler(Class):
         '''
         path = self._get_ending_delimter_trimmed()
         if self.is_symbolic_link(allow_portable_link=False):
-            link = os.readlink(path, *arguments, **keywords)
+# # python3.4
+# #             link = os.readlink(path, *arguments, **keywords)
+            link = convert_to_unicode(os.readlink(convert_to_string(
+                path
+            ), *arguments, **keywords))
+# #
         else:
             link = self.read_portable_link()
-        if not link.endswith(os.sep) and os.path.isdir(link):
+# # python3.4
+# #         if not link.endswith(os.sep) and os.path.isdir(link):
+        if not link.endswith(os.sep) and os.path.isdir(
+            convert_to_string(link)
+        ):
+# #
             link += os.sep
         if not self.is_referenced_via_absolute_path(location=link):
             link = self.__class__(location=self.directory.path + link)
@@ -3982,7 +4107,11 @@ class Handler(Class):
             True
         '''
         if not self:
-            os.makedirs(self._path, *arguments, **keywords)
+# # python3.4
+# #             os.makedirs(self._path, *arguments, **keywords)
+            os.makedirs(
+                convert_to_string(self._path), *arguments, **keywords)
+# #
         return self.is_directory()
 
     @JointPoint
@@ -4491,7 +4620,8 @@ class Handler(Class):
              self.__class__._root_path == os.sep)):
             if self._path.startswith(os.sep):
                 self._path = self.__class__._root_path[:-builtins.len(
-                    os.sep)] + self._path
+                    os.sep
+                )] + self._path
             else:
                 self._path = self.__class__._root_path + self._path
         return self._path
@@ -4559,14 +4689,20 @@ class Handler(Class):
             '...test...hans...~'
         '''
         self._path = self._initialized_path
-        self._path = os.path.normpath(os.path.expanduser(self._path))
 # # python3.4
+# #         self._path = os.path.normpath(os.path.expanduser(self._path))
 # #         if re.compile('[a-zA-Z]:').fullmatch(self._initialized_path):
+        self._path = convert_to_unicode(os.path.normpath(
+            os.path.expanduser(convert_to_string(self._path))))
         if re.compile('[a-zA-Z]:$').match(self._initialized_path):
 # #
             self._path += os.sep
         if not self.is_referenced_via_absolute_path():
-            self._path = os.path.abspath(self._path)
+# # python3.4
+# #             self._path = os.path.abspath(self._path)
+            self._path = convert_to_unicode(os.path.abspath(
+                convert_to_string(self._path)))
+# #
         return self._path
 
     @JointPoint
@@ -4590,13 +4726,15 @@ class Handler(Class):
             True
         '''
         if location is None:
-            location = os.curdir
+# # python3.4             location = os.curdir
+            location = convert_to_unicode(os.curdir)
         elif builtins.isinstance(location, self.__class__):
             if self._respect_root_path:
                 location = location.path
             else:
                 location = location._path
-        return location
+# # python3.4         return location
+        return convert_to_unicode(location)
 
     @JointPoint
 # # python3.4
@@ -4625,10 +4763,17 @@ class Handler(Class):
             >>> handler.path # doctest: +ELLIPSIS
             '...boostNode...'
         '''
-        self._path = os.path.normpath(path)
+# # python3.4
+# #         self._path = os.path.normpath(path)
+# #         if not self.is_referenced_via_absolute_path():
+# #             self._path = os.path.abspath(self._path)
+        self._path = convert_to_unicode(os.path.normpath(
+            convert_to_string(path)))
         if not self.is_referenced_via_absolute_path():
-            self._path = os.path.abspath(self._path)
+            self._path = convert_to_unicode(os.path.abspath(
+                convert_to_string(self._path)))
         self.path
+# #
         return self.is_element()
 
     @JointPoint
@@ -4784,6 +4929,8 @@ class Handler(Class):
 # #                     os.symlink(
 # #                         source_path, target_path,
 # #                         target_is_directory=self.is_directory())
+# #                 else:
+# #                     os.symlink(source_path, target_path)
                     create_symbolic_link = \
                         ctypes.windll.kernel32.CreateSymbolicLinkW
                     create_symbolic_link.argtypes = (
@@ -4791,17 +4938,26 @@ class Handler(Class):
                         ctypes.c_uint32)
                     create_symbolic_link.restype = ctypes.c_ubyte
                     if create_symbolic_link(
-                        target_path, source_path, self.is_directory()
+                        convert_to_string(target_path),
+                        convert_to_string(source_path),
+                        self.is_directory()
                     ) == 0:
                         raise ctypes.WinError()
-# #
                 else:
-                    os.symlink(source_path, target_path)
+                    os.symlink(
+                        convert_to_string(source_path),
+                        convert_to_string(target_path))
+# #
             except(builtins.AttributeError, builtins.NotImplementedError):
                 return self.make_portable_link(target, *arguments, **keywords)
             else:
                 return target.is_symbolic_link()
-        os.link(source_path, target_path)
+# # python3.4
+# #         os.link(source_path, target_path)
+        os.link(
+            convert_to_string(source_path),
+            convert_to_string(target_path))
+# #
         return target.is_file()
 
     @JointPoint
@@ -4897,7 +5053,12 @@ class Handler(Class):
             False
         '''
         os_statvfs = self._initialize_platform_dependencies()
-        if os.path.isfile(self._path) or os.path.isdir(self._path):
+# # python3.4
+# #         if os.path.isfile(self._path) or os.path.isdir(self._path):
+        if os.path.isfile(convert_to_string(self._path)) or os.path.isdir(
+            convert_to_string(self._path)
+        ):
+# #
             if os_statvfs is not None:
                 return(
                     os_statvfs.f_bavail * self.BLOCK_SIZE_IN_BYTE,
@@ -4908,9 +5069,17 @@ class Handler(Class):
                     path = self.directory.path
                 free_bytes = ctypes.c_ulonglong(0)
                 total_bytes = ctypes.c_ulonglong(0)
+# # python3.4
+# #                 self._determine_get_windows_disk_free_space_function()(
+# #                     ctypes.c_wchar_p(path), None, ctypes.pointer(
+# #                         total_bytes),
+# #                     ctypes.pointer(free_bytes))
                 self._determine_get_windows_disk_free_space_function()(
-                    ctypes.c_wchar_p(path), None, ctypes.pointer(total_bytes),
+                    ctypes.c_wchar_p(
+                        convert_to_string(path)
+                    ), None, ctypes.pointer(total_bytes),
                     ctypes.pointer(free_bytes))
+# #
                 return free_bytes.value, total_bytes.value
         return False
 
@@ -4940,12 +5109,14 @@ class Handler(Class):
         '''
         from boostNode.extension.system import Platform
         os_statvfs = None
-        if((os.path.isfile(self._path) or os.path.isdir(self._path)) and
-           builtins.hasattr(os, 'statvfs')):
 # # python3.4
+# #         if((os.path.isfile(self._path) or os.path.isdir(self._path)) and
+# #            builtins.hasattr(os, 'statvfs')):
 # #             os_statvfs = os.statvfs(self._path)
-            os_statvfs = os.statvfs(builtins.str(self._path.encode(
-                ENCODING)))
+        if((os.path.isfile(convert_to_string(self._path)) or
+           os.path.isdir(convert_to_string(self._path))) and
+           builtins.hasattr(os, 'statvfs')):
+            os_statvfs = os.statvfs(convert_to_string(self._path))
 # #
             self.__class__.BLOCK_SIZE_IN_BYTE = os_statvfs.f_bsize
             self.__class__.MAX_FILE_NAME_LENGTH = os_statvfs.f_namemax
