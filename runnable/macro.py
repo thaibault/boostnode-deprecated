@@ -45,15 +45,18 @@ import sys
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
 # # python3.4 pass
-from boostNode import ENCODING
+from boostNode import ENCODING, convert_to_unicode
 from boostNode.extension.file import Handler as FileHandler
-from boostNode.extension.native import Module, InstancePropertyInitializer, \
-    String
+from boostNode.extension.native import Module, InstancePropertyInitializer
+from boostNode.extension.native import String as StringExtension
 from boostNode.extension.system import CommandLine, Runnable
 # # python3.4 from boostNode.extension.type import Self
 pass
 from boostNode.paradigm.aspectOrientation import JointPoint
 from boostNode.paradigm.objectOrientation import Class
+
+# # python3.4 pass
+String = lambda content: StringExtension(convert_to_string(content))
 
 # endregion
 
@@ -848,7 +851,27 @@ class Replace(Class, Runnable):
                 consecutive lines with whitespace at the end of line aren't \
                 matched in first run.
             '''
-
+# # python3.4
+# #             return(
+# #                 '\n{prefix} {current_version}\n{prefix} {current_text}\n'
+# #                 '{alternate_text}{prefix}\n'.format(
+# #                     prefix=match.group('prefix'),
+# #                     current_version=self._current_version,
+# #                     current_text=match.group('current_text').replace(
+# #                         '\n', '\n%s ' % match.group('prefix')
+# #                     )[:-builtins.len(match.group('prefix')) - 2].replace(
+# #                         '\n%s \n' % match.group('prefix'),
+# #                         '\n%s\n' % match.group('prefix')
+# #                     ).replace(
+# #                         '\n%s \n' % match.group('prefix'),
+# #                         '\n%s\n' % match.group('prefix')
+# #                     ).rstrip(), alternate_text=re.compile(
+# #                         '\n%s ?' % String(
+# #                             match.group('prefix')
+# #                         ).validate_regex().content
+# #                     ).sub('\n', match.group(
+# #                         'alternate_text'
+# #                     ))[builtins.len(match.group('prefix')) + 1:]))
             return(
                 '\n{prefix} {current_version}\n{prefix} {current_text}\n'
                 '{alternate_text}{prefix}\n'.format(
@@ -863,11 +886,13 @@ class Replace(Class, Runnable):
                         '\n%s \n' % match.group('prefix'),
                         '\n%s\n' % match.group('prefix')
                     ).rstrip(), alternate_text=re.compile(
-                        '\n%s ?' % String(
-                            match.group('prefix')).validate_regex().content
+                        '\n%s ?' % convert_to_unicode(String(
+                            match.group('prefix')
+                        ).validate_regex().content)
                     ).sub('\n', match.group(
                         'alternate_text'
                     ))[builtins.len(match.group('prefix')) + 1:]))
+# #
         return match.group()
 
     @JointPoint

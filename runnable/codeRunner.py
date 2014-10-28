@@ -811,9 +811,7 @@ class Run(Class, Runnable):
                     properties=value, code_file=code_file)
 # # python3.4
 # #             elif builtins.isinstance(value, builtins.str):
-            elif builtins.isinstance(value, (
-                builtins.unicode, builtins.str
-            )):
+            elif builtins.isinstance(value, builtins.unicode):
 # #
                 rendered_properties[key] = TemplateParser(
                     template=value, string=True

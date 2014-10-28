@@ -51,16 +51,20 @@ import urllib
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
 # # python3.4 pass
-from boostNode import ENCODING, convert_to_unicode
+from boostNode import ENCODING, convert_to_string, convert_to_unicode
 from boostNode.extension.file import Handler as FileHandler
 from boostNode.extension.native import Dictionary, Module, \
-    InstancePropertyInitializer, String
+    InstancePropertyInitializer
+from boostNode.extension.native import String as StringExtension
 from boostNode.extension.output import Buffer, Print
 from boostNode.extension.system import CommandLine, Runnable
 # # python3.4 from boostNode.extension.type import Self, SelfClass
 pass
 from boostNode.paradigm.aspectOrientation import JointPoint
 from boostNode.paradigm.objectOrientation import Class
+
+# # python3.4 pass
+String = lambda content: StringExtension(convert_to_string(content))
 
 # endregion
 
@@ -546,8 +550,9 @@ class Parser(Class, Runnable):
             match = re.compile(
                 '(.*\n)?%s *__indent__ *= *'
                 '(?P<number_of_indents>[1-9][0-9]*) *(?:;+|\n).*$' %
-                String(self.left_code_delimiter).validate_regex().content,
-                re.DOTALL
+                convert_to_unicode(String(
+                    self.left_code_delimiter
+                ).validate_regex().content), re.DOTALL
             ).match(self.content)
 # #
             if match:
@@ -952,8 +957,9 @@ class Parser(Class, Runnable):
 # #            builtins.isinstance(
 # #                initializer_arguments['builtin_names'][0], builtins.str)):
         if(initializer_arguments['builtin_names'] and
-           builtins.isinstance(initializer_arguments['builtin_names'][0], (
-                builtins.unicode, builtins.str))):
+           builtins.isinstance(
+                initializer_arguments['builtin_names'][0],
+                builtins.unicode)):
 # #
             initializer_arguments['builtin_names'] = builtins.tuple(
                 builtins.map(
@@ -1457,10 +1463,16 @@ class Parser(Class, Runnable):
             ... ) # doctest: +ELLIPSIS
             (...Native exception object:...)
         '''
+# # python3.4
+# #         exception_message = '%s: %s' % (
+# #             exception.__class__.__name__, String(
+# #                 exception
+# #             ).get_camel_case_capitalize().replace("'", '"').content)
         exception_message = '%s: %s' % (
-            exception.__class__.__name__, String(
+            exception.__class__.__name__, convert_to_unicode(String(
                 exception
-            ).get_camel_case_capitalize().replace("'", '"').content)
+            ).get_camel_case_capitalize().replace("'", '"').content))
+# #
         native_exception_description = ''
         if(force_native_exception or sys.flags.debug or
            __logger__.isEnabledFor(logging.DEBUG)):
@@ -1754,7 +1766,7 @@ class Parser(Class, Runnable):
                 return '[%s]' % result
             return '{%s}' % result
         is_string = False
-        if builtins.isinstance(object, (builtins.unicode, builtins.str)):
+        if builtins.isinstance(object, builtins.unicode):
             is_string = True
         object = convert_to_unicode(object)
         if is_string and quote_string:

@@ -1775,10 +1775,16 @@ class Handler(Class):
         if self.is_file():
             self._path = self._get_ending_delimter_trimmed()
             if 'b' in mode:
+# # python3.4
+# #                 with builtins.open(
+# #                     self._path, mode, *arguments, **keywords
+# #                 ) as file:
                 with builtins.open(
-                    self._path, mode, *arguments, **keywords
+                    convert_to_string(self._path), mode, *arguments,
+                    **keywords
                 ) as file:
                     return file.read()
+# #
             else:
                 if 'encoding' in keywords:
                     self._encoding = keywords['encoding']
@@ -1790,7 +1796,8 @@ class Handler(Class):
 # #                     self._path, mode, *arguments, errors=errors, **keywords
 # #                 ) as file:
                 with codecs.open(
-                    self._path, mode, *arguments, errors=errors, **keywords
+                    convert_to_string(self._path), mode, *arguments,
+                    errors=errors, **keywords
                 ) as file:
 # #
                     '''
@@ -4356,9 +4363,7 @@ class Handler(Class):
                 return False
 # # python3.4
 # #             if builtins.isinstance(function, builtins.str):
-            if builtins.isinstance(function, (
-                builtins.unicode, builtins.str
-            )):
+            if builtins.isinstance(function, builtins.unicode):
 # #
                 result = builtins.getattr(file, function)(
                     *arguments, **keywords)
@@ -4997,7 +5002,7 @@ class Handler(Class):
 # #                 builtins.str, self.__class__
 # #             )):
             if builtins.isinstance(relative, (
-                builtins.unicode, builtins.str, self.__class__
+                builtins.unicode, self.__class__
             )):
 # #
                 return self.get_relative_path(context=relative)

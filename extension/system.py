@@ -62,15 +62,19 @@ pass
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
 # # python3.4 pass
-from boostNode import ENCODING, convert_to_unicode
+from boostNode import ENCODING, convert_to_string, convert_to_unicode
 from boostNode.extension.file import Handler as FileHandler
 from boostNode.extension.native import Dictionary, Module, Object, String
+from boostNode.extension.native import String as StringExtension
 from boostNode.extension.output import Buffer, Logger, Print
 # # python3.4
 # # from boostNode.extension.type import Null, Self, SelfClass, SelfClassObject
 from boostNode.extension.type import Null
 # #
 from boostNode.paradigm.aspectOrientation import FunctionDecorator, JointPoint
+
+# # python3.4 pass
+String = lambda content: StringExtension(convert_to_string(content))
 
 # endregion
 
@@ -1273,7 +1277,7 @@ class Platform(builtins.object):
             shell = True
 # # python3.4
 # #         if builtins.isinstance(command, builtins.str):
-        if builtins.isinstance(command, (builtins.unicode, builtins.str)):
+        if builtins.isinstance(command, builtins.unicode):
 # #
             result = cls._run_one_command(
                 command, command_arguments, secure, error, shell, no_blocking,
@@ -1319,7 +1323,12 @@ class Platform(builtins.object):
         file = FileHandler(location, must_exist=True)
         if builtins.hasattr(os, 'startfile'):
             return os.startfile(file)
-        shell_file = String(file._path).validate_shell()
+# # python3.4
+# #         shell_file = String(file._path).validate_shell()
+        shell_file = convert_to_unicode(String(
+            file._path
+        ).validate_shell())
+# #
         for unix_application_name in cls.UNIX_OPEN_APPLICATIONS:
             result = Platform.run(
                 command=unix_application_name, command_arguments=(shell_file,))

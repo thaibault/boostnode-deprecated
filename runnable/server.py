@@ -2140,9 +2140,7 @@ class CGIHTTPRequestHandler(
             cookie_object = cookies.SimpleCookie()
 # # python3.4
 # #             if builtins.isinstance(cookie, builtins.str):
-            if builtins.isinstance(cookie, (
-                builtins.unicode, builtins.str
-            )):
+            if builtins.isinstance(cookie, builtins.unicode):
 # #
                 cookie_object.load(cookie_object)
             else:
@@ -3263,9 +3261,9 @@ class CGIHTTPRequestHandler(
 # #             ) and self._handle_default_modules_get(
 # #                 self.server.web.module_loading
 # #             ):
-            if builtins.isinstance(self.server.web.module_loading, (
-                builtins.unicode, builtins.str
-            )) and self._handle_default_modules_get(
+            if builtins.isinstance(
+                self.server.web.module_loading, builtins.unicode
+            ) and self._handle_default_modules_get(
                 self.server.web.module_loading
             ):
 # #
@@ -3527,9 +3525,7 @@ class CGIHTTPRequestHandler(
                 self.wfile.write(self._encoded_output)
 # # python3.4
 # #             elif builtins.isinstance(output, builtins.bytes):
-            elif builtins.isinstance(output, (
-                builtins.unicode, builtins.str
-            )):
+            elif builtins.isinstance(output, builtins.unicode):
 # #
                 self.wfile.write(output)
             elif builtins.isinstance(output, builtins.str):
@@ -3669,9 +3665,7 @@ class CGIHTTPRequestHandler(
         size = builtins.len(output)
 # # python3.4
 # #         if not builtins.isinstance(errors, builtins.str):
-        if not builtins.isinstance(errors, (
-            builtins.unicode, builtins.str
-        )):
+        if not builtins.isinstance(errors, builtins.unicode):
 # #
             errors = errors.decode(
                 encoding=self.server.web.encoding, errors='strict')
