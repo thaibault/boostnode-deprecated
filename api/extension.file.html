@@ -876,36 +876,6 @@
 </dd></dl>
 
 <dl class="staticmethod">
-<dt id="boostNode.extension.file.Handler.get_lines">
-<em class="property">static </em><tt class="descname">get_lines</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.get_lines" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the number of lines in the file content referenced by the             &#8220;Handler&#8221; object.</p>
-<p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">file</span> <span class="o">=</span> <span class="n">Handler</span><span class="p">(</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;get_lines_test1&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">file</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="s">&#39;a</span><span class="se">\n</span><span class="s">b</span><span class="se">\n</span><span class="s">c</span><span class="se">\n</span><span class="s">&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">file</span><span class="o">.</span><span class="n">lines</span>
-<span class="go">3</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">file</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="s">&#39; &#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">file</span><span class="o">.</span><span class="n">lines</span>
-<span class="go">1</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">file</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">file</span><span class="o">.</span><span class="n">lines</span>
-<span class="go">0</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">file</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="s">&#39;a</span><span class="se">\n</span><span class="s">b</span><span class="se">\n</span><span class="s">ca</span><span class="se">\n</span><span class="s">b</span><span class="se">\n</span><span class="s">c&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">file</span><span class="o">.</span><span class="n">get_lines</span><span class="p">()</span>
-<span class="go">5</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="staticmethod">
 <dt id="boostNode.extension.file.Handler.get_mime_type">
 <em class="property">static </em><tt class="descname">get_mime_type</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.get_mime_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines the mime-type of the current object.</p>
@@ -978,6 +948,36 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">force_windows_behavior</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="go">&#39;C:&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="boostNode.extension.file.Handler.get_number_of_lines">
+<em class="property">static </em><tt class="descname">get_number_of_lines</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.file.Handler.get_number_of_lines" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the number of lines in the file content referenced by the             &#8220;Handler&#8221; object.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">file</span> <span class="o">=</span> <span class="n">Handler</span><span class="p">(</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;get_lines_test1&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">file</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="s">&#39;a</span><span class="se">\n</span><span class="s">b</span><span class="se">\n</span><span class="s">c</span><span class="se">\n</span><span class="s">&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">file</span><span class="o">.</span><span class="n">number_of_lines</span>
+<span class="go">3</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">file</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="s">&#39; &#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">file</span><span class="o">.</span><span class="n">number_of_lines</span>
+<span class="go">1</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">file</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">file</span><span class="o">.</span><span class="n">number_of_lines</span>
+<span class="go">0</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">file</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="s">&#39;a</span><span class="se">\n</span><span class="s">b</span><span class="se">\n</span><span class="s">ca</span><span class="se">\n</span><span class="s">b</span><span class="se">\n</span><span class="s">c&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">file</span><span class="o">.</span><span class="n">get_number_of_lines</span><span class="p">()</span>
+<span class="go">5</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1297,6 +1297,13 @@
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Handler</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="n">__file_path__</span><span class="p">)</span><span class="o">.</span><span class="n">is_directory</span><span class="p">()</span>
 <span class="go">False</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Handler</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">location</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;ä_is_directory&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">make_directory</span><span class="o">=</span><span class="bp">True</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">is_directory</span><span class="p">()</span>
+<span class="go">True</span>
 </pre></div>
 </div>
 </dd></dl>

@@ -173,6 +173,18 @@
 </dd></dl>
 
 <dl class="class">
+<dt id="boostNode.extension.output.ColoredFormatter">
+<em class="property">class </em><tt class="descclassname">boostNode.extension.output.</tt><tt class="descname">ColoredFormatter</tt><big>(</big><em>fmt=None</em>, <em>datefmt=None</em><big>)</big><a class="headerlink" href="#boostNode.extension.output.ColoredFormatter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wraps python&#8217;s native logging formatter to support level specific         colors.</p>
+<dl class="staticmethod">
+<dt id="boostNode.extension.output.ColoredFormatter.format">
+<em class="property">static </em><tt class="descname">format</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.output.ColoredFormatter.format" title="Permalink to this definition">¶</a></dt>
+<dd><p>Appends the level specified color to the logging output.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="boostNode.extension.output.Logger">
 <em class="property">class </em><tt class="descclassname">boostNode.extension.output.</tt><tt class="descname">Logger</tt><a class="headerlink" href="#boostNode.extension.output.Logger" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class provides handling with all components dealing with logger         object. It stores all logger components in a single data structure.</p>
@@ -224,7 +236,7 @@
 <span class="go">&#39;...&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">logger_a</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s">&#39;Log some information.&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">__test_buffer__</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span> 
-<span class="go">&#39;... - test - CRITICAL - Log some information.\n&#39;</span>
+<span class="go">&#39;... - test... - ...CRITICAL... - Log some information.\n&#39;</span>
 </pre></div>
 </div>
 </dd></dl>
