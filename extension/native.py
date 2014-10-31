@@ -2999,7 +2999,11 @@ class Module(Object):
                     object_name in sys.builtin_module_names or
                     (only_module_level and inspect.getmodule(object) !=
                         scope))):
-                yield object_name, object
+# # python3.4
+# #                 yield object_name, object
+                if object_name != 'String':
+                    yield object_name, object
+# #
 
     @JointPoint(builtins.classmethod)
 # # python3.4

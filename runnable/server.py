@@ -73,9 +73,13 @@ import threading
 import time
 # # python3.4
 # # import types
-# # from urllib import parse as urlparse
+# # from urllib.urlparse import urlparse as parse_url
+# # from urllib.urlparse import parse_qs as parse_url_query
+# # from urllib.urlparse import unquote as unquote_url
 import urllib
-import urlparse
+from urlparse import urlparse as parse_url
+from urlparse import parse_qs as parse_url_query
+from urlparse import unquote as unquote_url
 # #
 
 '''Make boostNode packages and modules importable via relative paths.'''
@@ -84,7 +88,7 @@ sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 # # python3.4 pass
 from boostNode import ENCODING, convert_to_string, convert_to_unicode
 from boostNode.extension.file import Handler as FileHandler
-from boostNode.extension.native import Module, Object, \
+from boostNode.extension.native import Dictionary, Module, Object, \
     InstancePropertyInitializer, String
 from boostNode.extension.output import Buffer, Print
 from boostNode.extension.system import CommandLine, Platform, Runnable
@@ -1749,31 +1753,39 @@ class CGIHTTPRequestHandler(
         if url is None and builtins.len(sys.argv) > 1:
             url = sys.argv[1]
         if url:
+# # python3.4
+# #             url = re.compile(
+# #                 self.server.web.request_parameter_delimiter
+# #             ).sub('?', url, 1)
+# #             parse_result = parse_url(url)
             url = re.compile(
                 self.server.web.request_parameter_delimiter
-            ).sub('?', url, 1)
-            get = urlparse.urlparse(url).query
-            if get:
+            ).sub('?', convert_to_unicode(url), 1)
+            parse_result = parse_url(convert_to_string(url))
+# #
+            get = {}
+            if parse_result.query:
                 try:
 # # python3.4
-# #                     get = urlparse.parse_qs(
-# #                         qs=get, keep_blank_values=True,
+# #                     get = parse_url_query(
+# #                         qs=parse_result.query, keep_blank_values=True,
 # #                         strict_parsing=True,
 # #                         encoding=self.server.web.encoding,
 # #                         errors='replace')
-                    get = urlparse.parse_qs(
-                        qs=get, keep_blank_values=True, strict_parsing=True
-                    )
+                    get = parse_url_query(
+                        qs=parse_result.query, keep_blank_values=True,
+                        strict_parsing=True)
 # #
                 except builtins.ValueError:
-                    get = {}
                     __logger__.info(
                         '"%s" is not a valid get query string.', url)
-            if not get:
-                get = {}
             for key, value in get.items():
-                get[key] = value[0]
-            return urlparse.urlparse(url), get
+# # python3.4
+# #                 get[key] = value[0]
+                get[convert_to_unicode(key)] = convert_to_unicode(
+                    value[0])
+# #
+            return parse_result, get
         return None, {}
 
     @JointPoint
@@ -2023,9 +2035,17 @@ class CGIHTTPRequestHandler(
         if self.headers.get('cookie'):
             cookie = cookies.SimpleCookie()
             cookie_content = self.headers.get('cookie')
+# # python3.4
+# #             pass
+            if builtins.isinstance(cookie_content, builtins.str):
+                cookie_content = convert_to_unicode(cookie_content)
+# #
             while True:
                 try:
-                    cookie.load(cookie_content)
+# # python3.4
+# #                     cookie.load(cookie_content)
+                    cookie.load(convert_to_string(cookie_content))
+# #
                 except cookies.CookieError as exception:
                     new_cookie_content = re.compile(
                         '([^=]*)/+([^=]*=[^;]*(?:;|$))'
@@ -2060,7 +2080,14 @@ class CGIHTTPRequestHandler(
                         cookie_content = new_cookie_content
                 else:
                     break
-            return cookie[name].value if name and name in cookie else cookie
+# # python3.4
+# #             return cookie[
+# #                 name
+# #             ].value if name and name in cookie else cookie
+            return convert_to_unicode(
+                cookie[name].value
+            ) if name and name in cookie else cookie
+# #
         return None
 
     @JointPoint
@@ -2580,7 +2607,7 @@ class CGIHTTPRequestHandler(
         if not __test_mode__:
             if self.data_type == 'application/x-www-form-urlencoded':
 # # python3.4
-# #                 self.data = urlparse.parse_qs(self.rfile.read(
+# #                 self.data = parse_url_query(self.rfile.read(
 # #                     content_length
 # #                 ).decode(self.server.web.encoding))
                 self.data = cgi.parse_qs(
@@ -2600,11 +2627,23 @@ class CGIHTTPRequestHandler(
                 self.data = json.loads(
                     self.rfile.read(content_length),
                     encoding=self.server.web.encoding)
+                return self.do_GET()
 # #
             else:
                 self.data = {
                     'type': self.data_type,
                     'content': self.rfile.read(content_length)}
+# # python3.4
+# #             pass
+            self.data = Dictionary(self.data).convert(
+                key_wrapper=lambda key, value: convert_to_unicode(
+                    key
+                ) if builtins.isinstance(key, builtins.str) else key,
+                value_wrapper=lambda key, value: convert_to_unicode(
+                    value
+                ) if builtins.isinstance(key, builtins.str) else value
+            ).content
+# #
         return self.do_GET()
 
     @JointPoint
@@ -3076,8 +3115,12 @@ class CGIHTTPRequestHandler(
     def _create_environment_variables(self):
 # #
         '''Creates all request specified environment-variables.'''
+# # python3.4
+# #         self._determine_host().request_uri = self.external_request_uri = \
+# #             self.path
         self._determine_host().request_uri = self.external_request_uri = \
-            self.path
+            convert_to_unicode(self.path)
+# #
         self._handle_redirect(external=False)
 # # python3.4
 # #         match = re.compile(
@@ -3092,11 +3135,10 @@ class CGIHTTPRequestHandler(
 # #
         self.path = ''
         if match:
-# # python3.4
-# #             self.path = posixpath.normpath(urlparse.unquote(match.group(
+# #             self.path = posixpath.normpath(unquote_url(match.group(
 # #                 'path')))
-            self.path = posixpath.normpath(urllib.unquote(match.group(
-                'path')))
+            self.path = convert_to_unicode(posixpath.normpath(unquote_url(
+                convert_to_string(match.group('path')))))
 # #
             if self.path == '.':
                 self.path = ''
@@ -3113,6 +3155,7 @@ class CGIHTTPRequestHandler(
             for key, morsel in cookie_handler.items():
                 self.cookie[key] = morsel.value
         self.get = self.parse_url(self.request_uri)[1]
+# #
         return self.path
 
     @JointPoint

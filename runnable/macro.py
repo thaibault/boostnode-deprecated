@@ -45,7 +45,7 @@ import sys
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
 # # python3.4 pass
-from boostNode import ENCODING, convert_to_unicode
+from boostNode import ENCODING, convert_to_string, convert_to_unicode
 from boostNode.extension.file import Handler as FileHandler
 from boostNode.extension.native import Module, InstancePropertyInitializer
 from boostNode.extension.native import String as StringExtension

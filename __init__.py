@@ -531,7 +531,7 @@ if __name__ != '__main__':
         logging.error(
             'Running subprocesses on windows without being administrator '
             "isn't possible. %s: %s", exception.__class__.__name__,
-            exception.message)
+            convert_to_unicode(exception))
 # #
         sys.exit(1)
 

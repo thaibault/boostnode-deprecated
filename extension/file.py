@@ -2505,16 +2505,11 @@ class Handler(Class):
         '''
         path = self._get_ending_delimter_trimmed()
         if allow_link:
-# # python3.4
-# #             return(
-# #                 os.path.isfile(path, *arguments, **keywords) or
-# #                 os.path.islink(path, *arguments, **keywords))
+# # python3.4             pass
+            path = convert_to_string(path)
             return(
-                os.path.isfile(
-                    convert_to_string(path), *arguments, **keywords
-                ) or os.path.islink(
-                    convert_to_string(path), *arguments, **keywords))
-# #
+                os.path.isfile(path, *arguments, **keywords) or
+                os.path.islink(path, *arguments, **keywords))
         return(
             not self.is_symbolic_link() and
             self.is_file(allow_link=True, *arguments, **keywords))

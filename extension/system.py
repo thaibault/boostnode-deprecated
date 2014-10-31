@@ -1182,12 +1182,13 @@ class Platform(builtins.object):
 # # python3.4
 # #     def run(
 # #         cls: SelfClass, command: Iterable, command_arguments=None,
-# #         secure=False, error=True, shell=None, log=False, no_blocking=False,
-# #         *arguments: builtins.object, **keywords: builtins.object
+# #         secure=False, error=True, shell=False, log=False,
+# #         no_blocking=False, *arguments: builtins.object,
+# #         **keywords: builtins.object
 # #     ) -> builtins.dict:
     def run(
         cls, command, command_arguments=None, secure=False, error=True,
-        shell=None, log=False, no_blocking=False, *arguments, **keywords
+        shell=False, log=False, no_blocking=False, *arguments, **keywords
     ):
 # #
         '''
@@ -1207,10 +1208,7 @@ class Platform(builtins.object):
             **error**             - If "False" exceptions by running command \
                                     are kept back.
 
-            **shell**             - Simulate a shell if "True". If explicit \
-                                    command arguments are given shell's \
-                                    default value is "True" and "False" \
-                                    otherwise.
+            **shell**             - Simulate a shell if "True".
 
             **log**               - If "True" standard output will be logged \
                                     with level "info" and error output with \
@@ -1237,7 +1235,7 @@ class Platform(builtins.object):
 
             >>> Platform.run(
             ...     command='not', command_arguments=('existing',),
-            ...     error=False
+            ...     error=False, shell=True
             ... ) # doctest: +ELLIPSIS
             {...'standard_output': ...}
 
@@ -1249,7 +1247,8 @@ class Platform(builtins.object):
 
             >>> Platform.run(
             ...     command=('not_existing', 'also_not_existing'),
-            ...     command_arguments=('existing',), error=False, log=True
+            ...     command_arguments=('existing',), error=False, log=True,
+            ...     shell=True
             ... ) # doctest: +ELLIPSIS
             {...'standard_output': ...}
 
@@ -1264,24 +1263,23 @@ class Platform(builtins.object):
             {...'standard_output': ...}
 
             >>> Platform.run(
-            ...     command='not', command_arguments=('existing',)
-            ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
+            ...     command='not', command_arguments=('existing',))
             Traceback (most recent call last):
             ...
-            boostNode.extension.native.SystemError: Command "not existing" ...
+            OSError: [Errno 2] No such file or directory
         '''
         if command_arguments is None:
             command_arguments = []
-            shell = False if shell is None else shell
-        elif shell is None:
-            shell = True
 # # python3.4
 # #         if builtins.isinstance(command, builtins.str):
-        if builtins.isinstance(command, builtins.unicode):
-# #
+# #             result = cls._run_one_command(
+# #                 command, command_arguments, secure, error, shell,
+# #                 no_blocking, *arguments, **keywords)
+        if builtins.isinstance(command, (builtins.unicode, builtins.str)):
             result = cls._run_one_command(
-                command, command_arguments, secure, error, shell, no_blocking,
-                *arguments, **keywords)
+                convert_to_unicode(command), command_arguments, secure,
+                error, shell, no_blocking, *arguments, **keywords)
+# #
         else:
             result = cls._run_multiple_commands(
                 commands=command, command_arguments=command_arguments,
@@ -1396,7 +1394,12 @@ class Platform(builtins.object):
             ... ) # doctest: +SKIP
         '''
         result = {'standard_output': '', 'error_output': '', 'return_code': 1}
-        command = ' '.join([command] + builtins.list(command_arguments))
+# # python3.4
+# #         command = ' '.join([command] + builtins.list(
+# #             command_arguments))
+        command = ' '.join([command] + builtins.list(builtins.map(
+            lambda value: convert_to_unicode(value), command_arguments)))
+# #
         if secure:
             result['return_code'] = os.system(command)
             if error and result['return_code'] != 0:
@@ -1404,14 +1407,14 @@ class Platform(builtins.object):
         else:
 # # python3.4
 # #             with subprocess.Popen(
-# #                 command, *arguments, shell=shell,
+# #                 command.split(), *arguments, shell=shell,
 # #                 stdin=subprocess.PIPE, stdout=subprocess.PIPE,
 # #                 stderr=subprocess.PIPE, **keywords
 # #             ) as process_handler:
 # #                 result = cls._communicate_to_process_handler(
 # #                     process_handler, no_blocking)
             process_handler = subprocess.Popen(
-                command, *arguments, shell=shell,
+                command.split(), *arguments, shell=shell,
                 stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE, **keywords)
             result = cls._communicate_to_process_handler(
@@ -1452,8 +1455,8 @@ class Platform(builtins.object):
 # #                 'error_output': result[1].decode(
 # #                     String(result[1]).encoding)}
             result = {
-                'standard_output': result[0],
-                'error_output': result[1]}
+                'standard_output': convert_to_unicode(result[0]),
+                'error_output': convert_to_unicode(result[1])}
 # #
             result['return_code'] = process_handler.returncode
         return result
