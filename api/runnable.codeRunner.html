@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>boostNode.runnable.codeRunner &mdash; boostNode 1.0 rc documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0 rc',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="boostNode 1.0 rc documentation" href="index.html" />
+    <link rel="next" title="boostNode.runnable.synchronisation" href="runnable.synchronisation.html" />
+    <link rel="prev" title="boostNode.runnable" href="runnable.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="runnable.synchronisation.html" title="boostNode.runnable.synchronisation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="runnable.html" title="boostNode.runnable"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">boostNode 1.0 rc documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-boostNode.runnable.codeRunner">
+<span id="boostnode-runnable-coderunner"></span><h1>boostNode.runnable.codeRunner<a class="headerlink" href="#module-boostNode.runnable.codeRunner" title="Permalink to this headline">¶</a></h1>
+<p>This module provides an easy way to compile, run and clean up a various     number of scripts.</p>
+<dl class="class">
+<dt id="boostNode.runnable.codeRunner.Run">
+<em class="property">class </em><tt class="descclassname">boostNode.runnable.codeRunner.</tt><tt class="descname">Run</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.codeRunner.Run" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class provides a large number of supported programming languages         support for compiling, running and cleaning after running.
+Determines a code file to run and runs them in its own thread by         piping all outputs through the command line interface.</p>
+<p><strong>code_file_path</strong>           - A given code file handler or path                                        which should be run.</p>
+<p><strong>default_command_sequence</strong> - A default command sequence which                                        should be executed in given order.</p>
+<dl class="attribute">
+<dt id="boostNode.runnable.codeRunner.Run.COMMAND_LINE_ARGUMENTS">
+<tt class="descname">COMMAND_LINE_ARGUMENTS</tt><em class="property"> = ({u'keywords': {u'help': u'Select a file for running.', u'default': {u'execute': u'__initializer_default_value__'}, u'required': {u'execute': u'__initializer_default_value__ is None'}, u'dest': u'code_file_path', u'action': u'store', u'type': {u'execute': u'type(__initializer_default_value__)'}, u'metavar': u'FILE_PATH'}, u'arguments': (u'-f', u'--code-file')}, {u'keywords': {u'dest': u'default_command_sequence', u'default': {u'execute': u'__initializer_default_value__'}, u'help': {u'execute': u'\'Select a default sequence of things to do with code files (default: &quot;%s&quot;).\' % \'&quot;, &quot;\'.join(__initializer_default_value__)'}, u'action': u'store', u'type': &lt;type 'str'&gt;, u'required': {u'execute': u'__initializer_default_value__ is None'}, u'nargs': u'*', u'metavar': u'COMMAND'}, u'arguments': (u'-d', u'--default-command-sequence')}, {u'keywords': {u'action': u'store_true', u'default': False, u'dest': u'meta_help', u'help': u'Shows this help message.'}, u'arguments': (u'-n', u'--runner-meta-help')})</em><a class="headerlink" href="#boostNode.runnable.codeRunner.Run.COMMAND_LINE_ARGUMENTS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Holds all command line interface argument informations.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="boostNode.runnable.codeRunner.Run.SUPPORTED_CODES">
+<tt class="descname">SUPPORTED_CODES</tt><em class="property"> = {u'laTeX': {u'commands': {u'compile': u'pdflatex &quot;&lt;% code_file.path %&gt;&quot; &amp;&amp; cd &quot;&lt;% code_file.directory.path %&gt;&quot; &amp;&amp; bibtex &quot;&lt;% code_file.basename %&gt;.aux&quot;; pdflatex &quot;&lt;% code_file.path %&gt;&quot; &amp;&amp; pdflatex &quot;&lt;% code_file.path %&gt;&quot;', u'run': u'openPath &quot;&lt;% code_file.basename %&gt;.pdf&quot; || gnome-open &quot;&lt;% code_file.basename %&gt;.pdf&quot; || kde-open &quot;&lt;% code_file.basename %&gt;.pdf&quot; || gvfs-open &quot;&lt;% code_file.basename %&gt;.pdf&quot; || exo-open &quot;&lt;% code_file.basename %&gt;.pdf&quot; || xdg-open &quot;&lt;% code_file.basename %&gt;.pdf&quot; || gedit &quot;&lt;% code_file.basename %&gt;.pdf&quot; || mousepad &quot;&lt;% code_file.basename %&gt;.pdf&quot; || gvim &quot;&lt;% code_file.basename %&gt;.pdf&quot; || vim &quot;&lt;% code_file.basename %&gt;.pdf&quot; || emacs &quot;&lt;% code_file.basename %&gt;.pdf&quot; || nano &quot;&lt;% code_file.basename %&gt;.pdf&quot; || vi &quot;&lt;% code_file.basename %&gt;.pdf&quot; || less &quot;&lt;% code_file.basename %&gt;.pdf&quot; || cat &quot;&lt;% code_file.basename %&gt;.pdf&quot;'}, u'code_manager': {u'commands': {u'compile': u'make compile', u'all': u'make all', u'run': u'make preview', u'clean': u'make clean'}, u'file_path': u'Makefile'}, u'extensions': (u'tex',), u'delete_patterns': (u'.+\\.aux', u'.+\\.log', u'.+\\.toc', u'.+\\.out', u'.+\\.blg', u'.+\\.bbl', u'.+\\.lol')}, u'c': {u'commands': {u'compile': u'g++ &quot;&lt;% code_file.path %&gt;&quot; -o &quot;&lt;% code_file.directory.path %&gt;&lt;% code_file.basename %&gt;&quot;', u'run': u'&quot;&lt;% code_file.directory.path %&gt;&lt;% code_file.basename %&gt;&quot; &lt;%arguments%&gt;'}, u'code_manager': {u'commands': {u'compile': u'make compile', u'test': u'make test', u'all': u'make all', u'clean': u'make clean'}, u'file_path': u'Makefile'}, u'extensions': (u'cpp', u'c', u'cc'), u'delete_patterns': (u'.*\\.o', u'.*Main', u'.*Test')}, u'shell': {u'commands': {u'run': u'&quot;&lt;% code_file.path %&gt;&quot; &lt;% arguments %&gt;'}, u'extensions': (u'sh', u'shell')}, u'java': {u'commands': {u'compile': u'javac &quot;&lt;% code_file.path %&gt;&quot;', u'run': u'java &quot;&lt;% code_file.basename.capitalize() %&gt;&quot; &lt;% arguments %&gt;'}, u'extensions': (u'java',), u'delete_patterns': (u'.*\\.class',)}, u'python': {u'commands': {u'run': u'&quot;&lt;% code_file.path %&gt;&quot; &lt;% arguments %&gt;'}, u'code_manager': {u'commands': {u'test': u'__init__.&lt;% code_file.extension %&gt; test', u'all': u'__init__.&lt;% code_file.extension %&gt; all', u'clean': u'__init__.&lt;% code_file.extension %&gt; clear'}, u'file_path': u'__init__.&lt;% code_file.extension %&gt;'}, u'extensions': (u'py', u'pyc', u'pyw', u'pyo', u'pyd'), u'delete_patterns': (u'.*\\.py[cod]', u'__pycache__', u'temp_.*')}, u'template': {u'commands': {u'compile': u'bash --login -c \'template &quot;&lt;% code_file.path %&gt;&quot; 1&gt;&quot;&lt;% code_file.directory.path %&gt;&lt;% code_file.basename %&gt;.html&quot;\'', u'run': u'bash --login -c \'webbrowser &quot;&lt;% code_file.directory.path %&gt;&lt;% code_file.basename %&gt;.html&quot;\''}, u'extensions': (u'tpl',)}, u'bash': {u'commands': {u'run': u'&quot;&lt;% code_file.path %&gt;&quot; &lt;% arguments %&gt;'}, u'extensions': (u'bash',)}}</em><a class="headerlink" href="#boostNode.runnable.codeRunner.Run.SUPPORTED_CODES" title="Permalink to this definition">¶</a></dt>
+<dd><p>Holds all supported code types and there methods to do common stuff.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="runnable.html"
+                        title="previous chapter">boostNode.runnable</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="runnable.synchronisation.html"
+                        title="next chapter">boostNode.runnable.synchronisation</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/runnable.codeRunner.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="runnable.synchronisation.html" title="boostNode.runnable.synchronisation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="runnable.html" title="boostNode.runnable"
+             >previous</a> |</li>
+        <li><a href="index.html">boostNode 1.0 rc documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 16.12.2012, Torben Sickert.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>
