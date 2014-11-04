@@ -2971,10 +2971,11 @@ class Module(Object):
     @Class.pseudo_property
 # # python3.4
 # #     def get_defined_objects(
-# #         cls: SelfClass, scope: (builtins.type, builtins.object),
-# #         only_module_level=True
+# #         cls: SelfClass, object: (
+# #             builtins.type, builtins.object, builtins.dict
+# #         ), only_module_level=True
 # #     ) -> types.GeneratorType:
-    def get_defined_objects(cls, scope, only_module_level=True):
+    def get_defined_objects(cls, object, only_module_level=True):
 # #
         '''
             Takes a module and gives a list of objects explicit defined in \
@@ -3010,25 +3011,32 @@ class Module(Object):
             ... ) == {('b', a.b), ('a', 'hans')}
             True
         '''
-        for object_name in builtins.set(builtins.dir(scope)):
-            try:
-                object = builtins.getattr(scope, object_name)
-            except builtins.AttributeError:
-                object = None
-            object = cls._determine_object(object)
+        # TODO check branches
+        if builtins.isinstance(object, builtins.dict):
+            scope = object
+            only_module_level = False
+        else:
+            scope = {}
+            for object_name in builtins.dir(object):
+# # python3.4                 pass
+                object_name = convert_to_unicode(object_name)
+                scope[object_name] = builtins.getattr(
+                    object, object_name, None)
+        for object_name, defined_object in scope.items():
+            defined_object = cls._determine_object(defined_object)
             if(not (object_name.startswith('__') and
                     object_name.endswith('__')) and
-               not (inspect.ismodule(object) or
+               not (inspect.ismodule(defined_object) or
                     object_name in cls.HIDDEN_BUILTIN_CALLABLES or
-                    inspect.isbuiltin(object) or
+                    inspect.isbuiltin(defined_object) or
                     object_name in sys.modules or
                     object_name in sys.builtin_module_names or
-                    (only_module_level and inspect.getmodule(object) !=
-                        scope))):
+                    (only_module_level and inspect.getmodule(defined_object) !=
+                        object))):
 # # python3.4
 # #                 yield object_name, object
                 if object_name != 'String':
-                    yield object_name, object
+                    yield object_name, defined_object
 # #
 
     @JointPoint(builtins.classmethod)

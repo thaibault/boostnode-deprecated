@@ -3810,7 +3810,7 @@ class CGIHTTPRequestHandler(
             if not __test_mode__:
                 Module.determine_caller(
                     callable_objects=Module.get_defined_callables(
-                        scope=requested_module)
+                        object=requested_module)
                 )[1]()
         except builtins.BaseException as exception:
             self._handle_module_exception(requested_module, exception)

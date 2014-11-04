@@ -351,7 +351,8 @@ class Buffer(Class, LoggingStreamHandler):
                 self._content = ''
                 temp_buffer = []
                 while not self.queue.empty():
-                    temp_buffer.append(self.queue.get())
+# # python3.4                     temp_buffer.append(self.queue.get())
+                    temp_buffer.append(convert_to_unicode(self.queue.get()))
                     self._content += temp_buffer[-1]
                 for content in temp_buffer:
                     self.queue.put(content)
