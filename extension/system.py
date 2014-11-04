@@ -2414,7 +2414,7 @@ class CommandLine(builtins.object):
             True
         '''
         callable_objects = builtins.tuple(Module.get_defined_callables(
-            scope=module['scope']))
+            object=module['scope']))
         if callable_objects:
             default_caller = Module.determine_caller(
                 caller=default_caller, callable_objects=callable_objects)
