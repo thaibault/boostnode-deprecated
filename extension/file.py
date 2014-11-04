@@ -2714,7 +2714,8 @@ class Handler(Class):
 # #                     path, mode='r', encoding=ENCODING, errors='strict'
 # #                 ) as file:
                 with codecs.open(
-                    path, mode='r', encoding=ENCODING, errors='strict'
+                    convert_to_string(path), mode='r', encoding=ENCODING,
+                    errors='strict'
                 ) as file:
 # #
                     file_content = file.read(maximum_length + 1).strip()
@@ -4358,7 +4359,9 @@ class Handler(Class):
                 return False
 # # python3.4
 # #             if builtins.isinstance(function, builtins.str):
-            if builtins.isinstance(function, builtins.unicode):
+            if builtins.isinstance(function, (
+                builtins.unicode, builtins.str
+            )):
 # #
                 result = builtins.getattr(file, function)(
                     *arguments, **keywords)

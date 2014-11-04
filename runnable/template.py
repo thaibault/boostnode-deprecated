@@ -57,6 +57,62 @@ from boostNode.extension.native import Dictionary, Module, \
     InstancePropertyInitializer
 from boostNode.extension.native import String as StringExtension
 from boostNode.extension.output import Buffer, Print
+from boostNode.extension.output import SET_ATTRIBUTE_MODE as \
+    SET_OUTPUT_ATTRIBUTE_MODE
+from boostNode.extension.output import RESET_ATTRIBUTE_MODE as \
+    RESET_OUTPUT_ATTRIBUTE_MODE
+from boostNode.extension.output import COLOR as OUTPUT_COLOR
+from boostNode.extension.output import HIGH_COLOR as HIGH_OUTPUT_COLOR
+from boostNode.extension.output import HIDDEN as OUTPUT_HIDDEN
+from boostNode.extension.output import BOLD as OUTPUT_BOLD
+from boostNode.extension.output import DIM as OUTPUT_DIM
+from boostNode.extension.output import ITALIC as OUTPUT_ITALIC
+from boostNode.extension.output import UNDERLINE as OUTPUT_UNDERLINE
+from boostNode.extension.output import BLINK as OUTPUT_BLINK
+from boostNode.extension.output import REVERSE as OUTPUT_REVERSE
+from boostNode.extension.output import CROSSED_OUT as OUTPUT_CROSSED_OUT
+from boostNode.extension.output import DEFAULT_FONT as OUTPUT_DEFAULT_FONT
+from boostNode.extension.output import FONT_1 as OUTPUT_FONT_1
+from boostNode.extension.output import FONT_2 as OUTPUT_FONT_2
+from boostNode.extension.output import FONT_3 as OUTPUT_FONT_3
+from boostNode.extension.output import FONT_4 as OUTPUT_FONT_4
+from boostNode.extension.output import FONT_5 as OUTPUT_FONT_5
+from boostNode.extension.output import FONT_6 as OUTPUT_FONT_6
+from boostNode.extension.output import FONT_7 as OUTPUT_FONT_7
+from boostNode.extension.output import FRAKTUR_HARDLY as OUTPUT_FRAKTUR_HARDLY
+from boostNode.extension.output import BOLD_OFF as OUTPUT_BOLD_OFF
+from boostNode.extension.output import BOLD_INTENSITY_OFF as \
+    OUTPUT_BOLD_INTENSITY_OFF
+from boostNode.extension.output import ITALIC_OFF as OUTPUT_ITALIC_OFF
+from boostNode.extension.output import UNDERLINE_OFF as OUTPUT_UNDERLINE_OFF
+from boostNode.extension.output import BLINK_OFF as OUTPUT_BLINK_OFF
+from boostNode.extension.output import RESERVERD_1 as OUTPUT_RESERVERD_1
+from boostNode.extension.output import REVERSE_OFF as OUTPUT_REVERSE_OFF
+from boostNode.extension.output import REVEAL_OFF as OUTPUT_REVEAL_OFF
+from boostNode.extension.output import CROSSED_OUT_OFF as \
+    OUTPUT_CROSSED_OUT_OFF
+from boostNode.extension.output import RESERVED_2 as OUTPUT_RESERVED_2
+from boostNode.extension.output import FRAMED as OUTPUT_FRAMED
+from boostNode.extension.output import ENCIRCLED as OUTPUT_ENCIRCLED
+from boostNode.extension.output import OVERLINED as OUTPUT_OVERLINED
+from boostNode.extension.output import FRAMED_ENCIRCLED_OFF as \
+    OUTPUT_FRAMED_ENCIRCLED_OFF
+from boostNode.extension.output import OVERLINED_OFF as OUTPUT_OVERLINED_OFF
+from boostNode.extension.output import RESERVED_3 as OUTPUT_RESERVED_3
+from boostNode.extension.output import RESERVED_4 as OUTPUT_RESERVED_4
+from boostNode.extension.output import RESERVED_5 as OUTPUT_RESERVED_5
+from boostNode.extension.output import RESERVED_6 as OUTPUT_RESERVED_6
+from boostNode.extension.output import IDEOGRAM_UNDERLINE as \
+    OUTPUT_IDEOGRAM_UNDERLINE
+from boostNode.extension.output import IDEOGRAM_DOUBLE_UNDERLINE as \
+    OUTPUT_IDEOGRAM_DOUBLE_UNDERLINE
+from boostNode.extension.output import IDEOGRAM_OVERLINE as \
+    OUTPUT_IDEOGRAM_OVERLINE
+from boostNode.extension.output import IDEOGRAM_DOUBLE_OVERLINE as \
+    OUTPUT_IDEOGRAM_DOUBLE_OVERLINE
+from boostNode.extension.output import IDEOGRAM_STRESS_MARKING as \
+    OUTPUT_IDEOGRAM_STRESS_MARKING
+from boostNode.extension.output import IDEOGRAM_OFF as OUTPUT_IDEOGRAM_OFF
 from boostNode.extension.system import CommandLine, Runnable
 # # python3.4 from boostNode.extension.type import Self, SelfClass
 pass
@@ -609,7 +665,51 @@ class Parser(Class, Runnable):
 # #             'copy': copy, 'deepCopy': deepcopy,
 # #             'DictionaryExtension': Dictionary, 'StringExtension': String,
 # #             'List': builtins.list, 'hasAttribute': builtins.hasattr,
-# #             'TemplateParser': self.__class__, 'crypt': crypt})
+# #             'TemplateParser': self.__class__, 'crypt': crypt,
+# #             'convert_console_sequences_to_html':
+# #                 self._convert_escape_sequences_to_html,
+# #             'console': {
+# #                 'SET_ATTRIBUTE_MODE': SET_OUTPUT_ATTRIBUTE_MODE,
+# #                 'RESET_ATTRIBUTE_MODE': RESET_OUTPUT_ATTRIBUTE_MODE,
+# #                 'COLOR': OUTPUT_COLOR, 'HIGH_COLOR': HIGH_OUTPUT_COLOR,
+# #                 'BOLD': OUTPUT_BOLD, 'DIM': OUTPUT_DIM,
+# #                 'ITALIC': OUTPUT_ITALIC, 'UNDERLINE': OUTPUT_UNDERLINE,
+# #                 'BLINK': OUTPUT_BLINK, 'REVERSE': OUTPUT_REVERSE,
+# #                 'CROSSED_OUT': OUTPUT_CROSSED_OUT,
+# #                 'DEFAULT_FONT': OUTPUT_DEFAULT_FONT,
+# #                 'FONT_1': OUTPUT_FONT_1,
+# #                 'FONT_2': OUTPUT_FONT_2,
+# #                 'FONT_3': OUTPUT_FONT_3,
+# #                 'FONT_4': OUTPUT_FONT_4,
+# #                 'FONT_5': OUTPUT_FONT_5,
+# #                 'FONT_6': OUTPUT_FONT_6,
+# #                 'FONT_7': OUTPUT_FONT_7,
+# #                 'FRAKTUR_HARDLY': OUTPUT_FRAKTUR_HARDLY,
+# #                 'BOLD_OFF': OUTPUT_BOLD_OFF,
+# #                 'BOLD_INTENSITY_OFF': OUTPUT_BOLD_INTENSITY_OFF,
+# #                 'ITALIC_OFF': OUTPUT_ITALIC_OFF,
+# #                 'UNDERLINE_OFF': OUTPUT_UNDERLINE_OFF,
+# #                 'BLINK_OFF': OUTPUT_BLINK_OFF,
+# #                 'RESERVERD_1': OUTPUT_RESERVERD_1,
+# #                 'REVERSE_OFF': OUTPUT_REVERSE_OFF,
+# #                 'REVEAL_OFF': OUTPUT_REVEAL_OFF,
+# #                 'CROSSED_OUT_OFF': OUTPUT_CROSSED_OUT_OFF,
+# #                 'RESERVED_2': OUTPUT_RESERVED_2,
+# #                 'FRAMED': OUTPUT_FRAMED,
+# #                 'ENCIRCLED': OUTPUT_ENCIRCLED,
+# #                 'OVERLINED': OUTPUT_OVERLINED,
+# #                 'FRAMED_ENCIRCLED_OFF': OUTPUT_FRAMED_ENCIRCLED_OFF,
+# #                 'OVERLINED_OFF': OUTPUT_OVERLINED_OFF,
+# #                 'RESERVED_3': OUTPUT_RESERVED_3,
+# #                 'RESERVED_4': OUTPUT_RESERVED_4,
+# #                 'RESERVED_5': OUTPUT_RESERVED_5,
+# #                 'RESERVED_6': OUTPUT_RESERVED_6,
+# #                 'IDEOGRAM_UNDERLINE': OUTPUT_IDEOGRAM_UNDERLINE,
+# #                 'IDEOGRAM_DOUBLE_UNDERLINE': OUTPUT_IDEOGRAM_DOUBLE_UNDERLINE,
+# #                 'IDEOGRAM_OVERLINE': OUTPUT_IDEOGRAM_OVERLINE,
+# #                 'IDEOGRAM_DOUBLE_OVERLINE': OUTPUT_IDEOGRAM_DOUBLE_OVERLINE,
+# #                 'IDEOGRAM_STRESS_MARKING': OUTPUT_IDEOGRAM_STRESS_MARKING,
+# #                 'IDEOGRAM_OFF': OUTPUT_IDEOGRAM_OFF}})
         self._builtins.update({
             '__indent__': self.indent, '__file__': self.file,
             '__time_stamp__': time.mktime(
@@ -627,7 +727,51 @@ class Parser(Class, Runnable):
             'deepCopy': deepcopy, 'DictionaryExtension': Dictionary,
             'StringExtension': String, 'List': builtins.list,
             'hasAttribute': builtins.hasattr,
-            'TemplateParser': self.__class__, 'crypt': crypt})
+            'TemplateParser': self.__class__, 'crypt': crypt,
+            'convert_console_sequences_to_html':
+                self._convert_escape_sequences_to_html,
+            'console': {
+                'SET_ATTRIBUTE_MODE': SET_OUTPUT_ATTRIBUTE_MODE,
+                'RESET_ATTRIBUTE_MODE': RESET_OUTPUT_ATTRIBUTE_MODE,
+                'COLOR': OUTPUT_COLOR, 'HIGH_COLOR': HIGH_OUTPUT_COLOR,
+                'BOLD': OUTPUT_BOLD, 'DIM': OUTPUT_DIM,
+                'ITALIC': OUTPUT_ITALIC, 'UNDERLINE': OUTPUT_UNDERLINE,
+                'BLINK': OUTPUT_BLINK, 'REVERSE': OUTPUT_REVERSE,
+                'CROSSED_OUT': OUTPUT_CROSSED_OUT,
+                'DEFAULT_FONT': OUTPUT_DEFAULT_FONT,
+                'FONT_1': OUTPUT_FONT_1,
+                'FONT_2': OUTPUT_FONT_2,
+                'FONT_3': OUTPUT_FONT_3,
+                'FONT_4': OUTPUT_FONT_4,
+                'FONT_5': OUTPUT_FONT_5,
+                'FONT_6': OUTPUT_FONT_6,
+                'FONT_7': OUTPUT_FONT_7,
+                'FRAKTUR_HARDLY': OUTPUT_FRAKTUR_HARDLY,
+                'BOLD_OFF': OUTPUT_BOLD_OFF,
+                'BOLD_INTENSITY_OFF': OUTPUT_BOLD_INTENSITY_OFF,
+                'ITALIC_OFF': OUTPUT_ITALIC_OFF,
+                'UNDERLINE_OFF': OUTPUT_UNDERLINE_OFF,
+                'BLINK_OFF': OUTPUT_BLINK_OFF,
+                'RESERVERD_1': OUTPUT_RESERVERD_1,
+                'REVERSE_OFF': OUTPUT_REVERSE_OFF,
+                'REVEAL_OFF': OUTPUT_REVEAL_OFF,
+                'CROSSED_OUT_OFF': OUTPUT_CROSSED_OUT_OFF,
+                'RESERVED_2': OUTPUT_RESERVED_2,
+                'FRAMED': OUTPUT_FRAMED,
+                'ENCIRCLED': OUTPUT_ENCIRCLED,
+                'OVERLINED': OUTPUT_OVERLINED,
+                'FRAMED_ENCIRCLED_OFF': OUTPUT_FRAMED_ENCIRCLED_OFF,
+                'OVERLINED_OFF': OUTPUT_OVERLINED_OFF,
+                'RESERVED_3': OUTPUT_RESERVED_3,
+                'RESERVED_4': OUTPUT_RESERVED_4,
+                'RESERVED_5': OUTPUT_RESERVED_5,
+                'RESERVED_6': OUTPUT_RESERVED_6,
+                'IDEOGRAM_UNDERLINE': OUTPUT_IDEOGRAM_UNDERLINE,
+                'IDEOGRAM_DOUBLE_UNDERLINE': OUTPUT_IDEOGRAM_DOUBLE_UNDERLINE,
+                'IDEOGRAM_OVERLINE': OUTPUT_IDEOGRAM_OVERLINE,
+                'IDEOGRAM_DOUBLE_OVERLINE': OUTPUT_IDEOGRAM_DOUBLE_OVERLINE,
+                'IDEOGRAM_STRESS_MARKING': OUTPUT_IDEOGRAM_STRESS_MARKING,
+                'IDEOGRAM_OFF': OUTPUT_IDEOGRAM_OFF}})
 # #
         return self._builtins
 
@@ -959,7 +1103,7 @@ class Parser(Class, Runnable):
         if(initializer_arguments['builtin_names'] and
            builtins.isinstance(
                 initializer_arguments['builtin_names'][0],
-                builtins.unicode)):
+                (builtins.unicode, builtins.str))):
 # #
             initializer_arguments['builtin_names'] = builtins.tuple(
                 builtins.map(
@@ -1465,13 +1609,13 @@ class Parser(Class, Runnable):
         '''
 # # python3.4
 # #         exception_message = '%s: %s' % (
-# #             exception.__class__.__name__, String(
-# #                 exception
-# #             ).get_camel_case_capitalize().replace("'", '"').content)
+# #             exception.__class__.__name__, builtins.str(exception).replace(
+# #                 "'", '"'
+# #             ))
         exception_message = '%s: %s' % (
-            exception.__class__.__name__, convert_to_unicode(String(
+            exception.__class__.__name__, convert_to_unicode(
                 exception
-            ).get_camel_case_capitalize().replace("'", '"').content))
+            ).replace("'", '"'))
 # #
         native_exception_description = ''
         if(force_native_exception or sys.flags.debug or
@@ -1542,7 +1686,7 @@ class Parser(Class, Runnable):
         ):
             rendered_python_code = self.represent_rendered_python_code()
 # # python3.4
-# #         exception = __exception__(
+# #         raise __exception__(
 # #             'Error with {template_description}{line_info}.\n'
 # #             '{exception_message}{native_exception_description}'
 # #             '{rendered_python_code}'.format(
@@ -1550,9 +1694,9 @@ class Parser(Class, Runnable):
 # #                 ), line_info=line_info,
 # #                 exception_message=exception_message,
 # #                 native_exception_description=native_exception_description,
-# #                 rendered_python_code=rendered_python_code))
-# #         raise exception from None
-        exception = __exception__(
+# #                 rendered_python_code=rendered_python_code)
+# #         ) from None
+        raise __exception__(
             'Error with {template_description}{line_info}.\n'
             '{exception_message}{native_exception_description}'
             '{rendered_python_code}'.format(
@@ -1560,9 +1704,7 @@ class Parser(Class, Runnable):
                 ), line_info=line_info,
                 exception_message=exception_message,
                 native_exception_description=native_exception_description,
-                rendered_python_code=rendered_python_code.encode(
-                    ENCODING)))
-        raise exception
+                rendered_python_code=rendered_python_code))
 # #
 
     @JointPoint
@@ -1642,6 +1784,75 @@ class Parser(Class, Runnable):
         return 0
 
         # # region wrapper methods for template context
+
+    @JointPoint
+# # python3.4
+# #     def _convert_escape_sequences_to_html(self: Self, content) -> None:
+    def _convert_escape_sequences_to_html(self, content):
+# #
+        '''
+            Represents the print function which will be used for all plain \
+            text wraps and print expressions by compiling the source template.
+
+            Examples:
+
+            >>> Parser('', string=True)._convert_escape_sequences_to_html(
+            ...     'hans ' + (
+            ...         SET_OUTPUT_ATTRIBUTE_MODE %
+            ...             OUTPUT_COLOR['foreground']['red']
+            ...     ) + 'peter' + SET_OUTPUT_ATTRIBUTE_MODE %
+            ...         RESET_OUTPUT_ATTRIBUTE_MODE)
+            'hans <span style="color: red">peter</span>'
+        '''
+        # TODO check branches.
+        def replace_handler(match):
+            '''Replaces each console sequence with corresponding html code.'''
+            mode = builtins.int(match.group('mode'))
+            if mode in (
+                RESET_OUTPUT_ATTRIBUTE_MODE, OUTPUT_UNDERLINE_OFF,
+                OUTPUT_BLINK_OFF, OUTPUT_REVEAL_OFF, OUTPUT_CROSSED_OUT_OFF,
+                OUTPUT_IDEOGRAM_OFF, OUTPUT_FRAMED_ENCIRCLED_OFF,
+                OUTPUT_OVERLINED_OFF
+            ):
+                return '</span>'
+            mapping = {
+                OUTPUT_HIDDEN: 'visibility: hidden',
+                OUTPUT_BOLD: 'font-weight: bold',
+                OUTPUT_DIM: 'opacity: .5',
+                OUTPUT_ITALIC: 'font-style: italic',
+                OUTPUT_UNDERLINE: 'text-decoration: underline',
+                OUTPUT_BLINK: 'text-decoration: blink',
+                OUTPUT_CROSSED_OUT: 'text-decoration: line-through',
+                OUTPUT_DEFAULT_FONT: 'font-family: initial',
+                OUTPUT_FRAKTUR_HARDLY: 'font-family: UnifrakturCook',
+                OUTPUT_BOLD_OFF: 'font-weight: normal',
+                OUTPUT_BOLD_INTENSITY_OFF: 'font-weight: normal',
+                OUTPUT_ITALIC_OFF: 'font-style: normal',
+                OUTPUT_FRAMED: 'border: 1px solid',
+                OUTPUT_ENCIRCLED: 'border-radius: 50%; text-align: center; '
+                    'border: 1px solid',
+                OUTPUT_OVERLINED: 'text-decoration: overline',
+                OUTPUT_IDEOGRAM_UNDERLINE: 'text-decoration: underline',
+                OUTPUT_IDEOGRAM_DOUBLE_UNDERLINE: 'border-bottom: 1px double',
+                OUTPUT_IDEOGRAM_OVERLINE: 'text-decoration: overline',
+                OUTPUT_IDEOGRAM_DOUBLE_OVERLINE: 'border-top: 1px double',
+                OUTPUT_IDEOGRAM_STRESS_MARKING:
+                    'font-weight: bold, color: red'}
+            if mode in mapping:
+                return '<span style="%s">' % mapping[mode]
+            for type, directive_prefix in {
+                'foreground': '', 'background': 'background-'
+            }.items():
+                for color, color_mode in OUTPUT_COLOR[type].items():
+                    if mode == color_mode:
+                        return '<span style="%scolor: %s">' % (
+                            directive_prefix, color.lower())
+            return '<span class="console-output-mode-%d">' % mode
+        content = re.compile(String(
+            SET_OUTPUT_ATTRIBUTE_MODE
+        ).validate_regex().sub('%d', '(?P<mode>[0-9]+)').content).sub(
+            replace_handler, content)
+        return content
 
     # NOTE: This method is heavily used during rendering. It should be as fast
     # as possible. So the JointPoint is deactivated.
@@ -1766,7 +1977,7 @@ class Parser(Class, Runnable):
                 return '[%s]' % result
             return '{%s}' % result
         is_string = False
-        if builtins.isinstance(object, builtins.unicode):
+        if builtins.isinstance(object, (builtins.unicode, builtins.str)):
             is_string = True
         object = convert_to_unicode(object)
         if is_string and quote_string:
@@ -2003,10 +2214,10 @@ class Parser(Class, Runnable):
         self._line_shifts.append(
             (self._number_of_generated_lines,
              self._number_of_generated_phantom_lines))
-        return "%s%s%sprint(%s%s, end='')\n" % (
+        return "%s%s%sprint(%s, end='%s')\n" % (
             last_empty_lines, before_placeholder, indent,
             match.group('placeholder').strip(),
-            ('+"\\n"' if self._get_new_line() else ''))
+            ('\\n' if self._get_new_line() else ''))
 
     @JointPoint
 # # python3.4

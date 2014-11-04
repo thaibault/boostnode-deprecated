@@ -47,7 +47,7 @@ import Queue as native_queue
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
 # # python3.4 pass
-from boostNode import ENCODING, convert_to_unicode
+from boostNode import ENCODING, convert_to_string, convert_to_unicode
 from boostNode.extension.file import Handler as FileHandler
 from boostNode.extension.native import Module
 # # python3.4 from boostNode.extension.type import Self, SelfClass
@@ -59,16 +59,36 @@ from boostNode.paradigm.objectOrientation import Class
 
 # region constants
 
-SET_ATTRIBUTE_MODE = '\033[%sm'
+SET_ATTRIBUTE_MODE = '\033[%dm'
 
-RESET = 0
-BRIGHT = 1
+RESET_ATTRIBUTE_MODE = 0
+BOLD = 1
 DIM = 2
-UNDERSCORE = 4
+ITALIC = 3
+UNDERLINE = 4
 BLINK = 5
+BLINK_RAPID = 6
 REVERSE = 7
 HIDDEN = 8
-
+CROSSED_OUT = 9
+DEFAULT_FONT = 10
+FONT_1 = 11
+FONT_2 = 12
+FONT_3 = 13
+FONT_4 = 14
+FONT_5 = 15
+FONT_6 = 16
+FONT_7 = 17
+FRAKTUR_HARDLY = 20
+BOLD_OFF = 21
+BOLD_INTENSITY_OFF = 22
+ITALIC_OFF = 23
+UNDERLINE_OFF = 24
+BLINK_OFF = 25
+RESERVERD_1 = 26
+REVERSE_OFF = 27
+REVEAL_OFF = 28
+CROSSED_OUT_OFF = 29
 COLOR = {
     'foreground': {
         'black': 30,
@@ -79,6 +99,7 @@ COLOR = {
         'magenta': 35,
         'cyan': 36,
         'white': 37,
+        'extended': 38,
         'fallback': 39
     }, 'background': {
         'black': 40,
@@ -88,9 +109,48 @@ COLOR = {
         'blue': 44,
         'magenta': 45,
         'cyan': 46,
-        'white': 47
+        'white': 47,
+        'extended': 48,
+        'fallback': 49
     }
 }
+HIGH_COLOR = {
+    'foreground': {
+        'black': 90,
+        'red': 91,
+        'green': 92,
+        'yellow': 93,
+        'blue': 94,
+        'magenta': 95,
+        'cyan': 96,
+        'white': 97
+    }, 'background': {
+        'black': 100,
+        'red': 101,
+        'green': 102,
+        'yellow': 103,
+        'blue': 104,
+        'magenta': 105,
+        'cyan': 106,
+        'white': 107
+    }
+}
+RESERVED_2 = 50
+FRAMED = 51
+ENCIRCLED = 52
+OVERLINED = 53
+FRAMED_ENCIRCLED_OFF = 54
+OVERLINED_OFF = 55
+RESERVED_3 = 56
+RESERVED_4 = 57
+RESERVED_5 = 58
+RESERVED_6 = 59
+IDEOGRAM_UNDERLINE = 60
+IDEOGRAM_DOUBLE_UNDERLINE = 61
+IDEOGRAM_OVERLINE = 62
+IDEOGRAM_DOUBLE_OVERLINE = 63
+IDEOGRAM_STRESS_MARKING = 64
+IDEOGRAM_OFF = 65
 
 # endregion
 
@@ -566,6 +626,8 @@ class Print(Class):
 # #         builtins.print(
 # #             *output, sep='', end='', file=keywords['buffer'],
 # #             flush=keywords['flush'])
+        for key, value in builtins.enumerate(output):
+            output[key] = convert_to_string(value)
         builtins.print(*output, sep='', end='', file=keywords['buffer'])
         if keywords['flush']:
             sys.stdout.flush()
@@ -639,12 +701,12 @@ class ColoredFormatter(LoggingFormatter):
         levelname = record.levelname
         if levelname in self.COLOR_TO_LEVEL_MAPPING:
             record.levelname = (
-                SET_ATTRIBUTE_MODE % RESET
+                SET_ATTRIBUTE_MODE % RESET_ATTRIBUTE_MODE
             ) + (
                 SET_ATTRIBUTE_MODE % COLOR['foreground'][
                     self.COLOR_TO_LEVEL_MAPPING[levelname]
                 ]
-            ) + levelname + (SET_ATTRIBUTE_MODE % RESET)
+            ) + levelname + (SET_ATTRIBUTE_MODE % RESET_ATTRIBUTE_MODE)
         '''
             Take this method type by another instance of this class via \
             introspection.
@@ -667,7 +729,7 @@ class Logger(Class):
     '''Defines the default logging level for new created logger handler.'''
     format = (SET_ATTRIBUTE_MODE % COLOR['foreground']['cyan']) + (
         '%(asctime)s - %(name)s' + (
-            SET_ATTRIBUTE_MODE % RESET
+            SET_ATTRIBUTE_MODE % RESET_ATTRIBUTE_MODE
         ) + ' - %(levelname)s - %(message)s'),
     '''Output format.'''
     terminator = '\n',

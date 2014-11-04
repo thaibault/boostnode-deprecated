@@ -1087,9 +1087,9 @@ class String(Object, builtins.str):
         '''
         return builtins.len(self.__str__())
 
-    @JointPoint
 # # python3.4     def __str__(self: Self) -> builtins.str:
-    def __str__(self):
+    @JointPoint
+    def __unicode__(self):
         '''
             Triggers if the current object should be directly interpreted as \
             pythons native string implementation.
@@ -1100,6 +1100,24 @@ class String(Object, builtins.str):
             'hans'
 
             >>> str(String())
+            ''
+        '''
+# # python3.4         return self.content
+        return convert_to_unicode(self.content)
+
+    @JointPoint
+# # python3.4     def __bytes__(self: Self) -> builtins.bytes:
+    def __str__(self):
+        '''
+            Triggers if the current object should be directly interpreted as \
+            pythons native bytes implementation.
+
+            Examples:
+
+            >>> bytes(String('hans'))
+            'hans'
+
+            >>> bytes(String())
             ''
         '''
         return self.content
@@ -2249,9 +2267,17 @@ class Dictionary(Object, builtins.dict):
             if key in exclude:
                 del immutable[key]
             else:
-                immutable[key] = self._immutable_helper(value, exclude)
-        return builtins.tuple(builtins.sorted(
-            immutable.items(), key=builtins.str))
+                try:
+# # python3.4
+# #                     immutable[key] = builtins.str(self._immutable_helper(
+# #                         value, exclude))
+                    immutable[key] = convert_to_unicode(self._immutable_helper(
+                        value, exclude))
+# #
+                except:
+                    # TODO reach branch with "instancemethid"
+                    del immutable[key]
+        return builtins.tuple(builtins.sorted(immutable.items()))
 
         # # endregion
 

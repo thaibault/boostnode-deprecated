@@ -91,6 +91,11 @@ from boostNode.extension.file import Handler as FileHandler
 from boostNode.extension.native import Dictionary, Module, Object, \
     InstancePropertyInitializer, String
 from boostNode.extension.output import Buffer, Print
+from boostNode.extension.output import SET_ATTRIBUTE_MODE as \
+    SET_OUTPUT_ATTRIBUTE_MODE
+from boostNode.extension.output import RESET_ATTRIBUTE_MODE as \
+    RESET_OUTPUT_ATTRIBUTE_MODE
+from boostNode.extension.output import COLOR as OUTPUT_COLOR
 from boostNode.extension.system import CommandLine, Platform, Runnable
 # # python3.4 from boostNode.extension.type import Self
 pass
@@ -549,7 +554,7 @@ class Web(Class, Runnable):
         ServerError: Given public key file path "..." ...
     '''
 
-    # region properties
+    # regio n properties
 
     COMMAND_LINE_ARGUMENTS = (
         {'arguments': ('-r', '--root'),
@@ -869,6 +874,13 @@ class Web(Class, Runnable):
     '''
     MAXIMUM_FIRST_GET_REQUEST_LINE_IN_CHARS = 65537
     '''This values describes the longest possible first get request line.'''
+    STATUS_PREFIX_CODE_LOGGING_COLOR_MAPPING = {
+        2: OUTPUT_COLOR['foreground']['green'],
+        3: OUTPUT_COLOR['foreground']['blue'],
+        4: OUTPUT_COLOR['foreground']['yellow'],
+        5: OUTPUT_COLOR['foreground']['red']
+    }
+    '''Maps a highlighting color to each http status code prefix.'''
     instances = []
     '''Saves all initializes server instances.'''
 
@@ -2169,12 +2181,13 @@ class CGIHTTPRequestHandler(
             cookie_object = cookies.SimpleCookie()
 # # python3.4
 # #             if builtins.isinstance(cookie, builtins.str):
-            if builtins.isinstance(cookie, builtins.unicode):
+            if builtins.isinstance(cookie, (builtins.unicode, builtins.str)):
 # #
                 cookie_object.load(cookie_object)
             else:
                 for key, value in cookie.items():
-                    cookie_object[key] = value
+# # python3.4                     cookie_object[key] = value
+                    cookie_object[convert_to_string(key)] = value
             cookie = cookie_object
         expires = self.date_time_string(time.time() + maximum_age_in_seconds)
         cookie = re.compile('^[^:]+: *').sub('', cookie.output()) + (
@@ -2360,7 +2373,7 @@ class CGIHTTPRequestHandler(
         '''
         format = (
             '{client_ip}:{client_port} {request_description} -> '
-            '{response_code}')
+            '%s{response_code}%s')
         forwarded_ip = forwarded_host = forwarded_server = None
         if 'headers' in self.__dict__:
             forwarded_ip = self.headers.get('x-forwarded-for')
@@ -2385,7 +2398,22 @@ class CGIHTTPRequestHandler(
             request_description = convert_to_unicode(
                 request_description)
 # #
-        __logger__.info(format.format(
+        # TODO check branches.
+        longest_match = 0
+        color_wrapper = '', ''
+        for status_code_prefix, output_color in \
+        self.server.web.STATUS_PREFIX_CODE_LOGGING_COLOR_MAPPING.items():
+            if longest_match < builtins.len(builtins.str(
+                status_code_prefix
+            )) and builtins.str(response_code).startswith(builtins.str(
+                status_code_prefix
+            )):
+                color_wrapper = (
+                    SET_OUTPUT_ATTRIBUTE_MODE % output_color,
+                    SET_OUTPUT_ATTRIBUTE_MODE % RESET_OUTPUT_ATTRIBUTE_MODE)
+                longest_match = builtins.len(builtins.str(status_code_prefix))
+        ##
+        __logger__.info((format % color_wrapper).format(
             client_ip=self.client_address[0],
             client_port=self.client_address[1],
             request_description=request_description,
@@ -3570,10 +3598,11 @@ class CGIHTTPRequestHandler(
                 self.wfile.write(self._encoded_output)
 # # python3.4
 # #             elif builtins.isinstance(output, builtins.bytes):
-            elif builtins.isinstance(output, builtins.unicode):
+            elif builtins.isinstance(output, builtins.str):
 # #
                 self.wfile.write(output)
-            elif builtins.isinstance(output, builtins.str):
+# #             elif builtins.isinstance(output, builtins.str):
+            elif builtins.isinstance(output, builtins.unicode):
                 self.wfile.write(output.encode(self.server.web.encoding))
             else:
                 self.copyfile(output, self.wfile)

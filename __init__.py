@@ -418,13 +418,14 @@ def convert_to_unicode(object):
         return object
     elif builtins.isinstance(object, builtins.str):
         return builtins.unicode(object, ENCODING)
-    elif builtins.hasattr(object, '__unicode__'):
-        return object.__unicode__()
-    elif builtins.hasattr(object, '__str__'):
-        object = object.__str__()
-        if builtins.isinstance(object, builtins.unicode):
-            return object
-        return builtins.unicode(object, ENCODING)
+    elif not builtins.isinstance(object, builtins.type):
+        if builtins.hasattr(object, '__unicode__'):
+            return object.__unicode__()
+        elif builtins.hasattr(object, '__str__'):
+            object = object.__str__()
+            if builtins.isinstance(object, builtins.unicode):
+                return object
+            return builtins.unicode(object, ENCODING)
     '''
         NOTE: We have to avoid using an explicit encoding to mimic python \
         native "builtins.str()" method behavior for getting a string \

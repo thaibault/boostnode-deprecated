@@ -52,7 +52,7 @@ import socket
 import struct
 import subprocess
 import sys
-import tempfile
+from tempfile import mkdtemp as make_temporary_directory
 import time
 import traceback
 # # python3.4 import types
@@ -1346,7 +1346,7 @@ class Platform(builtins.object):
         '''Creates a unique temporary process lock file directory location.'''
         if Platform.process_lock_directory is None:
             Platform.process_lock_directory = FileHandler(
-                location=tempfile.mkdtemp())
+                location=make_temporary_directory())
         return cls
 
     @JointPoint(builtins.classmethod)
@@ -2061,7 +2061,7 @@ class CommandLine(builtins.object):
             elif Buffer.__name__ in module['scope'].__dict__:
                 Buffer = module['scope'].__dict__[Buffer.__name__]
         module['scope'].__test_folder__ = FileHandler(
-            location=tempfile.mkdtemp(suffix=module['scope'].__name__))
+            location=make_temporary_directory(suffix=module['scope'].__name__))
         module['scope'].__test_buffer__ = Buffer()
         module['scope'].__test__ = cls.determine_wrapped_objects(
             scope=module['scope'])
