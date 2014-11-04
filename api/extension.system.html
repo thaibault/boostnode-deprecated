@@ -480,7 +480,7 @@ method.</p>
 <p><strong>command_arguments</strong> - A list of arguments passing through the                                     command line interface.</p>
 <p><strong>secure</strong>            - Disable output piping by python and run                                     command in systems native process.</p>
 <p><strong>error</strong>             - If &#8220;False&#8221; exceptions by running command                                     are kept back.</p>
-<p><strong>shell</strong>             - Simulate a shell if &#8220;True&#8221;. If explicit                                     command arguments are given shell&#8217;s                                     default value is &#8220;True&#8221; and &#8220;False&#8221;                                     otherwise.</p>
+<p><strong>shell</strong>             - Simulate a shell if &#8220;True&#8221;.</p>
 <p><strong>log</strong>               - If &#8220;True&#8221; standard output will be logged                                     with level &#8220;info&#8221; and error output with                                     level &#8220;warning&#8221;.</p>
 <p><strong>no_blocking</strong>       - If &#8220;True&#8221; resulting output won&#8217;t be a                                     string. You will get an python &#8220;IOBuffer&#8221;                                     like object. NOTE: If buffer is empty and                                     you try to read from buffer an exception                                     will occur.</p>
 <p>All following arguments are given through python&#8217;s native
@@ -498,7 +498,7 @@ method.</p>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Platform</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">command</span><span class="o">=</span><span class="s">&#39;not&#39;</span><span class="p">,</span> <span class="n">command_arguments</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;existing&#39;</span><span class="p">,),</span>
-<span class="gp">... </span>    <span class="n">error</span><span class="o">=</span><span class="bp">False</span>
+<span class="gp">... </span>    <span class="n">error</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="bp">True</span>
 <span class="gp">... </span><span class="p">)</span> 
 <span class="go">{...&#39;standard_output&#39;: ...}</span>
 </pre></div>
@@ -512,7 +512,8 @@ method.</p>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Platform</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">command</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;not_existing&#39;</span><span class="p">,</span> <span class="s">&#39;also_not_existing&#39;</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="n">command_arguments</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;existing&#39;</span><span class="p">,),</span> <span class="n">error</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="bp">True</span>
+<span class="gp">... </span>    <span class="n">command_arguments</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;existing&#39;</span><span class="p">,),</span> <span class="n">error</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">shell</span><span class="o">=</span><span class="bp">True</span>
 <span class="gp">... </span><span class="p">)</span> 
 <span class="go">{...&#39;standard_output&#39;: ...}</span>
 </pre></div>
@@ -530,11 +531,10 @@ method.</p>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Platform</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">command</span><span class="o">=</span><span class="s">&#39;not&#39;</span><span class="p">,</span> <span class="n">command_arguments</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;existing&#39;</span><span class="p">,)</span>
-<span class="gp">... </span><span class="p">)</span> 
+<span class="gp">... </span>    <span class="n">command</span><span class="o">=</span><span class="s">&#39;not&#39;</span><span class="p">,</span> <span class="n">command_arguments</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;existing&#39;</span><span class="p">,))</span>
 <span class="gt">Traceback (most recent call last):</span>
 <span class="c">...</span>
-<span class="gr">boostNode.extension.native.SystemError</span>: <span class="n">Command &quot;not existing&quot; ...</span>
+<span class="gr">OSError</span>: <span class="n">[Errno 2] No such file or directory</span>
 </pre></div>
 </div>
 </dd></dl>
