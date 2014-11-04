@@ -1182,13 +1182,14 @@ class Platform(builtins.object):
 # # python3.4
 # #     def run(
 # #         cls: SelfClass, command: Iterable, command_arguments=None,
-# #         secure=False, error=True, shell=False, log=False,
+# #         error=True, shell=False, native_shell=False, log=False,
 # #         no_blocking=False, *arguments: builtins.object,
 # #         **keywords: builtins.object
 # #     ) -> builtins.dict:
     def run(
-        cls, command, command_arguments=None, secure=False, error=True,
-        shell=False, log=False, no_blocking=False, *arguments, **keywords
+        cls, command, command_arguments=None, error=True, shell=False,
+        native_shell=False, log=False, no_blocking=False, *arguments,
+        **keywords
     ):
 # #
         '''
@@ -1202,13 +1203,13 @@ class Platform(builtins.object):
             **command_arguments** - A list of arguments passing through the \
                                     command line interface.
 
-            **secure**            - Disable output piping by python and run \
-                                    command in systems native process.
-
             **error**             - If "False" exceptions by running command \
                                     are kept back.
 
             **shell**             - Simulate a shell if "True".
+
+            **native_shell**      - Disable output piping by python and run \
+                                    command in systems native process.
 
             **log**               - If "True" standard output will be logged \
                                     with level "info" and error output with \
@@ -1273,19 +1274,19 @@ class Platform(builtins.object):
 # # python3.4
 # #         if builtins.isinstance(command, builtins.str):
 # #             result = cls._run_one_command(
-# #                 command, command_arguments, secure, error, shell,
+# #                 command, command_arguments, error, shell, native_shell,
 # #                 no_blocking, *arguments, **keywords)
         if builtins.isinstance(command, (builtins.unicode, builtins.str)):
             result = cls._run_one_command(
-                convert_to_unicode(command), command_arguments, secure,
-                error, shell, no_blocking, *arguments, **keywords)
+                convert_to_unicode(command), command_arguments, error,
+                shell, native_shell, no_blocking, *arguments, **keywords)
 # #
         else:
             result = cls._run_multiple_commands(
                 commands=command, command_arguments=command_arguments,
-                secure=secure, error=error, shell=shell, *arguments,
-                **keywords)
-        if log and not (secure or no_blocking):
+                error=error, shell=shell, native_shell=native_shell,
+                *arguments, **keywords)
+        if log and not (native_shell or no_blocking):
             cls._log_command_result(result)
         return result
 
@@ -1375,13 +1376,13 @@ class Platform(builtins.object):
 # # python3.4
 # #     def _run_one_command(
 # #         cls: SelfClass, command: Iterable, command_arguments: Iterable,
-# #         secure: builtins.bool, error: builtins.bool, shell: builtins.bool,
-# #         no_blocking: builtins.bool, *arguments: builtins.object,
-# #         **keywords: builtins.object
+# #         error: builtins.bool, shell: builtins.bool,
+# #         native_shell: builtins.bool, no_blocking: builtins.bool,
+# #         *arguments: builtins.object, **keywords: builtins.object
 # #     ) -> builtins.dict:
     def _run_one_command(
-        cls, command, command_arguments, secure, error, shell, no_blocking,
-        *arguments, **keywords
+        cls, command, command_arguments, error, shell, native_shell,
+        no_blocking, *arguments, **keywords
     ):
 # #
         '''
@@ -1400,7 +1401,7 @@ class Platform(builtins.object):
         command = ' '.join([command] + builtins.list(builtins.map(
             lambda value: convert_to_unicode(value), command_arguments)))
 # #
-        if secure:
+        if native_shell:
             result['return_code'] = os.system(command)
             if error and result['return_code'] != 0:
                 sys.exit(result['return_code'])
@@ -1465,11 +1466,12 @@ class Platform(builtins.object):
 # # python3.4
 # #     def _run_multiple_commands(
 # #         cls: SelfClass, commands: Iterable, command_arguments: Iterable,
-# #         secure: builtins.bool, error: builtins.bool, shell: builtins.bool,
-# #         *arguments: builtins.object, **keywords: builtins.object
+# #         error: builtins.bool, shell: builtins.bool,
+# #         native_shell: builtins.bool, *arguments: builtins.object,
+# #         **keywords: builtins.object
 # #     ) -> builtins.dict:
     def _run_multiple_commands(
-        cls, commands, command_arguments, secure, error, shell,
+        cls, commands, command_arguments, error, shell, native_shell,
         *arguments, **keywords
     ):
 # #
@@ -1478,8 +1480,8 @@ class Platform(builtins.object):
         for sub_command in commands:
             sub_result = cls.run(
                 command=sub_command, command_arguments=command_arguments,
-                secure=secure, error=error, shell=shell, *arguments,
-                **keywords)
+                error=error, shell=shell, native_shell=native_shell,
+                *arguments, **keywords)
             result['standard_output'].append(sub_result['standard_output'])
             result['error_output'].append(sub_result['error_output'])
             result['return_code'].append(sub_result['return_code'])
@@ -2787,7 +2789,7 @@ class CommandLine(builtins.object):
                         code_manager=initializer.path,
                         arguments='", "'.join(new_command_line_arguments)))
                 Platform.run(
-                    command=initializer.path, secure=True,
+                    command=initializer.path, native_shell=True,
                     command_arguments=new_command_line_arguments)
         return cls
 
