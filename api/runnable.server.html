@@ -62,13 +62,19 @@
 <dl class="attribute">
 <dt id="boostNode.runnable.server.CGIHTTPRequestHandler.content_length_sent">
 <tt class="descname">content_length_sent</tt><em class="property"> = None</em><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.content_length_sent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Saves the error message format.</p>
+<dd><p>Saves the error message format. NOTE: Has to be a native string to avoid encoding errors in python&#8217;s native underlying request handler logic.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="boostNode.runnable.server.CGIHTTPRequestHandler.content_type_sent">
 <tt class="descname">content_type_sent</tt><em class="property"> = None</em><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.content_type_sent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Saves the error message format.</p>
+<dd><p>Saves the error message format. NOTE: Has to be a native string to avoid encoding errors in python&#8217;s native underlying request handler logic.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="boostNode.runnable.server.CGIHTTPRequestHandler.data_type">
+<tt class="descname">data_type</tt><em class="property"> = None</em><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.data_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves the last started worker thread instance.</p>
 </dd></dl>
 
 <dl class="staticmethod">
@@ -343,6 +349,18 @@
 <dd><p>Finishes all sent headers by a trailing new empty line.</p>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="boostNode.runnable.server.CGIHTTPRequestHandler.error_content_type">
+<tt class="descname">error_content_type</tt><em class="property"> = None</em><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.error_content_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves the self describing server version string. This string is included in every response.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="boostNode.runnable.server.CGIHTTPRequestHandler.error_message_format">
+<tt class="descname">error_message_format</tt><em class="property"> = None</em><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.error_message_format" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves the error content type header.</p>
+</dd></dl>
+
 <dl class="staticmethod">
 <dt id="boostNode.runnable.server.CGIHTTPRequestHandler.get_cookie">
 <em class="property">static </em><tt class="descname">get_cookie</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.get_cookie" title="Permalink to this definition">¶</a></dt>
@@ -458,13 +476,13 @@
 <dl class="attribute">
 <dt id="boostNode.runnable.server.CGIHTTPRequestHandler.headers_ended">
 <tt class="descname">headers_ended</tt><em class="property"> = None</em><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.headers_ended" title="Permalink to this definition">¶</a></dt>
-<dd><p>Saves the error message format.</p>
+<dd><p>Saves the error message format. NOTE: Has to be a native string to avoid encoding errors in python&#8217;s native underlying request handler logic.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="boostNode.runnable.server.CGIHTTPRequestHandler.last_running_worker">
 <tt class="descname">last_running_worker</tt><em class="property"> = None</em><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.last_running_worker" title="Permalink to this definition">¶</a></dt>
-<dd><p>Saves the last started worker thread instance.</p>
+<dd><p>Consists the explicit requested file name (like python&#8217;s native &#8220;self.file&#8221;) coming from client.</p>
 </dd></dl>
 
 <dl class="staticmethod">
@@ -489,7 +507,7 @@
 <dl class="attribute">
 <dt id="boostNode.runnable.server.CGIHTTPRequestHandler.load_module">
 <tt class="descname">load_module</tt><em class="property"> = None</em><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.load_module" title="Permalink to this definition">¶</a></dt>
-<dd><p>Defines weather the handler has decided to run a python module or an external script.</p>
+<dd><p>Defines arguments given to a requested file which is running by the server.</p>
 </dd></dl>
 
 <dl class="staticmethod">
@@ -608,31 +626,25 @@
 <dl class="attribute">
 <dt id="boostNode.runnable.server.CGIHTTPRequestHandler.request_arguments">
 <tt class="descname">request_arguments</tt><em class="property"> = None</em><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.request_arguments" title="Permalink to this definition">¶</a></dt>
-<dd><p>Defines arguments given to a requested file which is running by the server.</p>
+<dd><p>Indicates if an answer is expected from the requested file.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="boostNode.runnable.server.CGIHTTPRequestHandler.requested_file">
 <tt class="descname">requested_file</tt><em class="property"> = None</em><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.requested_file" title="Permalink to this definition">¶</a></dt>
-<dd><p>References the corresponding file handler to requested file name.</p>
+<dd><p>Defines weather the handler has decided to run a python module or an external script.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="boostNode.runnable.server.CGIHTTPRequestHandler.requested_file_name">
 <tt class="descname">requested_file_name</tt><em class="property"> = None</em><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.requested_file_name" title="Permalink to this definition">¶</a></dt>
-<dd><p>Consists the explicit requested file name (like python&#8217;s native &#8220;self.file&#8221;) coming from client.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="boostNode.runnable.server.CGIHTTPRequestHandler.respond">
-<tt class="descname">respond</tt><em class="property"> = None</em><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.respond" title="Permalink to this definition">¶</a></dt>
-<dd><p>Indicates if an answer is expected from the requested file.</p>
+<dd><p>References the corresponding file handler to requested file name.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="boostNode.runnable.server.CGIHTTPRequestHandler.response_sent">
 <tt class="descname">response_sent</tt><em class="property"> = None</em><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.response_sent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Saves the error message format.</p>
+<dd><p>Saves the error message format. NOTE: Has to be a native string to avoid encoding errors in python&#8217;s native underlying request handler logic.</p>
 </dd></dl>
 
 <dl class="staticmethod">
@@ -737,7 +749,7 @@
 <dl class="attribute">
 <dt id="boostNode.runnable.server.CGIHTTPRequestHandler.server_version">
 <tt class="descname">server_version</tt><em class="property"> = None</em><a class="headerlink" href="#boostNode.runnable.server.CGIHTTPRequestHandler.server_version" title="Permalink to this definition">¶</a></dt>
-<dd><p>Saves the self describing server version string. This string is included in every response.</p>
+<dd><p>Saves gziped encoded output.</p>
 </dd></dl>
 
 <dl class="staticmethod">
