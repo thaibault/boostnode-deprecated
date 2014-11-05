@@ -554,7 +554,7 @@ class Web(Class, Runnable):
         ServerError: Given public key file path "..." ...
     '''
 
-    # regio n properties
+    # region properties
 
     COMMAND_LINE_ARGUMENTS = (
         {'arguments': ('-r', '--root'),
@@ -1327,13 +1327,19 @@ class CGIHTTPRequestHandler(
     @JointPoint
 # # python3.4
 # #     def __init__(
-# #         self, *arguments: builtins.object, **keywords: builtins.object
+# #         self, request_socket: socket.socket,
+# #         request_address: builtins.tuple,
+# #         server: MultiProcessingHTTPServer, *arguments: builtins.object,
+# #         **keywords: builtins.object
 # #     ) -> None:
 # #         '''
 # #             This method calls is parent. It's necessary to make some class
 # #             properties instance properties.
 # #         '''
-    def __init__(self, *arguments, **keywords):
+    def __init__(
+        self, request_socket, request_address, server, *arguments,
+        **keywords
+    ):
 # #
         '''
             Initializes all used properties and calls the super method.
@@ -1357,58 +1363,82 @@ class CGIHTTPRequestHandler(
         self.request_type = ''
         self.external_request_type = ''
         self.data_type = ''
-        self.last_running_worker = None
         '''Saves the last started worker thread instance.'''
-        self.requested_file_name = ''
+        self.last_running_worker = None
         '''
             Consists the explicit requested file name (like python's native \
             "self.file") coming from client.
         '''
-        self.requested_file = None
+        self.requested_file_name = ''
         '''References the corresponding file handler to requested file name.'''
-        self.load_module = False
+        self.requested_file = None
         '''
             Defines weather the handler has decided to run a python module or \
             an external script.
         '''
-        self.request_arguments = []
+        self.load_module = False
         '''
             Defines arguments given to a requested file which is running by \
             the server.
         '''
-        self.respond = False
+        self.request_arguments = []
         '''Indicates if an answer is expected from the requested file.'''
+        self.respond = False
         self.response_sent = self.headers_ended = self.content_type_sent = \
             self.content_length_sent = False
-        '''Saves the error message format.'''
-# # python3.4         self.error_message_format = (
-        self.error_message_format = convert_to_unicode(
-            '<!DOCTYPE html>\n'
-            '<html>\n'
-            '    <head><title>Error response</title></head>\n'
+# # python3.4
+# #         '''Saves the error message format.'''
+# #         self.error_message_format = (
+        '''
+            Saves the error message format. NOTE: Has to be a native string \
+            to avoid encoding errors in python's native underlying request \
+            handler logic.
+        '''
+        self.error_message_format = convert_to_string(
+# #
+            '<!doctype html>\n'
+            '<html lang="en">\n'
+            '    <head>\n'
+            '        <meta charset="{charset}">\n'
+            '        <meta name="robots" content="noindex, follow" />\n'
+            '        <meta name="viewport" content="width=device-width, '
+                     'initial-scale=1.0" />\n'
+            '        <title>Error response</title>\n'
+            '    </head>\n'
             '    <body>\n'
             '        <h1>Error response</h1>\n'
-            '        <p>Error code %(code)d.</p>\n'
+            '        <p>\n'
+            '            Error code <span style="color: red">%(code)d</span>'
+                         '.\n'
+            '        </p>\n'
             '        <p>Message:</p>\n'
             '        <pre>%(message)s.</pre>\n'
             '        <p>Error code explanation: %(code)s</p>\n'
             '        <p>%(explain)s.</p>\n'
             '    </body>\n'
-            '</html>')
-        self.server_version = '{program} {version} {status}'.format(
-            program=String(__module_name__).get_camel_case_capitalize(
-            ).content, version=__version__, status=__status__)
+            '</html>').format(charset=server.web.encoding.replace('_', '-'))
+        '''Saves the error content type header.'''
+# # python3.4
+# #         self.error_content_type = 'text/html; charset=%s' % \
+# #                 self.server.web.encoding.replace('_', '-')
+        self.error_content_type = convert_to_string(
+            'text/html; charset=%s' % server.web.encoding.replace(
+                '_', '-'))
+# #
         '''
             Saves the self describing server version string. This string is \
             included in every response.
         '''
-        self._encoded_output = None
+        self.server_version = '{program} {version} {status}'.format(
+            program=String(__module_name__).get_camel_case_capitalize(
+            ).content, version=__version__, status=__status__)
         '''Saves gziped encoded output.'''
-        self._authentication_location = None
+        self._encoded_output = None
         '''
             Points to location which is authoritative to be reachable from \
             requested destination.
         '''
+        self._authentication_location = None
 
         # # # endregion
 
@@ -1416,7 +1446,7 @@ class CGIHTTPRequestHandler(
             '''Take this method via introspection.'''
             return builtins.getattr(
                 builtins.super(self.__class__, self), inspect.stack()[0][3]
-            )(*arguments, **keywords)
+            )(request_socket, request_address, server, *arguments, **keywords)
 
     @JointPoint
 # # python3.4     def __repr__(self: Self) -> builtins.str:
@@ -1852,7 +1882,7 @@ class CGIHTTPRequestHandler(
             '''Take this method via introspection.'''
             builtins.getattr(
                 builtins.super(self.__class__, self), inspect.stack()[0][3]
-            )(code, *arguments, **keywords)
+            )(code, message, *arguments, **keywords)
         return self
 
     @JointPoint
