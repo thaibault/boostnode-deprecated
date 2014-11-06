@@ -666,7 +666,7 @@ class Parser(Class, Runnable):
 # #             'DictionaryExtension': Dictionary, 'StringExtension': String,
 # #             'List': builtins.list, 'hasAttribute': builtins.hasattr,
 # #             'TemplateParser': self.__class__, 'crypt': crypt,
-# #             'convert_console_sequences_to_html':
+# #             'convert_escape_sequences_to_html':
 # #                 self._convert_escape_sequences_to_html,
 # #             'console': {
 # #                 'SET_ATTRIBUTE_MODE': SET_OUTPUT_ATTRIBUTE_MODE,
@@ -728,7 +728,7 @@ class Parser(Class, Runnable):
             'StringExtension': String, 'List': builtins.list,
             'hasAttribute': builtins.hasattr,
             'TemplateParser': self.__class__, 'crypt': crypt,
-            'convert_console_sequences_to_html':
+            'convert_escape_sequences_to_html':
                 self._convert_escape_sequences_to_html,
             'console': {
                 'SET_ATTRIBUTE_MODE': SET_OUTPUT_ATTRIBUTE_MODE,
@@ -1848,11 +1848,16 @@ class Parser(Class, Runnable):
                         return '<span style="%scolor: %s">' % (
                             directive_prefix, color.lower())
             return '<span class="console-output-mode-%d">' % mode
-        content = re.compile(String(
-            SET_OUTPUT_ATTRIBUTE_MODE
-        ).validate_regex().sub('%d', '(?P<mode>[0-9]+)').content).sub(
-            replace_handler, content)
-        return content
+# # python3.4
+# #         return re.compile(String(
+# #             SET_OUTPUT_ATTRIBUTE_MODE
+# #         ).validate_regex().sub('%d', '(?P<mode>[0-9]+)').content).sub(
+# #             replace_handler, builtins.str(content))
+        return re.compile(convert_to_unicode(String(
+            convert_to_string(SET_OUTPUT_ATTRIBUTE_MODE)
+        ).validate_regex().sub('%d', '(?P<mode>[0-9]+)').content)).sub(
+            replace_handler, convert_to_unicode(content))
+# #
 
     # NOTE: This method is heavily used during rendering. It should be as fast
     # as possible. So the JointPoint is deactivated.
