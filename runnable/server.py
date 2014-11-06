@@ -244,9 +244,10 @@ class MultiProcessingHTTPServer(
         # # # endregion
 
         '''Take this method via introspection.'''
-        return builtins.getattr(
-            builtins.super(self.__class__, self), inspect.stack()[0][3]
-        )(*arguments, **keywords)
+        if not __test_mode__:
+            return builtins.getattr(
+                builtins.super(self.__class__, self), inspect.stack()[0][3]
+            )(*arguments, **keywords)
 
         # # endregion
 
@@ -1043,9 +1044,9 @@ class Web(Class, Runnable):
 # # python3.4
 # #     def _initialize(
 # #         self: Self, root=None, host_name='', port=0, default='',
-# #         public_key_file=None, stop_order='stop',
-# #         encoding=ENCODING, request_whitelist=('*:/.*',),
-# #         request_blacklist=(), same_process_request_whitelist=(),
+# #         public_key_file=None, stop_order='stop', encoding=ENCODING,
+# #         request_whitelist=('*:/.*',), request_blacklist=(),
+# #         same_process_request_whitelist=(),
 # #         # NOTE: Tuple for explicit web_server file reference validation.
 # #         # ('text/.+$', 'image/.+$', 'application/(x-)?javascript$')
 # #         static_mime_type_pattern=('.+/.+$',),
@@ -1069,9 +1070,9 @@ class Web(Class, Runnable):
 # #     ) -> Self:
     def _initialize(
         self, root=None, host_name='', port=0, default='',
-        public_key_file=None, stop_order='stop',
-        encoding=ENCODING, request_whitelist=('*:/.*',),
-        request_blacklist=(), same_process_request_whitelist=(),
+        public_key_file=None, stop_order='stop', encoding=ENCODING,
+        request_whitelist=('*:/.*',), request_blacklist=(),
+        same_process_request_whitelist=(),
         # NOTE: Tuple for explicit web_server file reference validation.
         # ('text/.+$', 'image/.+$', 'application/(x-)?javascript$')
         static_mime_type_pattern=('.+/.+$',),
@@ -1346,12 +1347,19 @@ class CGIHTTPRequestHandler(
 
             Examples:
 
-            >>> CGIHTTPRequestHandler() # doctest: +ELLIPSIS
+            >>> server = MultiProcessingHTTPServer()
+            >>> server.web = Web(__test_folder__)
+            >>> CGIHTTPRequestHandler(
+            ...     socket.socket(socket.AF_INET, socket.SOCK_STREAM),
+            ...     ('127.0.0.1', 12345), server
+            ... ) # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "" and parame...
         '''
 
         # # # region properties
 
+        '''Saves current server instance.'''
+        self.server = server
         '''Properties defined by incoming request.'''
         self.host = ''
         self.request_uri = ''
@@ -1416,13 +1424,14 @@ class CGIHTTPRequestHandler(
             '        <p>Error code explanation: %(code)s</p>\n'
             '        <p>%(explain)s.</p>\n'
             '    </body>\n'
-            '</html>').format(charset=server.web.encoding.replace('_', '-'))
+            '</html>').format(charset=self.server.web.encoding.replace(
+                '_', '-'))
         '''Saves the error content type header.'''
 # # python3.4
 # #         self.error_content_type = 'text/html; charset=%s' % \
 # #                 self.server.web.encoding.replace('_', '-')
         self.error_content_type = convert_to_string(
-            'text/html; charset=%s' % server.web.encoding.replace(
+            'text/html; charset=%s' % self.server.web.encoding.replace(
                 '_', '-'))
 # #
         '''
@@ -1456,7 +1465,12 @@ class CGIHTTPRequestHandler(
 
             Examples:
 
-            >>> repr(CGIHTTPRequestHandler()) # doctest: +SKIP
+            >>> server = MultiProcessingHTTPServer()
+            >>> server.web = Web(__test_folder__)
+            >>> repr(CGIHTTPRequestHandler(
+            ...     socket.socket(socket.AF_INET, socket.SOCK_STREAM),
+            ...     ('127.0.0.1', 12345), server
+            ... )) # doctest: +SKIP
             'Object of "CGIHTTPRequestHandler" with request uri "" and para...'
         '''
         return 'Object of "{class_name}" with request uri "{url}" and '\
@@ -1478,11 +1492,12 @@ class CGIHTTPRequestHandler(
 
             Examples:
 
-            >>> handler = CGIHTTPRequestHandler()
+            >>> server = MultiProcessingHTTPServer()
+            >>> server.web = Web(__test_folder__)
+            >>> handler = CGIHTTPRequestHandler(
+            ...     socket.socket(socket.AF_INET, socket.SOCK_STREAM),
+            ...     ('127.0.0.1', 12345), server)
             >>> handler.path = '/'
-            >>> handler.server = Class()
-            >>> handler.server.web = Web(
-            ...     __test_folder__, request_whitelist=('*:/?',))
             >>> # # python2.7
             >>> if sys.version_info.major < 3:
             ...     handler.headers = handler.MessageClass(
@@ -1618,11 +1633,12 @@ class CGIHTTPRequestHandler(
 
             Examples:
 
-            >>> handler = CGIHTTPRequestHandler()
+            >>> server = MultiProcessingHTTPServer()
+            >>> server.web = Web(__test_folder__)
+            >>> handler = CGIHTTPRequestHandler(
+            ...     socket.socket(socket.AF_INET, socket.SOCK_STREAM),
+            ...     ('127.0.0.1', 12345), server)
             >>> handler.path = '/'
-            >>> handler.server = Class()
-            >>> handler.server.web = Web(
-            ...     __test_folder__, request_whitelist=('*:/?',))
             >>> # # python2.7
             >>> if sys.version_info.major < 3:
             ...     handler.headers = handler.MessageClass(
@@ -1645,11 +1661,12 @@ class CGIHTTPRequestHandler(
 
             Examples:
 
-            >>> handler = CGIHTTPRequestHandler()
+            >>> server = MultiProcessingHTTPServer()
+            >>> server.web = Web(__test_folder__)
+            >>> handler = CGIHTTPRequestHandler(
+            ...     socket.socket(socket.AF_INET, socket.SOCK_STREAM),
+            ...     ('127.0.0.1', 12345), server)
             >>> handler.path = '/'
-            >>> handler.server = Class()
-            >>> handler.server.web = Web(
-            ...     __test_folder__, request_whitelist=('*:/?',))
             >>> # # python2.7
             >>> if sys.version_info.major < 3:
             ...     handler.headers = handler.MessageClass(
@@ -1672,11 +1689,12 @@ class CGIHTTPRequestHandler(
 
             Examples:
 
-            >>> handler = CGIHTTPRequestHandler()
+            >>> server = MultiProcessingHTTPServer()
+            >>> server.web = Web(__test_folder__)
+            >>> handler = CGIHTTPRequestHandler(
+            ...     socket.socket(socket.AF_INET, socket.SOCK_STREAM),
+            ...     ('127.0.0.1', 12345), server)
             >>> handler.path = '/'
-            >>> handler.server = Class()
-            >>> handler.server.web = Web(
-            ...     __test_folder__, request_whitelist=('*:/?',))
             >>> # # python2.7
             >>> if sys.version_info.major < 3:
             ...     handler.headers = handler.MessageClass(
@@ -1699,11 +1717,12 @@ class CGIHTTPRequestHandler(
 
             Examples:
 
-            >>> handler = CGIHTTPRequestHandler()
+            >>> server = MultiProcessingHTTPServer()
+            >>> server.web = Web(__test_folder__)
+            >>> handler = CGIHTTPRequestHandler(
+            ...     socket.socket(socket.AF_INET, socket.SOCK_STREAM),
+            ...     ('127.0.0.1', 12345), server)
             >>> handler.path = '/'
-            >>> handler.server = Class()
-            >>> handler.server.web = Web(
-            ...     __test_folder__, request_whitelist=('*:/?',))
             >>> # # python2.7
             >>> if sys.version_info.major < 3:
             ...     handler.headers = handler.MessageClass(
@@ -1726,11 +1745,12 @@ class CGIHTTPRequestHandler(
 
             Examples:
 
-            >>> handler = CGIHTTPRequestHandler()
+            >>> server = MultiProcessingHTTPServer()
+            >>> server.web = Web(__test_folder__)
+            >>> handler = CGIHTTPRequestHandler(
+            ...     socket.socket(socket.AF_INET, socket.SOCK_STREAM),
+            ...     ('127.0.0.1', 12345), server)
             >>> handler.path = '/'
-            >>> handler.server = Class()
-            >>> handler.server.web = Web(
-            ...     __test_folder__, request_whitelist=('*:/?',))
             >>> # # python2.7
             >>> if sys.version_info.major < 3:
             ...     handler.headers = handler.MessageClass(
@@ -1761,7 +1781,11 @@ class CGIHTTPRequestHandler(
             containing get parameter.
 
             >>> sys_argv_backup = copy(sys.argv)
-            >>> handler = CGIHTTPRequestHandler()
+            >>> server = MultiProcessingHTTPServer()
+            >>> server.web = Web(__test_folder__)
+            >>> handler = CGIHTTPRequestHandler(
+            ...     socket.socket(socket.AF_INET, socket.SOCK_STREAM),
+            ...     ('127.0.0.1', 12345), server)
             >>> handler.request_parameter_delimiter = '?'
             >>> sys.argv = sys.argv[:1]
 
@@ -1769,20 +1793,14 @@ class CGIHTTPRequestHandler(
             (None, {})
 
             >>> sys.argv[1:] = ['hans']
-            >>> handler.server = Class()
-            >>> handler.server.web = Web()
             >>> handler.parse_url() # doctest: +ELLIPSIS
             (ParseResult(...'hans'...), {})
 
             >>> sys.argv[1:] = ['?hans=peter']
-            >>> handler.server = Class()
-            >>> handler.server.web = Web()
             >>> handler.parse_url() # doctest: +ELLIPSIS
             (ParseResult(..., {'hans': 'peter'})
 
             >>> sys.argv[1:] = ['?hans=peter&s']
-            >>> handler.server = Class()
-            >>> handler.server.web = Web()
             >>> __test_buffer__.clear() # doctest: +ELLIPSIS
             '...'
             >>> handler.parse_url() # doctest: +ELLIPSIS
@@ -1844,7 +1862,12 @@ class CGIHTTPRequestHandler(
 
             Examples:
 
-            >>> CGIHTTPRequestHandler().send_response() # doctest: +ELLIPSIS
+            >>> server = MultiProcessingHTTPServer()
+            >>> server.web = Web(__test_folder__)
+            >>> CGIHTTPRequestHandler(
+            ...     socket.socket(socket.AF_INET, socket.SOCK_STREAM),
+            ...     ('127.0.0.1', 12345), server
+            ... ).send_response() # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "" and parame...
         '''
         if not (self.response_sent or __test_mode__):
@@ -1899,11 +1922,12 @@ class CGIHTTPRequestHandler(
 
             Examples:
 
-            >>> handler = CGIHTTPRequestHandler()
+            >>> server = MultiProcessingHTTPServer()
+            >>> server.web = Web(__test_folder__)
+            >>> handler = CGIHTTPRequestHandler(
+            ...     socket.socket(socket.AF_INET, socket.SOCK_STREAM),
+            ...     ('127.0.0.1', 12345), server)
             >>> handler.path = '/'
-            >>> handler.server = Class()
-            >>> handler.server.web = Web(
-            ...     __test_folder__, request_whitelist=('*:/?',))
             >>> handler.requested_file = FileHandler()
 
             >>> handler.list_directory() # doctest: +ELLIPSIS
@@ -1986,7 +2010,11 @@ class CGIHTTPRequestHandler(
 
             Examples:
 
-            >>> handler = CGIHTTPRequestHandler()
+            >>> server = MultiProcessingHTTPServer()
+            >>> server.web = Web(__test_folder__)
+            >>> handler = CGIHTTPRequestHandler(
+            ...     socket.socket(socket.AF_INET, socket.SOCK_STREAM),
+            ...     ('127.0.0.1', 12345), server)
             >>> # # python2.7
             >>> if sys.version_info.major < 3:
             ...     handler.headers = handler.MessageClass(
@@ -2178,7 +2206,11 @@ class CGIHTTPRequestHandler(
 
             Examples:
 
-            >>> handler = CGIHTTPRequestHandler()
+            >>> server = MultiProcessingHTTPServer()
+            >>> server.web = Web(__test_folder__)
+            >>> handler = CGIHTTPRequestHandler(
+            ...     socket.socket(socket.AF_INET, socket.SOCK_STREAM),
+            ...     ('127.0.0.1', 12345), server)
 
             >>> handler.send_cookie('') # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "" and parame...
@@ -2350,9 +2382,11 @@ class CGIHTTPRequestHandler(
 
             Examples:
 
-            >>> handler = CGIHTTPRequestHandler()
-            >>> handler.server = Class()
-            >>> handler.server.web = Web()
+            >>> server = MultiProcessingHTTPServer()
+            >>> server.web = Web(__test_folder__)
+            >>> handler = CGIHTTPRequestHandler(
+            ...     socket.socket(socket.AF_INET, socket.SOCK_STREAM),
+            ...     ('127.0.0.1', 12345), server)
             >>> handler.client_address = '192.168.0.1', 80
 
             >>> __test_buffer__.clear() # doctest: +ELLIPSIS
@@ -2399,7 +2433,7 @@ class CGIHTTPRequestHandler(
             >>> handler.log_message('', '', 404) # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "" and parame...
             >>> __test_buffer__.clear() # doctest: +ELLIPSIS
-            '...192.168.0.1:80  -> 404 - forwarded for: 192.168.0.1 - forwar...
+            '...192.168.0.1:80  -> ...404... - forwarded for: 192.168.0.1 - ...
         '''
         format = (
             '{client_ip}:{client_port} {request_description} -> '
@@ -2485,9 +2519,11 @@ class CGIHTTPRequestHandler(
 
             Examples:
 
-            >>> handler = CGIHTTPRequestHandler()
-            >>> handler.server = Class()
-            >>> handler.server.web = Web(__test_folder__)
+            >>> server = MultiProcessingHTTPServer()
+            >>> server.web = Web(__test_folder__)
+            >>> handler = CGIHTTPRequestHandler(
+            ...     socket.socket(socket.AF_INET, socket.SOCK_STREAM),
+            ...     ('127.0.0.1', 12345), server)
             >>> # # python2.7
             >>> if sys.version_info.major < 3:
             ...     handler.headers = handler.MessageClass(
@@ -2582,9 +2618,11 @@ class CGIHTTPRequestHandler(
 
             Examples:
 
-            >>> handler = CGIHTTPRequestHandler()
-            >>> handler.server = Class()
-            >>> handler.server.web = Web(__test_folder__)
+            >>> server = MultiProcessingHTTPServer()
+            >>> server.web = Web(__test_folder__)
+            >>> handler = CGIHTTPRequestHandler(
+            ...     socket.socket(socket.AF_INET, socket.SOCK_STREAM),
+            ...     ('127.0.0.1', 12345), server)
 
             >>> handler.requested_file = FileHandler(
             ...     __test_folder__.path + '_is_valid_reference')
@@ -2773,9 +2811,11 @@ class CGIHTTPRequestHandler(
 
             Examples:
 
-            >>> handler = CGIHTTPRequestHandler()
-            >>> handler.server = Class()
-            >>> handler.server.web = Web(__test_folder__)
+            >>> server = MultiProcessingHTTPServer()
+            >>> server.web = Web(__test_folder__)
+            >>> handler = CGIHTTPRequestHandler(
+            ...     socket.socket(socket.AF_INET, socket.SOCK_STREAM),
+            ...     ('127.0.0.1', 12345), server)
             >>> # # python2.7
             >>> if sys.version_info.major < 3:
             ...     handler.headers = handler.MessageClass(
@@ -2891,9 +2931,11 @@ class CGIHTTPRequestHandler(
 
             Examples:
 
-            >>> handler = CGIHTTPRequestHandler()
-            >>> handler.server = Class()
-            >>> handler.server.web = Web(__test_folder__)
+            >>> server = MultiProcessingHTTPServer()
+            >>> server.web = Web(__test_folder__)
+            >>> handler = CGIHTTPRequestHandler(
+            ...     socket.socket(socket.AF_INET, socket.SOCK_STREAM),
+            ...     ('127.0.0.1', 12345), server)
 
             >>> handler.path = '/'
             >>> handler.requested_file = __test_folder__
@@ -3021,9 +3063,11 @@ class CGIHTTPRequestHandler(
 
             Examples:
 
-            >>> handler = CGIHTTPRequestHandler()
-            >>> handler.server = Class()
-            >>> handler.server.web = Web(__test_folder__)
+            >>> server = MultiProcessingHTTPServer()
+            >>> server.web = Web(__test_folder__)
+            >>> handler = CGIHTTPRequestHandler(
+            ...     socket.socket(socket.AF_INET, socket.SOCK_STREAM),
+            ...     ('127.0.0.1', 12345), server)
             >>> handler.server.web.host_name = 'test'
             >>> # # python2.7
             >>> if sys.version_info.major < 3:
@@ -3228,9 +3272,11 @@ class CGIHTTPRequestHandler(
 
             Examples:
 
-            >>> handler = CGIHTTPRequestHandler()
-            >>> handler.server = Class()
-            >>> handler.server.web = Web(__test_folder__)
+            >>> server = MultiProcessingHTTPServer()
+            >>> server.web = Web(__test_folder__)
+            >>> handler = CGIHTTPRequestHandler(
+            ...     socket.socket(socket.AF_INET, socket.SOCK_STREAM),
+            ...     ('127.0.0.1', 12345), server)
             >>> # # python2.7
             >>> if sys.version_info.major < 3:
             ...     handler.headers = handler.MessageClass(
@@ -3258,9 +3304,11 @@ class CGIHTTPRequestHandler(
 
             Examples:
 
-            >>> handler = CGIHTTPRequestHandler()
-            >>> handler.server = Class()
-            >>> handler.server.web = Web(__test_folder__)
+            >>> server = MultiProcessingHTTPServer()
+            >>> server.web = Web(__test_folder__)
+            >>> handler = CGIHTTPRequestHandler(
+            ...     socket.socket(socket.AF_INET, socket.SOCK_STREAM),
+            ...     ('127.0.0.1', 12345), server)
             >>> # # python2.7
             >>> if sys.version_info.major < 3:
             ...     handler.headers = handler.MessageClass(
@@ -3337,9 +3385,11 @@ class CGIHTTPRequestHandler(
 
             Examples:
 
-            >>> handler = CGIHTTPRequestHandler()
-            >>> handler.server = Class()
-            >>> handler.server.web = Web(__test_folder__)
+            >>> server = MultiProcessingHTTPServer()
+            >>> server.web = Web(__test_folder__)
+            >>> handler = CGIHTTPRequestHandler(
+            ...     socket.socket(socket.AF_INET, socket.SOCK_STREAM),
+            ...     ('127.0.0.1', 12345), server)
             >>> # # python2.7
             >>> if sys.version_info.major < 3:
             ...     handler.headers = handler.MessageClass(
@@ -3391,9 +3441,11 @@ class CGIHTTPRequestHandler(
 
             >>> test_globals_backup = __test_globals__['__name__']
 
-            >>> handler = CGIHTTPRequestHandler()
-            >>> handler.server = Class()
-            >>> handler.server.web = Web(__test_folder__)
+            >>> server = MultiProcessingHTTPServer()
+            >>> server.web = Web(__test_folder__)
+            >>> handler = CGIHTTPRequestHandler(
+            ...     socket.socket(socket.AF_INET, socket.SOCK_STREAM),
+            ...     ('127.0.0.1', 12345), server)
             >>> # # python2.7
             >>> if sys.version_info.major < 3:
             ...     handler.headers = handler.MessageClass(
@@ -3434,9 +3486,11 @@ class CGIHTTPRequestHandler(
 
             Examples:
 
-            >>> handler = CGIHTTPRequestHandler()
-            >>> handler.server = Class()
-            >>> handler.server.web = Web(__test_folder__)
+            >>> server = MultiProcessingHTTPServer()
+            >>> server.web = Web(__test_folder__)
+            >>> handler = CGIHTTPRequestHandler(
+            ...     socket.socket(socket.AF_INET, socket.SOCK_STREAM),
+            ...     ('127.0.0.1', 12345), server)
             >>> handler.path = '/'
             >>> # # python2.7
             >>> if sys.version_info.major < 3:
@@ -3483,9 +3537,11 @@ class CGIHTTPRequestHandler(
 
             Examples:
 
-            >>> handler = CGIHTTPRequestHandler()
-            >>> handler.server = Class()
-            >>> handler.server.web = Web(__test_folder__)
+            >>> server = MultiProcessingHTTPServer()
+            >>> server.web = Web(__test_folder__)
+            >>> handler = CGIHTTPRequestHandler(
+            ...     socket.socket(socket.AF_INET, socket.SOCK_STREAM),
+            ...     ('127.0.0.1', 12345), server)
             >>> handler.requested_file = FileHandler(
             ...     __test_folder__.path + '_static_get')
             >>> handler.requested_file.content = ''
@@ -3577,9 +3633,11 @@ class CGIHTTPRequestHandler(
 
             Examples:
 
-            >>> handler = CGIHTTPRequestHandler()
-            >>> handler.server = Class()
-            >>> handler.server.web = Web(__test_folder__)
+            >>> server = MultiProcessingHTTPServer()
+            >>> server.web = Web(__test_folder__)
+            >>> handler = CGIHTTPRequestHandler(
+            ...     socket.socket(socket.AF_INET, socket.SOCK_STREAM),
+            ...     ('127.0.0.1', 12345), server)
             >>> handler.requested_file = FileHandler(
             ...     __test_folder__.path + '_static_get')
             >>> handler.requested_file.content = ''
@@ -3651,9 +3709,11 @@ class CGIHTTPRequestHandler(
 
             Examples:
 
-            >>> handler = CGIHTTPRequestHandler()
-            >>> handler.server = Class()
-            >>> handler.server.web = Web(__test_folder__)
+            >>> server = MultiProcessingHTTPServer()
+            >>> server.web = Web(__test_folder__)
+            >>> handler = CGIHTTPRequestHandler(
+            ...     socket.socket(socket.AF_INET, socket.SOCK_STREAM),
+            ...     ('127.0.0.1', 12345), server)
 
             >>> isinstance(handler._gzip(''), bytes)
             True
@@ -3722,9 +3782,11 @@ class CGIHTTPRequestHandler(
 
             Examples:
 
-            >>> handler = CGIHTTPRequestHandler()
-            >>> handler.server = Class()
-            >>> handler.server.web = Web(__test_folder__)
+            >>> server = MultiProcessingHTTPServer()
+            >>> server.web = Web(__test_folder__)
+            >>> handler = CGIHTTPRequestHandler(
+            ...     socket.socket(socket.AF_INET, socket.SOCK_STREAM),
+            ...     ('127.0.0.1', 12345), server)
             >>> handler.requested_file = FileHandler(
             ...     __test_folder__.path + '_run_requested_file')
             >>> handler.requested_file.content = ''
@@ -3874,9 +3936,11 @@ class CGIHTTPRequestHandler(
 
             Examples:
 
-            >>> handler = CGIHTTPRequestHandler()
-            >>> handler.server = Class()
-            >>> handler.server.web = Web(__test_folder__)
+            >>> server = MultiProcessingHTTPServer()
+            >>> server.web = Web(__test_folder__)
+            >>> handler = CGIHTTPRequestHandler(
+            ...     socket.socket(socket.AF_INET, socket.SOCK_STREAM),
+            ...     ('127.0.0.1', 12345), server)
 
             >>> try:
             ...     raise OSError('hans')
