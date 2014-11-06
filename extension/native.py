@@ -3084,7 +3084,7 @@ class Module(Object):
 
             >>> Module.execute_program_for_modules(
             ...     'program', 'not_existing', boostNode.extension.__all__,
-            ...     error=False
+            ...     error=False, shell=True
             ... ) # doctest: +ELLIPSIS
             ('', ...)
 

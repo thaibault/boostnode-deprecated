@@ -358,6 +358,11 @@ __version__ = '1.0'
 
 # # python3.4 import builtins
 import __builtin__ as builtins
+# # python3.4
+# # pass
+from collections import Iterable
+from copy import deepcopy
+# #
 import inspect
 import logging
 import os
@@ -422,7 +427,15 @@ def convert_to_unicode(object):
         if builtins.hasattr(object, '__unicode__'):
             return object.__unicode__()
         elif builtins.hasattr(object, '__str__'):
-            object = object.__str__()
+            try:
+                object = object.__str__()
+            except builtins.UnicodeEncodeError:
+                if builtins.isinstance(object, Iterable):
+                    for index, item in enumerate(object):
+                        object[index] = convert_to_unicode(item)
+                    object = object.__str__()
+                else:
+                    raise
             if builtins.isinstance(object, builtins.unicode):
                 return object
             return builtins.unicode(object, ENCODING)

@@ -3093,16 +3093,23 @@ class Handler(Class):
             ...     make_directory=True)
             >>> not_accessible_file.change_right(000) # doctest: +ELLIPSIS
             Object of "Handler" with path "...
-            >>> list(__test_folder__) # doctest: +ELLIPSIS
-            [...]
+            >>> if sys.version_info.major < 3:
+            ...     convert_to_unicode(list(__test_folder__))
+            ... else:
+            ...     str(list(__test_folder__)) # doctest: +ELLIPSIS
+            "[...]"
             >>> not_accessible_file.remove_directory()
             True
 
             >>> not_accessible_file.content = ''
             >>> not_accessible_file.change_right(000) # doctest: +ELLIPSIS
             Object of "Handler" with path "...
-            >>> list(__test_folder__) # doctest: +ELLIPSIS
-            [...]
+
+            >>> if sys.version_info.major < 3:
+            ...     convert_to_unicode(list(__test_folder__))
+            ... else:
+            ...     str(list(__test_folder__)) # doctest: +ELLIPSIS
+            "[...]"
             >>> not_accessible_file.remove_file()
             True
 

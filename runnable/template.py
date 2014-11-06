@@ -705,9 +705,11 @@ class Parser(Class, Runnable):
 # #                 'RESERVED_5': OUTPUT_RESERVED_5,
 # #                 'RESERVED_6': OUTPUT_RESERVED_6,
 # #                 'IDEOGRAM_UNDERLINE': OUTPUT_IDEOGRAM_UNDERLINE,
-# #                 'IDEOGRAM_DOUBLE_UNDERLINE': OUTPUT_IDEOGRAM_DOUBLE_UNDERLINE,
+# #                 'IDEOGRAM_DOUBLE_UNDERLINE':
+# #                     OUTPUT_IDEOGRAM_DOUBLE_UNDERLINE,
 # #                 'IDEOGRAM_OVERLINE': OUTPUT_IDEOGRAM_OVERLINE,
-# #                 'IDEOGRAM_DOUBLE_OVERLINE': OUTPUT_IDEOGRAM_DOUBLE_OVERLINE,
+# #                 'IDEOGRAM_DOUBLE_OVERLINE':
+# #                     OUTPUT_IDEOGRAM_DOUBLE_OVERLINE,
 # #                 'IDEOGRAM_STRESS_MARKING': OUTPUT_IDEOGRAM_STRESS_MARKING,
 # #                 'IDEOGRAM_OFF': OUTPUT_IDEOGRAM_OFF}})
         self._builtins.update({
@@ -767,9 +769,11 @@ class Parser(Class, Runnable):
                 'RESERVED_5': OUTPUT_RESERVED_5,
                 'RESERVED_6': OUTPUT_RESERVED_6,
                 'IDEOGRAM_UNDERLINE': OUTPUT_IDEOGRAM_UNDERLINE,
-                'IDEOGRAM_DOUBLE_UNDERLINE': OUTPUT_IDEOGRAM_DOUBLE_UNDERLINE,
+                'IDEOGRAM_DOUBLE_UNDERLINE':
+                    OUTPUT_IDEOGRAM_DOUBLE_UNDERLINE,
                 'IDEOGRAM_OVERLINE': OUTPUT_IDEOGRAM_OVERLINE,
-                'IDEOGRAM_DOUBLE_OVERLINE': OUTPUT_IDEOGRAM_DOUBLE_OVERLINE,
+                'IDEOGRAM_DOUBLE_OVERLINE':
+                    OUTPUT_IDEOGRAM_DOUBLE_OVERLINE,
                 'IDEOGRAM_STRESS_MARKING': OUTPUT_IDEOGRAM_STRESS_MARKING,
                 'IDEOGRAM_OFF': OUTPUT_IDEOGRAM_OFF}})
 # #
@@ -1829,8 +1833,9 @@ class Parser(Class, Runnable):
                 OUTPUT_BOLD_INTENSITY_OFF: 'font-weight: normal',
                 OUTPUT_ITALIC_OFF: 'font-style: normal',
                 OUTPUT_FRAMED: 'border: 1px solid',
-                OUTPUT_ENCIRCLED: 'border-radius: 50%; text-align: center; '
-                    'border: 1px solid',
+                OUTPUT_ENCIRCLED:
+                    'border-radius: 50%; text-align: center; border: 1px '
+                    'solid',
                 OUTPUT_OVERLINED: 'text-decoration: overline',
                 OUTPUT_IDEOGRAM_UNDERLINE: 'text-decoration: underline',
                 OUTPUT_IDEOGRAM_DOUBLE_UNDERLINE: 'border-bottom: 1px double',

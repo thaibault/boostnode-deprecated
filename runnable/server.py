@@ -104,6 +104,8 @@ from boostNode.paradigm.objectOrientation import Class
 
 # endregion
 
+# TODO check branches.
+
 
 # region classes
 
@@ -1397,27 +1399,48 @@ class CGIHTTPRequestHandler(
 # # python3.4
 # #         '''Saves the error message format.'''
 # #         self.error_message_format = (
+# #             '<!doctype html>\n'
+# #             '<html lang="en">\n'
+# #             '    <head>\n'
+# #             '        <meta charset="{charset}">\n'
+# #             '        <meta name="robots" content="noindex, follow" />\n'
+# #             '        <meta name="viewport" content="width=device-width, '
+# #                      'initial-scale=1.0" />\n'
+# #             '        <title>Error response</title>\n'
+# #             '    </head>\n'
+# #             '    <body>\n'
+# #             '        <h1>Error response</h1>\n'
+# #             '        <p>\n'
+# #             '            Error code '
+# #                          '<span style="color: red">%(code)d</span>.\n'
+# #             '        </p>\n'
+# #             '        <p>Message:</p>\n'
+# #             '        <pre>%(message)s.</pre>\n'
+# #             '        <p>Error code explanation: %(code)s</p>\n'
+# #             '        <p>%(explain)s.</p>\n'
+# #             '    </body>\n'
+# #             '</html>').format(charset=self.server.web.encoding.replace(
+# #                 '_', '-'))
         '''
             Saves the error message format. NOTE: Has to be a native string \
             to avoid encoding errors in python's native underlying request \
             handler logic.
         '''
         self.error_message_format = convert_to_string(
-# #
             '<!doctype html>\n'
             '<html lang="en">\n'
             '    <head>\n'
             '        <meta charset="{charset}">\n'
             '        <meta name="robots" content="noindex, follow" />\n'
             '        <meta name="viewport" content="width=device-width, '
-                     'initial-scale=1.0" />\n'
+            'initial-scale=1.0" />\n'
             '        <title>Error response</title>\n'
             '    </head>\n'
             '    <body>\n'
             '        <h1>Error response</h1>\n'
             '        <p>\n'
-            '            Error code <span style="color: red">%(code)d</span>'
-                         '.\n'
+            '            Error code '
+            '<span style="color: red">%(code)d</span>.\n'
             '        </p>\n'
             '        <p>Message:</p>\n'
             '        <pre>%(message)s.</pre>\n'
@@ -1426,6 +1449,7 @@ class CGIHTTPRequestHandler(
             '    </body>\n'
             '</html>').format(charset=self.server.web.encoding.replace(
                 '_', '-'))
+# #
         '''Saves the error content type header.'''
 # # python3.4
 # #         self.error_content_type = 'text/html; charset=%s' % \
@@ -2465,8 +2489,9 @@ class CGIHTTPRequestHandler(
         # TODO check branches.
         longest_match = 0
         color_wrapper = '', ''
-        for status_code_prefix, output_color in \
-        self.server.web.STATUS_PREFIX_CODE_LOGGING_COLOR_MAPPING.items():
+        for status_code_prefix, output_color in (
+            self.server.web.STATUS_PREFIX_CODE_LOGGING_COLOR_MAPPING.items()
+        ):
             if longest_match < builtins.len(builtins.str(
                 status_code_prefix
             )) and builtins.str(response_code).startswith(builtins.str(
