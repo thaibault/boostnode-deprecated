@@ -531,10 +531,11 @@ method.</p>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Platform</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">command</span><span class="o">=</span><span class="s">&#39;not&#39;</span><span class="p">,</span> <span class="n">command_arguments</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;existing&#39;</span><span class="p">,))</span>
+<span class="gp">... </span>    <span class="n">command</span><span class="o">=</span><span class="s">&#39;not&#39;</span><span class="p">,</span> <span class="n">command_arguments</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;existing&#39;</span><span class="p">,)</span>
+<span class="gp">... </span><span class="p">)</span> 
 <span class="gt">Traceback (most recent call last):</span>
 <span class="c">...</span>
-<span class="gr">OSError</span>: <span class="n">[Errno 2] No such file or directory</span>
+<span class="gr">FileNotFoundError</span>: <span class="n">[Errno 2] No such file or directory: &#39;not&#39;</span>
 </pre></div>
 </div>
 </dd></dl>
