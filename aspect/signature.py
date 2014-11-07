@@ -44,6 +44,7 @@ pass
 '''Make boostNode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
+# # python3.4 pass
 from boostNode import convert_to_unicode
 from boostNode.extension.type import Self, SelfClass, SelfClassObject
 # # python3.4

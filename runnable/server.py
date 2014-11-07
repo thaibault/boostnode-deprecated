@@ -73,9 +73,9 @@ import threading
 import time
 # # python3.4
 # # import types
-# # from urllib.urlparse import urlparse as parse_url
-# # from urllib.urlparse import parse_qs as parse_url_query
-# # from urllib.urlparse import unquote as unquote_url
+# # from urllib.parse import urlparse as parse_url
+# # from urllib.parse import parse_qs as parse_url_query
+# # from urllib.parse import unquote as unquote_url
 import urllib
 from urlparse import urlparse as parse_url
 from urlparse import parse_qs as parse_url_query
@@ -85,8 +85,10 @@ from urlparse import unquote as unquote_url
 '''Make boostNode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
-# # python3.4 pass
+# # python3.4
+# # from boostNode import ENCODING
 from boostNode import ENCODING, convert_to_string, convert_to_unicode
+# #
 from boostNode.extension.file import Handler as FileHandler
 from boostNode.extension.native import Dictionary, Module, Object, \
     InstancePropertyInitializer, String
@@ -163,15 +165,10 @@ class SocketFileObjectWrapper(socket._fileobject):
                 socket.herror, socket.gaierror, socket.timeout,
                 socket.error
             ) as exception:
-# # python3.4
-# #                 __logger__.info(
-# #                     'Connection interrupted. %s: %s',
-# #                     exception.__class__.__name__, builtins.str(exception))
                 __logger__.info(
                     'Connection interrupted. %s: %s',
                     exception.__class__.__name__, convert_to_unicode(
                         exception))
-# #
                 return ''
         elif self.first_read_line is True:
             try:
@@ -184,15 +181,10 @@ class SocketFileObjectWrapper(socket._fileobject):
                 socket.herror, socket.gaierror, socket.timeout,
                 socket.error
             ) as exception:
-# # python3.4
-# #                 __logger__.info(
-# #                     'Connection interrupted. %s: %s',
-# #                     exception.__class__.__name__, builtins.str(exception))
                 __logger__.info(
                     'Connection interrupted. %s: %s',
                     exception.__class__.__name__, convert_to_unicode(
                         exception))
-# #
                 return ''
         result = self.first_read_line
         self.first_read_line = True
@@ -201,7 +193,6 @@ class SocketFileObjectWrapper(socket._fileobject):
         # endregion
 
     # endregion
-
 # #
 
 
@@ -1405,14 +1396,14 @@ class CGIHTTPRequestHandler(
 # #             '        <meta charset="{charset}">\n'
 # #             '        <meta name="robots" content="noindex, follow" />\n'
 # #             '        <meta name="viewport" content="width=device-width, '
-# #                      'initial-scale=1.0" />\n'
+# #             'initial-scale=1.0" />\n'
 # #             '        <title>Error response</title>\n'
 # #             '    </head>\n'
 # #             '    <body>\n'
 # #             '        <h1>Error response</h1>\n'
 # #             '        <p>\n'
 # #             '            Error code '
-# #                          '<span style="color: red">%(code)d</span>.\n'
+# #             '<span style="color: red">%(code)d</span>.\n'
 # #             '        </p>\n'
 # #             '        <p>Message:</p>\n'
 # #             '        <pre>%(message)s.</pre>\n'
@@ -1422,9 +1413,9 @@ class CGIHTTPRequestHandler(
 # #             '</html>').format(charset=self.server.web.encoding.replace(
 # #                 '_', '-'))
         '''
-            Saves the error message format. NOTE: Has to be a native string \
-            to avoid encoding errors in python's native underlying request \
-            handler logic.
+            Saves the error message format. NOTE: Has to be a native \
+            string to avoid encoding errors in python's native underlying \
+            request handler logic.
         '''
         self.error_message_format = convert_to_string(
             '<!doctype html>\n'
@@ -1453,7 +1444,7 @@ class CGIHTTPRequestHandler(
         '''Saves the error content type header.'''
 # # python3.4
 # #         self.error_content_type = 'text/html; charset=%s' % \
-# #                 self.server.web.encoding.replace('_', '-')
+# #             self.server.web.encoding.replace('_', '-')
         self.error_content_type = convert_to_string(
             'text/html; charset=%s' % self.server.web.encoding.replace(
                 '_', '-'))
@@ -2267,7 +2258,9 @@ class CGIHTTPRequestHandler(
             cookie_object = cookies.SimpleCookie()
 # # python3.4
 # #             if builtins.isinstance(cookie, builtins.str):
-            if builtins.isinstance(cookie, (builtins.unicode, builtins.str)):
+            if builtins.isinstance(cookie, (
+                builtins.unicode, builtins.str
+            )):
 # #
                 cookie_object.load(cookie_object)
             else:
@@ -2890,13 +2883,20 @@ class CGIHTTPRequestHandler(
                 accept += line.split(',')
         variables = deepcopy(os.environ)
 # # python3.4
-# #         content_type = self.headers.get_content_type()
-        content_type = self.headers.get('content-type', 'text/plain')
-# #
+# #         variables.update({
+# #             'HTTP_ACCEPT': ','.join(accept),
+# #             'REQUEST_METHOD': self.command,
+# #             'CONTENT_TYPE': self.headers.get_content_type(),
+# #             'QUERY_STRING': self.parameter,
+# #             'REMOTE_HOST': self.host,
+# #             'CONTENT_LENGTH': self.headers.get('content-length', '0'),
+# #             'HTTP_USER_AGENT': '',
+# #             'HTTP_COOKIE': '',
+# #             'HTTP_REFERER': ''})
         variables.update({
             'HTTP_ACCEPT': ','.join(accept),
             'REQUEST_METHOD': self.command,
-            'CONTENT_TYPE': content_type,
+            'CONTENT_TYPE': self.headers.get('content-type', 'text/plain'),
             'QUERY_STRING': self.parameter,
             'REMOTE_HOST': self.host,
             'CONTENT_LENGTH': convert_to_unicode(self.headers.get(
@@ -2904,6 +2904,7 @@ class CGIHTTPRequestHandler(
             'HTTP_USER_AGENT': '',
             'HTTP_COOKIE': '',
             'HTTP_REFERER': ''})
+# #
         for variable_name in variables:
 # # python3.4
 # #             if variable_name.replace('_', '-').lower() in self.headers:
@@ -3262,6 +3263,7 @@ class CGIHTTPRequestHandler(
 # #
         self.path = ''
         if match:
+# # python3.4
 # #             self.path = posixpath.normpath(unquote_url(match.group(
 # #                 'path')))
             self.path = convert_to_unicode(posixpath.normpath(unquote_url(
@@ -3714,7 +3716,7 @@ class CGIHTTPRequestHandler(
             elif builtins.isinstance(output, builtins.str):
 # #
                 self.wfile.write(output)
-# #             elif builtins.isinstance(output, builtins.str):
+# # python3.4             elif builtins.isinstance(output, builtins.str):
             elif builtins.isinstance(output, builtins.unicode):
                 self.wfile.write(output.encode(self.server.web.encoding))
             else:

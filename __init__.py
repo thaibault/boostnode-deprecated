@@ -356,10 +356,9 @@ __maintainer_email__ = 't.sickert["~at~"]gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-# # python3.4 import builtins
-import __builtin__ as builtins
 # # python3.4
-# # pass
+# # import builtins
+import __builtin__ as builtins
 from collections import Iterable
 from copy import deepcopy
 # #
@@ -395,10 +394,10 @@ ENCODING = 'utf_8'
 # # python3.4
 # # pass
 '''
-    Handling "builtins.str" and "builtins.unicode" in python2.7.X needs some \
-    much attention. Because different API's uses different types. The main \
-    development goes to "builtins.unicode" so working with boostNode means \
-    you should use them.
+    Handling "builtins.str" and "builtins.unicode" in python2.7.X needs \
+    some much attention. Because different API's uses different types. \
+    The main development goes to "builtins.unicode" so working with \
+    boostNode means you should use them.
 
     Every content which could contain a "builtins.str" type and may have \
     non ascii-characters should be converted via the \
@@ -411,9 +410,9 @@ def convert_to_unicode(object):
         Converts given object to its unicode string representation like \
         python's native "builtins.str()" method.
     '''
-    if builtins.isinstance(object, builtins.Exception) and builtins.hasattr(
-        object, 'message'
-    ):
+    if builtins.isinstance(
+        object, builtins.Exception
+    ) and builtins.hasattr(object, 'message'):
         object = object.message
     if builtins.isinstance(object, builtins.unicode):
         '''
@@ -529,6 +528,12 @@ __all__ = __get_all_modules__()
 if __name__ != '__main__':
     from boostNode.aspect.signature import add_check as add_signature_check
     from boostNode.extension.native import Module
+
+# # python3.4
+# #     pass
+    builtins.reload(sys)
+    sys.setdefaultencoding(ENCODING)
+# #
     try:
         '''
             Add signature checking for all functions and methods with joint \

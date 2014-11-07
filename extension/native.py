@@ -54,6 +54,7 @@ sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
 import boostNode
 # # python3.4
+# # from boostNode import ENCODING
 # # from boostNode.extension.type import Self, SelfClass, SelfClassObject
 from boostNode import ENCODING, convert_to_string, convert_to_unicode
 # #
@@ -1031,6 +1032,28 @@ class String(Object, builtins.str):
 
             >>> String(['A', 5]).content
             "['A', 5]"
+
+            >>> String().encoding == String.IMPORTANT_ENCODINGS[0]
+            True
+
+            >>> String('hans').encoding == String.IMPORTANT_ENCODINGS[0]
+            True
+
+            >>> String('hans').encoding == String.IMPORTANT_ENCODINGS[0]
+            True
+
+            >>> String(b'hans').encoding == String.IMPORTANT_ENCODINGS[0]
+            True
+
+            >>> if sys.version_info.major < 3:
+            ...     String(
+            ...         u'ö'.encode('latin1')
+            ...     ).encoding == String.IMPORTANT_ENCODINGS[0]
+            ... else:
+            ...     String(
+            ...         'ö'.encode('latin1')
+            ...     ).encoding  == String.IMPORTANT_ENCODINGS[0]
+            False
         '''
 
         # # # region properties
@@ -1040,10 +1063,15 @@ class String(Object, builtins.str):
         '''The main string property. It saves the current string.'''
         if content is None:
             content = ''
+        self.encoding = self.IMPORTANT_ENCODINGS[0]
 # # python3.4
+# #         if builtins.isinstance(content, builtins.bytes):
+# #             self.encoding, content = self._determine_encoding(content)
 # #         if not builtins.isinstance(content, builtins.str):
 # #             content = builtins.str(content)
-        if not builtins.isinstance(content, builtins.str):
+        if builtins.isinstance(content, builtins.bytes):
+            self.encoding, content = self._determine_encoding(content)
+        else:
             content = convert_to_string(content)
 # #
         self.content = content
@@ -1087,8 +1115,8 @@ class String(Object, builtins.str):
         '''
         return builtins.len(self.__str__())
 
-# # python3.4     def __str__(self: Self) -> builtins.str:
     @JointPoint
+# # python3.4     def __str__(self: Self) -> builtins.str:
     def __unicode__(self):
         '''
             Triggers if the current object should be directly interpreted as \
@@ -1114,12 +1142,19 @@ class String(Object, builtins.str):
 
             Examples:
 
-            >>> bytes(String('hans'))
-            'hans'
+            >>> if sys.version_info.major < 3:
+            ...     bytes(String('hans')) == b'hans'
+            ... else:
+            ...     bytes(String('hans'), ENCODING) == b'hans'
+            True
 
-            >>> bytes(String())
-            ''
+            >>> if sys.version_info.major < 3:
+            ...     bytes(String()) == b''
+            ... else:
+            ...     bytes(String(), ENCODING) == b''
+            True
         '''
+# # python3.4         return builtins.bytes(self.content, ENCODING)
         return self.content
 
     @JointPoint
@@ -1183,52 +1218,6 @@ class String(Object, builtins.str):
                 if default is None:
                     return self.content
                 return default
-
-    @JointPoint(Class.pseudo_property)
-# # python3.4     def get_encoding(self: Self) -> builtins.str:
-    def get_encoding(self):
-        '''
-            Guesses the encoding used in current string (bytes). Encodings \
-            are checked in alphabetic order.
-
-            Examples:
-
-            >>> String().encoding == String.IMPORTANT_ENCODINGS[0]
-            True
-
-            >>> String('hans').encoding == String.IMPORTANT_ENCODINGS[0]
-            True
-
-            >>> String('hans').encoding == String.IMPORTANT_ENCODINGS[0]
-            True
-
-            >>> String(b'hans').encoding == String.IMPORTANT_ENCODINGS[0]
-            True
-
-            >>> if sys.version_info.major < 3:
-            ...     String(
-            ...         u'Ã¤'.encode('latin1')
-            ...     ).encoding == String.IMPORTANT_ENCODINGS[0]
-            ... else:
-            ...     String(
-            ...         'Ã¤'.encode('latin1')
-            ...     ).encoding  == String.IMPORTANT_ENCODINGS[0]
-            False
-        '''
-        if self.content and builtins.isinstance(self.content, builtins.bytes):
-            for encoding in builtins.list(
-                self.IMPORTANT_ENCODINGS
-            ) + builtins.sorted(builtins.filter(
-                lambda encoding: encoding not in self.IMPORTANT_ENCODINGS,
-                builtins.set(encodings.aliases.aliases.values())
-            )):
-                try:
-                    self.content.decode(encoding)
-                except builtins.UnicodeDecodeError:
-                    pass
-                else:
-                    return encoding
-        return self.IMPORTANT_ENCODINGS[0]
 
     @JointPoint
 # # python3.4     def get_camel_case_capitalize(self: Self) -> Self:
@@ -1894,8 +1883,7 @@ class String(Object, builtins.str):
             number_of_replaces = 0
             for search_string, replacement in search.items():
 # # python3.4
-# #                 self.content, temp_number_of_replaces = \
-# #                 builtins.getattr(
+# #                 self.content, temp_number_of_replaces = builtins.getattr(
 # #                     re.compile(builtins.str(search_string)),
 # #                     inspect.stack()[0][3]
 # #                 )(
@@ -2022,6 +2010,30 @@ class String(Object, builtins.str):
         # endregion
 
         # region protected
+
+    @JointPoint(Class.pseudo_property)
+# # python3.4
+# #     def _determine_encoding(self: Self, content) -> builtins.tuple:
+    def _determine_encoding(self, content):
+# #
+        '''
+            Guesses the encoding used in current string (bytes). Encodings \
+            are checked in alphabetic order.
+        '''
+        if content and builtins.isinstance(content, builtins.bytes):
+            for encoding in builtins.list(
+                self.IMPORTANT_ENCODINGS
+            ) + builtins.sorted(builtins.filter(
+                lambda encoding: encoding not in self.IMPORTANT_ENCODINGS,
+                builtins.set(encodings.aliases.aliases.values())
+            )):
+                try:
+                    content = content.decode(encoding)
+                except builtins.UnicodeDecodeError:
+                    pass
+                else:
+                    return encoding, content
+        return self.IMPORTANT_ENCODINGS[0], content
 
         # # region find python code end bracket helper
 
@@ -2267,16 +2279,12 @@ class Dictionary(Object, builtins.dict):
             if key in exclude:
                 del immutable[key]
             else:
-                try:
 # # python3.4
-# #                     immutable[key] = builtins.str(self._immutable_helper(
-# #                         value, exclude))
-                    immutable[key] = convert_to_unicode(self._immutable_helper(
-                        value, exclude))
+# #                 immutable[key] = builtins.str(self._immutable_helper(
+# #                     value, exclude))
+                immutable[key] = convert_to_unicode(
+                    self._immutable_helper(value, exclude))
 # #
-                except:
-                    # TODO reach branch with "instancemethid"
-                    del immutable[key]
         return builtins.tuple(builtins.sorted(immutable.items()))
 
         # # endregion
@@ -3034,7 +3042,7 @@ class Module(Object):
                     (only_module_level and inspect.getmodule(defined_object) !=
                         object))):
 # # python3.4
-# #                 yield object_name, object
+# #                 yield object_name, defined_object
                 if object_name != 'String':
                     yield object_name, defined_object
 # #
@@ -3185,8 +3193,8 @@ class Module(Object):
         module.__exception__ = builtins.type(
             builtins.str('%sError') % String(
                 module.__module_name__
-            ).get_camel_case_capitalize().content, (builtins.Exception,),
-            {'__init__': lambda self, message, *arguments:
+            ).get_camel_case_capitalize().content, (builtins.Exception,), {
+                '__init__': lambda self, message, *arguments:
                 builtins.Exception.__init__(
                     self, message % arguments
                 ) if arguments else builtins.Exception.__init__(
@@ -3197,7 +3205,7 @@ class Module(Object):
         '''Extend imported modules which couldn't be extended yet.'''
         if post_extend_others:
             for imported_name, imported_module in sys.modules.items():
-                if(imported_name.startswith(boostNode.__name__ + '.') and
+                if('%s.' % imported_name.startswith(boostNode.__name__) and
                    builtins.hasattr(imported_module, '__module_name__') and
                    imported_module.__module_name__ is None):
                     '''Take this method via introspection.'''

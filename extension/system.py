@@ -61,8 +61,10 @@ pass
 '''Make boostNode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
-# # python3.4 pass
+# # python3.4
+# # from boostNode import ENCODING
 from boostNode import ENCODING, convert_to_string, convert_to_unicode
+# #
 from boostNode.extension.file import Handler as FileHandler
 from boostNode.extension.native import Dictionary, Module, Object, String
 from boostNode.extension.native import String as StringExtension
@@ -73,8 +75,11 @@ from boostNode.extension.type import Null
 # #
 from boostNode.paradigm.aspectOrientation import FunctionDecorator, JointPoint
 
-# # python3.4 pass
+# # python3.4
+# # # NOTE: Should be removed if we drop python2.X support.
+# # String = StringExtension
 String = lambda content: StringExtension(convert_to_string(content))
+# #
 
 # endregion
 
@@ -705,7 +710,7 @@ class Runnable(builtins.object):
 # # python3.4
 # #             __logger__.critical(
 # #                 'Line {line_number}: {exception_name}: '
-# #                 '{exception_message}\n
+# #                 '{exception_message}\n'
 # #                 'Type "'
 # #                 '{program_file_path} --help" for additional '
 # #                 'informations.'.format(
@@ -714,7 +719,8 @@ class Runnable(builtins.object):
 # #                     exception_message=builtins.str(exception),
 # #                     program_file_path=sys.argv[0]))
             __logger__.critical(
-                'Line {line_number}: {exception_name}: {exception_message}\n'
+                'Line {line_number}: {exception_name}: '
+                '{exception_message}\n'
                 'Type "'
                 '{program_file_path} --help" for additional '
                 'informations.'.format(
@@ -1264,10 +1270,11 @@ class Platform(builtins.object):
             {...'standard_output': ...}
 
             >>> Platform.run(
-            ...     command='not', command_arguments=('existing',))
+            ...     command='not', command_arguments=('existing',)
+            ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
-            OSError: [Errno 2] No such file or directory
+            FileNotFoundError: [Errno 2] No such file or directory: 'not'
         '''
         if command_arguments is None:
             command_arguments = []
@@ -2016,7 +2023,7 @@ class CommandLine(builtins.object):
                 valid outputs.
             '''
             for suffix in ("'", '"', '\\"', "\\'"):
-                got = got.replace('u%s' % suffix, '%s' % suffix)
+                got = got.replace('u%s' % suffix, suffix)
             got = got.replace('"unicode"', '"str"')
             return native_output_checker(
                 output_checker_instance, want, got, *arguments, **keywords)
@@ -3010,8 +3017,8 @@ class CommandLine(builtins.object):
 # #                     ' "%s".', builtins.str(argument['execute']),
 # #                     builtins.str(exception), keyword)
                 raise __exception__(
-                    'During rendering argument "%s". Error "%s" occurs for '
-                    '"%s".', convert_to_unicode(argument['execute']),
+                    'During rendering argument "%s". Error "%s" occurs for'
+                    ' "%s".', convert_to_unicode(argument['execute']),
                     convert_to_unicode(exception), keyword)
 # #
         return argument

@@ -33,6 +33,7 @@ import __builtin__ as builtins
 from copy import copy
 import inspect
 import logging
+# # python3.4 from logging import getLoggerClass, getLogger, LogRecord
 from logging import getLoggerClass, getLogger
 from logging import StreamHandler as LoggingStreamHandler
 from logging import Formatter as LoggingFormatter
@@ -47,7 +48,7 @@ import Queue as native_queue
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
 # # python3.4 pass
-from boostNode import ENCODING, convert_to_string, convert_to_unicode
+from boostNode import convert_to_string, convert_to_unicode
 from boostNode.extension.file import Handler as FileHandler
 from boostNode.extension.native import Module
 # # python3.4 from boostNode.extension.type import Self, SelfClass
@@ -287,7 +288,7 @@ class Buffer(Class, LoggingStreamHandler):
                 ' with content "{content}".'.format(
                     class_name=self.__class__.__name__,
                     type=buffer_type, type_addition=type_addition,
-                    content=builtins.unicode(self.content, ENCODING)))
+                    content=convert_to_unicode(self.content)))
 # #
         return(
             'Object of "{class_name}" ({type} buffered{type_addition}) '
@@ -351,8 +352,11 @@ class Buffer(Class, LoggingStreamHandler):
                 self._content = ''
                 temp_buffer = []
                 while not self.queue.empty():
-# # python3.4                     temp_buffer.append(self.queue.get())
-                    temp_buffer.append(convert_to_unicode(self.queue.get()))
+# # python3.4
+# #                     temp_buffer.append(self.queue.get())
+                    temp_buffer.append(convert_to_unicode(
+                        self.queue.get()))
+# #
                     self._content += temp_buffer[-1]
                 for content in temp_buffer:
                     self.queue.put(content)
@@ -361,7 +365,7 @@ class Buffer(Class, LoggingStreamHandler):
         if self.force_string and builtins.isinstance(
             self._content, builtins.unicode
         ):
-            self._content = self._content.encode(ENCODING)
+            self._content = convert_to_string(self._content)
 # #
         return self._content
 
@@ -397,7 +401,7 @@ class Buffer(Class, LoggingStreamHandler):
         if self.force_string and builtins.isinstance(
             content, builtins.unicode
         ):
-            content = content.encode(ENCODING)
+            content = convert_to_string(content)
 # #
         with self._lock:
             self.last_written = content
@@ -487,7 +491,7 @@ class Buffer(Class, LoggingStreamHandler):
 # #         pass
         if self.force_string:
             self._content = builtins.str()
-            content = content.encode(ENCODING)
+            content = convert_to_string(content)
 # #
         return content
 
@@ -603,7 +607,7 @@ class Print(Class):
                     if index != 0 and keywords['separator']:
 # # python3.4
 # #                         result += builtins.str(keywords['separator'])
-# #                     result += convert_to_unicode(out.get())
+# #                     result += out.get()
                         result += convert_to_unicode(
                             keywords['separator'])
                     result += convert_to_unicode(out.get())
@@ -614,12 +618,12 @@ class Print(Class):
                 output[index] = convert_to_unicode(out)
             else:
 # # python3.4
-# #                 output[index] = builtins.str(
+# #                 output[index] = '%s%s' % (builtins.str(
 # #                     keywords['separator']
-# #                 ) + builtins.str(out)
-                output[index] = convert_to_unicode(
+# #                 ), builtins.str(out))
+                output[index] = '%s%s' % (convert_to_unicode(
                     keywords['separator']
-                ) + convert_to_unicode(out)
+                ), convert_to_unicode(out))
 # #
         line_replace = '\033[1A\r\033[2K' if keywords['replace'] else ''
         output = [keywords['start'], line_replace] + output + [keywords['end']]
@@ -696,7 +700,7 @@ class ColoredFormatter(LoggingFormatter):
     '''Defines the level to color mapping.'''
 
     @JointPoint
-# # python3.4     def format_(self: Self, record: LogRecord) -> builtins.str:
+# # python3.4     def format(self: Self, record: LogRecord) -> builtins.str:
     def format(self, record):
         '''Appends the level specified color to the logging output.'''
         levelname = record.levelname

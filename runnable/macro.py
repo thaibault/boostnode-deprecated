@@ -44,8 +44,10 @@ import sys
 '''Make boostNode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
-# # python3.4 pass
+# # python3.4
+# # from boostNode import ENCODING
 from boostNode import ENCODING, convert_to_string, convert_to_unicode
+# #
 from boostNode.extension.file import Handler as FileHandler
 from boostNode.extension.native import Module, InstancePropertyInitializer
 from boostNode.extension.native import String as StringExtension
@@ -55,8 +57,11 @@ pass
 from boostNode.paradigm.aspectOrientation import JointPoint
 from boostNode.paradigm.objectOrientation import Class
 
-# # python3.4 pass
+# # python3.4
+# # # NOTE: Should be removed if we drop python2.X support.
+# # String = StringExtension
 String = lambda content: StringExtension(convert_to_string(content))
+# #
 
 # endregion
 
@@ -705,11 +710,12 @@ class Replace(Class, Runnable):
         for file in directory:
             __logger__.debug('Check "%s".', file.path)
             if not self._in_exclude_location(location=file):
-                if file.is_file() and (not self.extension or
-                                       file.extension == self.extension):
-                    self._convert_file(file)
-                elif file.is_directory():
+                if file.is_directory(allow_link=False):
                     self._convert_directory(directory=file)
+                elif file.is_file(allow_link=False) and (
+                    not self.extension or file.extension == self.extension
+                ):
+                    self._convert_file(file)
         return self
 
     @JointPoint

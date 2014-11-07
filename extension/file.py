@@ -51,6 +51,7 @@ pass
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
 # # python3.4
+# # from boostNode import ENCODING
 # # from boostNode.extension.native import Object, String
 # # from boostNode.extension.type import Self, SelfClass, SelfClassObject
 from boostNode import ENCODING, convert_to_string, convert_to_unicode
@@ -1476,6 +1477,9 @@ class Handler(Class):
         if context is None:
 # # python3.4
 # #             return os.path.relpath(self._path, *arguments, **keywords)
+# #         return os.path.relpath(
+# #             self._path, *arguments,
+# #             start=self.__class__(location=context)._path, **keywords)
             return convert_to_unicode(os.path.relpath(convert_to_string(
                 self._path
             ), *arguments, **keywords))
@@ -1488,7 +1492,7 @@ class Handler(Class):
 # # python3.4
 # #     def get_directory(
 # #         self: Self, output_with_root_prefix=None
-# #     ) -> builtins.str:
+# #     ) -> SelfClassObject:
     def get_directory(self, output_with_root_prefix=None):
 # #
         '''
@@ -1783,8 +1787,8 @@ class Handler(Class):
                     convert_to_string(self._path), mode, *arguments,
                     **keywords
                 ) as file:
-                    return file.read()
 # #
+                    return file.read()
             else:
                 if 'encoding' in keywords:
                     self._encoding = keywords['encoding']
@@ -3097,7 +3101,7 @@ class Handler(Class):
             ...     convert_to_unicode(list(__test_folder__))
             ... else:
             ...     str(list(__test_folder__)) # doctest: +ELLIPSIS
-            "[...]"
+            '[...]'
             >>> not_accessible_file.remove_directory()
             True
 
@@ -3109,7 +3113,7 @@ class Handler(Class):
             ...     convert_to_unicode(list(__test_folder__))
             ... else:
             ...     str(list(__test_folder__)) # doctest: +ELLIPSIS
-            "[...]"
+            '[...]'
             >>> not_accessible_file.remove_file()
             True
 
@@ -3127,7 +3131,7 @@ class Handler(Class):
                         builtins.ord('A'), builtins.ord('Z') + 1):
                     path = '%s:\\' % builtins.chr(letter_number)
 # # python3.4
-# #                      if os.path.exists(path):
+# #                     if os.path.exists(path):
                     if os.path.exists(convert_to_string(path)):
 # #
                         yield self.__class__(location=path)
@@ -3229,8 +3233,8 @@ class Handler(Class):
 # #             except (builtins.PermissionError, builtins.OSError):
                 os.rmdir(
                     convert_to_string(self._path), *arguments, **keywords)
-# #
             except builtins.OSError:
+# #
                 try:
 # # python3.4
 # #                     self.change_right(

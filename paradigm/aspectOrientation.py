@@ -221,8 +221,8 @@ class FunctionDecorator(Class):
 # # python3.4
 # #             return(
 # #                 'Object of "{class_name}" with class object '
-# #                 '"{class_object}", 'object "{object}", wrapped function '
-# #                 "{wrapped_function}" and return value "{value}" '
+# #                 '"{class_object}", object "{object}", wrapped function '
+# #                 '"{wrapped_function}" and return value "{value}" '
 # #                 '({type}).'.format(
 # #                     class_name=self.__class__.__name__,
 # #                     class_object=self.class_object.__name__,
@@ -579,7 +579,7 @@ class ReturnAspect(Class):
             >>> repr(return_aspect) # doctest: +ELLIPSIS
             'Object of "ReturnAspect" with class object "A", object "...'
         '''
-# # python2.7
+# # python3.4
 # #         return(
 # #             'Object of "{class_name}" with class object "{class_object}", '
 # #             'object "{object}", function "{function}", arguments '
@@ -596,8 +596,8 @@ class ReturnAspect(Class):
         return(
             'Object of "{class_name}" with class object "{class_object}", '
             'object "{object}", function "{function}", arguments '
-            '"{arguments}", keywords "{keywords}" and return value "{value}" '
-            '({type}).'.format(
+            '"{arguments}", keywords "{keywords}" and return value '
+            '"{value}" ({type}).'.format(
                 class_name=self.__class__.__name__,
                 class_object=self.class_object.__name__,
                 object=builtins.repr(self.object),

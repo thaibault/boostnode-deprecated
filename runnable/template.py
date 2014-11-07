@@ -50,8 +50,10 @@ import urllib
 '''Make boostNode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
-# # python3.4 pass
+# # python3.4
+# # from boostNode import ENCODING
 from boostNode import ENCODING, convert_to_string, convert_to_unicode
+# #
 from boostNode.extension.file import Handler as FileHandler
 from boostNode.extension.native import Dictionary, Module, \
     InstancePropertyInitializer
@@ -119,8 +121,11 @@ pass
 from boostNode.paradigm.aspectOrientation import JointPoint
 from boostNode.paradigm.objectOrientation import Class
 
-# # python3.4 pass
+# # python3.4
+# # # NOTE: Should be removed if we drop python2.X support.
+# # String = StringExtension
 String = lambda content: StringExtension(convert_to_string(content))
+# #
 
 # endregion
 
@@ -1791,7 +1796,9 @@ class Parser(Class, Runnable):
 
     @JointPoint
 # # python3.4
-# #     def _convert_escape_sequences_to_html(self: Self, content) -> None:
+# #     def _convert_escape_sequences_to_html(
+# #         self: Self, content
+# #     ) -> builtins.str:
     def _convert_escape_sequences_to_html(self, content):
 # #
         '''
@@ -1952,16 +1959,18 @@ class Parser(Class, Runnable):
 
             >>> parser._convert_to_string('hans')
             'hans'
-            >>> parser._convert_to_string(('hans',))
-            '("hans",)'
-            >>> parser._convert_to_string(('hans', 'ä')) # doctest: +ELLIPSIS
-            '("hans", "...")'
+            >>> parser._convert_to_string(('hans',)).replace('"', "'")
+            "('hans',)"
+            >>> parser._convert_to_string(('hans', 'ä')).replace(
+            ...     '"', "'"
+            ... ) # doctest: +ELLIPSIS
+            "('hans', '...')"
             >>> parser._convert_to_string(
             ...     {'hans', 'ä', 3}
-            ... ) # doctest: +ELLIPSIS
-            '{...}'
-            >>> parser._convert_to_string(['hans', 3, True])
-            '["hans", 3, True]'
+            ... ).replace('"', "'") # doctest: +ELLIPSIS
+            "{...}"
+            >>> parser._convert_to_string(['hans', 3, True]).replace('"', "'")
+            "['hans', 3, True]"
         '''
         # TODO test
         if builtins.isinstance(object, builtins.dict):
@@ -1976,8 +1985,8 @@ class Parser(Class, Runnable):
                 if index:
                     result += ', '
                 '''
-                    Take this method type by another instance of this class \
-                    via introspection.
+                    Take this method type by another instance of this \
+                    class via introspection.
                 '''
                 result += builtins.getattr(self, inspect.stack()[0][3])(
                     sub_object, quote_string=True)
@@ -2071,11 +2080,13 @@ class Parser(Class, Runnable):
 
             Examples:
 
-            >>> Parser('<%hans%>', string=True).render(hans=5).output
+            >>> Parser('<% hans %>', string=True).render(hans=5).output
             '5'
-            >>> Parser('number:<%hans%>\\n', string=True).render(hans=5).output
+            >>> Parser('number:<% hans %>\\n', string=True).render(
+            ...     hans=5
+            ... ).output
             'number:5'
-            >>> Parser('<%hans%>number:<%hans%>', string=True).render(
+            >>> Parser('<% hans %>number:<% hans %>', string=True).render(
             ...     hans=5
             ... ).output
             '5number:5'
