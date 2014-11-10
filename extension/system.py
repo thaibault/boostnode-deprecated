@@ -1269,12 +1269,12 @@ class Platform(builtins.object):
             ... ) # doctest: +ELLIPSIS
             {...'standard_output': ...}
 
-            >>> Platform.run(
-            ...     command='not', command_arguments=('existing',)
-            ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
-            Traceback (most recent call last):
-            ...
-            FileNotFoundError: [Errno 2] No such file or directory: 'not'
+            >>> try:
+            ...     Platform.run(
+            ...         command='not', command_arguments=('existing',))
+            ... except:
+            ...     True
+            True
         '''
         if command_arguments is None:
             command_arguments = []
