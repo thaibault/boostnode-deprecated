@@ -91,6 +91,9 @@
 <span class="gt">Traceback (most recent call last):</span>
 <span class="c">...</span>
 <span class="gr">boostNode.extension.native.TemplateError</span>: <span class="n">Error with given template ...</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="c">...</span>
+<span class="gr">boostNode.extension.native.TemplateError</span>: <span class="n">Error with given template ...</span>
 </pre></div>
 </div>
 <dl class="staticmethod">
@@ -260,6 +263,9 @@
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">template</span> <span class="o">=</span> <span class="n">Parser</span><span class="p">(</span><span class="n">template</span><span class="o">=</span><span class="s">&#39;hans &lt;%not_hans%&gt;&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">template</span><span class="o">.</span><span class="n">substitute</span><span class="p">()</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="c">...</span>
+<span class="gr">KeyError</span>: <span class="n">&#39;not_hans&#39;</span>
 <span class="gt">Traceback (most recent call last):</span>
 <span class="c">...</span>
 <span class="gr">KeyError</span>: <span class="n">&#39;not_hans&#39;</span>

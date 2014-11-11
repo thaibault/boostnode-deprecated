@@ -621,6 +621,9 @@ method.</p>
 <span class="gt">Traceback (most recent call last):</span>
 <span class="c">...</span>
 <span class="gr">boosteNode.extension.system.SystemError</span>: <span class="n">Incorrect MAC-address ...</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="c">...</span>
+<span class="gr">boosteNode.extension.system.SystemError</span>: <span class="n">Incorrect MAC-address ...</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -670,9 +673,9 @@ initializer.</p>
 <dt id="boostNode.extension.system.Runnable.stop">
 <em class="property">static </em><tt class="descname">stop</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.system.Runnable.stop" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method should usually be overwritten to handle cleanup jobs.</p>
-<p><strong>signal_number</strong> - signal number to end with</p>
-<p><strong>stack_frame</strong>   - frame of last executed stack</p>
-<p><strong>reason</strong>        - description why the application should stop</p>
+<p><strong>reason</strong>              - Reason why we should stop</p>
+<p><strong>given_signal_number</strong> - Termination signal number</p>
+<p><strong>force_stopping</strong>      - Indicates weather we should enforce                                       termination process</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">A</span><span class="p">(</span><span class="n">Runnable</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">_initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">pass</span>
