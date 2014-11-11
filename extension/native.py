@@ -1069,9 +1069,12 @@ class String(Object, builtins.str):
 # #             self.encoding, content = self._determine_encoding(content)
 # #         if not builtins.isinstance(content, builtins.str):
 # #             content = builtins.str(content)
-        if builtins.isinstance(content, builtins.bytes):
-            self.encoding, content = self._determine_encoding(content)
-        else:
+        '''
+            NOTE: We don't support automatic encoding detection for python2.X \
+            because it would be too expensive if we can't distinguish \
+            between bytes and strings.
+        '''
+        if not builtins.isinstance(content, builtins.str):
             content = convert_to_string(content)
 # #
         self.content = content
@@ -1724,8 +1727,7 @@ class String(Object, builtins.str):
         '''
         if builtins.isinstance(search, builtins.dict):
             for search_string, replacement in search.items():
-                # NOTE: We don't use introspection here because this method is
-                # under heavy use.
+                # NOTE: This more elegant version is too expensive.
                 # '''Take this method name via introspection.'''
                 # self.content = builtins.getattr(
                 #     self.__class__(self.content), inspect.stack()[0][3]
@@ -2020,7 +2022,7 @@ class String(Object, builtins.str):
             Guesses the encoding used in current string (bytes). Encodings \
             are checked in alphabetic order.
         '''
-        if content and builtins.isinstance(content, builtins.bytes):
+        if content:
             for encoding in builtins.list(
                 self.IMPORTANT_ENCODINGS
             ) + builtins.sorted(builtins.filter(
@@ -2329,11 +2331,13 @@ class Dictionary(Object, builtins.dict):
 # # python3.4
 # #     def convert(
 # #         self: Self, key_wrapper=lambda key, value: key,
-# #         value_wrapper=lambda key, value: value
+# #         value_wrapper=lambda key, value: value,
+# #         no_wrap_indicator='__no_wrapping__', remove_wrap_indicator=True
 # #     ) -> Self:
     def convert(
         self, key_wrapper=lambda key, value: key,
-        value_wrapper=lambda key, value: value
+        value_wrapper=lambda key, value: value,
+        no_wrap_indicator='__no_wrapping__', remove_wrap_indicator=True
     ):
 # #
         '''
@@ -2389,6 +2393,13 @@ class Dictionary(Object, builtins.dict):
             True
         '''
         for key, value in copy(self.content).items():
+            # TODO check new branches.
+            if key == no_wrap_indicator:
+                if remove_wrap_indicator:
+                    self.content = value
+                else:
+                    self.content[key] = value
+                return self
             del self.content[key]
             key = key_wrapper(key, value)
             if builtins.isinstance(value, builtins.dict):
@@ -2398,7 +2409,10 @@ class Dictionary(Object, builtins.dict):
                 '''
                 self.content[key] = builtins.getattr(
                     self.__class__(value), inspect.stack()[0][3]
-                )(key_wrapper, value_wrapper).content
+                )(
+                    key_wrapper, value_wrapper, no_wrap_indicator,
+                    remove_wrap_indicator
+                ).content
 # # python3.4
 # #             elif(builtins.isinstance(value, Iterable) and
 # #                  not builtins.isinstance(
@@ -2413,7 +2427,9 @@ class Dictionary(Object, builtins.dict):
                 '''
                 self.content[key] = self._convert_iterable(
                     iterable=value, key_wrapper=key_wrapper,
-                    value_wrapper=value_wrapper)
+                    value_wrapper=value_wrapper,
+                    no_wrap_indicator=no_wrap_indicator,
+                    remove_wrap_indicator=remove_wrap_indicator)
             else:
                 self.content[key] = value_wrapper(key, value)
         return self
@@ -2494,9 +2510,13 @@ class Dictionary(Object, builtins.dict):
     @JointPoint(builtins.classmethod)
 # # python3.4
 # #     def _convert_iterable(
-# #         cls, iterable, key_wrapper, value_wrapper, bla=False
+# #         cls, iterable, key_wrapper, value_wrapper, no_wrap_indicator,
+# #         remove_wrap_indicator
 # #     ):
-    def _convert_iterable(cls, iterable, key_wrapper, value_wrapper):
+    def _convert_iterable(
+        cls, iterable, key_wrapper, value_wrapper, no_wrap_indicator,
+        remove_wrap_indicator
+    ):
 # #
         '''
             Converts all keys or values and nested keys or values with given \
@@ -2513,7 +2533,8 @@ class Dictionary(Object, builtins.dict):
             for key, value in builtins.enumerate(iterable):
                 if builtins.isinstance(value, builtins.dict):
                     iterable[key] = cls(value).convert(
-                        key_wrapper, value_wrapper
+                        key_wrapper, value_wrapper, no_wrap_indicator,
+                        remove_wrap_indicator
                     ).content
 # # python3.4
 # #                 elif(builtins.isinstance(value, Iterable) and
@@ -2529,8 +2550,11 @@ class Dictionary(Object, builtins.dict):
                     '''
                     iterable[key] = builtins.getattr(
                         cls, inspect.stack()[0][3]
-                    )(iterable=value, key_wrapper=key_wrapper,
-                      value_wrapper=value_wrapper)
+                    )(
+                        iterable=value, key_wrapper=key_wrapper,
+                        value_wrapper=value_wrapper,
+                        no_wrap_indicator=no_wrap_indicator,
+                        remove_wrap_indicator=remove_wrap_indicator)
                 else:
                     iterable[key] = value_wrapper(key, value)
         except builtins.TypeError as exception:

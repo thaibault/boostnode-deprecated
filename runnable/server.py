@@ -354,6 +354,7 @@ class MultiProcessingHTTPServer(
         '''NOTE: We have to add 1 for the server processes itself.'''
         self.web.number_of_running_processes = \
             builtins.len(multiprocessing.active_children()) + 1
+        '''Determine this method name via introspection.'''
         parent_function = builtins.getattr(
             server.HTTPServer, inspect.stack()[0][3])
         if(not self.is_same_process_request(request_socket) and
@@ -914,7 +915,7 @@ class Web(Class, Runnable):
     @JointPoint
 # # python3.4
 # #     def stop(
-# #         self: Self, *arguments: builtins.object,
+# #         self: Self, *arguments: builtins.object, force_stopping=False,
 # #         **keywords: builtins.object
 # #     ) -> Self:
     def stop(self, *arguments, **keywords):
@@ -936,29 +937,43 @@ class Web(Class, Runnable):
             >>> web.stop() # doctest: +ELLIPSIS
             Object of "Web" with root path "...", port "0" and stop order "s...
         '''
+# # python3.4
+# #         pass
+        force_stopping, keywords = Dictionary(keywords).pop(
+            name='force_stopping', default_value=False)
+# #
         if self.__dict__.get('service'):
             self.block_new_worker = True
+            # TODO check new branches.
             number_of_running_workers = self.number_of_running_threads + \
                 builtins.len(multiprocessing.active_children())
-            shown_number = 0
-            while number_of_running_workers > 0:
-                if(number_of_running_workers !=
-                   self.number_of_running_threads +
-                   builtins.len(multiprocessing.active_children())):
-                    number_of_running_workers = \
-                        self.number_of_running_threads + \
-                        builtins.len(multiprocessing.active_children())
-                if(shown_number != number_of_running_workers and
-                   number_of_running_workers > 0):
+            if force_stopping:
+                if number_of_running_workers:
                     __logger__.info(
-                        'Waiting for %d running workers (%d threads and '
-                        '%d processes).', number_of_running_workers,
-                        self.number_of_running_threads,
-                        builtins.len(multiprocessing.active_children()))
-                    shown_number = number_of_running_workers
-                time.sleep(2)
-            __logger__.info('Shutting down web server.')
-            self.__class__.instances.remove(self)
+                        'Enforcing web server child processes to stop.')
+                    for worker in multiprocessing.active_children():
+                        os.kill(worker.pid, signal.SIGKILL)
+                    return self
+            else:
+                shown_number = 0
+                while number_of_running_workers > 0:
+                    if(number_of_running_workers !=
+                       self.number_of_running_threads +
+                       builtins.len(multiprocessing.active_children())):
+                        number_of_running_workers = \
+                            self.number_of_running_threads + \
+                            builtins.len(multiprocessing.active_children())
+                    if(shown_number != number_of_running_workers and
+                       number_of_running_workers > 0):
+                        __logger__.info(
+                            'Waiting for %d running workers (%d threads and '
+                            '%d processes).', number_of_running_workers,
+                            self.number_of_running_threads,
+                            builtins.len(multiprocessing.active_children()))
+                        shown_number = number_of_running_workers
+                    time.sleep(2)
+                __logger__.info('Shutting down web server.')
+                self.__class__.instances.remove(self)
             if not __test_mode__:
                 '''Terminates the serve forever loop.'''
                 self.service.shutdown()
@@ -985,7 +1000,7 @@ class Web(Class, Runnable):
         '''Take this method type by the abstract class via introspection.'''
         return builtins.getattr(
             builtins.super(self.__class__, self), inspect.stack()[0][3]
-        )(*arguments, **keywords)
+        )(*arguments, force_stopping=force_stopping, **keywords)
 
         # endregion
 

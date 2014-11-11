@@ -311,6 +311,11 @@ class Runnable(builtins.object):
             implementation.
         '''
         self._childrens_module = inspect.getmodule(self.__class__)
+        '''
+            Saves given terminations signals to boost termination if signals }
+            comes second time.
+        '''
+        self._given_termination_signals = builtins.set()
         '''This lock prevents form triggering the stop method twice.'''
         self.__stop_lock = multiprocessing.Lock()
 
@@ -350,12 +355,12 @@ class Runnable(builtins.object):
                     given_input_explanation = ' (not "%s")' % self._given_order
 # # python3.4
 # #                 self._given_order = builtins.input(
-# #                     'Write "%s" or "%s"%s for shutting or restarting '
+# #                     'Write "%s" or "%s"%s for shutting down or restarting '
 # #                     '"%s":\n' %
 # #                     (self.stop_order, self.restart_order,
 # #                      given_input_explanation, self.__class__.__name__))
                 self._given_order = builtins.raw_input(
-                    'Write "%s" or "%s"%s for shutting or restarting '
+                    'Write "%s" or "%s"%s for shutting down or restarting '
                     '"%s":\n' %
                     (self.stop_order, self.restart_order,
                      given_input_explanation, self.__class__.__name__))
@@ -376,18 +381,20 @@ class Runnable(builtins.object):
     @JointPoint
 # # python3.4
 # #     def stop(
-# #         self: Self, signal_number=None, stack_frame=None, reason=''
+# #         self: Self, *arguments, reason='', given_signal_number=None,
+# #         force_stopping=False, **keywords
 # #     ) -> Self:
-    def stop(self, signal_number=None, stack_frame=None, reason=''):
+    def stop(self, *arguments, **keywords):
 # #
         '''
             This method should usually be overwritten to handle cleanup jobs.
 
-            **signal_number** - signal number to end with
+            **reason**              - Reason why we should stop
 
-            **stack_frame**   - frame of last executed stack
+            **given_signal_number** - Termination signal number
 
-            **reason**        - description why the application should stop
+            **force_stopping**      - Indicates weather we should enforce \
+                                      termination process
 
             Examples:
 
@@ -403,19 +410,35 @@ class Runnable(builtins.object):
             >>> A().stop(signal_number=2) # doctest: +ELLIPSIS
             Object of "A" implementing a command line runnable interface to...
         '''
+# # python3.4
+# #         pass
+        keywords_dictionary = Dictionary(keywords)
+        reason, keywords = keywords_dictionary.pop(
+            name='reason', default_value='')
+        given_signal_number, keywords = keywords_dictionary.pop(
+            name='given_signal_number')
+        force_stopping, keywords = keywords_dictionary.pop(
+            name='force_stopping', default_value=False)
+# #
         if not reason:
             reason = 'program trigger or normal termination'
-            if signal_number:
-                reason = 'signal number %d' % signal_number
+            if given_signal_number is not None:
+                reason = 'signal number %d' % given_signal_number
         __logger__.debug(
             'Closing "%s" caused by %s.', self.__class__.__name__, reason)
+        # TODO check new branches.
+        if force_stopping:
+            __logger__.warning(
+                'Closing "%s" was enforced caused by polling stop signals',
+                self.__class__.__name__)
         return self
 
     @JointPoint(atexit.register)
 # # python3.4
 # #     def trigger_stop(
 # #         self=None, *arguments: builtins.object, exit=True,
-# #         force_stopping=False, **keywords: builtins.object
+# #         force_stopping=None, signal_name=None
+# #         **keywords: builtins.object
 # #     ) -> Self:
     def trigger_stop(self=None, *arguments, **keywords):
 # #
@@ -450,8 +473,25 @@ class Runnable(builtins.object):
         exit, keywords = keywords_dictionary.pop(
             name='exit', default_value=True)
         force_stopping, keywords = keywords_dictionary.pop(
-            name='force_stopping', default_value=False)
+            name='force_stopping')
+        signal_name, keywords = keywords_dictionary.pop(
+            name='signal_name', default_value=False)
 # #
+        '''Enforce termination if we have given a stop signal a second time.'''
+        # TODO check new branches.
+        if signal_name in Platform.TERMINATION_SIGNALS:
+            if(signal_name in self._given_termination_signals and
+               force_stopping is None):
+                force_stopping = True
+                self._given_termination_signals.remove(signal_name)
+                __logger__.warning('Application will be enforced to stop now.')
+            else:
+                __logger__.info(
+                    'Sending a second "%s" signal will enforce to stop '
+                    'ungracefully.', signal_name)
+                self._given_termination_signals.add(signal_name)
+        if force_stopping is None:
+            force_stopping = False
         if(force_stopping or not (self is None or self._in_test_mode()) and
            self.__stop_lock.acquire(False)):
             reason = ''
@@ -459,8 +499,10 @@ class Runnable(builtins.object):
                 self.stop_order, self.restart_order
             ):
                 reason = 'given order "%s"' % self._given_order
-            self.stop(*arguments, reason=reason, **keywords)
-            self._handle_given_order(arguments, exit, force_stopping)
+            self.stop(
+                *arguments, reason=reason, force_stopping=force_stopping,
+                **keywords)
+            self._handle_given_order(arguments, exit)
         return self
 
         # endregion
@@ -533,10 +575,9 @@ class Runnable(builtins.object):
     @JointPoint
 # # python3.4
 # #     def _handle_given_order(
-# #         self: Self, arguments: builtins.tuple, exit: builtins.bool,
-# #         force_stopping: builtins.bool
+# #         self: Self, arguments: builtins.tuple, exit: builtins.bool
 # #     ) -> Self:
-    def _handle_given_order(self, arguments, exit, force_stopping):
+    def _handle_given_order(self, arguments, exit):
 # #
         '''
             Handles given order via command line standard input.
@@ -547,13 +588,13 @@ class Runnable(builtins.object):
             ...     def _initialize(self): pass
             >>> a = A()
 
-            >>> a._handle_given_order((), True, False)
+            >>> a._handle_given_order((), True)
             Traceback (most recent call last):
             ...
             SystemExit
 
             >>> a._given_order = a.restart_order
-            >>> a._handle_given_order((), True, False) # doctest: +ELLIPSIS
+            >>> a._handle_given_order((), True) # doctest: +ELLIPSIS
             Traceback (most recent call last):
             ...
             NotImplementedError: Method "_run" wasn't implemented by "A" and...
@@ -566,7 +607,7 @@ class Runnable(builtins.object):
                 builtins.str(self._initial_keywords))
             self.__class__.run(
                 *self._initial_arguments, **self._initial_keywords)
-        elif not force_stopping:
+        else:
             self._terminate(arguments, exit)
         return self
 
@@ -650,9 +691,16 @@ class Runnable(builtins.object):
                 NOTE: We have to reassign signal handlers, because old \
                 handlers are garbage collected after a soft restart.
             '''
-            signal_numbers = Platform.termination_signal_numbers
-            for signal_number in signal_numbers:
-                signal.signal(signal_number, self.trigger_stop)
+            for signal_number in Platform.termination_signal_numbers:
+                for termination_signal in Platform.TERMINATION_SIGNALS:
+                    if signal_number == builtins.getattr(
+                        signal, termination_signal
+                    ):
+                        signal.signal(
+                            signal_number,
+                            lambda *arguments, **keywords: self.trigger_stop(
+                                *arguments, signal_name=termination_signal,
+                                given_signal_number=signal_number, **keywords))
         try:
             self._run(*arguments, **keywords)
         except builtins.BaseException as exception:
@@ -799,12 +847,12 @@ class Platform(builtins.object):
             >>> os # doctest: +SKIP
             'posix'
         '''
-        for termination_signal_number in cls.TERMINATION_SIGNALS:
-            if(builtins.hasattr(signal, termination_signal_number) and
-               not builtins.getattr(signal, termination_signal_number) in
+        for termination_signal in cls.TERMINATION_SIGNALS:
+            if(builtins.hasattr(signal, termination_signal) and
+               builtins.getattr(signal, termination_signal) not in
                cls.termination_signal_numbers):
                 cls.termination_signal_numbers.append(builtins.getattr(
-                    signal, termination_signal_number))
+                    signal, termination_signal))
         if 'nt' == os.name:
             cls.operating_system = 'windows'
         elif 'darvin' == sys.platform:

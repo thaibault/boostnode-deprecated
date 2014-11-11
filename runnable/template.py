@@ -661,6 +661,7 @@ class Parser(Class, Runnable):
 # #             ) + now.microsecond / 1000 ** 2, 'DateTime': DateTime,
 # #             'time': time, 'FileHandler': FileHandler, 'print': self._print,
 # #             'include': self._include, 'String': self._convert_to_string,
+# #             'Integer': builtins.int, 'Float': builtins.float,
 # #             'length': builtins.len, 'Json': json,
 # #             'path_name_to_url': urllib.request.pathname2url,
 # #             'false': False, 'true': True, 'locals': builtins.locals,
@@ -671,7 +672,7 @@ class Parser(Class, Runnable):
 # #             'DictionaryExtension': Dictionary, 'StringExtension': String,
 # #             'List': builtins.list, 'hasAttribute': builtins.hasattr,
 # #             'TemplateParser': self.__class__, 'crypt': crypt,
-# #             'convert_escape_sequences_to_html':
+# #             'convertEscapeSequencesToHTML':
 # #                 self._convert_escape_sequences_to_html,
 # #             'console': {
 # #                 'SET_ATTRIBUTE_MODE': SET_OUTPUT_ATTRIBUTE_MODE,
@@ -725,6 +726,7 @@ class Parser(Class, Runnable):
             'time': time, 'FileHandler': FileHandler, 'print': self._print,
             'include': self._include,
             'String': self._convert_to_string,
+            'Integer': builtins.int, 'Float': builtins.float,
             'length': builtins.len, 'Json': json,
             'path_name_to_url': urllib.pathname2url, 'false': False,
             'true': True, 'locals': builtins.locals, 'type': builtins.type,
@@ -735,7 +737,7 @@ class Parser(Class, Runnable):
             'StringExtension': String, 'List': builtins.list,
             'hasAttribute': builtins.hasattr,
             'TemplateParser': self.__class__, 'crypt': crypt,
-            'convert_escape_sequences_to_html':
+            'convertEscapeSequencesToHTML':
                 self._convert_escape_sequences_to_html,
             'console': {
                 'SET_ATTRIBUTE_MODE': SET_OUTPUT_ATTRIBUTE_MODE,
@@ -972,6 +974,11 @@ class Parser(Class, Runnable):
             ... ).render() # doctest: +ELLIPSIS
             Object of "Parser" with template "hans says...<% end...
         '''
+        if self.left_code_delimiter not in self.content:
+            # TODO check branch
+            '''Avoid a lot of calculations if possible.'''
+            self.output = self.content
+            return self
         mapping = copy(mapping)
         mapping.update({'__builtins__': self.builtins})
         mapping.update(keywords)
@@ -981,6 +988,7 @@ class Parser(Class, Runnable):
             else:
                 template_hash = self.file.path.replace(os.sep, '_')
             if self.full_caching:
+                # TODO calculate exclude list one time dynamically.
                 full_cache_file = FileHandler(
                     location='%s/%s.txt' % (
                         FileHandler(
@@ -989,7 +997,18 @@ class Parser(Class, Runnable):
                         ).path, builtins.str(
                             builtins.hash(Dictionary(
                                 content=mapping
-                            ).get_immutable(exclude=('include', 'print'))))))
+                            ).get_immutable(exclude=(
+                                'include', 'print', '__indent__', '__file__',
+                                '__time_stamp__', '__builtins__', 'DateTime',
+                                'time', 'FileHandler', 'String', 'Integer',
+                                'Float', 'length', 'Json', 'path_name_to_url',
+                                'false', 'true', 'locals', 'type', 'sort',
+                                'is_type_of', 'Tuple', 'Dictionary',
+                                'RegularExpression', 'copy', 'deepCopy',
+                                'DictionaryExtension', 'StringExtension',
+                                'List', 'hasAttribute', 'TemplateParser',
+                                'crypt', 'convert_escape_sequences_to_html'
+                            ))))))
                 if full_cache_file:
                     self._output.write(full_cache_file.content)
                     return self
@@ -1128,8 +1147,8 @@ class Parser(Class, Runnable):
 # #     def _initialize(
 # #         self: Self, template: (builtins.str, FileHandler), string=None,
 # #         cache_path=None, full_caching=False, propagate_full_caching=False,
-# #         file_encoding=ENCODING,
-# #         placeholder_name_pattern='[a-zA-Z0-9_\[\]\'"\.()\\\\,\-+ :/={}$]+',
+# #         file_encoding=ENCODING, placeholder_name_pattern='[a-zA-Z0-9+\-*/'
+# #             '_\[\]\'"\.()\\\\, :={}$]+',
 # #         command_line_placeholder_name_pattern='(?s)'
 # #                                               '[a-zA-Z0-9_\[\]\.(),\-+]+',
 # #         command_line_placeholder_pattern=(
@@ -1189,7 +1208,8 @@ class Parser(Class, Runnable):
     def _initialize(
         self, template, string=None, cache_path=None, full_caching=False,
         propagate_full_caching=False, file_encoding=ENCODING,
-        placeholder_name_pattern='[a-zA-Z0-9_\[\]\'"\.()\\\\,\-+ :/={}$]+',
+        placeholder_name_pattern='[a-zA-Z0-9+\-*/'
+            '_\[\]\'"\.()\\\\, :={}$]+',
         command_line_placeholder_name_pattern='(?s)'
                                               '[a-zA-Z0-9_\[\]\.(),\-+]+',
         command_line_placeholder_pattern='^(?P<variable_name>'
@@ -1320,16 +1340,15 @@ class Parser(Class, Runnable):
 # # python3.4     def _render_content(self: Self) -> builtins.str:
     def _render_content(self):
         '''Generates runnable python code from current template.'''
-        return re.compile(
-            self.template_pattern.format(
-                left_delimiter=String(
-                    self.left_code_delimiter
-                ).validate_regex(),
-                right_delimiter=String(
-                    self.right_code_delimiter
-                ).validate_regex(),
-                placeholder=self.placeholder_name_pattern,
-                right_escaped=self.right_escaped)
+        return re.compile(self.template_pattern.format(
+            left_delimiter=String(
+                self.left_code_delimiter
+            ).validate_regex(),
+            right_delimiter=String(
+                self.right_code_delimiter
+            ).validate_regex(),
+            placeholder=self.placeholder_name_pattern,
+            right_escaped=self.right_escaped)
         ).sub(self._render_code, self.content).strip()
 
     @JointPoint
