@@ -997,7 +997,7 @@ class Web(Class, Runnable):
                 self.service.socket.setsockopt(
                     socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
                 self.service.socket.close()
-        '''Take this method type by the abstract class via introspection.'''
+        '''Take this method type from abstract class via introspection.'''
         return builtins.getattr(
             builtins.super(self.__class__, self), inspect.stack()[0][3]
         )(*arguments, force_stopping=force_stopping, **keywords)

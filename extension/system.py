@@ -539,15 +539,6 @@ class Runnable(builtins.object):
                 context_module = inspect.getmodule(context[0])
                 if context_module is this_module:
                     return True
-                if context_module is joint_point_module or (
-                    context[3] == reference_context[3] and
-                    re.compile(
-                        '(?:|[^a-z0-9])%s[ \t]*\(' % builtins.super.__name__,
-                        re.IGNORECASE
-                    ).search(context[4][0])
-                ):
-                    continue
-                break
             elif reference_context[0] is context[0]:
                 reference_context_reached = True
         return False
