@@ -326,10 +326,9 @@ class Runnable(builtins.object):
             arguments = arguments[:-1]
             run = True
         if((self._called_through_generic_interface(
-            reference_context=inspect.stack()[0]) and
-            self._childrens_module.__name__ == '__main__' and
-            not self._in_test_mode()) or run
-           ):
+            this_initializer_context=inspect.stack()[0]
+        ) and self._childrens_module.__name__ == '__main__' and
+        not self._in_test_mode()) or run):
             self._initial_arguments = arguments
             self._initial_keywords = keywords
             self._handle_module_running(arguments, keywords)
@@ -514,9 +513,9 @@ class Runnable(builtins.object):
     @JointPoint
 # # python3.4
 # #     def _called_through_generic_interface(
-# #         self: Self, reference_context: builtins.tuple
+# #         self: Self, this_initializer_context: builtins.tuple
 # #     ) -> builtins.bool:
-    def _called_through_generic_interface(self, reference_context):
+    def _called_through_generic_interface(self, this_initializer_context):
 # #
         '''
             Indicates if current context was called via generic module \
@@ -531,16 +530,31 @@ class Runnable(builtins.object):
             >>> A() # doctest: +ELLIPSIS
             Object of "A" implementing a command line runnable interface to ...
         '''
-        this_module = inspect.getmodule(reference_context[0])
+        this_module = inspect.getmodule(this_initializer_context[0])
         joint_point_module = inspect.getmodule(JointPoint)
-        reference_context_reached = False
+        this_initializer_skipped = False
         for context in inspect.stack():
-            if reference_context_reached:
+            if this_initializer_skipped:
+                '''
+                    Check if this context was initially triggered through \
+                    this module API. If so we assume that this generic API \
+                    was used.
+                '''
                 context_module = inspect.getmodule(context[0])
                 if context_module is this_module:
                     return True
-            elif reference_context[0] is context[0]:
-                reference_context_reached = True
+                '''
+                    Skip joint point trigger and super calls in overwritten \
+                    initialisation methods to keep on searching otherwise \
+                    there are function call within the stack which doesn't \
+                    come directly through this generic API.
+                '''
+                if not (context[3] == this_initializer_context[3] or
+                    context_module is joint_point_module
+                ):
+                    return False
+            elif this_initializer_context[0] is context[0]:
+                this_initializer_skipped = True
         return False
 
     @JointPoint
