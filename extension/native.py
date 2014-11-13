@@ -1772,7 +1772,7 @@ class String(Object, builtins.str):
 
             Return the string obtained by replacing the leftmost \
             non-overlapping occurrences of pattern in string by the \
-            replacement "replace". If the pattern isnât found, string is \
+            replacement "replace". If the pattern isn't found, string is \
             returned unchanged. "replace" can be a string or a function;
 
             If "replace" is a string, any backslash escapes in it are \
@@ -1797,7 +1797,7 @@ class String(Object, builtins.str):
             above, "\g<name>" will use the substring matched by the group \
             named name, as defined by the "(?P<name>...)" syntax. \
             "\g<number>" uses the corresponding group number; "\g<2>" is \
-            therefore equivalent to "\2", but isnât ambiguous in a \
+            therefore equivalent to "\2", but isn't ambiguous in a \
             replacement such as "\g<2>0". "\20" would be interpreted as a \
             reference to group 20, not a reference to group 2 followed by the \
             literal character "0". The backreference "\g<0>" substitutes in \
@@ -3413,6 +3413,8 @@ class Time(Object):
 
     '''This class adds some features for dealing with times.'''
 
+    PATTERN = '(?P<hour>[0-9]{1,2}):(?P<minute>[0-9]{1,2})',
+
     # region dynamic methods
 
     # # region public
@@ -3436,23 +3438,42 @@ class Time(Object):
 
             >>> Time()
             Object of "Time" datetime.time(0, 0).
+
+            >>> Time('08:30').content
+            datetime.time(8, 30)
         '''
 
         # # # region properties
 
-        '''The main property. It saves the current time data.'''
-        content = String(content).get_number(default=0)
-        hours = builtins.int(content / 60 ** 2)
-        hours_in_seconds = hours * 60 ** 2
-        minutes = builtins.int((content - hours_in_seconds) / 60)
-        minutes_in_seconds = minutes * 60
-        seconds = builtins.int(content - hours_in_seconds - minutes_in_seconds)
-        microseconds = builtins.int((
-            content - hours_in_seconds - minutes_in_seconds - seconds
-        ) * 1000 ** 2)
-        self.content = NativeTime(
-            hour=hours, minute=minutes, second=seconds,
-            microsecond=microseconds)
+        content = String(content).get_number(default=content)
+        # TODO check branches.
+        if builtins.isinstance(content, builtins.unicode):
+            for pattern in self.PATTERN:
+# # python3.4
+# #                 match = re.compile(pattern).fullmatch(content)
+                match = re.compile('(?:%s)$' % pattern).match(content)
+# #
+                if match:
+                    result = {}
+                    for type in ('hour', 'minute', 'second', 'microsecond'):
+                        try:
+                            result[type] = builtins.int(match.group(type))
+                        except builtins.IndexError:
+                            pass
+                    self.content = NativeTime(**result)
+        else:
+            hours = builtins.int(content / 60 ** 2)
+            hours_in_seconds = hours * 60 ** 2
+            minutes = builtins.int((content - hours_in_seconds) / 60)
+            minutes_in_seconds = minutes * 60
+            seconds = builtins.int(
+                content - hours_in_seconds - minutes_in_seconds)
+            microseconds = builtins.int((
+                content - hours_in_seconds - minutes_in_seconds - seconds
+            ) * 1000 ** 2)
+            self.content = NativeTime(
+                hour=hours, minute=minutes, second=seconds,
+                microsecond=microseconds)
 
         # # # endregion
 

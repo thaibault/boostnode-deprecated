@@ -456,7 +456,7 @@ def convert_to_string(object):
 
 
 # # python3.4 def __get_all_modules__(path=sys.path[0]) -> builtins.list:
-def __get_all_modules__(path=sys.path[0]):
+def __get_all_modules__(path=convert_to_unicode(sys.path[0])):
     '''
         This method provides a generic way to determine all modules in \
         current package or folder. It is useful for "__init__.py" files.
@@ -488,6 +488,19 @@ def __get_all_modules__(path=sys.path[0]):
         >>> __get_all_modules__(__test_folder__.path + '__get_all_modules__')
         []
     '''
+# # python3.4
+# #     if not path:
+# #         path = os.getcwd()
+# #     return builtins.list(builtins.set(builtins.map(
+# #         lambda name: name[:name.rfind('.')],
+# #         builtins.filter(
+# #             lambda name: (
+# #                 (name.endswith('.py') or name.endswith('.pyc')) and
+# #                 not name.startswith('__init__.') and os.path.isfile(
+# #                     '%s%s%s' % (path, os.sep, name))),
+# #             os.listdir(
+# #                 path[:-(builtins.len(os.path.basename(path)) + 1)] if
+# #                 os.path.isfile(path) else path)))))
     if not path:
         path = os.getcwd()
     return builtins.list(builtins.set(builtins.map(
@@ -496,10 +509,12 @@ def __get_all_modules__(path=sys.path[0]):
             lambda name: (
                 (name.endswith('.py') or name.endswith('.pyc')) and
                 not name.startswith('__init__.') and os.path.isfile(
-                    path + os.sep + name)),
-            os.listdir(
-                path[:-(builtins.len(os.path.basename(path)) + 1)] if
-                os.path.isfile(path) else path)))))
+                    convert_to_string('%s%s%s' % (path, os.sep, name)))),
+            builtins.map(
+                lambda name: convert_to_unicode(name), os.listdir(
+                    path[:-(builtins.len(os.path.basename(path)) + 1)] if
+                    os.path.isfile(path) else path))))))
+# #
 
 # endregion
 
