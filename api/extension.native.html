@@ -634,7 +634,7 @@
 
 <dl class="classmethod">
 <dt id="boostNode.extension.native.Module.get_context_path">
-<em class="property">classmethod </em><tt class="descname">get_context_path</tt><big>(</big><em>path=None</em>, <em>frame=&lt;frame object at 0x7f2b668c2050&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_context_path" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><tt class="descname">get_context_path</tt><big>(</big><em>path=None</em>, <em>frame=&lt;frame object at 0x7f1955543050&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_context_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines the package and module level context path to a given             context or file.</p>
 <p><strong>path</strong>  - relative or absolute context or file path to normalize</p>
 <p><strong>frame</strong> - stack frame to analyse again context</p>
@@ -1324,7 +1324,7 @@
 <dd>sequence</dd>
 </dl>
 <p>Additional arguments and keywords are forwarded to python&#8217;s             native &#8220;re.sub()&#8221; method.</p>
-<p>Return the string obtained by replacing the leftmost             non-overlapping occurrences of pattern in string by the             replacement &#8220;replace&#8221;. If the pattern isnât found, string is             returned unchanged. &#8220;replace&#8221; can be a string or a function;</p>
+<p>Return the string obtained by replacing the leftmost             non-overlapping occurrences of pattern in string by the             replacement &#8220;replace&#8221;. If the pattern isn&#8217;t found, string is             returned unchanged. &#8220;replace&#8221; can be a string or a function;</p>
 <p>If &#8220;replace&#8221; is a string, any backslash escapes in it are             processed. That means &#8220;</p>
 </div></blockquote>
 <p>&#8221; is converted to a single newline             character, &#8221;
@@ -1332,7 +1332,7 @@
 <blockquote>
 <div><p>If &#8220;replace&#8221; is a function, it is called for every             non-overlapping occurrence of pattern. The function takes a             single match object argument, and returns the replacement string.</p>
 <p>The pattern may be a string or an RE object. The optional             argument count is the maximum number of pattern occurrences to be             replaced; count must be a non-negative integer. If omitted or             zero, all occurrences will be replaced. Empty matches for the             pattern are replaced only when not adjacent to a previous match,             so sub(&#8216;x*&#8217;, &#8216;-&#8216;, &#8216;abc&#8217;) returns &#8216;-a-b-c-&#8216;.</p>
-<p>In addition to character escapes and back references as described             above, &#8220;g&lt;name&gt;&#8221; will use the substring matched by the group             named name, as defined by the &#8220;(?P&lt;name&gt;...)&#8221; syntax.             &#8220;g&lt;number&gt;&#8221; uses the corresponding group number; &#8220;g&lt;2&gt;&#8221; is             therefore equivalent to &#8220;&#8221;, but isnât ambiguous in a             replacement such as &#8220;g&lt;2&gt;0&#8221;. &#8220;&#8221; would be interpreted as a             reference to group 20, not a reference to group 2 followed by the             literal character &#8220;0&#8221;. The backreference &#8220;g&lt;0&gt;&#8221; substitutes in             the entire substring matched by the RE.</p>
+<p>In addition to character escapes and back references as described             above, &#8220;g&lt;name&gt;&#8221; will use the substring matched by the group             named name, as defined by the &#8220;(?P&lt;name&gt;...)&#8221; syntax.             &#8220;g&lt;number&gt;&#8221; uses the corresponding group number; &#8220;g&lt;2&gt;&#8221; is             therefore equivalent to &#8220;&#8221;, but isn&#8217;t ambiguous in a             replacement such as &#8220;g&lt;2&gt;0&#8221;. &#8220;&#8221; would be interpreted as a             reference to group 20, not a reference to group 2 followed by the             literal character &#8220;0&#8221;. The backreference &#8220;g&lt;0&gt;&#8221; substitutes in             the entire substring matched by the RE.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s">&#39;([^a]+)&#39;</span><span class="p">,</span> <span class="s">&#39; jau-suffix &#39;</span><span class="p">)</span>
 <span class="go">Object of &quot;String&quot; with &quot; jau-suffix a jau-suffix &quot; saved.</span>
