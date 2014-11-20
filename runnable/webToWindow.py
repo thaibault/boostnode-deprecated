@@ -31,7 +31,7 @@ __version__ = '1.0'
 import __builtin__ as builtins
 import inspect
 import os
-import re
+import re as regularExpression
 import sys
 import threading
 # # python3.4 import types
@@ -339,8 +339,10 @@ class Browser(Class, Runnable):
 
             **url** - URL to set.
         '''
-# # python3.4         if re.compile('[a-zA-Z]+://.*').fullmatch(url):
-        if re.compile('[a-zA-Z]+://.*$').match(url):
+# # python3.4
+# #         if regularExpression.compile('[a-zA-Z]+://.*').fullmatch(url):
+        if regularExpression.compile('[a-zA-Z]+://.*$').match(url):
+# #
             self._url = url
         else:
             self._url = 'http://' + url

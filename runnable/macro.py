@@ -38,7 +38,7 @@ import codecs
 # #
 import inspect
 import os
-import re
+import re as regularExpression
 import sys
 
 '''Make boostNode packages and modules importable via relative paths.'''
@@ -74,7 +74,8 @@ class Replace(Class, Runnable):
         Parse source code and replace version depended code snippets with the \
         correct given version code snippets.
 
-        NOTE: "(?s...)" is equivalent to regular expression flag "re.DOTALL". \
+        NOTE: "(?s...)" is equivalent to regular expression flag \
+        "regularExpression.DOTALL".
         NOTE: That alternate version in one line regular expression pattern \
         could be empty.
 
@@ -547,9 +548,12 @@ class Replace(Class, Runnable):
             ''
         '''
         content = file.get_content(encoding=self.encoding)
-        match = re.compile(self.one_line_regex_pattern).search(content)
+        match = regularExpression.compile(self.one_line_regex_pattern).search(
+            content)
         if match is None:
-            match = re.compile(self.more_line_regex_pattern).search(content)
+            match = regularExpression.compile(
+                self.more_line_regex_pattern
+            ).search(content)
         if match:
             __logger__.info(
                 'Detected "%s" as new version.',
@@ -799,9 +803,10 @@ class Replace(Class, Runnable):
                     file.path, self.encoding)
                 return self
 # # python3.4
-# #             match = re.compile(self.first_line_regex_pattern).fullmatch(
-# #                 first_line)
-            match = re.compile(
+# #             match = regularExpression.compile(
+# #                 self.first_line_regex_pattern
+# #             ).fullmatch(first_line)
+            match = regularExpression.compile(
                 '(?:%s)$' % self.first_line_regex_pattern
             ).match(first_line)
 # #
@@ -828,18 +833,19 @@ class Replace(Class, Runnable):
             '"{new_version}".'.format(
                 path=file.path, current_version=self._current_version,
                 new_version=self._new_version))
-        file_content = first_line + re.compile(
+        file_content = '%s%s' % (first_line, regularExpression.compile(
             self.more_line_regex_pattern
-        ).sub(self._replace_alternate_lines, file_content)
+        ).sub(self._replace_alternate_lines, file_content))
         if not self.dry:
-            file.content = re.compile(self.one_line_regex_pattern).sub(
-                self._replace_alternate_line, file_content)
+            file.content = regularExpression.compile(
+                self.one_line_regex_pattern
+            ).sub(self._replace_alternate_line, file_content)
         return self
 
     @JointPoint
 # # python3.4
 # #     def _replace_alternate_lines(
-# #         self: Self, match: type(re.compile('').match(''))
+# #         self: Self, match: type(regularExpression.compile('').match(''))
 # #     ) -> builtins.str:
     def _replace_alternate_lines(self, match):
 # #
@@ -871,10 +877,10 @@ class Replace(Class, Runnable):
 # #                     ).replace(
 # #                         '\n%s \n' % match.group('prefix'),
 # #                         '\n%s\n' % match.group('prefix')
-# #                     ).rstrip(), alternate_text=re.compile(
+# #                     ).rstrip(), alternate_text=regularExpression.compile(
 # #                         '\n%s ?' % String(
 # #                             match.group('prefix')
-# #                         ).validate_regex().content
+# #                         ).regex_validated.content
 # #                     ).sub('\n', match.group(
 # #                         'alternate_text'
 # #                     ))[builtins.len(match.group('prefix')) + 1:]))
@@ -891,10 +897,10 @@ class Replace(Class, Runnable):
                     ).replace(
                         '\n%s \n' % match.group('prefix'),
                         '\n%s\n' % match.group('prefix')
-                    ).rstrip(), alternate_text=re.compile(
+                    ).rstrip(), alternate_text=regularExpression.compile(
                         '\n%s ?' % convert_to_unicode(String(
                             match.group('prefix')
-                        ).validate_regex().content)
+                        ).regex_validated.content)
                     ).sub('\n', match.group(
                         'alternate_text'
                     ))[builtins.len(match.group('prefix')) + 1:]))
@@ -904,7 +910,7 @@ class Replace(Class, Runnable):
     @JointPoint
 # # python3.4
 # #     def _replace_alternate_line(
-# #         self: Self, match: type(re.compile('').match(''))
+# #         self: Self, match: type(regularExpression.compile('').match(''))
 # #     ) -> builtins.str:
     def _replace_alternate_line(self, match):
 # #

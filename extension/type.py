@@ -114,7 +114,7 @@ class Model(builtins.type):
 
         class_scope['__table_name__'] = String(
             class_name
-        ).get_camel_case_to_delimited().content
+        ).camel_case_to_delimited.content
         class_scope['__tablename__'] = class_scope['__table_name__']
         class_scope['db_table'] = class_scope['__table_name__']
         '''Take this method name via introspection.'''

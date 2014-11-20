@@ -46,7 +46,7 @@ import inspect
 import logging
 import multiprocessing
 import os
-import re
+import re as regularExpression
 import signal
 import socket
 import struct
@@ -66,7 +66,7 @@ sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 from boostNode import ENCODING, convert_to_string, convert_to_unicode
 # #
 from boostNode.extension.file import Handler as FileHandler
-from boostNode.extension.native import Dictionary, Module, Object, String
+from boostNode.extension.native import Dictionary, Module, Object
 from boostNode.extension.native import String as StringExtension
 from boostNode.extension.output import Buffer, Logger, Print
 # # python3.4
@@ -128,8 +128,9 @@ class Runnable(builtins.object):
             >>> repr(A()) # doctest: +ELLIPSIS
             'Object of "A" implementing a command line runnable interface t...'
         '''
-        return('Object of "%s" implementing a command line runnable interface '
-               'to be usable outside this python environment.' % cls.__name__)
+        return(
+            'Object of "%s" implementing a command line runnable interface to '
+            'be usable outside this python environment.' % cls.__name__)
 
         # # endregion
 
@@ -1328,6 +1329,12 @@ class Platform(builtins.object):
             ... except:
             ...     True
             True
+
+            >>> Platform.run(
+            ...     command='not', command_arguments=('existing',),
+            ...     shell=True, error=False
+            ... ) # doctest: +ELLIPSIS
+            {...'return_code': ...}
         '''
         if command_arguments is None:
             command_arguments = []
@@ -1383,10 +1390,10 @@ class Platform(builtins.object):
         if builtins.hasattr(os, 'startfile'):
             return os.startfile(file)
 # # python3.4
-# #         shell_file = String(file._path).validate_shell()
+# #         shell_file = String(file._path).shell_validated
         shell_file = convert_to_unicode(String(
             file._path
-        ).validate_shell())
+        ).shell_validated)
 # #
         for unix_application_name in cls.UNIX_OPEN_APPLICATIONS:
             result = Platform.run(
@@ -2587,7 +2594,7 @@ class CommandLine(builtins.object):
         return '{program} {version} {status}'.format(
             program=String(
                 sys.modules[module_name].__module_name__
-            ).get_camel_case_capitalize().content,
+            ).camel_case_capitalize.content,
             version=sys.modules[module_name].__version__,
             status=sys.modules[module_name].__status__)
 
@@ -2624,10 +2631,12 @@ class CommandLine(builtins.object):
             if sys.modules[module_name].__doc__ is not None:
                 description += ' - ' + sys.modules[module_name].__doc__
 # # python3.4
-# #         match = re.compile('((?:.|\n)*)\n.+\n *=+\n(?:.|\n)*').fullmatch(
-# #             description)
-        match = re.compile('((?:.|\n)*)\n.+\n *=+\n(?:.|\n)*$').match(
-            description)
+# #         match = regularExpression.compile(
+# #             '((?:.|\n)*)\n.+\n *=+\n(?:.|\n)*'
+# #         ).fullmatch(description)
+        match = regularExpression.compile(
+            '((?:.|\n)*)\n.+\n *=+\n(?:.|\n)*$'
+        ).match(description)
 # #
         description = match.group(1) if match else description
         return description.format(version=version)
@@ -3022,8 +3031,8 @@ class CommandLine(builtins.object):
         choices = cls.PACKAGE_INTERFACE_ARGUMENTS[0]['keywords']['choices']
         return cls.argument_parser(
             version='{package} {version} {status}'.format(
-                package=String(package_name).get_camel_case_capitalize(
-                ).content, version=sys.modules[name].__version__,
+                package=String(package_name).camel_case_capitalize.content,
+                version=sys.modules[name].__version__,
                 status=sys.modules[name].__status__),
             module_name=name,
             arguments=cls.PACKAGE_INTERFACE_ARGUMENTS + command_line_arguments,

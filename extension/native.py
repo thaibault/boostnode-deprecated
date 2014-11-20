@@ -38,14 +38,18 @@ import __builtin__ as builtins
 # #
 from collections import Iterable
 from copy import copy
+from datetime import datetime as NativeDateTime
 from datetime import time as NativeTime
+from datetime import date as NativeDate
+from datetime import timedelta as NativeTimeDelta
 import encodings
 import functools
 from hashlib import sha224
 import inspect
 import os
-import re
+import re as regularExpression
 import sys
+import time
 # # python3.4 import types
 pass
 
@@ -58,6 +62,7 @@ import boostNode
 # # from boostNode.extension.type import Self, SelfClass, SelfClassObject
 from boostNode import ENCODING, convert_to_string, convert_to_unicode
 # #
+from boostNode.extension.type import Null
 from boostNode.paradigm.aspectOrientation import FunctionDecorator, JointPoint
 from boostNode.paradigm.objectOrientation import Class
 
@@ -464,10 +469,10 @@ class Model(builtins.object):
                     name, cls.__name__, property_information['maximum_length'],
                     value, builtins.len(value)))
 # # python3.4
-# #         if 'pattern' in property_information and re.compile(
+# #         if 'pattern' in property_information and regularExpression.compile(
 # #             property_information['pattern']
 # #         ).fullmatch(value) is None:
-        if 'pattern' in property_information and re.compile(
+        if 'pattern' in property_information and regularExpression.compile(
             '(?:%s)$' % property_information['pattern']
         ).match(value) is None:
 # #
@@ -657,6 +662,99 @@ class Object(Class):
         return convert_to_unicode(self.content)
 
         # # endregion
+
+    # TODO check
+    @JointPoint(Class.pseudo_property)
+# # python3.4
+# #     def get_compatible_type(self: Self) -> (
+# #         builtins.object, builtins.type
+# #     ):
+    def get_compatible_type(self):
+# #
+        '''Converts data to python cross platform compatible data objects.'''
+# # python3.4
+# #         if builtins.isinstance(self.content, NativeDate):
+# #             return time.mktime(self.content.timetuple())
+# #         if builtins.isinstance(self.content, NativeDateTime):
+# #             return self.content.timestamp(
+# #             ) + builtins.float(self.content.microsecond) / 1000 ** 2
+        if builtins.isinstance(self.content, NativeDate):
+            return time.mktime(self.content.timetuple())
+        if builtins.isinstance(self.content, NativeDateTime):
+            return(
+                time.mktime(self.content.timetuple()) +
+                self.content.microsecond / 1000 ** 2)
+# #
+        if builtins.isinstance(self.content, NativeTime):
+            return(
+                60.0 ** 2 * self.content.hour + 60 * self.content.minute +
+                self.content.second + self.content.microsecond / 1000 ** 2)
+        if builtins.isinstance(self.content, NativeTimeDelta):
+            return self.content.total_seconds()
+        if not builtins.isinstance(self.content, (
+            builtins.int, builtins.float, builtins.type(None)
+        )):
+# # python3.4             return builtins.str(self.content)
+            return convert_to_unicode(self.content)
+        return self.content
+
+    # TODO check
+    # TODO check complexity everywhere
+    @JointPoint(Class.pseudo_property)
+# # python3.4
+# #     def get_known_type(self: Self, description=None) -> (
+# #         builtins.object, builtins.type
+# #     ):
+    def get_known_type(self, description=None):
+# #
+        '''Converts interpretable data to python specific data objects.'''
+        if self.content is not None:
+# # python3.4
+# #             if builtins.isinstance(description, builtins.str):
+            if builtins.isinstance(description, (
+                builtins.unicode, builtins.str
+            )):
+# #
+                if description == 'date_time' or description.endswith(
+                    '_date_time'
+                ) or description.endswith('DateTime'):
+                    return DateTime(self.content).content
+                elif description == 'date' or description.endswith(
+                    '_date'
+                ) or description.endswith('Date'):
+                    return Date(self.content).content
+                elif description == 'time' or description.endswith(
+                    '_time'
+                ) or description.endswith('Time'):
+                    return Time(self.content).content
+                elif description == 'time_delta' or description.endswith(
+                    '_time_delta'
+                ) or description.endswith('TimeDelta'):
+                    return TimeDelta(self.content).content
+                elif(description == 'phone_number' or description.endswith(
+                    '_phone_number'
+                ) or description.endswith('PhoneNumber') or
+                description == 'zip_code' or description.endswith(
+                    '_zip_code'
+                ) or description.endswith('ZipCode')):
+                    if regularExpression.compile('[0-9]+').search(
+                        self.content
+                    ):
+                        return regularExpression.compile('[^0-9]+').sub(
+                            '', self.content.replace('+', '00', 1))
+                    return self.content
+# # python3.4
+# #             if builtins.isinstance(self.content, builtins.str):
+# #                 return String(self.content).number
+            if builtins.isinstance(self.content, (
+                builtins.unicode, builtins.str
+            )):
+                number = String(self.content).number
+                if builtins.isinstance(number, builtins.str):
+                    return convert_to_unicode(number)
+                return number
+# #
+        return self.content
 
     @JointPoint
 # # python3.4     def copy(self: Self) -> builtins.dict:
@@ -1046,9 +1144,7 @@ class String(Object, builtins.str):
             True
 
             >>> if sys.version_info.major < 3:
-            ...     String(
-            ...         u'ö'.encode('latin1')
-            ...     ).encoding == String.IMPORTANT_ENCODINGS[0]
+            ...     False
             ... else:
             ...     String(
             ...         'ö'.encode('latin1')
@@ -1080,25 +1176,6 @@ class String(Object, builtins.str):
         self.content = content
 
         # # # endregion
-
-    @JointPoint
-# # python3.4     def __repr__(self: Self) -> builtins.str:
-    def __repr__(self):
-        '''
-            Invokes if this object should describe itself by a string.
-
-            Examples:
-
-            >>> repr(String('hans'))
-            'Object of "String" with "hans" saved.'
-        '''
-# # python3.4
-# #         return 'Object of "{class_name}" with "{content}" saved.'.format(
-# #             class_name=self.__class__.__name__, content=self.content)
-        return 'Object of "{class_name}" with "{content}" saved.'.format(
-            class_name=self.__class__.__name__,
-            content=convert_to_unicode(self.content))
-# #
 
     @JointPoint
 # # python3.4     def __len__(self: Self) -> builtins.int:
@@ -1184,9 +1261,9 @@ class String(Object, builtins.str):
 
         # # region getter
 
-    @JointPoint
-# # python3.4     def get_number(self: Self, default=None):
-    def get_number(self, default=None):
+    @JointPoint(Class.pseudo_property)
+# # python3.4     def get_number(self: Self, default=None, slice=False):
+    def get_number(self, default=None, slice=False):
         '''
             Returns a number representation of current string content if \
             possible. If no conversion is possible given default value will \
@@ -1195,23 +1272,43 @@ class String(Object, builtins.str):
 
             **default** - Fall-back value
 
+            **slice**   - If "True" non numbers will be removed
+
             Examples:
 
-            >>> String().get_number()
+            >>> String().number
             ''
 
-            >>> String('hans').get_number()
+            >>> String('hans').number
             'hans'
 
-            >>> String('5').get_number()
+            >>> String('5').number
             5
 
-            >>> String('5.5').get_number()
+            >>> String('5.5').number
             5.5
 
             >>> String('hans').get_number(default=5)
             5
+
+            >>> String('hans').number
+            'hans'
+
+            >>> String('hans').get_number(default='test', slice=True)
+            'test'
+
+            >>> String('ha4ns').get_number(slice=True)
+            4
+
+            >>> String(4).get_number(slice=True)
+            4
+
+            >>> String(4).number
+            4
         '''
+        if slice:
+            self.content = regularExpression.compile('[^0-9]+').sub(
+                '', self.content)
         try:
             return builtins.int(self.content)
         except(builtins.TypeError, builtins.ValueError):
@@ -1222,7 +1319,7 @@ class String(Object, builtins.str):
                     return self.content
                 return default
 
-    @JointPoint
+    @JointPoint(Class.pseudo_property)
 # # python3.4     def get_camel_case_capitalize(self: Self) -> Self:
     def get_camel_case_capitalize(self):
         '''
@@ -1231,7 +1328,7 @@ class String(Object, builtins.str):
 
             Examples:
 
-            >>> String().get_camel_case_capitalize().content
+            >>> String().camel_case_capitalize.content
             ''
 
             >>> String('haNs').get_camel_case_capitalize().content
@@ -1271,25 +1368,25 @@ class String(Object, builtins.str):
 
             Examples:
 
-            >>> String().get_delimited_to_camel_case().content
+            >>> String().delimited_to_camel_case.content
             ''
 
-            >>> String('hans_peter').get_delimited_to_camel_case().content
+            >>> String('hans_peter').delimited_to_camel_case.content
             'hansPeter'
 
-            >>> String('hans__peter').get_delimited_to_camel_case().content
+            >>> String('hans__peter').delimited_to_camel_case.content
             'hans_Peter'
 
-            >>> String('HansPeter').get_delimited_to_camel_case().content
+            >>> String('HansPeter').delimited_to_camel_case.content
             'HansPeter'
 
-            >>> String('Hans_Peter').get_delimited_to_camel_case().content
+            >>> String('Hans_Peter').delimited_to_camel_case.content
             'HansPeter'
 
-            >>> String('_Hans_Peter').get_delimited_to_camel_case().content
+            >>> String('_Hans_Peter').delimited_to_camel_case.content
             '_HansPeter'
 
-            >>> String('_').get_delimited_to_camel_case().content
+            >>> String('_').delimited_to_camel_case.content
             '_'
 
             >>> String('hans_peter').get_delimited_to_camel_case('-').content
@@ -1335,7 +1432,7 @@ class String(Object, builtins.str):
         '''
         if abbreviations is None:
             abbreviations = self.abbreviations
-        delimiter = self.__class__(delimiter).validate_regex().content
+        delimiter = self.__class__(delimiter).regex_validated.content
         if preserve_wrong_formatted_abbreviations:
             abbreviations = ')|(?:'.join(abbreviations)
         else:
@@ -1344,7 +1441,7 @@ class String(Object, builtins.str):
                     abbreviation.capitalize(), abbreviation),
                 abbreviations))
 # # python3.4
-# #         self.content = re.compile(
+# #         self.content = regularExpression.compile(
 # #             '(?!^)(?P<before>%s)(?P<abbreviation>(?:%s))'
 # #             '(?P<after>%s|$)' % (delimiter, abbreviations, delimiter)
 # #         ).sub(
@@ -1353,12 +1450,12 @@ class String(Object, builtins.str):
 # #                 match.group('abbreviation').upper(),
 # #                 match.group('after')
 # #             ), self.content)
-# #         self.content = re.compile(
+# #         self.content = regularExpression.compile(
 # #             '(?!^)%s(?P<first_letter>[a-zA-Z0-9])' % delimiter
 # #         ).sub(
 # #             lambda match: match.group('first_letter').upper(),
 # #             self.content)
-        self.content = re.compile(
+        self.content = regularExpression.compile(
             '(?!^)(?P<before>%s)(?P<abbreviation>(?:%s))'
             '(?P<after>%s|$)' % (delimiter, abbreviations, delimiter)
         ).sub(
@@ -1366,7 +1463,7 @@ class String(Object, builtins.str):
                 match.group('before'), match.group('abbreviation').upper(),
                 match.group('after')
             ), convert_to_unicode(self.content))
-        self.content = re.compile(
+        self.content = regularExpression.compile(
             '(?!^)%s(?P<first_letter>[a-zA-Z0-9])' % delimiter
         ).sub(
             lambda match: match.group('first_letter').upper(),
@@ -1375,7 +1472,7 @@ class String(Object, builtins.str):
 # #
         return self
 
-    @JointPoint
+    @JointPoint(Class.pseudo_property)
 # # python3.4
 # #     def get_camel_case_to_delimited(
 # #         self: Self, delimiter='_', abbreviations=None
@@ -1396,13 +1493,13 @@ class String(Object, builtins.str):
 
             Examples:
 
-            >>> String().get_camel_case_to_delimited().content
+            >>> String().camel_case_to_delimited.content
             ''
 
-            >>> String('hansPeter').get_camel_case_to_delimited().content
+            >>> String('hansPeter').camel_case_to_delimited.content
             'hans_peter'
 
-            >>> String('hans_peter').get_camel_case_to_delimited().content
+            >>> String('hans_peter').camel_case_to_delimited.content
             'hans_peter'
 
             >>> String('hansPeter').get_camel_case_to_delimited('-').content
@@ -1411,7 +1508,7 @@ class String(Object, builtins.str):
             >>> String('hansPeter').get_camel_case_to_delimited('+').content
             'hans+peter'
 
-            >>> String('Hans').get_camel_case_to_delimited().content
+            >>> String('Hans').camel_case_to_delimited.content
             'hans'
 
             >>> String('hansAPIURL').get_camel_case_to_delimited(
@@ -1421,32 +1518,32 @@ class String(Object, builtins.str):
         '''
         if abbreviations is None:
             abbreviations = self.abbreviations
-        escaped_delimiter = self.__class__(delimiter).validate_regex().content
+        escaped_delimiter = self.__class__(delimiter).regex_validated.content
         abbreviations = ')|(?:'.join(builtins.map(
             lambda abbreviation: abbreviation.upper(), abbreviations))
 # # python3.4
-# #         self.content = re.compile(
+# #         self.content = regularExpression.compile(
 # #             '((?:%s))((?:%s))' % (abbreviations, abbreviations)
 # #         ).sub('\\1%s\\2' % delimiter, self.content)
-        self.content = re.compile(
+        self.content = regularExpression.compile(
             '((?:%s))((?:%s))' % (abbreviations, abbreviations)
         ).sub('\\1%s\\2' % delimiter, convert_to_unicode(self.content))
 # #
-        self.content = re.compile(
+        self.content = regularExpression.compile(
             '([^%s])([A-Z][a-z]+)' % escaped_delimiter
         ).sub('\\1%s\\2' % delimiter, self.content)
 # # python3.4
-# #         self.content = re.compile(
+# #         self.content = regularExpression.compile(
 # #             '([a-z0-9])([A-Z])'
 # #         ).sub('\\1%s\\2' % delimiter, self.content).lower()
-        self.content = re.compile(
+        self.content = regularExpression.compile(
             '([a-z0-9])([A-Z])'
         ).sub('\\1%s\\2' % delimiter, self.content).lower().encode(
             ENCODING)
 # #
         return self
 
-    @JointPoint
+    @JointPoint(Class.pseudo_property)
 # # python3.4
 # #     def get_delimited(
 # #         self: Self, delimiter='-', search_pattern='a-zA-Z'
@@ -1464,34 +1561,34 @@ class String(Object, builtins.str):
 
             Examples:
 
-            >>> String().get_delimited().content
+            >>> String().delimited.content
             ''
 
-            >>> String('a b').get_delimited().content
+            >>> String('a b').delimited.content
             'a-b'
 
-            >>> String('a b_').get_delimited().content
+            >>> String('a b_').delimited.content
             'a-b'
 
-            >>> String('ab').get_delimited().content
+            >>> String('ab').delimited.content
             'ab'
 
-            >>> String(' ').get_delimited().content
+            >>> String(' ').delimited.content
             ''
 
-            >>> String('   a ').get_delimited().content
+            >>> String('   a ').delimited.content
             'a'
 
-            >>> String(' -  a _').get_delimited().content
+            >>> String(' -  a _').delimited.content
             'a'
 
-            >>> String('\\na').get_delimited().content
+            >>> String('\\na').delimited.content
             'a'
 
-            >>> String('Get in touch').get_delimited().content
+            >>> String('Get in touch').delimited.content
             'Get-in-touch'
 
-            >>> String("I'm cool").get_delimited().content
+            >>> String("I'm cool").delimited.content
             'I-m-cool'
         '''
         return self.sub(
@@ -1500,13 +1597,11 @@ class String(Object, builtins.str):
             ), '\\1'
         ).sub('[^%s]+' % search_pattern, delimiter)
 
-        # # endregion
+        # # # region validation
 
-        # # region validation
-
-    @JointPoint
-# # python3.4     def validate_shell(self: Self) -> Self:
-    def validate_shell(self):
+    @JointPoint(Class.pseudo_property)
+# # python3.4     def get_shell_validated(self: Self) -> Self:
+    def get_shell_validated(self):
         '''
             Validates the current string for using as a command in shell. \
             Special shell command chars will be escaped.
@@ -1515,12 +1610,10 @@ class String(Object, builtins.str):
 
             >>> String(
             ...     'a new folder with special signs "&"'
-            ... ).validate_shell() # doctest: +ELLIPSIS
-            Object of "String" with "a\ new\ fol...ial\ signs\ \\"\&\\"" saved.
+            ... ).shell_validated # doctest: +ELLIPSIS
+            Object of "str" ('a\\\\ new...ial\\\\ signs\\\\ \\\\"\\\\&\\\\"').
 
-            >>> String(
-            ...     ''
-            ... ).validate_shell().content
+            >>> String('').shell_validated.content
             ''
 
             >>> if sys.version_info.major < 3:
@@ -1528,7 +1621,7 @@ class String(Object, builtins.str):
             ... else:
             ...     String(
             ...         """[\"'`()&$ -]"""
-            ...     ).validate_shell().content == (
+            ...     ).shell_validated.content == (
             ...         '[\\\\"\\\\\\'\\\\`\\\\(\\\\)\\\\&\\\\$\\\\ \\\\-]')
             True
         '''
@@ -1538,23 +1631,23 @@ class String(Object, builtins.str):
             search=self.__class__.get_escaping_replace_dictionary(
                 self.SPECIAL_SHELL_SEQUENCES))
 
-    @JointPoint
-# # python3.4     def validate_html(self: Self) -> Self:
-    def validate_html(self):
+    @JointPoint(Class.pseudo_property)
+# # python3.4     def get_html_validated(self: Self) -> Self:
+    def get_html_validated(self):
 # #
         '''
             Validates current string for using as snippet in a html document.
 
             Examples:
 
-            >>> String('<html></html>').validate_html().content
+            >>> String('<html></html>').html_validated.content
             '&lt;html&gt;&lt;/html&gt;'
         '''
         return self.replace(self.SPECIAL_HTML_SEQUENCES)
 
-    @JointPoint
-# # python3.4     def validate_regex(self: Self, exclude_symbols=()) -> Self:
-    def validate_regex(self, exclude_symbols=()):
+    @JointPoint(Class.pseudo_property)
+# # python3.4     def get_regex_validated(self: Self, exclude_symbols=()) -> Self:
+    def get_regex_validated(self, exclude_symbols=()):
         '''
             Validates the current string for using in a regular expression \
             pattern. Special regular expression chars will be escaped.
@@ -1564,21 +1657,21 @@ class String(Object, builtins.str):
 
             Examples:
 
-            >>> String("that's no regex: .*$").validate_regex()
-            Object of "String" with "that's no regex: \.\*\$" saved.
+            >>> String("that's no regex: .*$").regex_validated
+            Object of "str" ("that's no regex: \\\\.\\\\*\\\\$").
 
-            >>> String().validate_regex(exclude_symbols=()).content
+            >>> String().get_regex_validated(exclude_symbols=()).content
             ''
 
-            >>> String('-\[]()^$*+.}-').validate_regex(('}',)).content
+            >>> String('-\[]()^$*+.}-').get_regex_validated(('}',)).content
             '\\\\-\\\\\\\\\\\\[\\\\]\\\\(\\\\)\\\\^\\\\$\\\\*\\\\+\\\\.}\\\\-'
 
-            >>> String('-\[]()^$*+.{}-').validate_regex(
+            >>> String('-\[]()^$*+.{}-').get_regex_validated(
             ...     ('[', ']', '(', ')', '^', '$', '*', '+', '.', '{')
             ... ).content
             '\\\\-\\\\\\\\[]()^$*+.{\\\\}\\\\-'
 
-            >>> String('-').validate_regex(('\\\\',)).content
+            >>> String('-').get_regex_validated(('\\\\',)).content
             '\\\\-'
         '''
         '''The escape sequence must also be escaped; but at first.'''
@@ -1590,9 +1683,9 @@ class String(Object, builtins.str):
                     builtins.set(self.SPECIAL_REGEX_SEQUENCES) -
                     builtins.set(exclude_symbols))))
 
-    @JointPoint
-# # python3.4     def validate_format(self: Self) -> Self:
-    def validate_format(self):
+    @JointPoint(Class.pseudo_property)
+# # python3.4     def get_format_validated(self: Self) -> Self:
+    def get_format_validated(self):
         '''
             Validates the current string for using in a string with \
             placeholder like "{name}". It will be escaped to not interpreted \
@@ -1600,24 +1693,24 @@ class String(Object, builtins.str):
 
             Examples:
 
-            >>> String("that's no {placeholder}").validate_format()
-            Object of "String" with "that's no \{placeholder\}" saved.
+            >>> String("that's no {placeholder}").format_validated
+            Object of "str" ("that's no \\\\{placeholder\\\\}").
 
-            >>> String().validate_format().content
+            >>> String().format_validated.content
             ''
         '''
 # # python3.4
-# #         self.content = re.compile('{([a-z]+)}').sub(
+# #         self.content = regularExpression.compile('{([a-z]+)}').sub(
 # #             '\{\\1\}', self.content)
-        self.content = re.compile('{([a-z]+)}').sub(
+        self.content = regularExpression.compile('{([a-z]+)}').sub(
             '\{\\1\}', convert_to_unicode(self.content)
         ).encode(ENCODING)
 # #
         return self
 
-    @JointPoint
-# # python3.4     def validate_url(self: Self) -> Self:
-    def validate_url(self):
+    @JointPoint(Class.pseudo_property)
+# # python3.4     def get_url_validated(self: Self) -> Self:
+    def get_url_validated(self):
         '''
             Validates a given url by escaping special chars.
 
@@ -1625,10 +1718,10 @@ class String(Object, builtins.str):
 
             >>> String(
             ...     'here%20is%20no%20%22url%22%20present!+'
-            ... ).validate_url()
-            Object of "String" with "here is no "url" present! " saved.
+            ... ).url_validated
+            Object of "str" ('here is no "url" present! ').
 
-            >>> String('').validate_url().content
+            >>> String('').url_validated.content
             ''
 
             >>> if sys.version_info.major < 3:
@@ -1636,19 +1729,22 @@ class String(Object, builtins.str):
             ... else:
             ...     String(
             ...         '[+%20%22%2F%7E%C3%A4%C3%84%C3%B6]'
-            ...     ).validate_url().content == '[  "/~Ã¤ÃÃ¶]'
+            ...     ).url_validated.content == '[  "/~Ã¤ÃÃ¶]'
             True
 
             >>> if sys.version_info.major < 3:
             ...     True
             ... else:
-            ...     String('[%C3%96%C3%BC%C3%9C]').validate_url(
-            ...         ).content == '[ÃÃ¼Ã]'
+            ...     String(
+            ...         '[%C3%96%C3%BC%C3%9C]'
+            ...     ).url_validated.content == '[ÃÃ¼Ã]'
             True
         '''
         search = self.SPECIAL_URL_SEQUENCES
         search.update(self.NON_STANDARD_SPECIAL_URL_SEQUENCES)
         return self.replace(search)
+
+        # # # endregion
 
         # # endregion
 
@@ -1714,10 +1810,10 @@ class String(Object, builtins.str):
             Examples:
 
             >>> String('hans').replace('ans', 'ut')
-            Object of "String" with "hut" saved.
+            Object of "str" ('hut').
 
             >>> String().replace('hans', 'peter')
-            Object of "String" with "" saved.
+            Object of "str" ('').
 
             >>> String().replace('hans', 'peter').content
             ''
@@ -1757,10 +1853,11 @@ class String(Object, builtins.str):
     def sub(self, search, replace=None, *arguments, **keywords):
 # #
         '''
-            Implements the pythons native "re.sub()" method in an object \
-            oriented way. This method serves additionally dictionaries as \
-            "search" parameter for multiple replacements. If you use \
-            dictionaries, the second parameter "replace" becomes useless.
+            Implements the pythons native "regularExpression.sub()" method in \
+            an object oriented way. This method serves additionally \
+            dictionaries as "search" parameter for multiple replacements. If \
+            you use dictionaries, the second parameter "replace" becomes \
+            useless.
 
             **search**  - regular expression search pattern
 
@@ -1768,7 +1865,7 @@ class String(Object, builtins.str):
                           sequence
 
             Additional arguments and keywords are forwarded to python's \
-            native "re.sub()" method.
+            native "regularExpression.sub()" method.
 
             Return the string obtained by replacing the leftmost \
             non-overlapping occurrences of pattern in string by the \
@@ -1801,15 +1898,15 @@ class String(Object, builtins.str):
             replacement such as "\g<2>0". "\20" would be interpreted as a \
             reference to group 20, not a reference to group 2 followed by the \
             literal character "0". The backreference "\g<0>" substitutes in \
-            the entire substring matched by the RE.
+            the entire substring matched by the regularExpression.
 
             Examples:
 
             >>> String('hans').sub('([^a]+)', ' jau-suffix ')
-            Object of "String" with " jau-suffix a jau-suffix " saved.
+            Object of "str" (' jau-suffix a jau-suffix ').
 
             >>> String('hans').sub('n', 'l')
-            Object of "String" with "hals" saved.
+            Object of "str" ('hals').
 
             >>> String().sub('n', 'l').content
             ''
@@ -1824,7 +1921,8 @@ class String(Object, builtins.str):
             for search_string, replacement in search.items():
                 '''Take this method name via introspection.'''
                 self.content = builtins.getattr(
-                    re.compile(search_string), inspect.stack()[0][3]
+                    regularExpression.compile(search_string),
+                    inspect.stack()[0][3]
                 )(replacement, self.content, *arguments, **keywords)
         else:
             '''
@@ -1833,10 +1931,10 @@ class String(Object, builtins.str):
             '''
 # # python3.4
 # #             self.content = builtins.getattr(
-# #                 re.compile(search), inspect.stack()[0][3]
+# #                 regularExpression.compile(search), inspect.stack()[0][3]
 # #             )(replace, self.content, *arguments, **keywords)
             self.content = builtins.getattr(
-                re.compile(search), inspect.stack()[0][3]
+                regularExpression.compile(search), inspect.stack()[0][3]
             )(replace, convert_to_unicode(
                 self.content
             ), *arguments, **keywords).encode(ENCODING)
@@ -1852,20 +1950,21 @@ class String(Object, builtins.str):
     def subn(self, search, replace='', *arguments, **keywords):
 # #
         '''
-            Implements the pythons native "re.subn()" method in an object \
-            oriented way. This method serves additionally dictionaries as \
-            "search" parameter for multiple replacements. If you use \
-            dictionaries, the second parameter "replace" becomes useless.
+            Implements the pythons native "regularExpression.subn()" method \
+            in an object oriented way. This method serves additionally \
+            dictionaries as "search" parameter for multiple replacements. If \
+            you use dictionaries, the second parameter "replace" becomes \
+            useless.
 
-            Perform the same operation as "re.sub()", but returns a tuple: \
-            ("new_string", "number_of_subs_made").
+            Perform the same operation as "regularExpression.sub()", but \
+            returns a tuple: ("new_string", "number_of_subs_made").
 
             **search**  - regular expression search pattern
 
             **replace** - string to replace with given search sequence
 
-            Additional arguments and keywords are forwarded to pythons's native
-            "re.subn()" method.
+            Additional arguments and keywords are forwarded to pythons's \
+            native "regularExpression.subn()" method.
 
             Examples:
 
@@ -1886,14 +1985,15 @@ class String(Object, builtins.str):
             for search_string, replacement in search.items():
 # # python3.4
 # #                 self.content, temp_number_of_replaces = builtins.getattr(
-# #                     re.compile(builtins.str(search_string)),
+# #                     regularExpression.compile(builtins.str(search_string)),
 # #                     inspect.stack()[0][3]
 # #                 )(
 # #                     builtins.str(replacement), self.content,
 # #                     *arguments, **keywords)
                 self.content, temp_number_of_replaces = builtins.getattr(
-                    re.compile(convert_to_unicode(search_string)),
-                    inspect.stack()[0][3]
+                    regularExpression.compile(convert_to_unicode(
+                        search_string
+                    )), inspect.stack()[0][3]
                 )(convert_to_unicode(replacement), self.content,
                   *arguments, **keywords)
 # #
@@ -1901,12 +2001,12 @@ class String(Object, builtins.str):
         else:
 # # python3.4
 # #             self.content, number_of_replaces = builtins.getattr(
-# #                 re.compile(builtins.str(search)),
+# #                 regularExpression.compile(builtins.str(search)),
 # #                 inspect.stack()[0][3]
 # #             )(builtins.str(replace), self.content, *arguments,
 # #               **keywords)
             self.content, number_of_replaces = builtins.getattr(
-                re.compile(convert_to_unicode(search)),
+                regularExpression.compile(convert_to_unicode(search)),
                 inspect.stack()[0][3]
             )(convert_to_unicode(replace), self.content, *arguments,
               **keywords)
@@ -1929,16 +2029,16 @@ class String(Object, builtins.str):
 
             >>> string = String('hans\\npeter\\nklaus and sally\\n')
             >>> string.readline()
-            Object of "String" with "hans" saved.
+            Object of "str" ('hans').
             >>> string.readline()
-            Object of "String" with "peter" saved.
+            Object of "str" ('peter').
             >>> string.readline().content
             'klaus and sally'
             >>> string.readline()
             False
 
             >>> String('hans').readline()
-            Object of "String" with "hans" saved.
+            Object of "str" ('hans').
 
             >>> string = String('hans')
             >>> string.readline().content
@@ -2000,12 +2100,12 @@ class String(Object, builtins.str):
             Examples:
 
             >>> String('^--(?P<name>.+)--$').delete_variables_from_regex()
-            Object of "String" with "^--(.+)--$" saved.
+            Object of "str" ('^--(.+)--$').
 
             >>> String(
             ...     '^--(?P<a>.+)--(?P<b>.+)--$'
             ... ).delete_variables_from_regex()
-            Object of "String" with "^--(.+)--(.+)--$" saved.
+            Object of "str" ('^--(.+)--(.+)--$').
         '''
         return self.subn('\(\?P<[a-z]+>(?P<pattern>.+?)\)', '(\g<pattern>)')[0]
 
@@ -2191,10 +2291,10 @@ class Dictionary(Object, builtins.dict):
             Examples:
 
             >>> Dictionary((('hans', 5), (4, 3))) # doctest: +ELLIPSIS
-            Object of "Dictionary" (...hans...5...).
+            Object of "dict" (...hans...5...).
 
             >>> Dictionary() # doctest: +ELLIPSIS
-            Object of "Dictionary" ({}).
+            Object of "dict" ({}).
         '''
 
         # # # region properties
@@ -2207,21 +2307,6 @@ class Dictionary(Object, builtins.dict):
         self.content = builtins.dict(content)
 
         # # # endregion
-
-    @JointPoint
-# # python3.4     def __repr__(self: Self) -> builtins.str:
-    def __repr__(self):
-        '''
-            Invokes if this object should describe itself by a string.
-
-            Examples:
-
-            >>> repr(Dictionary({'a': 'hans'}))
-            'Object of "Dictionary" ({\\'a\\': \\'hans\\'}).'
-        '''
-        return 'Object of "{class_name}" ({content}).'.format(
-            class_name=self.__class__.__name__,
-            content=builtins.repr(self.content))
 
     @JointPoint
 # # python3.4     def __hash__(self: Self) -> builtins.int:
@@ -2289,6 +2374,85 @@ class Dictionary(Object, builtins.dict):
 # #
         return builtins.tuple(builtins.sorted(immutable.items()))
 
+    # TODO check
+    @JointPoint(Class.pseudo_property)
+# # python3.4
+# #     def get_compatible_types(
+# #         self: Self, *arguments: (builtins.object, builtins.type),
+# #         **keywords: (builtins.object, builtins.type)
+# #     ) -> (builtins.object, builtins.type):
+    def get_compatible_types(self, *arguments, **keywords):
+# #
+        '''
+            Converts dictionary where each type will be converted to a cross \
+            system compatible type. The result is serialiseable to json for \
+            example. This method provides the same interface as \
+            "convert()".
+
+            Examples:
+
+            TODO
+        '''
+# # python3.4
+# #         return self.convert(
+# #             *arguments,
+# #             key_wrapper=lambda key, value: self._convert_to_compatible_type(
+# #                 String(key).get_delimited_to_camel_case(
+# #                     preserve_wrong_formatted_abbreviations=True
+# #                 ).content if builtins.isinstance(
+# #                     key, builtins.str
+# #                 ) else key
+# #             ), value_wrapper=self._convert_to_compatible_type, **keywords)
+        return self.convert(
+            *arguments,
+            key_wrapper=lambda key, value: self._convert_to_compatible_type(
+                String(key).get_delimited_to_camel_case(
+                    preserve_wrong_formatted_abbreviations=True
+                ).content if builtins.isinstance(
+                    key, (builtins.unicode, builtins.str)
+                ) else key
+            ), value_wrapper=self._convert_to_compatible_type, **keywords)
+# #
+
+    # TODO check
+    @JointPoint(Class.pseudo_property)
+# # python3.4
+# #     def get_known_types(
+# #         self: Self, *arguments: (builtins.object, builtins.type),
+# #         **keywords: (builtins.object, builtins.type)
+# #     ) -> (builtins.object, builtins.type):
+    def get_known_types(self, *arguments, **keywords):
+# #
+        '''
+            Converts dictionary where each type will be tried to converted to \
+            a native python type. This method provides the same interface as \
+            "convert()".
+
+            Examples:
+
+            TODO
+        '''
+# # python3.4
+# #         return self.convert(
+# #             *arguments,
+# #             key_wrapper=lambda key, value: self._convert_to_known_type(
+# #                 String(
+# #                     key
+# #                 ).camel_case_to_delimited.content if builtins.isinstance(
+# #                     key, builtins.str
+# #                 ) else key
+# #             ), value_wrapper=self._convert_to_known_type, **keywords)
+        return self.convert(
+            *arguments,
+            key_wrapper=lambda key, value: self._convert_to_known_type(
+                String(
+                    key
+                ).camel_case_to_delimited.content if builtins.isinstance(
+                    key, (builtins.unicode, builtins.str)
+                ) else key
+            ), value_wrapper=self._convert_to_known_type, **keywords)
+# #
+
         # # endregion
 
     @JointPoint
@@ -2343,6 +2507,16 @@ class Dictionary(Object, builtins.dict):
         '''
             Converts all keys or values and nested keys or values with given \
             callback functions.
+
+            **key_wrapper**           - Function to convert each visited key
+
+            **value_wrapper**         - Function to convert each visited value
+
+            **no_wrap_indicator**     - Key name to skip conversion for \
+                                        corresponding value
+
+            **remove_wrap_indicator** - Removes wrap indicator und leaves its \
+                                        value untouched.
 
             Examples:
 
@@ -2506,6 +2680,32 @@ class Dictionary(Object, builtins.dict):
         # endregion
 
         # region protected methods
+
+    # TODO check
+    @JointPoint(builtins.classmethod)
+# # python3.4
+# #     def _convert_to_compatible_type(
+# #         cls, key: (builtins.object, builtins.type), value=Null
+# #     ) -> (builtins.object, builtins.type):
+    def _convert_to_compatible_type(cls, key, value=Null):
+# #
+        '''Converts data to python cross platform compatible data objects.'''
+        if value is Null:
+            value = key
+        return Object(content=value).compatible_type
+
+    # TODO check
+    # TODO check complexity everywhere
+    @JointPoint(builtins.classmethod)
+# # python3.4
+# #     def _convert_to_known_type(
+# #         cls, key: (builtins.object, builtins.type), value=Null
+# #     ) -> (builtins.object, builtins.type):
+    def _convert_to_known_type(cls, key, value=Null):
+# #
+        '''Converts interpretable data to python specific data objects.'''
+        return Object(content=key if value is Null else value).get_known_type(
+            description=None if value is Null else key)
 
     @JointPoint(builtins.classmethod)
 # # python3.4
@@ -3217,7 +3417,7 @@ class Module(Object):
         module.__exception__ = builtins.type(
             builtins.str('%sError') % String(
                 module.__module_name__
-            ).get_camel_case_capitalize().content, (builtins.Exception,), {
+            ).camel_case_capitalize.content, (builtins.Exception,), {
                 '__init__': lambda self, message, *arguments:
                 builtins.Exception.__init__(
                     self, message % arguments
@@ -3413,7 +3613,11 @@ class Time(Object):
 
     '''This class adds some features for dealing with times.'''
 
+    # region properties
+
     PATTERN = '(?P<hour>[0-9]{1,2}):(?P<minute>[0-9]{1,2})',
+
+    # endregion
 
     # region dynamic methods
 
@@ -3422,22 +3626,18 @@ class Time(Object):
     # # # region special
 
     @JointPoint
-# # python3.4
-# #     def __init__(
-# #         self: Self, content=0, **keywords: builtins.object
-# #     ) -> None:
-    def __init__(self, content=0, **keywords):
-# #
+# # python3.4     def __init__(self: Self, content=0) -> None:
+    def __init__(self, content=0):
         '''
             Generates a new high level wrapper for times.
 
             Examples:
 
             >>> Time(5)
-            Object of "Time" datetime.time(0, 0, 5).
+            Object of "time" (datetime.time(0, 0, 5)).
 
             >>> Time()
-            Object of "Time" datetime.time(0, 0).
+            Object of "time" (datetime.time(0, 0)).
 
             >>> Time('08:30').content
             datetime.time(8, 30)
@@ -3447,11 +3647,16 @@ class Time(Object):
 
         content = String(content).get_number(default=content)
         # TODO check branches.
-        if builtins.isinstance(content, builtins.unicode):
+        if builtins.isinstance(content, NativeTime):
+            self.content = content
+        elif builtins.isinstance(content, builtins.unicode):
             for pattern in self.PATTERN:
 # # python3.4
-# #                 match = re.compile(pattern).fullmatch(content)
-                match = re.compile('(?:%s)$' % pattern).match(content)
+# #                 match = regularExpression.compile(pattern).fullmatch(
+# #                     content)
+                match = regularExpression.compile(
+                    '(?:%s)$' % pattern
+                ).match(content)
 # #
                 if match:
                     result = {}
@@ -3477,20 +3682,225 @@ class Time(Object):
 
         # # # endregion
 
+    # # # endregion
+
+    # # endregion
+
+    # endregion
+
+
+class DateTime(Object):
+
+    '''This class adds some features for dealing with date times.'''
+
+    # region dynamic me thods
+
+    # # region public
+
+    # # # region special
+
     @JointPoint
-# # python3.4     def __repr__(self: Self) -> builtins.str:
-    def __repr__(self):
+# # python3.4     def __init__(self: Self, content=0) -> None:
+    def __init__(self, content=0):
         '''
-            Invokes if this object should describe itself by a string.
+            Generates a new high level wrapper for date times.
 
             Examples:
 
-            >>> repr(Time(5))
-            'Object of "Time" datetime.time(0, 0, 5).'
+            >>> DateTime(123456).content
+            datetime.datetime(1970, 1, 2, 11, 17, 36)
+
+            TODO
         '''
-        return 'Object of "{class_name}" {content}.'.format(
-            class_name=self.__class__.__name__,
-            content=builtins.repr(self.content))
+        # TODO check branches
+        self.content = None
+        if builtins.isinstance(content, NativeDateTime):
+            self.content = content
+        elif builtins.isinstance(content, (builtins.int, builtins.float)):
+            self.content = NativeDateTime.fromtimestamp(content)
+        else:
+            converted_value = String(content).number
+            if builtins.isinstance(converted_value, (
+                builtins.int, builtins.float
+            )):
+                self.content = NativeDateTime.fromtimestamp(converted_value)
+# # python3.4
+# #             if builtins.isinstance(content, builtins.str):
+            if builtins.isinstance(content, (
+                builtins.unicode, builtins.str
+            )):
+# #
+                for delimiter in ('/', '.', ':'):
+                    for year_format in ('%y', '%Y'):
+                        for ms_format in ('', ':%f'):
+                            for date_time_format in (
+                                '%c',
+                                '%d{delimiter}%m{delimiter}{year} '
+                                '%X{microsecond}',
+                                '%m{delimiter}%d{delimiter}{year} '
+                                '%X{microsecond}',
+                                '%w{delimiter}%m{delimiter}{year} '
+                                '%X{microsecond}',
+                            ):
+                                try:
+                                    self.content = NativeDateTime.strptime(
+                                        content, date_time_format.format(
+                                            delimiter=delimiter,
+                                            year=year_format,
+                                            microsecond=ms_format))
+                                except builtins.ValueError:
+                                    pass
+                                else:
+                                    return
+                if self.content is None:
+                    raise __exception__(
+                        '"%s" couldn\'t be interpreted as date time.', content)
+
+    # # # endregion
+
+    # # endregion
+
+    # endregion
+
+
+class Date(Object):
+
+    '''This class adds some features for dealing with date times.'''
+
+    # region properties
+
+    DATE_FORMATS = (
+        '^(?:[A-Za-z]{2}\. )?(?P<day>[0-9]{1,2})\.(?P<month>[0-9]{1,2})\.'
+        '(?P<year>[0-9]{4})',
+        '^(?:[A-Za-z]{2}\. )?(?P<month>[0-9]{1,2})/(?P<day>[0-9]{1,2})/'
+        '(?P<year>[0-9]{4})')
+    '''Known date formats to parse date strings.'''
+
+    # endregion
+
+    # region dynamic methods
+
+    # # region public
+
+    # # # region special
+
+    @JointPoint
+# # python3.4     def __init__(self: Self, content=0) -> None:
+    def __init__(self, content=0, **keywords):
+        '''
+            Generates a new high level wrapper for dates.
+
+            Examples:
+
+            >>> Date(12345).content
+            datetime.date(1970, 1, 1)
+
+            TODO
+        '''
+        # TODO check branches
+        self.content = None
+        if builtins.isinstance(content, NativeDate):
+            self.content = content
+        elif builtins.isinstance(content, (builtins.int, builtins.float)):
+            self.content = NativeDate.fromtimestamp(content)
+        else:
+            converted_value = String(content).number
+            if builtins.isinstance(converted_value, (
+                builtins.int, builtins.float
+            )):
+                self.content = NativeDate.fromtimestamp(converted_value)
+# # python3.4
+# #             if builtins.isinstance(content, builtins.str):
+            if builtins.isinstance(content, (builtins.unicode, builtins.str)):
+# #
+                for delimiter in ('/', '.', ':'):
+                    for year_format in ('%y', '%Y'):
+                        for date_format in (
+                            '%x', '%d{delimiter}%m{delimiter}{year}',
+                            '%m{delimiter}%d{delimiter}{year}',
+                            '%w{delimiter}%m{delimiter}{year}'
+                        ):
+                            try:
+# # python3.4
+# #                                 self.content = NativeDate.fromtimestamp(
+# #                                     NativeDateTime.strptime(
+# #                                         content, date_format.format(
+# #                                             delimiter=delimiter,
+# #                                             year=year_format
+# #                                         )).timestamp())
+                                self.content = NativeDate.fromtimestamp(
+                                    time.mktime(NativeDateTime.strptime(
+                                        content, date_format.format(
+                                            delimiter=delimiter,
+                                            year=year_format
+                                        )).timetuple()))
+# #
+                            except builtins.ValueError:
+                                pass
+                if self.content is None:
+                    for date_pattern in self.DATE_FORMATS:
+# # python3.4
+# #                         match = regularExpression.compile(
+# #                             date_pattern
+# #                         ).match(content)
+                        match = regularExpression.compile(
+                            '(?:%s)$' % date_pattern
+                        ).match(content)
+# #
+                        if match:
+                            self.content = NativeDate(
+                                year=builtins.int(match.group('year')),
+                                month=builtins.int(match.group('month')),
+                                day=builtins.int(match.group('day')))
+                if self.content is None:
+                    raise __exception__(
+                        '"%s" couldn\'t be interpreted as date.', content)
+
+    # # # endregion
+
+    # # endregion
+
+    # endregion
+
+
+class TimeDelta(Object):
+
+    '''This class adds some features for dealing with date times.'''
+
+    # region dynamic methods
+
+    # # region public
+
+    # # # region special
+
+    @JointPoint
+# # python3.4     def __init__(self: Self, content=0) -> None:
+    def __init__(self, content=0, default=None):
+        '''
+            Generates a new high level wrapper for dates.
+
+            Examples:
+
+            >>> TimeDelta(12345).content
+            datetime.timedelta(0, 12345)
+
+            TODO
+        '''
+        # TODO check branches
+        self.content = None
+        if builtins.isinstance(content, NativeTimeDelta):
+            self.content = content
+        elif builtins.isinstance(content, (builtins.int, builtins.float)):
+            self.content = NativeTimeDelta(seconds=content)
+        else:
+            converted_value = String(content).number
+            if builtins.isinstance(converted_value, (
+                builtins.int, builtins.float
+            )):
+                self.content = NativeTimeDelta(seconds=converted_value)
+            else:
+                raise __exception__(
+                    '"%s" couldn\'t be interpreted as time delta.', content)
 
     # # # endregion
 

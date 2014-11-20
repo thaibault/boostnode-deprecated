@@ -40,7 +40,7 @@ from copy import deepcopy
 import inspect
 import mimetypes
 import os
-import re
+import re as regularExpression
 import shutil
 import stat
 import sys
@@ -364,10 +364,10 @@ class Handler(Class):
         if decimal is None:
             decimal = cls.DECIMAL
 # # python3.4
-# #         match = re.compile(cls.REGEX_FORMAT.format(
+# #         match = regularExpression.compile(cls.REGEX_FORMAT.format(
 # #             units=cls.determine_regex_units(formats=cls.FORMATS)
 # #         )).fullmatch(size_and_unit.lower())
-        match = re.compile('(?:%s)$' % cls.REGEX_FORMAT.format(
+        match = regularExpression.compile('(?:%s)$' % cls.REGEX_FORMAT.format(
             units=cls.determine_regex_units(formats=cls.FORMATS)
         )).match(size_and_unit.lower())
 # #
@@ -1596,11 +1596,13 @@ class Handler(Class):
             path = path[:-builtins.len(os.sep)]
 # # python3.4
 # #         if((Platform().operating_system == 'windows' or
-# #             force_windows_behavior) and re.compile('[A-Za-z]:').fullmatch(
-# #                 path)):
+# #             force_windows_behavior) and regularExpression.compile(
+# #                 '[A-Za-z]:'
+# #             ).fullmatch(path)):
         if((Platform().operating_system == 'windows' or
-            force_windows_behavior) and re.compile('[A-Za-z]:$').match(
-                path)):
+            force_windows_behavior) and regularExpression.compile(
+                '[A-Za-z]:$'
+            ).match(path)):
 # #
             return path
 # # python3.4
@@ -1889,12 +1891,16 @@ class Handler(Class):
 # # python3.4
 # #         return String(
 # #             self.portable_link_pattern
-# #         ).validate_regex(exclude_symbols=('{', '}', '-')).content.format(
+# #         ).get_regex_validated(exclude_symbols=(
+# #             '{', '}', '-'
+# #         )).content.format(
 # #             size='(?P<size>[0-9]+)', label='(?P<label>.*?)',
 # #             path='(?P<path>.*?)')
         return convert_to_unicode(String(
             self.portable_link_pattern
-        ).validate_regex(exclude_symbols=('{', '}', '-')).content).format(
+        ).get_regex_validated(exclude_symbols=(
+            '{', '}', '-'
+        )).content).format(
             size='(?P<size>[0-9]+)', label='(?P<label>.*?)',
             path='(?P<path>.*?)')
 # #
@@ -2653,7 +2659,7 @@ class Handler(Class):
             True
         '''
         for pattern in self.MEDIA_MIME_TYPE_PATTERN:
-            if re.search(pattern, self.mime_type):
+            if regularExpression.search(pattern, self.mime_type):
                 return True
         return False
 
@@ -2730,12 +2736,12 @@ class Handler(Class):
 # # python3.4
 # #                 return(
 # #                     builtins.len(file_content) <= maximum_length and
-# #                     builtins.bool(re.compile(
+# #                     builtins.bool(regularExpression.compile(
 # #                         self.portable_regex_link_pattern
 # #                     ).fullmatch(file_content)))
                 return(
                     builtins.len(file_content) <= maximum_length and
-                    builtins.bool(re.compile(
+                    builtins.bool(regularExpression.compile(
                         '(?:%s)$' % self.portable_regex_link_pattern
                     ).match(file_content)))
 # #
@@ -4232,10 +4238,10 @@ class Handler(Class):
         '''
         if self.is_portable_link():
 # # python3.4
-# #             path = re.compile(self.portable_regex_link_pattern).fullmatch(
-# #                 self.content.strip()
-# #             ).group('path')
-            path = re.compile(
+# #             path = regularExpression.compile(
+# #                 self.portable_regex_link_pattern
+# #             ).fullmatch(self.content.strip()).group('path')
+            path = regularExpression.compile(
                 '(?:%s)$' % self.portable_regex_link_pattern
             ).match(self.content.strip()).group('path')
 # #
@@ -4433,8 +4439,10 @@ class Handler(Class):
         for file in self:
             for pattern in patterns:
 # # python3.4
-# #                 if re.compile(pattern).fullmatch(file.name):
-                if re.compile('(?:%s)$' % pattern).match(file.name):
+# #                 if regularExpression.compile(pattern).fullmatch(file.name):
+                if regularExpression.compile('(?:%s)$' % pattern).match(
+                    file.name
+                ):
 # #
                     file.remove_deep()
         return self
@@ -4630,7 +4638,7 @@ class Handler(Class):
             not self._path.startswith(
                 self.__class__._root_path[:-builtins.len(os.sep)])) and not
             ('windows' == Platform().operating_system and
-             re.compile('[a-zA-Z]:\\').match(self._path) and
+             regularExpression.compile('[a-zA-Z]:\\').match(self._path) and
              self.__class__._root_path == os.sep)):
             if self._path.startswith(os.sep):
                 self._path = self.__class__._root_path[:-builtins.len(
@@ -4705,10 +4713,14 @@ class Handler(Class):
         self._path = self._initialized_path
 # # python3.4
 # #         self._path = os.path.normpath(os.path.expanduser(self._path))
-# #         if re.compile('[a-zA-Z]:').fullmatch(self._initialized_path):
+# #         if regularExpression.compile('[a-zA-Z]:').fullmatch(
+# #             self._initialized_path
+# #         ):
         self._path = convert_to_unicode(os.path.normpath(
             os.path.expanduser(convert_to_string(self._path))))
-        if re.compile('[a-zA-Z]:$').match(self._initialized_path):
+        if regularExpression.compile('[a-zA-Z]:$').match(
+            self._initialized_path
+        ):
 # #
             self._path += os.sep
         if not self.is_referenced_via_absolute_path():

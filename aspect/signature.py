@@ -46,7 +46,7 @@ sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
 # # python3.4 pass
 from boostNode import convert_to_unicode
-from boostNode.extension.type import Self, SelfClass, SelfClassObject
+from boostNode.extension.type import Self, SelfClass, SelfClassObject, Null
 # # python3.4
 # # from boostNode.paradigm.aspectOrientation import Argument, CallJointPoint
 pass
@@ -442,7 +442,7 @@ class CheckObject(builtins.object):
             SignatureError: "B.b()" expects instance of "bool" for "return ...
         '''
         if not (expected_type is builtins.type(None) or
-                expected_type is given_type or
+                expected_type is Null, expected_type is given_type or
                 builtins.issubclass(given_type, expected_type)):
             if expected_type is Self:
                 self._handle_self(given_type, name, value)

@@ -59,7 +59,7 @@ import posixpath
 # # python3.4 import socketserver
 pass
 import ssl
-import re
+import re as regularExpression
 import signal
 import socket
 import subprocess
@@ -262,8 +262,12 @@ class MultiProcessingHTTPServer(
         ).strip()
         for pattern in self.web.same_process_request_whitelist:
 # # python3.4
-# #             if re.compile(pattern).fullmatch(first_request_line.decode()):
-            if re.compile('(?:%s)$' % pattern).match(first_request_line):
+# #             if regularExpression.compile(pattern).fullmatch(
+# #                 first_request_line.decode()
+# #             ):
+            if regularExpression.compile('(?:%s)$' % pattern).match(
+                first_request_line
+            ):
 # #
                 return True
         return False
@@ -1469,8 +1473,8 @@ class CGIHTTPRequestHandler(
             included in every response.
         '''
         self.server_version = '{program} {version} {status}'.format(
-            program=String(__module_name__).get_camel_case_capitalize(
-            ).content, version=__version__, status=__status__)
+            program=String(__module_name__).camel_case_capitalize.content,
+            version=__version__, status=__status__)
         '''Saves gziped encoded output.'''
         self._encoded_output = None
         '''
@@ -1844,11 +1848,11 @@ class CGIHTTPRequestHandler(
             url = sys.argv[1]
         if url:
 # # python3.4
-# #             url = re.compile(
+# #             url = regularExpression.compile(
 # #                 self.server.web.request_parameter_delimiter
 # #             ).sub('?', url, 1)
 # #             parse_result = parse_url(url)
-            url = re.compile(
+            url = regularExpression.compile(
                 self.server.web.request_parameter_delimiter
             ).sub('?', convert_to_unicode(url), 1)
             parse_result = parse_url(convert_to_string(url))
@@ -2147,7 +2151,7 @@ class CGIHTTPRequestHandler(
                     cookie.load(convert_to_string(cookie_content))
 # #
                 except cookies.CookieError as exception:
-                    new_cookie_content = re.compile(
+                    new_cookie_content = regularExpression.compile(
                         '([^=]*)/+([^=]*=[^;]*(?:;|$))'
                     ).sub('\\1\\2', cookie_content)
                     if cookie_content == new_cookie_content:
@@ -2284,7 +2288,9 @@ class CGIHTTPRequestHandler(
                     cookie_object[convert_to_string(key)] = value
             cookie = cookie_object
         expires = self.date_time_string(time.time() + maximum_age_in_seconds)
-        cookie = re.compile('^[^:]+: *').sub('', cookie.output()) + (
+        cookie = regularExpression.compile('^[^:]+: *').sub(
+            '', cookie.output()
+        ) + (
             ';version="%s";expires=%s;Max-Age=%d;Path=%s;comment=%s;'
             'domain=%s%s%s' % (
                 builtins.str(version), expires, maximum_age_in_seconds, path,
@@ -2618,14 +2624,14 @@ class CGIHTTPRequestHandler(
                 self._authentication_location = \
                     self._authentication_location.directory
 # # python3.4
-# #             login_data_match = re.compile(
+# #             login_data_match = regularExpression.compile(
 # #                 '(?P<name>[^:]+):(?P<password>.+)$'
 # #             ).match(base64_decode(
 # #                 self.headers.get('authorization', '')[builtins.len(
 # #                     'Basic '
 # #                 ):]
 # #             ).decode(self.server.web.encoding))
-            login_data_match = re.compile(
+            login_data_match = regularExpression.compile(
                 '(?P<name>[^:]+):(?P<password>.+)$'
             ).match(base64_decode(self.headers.get(
                 'authorization', ''
@@ -2786,14 +2792,14 @@ class CGIHTTPRequestHandler(
         __logger__.info(
             'Use authentication file "%s".', authentication_file._path)
 # # python3.4
-# #         match = re.compile(
+# #         match = regularExpression.compile(
 # #             self.server.web.authentication_file_content_pattern
 # #         ).fullmatch(authentication_file.content.strip())
 # #         return base64_encode(('%s:%s' % (
 # #             match.group('name'), match.group('password')
 # #         )).encode(self.server.web.encoding)).decode(
 # #             self.server.web.encoding)
-        match = re.compile(
+        match = regularExpression.compile(
             '(?:%s)$' % self.server.web.authentication_file_content_pattern
         ).match(authentication_file.content.strip())
         return base64_encode(
@@ -3034,7 +3040,8 @@ class CGIHTTPRequestHandler(
             if self.requested_file.is_file():
                 error_message += \
                     '. Detected mime-type "%s"' % self.requested_file.mime_type
-        self.send_error(404, re.compile('\n+').sub('\n', error_message))
+        self.send_error(404, regularExpression.compile('\n+').sub(
+            '\n', error_message))
         return self
 
     @JointPoint
@@ -3049,8 +3056,10 @@ class CGIHTTPRequestHandler(
             matches the given subject.
         '''
         for pattern in patterns:
-# # python3.4             if re.compile(pattern).fullmatch(subject):
-            if re.compile('(?:%s)$' % pattern).match(subject):
+# # python3.4
+# #             if regularExpression.compile(pattern).fullmatch(subject):
+            if regularExpression.compile('(?:%s)$' % pattern).match(subject):
+# #
                 return subject
         return False
 
@@ -3072,8 +3081,9 @@ class CGIHTTPRequestHandler(
 # #
         '''Checks if current request matches on of the given pattern.'''
 # # python3.4
-# #         patterns = re.compile('(?P<request_type>.+?):(?P<request_uri>.*)')
-        patterns = re.compile(
+# #         patterns = regularExpression.compile(
+# #             '(?P<request_type>.+?):(?P<request_uri>.*)')
+        patterns = regularExpression.compile(
             '^(?P<request_type>.+?):(?P<request_uri>.*)$')
 # #
         request_type_uppercase = self.external_request_type.upper()
@@ -3084,11 +3094,12 @@ class CGIHTTPRequestHandler(
 # # python3.4
 # #             if(request_type_uppercase in request_types or
 # #                '*' in request_types
-# #                ) and re.compile(match.group('request_uri')).fullmatch(
-# #                    self.external_request_uri) is not None:
+# #                ) and regularExpression.compile(match.group(
+# #                    'request_uri'
+# #                )).fullmatch(self.external_request_uri) is not None:
             if(request_type_uppercase in request_types or
                '*' in request_types
-               ) and re.compile('(?:%s)$' % match.group(
+               ) and regularExpression.compile('(?:%s)$' % match.group(
                    'request_uri'
                )).match(self.external_request_uri) is not None:
 # #
@@ -3192,8 +3203,10 @@ class CGIHTTPRequestHandler(
             http redirection code.
         '''
 # # python3.4
-# #         patterns = re.compile('(?P<request_type>.+?):(?P<request_uri>.*)')
-        patterns = re.compile('(?P<request_type>.+?):(?P<request_uri>.*)$')
+# #         patterns = regularExpression.compile(
+# #             '(?P<request_type>.+?):(?P<request_uri>.*)')
+        patterns = regularExpression.compile(
+            '(?P<request_type>.+?):(?P<request_uri>.*)$')
 # #
         request_type_uppercase = self.request_type.upper()
         redirects = self.server.web.internal_redirects
@@ -3204,13 +3217,14 @@ class CGIHTTPRequestHandler(
             source_match = patterns.match(source)
             request_types = source_match.group('request_type').split('|')
 # # python3.4
-# #             pattern = re.compile(source_match.group('request_uri'))
+# #             pattern = regularExpression.compile(source_match.group(
+# #                 'request_uri'))
 # #             if(request_type_uppercase in request_types or
 # #                '*' in request_types
 # #                ) and pattern.fullmatch(
 # #                    self.external_request_uri) is not None:
-            pattern = re.compile('(?:%s)$' % source_match.group(
-                'request_uri'))
+            pattern = regularExpression.compile(
+                '(?:%s)$' % source_match.group('request_uri'))
             if(request_type_uppercase in request_types or
                '*' in request_types
                ) and pattern.match(self.external_request_uri) is not None:
@@ -3223,9 +3237,9 @@ class CGIHTTPRequestHandler(
     @JointPoint
 # # python3.4
 # #     def _handle_matched_redirect(
-# #         self: Self, pattern: builtins.type(re.compile('')),
-# #         patterns: builtins.type(re.compile('')), target: builtins.str,
-# #         external: builtins.bool
+# #         self: Self, pattern: builtins.type(regularExpression.compile('')),
+# #         patterns: builtins.type(regularExpression.compile('')),
+# #         target: builtins.str, external: builtins.bool
 # #     ) -> Self:
     def _handle_matched_redirect(
         self, pattern, patterns, target, external
@@ -3246,7 +3260,7 @@ class CGIHTTPRequestHandler(
             for request in target_match.group('request_uri').split('#'):
                 self.request_uri = pattern.sub(
                     request, self.external_request_uri
-                ).format(host_name=re.compile(':[0-9]+$').sub(
+                ).format(host_name=regularExpression.compile(':[0-9]+$').sub(
                     '', self.host))
                 if FileHandler(location=self.request_uri):
                     break
@@ -3266,11 +3280,11 @@ class CGIHTTPRequestHandler(
 # #
         self._handle_redirect(external=False)
 # # python3.4
-# #         match = re.compile(
+# #         match = regularExpression.compile(
 # #             '[^/]*/+(?P<path>.*?)(?:{delimiter}(?P<parameter>.*))?'.format(
 # #                 delimiter=self.server.web.request_parameter_delimiter)
 # #         ).fullmatch(self.request_uri)
-        match = re.compile(
+        match = regularExpression.compile(
             '[^/]*/+(?P<path>.*?)'
             '(?:{delimiter}(?P<parameter>.*))?$'.format(
                 delimiter=self.server.web.request_parameter_delimiter)
@@ -3612,12 +3626,14 @@ class CGIHTTPRequestHandler(
                 given a 301 redirect will be returned to same request with \
                 trailing slash.
             '''
-            if not re.compile(
+            if not regularExpression.compile(
                 '/(%s.*)?$' % self.server.web.request_parameter_delimiter
             ).search(self.external_request_uri):
-                self.send_response(301).send_header('Location', re.compile(
-                    '((%s.*)?)$' % self.server.web.request_parameter_delimiter
-                ).sub('/\\1', self.external_request_uri))
+                self.send_response(301).send_header(
+                    'Location', regularExpression.compile(
+                        '((%s.*)?)$' %
+                        self.server.web.request_parameter_delimiter
+                    ).sub('/\\1', self.external_request_uri))
                 return self.end_headers()
             return self.list_directory()
         try:
@@ -3884,11 +3900,12 @@ class CGIHTTPRequestHandler(
                    debug):
                     program_description = ' "%s"' % self.request_arguments[0]
                 self.send_error(
-                    500, 'Internal server error with cgi program%s: "%s"' %
-                    (program_description, re.compile('\n+').sub('\n', errors)))
+                    500, 'Internal server error with cgi program%s: "%s"' % (
+                        program_description,
+                        regularExpression.compile('\n+').sub('\n', errors)))
             else:
                 '''Check if given output contains a header.'''
-                header_match = re.compile(
+                header_match = regularExpression.compile(
                     '[A-Z0-9]+/([0-9]+\.)+[0-9]+ [0-9]{3} [a-zA-Z ]+\n'
                     '([^:]+: .+\n)+\n.+'
                 ).match(output.decode(encoding=self.server.web.encoding))
@@ -4020,10 +4037,12 @@ class CGIHTTPRequestHandler(
                debug):
 # # python3.4
 # #                 self.send_error(500, '%s: %s' % (
-# #                     exception.__class__.__name__, re.compile('\n+').sub(
+# #                     exception.__class__.__name__,
+# #                     regularExpression.compile('\n+').sub(
 # #                         '\n', builtins.str(exception))))
                 self.send_error(500, '%s: %s' % (
-                    exception.__class__.__name__, re.compile('\n+').sub(
+                    exception.__class__.__name__,
+                    regularExpression.compile('\n+').sub(
                         '\n', convert_to_unicode(exception))))
 # #
             else:

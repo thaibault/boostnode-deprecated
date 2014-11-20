@@ -40,12 +40,12 @@ import inspect
 import json
 import logging
 import os
-import re
+import re as regularExpression
 import string as native_string
 import sys
 import traceback
-# # python3.4 import urllib.request
-import urllib
+# # python3.4 from urllib.request import pathname2url
+from urllib import pathname2url
 
 '''Make boostNode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
@@ -140,8 +140,9 @@ class Parser(Class, Runnable):
         snippets.
 
         NOTE: "(?s...)" and "(?m...)" is equivalent for regular expression \
-        flag "re.DOTALL" and "re.MULTILINE". NOTE: This regular expression \
-        patterns assumes that the delimiter has at least a length of two.
+        flag "regularExpression.DOTALL" and "regularExpression.MULTILINE". \
+        NOTE: This regular expression patterns assumes that the delimiter has \
+        at least a length of two.
 
         **template**                              - A template string, path \
                                                     to template file or file \
@@ -602,18 +603,18 @@ class Parser(Class, Runnable):
         if not self._indent and self.content:
             self._indent = self.template_context_default_indent
 # # python3.4
-# #             match = re.compile(
+# #             match = regularExpression.compile(
 # #                 '(.*\n)?%s *__indent__ *= *'
 # #                 '(?P<number_of_indents>[1-9][0-9]*) *(?:;+|\n).*' %
-# #                 String(self.left_code_delimiter).validate_regex().content,
-# #                 re.DOTALL
+# #                 String(self.left_code_delimiter).regex_validated.content,
+# #                 regularExpression.DOTALL
 # #             ).fullmatch(self.content)
-            match = re.compile(
+            match = regularExpression.compile(
                 '(.*\n)?%s *__indent__ *= *'
                 '(?P<number_of_indents>[1-9][0-9]*) *(?:;+|\n).*$' %
                 convert_to_unicode(String(
                     self.left_code_delimiter
-                ).validate_regex().content), re.DOTALL
+                ).regex_validated.content), regularExpression.DOTALL
             ).match(self.content)
 # #
             if match:
@@ -653,91 +654,23 @@ class Parser(Class, Runnable):
             {...'print': ..._print...}
         '''
         now = DateTime.now()
-# # python3.4
-# #         self._builtins.update({
-# #             '__indent__': self.indent, '__file__': self.file,
-# #             '__time_stamp__': time.mktime(
-# #                 now.timetuple()
-# #             ) + now.microsecond / 1000 ** 2, 'DateTime': DateTime,
-# #             'time': time, 'FileHandler': FileHandler, 'print': self._print,
-# #             'include': self._include, 'String': self._convert_to_string,
-# #             'Integer': builtins.int, 'Float': builtins.float,
-# #             'length': builtins.len, 'Json': json,
-# #             'path_name_to_url': urllib.request.pathname2url,
-# #             'false': False, 'true': True, 'locals': builtins.locals,
-# #             'type': builtins.type, 'sort': builtins.sorted,
-# #             'is_type_of': builtins.isinstance, 'Tuple': builtins.tuple,
-# #             'Dictionary': builtins.dict, 'RegularExpression': re.compile,
-# #             'copy': copy, 'deepCopy': deepcopy,
-# #             'DictionaryExtension': Dictionary, 'StringExtension': String,
-# #             'List': builtins.list, 'hasAttribute': builtins.hasattr,
-# #             'TemplateParser': self.__class__, 'crypt': crypt,
-# #             'convertEscapeSequencesToHTML':
-# #                 self._convert_escape_sequences_to_html,
-# #             'console': {
-# #                 'SET_ATTRIBUTE_MODE': SET_OUTPUT_ATTRIBUTE_MODE,
-# #                 'RESET_ATTRIBUTE_MODE': RESET_OUTPUT_ATTRIBUTE_MODE,
-# #                 'COLOR': OUTPUT_COLOR, 'HIGH_COLOR': HIGH_OUTPUT_COLOR,
-# #                 'BOLD': OUTPUT_BOLD, 'DIM': OUTPUT_DIM,
-# #                 'ITALIC': OUTPUT_ITALIC, 'UNDERLINE': OUTPUT_UNDERLINE,
-# #                 'BLINK': OUTPUT_BLINK, 'REVERSE': OUTPUT_REVERSE,
-# #                 'CROSSED_OUT': OUTPUT_CROSSED_OUT,
-# #                 'DEFAULT_FONT': OUTPUT_DEFAULT_FONT,
-# #                 'FONT_1': OUTPUT_FONT_1,
-# #                 'FONT_2': OUTPUT_FONT_2,
-# #                 'FONT_3': OUTPUT_FONT_3,
-# #                 'FONT_4': OUTPUT_FONT_4,
-# #                 'FONT_5': OUTPUT_FONT_5,
-# #                 'FONT_6': OUTPUT_FONT_6,
-# #                 'FONT_7': OUTPUT_FONT_7,
-# #                 'FRAKTUR_HARDLY': OUTPUT_FRAKTUR_HARDLY,
-# #                 'BOLD_OFF': OUTPUT_BOLD_OFF,
-# #                 'BOLD_INTENSITY_OFF': OUTPUT_BOLD_INTENSITY_OFF,
-# #                 'ITALIC_OFF': OUTPUT_ITALIC_OFF,
-# #                 'UNDERLINE_OFF': OUTPUT_UNDERLINE_OFF,
-# #                 'BLINK_OFF': OUTPUT_BLINK_OFF,
-# #                 'RESERVERD_1': OUTPUT_RESERVERD_1,
-# #                 'REVERSE_OFF': OUTPUT_REVERSE_OFF,
-# #                 'REVEAL_OFF': OUTPUT_REVEAL_OFF,
-# #                 'CROSSED_OUT_OFF': OUTPUT_CROSSED_OUT_OFF,
-# #                 'RESERVED_2': OUTPUT_RESERVED_2,
-# #                 'FRAMED': OUTPUT_FRAMED,
-# #                 'ENCIRCLED': OUTPUT_ENCIRCLED,
-# #                 'OVERLINED': OUTPUT_OVERLINED,
-# #                 'FRAMED_ENCIRCLED_OFF': OUTPUT_FRAMED_ENCIRCLED_OFF,
-# #                 'OVERLINED_OFF': OUTPUT_OVERLINED_OFF,
-# #                 'RESERVED_3': OUTPUT_RESERVED_3,
-# #                 'RESERVED_4': OUTPUT_RESERVED_4,
-# #                 'RESERVED_5': OUTPUT_RESERVED_5,
-# #                 'RESERVED_6': OUTPUT_RESERVED_6,
-# #                 'IDEOGRAM_UNDERLINE': OUTPUT_IDEOGRAM_UNDERLINE,
-# #                 'IDEOGRAM_DOUBLE_UNDERLINE':
-# #                     OUTPUT_IDEOGRAM_DOUBLE_UNDERLINE,
-# #                 'IDEOGRAM_OVERLINE': OUTPUT_IDEOGRAM_OVERLINE,
-# #                 'IDEOGRAM_DOUBLE_OVERLINE':
-# #                     OUTPUT_IDEOGRAM_DOUBLE_OVERLINE,
-# #                 'IDEOGRAM_STRESS_MARKING': OUTPUT_IDEOGRAM_STRESS_MARKING,
-# #                 'IDEOGRAM_OFF': OUTPUT_IDEOGRAM_OFF}})
         self._builtins.update({
             '__indent__': self.indent, '__file__': self.file,
             '__time_stamp__': time.mktime(
                 now.timetuple()
             ) + now.microsecond / 1000 ** 2, 'DateTime': DateTime,
             'time': time, 'FileHandler': FileHandler, 'print': self._print,
-            'include': self._include,
-            'String': self._convert_to_string,
+            'include': self._include, 'String': self._convert_to_string,
             'Integer': builtins.int, 'Float': builtins.float,
-            'length': builtins.len, 'Json': json,
-            'path_name_to_url': urllib.pathname2url, 'false': False,
-            'true': True, 'locals': builtins.locals, 'type': builtins.type,
-            'sort': builtins.sorted, 'is_type_of': builtins.isinstance,
-            'Tuple': builtins.tuple, 'Dictionary': builtins.dict,
-            'RegularExpression': re.compile, 'copy': copy,
+            'length': builtins.len, 'Json': json, 'sort': builtins.sorted,
+            'path_name_to_url': pathname2url, 'false': False, 'true': True,
+            'is_type_of': builtins.isinstance, 'Tuple': builtins.tuple,
+            'Dictionary': builtins.dict,
+            'RegularExpression': regularExpression.compile, 'copy': copy,
             'deepCopy': deepcopy, 'DictionaryExtension': Dictionary,
             'StringExtension': String, 'List': builtins.list,
-            'hasAttribute': builtins.hasattr,
-            'TemplateParser': self.__class__, 'crypt': crypt,
-            'convertEscapeSequencesToHTML':
+            'hasAttribute': builtins.hasattr, 'TemplateParser': self.__class__,
+            'crypt': crypt, 'convertEscapeSequencesToHTML':
                 self._convert_escape_sequences_to_html,
             'console': {
                 'SET_ATTRIBUTE_MODE': SET_OUTPUT_ATTRIBUTE_MODE,
@@ -783,7 +716,6 @@ class Parser(Class, Runnable):
                     OUTPUT_IDEOGRAM_DOUBLE_OVERLINE,
                 'IDEOGRAM_STRESS_MARKING': OUTPUT_IDEOGRAM_STRESS_MARKING,
                 'IDEOGRAM_OFF': OUTPUT_IDEOGRAM_OFF}})
-# #
         return self._builtins
 
         # # endregion
@@ -871,11 +803,12 @@ class Parser(Class, Runnable):
                 return builtins.str(keywords[match.group(
                     'variable_name')])
             return match.group(0)
-        self._output.write(re.compile(self.placeholder_pattern.format(
-            left_delimiter=self.left_code_delimiter,
-            right_delimiter=self.right_code_delimiter,
-            placeholder=self.placeholder_name_pattern)
-        ).sub(substitute, self.content))
+        self._output.write(regularExpression.compile(
+            self.placeholder_pattern.format(
+                left_delimiter=self.left_code_delimiter,
+                right_delimiter=self.right_code_delimiter,
+                placeholder=self.placeholder_name_pattern
+            )).sub(substitute, self.content))
 # #
         return self
 
@@ -904,11 +837,12 @@ class Parser(Class, Runnable):
             >>> template.substitute_all(replacement='hans').output
             'test hans hans hans'
         '''
-        self._output.write(re.compile(self.placeholder_pattern.format(
-            left_delimiter=self.left_code_delimiter,
-            right_delimiter=self.right_code_delimiter,
-            placeholder=self.placeholder_name_pattern)
-        ).sub(replacement, self.content))
+        self._output.write(regularExpression.compile(
+            self.placeholder_pattern.format(
+                left_delimiter=self.left_code_delimiter,
+                right_delimiter=self.right_code_delimiter,
+                placeholder=self.placeholder_name_pattern
+            )).sub(replacement, self.content))
         return self
 
     @JointPoint
@@ -975,9 +909,8 @@ class Parser(Class, Runnable):
             Object of "Parser" with template "hans says...<% end...
         '''
         if self.left_code_delimiter not in self.content:
-            # TODO check branch
             '''Avoid a lot of calculations if possible.'''
-            self.output = self.content
+            self.output = self.content.rstrip()
             return self
         mapping = copy(mapping)
         mapping.update({'__builtins__': self.builtins})
@@ -988,7 +921,6 @@ class Parser(Class, Runnable):
             else:
                 template_hash = self.file.path.replace(os.sep, '_')
             if self.full_caching:
-                # TODO calculate exclude list one time dynamically.
                 full_cache_file = FileHandler(
                     location='%s/%s.txt' % (
                         FileHandler(
@@ -997,18 +929,7 @@ class Parser(Class, Runnable):
                         ).path, builtins.str(
                             builtins.hash(Dictionary(
                                 content=mapping
-                            ).get_immutable(exclude=(
-                                'include', 'print', '__indent__', '__file__',
-                                '__time_stamp__', '__builtins__', 'DateTime',
-                                'time', 'FileHandler', 'String', 'Integer',
-                                'Float', 'length', 'Json', 'path_name_to_url',
-                                'false', 'true', 'locals', 'type', 'sort',
-                                'is_type_of', 'Tuple', 'Dictionary',
-                                'RegularExpression', 'copy', 'deepCopy',
-                                'DictionaryExtension', 'StringExtension',
-                                'List', 'hasAttribute', 'TemplateParser',
-                                'crypt', 'convert_escape_sequences_to_html'
-                            ))))))
+                            ).get_immutable(exclude=self._builtins.keys())))))
                 if full_cache_file:
                     self._output.write(full_cache_file.content)
                     return self
@@ -1051,9 +972,13 @@ class Parser(Class, Runnable):
             ... ).represent_rendered_python_code()
             ''
 
-            >>> Parser('klaus', string=True).render(
+            >>> Parser("<% 'klaus' %>", string=True).render(
             ... ).represent_rendered_python_code() # doctest: +ELLIPSIS
             "\\nrendered python code...-\\n\\n1 | print('klaus', end='')\\n"
+
+            >>> Parser("klaus", string=True).render(
+            ... ).represent_rendered_python_code() # doctest: +ELLIPSIS
+            ''
         '''
         self._number_of_rendered_python_code_lines = builtins.len(
             String(self.rendered_python_code).readlines())
@@ -1061,7 +986,7 @@ class Parser(Class, Runnable):
         @JointPoint
 # # python3.4
 # #         def replace_rendered_python_code_line(
-# #             match: builtins.type(re.compile('').match(''))
+# #             match: builtins.type(regularExpression.compile('').match(''))
 # #         ) -> builtins.str:
         def replace_rendered_python_code_line(match):
 # #
@@ -1081,8 +1006,9 @@ class Parser(Class, Runnable):
             headline = 'rendered python code of %s:' % (
                 self._determine_template_description())
             return('\n%s\n%s\n\n%s\n' % (
-                headline, builtins.len(headline) * '-', re.compile(
-                    '^(?P<line>.*)$', re.MULTILINE
+                headline, builtins.len(headline) * '-',
+                regularExpression.compile(
+                    '^(?P<line>.*)$', regularExpression.MULTILINE
                 ).sub(
                     replace_rendered_python_code_line,
                     self.rendered_python_code)))
@@ -1261,10 +1187,11 @@ class Parser(Class, Runnable):
                                 ')',
         left_code_delimiter='<%', right_code_delimiter='%>',
         right_escaped='%',  # For example: "<%%" evaluates to "<%"
-        template_context_default_indent=4,
-        builtin_names=(builtins.all, builtins.filter, builtins.map,
-                       builtins.enumerate, builtins.range),
-        pretty_indent=False, **keywords
+        template_context_default_indent=4, builtin_names=(
+            builtins.all, builtins.filter, builtins.map,
+            builtins.enumerate, builtins.range, builtins.locals,
+            builtins.type
+        ), pretty_indent=False, **keywords
     ):
 # #
         '''Initializes output buffer and template scope.'''
@@ -1340,13 +1267,9 @@ class Parser(Class, Runnable):
 # # python3.4     def _render_content(self: Self) -> builtins.str:
     def _render_content(self):
         '''Generates runnable python code from current template.'''
-        return re.compile(self.template_pattern.format(
-            left_delimiter=String(
-                self.left_code_delimiter
-            ).validate_regex(),
-            right_delimiter=String(
-                self.right_code_delimiter
-            ).validate_regex(),
+        return regularExpression.compile(self.template_pattern.format(
+            left_delimiter=String(self.left_code_delimiter).regex_validated,
+            right_delimiter=String(self.right_code_delimiter).regex_validated,
             placeholder=self.placeholder_name_pattern,
             right_escaped=self.right_escaped)
         ).sub(self._render_code, self.content).strip()
@@ -1400,8 +1323,9 @@ class Parser(Class, Runnable):
             pattern = self.command_line_placeholder_pattern.format(
                 placeholder=self.command_line_placeholder_name_pattern)
 # # python3.4
-# #             match = re.compile(pattern).fullmatch(variable)
-            match = re.compile('(?:%s)$' % pattern).match(variable)
+# #             match = regularExpression.compile(pattern).fullmatch(variable)
+            match = regularExpression.compile('(?:%s)$' % pattern).match(
+                variable)
 # #
             if match:
                 keywords.update(
@@ -1459,7 +1383,7 @@ class Parser(Class, Runnable):
                     self.template)
             self.content = self.file.content
         self.native_template_object = native_string.Template(self.content)
-        self.native_template_object.pattern = re.compile(
+        self.native_template_object.pattern = regularExpression.compile(
             self.native_template_pattern)
         self.native_template_object.delimiter = self.left_code_delimiter
         return self
@@ -1880,13 +1804,13 @@ class Parser(Class, Runnable):
                             directive_prefix, color.lower())
             return '<span class="console-output-mode-%d">' % mode
 # # python3.4
-# #         return re.compile(String(
+# #         return regularExpression.compile(String(
 # #             SET_OUTPUT_ATTRIBUTE_MODE
-# #         ).validate_regex().sub('%d', '(?P<mode>[0-9]+)').content).sub(
+# #         ).regex_validated.sub('%d', '(?P<mode>[0-9]+)').content).sub(
 # #             replace_handler, builtins.str(content))
-        return re.compile(convert_to_unicode(String(
+        return regularExpression.compile(convert_to_unicode(String(
             convert_to_string(SET_OUTPUT_ATTRIBUTE_MODE)
-        ).validate_regex().sub('%d', '(?P<mode>[0-9]+)').content)).sub(
+        ).regex_validated.sub('%d', '(?P<mode>[0-9]+)').content)).sub(
             replace_handler, convert_to_unicode(content))
 # #
 
@@ -2090,7 +2014,9 @@ class Parser(Class, Runnable):
     @JointPoint
 # # python3.4
 # #     def _render_code(
-# #         self: Self, match: builtins.type(re.compile('').match(''))
+# #         self: Self, match: builtins.type(regularExpression.compile(
+# #             ''
+# #         ).match(''))
 # #     ) -> builtins.str:
     def _render_code(self, match):
 # #
@@ -2162,6 +2088,11 @@ class Parser(Class, Runnable):
 
             >>> Parser('\\n', string=True).render().output
             ''
+
+            >>> Parser('\\na\\n', string=True).render(
+            ... ).output == Parser('\\n<% "a" %>\\n', string=True).render(
+            ... ).output
+            True
         '''
         '''
             This has been sorted by their average frequency for improving \
@@ -2187,7 +2118,9 @@ class Parser(Class, Runnable):
     @JointPoint
 # # python3.4
 # #     def _render_escaped_none_code_line(
-# #         self: Self, match: builtins.type(re.compile('').match(''))
+# #         self: Self, match: builtins.type(regularExpression.compile(
+# #             ''
+# #         ).match(''))
 # #     ) -> builtins.str:
     def _render_escaped_none_code_line(self, match):
 # #
@@ -2214,7 +2147,9 @@ class Parser(Class, Runnable):
     @JointPoint
 # # python3.4
 # #     def _render_placeholder(
-# #         self: Self, match: builtins.type(re.compile('').match(''))
+# #         self: Self, match: builtins.type(regularExpression.compile(
+# #             ''
+# #         ).match(''))
 # #     ) -> builtins.str:
     def _render_placeholder(self, match):
 # #
@@ -2262,7 +2197,9 @@ class Parser(Class, Runnable):
     @JointPoint
 # # python3.4
 # #     def _render_empty_line(
-# #         self: Self, match: builtins.type(re.compile('').match(''))
+# #         self: Self, match: builtins.type(regularExpression.compile(
+# #             ''
+# #         ).match(''))
 # #     ) -> builtins.str:
     def _render_empty_line(self, match):
 # #
@@ -2276,7 +2213,9 @@ class Parser(Class, Runnable):
     @JointPoint
 # # python3.4
 # #     def _render_none_code_line(
-# #         self: Self, match: builtins.type(re.compile('').match(''))
+# #         self: Self, match: builtins.type(regularExpression.compile(
+# #             ''
+# #         ).match(''))
 # #     ) -> builtins.str:
     def _render_none_code_line(self, match):
 # #
@@ -2303,7 +2242,9 @@ class Parser(Class, Runnable):
     @JointPoint
 # # python3.4
 # #     def _render_code_line(
-# #         self: Self, match: builtins.type(re.compile('').match(''))
+# #         self: Self, match: builtins.type(regularExpression.compile(
+# #             ''
+# #         ).match(''))
 # #     ) -> builtins.str:
     def _render_code_line(self, match):
 # #
@@ -2330,7 +2271,7 @@ class Parser(Class, Runnable):
 # # python3.4
 # #     def _save_output_method_indent_level(
 # #         self: Self, code_line: builtins.str, was_new_line: builtins.bool,
-# #         match: builtins.type(re.compile('').match(''))
+# #         match: builtins.type(regularExpression.compile('').match(''))
 # #     ) -> builtins.str:
     def _save_output_method_indent_level(
         self, code_line, was_new_line, match
@@ -2352,7 +2293,8 @@ class Parser(Class, Runnable):
 # # python3.4
 # #     def _handle_include_output_indent_level(
 # #         self: Self, code_line: builtins.str,
-# #         match: builtins.type(re.compile('').match('')), slice: builtins.int
+# #         match: builtins.type(regularExpression.compile('').match('')),
+# #         slice: builtins.int
 # #     ) -> builtins.str:
     def _handle_include_output_indent_level(self, code_line, match, slice):
 # #
@@ -2366,7 +2308,7 @@ class Parser(Class, Runnable):
         slice_position = builtins.len('include(') + length_of_include_call
         indent_space = match.group('indent_code')[slice:]
         arguments = code_line[builtins.len('include('):slice_position]
-        regex = re.compile('(?:, *)?\*\*[^ ]+$')
+        regex = regularExpression.compile('(?:, *)?\*\*[^ ]+$')
         match = regex.search(arguments)
         if match:
             arguments = regex.sub('', arguments)
@@ -2381,7 +2323,8 @@ class Parser(Class, Runnable):
 # # python3.4
 # #     def _handle_print_output_indent_level(
 # #         self: Self, code_line: builtins.str,
-# #         match: builtins.type(re.compile('').match('')), slice: builtins.int
+# #         match: builtins.type(regularExpression.compile('').match('')),
+# #         slice: builtins.int
 # #     ) -> builtins.str:
     def _handle_print_output_indent_level(self, code_line, match, slice):
 # #

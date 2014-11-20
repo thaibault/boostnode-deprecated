@@ -37,7 +37,7 @@ import __builtin__ as builtins
 import functools
 import inspect
 import os
-import re
+import re as regularExpression
 import sys
 import types
 
@@ -972,8 +972,9 @@ class PointCut(ReturnAspect):
         for aspect in ASPECTS:
 # # python3.4
 # #             if('point_cut' not in aspect or
-# #                re.compile(aspect['point_cut']).fullmatch(context_path)):
-            if('point_cut' not in aspect or re.compile(
+# #                regularExpression.compile(aspect['point_cut']).fullmatch(
+# #                    context_path)):
+            if('point_cut' not in aspect or regularExpression.compile(
                 aspect['point_cut']
             ).match('(?:%s)$' % context_path)):
 # #
