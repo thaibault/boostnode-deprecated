@@ -139,6 +139,18 @@
 </dd></dl>
 
 <dl class="class">
+<dt id="boostNode.extension.native.Date">
+<em class="property">class </em><tt class="descclassname">boostNode.extension.native.</tt><tt class="descname">Date</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Date" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class adds some features for dealing with date times.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="boostNode.extension.native.DateTime">
+<em class="property">class </em><tt class="descclassname">boostNode.extension.native.</tt><tt class="descname">DateTime</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.DateTime" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class adds some features for dealing with date times.</p>
+</dd></dl>
+
+<dl class="class">
 <dt id="boostNode.extension.native.Dictionary">
 <em class="property">class </em><tt class="descclassname">boostNode.extension.native.</tt><tt class="descname">Dictionary</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Dictionary" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class extends the native dictionary object.</p>
@@ -149,6 +161,10 @@
 <dt id="boostNode.extension.native.Dictionary.convert">
 <em class="property">static </em><tt class="descname">convert</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Dictionary.convert" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts all keys or values and nested keys or values with given             callback functions.</p>
+<p><strong>key_wrapper</strong>           - Function to convert each visited key</p>
+<p><strong>value_wrapper</strong>         - Function to convert each visited value</p>
+<p><strong>no_wrap_indicator</strong>     - Key name to skip conversion for                                         corresponding value</p>
+<p><strong>remove_wrap_indicator</strong> - Removes wrap indicator und leaves its                                         value untouched.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Dictionary</span><span class="p">({})</span><span class="o">.</span><span class="n">convert</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
 <span class="go">{}</span>
@@ -207,6 +223,14 @@
 </dd></dl>
 
 <dl class="staticmethod">
+<dt id="boostNode.extension.native.Dictionary.get_compatible_types">
+<em class="property">static </em><tt class="descname">get_compatible_types</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Dictionary.get_compatible_types" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts dictionary where each type will be converted to a cross             system compatible type. The result is serialiseable to json for             example. This method provides the same interface as             &#8220;convert()&#8221;.</p>
+<p>Examples:</p>
+<p>TODO</p>
+</dd></dl>
+
+<dl class="staticmethod">
 <dt id="boostNode.extension.native.Dictionary.get_immutable">
 <em class="property">static </em><tt class="descname">get_immutable</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Dictionary.get_immutable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates an immutable copy of the current dictionary. Mutable             iterables are generally translated to sorted tuples.</p>
@@ -216,6 +240,14 @@
 <span class="go">((&#39;b&#39;, &#39;B&#39;),)</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="boostNode.extension.native.Dictionary.get_known_types">
+<em class="property">static </em><tt class="descname">get_known_types</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Dictionary.get_known_types" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts dictionary where each type will be tried to converted to             a native python type. This method provides the same interface as             &#8220;convert()&#8221;.</p>
+<p>Examples:</p>
+<p>TODO</p>
 </dd></dl>
 
 <dl class="staticmethod">
@@ -634,7 +666,7 @@
 
 <dl class="classmethod">
 <dt id="boostNode.extension.native.Module.get_context_path">
-<em class="property">classmethod </em><tt class="descname">get_context_path</tt><big>(</big><em>path=None</em>, <em>frame=&lt;frame object at 0x7f1955543050&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_context_path" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><tt class="descname">get_context_path</tt><big>(</big><em>path=None</em>, <em>frame=&lt;frame object at 0x7fdc645a9050&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_context_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines the package and module level context path to a given             context or file.</p>
 <p><strong>path</strong>  - relative or absolute context or file path to normalize</p>
 <p><strong>frame</strong> - stack frame to analyse again context</p>
@@ -888,6 +920,18 @@
 </dd></dl>
 
 <dl class="staticmethod">
+<dt id="boostNode.extension.native.Object.get_compatible_type">
+<em class="property">static </em><tt class="descname">get_compatible_type</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Object.get_compatible_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts data to python cross platform compatible data objects.</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="boostNode.extension.native.Object.get_known_type">
+<em class="property">static </em><tt class="descname">get_known_type</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Object.get_known_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts interpretable data to python specific data objects.</p>
+</dd></dl>
+
+<dl class="staticmethod">
 <dt id="boostNode.extension.native.Object.is_binary">
 <em class="property">static </em><tt class="descname">is_binary</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Object.is_binary" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines if given data is binary.</p>
@@ -956,13 +1000,13 @@
 <dd><p>Removes python supported variables in regular expression strings.             This method is useful if a python regular expression should be             given to another regular expression engine which doesn&#8217;t support             variables.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;^--(?P&lt;name&gt;.+)--$&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delete_variables_from_regex</span><span class="p">()</span>
-<span class="go">Object of &quot;String&quot; with &quot;^--(.+)--$&quot; saved.</span>
+<span class="go">Object of &quot;str&quot; (&#39;^--(.+)--$&#39;).</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="s">&#39;^--(?P&lt;a&gt;.+)--(?P&lt;b&gt;.+)--$&#39;</span>
 <span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">delete_variables_from_regex</span><span class="p">()</span>
-<span class="go">Object of &quot;String&quot; with &quot;^--(.+)--(.+)--$&quot; saved.</span>
+<span class="go">Object of &quot;str&quot; (&#39;^--(.+)--(.+)--$&#39;).</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -990,7 +1034,7 @@
 <em class="property">static </em><tt class="descname">get_camel_case_capitalize</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.get_camel_case_capitalize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Acts like pythons native &#8220;builtins.str.capitalize()&#8221; method but             preserves camel case characters.</p>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">()</span><span class="o">.</span><span class="n">get_camel_case_capitalize</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">()</span><span class="o">.</span><span class="n">camel_case_capitalize</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;&#39;</span>
 </pre></div>
 </div>
@@ -1008,15 +1052,15 @@
 <p><strong>abbreviations</strong> - Collection of shortcut words to represent                                 upper cased.</p>
 <p>Returns the modified string instance.</p>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">()</span><span class="o">.</span><span class="n">get_camel_case_to_delimited</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">()</span><span class="o">.</span><span class="n">camel_case_to_delimited</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hansPeter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_camel_case_to_delimited</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hansPeter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">camel_case_to_delimited</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;hans_peter&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans_peter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_camel_case_to_delimited</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans_peter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">camel_case_to_delimited</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;hans_peter&#39;</span>
 </pre></div>
 </div>
@@ -1028,7 +1072,7 @@
 <span class="go">&#39;hans+peter&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;Hans&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_camel_case_to_delimited</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;Hans&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">camel_case_to_delimited</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;hans&#39;</span>
 </pre></div>
 </div>
@@ -1048,43 +1092,43 @@
 <p><strong>search_pattern</strong> - Patterns not to delimit</p>
 <p>Returns the modified string instance.</p>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">()</span><span class="o">.</span><span class="n">get_delimited</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">()</span><span class="o">.</span><span class="n">delimited</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;a b&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_delimited</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;a b&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delimited</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;a-b&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;a b_&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_delimited</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;a b_&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delimited</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;a-b&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;ab&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_delimited</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;ab&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delimited</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;ab&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_delimited</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delimited</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;   a &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_delimited</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;   a &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delimited</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;a&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39; -  a _&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_delimited</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39; -  a _&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delimited</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;a&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">a&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_delimited</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">a&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delimited</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;a&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;Get in touch&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_delimited</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;Get in touch&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delimited</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;Get-in-touch&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&quot;I&#39;m cool&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get_delimited</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&quot;I&#39;m cool&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">delimited</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;I-m-cool&#39;</span>
 </pre></div>
 </div>
@@ -1099,31 +1143,31 @@
 <p><strong>preserve_wrong_formatted_abbreviations</strong> - If set to &#8220;True&#8221;                                                          wrong formatted                                                          camel case                                                          abbreviations will                                                          be ignored.</p>
 <p>Returns the modified string instance.</p>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">()</span><span class="o">.</span><span class="n">get_delimited_to_camel_case</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">()</span><span class="o">.</span><span class="n">delimited_to_camel_case</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans_peter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_delimited_to_camel_case</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans_peter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delimited_to_camel_case</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;hansPeter&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans__peter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_delimited_to_camel_case</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans__peter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delimited_to_camel_case</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;hans_Peter&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;HansPeter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_delimited_to_camel_case</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;HansPeter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delimited_to_camel_case</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;HansPeter&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;Hans_Peter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_delimited_to_camel_case</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;Hans_Peter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delimited_to_camel_case</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;HansPeter&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;_Hans_Peter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_delimited_to_camel_case</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;_Hans_Peter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delimited_to_camel_case</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;_HansPeter&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_delimited_to_camel_case</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delimited_to_camel_case</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;_&#39;</span>
 </pre></div>
 </div>
@@ -1202,29 +1246,168 @@
 </dd></dl>
 
 <dl class="staticmethod">
+<dt id="boostNode.extension.native.String.get_format_validated">
+<em class="property">static </em><tt class="descname">get_format_validated</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.get_format_validated" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validates the current string for using in a string with             placeholder like &#8220;{name}&#8221;. It will be escaped to not interpreted             as placeholder like &#8220;{name}&#8221;.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&quot;that&#39;s no {placeholder}&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format_validated</span>
+<span class="go">Object of &quot;str&quot; (&quot;that&#39;s no \\{placeholder\\}&quot;).</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">()</span><span class="o">.</span><span class="n">format_validated</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="boostNode.extension.native.String.get_html_validated">
+<em class="property">static </em><tt class="descname">get_html_validated</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.get_html_validated" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validates current string for using as snippet in a html document.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;&lt;html&gt;&lt;/html&gt;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">html_validated</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;&amp;lt;html&amp;gt;&amp;lt;/html&amp;gt;&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
 <dt id="boostNode.extension.native.String.get_number">
 <em class="property">static </em><tt class="descname">get_number</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.get_number" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a number representation of current string content if             possible. If no conversion is possible given default value will             be returned. If given default value is &#8220;None&#8221; current string             will be returned.</p>
 <p><strong>default</strong> - Fall-back value</p>
+<p><strong>slice</strong>   - If &#8220;True&#8221; non numbers will be removed</p>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">()</span><span class="o">.</span><span class="n">get_number</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">()</span><span class="o">.</span><span class="n">number</span>
 <span class="go">&#39;&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_number</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">number</span>
 <span class="go">&#39;hans&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;5&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_number</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;5&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">number</span>
 <span class="go">5</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;5.5&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_number</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;5.5&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">number</span>
 <span class="go">5.5</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_number</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 <span class="go">5</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">number</span>
+<span class="go">&#39;hans&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_number</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s">&#39;test&#39;</span><span class="p">,</span> <span class="nb">slice</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="go">&#39;test&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;ha4ns&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_number</span><span class="p">(</span><span class="nb">slice</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="go">4</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">get_number</span><span class="p">(</span><span class="nb">slice</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="go">4</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">number</span>
+<span class="go">4</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="boostNode.extension.native.String.get_regex_validated">
+<em class="property">static </em><tt class="descname">get_regex_validated</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.get_regex_validated" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validates the current string for using in a regular expression             pattern. Special regular expression chars will be escaped.</p>
+<p><strong>exclude_symbols</strong> - Escapes each regular expression special                                   character.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&quot;that&#39;s no regex: .*$&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">regex_validated</span>
+<span class="go">Object of &quot;str&quot; (&quot;that&#39;s no regex: \\.\\*\\$&quot;).</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">()</span><span class="o">.</span><span class="n">get_regex_validated</span><span class="p">(</span><span class="n">exclude_symbols</span><span class="o">=</span><span class="p">())</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;-\[]()^$*+.}-&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_regex_validated</span><span class="p">((</span><span class="s">&#39;}&#39;</span><span class="p">,))</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;\\-\\\\\\[\\]\\(\\)\\^\\$\\*\\+\\.}\\-&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;-\[]()^$*+.{}-&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_regex_validated</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="p">(</span><span class="s">&#39;[&#39;</span><span class="p">,</span> <span class="s">&#39;]&#39;</span><span class="p">,</span> <span class="s">&#39;(&#39;</span><span class="p">,</span> <span class="s">&#39;)&#39;</span><span class="p">,</span> <span class="s">&#39;^&#39;</span><span class="p">,</span> <span class="s">&#39;$&#39;</span><span class="p">,</span> <span class="s">&#39;*&#39;</span><span class="p">,</span> <span class="s">&#39;+&#39;</span><span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">,</span> <span class="s">&#39;{&#39;</span><span class="p">)</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;\\-\\\\[]()^$*+.{\\}\\-&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_regex_validated</span><span class="p">((</span><span class="s">&#39;</span><span class="se">\\</span><span class="s">&#39;</span><span class="p">,))</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;\\-&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="boostNode.extension.native.String.get_shell_validated">
+<em class="property">static </em><tt class="descname">get_shell_validated</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.get_shell_validated" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validates the current string for using as a command in shell.             Special shell command chars will be escaped.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="s">&#39;a new folder with special signs &quot;&amp;&quot;&#39;</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">shell_validated</span> 
+<span class="go">Object of &quot;str&quot; (&#39;a\\ new...ial\\ signs\\ \\&quot;\\&amp;\\&quot;&#39;).</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">shell_validated</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="bp">True</span>
+<span class="gp">... </span><span class="k">else</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">String</span><span class="p">(</span>
+<span class="gp">... </span>        <span class="sd">&quot;&quot;&quot;[&quot;&#39;`()&amp;$ -]&quot;&quot;&quot;</span>
+<span class="gp">... </span>    <span class="p">)</span><span class="o">.</span><span class="n">shell_validated</span><span class="o">.</span><span class="n">content</span> <span class="o">==</span> <span class="p">(</span>
+<span class="gp">... </span>        <span class="s">&#39;[</span><span class="se">\\</span><span class="s">&quot;</span><span class="se">\\\&#39;\\</span><span class="s">`</span><span class="se">\\</span><span class="s">(</span><span class="se">\\</span><span class="s">)</span><span class="se">\\</span><span class="s">&amp;</span><span class="se">\\</span><span class="s">$</span><span class="se">\\</span><span class="s"> </span><span class="se">\\</span><span class="s">-]&#39;</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="boostNode.extension.native.String.get_url_validated">
+<em class="property">static </em><tt class="descname">get_url_validated</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.get_url_validated" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validates a given url by escaping special chars.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="s">&#39;here</span><span class="si">%20i</span><span class="s">s%20no</span><span class="si">%20%</span><span class="s">22url</span><span class="si">%22%</span><span class="s">20present!+&#39;</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">url_validated</span>
+<span class="go">Object of &quot;str&quot; (&#39;here is no &quot;url&quot; present! &#39;).</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">url_validated</span><span class="o">.</span><span class="n">content</span>
+<span class="go">&#39;&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="bp">True</span>
+<span class="gp">... </span><span class="k">else</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">String</span><span class="p">(</span>
+<span class="gp">... </span>        <span class="s">&#39;[+</span><span class="si">%20%</span><span class="s">22</span><span class="si">%2F%7E</span><span class="s">%C3%A4%C3</span><span class="si">%84%</span><span class="s">C3%B6]&#39;</span>
+<span class="gp">... </span>    <span class="p">)</span><span class="o">.</span><span class="n">url_validated</span><span class="o">.</span><span class="n">content</span> <span class="o">==</span> <span class="s">&#39;[  &quot;/~Ã¤ÃÃ¶]&#39;</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="bp">True</span>
+<span class="gp">... </span><span class="k">else</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">String</span><span class="p">(</span>
+<span class="gp">... </span>        <span class="s">&#39;[%C3</span><span class="si">%96%</span><span class="s">C3%BC%C3%9C]&#39;</span>
+<span class="gp">... </span>    <span class="p">)</span><span class="o">.</span><span class="n">url_validated</span><span class="o">.</span><span class="n">content</span> <span class="o">==</span> <span class="s">&#39;[ÃÃ¼Ã]&#39;</span>
+<span class="go">True</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1238,9 +1421,9 @@
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">string</span> <span class="o">=</span> <span class="n">String</span><span class="p">(</span><span class="s">&#39;hans</span><span class="se">\n</span><span class="s">peter</span><span class="se">\n</span><span class="s">klaus and sally</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">string</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
-<span class="go">Object of &quot;String&quot; with &quot;hans&quot; saved.</span>
+<span class="go">Object of &quot;str&quot; (&#39;hans&#39;).</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">string</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
-<span class="go">Object of &quot;String&quot; with &quot;peter&quot; saved.</span>
+<span class="go">Object of &quot;str&quot; (&#39;peter&#39;).</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">string</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;klaus and sally&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">string</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
@@ -1248,7 +1431,7 @@
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
-<span class="go">Object of &quot;String&quot; with &quot;hans&quot; saved.</span>
+<span class="go">Object of &quot;str&quot; (&#39;hans&#39;).</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">string</span> <span class="o">=</span> <span class="n">String</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">)</span>
@@ -1296,11 +1479,11 @@
 <p>Return a copy of the string with all occurrences of substring old             replaced by new. If an optional argument count is given, only the             first count occurrences are replaced.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;ans&#39;</span><span class="p">,</span> <span class="s">&#39;ut&#39;</span><span class="p">)</span>
-<span class="go">Object of &quot;String&quot; with &quot;hut&quot; saved.</span>
+<span class="go">Object of &quot;str&quot; (&#39;hut&#39;).</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">,</span> <span class="s">&#39;peter&#39;</span><span class="p">)</span>
-<span class="go">Object of &quot;String&quot; with &quot;&quot; saved.</span>
+<span class="go">Object of &quot;str&quot; (&#39;&#39;).</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">,</span> <span class="s">&#39;peter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
@@ -1317,13 +1500,13 @@
 <dt id="boostNode.extension.native.String.sub">
 <em class="property">static </em><tt class="descname">sub</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.sub" title="Permalink to this definition">¶</a></dt>
 <dd><blockquote>
-<div><p>Implements the pythons native &#8220;re.sub()&#8221; method in an object             oriented way. This method serves additionally dictionaries as             &#8220;search&#8221; parameter for multiple replacements. If you use             dictionaries, the second parameter &#8220;replace&#8221; becomes useless.</p>
+<div><p>Implements the pythons native &#8220;regularExpression.sub()&#8221; method in             an object oriented way. This method serves additionally             dictionaries as &#8220;search&#8221; parameter for multiple replacements. If             you use dictionaries, the second parameter &#8220;replace&#8221; becomes             useless.</p>
 <p><strong>search</strong>  - regular expression search pattern</p>
 <dl class="docutils">
 <dt><strong>replace</strong> - string or function to replace with given search</dt>
 <dd>sequence</dd>
 </dl>
-<p>Additional arguments and keywords are forwarded to python&#8217;s             native &#8220;re.sub()&#8221; method.</p>
+<p>Additional arguments and keywords are forwarded to python&#8217;s             native &#8220;regularExpression.sub()&#8221; method.</p>
 <p>Return the string obtained by replacing the leftmost             non-overlapping occurrences of pattern in string by the             replacement &#8220;replace&#8221;. If the pattern isn&#8217;t found, string is             returned unchanged. &#8220;replace&#8221; can be a string or a function;</p>
 <p>If &#8220;replace&#8221; is a string, any backslash escapes in it are             processed. That means &#8220;</p>
 </div></blockquote>
@@ -1332,14 +1515,14 @@
 <blockquote>
 <div><p>If &#8220;replace&#8221; is a function, it is called for every             non-overlapping occurrence of pattern. The function takes a             single match object argument, and returns the replacement string.</p>
 <p>The pattern may be a string or an RE object. The optional             argument count is the maximum number of pattern occurrences to be             replaced; count must be a non-negative integer. If omitted or             zero, all occurrences will be replaced. Empty matches for the             pattern are replaced only when not adjacent to a previous match,             so sub(&#8216;x*&#8217;, &#8216;-&#8216;, &#8216;abc&#8217;) returns &#8216;-a-b-c-&#8216;.</p>
-<p>In addition to character escapes and back references as described             above, &#8220;g&lt;name&gt;&#8221; will use the substring matched by the group             named name, as defined by the &#8220;(?P&lt;name&gt;...)&#8221; syntax.             &#8220;g&lt;number&gt;&#8221; uses the corresponding group number; &#8220;g&lt;2&gt;&#8221; is             therefore equivalent to &#8220;&#8221;, but isn&#8217;t ambiguous in a             replacement such as &#8220;g&lt;2&gt;0&#8221;. &#8220;&#8221; would be interpreted as a             reference to group 20, not a reference to group 2 followed by the             literal character &#8220;0&#8221;. The backreference &#8220;g&lt;0&gt;&#8221; substitutes in             the entire substring matched by the RE.</p>
+<p>In addition to character escapes and back references as described             above, &#8220;g&lt;name&gt;&#8221; will use the substring matched by the group             named name, as defined by the &#8220;(?P&lt;name&gt;...)&#8221; syntax.             &#8220;g&lt;number&gt;&#8221; uses the corresponding group number; &#8220;g&lt;2&gt;&#8221; is             therefore equivalent to &#8220;&#8221;, but isn&#8217;t ambiguous in a             replacement such as &#8220;g&lt;2&gt;0&#8221;. &#8220;&#8221; would be interpreted as a             reference to group 20, not a reference to group 2 followed by the             literal character &#8220;0&#8221;. The backreference &#8220;g&lt;0&gt;&#8221; substitutes in             the entire substring matched by the regularExpression.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s">&#39;([^a]+)&#39;</span><span class="p">,</span> <span class="s">&#39; jau-suffix &#39;</span><span class="p">)</span>
-<span class="go">Object of &quot;String&quot; with &quot; jau-suffix a jau-suffix &quot; saved.</span>
+<span class="go">Object of &quot;str&quot; (&#39; jau-suffix a jau-suffix &#39;).</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s">&#39;n&#39;</span><span class="p">,</span> <span class="s">&#39;l&#39;</span><span class="p">)</span>
-<span class="go">Object of &quot;String&quot; with &quot;hals&quot; saved.</span>
+<span class="go">Object of &quot;str&quot; (&#39;hals&#39;).</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">()</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s">&#39;n&#39;</span><span class="p">,</span> <span class="s">&#39;l&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
@@ -1360,12 +1543,11 @@
 <dl class="staticmethod">
 <dt id="boostNode.extension.native.String.subn">
 <em class="property">static </em><tt class="descname">subn</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.subn" title="Permalink to this definition">¶</a></dt>
-<dd><p>Implements the pythons native &#8220;re.subn()&#8221; method in an object             oriented way. This method serves additionally dictionaries as             &#8220;search&#8221; parameter for multiple replacements. If you use             dictionaries, the second parameter &#8220;replace&#8221; becomes useless.</p>
-<p>Perform the same operation as &#8220;re.sub()&#8221;, but returns a tuple:             (&#8220;new_string&#8221;, &#8220;number_of_subs_made&#8221;).</p>
+<dd><p>Implements the pythons native &#8220;regularExpression.subn()&#8221; method             in an object oriented way. This method serves additionally             dictionaries as &#8220;search&#8221; parameter for multiple replacements. If             you use dictionaries, the second parameter &#8220;replace&#8221; becomes             useless.</p>
+<p>Perform the same operation as &#8220;regularExpression.sub()&#8221;, but             returns a tuple: (&#8220;new_string&#8221;, &#8220;number_of_subs_made&#8221;).</p>
 <p><strong>search</strong>  - regular expression search pattern</p>
 <p><strong>replace</strong> - string to replace with given search sequence</p>
-<p>Additional arguments and keywords are forwarded to pythons&#8217;s native
-&#8220;re.subn()&#8221; method.</p>
+<p>Additional arguments and keywords are forwarded to pythons&#8217;s             native &#8220;regularExpression.subn()&#8221; method.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">String</span><span class="p">()</span><span class="o">.</span><span class="n">subn</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">content</span>
@@ -1383,131 +1565,18 @@
 </div>
 </dd></dl>
 
-<dl class="staticmethod">
-<dt id="boostNode.extension.native.String.validate_format">
-<em class="property">static </em><tt class="descname">validate_format</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.validate_format" title="Permalink to this definition">¶</a></dt>
-<dd><p>Validates the current string for using in a string with             placeholder like &#8220;{name}&#8221;. It will be escaped to not interpreted             as placeholder like &#8220;{name}&#8221;.</p>
-<p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&quot;that&#39;s no {placeholder}&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">validate_format</span><span class="p">()</span>
-<span class="go">Object of &quot;String&quot; with &quot;that&#39;s no \{placeholder\}&quot; saved.</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">()</span><span class="o">.</span><span class="n">validate_format</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
-<span class="go">&#39;&#39;</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="staticmethod">
-<dt id="boostNode.extension.native.String.validate_html">
-<em class="property">static </em><tt class="descname">validate_html</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.validate_html" title="Permalink to this definition">¶</a></dt>
-<dd><p>Validates current string for using as snippet in a html document.</p>
-<p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;&lt;html&gt;&lt;/html&gt;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">validate_html</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
-<span class="go">&#39;&amp;lt;html&amp;gt;&amp;lt;/html&amp;gt;&#39;</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="staticmethod">
-<dt id="boostNode.extension.native.String.validate_regex">
-<em class="property">static </em><tt class="descname">validate_regex</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.validate_regex" title="Permalink to this definition">¶</a></dt>
-<dd><p>Validates the current string for using in a regular expression             pattern. Special regular expression chars will be escaped.</p>
-<p><strong>exclude_symbols</strong> - Escapes each regular expression special                                   character.</p>
-<p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&quot;that&#39;s no regex: .*$&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">validate_regex</span><span class="p">()</span>
-<span class="go">Object of &quot;String&quot; with &quot;that&#39;s no regex: \.\*\$&quot; saved.</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">()</span><span class="o">.</span><span class="n">validate_regex</span><span class="p">(</span><span class="n">exclude_symbols</span><span class="o">=</span><span class="p">())</span><span class="o">.</span><span class="n">content</span>
-<span class="go">&#39;&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;-\[]()^$*+.}-&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">validate_regex</span><span class="p">((</span><span class="s">&#39;}&#39;</span><span class="p">,))</span><span class="o">.</span><span class="n">content</span>
-<span class="go">&#39;\\-\\\\\\[\\]\\(\\)\\^\\$\\*\\+\\.}\\-&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;-\[]()^$*+.{}-&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">validate_regex</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="p">(</span><span class="s">&#39;[&#39;</span><span class="p">,</span> <span class="s">&#39;]&#39;</span><span class="p">,</span> <span class="s">&#39;(&#39;</span><span class="p">,</span> <span class="s">&#39;)&#39;</span><span class="p">,</span> <span class="s">&#39;^&#39;</span><span class="p">,</span> <span class="s">&#39;$&#39;</span><span class="p">,</span> <span class="s">&#39;*&#39;</span><span class="p">,</span> <span class="s">&#39;+&#39;</span><span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">,</span> <span class="s">&#39;{&#39;</span><span class="p">)</span>
-<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
-<span class="go">&#39;\\-\\\\[]()^$*+.{\\}\\-&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">validate_regex</span><span class="p">((</span><span class="s">&#39;</span><span class="se">\\</span><span class="s">&#39;</span><span class="p">,))</span><span class="o">.</span><span class="n">content</span>
-<span class="go">&#39;\\-&#39;</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="staticmethod">
-<dt id="boostNode.extension.native.String.validate_shell">
-<em class="property">static </em><tt class="descname">validate_shell</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.validate_shell" title="Permalink to this definition">¶</a></dt>
-<dd><p>Validates the current string for using as a command in shell.             Special shell command chars will be escaped.</p>
-<p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="s">&#39;a new folder with special signs &quot;&amp;&quot;&#39;</span>
-<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">validate_shell</span><span class="p">()</span> 
-<span class="go">Object of &quot;String&quot; with &quot;a\ new\ fol...ial\ signs\ \&quot;\&amp;\&quot;&quot; saved.</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="s">&#39;&#39;</span>
-<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">validate_shell</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
-<span class="go">&#39;&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="bp">True</span>
-<span class="gp">... </span><span class="k">else</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="n">String</span><span class="p">(</span>
-<span class="gp">... </span>        <span class="sd">&quot;&quot;&quot;[&quot;&#39;`()&amp;$ -]&quot;&quot;&quot;</span>
-<span class="gp">... </span>    <span class="p">)</span><span class="o">.</span><span class="n">validate_shell</span><span class="p">()</span><span class="o">.</span><span class="n">content</span> <span class="o">==</span> <span class="p">(</span>
-<span class="gp">... </span>        <span class="s">&#39;[</span><span class="se">\\</span><span class="s">&quot;</span><span class="se">\\\&#39;\\</span><span class="s">`</span><span class="se">\\</span><span class="s">(</span><span class="se">\\</span><span class="s">)</span><span class="se">\\</span><span class="s">&amp;</span><span class="se">\\</span><span class="s">$</span><span class="se">\\</span><span class="s"> </span><span class="se">\\</span><span class="s">-]&#39;</span><span class="p">)</span>
-<span class="go">True</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="staticmethod">
-<dt id="boostNode.extension.native.String.validate_url">
-<em class="property">static </em><tt class="descname">validate_url</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.validate_url" title="Permalink to this definition">¶</a></dt>
-<dd><p>Validates a given url by escaping special chars.</p>
-<p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="s">&#39;here</span><span class="si">%20i</span><span class="s">s%20no</span><span class="si">%20%</span><span class="s">22url</span><span class="si">%22%</span><span class="s">20present!+&#39;</span>
-<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">validate_url</span><span class="p">()</span>
-<span class="go">Object of &quot;String&quot; with &quot;here is no &quot;url&quot; present! &quot; saved.</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">validate_url</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
-<span class="go">&#39;&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="bp">True</span>
-<span class="gp">... </span><span class="k">else</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="n">String</span><span class="p">(</span>
-<span class="gp">... </span>        <span class="s">&#39;[+</span><span class="si">%20%</span><span class="s">22</span><span class="si">%2F%7E</span><span class="s">%C3%A4%C3</span><span class="si">%84%</span><span class="s">C3%B6]&#39;</span>
-<span class="gp">... </span>    <span class="p">)</span><span class="o">.</span><span class="n">validate_url</span><span class="p">()</span><span class="o">.</span><span class="n">content</span> <span class="o">==</span> <span class="s">&#39;[  &quot;/~Ã¤ÃÃ¶]&#39;</span>
-<span class="go">True</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="bp">True</span>
-<span class="gp">... </span><span class="k">else</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="n">String</span><span class="p">(</span><span class="s">&#39;[%C3</span><span class="si">%96%</span><span class="s">C3%BC%C3%9C]&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">validate_url</span><span class="p">(</span>
-<span class="gp">... </span>        <span class="p">)</span><span class="o">.</span><span class="n">content</span> <span class="o">==</span> <span class="s">&#39;[ÃÃ¼Ã]&#39;</span>
-<span class="go">True</span>
-</pre></div>
-</div>
-</dd></dl>
-
 </dd></dl>
 
 <dl class="class">
 <dt id="boostNode.extension.native.Time">
 <em class="property">class </em><tt class="descclassname">boostNode.extension.native.</tt><tt class="descname">Time</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Time" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class adds some features for dealing with times.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="boostNode.extension.native.TimeDelta">
+<em class="property">class </em><tt class="descclassname">boostNode.extension.native.</tt><tt class="descname">TimeDelta</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.TimeDelta" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class adds some features for dealing with date times.</p>
 </dd></dl>
 
 </div>

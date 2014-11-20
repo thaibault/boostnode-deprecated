@@ -59,7 +59,7 @@
 <dt id="boostNode.runnable.template.Parser">
 <em class="property">class </em><tt class="descclassname">boostNode.runnable.template.</tt><tt class="descname">Parser</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.template.Parser" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class can parse a string or file to interpret it as template for         replacing containing placeholder and rendering embedded python script         snippets.</p>
-<p>NOTE: &#8220;(?s...)&#8221; and &#8220;(?m...)&#8221; is equivalent for regular expression         flag &#8220;re.DOTALL&#8221; and &#8220;re.MULTILINE&#8221;. NOTE: This regular expression         patterns assumes that the delimiter has at least a length of two.</p>
+<p>NOTE: &#8220;(?s...)&#8221; and &#8220;(?m...)&#8221; is equivalent for regular expression         flag &#8220;regularExpression.DOTALL&#8221; and &#8220;regularExpression.MULTILINE&#8221;.         NOTE: This regular expression patterns assumes that the delimiter has         at least a length of two.</p>
 <p><strong>template</strong>                              - A template string, path                                                     to template file or file                                                     object pointing to a                                                     template file.</p>
 <p><strong>cache_path</strong>                            - Indicates weather to                                                     cache the compiled                                                     template in given path.</p>
 <p><strong>string</strong>                                - Indicates weather                                                     &#8220;template&#8221; is a template                                                     string or file path.</p>
@@ -208,9 +208,14 @@
 <span class="go">&#39;&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Parser</span><span class="p">(</span><span class="s">&#39;klaus&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Parser</span><span class="p">(</span><span class="s">&quot;&lt;% &#39;klaus&#39; %&gt;&quot;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
 <span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">represent_rendered_python_code</span><span class="p">()</span> 
 <span class="go">&quot;\nrendered python code...-\n\n1 | print(&#39;klaus&#39;, end=&#39;&#39;)\n&quot;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Parser</span><span class="p">(</span><span class="s">&quot;klaus&quot;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">represent_rendered_python_code</span><span class="p">()</span> 
+<span class="go">&#39;&#39;</span>
 </pre></div>
 </div>
 </dd></dl>
