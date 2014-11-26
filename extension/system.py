@@ -1600,13 +1600,13 @@ class CommandLine(builtins.object):
     '''
     DEFAULT_ARGUMENTS = (
         {'arguments': ('-x', '--version'),
-         'keywords': {
+         'specification': {
              'action': 'version',
              'version': {'execute': '__version_string__'},
              'help': 'Show current program version.',
              'dest': 'version'}},
         {'arguments': ('-l', '--log-level'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'default': 'critical',
              'type': builtins.str,
@@ -1615,14 +1615,14 @@ class CommandLine(builtins.object):
              'help': {'execute':
                       '"Defines log level of current program '
                       'instance. (Level: \\"%s\\")" % '
-                      '"\\", \\"".join(__default_arguments__[1]["keywords"]'
-                      '["choices"])'},
+                      '"\\", \\"".join(__default_arguments__[1]'
+                      '["specification"]["choices"])'},
              'dest': 'log_level',
              'metavar': 'LOG_LEVEL'}})
     '''Defines standard arguments for every command line interface program.'''
     DEFAULT_CALLER_ARGUMENTS = (
         {'arguments': ('-c', '--module-object',),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'default': {'execute': 'default_caller'},
              'type': builtins.str,
@@ -1633,19 +1633,19 @@ class CommandLine(builtins.object):
              'dest': 'module_object',
              'metavar': 'CALLABLE_MODULE_OBJECT'}},
         {'arguments': ('-t', '--test'),
-         'keywords': {
+         'specification': {
              'action': 'store_true',
              'default': False,
              'help': 'Test current library.',
              'dest': 'test'}},
         {'arguments': ('-v', '--verbose-test'),
-         'keywords': {
+         'specification': {
              'action': 'store_true',
              'default': False,
              'help': 'Test current library verbosely.',
              'dest': 'verbose_test'}},
         {'arguments': ('-m', '--meta-help'),
-         'keywords': {
+         'specification': {
              'action': 'store_true',
              'default': False,
              'help': 'Shows this help message.',
@@ -1653,7 +1653,7 @@ class CommandLine(builtins.object):
     '''Defines standard arguments for every meta command line interface.'''
     PACKAGE_INTERFACE_ARGUMENTS = (
         {'arguments': ('commands',),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'default': '',
              'type': builtins.str,
@@ -1752,13 +1752,13 @@ class CommandLine(builtins.object):
 
             >>> CommandLine.argument_parser((
             ...     {'arguments': ('-s', '--long'),
-            ...      'keywords': {'action': 'store', 'type': str}},))
+            ...      'specification': {'action': 'store', 'type': str}},))
             Namespace(log_level='critical', long='hans')
 
             >>> sys.modules[__name__].__doc__ = None
             >>> CommandLine.argument_parser((
             ...     {'arguments': ('-s', '--long'),
-            ...      'keywords': {'action': 'store', 'type': str}},))
+            ...      'specification': {'action': 'store', 'type': str}},))
             Namespace(log_level='critical', long='hans')
 
             >>> sys.argv = sys_argv_backup
@@ -2200,9 +2200,9 @@ class CommandLine(builtins.object):
 
             >>> CommandLine._validate_command_line_argument({
             ...     'arguments': ('-a', '--abba'),
-            ...     'keywords': {'dest': 'abba'}},
+            ...     'specification': {'dest': 'abba'}},
             ...     ({'arguments': ('-a', '--baab'),
-            ...       'keywords': {'dest': 'abba'}},)
+            ...       'specification': {'dest': 'abba'}},)
             ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
@@ -2221,8 +2221,8 @@ class CommandLine(builtins.object):
                ):
                 raise __exception__(
                     'Argument "%s" shadows argument "%s" with shortcut '
-                    '"%s".', argument['keywords']['dest'],
-                    other_argument['keywords']['dest'],
+                    '"%s".', argument['specification']['dest'],
+                    other_argument['specification']['dest'],
                     argument['arguments'][0])
         return cls._validate_command_line_argument_again_help_argument(
             argument)
@@ -2244,7 +2244,7 @@ class CommandLine(builtins.object):
             >>> (command_line.
             ...  _validate_command_line_argument_again_help_argument)({
             ...     'arguments': ('-h', '--hans'),
-            ...     'keywords': {'dest': 'hans'}}
+            ...     'specification': {'dest': 'hans'}}
             ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
@@ -2255,7 +2255,7 @@ class CommandLine(builtins.object):
            argument['arguments'][1] == '--help'):
             raise __exception__(
                 'Argument "%s" shadows default argument "help".',
-                argument['keywords']['dest'])
+                argument['specification']['dest'])
         return cls
 
     @JointPoint(builtins.classmethod)
@@ -2362,8 +2362,8 @@ class CommandLine(builtins.object):
 
             >>> CommandLine._add_command_line_arguments(({
             ...     'arguments': ('-a', '--hans'),
-            ...     'keywords': {'dest': 'hans',
-            ...                  'help': {'execute': 'fails'}}},),
+            ...     'specification': {'dest': 'hans',
+            ...                       'help': {'execute': 'fails'}}},),
             ...     (), {}) # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
@@ -2374,17 +2374,17 @@ class CommandLine(builtins.object):
         ):
             cls._validate_command_line_argument(argument, arguments)
             scope['__name__'] = argument['arguments'][0]
-            if 'dest' in argument['keywords']:
-                scope['__name__'] = argument['keywords']['dest']
+            if 'dest' in argument['specification']:
+                scope['__name__'] = argument['specification']['dest']
             scope = cls._handle_initializer_default_values(scope)
-            argument['keywords'] = cls._render_command_line_argument(
-                argument=argument['keywords'], scope=scope)
-            for keyword, value in argument['keywords'].items():
-                argument['keywords'][keyword] = cls\
-                    ._render_command_line_argument(
+            argument['specification'] = cls._render_command_line_argument(
+                argument=argument['specification'], scope=scope)
+            for keyword, value in argument['specification'].items():
+                argument['specification'][keyword] = \
+                    cls._render_command_line_argument(
                         argument=value, scope=scope, keyword=keyword)
             cls.current_argument_parser.add_argument(
-                *argument['arguments'], **argument['keywords'])
+                *argument['arguments'], **argument['specification'])
         return cls
 
     @JointPoint(builtins.classmethod)
@@ -3028,7 +3028,7 @@ class CommandLine(builtins.object):
         '''
         Logger.change_all(level=('info',))
         package_name = Module.get_package_name(frame)
-        choices = cls.PACKAGE_INTERFACE_ARGUMENTS[0]['keywords']['choices']
+        choices = cls.PACKAGE_INTERFACE_ARGUMENTS[0]['specification']['choices']
         return cls.argument_parser(
             version='{package} {version} {status}'.format(
                 package=String(package_name).camel_case_capitalize.content,
@@ -3042,10 +3042,10 @@ class CommandLine(builtins.object):
 # # python3.4
 # #     def _render_command_line_argument(
 # #         cls: SelfClass, argument: builtins.object, scope: builtins.dict,
-# #         keyword='keywords'
+# #         keyword='specification'
 # #     ) -> builtins.object:
     def _render_command_line_argument(
-        cls, argument, scope, keyword='keywords'
+        cls, argument, scope, keyword='specification'
     ):
 # #
         '''

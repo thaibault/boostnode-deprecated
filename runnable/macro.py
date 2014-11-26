@@ -128,7 +128,7 @@ class Replace(Class, Runnable):
 
     COMMAND_LINE_ARGUMENTS = (
         {'arguments': ('-p', '--path'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': builtins.str,
@@ -138,7 +138,7 @@ class Replace(Class, Runnable):
              'dest': 'location',
              'metavar': 'PATH'}},
         {'arguments': ('-n', '--new-version'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},
@@ -147,20 +147,20 @@ class Replace(Class, Runnable):
              'dest': '_new_version',
              'metavar': 'VERSION'}},
         {'arguments': ('-s', '--skip-self-file'),
-         'keywords': {
+         'specification': {
              'action': 'store_true',
              'default': {'execute': '__initializer_default_value__'},
              'help': 'Determines if this file should be ignored for running '
                      'any macros.',
              'dest': 'skip_self_file'}},
         {'arguments': ('-y', '--dry'),
-         'keywords': {
+         'specification': {
              'action': 'store_true',
              'default': {'execute': '__initializer_default_value__'},
              'help': 'Define if there really should be done something.',
              'dest': 'dry'}},
         {'arguments': ('-e', '--extension'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},
@@ -173,7 +173,7 @@ class Replace(Class, Runnable):
              'dest': 'extension',
              'metavar': 'FILE_EXTENSION'}},
         {'arguments': ('-a', '--exclude-locations'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'nargs': '*',
              'default': {'execute': '__initializer_default_value__'},
@@ -186,7 +186,7 @@ class Replace(Class, Runnable):
              'dest': '_exclude_locations',
              'metavar': 'PATHS'}},
         {'arguments': ('-f', '--first-line-regex-pattern'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},
@@ -199,7 +199,7 @@ class Replace(Class, Runnable):
              'dest': 'first_line_regex_pattern',
              'metavar': 'REGEX'}},
         {'arguments': ('-o', '--one-line-regex-pattern'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},
@@ -212,7 +212,7 @@ class Replace(Class, Runnable):
              'dest': 'one_line_regex_pattern',
              'metavar': 'REGEX'}},
         {'arguments': ('-r', '--more-line-regex-pattern'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},
@@ -225,7 +225,7 @@ class Replace(Class, Runnable):
              'dest': 'more_line_regex_pattern',
              'metavar': 'REGEX'}},
         {'arguments': ('-g', '--encoding'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},

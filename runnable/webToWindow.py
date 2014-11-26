@@ -115,7 +115,7 @@ class Browser(Class, Runnable):
 
     COMMAND_LINE_ARGUMENTS = (
         {'arguments': ('_url',),
-         'keywords': {
+         'specification': {
              'action': 'store',
              # 'required': False,
              'help': 'Select an url to request and interpret with the '
@@ -123,7 +123,7 @@ class Browser(Class, Runnable):
              # 'dest': '_url',
              'metavar': 'URL'}},
         {'arguments': ('-w', '--width'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},
@@ -136,7 +136,7 @@ class Browser(Class, Runnable):
              'dest': 'width_in_pixel',
              'metavar': 'NUMBER_OF_PIXELS'}},
         {'arguments': ('-y', '--height'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},
@@ -149,20 +149,20 @@ class Browser(Class, Runnable):
              'dest': 'height_in_pixel',
              'metavar': 'NUMBER_OF_PIXELS'}},
         {'arguments': ('-f', '--fullscreen'),
-         'keywords': {
+         'specification': {
              'action': 'store_true',
              'default': {'execute': '__initializer_default_value__'},
              'help': 'If set window will be started in fullscreen.',
              'dest': 'fullscreen'}},
         {'arguments': ('-n', '--no-window-decoration'),
-         'keywords': {
+         'specification': {
              'action': 'store_true',
              'default': {'execute': '__initializer_default_value__'},
              'help': 'If set no window decoration (e.g. title bar) will be '
                      'shown.',
              'dest': 'no_window_decoration'}},
         {'arguments': ('-g', '--default-gui-toolkit'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': builtins.str,
@@ -177,14 +177,14 @@ class Browser(Class, Runnable):
              'dest': 'default_gui_toolkit',
              'metavar': 'GUI_TOOLKIT'}},
         {'arguments': ('-b', '--no-progress-bar'),
-         'keywords': {
+         'specification': {
              'action': 'store_true',
              'default': {'execute': '__initializer_default_value__'},
              'help': 'If set no progress bar for showing website rendering '
                      'state is shown.',
              'dest': 'no_progress_bar'}},
         {'arguments': ('-d', '--default-title'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},
@@ -198,7 +198,7 @@ class Browser(Class, Runnable):
              'dest': 'default_title',
              'metavar': 'TITLE'}},
         {'arguments': ('-s', '--stop-order'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},

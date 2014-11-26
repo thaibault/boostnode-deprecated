@@ -230,7 +230,7 @@ class Parser(Class, Runnable):
 
     COMMAND_LINE_ARGUMENTS = (
         {'arguments': ('template',),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': builtins.str,
@@ -240,14 +240,14 @@ class Parser(Class, Runnable):
              # 'dest': 'template',
              'metavar': 'TEMPLATE'}},
         {'arguments': ('-s', '--string'),
-         'keywords': {
+         'specification': {
              'action': 'store_true',
              'default': {'execute': '__initializer_default_value__'},
              'help': 'Determine if given template should be interpreted as '
                      'template or a file name pointing to a template file.',
              'dest': 'string'}},
         {'arguments': ('-u', '--cache-path'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': builtins.str,
@@ -258,7 +258,7 @@ class Parser(Class, Runnable):
              'dest': 'cache_path',
              'metavar': 'PATH'}},
         {'arguments': ('-w', '--full-caching'),
-         'keywords': {
+         'specification': {
              'action': 'store_true',
              'default': {'execute': '__initializer_default_value__'},
              'help': 'Only takes affect if a cache path is provided. It '
@@ -266,14 +266,14 @@ class Parser(Class, Runnable):
                      "if given scope variables doesn't change very often.",
              'dest': 'full_caching'}},
         {'arguments': ('-y', '-propagate-full-caching'),
-         'keywords': {
+         'specification': {
              'action': 'store_true',
              'default': {'execute': '__initializer_default_value__'},
              'help': 'Indicates if an activated full caching should be '
                      'propagated to nested template includes.',
              'dest': 'propagate_full_caching'}},
         {'arguments': ('-u', '--cache-path'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': builtins.str,
@@ -283,7 +283,7 @@ class Parser(Class, Runnable):
              'dest': 'cache_path',
              'metavar': 'PATH'}},
         {'arguments': ('-q', '--file-encoding'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},
@@ -295,7 +295,7 @@ class Parser(Class, Runnable):
              'dest': 'file_encoding',
              'metavar': 'ENCODING'}},
         {'arguments': ('-p', '--placeholder-name-pattern'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},
@@ -308,7 +308,7 @@ class Parser(Class, Runnable):
              'dest': 'placeholder_name_pattern',
              'metavar': 'REGEX_PATTERN'}},
         {'arguments': ('-o', '--command-line-placeholder-name-pattern'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},
@@ -322,7 +322,7 @@ class Parser(Class, Runnable):
              'dest': 'command_line_placeholder_name_pattern',
              'metavar': 'REGEX_PATTERN'}},
         {'arguments': ('-d', '--left-code-delimiter'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},
@@ -335,7 +335,7 @@ class Parser(Class, Runnable):
              'dest': 'left_code_delimiter',
              'metavar': 'STRING'}},
         {'arguments': ('-e', '--right-code-delimiter'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},
@@ -348,7 +348,7 @@ class Parser(Class, Runnable):
              'dest': 'right_code_delimiter',
              'metavar': 'STRING'}},
         {'arguments': ('-r', '--right-escaped'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},
@@ -362,7 +362,7 @@ class Parser(Class, Runnable):
              'dest': 'right_escaped',
              'metavar': 'STRING'}},
         {'arguments': ('-f', '--placeholder-pattern'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},
@@ -375,7 +375,7 @@ class Parser(Class, Runnable):
              'dest': 'placeholder_pattern',
              'metavar': 'REGEX_PATTERN'}},
         {'arguments': ('-j', '--template-context-default-indent'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},
@@ -387,7 +387,7 @@ class Parser(Class, Runnable):
              'dest': 'template_context_default_indent',
              'metavar': 'NUMBER'}},
         {'arguments': ('-a', '--template-pattern'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},
@@ -400,7 +400,7 @@ class Parser(Class, Runnable):
              'dest': 'template_pattern',
              'metavar': 'REGEX_PATTERN'}},
         {'arguments': ('-i', '--command-line-placeholder-pattern'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},
@@ -413,7 +413,7 @@ class Parser(Class, Runnable):
              'dest': 'command_line_placeholder_pattern',
              'metavar': 'REGEX_PATTERN'}},
         {'arguments': ('-n', '--native-template-pattern'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},
@@ -426,7 +426,7 @@ class Parser(Class, Runnable):
              'dest': 'native_template_pattern',
              'metavar': 'REGEX_PATTERN'}},
         {'arguments': ('-b', '--builtins'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'nargs': '*',
              'default': {'execute': '__initializer_default_value__'},
@@ -441,7 +441,7 @@ class Parser(Class, Runnable):
              'dest': 'builtin_names',
              'metavar': 'BUILTIN'}},
         {'arguments': ('-g', '--scope-variables'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'nargs': '*',
              'default': (),
@@ -451,7 +451,7 @@ class Parser(Class, Runnable):
              'dest': 'scope_variables',
              'metavar': 'VARIABLES'}},
         {'arguments': ('-k', '--pretty-indent'),
-         'keywords': {
+         'specification': {
              'action': 'store_true',
              'default': {'execute': '__initializer_default_value__'},
              'help': 'Spend time on generating right indented output.',

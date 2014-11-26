@@ -76,7 +76,7 @@ class Run(Class, Runnable):
 
     COMMAND_LINE_ARGUMENTS = (
         {'arguments': ('-f', '--code-file'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},
@@ -85,7 +85,7 @@ class Run(Class, Runnable):
              'dest': 'code_file_path',
              'metavar': 'FILE_PATH'}},
         {'arguments': ('-d', '--default-command-sequence'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'nargs': '*',
              'default': {'execute': '__initializer_default_value__'},
@@ -98,7 +98,7 @@ class Run(Class, Runnable):
              'dest': 'default_command_sequence',
              'metavar': 'COMMAND'}},
         {'arguments': ('-n', '--runner-meta-help'),
-         'keywords': {
+         'specification': {
              'action': 'store_true',
              'default': False,
              'help': 'Shows this help message.',

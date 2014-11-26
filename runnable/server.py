@@ -557,7 +557,7 @@ class Web(Class, Runnable):
 
     COMMAND_LINE_ARGUMENTS = (
         {'arguments': ('-r', '--root'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},
@@ -567,7 +567,7 @@ class Web(Class, Runnable):
              'dest': 'root',
              'metavar': 'PATH'}},
         {'arguments': ('-H', '--host-name'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},
@@ -581,7 +581,7 @@ class Web(Class, Runnable):
              'dest': 'host_name',
              'metavar': 'NAME'}},
         {'arguments': ('-p', '--port'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},
@@ -592,7 +592,7 @@ class Web(Class, Runnable):
              'dest': 'port',
              'metavar': 'NUMBER'}},
         {'arguments': ('-d', '--default'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},
@@ -606,7 +606,7 @@ class Web(Class, Runnable):
              'dest': 'default',
              'metavar': 'PATH'}},
         {'arguments': ('-u', '--public-key-file-path'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},
@@ -619,7 +619,7 @@ class Web(Class, Runnable):
              'dest': 'public_key_file_path',
              'metavar': 'PATH'}},
         {'arguments': ('-o', '--stop-order'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},
@@ -631,7 +631,7 @@ class Web(Class, Runnable):
              'dest': 'stop_order',
              'metavar': 'STRING'}},
         {'arguments': ('-w', '--request-whitelist'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'nargs': '*',
              'default': {'execute': '__initializer_default_value__'},
@@ -642,7 +642,7 @@ class Web(Class, Runnable):
              'dest': 'request_whitelist',
              'metavar': 'REGEX_PATTERN'}},
         {'arguments': ('-b', '--request-blacklist'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'nargs': '*',
              'default': {'execute': '__initializer_default_value__'},
@@ -653,7 +653,7 @@ class Web(Class, Runnable):
              'dest': 'request_blacklist',
              'metavar': 'REGEX_PATTERN'}},
         {'arguments': ('-I', '--internal-redirects'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'nargs': '*',
              'default': {'execute': '__initializer_default_value__'},
@@ -664,7 +664,7 @@ class Web(Class, Runnable):
              'dest': 'internal_redirects',
              'metavar': 'REGEX_PATTERN#REPLACEMENT'}},
         {'arguments': ('-A', '--external-redirects'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'nargs': '*',
              'default': {'execute': '__initializer_default_value__'},
@@ -675,7 +675,7 @@ class Web(Class, Runnable):
              'dest': 'external_redirects',
              'metavar': 'REGEX_PATTERN#REPLACEMENT'}},
         {'arguments': ('-s', '--static-mime-type-pattern'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'nargs': '*',
              'default': {'execute': '__initializer_default_value__'},
@@ -691,7 +691,7 @@ class Web(Class, Runnable):
              'dest': 'static_mime_type_pattern',
              'metavar': 'REGEX_PATTERN'}},
         {'arguments': ('-y', '--dynamic-mime-type-pattern'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'nargs': '*',
              'default': {'execute': '__initializer_default_value__'},
@@ -707,7 +707,7 @@ class Web(Class, Runnable):
              'dest': 'dynamic_mime_type_pattern',
              'metavar': 'REGEX_PATTERN'}},
         {'arguments': ('-C', '--compressible-mime-type-pattern'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'nargs': '*',
              'default': {'execute': '__initializer_default_value__'},
@@ -722,7 +722,7 @@ class Web(Class, Runnable):
              'dest': 'compressible_mime_type_pattern',
              'metavar': 'REGEX_PATTERN'}},
         {'arguments': ('-f', '--default-file-name-pattern'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'nargs': '*',
              'default': {'execute': '__initializer_default_value__'},
@@ -738,7 +738,7 @@ class Web(Class, Runnable):
              'dest': 'default_file_name_pattern',
              'metavar': 'REGEX_PATTERN'}},
         {'arguments': ('-n', '--default-module-name-pattern'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'nargs': '*',
              'default': {'execute': '__initializer_default_value__'},
@@ -753,7 +753,7 @@ class Web(Class, Runnable):
              'dest': 'default_module_names',
              'metavar': 'REGEX_PATTERN'}},
         {'arguments': ('-q', '--file-size-stream-threshold-in-byte'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},
@@ -766,7 +766,7 @@ class Web(Class, Runnable):
              'dest': 'file_size_stream_threshold_in_byte',
              'metavar': 'NUMBER'}},
         {'arguments': ('-a', '--authentication'),
-         'keywords': {
+         'specification': {
              'action': 'store_true',
              'default': {'execute': '__initializer_default_value__'},
              'required': {'execute': '__initializer_default_value__ is None'},
@@ -775,7 +775,7 @@ class Web(Class, Runnable):
                      'directories you want to save.',
              'dest': 'authentication'}},
         {'arguments': ('-e', '--enable-module-loading'),
-         'keywords': {
+         'specification': {
              'action': 'store_true',
              'default': False,
              'required': False,
@@ -785,7 +785,7 @@ class Web(Class, Runnable):
                      'is possible independently.',
              'dest': 'module_loading'}},
         {'arguments': ('-z', '--disable-directory-listing'),
-         'keywords': {
+         'specification': {
              'action': 'store_false',
              'default': True,
              'required': False,
@@ -793,7 +793,7 @@ class Web(Class, Runnable):
                      'requested.',
              'dest': 'directory_listing'}},
         {'arguments': ('-g', '--authentication-file-content-pattern'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},
@@ -806,7 +806,7 @@ class Web(Class, Runnable):
              'dest': 'authentication_file_content_pattern',
              'metavar': 'REGEX_PATTERN'}},
         {'arguments': ('-i', '--authentication-file-name-pattern'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},
@@ -818,7 +818,7 @@ class Web(Class, Runnable):
              'dest': 'authentication_file_name',
              'metavar': 'STRING'}},
         {'arguments': ('-j', '--request-parameter-delimiter'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},
@@ -831,7 +831,7 @@ class Web(Class, Runnable):
              'dest': 'request_parameter_delimiter',
              'metavar': 'STRING'}},
         {'arguments': ('-E', '--encoding'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},
@@ -846,7 +846,7 @@ class Web(Class, Runnable):
              'dest': 'encoding',
              'metavar': 'STRING'}},
         {'arguments': ('-k', '--maximum-number-of-processes'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},

@@ -185,7 +185,7 @@ class Reflector(Class, Runnable):
 
     COMMAND_LINE_ARGUMENTS = (
         {'arguments': ('source_location',),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'nargs': '?',
              'const': '',
@@ -196,7 +196,7 @@ class Reflector(Class, Runnable):
              # 'dest': 'source_location',
              'metavar': 'FOLDER_PATH'}},
         {'arguments': ('target_location',),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'nargs': '?',
              'const': '',
@@ -209,11 +209,11 @@ class Reflector(Class, Runnable):
              # 'dest': 'target_location',
              'metavar': 'FOLDER_PATH'}},
         {'arguments': ('-a', '--source'),
-         'keywords': {'execute': 'arguments[0]["keywords"]'}},
+         'specification': {'execute': 'arguments[0]["specification"]'}},
         {'arguments': ('-b', '--target'),
-         'keywords': {'execute': 'arguments[1]["keywords"]'}},
+         'specification': {'execute': 'arguments[1]["specification"]'}},
         {'arguments': ('-f', '--limit'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},
@@ -225,7 +225,7 @@ class Reflector(Class, Runnable):
              'dest': 'limit',
              'metavar': 'LIMIT'}},
         {'arguments': ('-p', '--priority-locations'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'nargs': '*',
              'default': {'execute': '__initializer_default_value__'},
@@ -237,7 +237,7 @@ class Reflector(Class, Runnable):
              'dest': 'priority_locations',
              'metavar': 'PATHS'}},
         {'arguments': ('-e', '--exclude-locations'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'nargs': '*',
              'default': {'execute': '__initializer_default_value__'},
@@ -249,7 +249,7 @@ class Reflector(Class, Runnable):
              'dest': 'exclude_locations',
              'metavar': 'PATHS'}},
         {'arguments': ('-r', '--target-rights'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},
@@ -261,27 +261,27 @@ class Reflector(Class, Runnable):
              'dest': 'target_rights',
              'metavar': 'RIGHT'}},
         {'arguments': ('-s', '--synchronize-back'),
-         'keywords': {
+         'specification': {
              'action': 'store_true',
              'default': {'execute': '__initializer_default_value__'},
              'help': 'Select to synchronize an existing reflection back.',
              'dest': 'synchronize_back'}},
         {'arguments': ('-d', '--create'),
-         'keywords': {
+         'specification': {
              'action': 'store_true',
              'default': {'execute': '__initializer_default_value__'},
              'help': 'Select to create a reflection (optionally after '
                      'a synchronisation).',
              'dest': 'create'}},
         {'arguments': ('-n', '--use-native-symlinks'),
-         'keywords': {
+         'specification': {
              'action': 'store_true',
              'default': {'execute': '__initializer_default_value__'},
              'help': 'Use native system symbolic links instead of portable '
                      'FileReflector links.',
              'dest': 'use_native_symlinks'}},
         {'arguments': ('-u', '--minimum-reflection-size'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},
@@ -293,7 +293,7 @@ class Reflector(Class, Runnable):
              'dest': 'minimum_reflection_size_in_byte',
              'metavar': 'NUMBER_OF_BYTES'}},
         {'arguments': ('-o', '--open'),
-         'keywords': {
+         'specification': {
              'action': 'store',
              'nargs': '*',
              'default': (),
