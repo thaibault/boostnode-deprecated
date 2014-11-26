@@ -707,7 +707,14 @@ class Object(Class):
 # #     ):
     def get_known_type(self, description=None):
 # #
-        '''Converts interpretable data to python specific data objects.'''
+        '''
+            Converts interpretable data to python specific data objects.
+
+            Examples:
+
+            >>> Object('ap9c').get_known_type('phone_number')
+            '9'
+        '''
         if self.content is not None:
 # # python3.4
 # #             if builtins.isinstance(description, builtins.str):
@@ -731,18 +738,14 @@ class Object(Class):
                     '_time_delta'
                 ) or description.endswith('TimeDelta'):
                     return TimeDelta(self.content).content
-                elif(description == 'phone_number' or description.endswith(
+                elif description == 'phone_number' or description.endswith(
                     '_phone_number'
-                ) or description.endswith('PhoneNumber') or
-                description == 'zip_code' or description.endswith(
+                ) or description.endswith('PhoneNumber'):
+                    return PhoneNumber(self.content).content
+                elif description == 'zip_code' or description.endswith(
                     '_zip_code'
-                ) or description.endswith('ZipCode')):
-                    if regularExpression.compile('[0-9]+').search(
-                        self.content
-                    ):
-                        return regularExpression.compile('[^0-9]+').sub(
-                            '', self.content.replace('+', '00', 1))
-                    return self.content
+                ) or description.endswith('ZipCode'):
+                    return ZipCode(self.content).content
 # # python3.4
 # #             if builtins.isinstance(self.content, builtins.str):
 # #                 return String(self.content).number
@@ -2763,12 +2766,12 @@ class Dictionary(Object, builtins.dict):
                 file).
             '''
 # # python3.4
-# #             __logger__.warning(
-# #                 '%s: %s', exception.__class__.__name__,
-# #                 builtins.str(exception))
-            __logger__.warning(
-                '%s: %s', exception.__class__.__name__,
-                convert_to_unicode(exception))
+# #             __logger__.debug(
+# #                 '%s: %s (%s)', exception.__class__.__name__,
+# #                 builtins.str(exception), builtins.type(iterable))
+            __logger__.debug(
+                '%s: %s (%s)', exception.__class__.__name__,
+                convert_to_unicode(exception), builtins.type(iterable))
 # #
         return iterable
 
@@ -3693,7 +3696,7 @@ class DateTime(Object):
 
     '''This class adds some features for dealing with date times.'''
 
-    # region dynamic me thods
+    # region dynamic methods
 
     # # region public
 
@@ -3754,7 +3757,8 @@ class DateTime(Object):
                                     return
                 if self.content is None:
                     raise __exception__(
-                        '"%s" couldn\'t be interpreted as date time.', content)
+                        '"%s" couldn\'t be interpreted as "%s".', content,
+                        self.__class__.__name__)
 
     # # # endregion
 
@@ -3854,7 +3858,8 @@ class Date(Object):
                                 day=builtins.int(match.group('day')))
                 if self.content is None:
                     raise __exception__(
-                        '"%s" couldn\'t be interpreted as date.', content)
+                        '"%s" couldn\'t be interpreted as "%s".', content,
+                        self.__class__.__name__)
 
     # # # endregion
 
@@ -3875,7 +3880,7 @@ class TimeDelta(Object):
 
     @JointPoint
 # # python3.4     def __init__(self: Self, content=0) -> None:
-    def __init__(self, content=0, default=None):
+    def __init__(self, content=0):
         '''
             Generates a new high level wrapper for dates.
 
@@ -3887,7 +3892,6 @@ class TimeDelta(Object):
             TODO
         '''
         # TODO check branches
-        self.content = None
         if builtins.isinstance(content, NativeTimeDelta):
             self.content = content
         elif builtins.isinstance(content, (builtins.int, builtins.float)):
@@ -3900,7 +3904,267 @@ class TimeDelta(Object):
                 self.content = NativeTimeDelta(seconds=converted_value)
             else:
                 raise __exception__(
-                    '"%s" couldn\'t be interpreted as time delta.', content)
+                    '"%s" couldn\'t be interpreted as "%s".', content,
+                    self.__class__.__name__)
+
+    # # # endregion
+
+    # # endregion
+
+    # endregion
+
+
+class PhoneNumber(Object):
+
+    '''This class adds some features for dealing with phone numbers.'''
+
+
+    # region dynamic methods
+
+    # # region public
+
+    # # # region special
+
+    @JointPoint
+# # python3.4     def __init__(self: Self, content: builtins.str) -> None:
+    def __init__(self, content):
+        '''
+            Generates a new high level wrapper phone numbers.
+
+            Examples:
+
+            >>> PhoneNumber('+49 (0) 176-12 34-56').content
+            '0049-176-1234-56'
+
+            >>> PhoneNumber('+49(0)176 12-34 56').content
+            '0049-176-123456'
+
+            >>> PhoneNumber('+49 176 12 34 56').content
+            '0049-176-123456'
+
+            >>> PhoneNumber('+49-176-12 34 56').content
+            '0049-176-123456'
+
+            >>> PhoneNumber('0172/12555433').content
+            '0172-12555433'
+
+            >>> PhoneNumber('0176 12 34 56').content
+            '0176-123456'
+
+            >>> PhoneNumber('01761 234 56').content
+            '01761-23456'
+
+            >>> PhoneNumber('').content
+            Traceback (most recent call last):
+            ...
+            NativeError: "" couldn't be interpreted as "PhoneNumber".
+
+            >>> PhoneNumber('+49 (178) 12 34 56').content
+            '0049-178-123456'
+
+            >>> PhoneNumber('+49(178)123456').content
+            '0049-178-123456'
+
+            >>> PhoneNumber('+49(178)12345-6').content
+            '0049-178-12345-6'
+
+            >>> PhoneNumber('+49 (178) 123 45-6').content
+            '0049-178-12345-6'
+
+            >>> PhoneNumber(None).content
+            Traceback (most recent call last):
+            ...
+            NativeError: "None" couldn't be interpreted as "PhoneNumber".
+
+            >>> PhoneNumber('06132-77-0').content
+            '06132-77-0'
+
+            >>> PhoneNumber('06132-77-0 ').content
+            '06132-77-0'
+
+            >>> PhoneNumber('06132-77-0a').content
+            '06132-770'
+
+            >>> PhoneNumber('06132-77-0a ').content
+            '06132-770'
+
+            >>> PhoneNumber('  06132-77-0a ').content
+            '06132-770'
+
+            >>> PhoneNumber('  061 32-77-0a ').content
+            '06132-770'
+
+            >>> PhoneNumber('  061 32-77-0 ').content
+            '06132-77-0'
+
+            >>> PhoneNumber('  0061 32-77-0 ').content
+            '0061-32-77-0'
+
+            >>> PhoneNumber('  +61 32-77-0 ').content
+            '0061-32-77-0'
+
+            >>> PhoneNumber('05661-711677').content
+            '05661-711677'
+
+            >>> PhoneNumber('0174/5661677').content
+            '0174-5661677'
+
+            >>> PhoneNumber('+49 (0) 174 / 566 16 77').content
+            '0049-174-5661677'
+
+            >>> PhoneNumber('+49 (174) 566 16 77').content
+            '0049-174-5661677'
+
+            >>> PhoneNumber(' +49 (174) 566 16 77 ').content
+            '0049-174-5661677'
+
+            >>> PhoneNumber('02 91 / 14 55').content
+            '0291-1455'
+        '''
+        # TODO check branches
+# # python3.4
+# #         if(builtins.isinstance(content, builtins.str) and
+# #            regularExpression.compile('[0-9]+').search(content)):
+        if builtins.isinstance(content, (
+            builtins.unicode, builtins.str
+        )) and regularExpression.compile('[0-9]+').search(
+            convert_to_unicode(content)
+        ):
+            content = convert_to_unicode(content)
+# #
+            # TODO
+            a = content
+            '''Normalize country code prefix.'''
+            self.content = regularExpression.compile('^[^0-9]*\+(.+)$').sub(
+                '00\\1', content.strip())
+            separator_pattern = '(?:[ /\\-]+)'
+            '''Remove unneeded area code zero in brackets.'''
+            self.content = regularExpression.compile(
+                '^(.+?){separator}?\(0\){separator}?(.+)$'.format(
+                    separator=separator_pattern)
+            ).sub('\\1-\\2', self.content)
+            '''Remove unneeded area code brackets.'''
+            self.content = regularExpression.compile(
+                '^(.+?){separator}?\((.+)\){separator}?(.+)$'.format(
+                    separator=separator_pattern)
+            ).sub('\\1-\\2-\\3', self.content)
+            '''Remove separators which doesn't mark semantics.'''
+            compiled_pattern = regularExpression.compile(
+                '^(?P<country_code>00[0-9]+){separator}(?P<area_code>[0-9]+)'
+                '{separator}(?P<number>.+)$'.format(
+                    separator=separator_pattern))
+            if compiled_pattern.match(self.content):
+                '''Country code and area code matched.'''
+                self.content = compiled_pattern.sub(
+                    lambda match: '%s-%s-%s' % (
+                        match.group('country_code'), match.group('area_code'),
+                        self._preserve_only_last_separator(match.group(
+                            'number'))
+                    ), self.content)
+            else:
+                '''One prefix code matched.'''
+                compiled_pattern = regularExpression.compile(
+                    '^(?P<prefix_code>[0-9 ]+)[/-](?P<number>.+)$')
+                if compiled_pattern.match(self.content):
+                    '''Prefer "/" or "-" over " " as area code separator.'''
+                    self.content = compiled_pattern.sub(
+                        lambda match: '%s-%s' % (
+                            match.group('prefix_code').replace(' ', ''),
+                            self._preserve_only_last_separator(match.group(
+                                'number'))
+                    ), self.content)
+                else:
+                    self.content = regularExpression.compile(
+                        '^(?P<prefix_code>[0-9]+)%s(?P<number>.+)$' %
+                        separator_pattern
+                    ).sub(lambda match: '%s-%s' % (
+                        match.group('prefix_code'),
+                        self._preserve_only_last_separator(match.group('number'))
+                    ), self.content)
+            self.content = regularExpression.compile('[^0-9-]+').sub(
+                '', self.content)
+        else:
+            raise __exception__(
+                '"%s" couldn\'t be interpreted as "%s".', content,
+                self.__class__.__name__)
+
+    # # # endregion
+
+    # # endregion
+
+    # endregion
+
+    # region static methods
+
+    # # region protected
+
+    @JointPoint(builtins.classmethod)
+# # python3.4
+# #     def _preserve_only_last_separator(self: Self, number: builtins.str):
+    def _preserve_only_last_separator(self, number):
+# #
+        '''
+            Slices all none numbers but preserves last separator.
+
+            Examples:
+
+            >>> PhoneNumber._preserve_only_last_separator('12-34-56')
+            '1234-56'
+        '''
+        compiled_pattern = regularExpression.compile(
+            '^(?P<base_number>.*[0-9].*)-'
+            '(?P<direct_dialing_number_suffix>[0-9]+)$')
+        if compiled_pattern.match(number):
+            return compiled_pattern.sub(lambda match: '%s-%s' % (
+                regularExpression.compile('[^0-9]+').sub('', match.group(
+                    'base_number'
+                )), match.group('direct_dialing_number_suffix')), number)
+        return regularExpression.compile('[^0-9]+').sub('', number)
+
+    # # endregion
+
+    # endregion
+
+
+class ZipCode(Object):
+
+    '''This class adds some features for dealing with zip codes.'''
+
+    # region dynamic methods
+
+    # # region public
+
+    # # # region special
+
+    @JointPoint
+# # python3.4     def __init__(self: Self, content: builtins.str) -> None:
+    def __init__(self, content):
+        '''
+            Generates a new high level wrapper zip codes.
+
+            Examples:
+
+            TODO
+        '''
+        # TODO check branches
+
+# # python3.4
+# #         if(builtins.isinstance(content, builtins.str) and
+# #            regularExpression.compile('[0-9]+').search(self.content)):
+# #             self.content = regularExpression.compile('[^0-9]+').sub(
+# #                 '', content)
+        if builtins.isinstance(content, (
+            builtins.unicode, builtins.str
+        )) and regularExpression.compile('[0-9]+').search(
+            convert_to_unicode(content)
+        ):
+            self.content = regularExpression.compile('[^0-9]+').sub(
+                '', convert_to_unicode(content))
+# #
+        else:
+            raise __exception__(
+                '"%s" couldn\'t be interpreted as "%s".', content,
+                self.__class__.__name__)
 
     # # # endregion
 
