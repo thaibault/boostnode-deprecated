@@ -666,7 +666,7 @@
 
 <dl class="classmethod">
 <dt id="boostNode.extension.native.Module.get_context_path">
-<em class="property">classmethod </em><tt class="descname">get_context_path</tt><big>(</big><em>path=None</em>, <em>frame=&lt;frame object at 0x7fdc645a9050&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_context_path" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><tt class="descname">get_context_path</tt><big>(</big><em>path=None</em>, <em>frame=&lt;frame object at 0x7f5fddc23050&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_context_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines the package and module level context path to a given             context or file.</p>
 <p><strong>path</strong>  - relative or absolute context or file path to normalize</p>
 <p><strong>frame</strong> - stack frame to analyse again context</p>
@@ -929,6 +929,11 @@
 <dt id="boostNode.extension.native.Object.get_known_type">
 <em class="property">static </em><tt class="descname">get_known_type</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Object.get_known_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts interpretable data to python specific data objects.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Object</span><span class="p">(</span><span class="s">&#39;ap9c&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_known_type</span><span class="p">(</span><span class="s">&#39;phone_number&#39;</span><span class="p">)</span>
+<span class="go">&#39;9&#39;</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="staticmethod">
@@ -987,6 +992,12 @@
 </div>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="class">
+<dt id="boostNode.extension.native.PhoneNumber">
+<em class="property">class </em><tt class="descclassname">boostNode.extension.native.</tt><tt class="descname">PhoneNumber</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.PhoneNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class adds some features for dealing with phone numbers.</p>
 </dd></dl>
 
 <dl class="class">
@@ -1577,6 +1588,12 @@
 <dt id="boostNode.extension.native.TimeDelta">
 <em class="property">class </em><tt class="descclassname">boostNode.extension.native.</tt><tt class="descname">TimeDelta</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.TimeDelta" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class adds some features for dealing with date times.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="boostNode.extension.native.ZipCode">
+<em class="property">class </em><tt class="descclassname">boostNode.extension.native.</tt><tt class="descname">ZipCode</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.ZipCode" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class adds some features for dealing with zip codes.</p>
 </dd></dl>
 
 </div>
