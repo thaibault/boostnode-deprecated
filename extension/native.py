@@ -702,10 +702,10 @@ class Object(Class):
     # TODO check complexity everywhere
     @JointPoint(Class.pseudo_property)
 # # python3.4
-# #     def get_known_type(self: Self, description=None) -> (
+# #     def get_known_type(self: Self, description=None, strict=True) -> (
 # #         builtins.object, builtins.type
 # #     ):
-    def get_known_type(self, description=None):
+    def get_known_type(self, description=None, strict=True):
 # #
         '''
             Converts interpretable data to python specific data objects.
@@ -722,30 +722,35 @@ class Object(Class):
                 builtins.unicode, builtins.str
             )):
 # #
-                if description == 'date_time' or description.endswith(
-                    '_date_time'
-                ) or description.endswith('DateTime'):
-                    return DateTime(self.content).content
-                elif description == 'date' or description.endswith(
-                    '_date'
-                ) or description.endswith('Date'):
-                    return Date(self.content).content
-                elif description == 'time' or description.endswith(
-                    '_time'
-                ) or description.endswith('Time'):
-                    return Time(self.content).content
-                elif description == 'time_delta' or description.endswith(
-                    '_time_delta'
-                ) or description.endswith('TimeDelta'):
-                    return TimeDelta(self.content).content
-                elif description == 'phone_number' or description.endswith(
-                    '_phone_number'
-                ) or description.endswith('PhoneNumber'):
-                    return PhoneNumber(self.content).content
-                elif description == 'zip_code' or description.endswith(
-                    '_zip_code'
-                ) or description.endswith('ZipCode'):
-                    return ZipCode(self.content).content
+                try:
+                    if description == 'date_time' or description.endswith(
+                        '_date_time'
+                    ) or description.endswith('DateTime'):
+                        return DateTime(self.content).content
+                    elif description == 'date' or description.endswith(
+                        '_date'
+                    ) or description.endswith('Date'):
+                        return Date(self.content).content
+                    elif description == 'time' or description.endswith(
+                        '_time'
+                    ) or description.endswith('Time'):
+                        return Time(self.content).content
+                    elif description == 'time_delta' or description.endswith(
+                        '_time_delta'
+                    ) or description.endswith('TimeDelta'):
+                        return TimeDelta(self.content).content
+                    elif description == 'phone_number' or description.endswith(
+                        '_phone_number'
+                    ) or description.endswith('PhoneNumber'):
+                        return PhoneNumber(self.content).content
+                    elif description == 'zip_code' or description.endswith(
+                        '_zip_code'
+                    ) or description.endswith('ZipCode'):
+                        return ZipCode(self.content).content
+                except __exception__:
+                    if strict:
+                        raise
+                    return None if strict is None else self.content
 # # python3.4
 # #             if builtins.isinstance(self.content, builtins.str):
 # #                 return String(self.content).number
@@ -2422,7 +2427,7 @@ class Dictionary(Object, builtins.dict):
 # # python3.4
 # #     def get_known_types(
 # #         self: Self, *arguments: (builtins.object, builtins.type),
-# #         **keywords: (builtins.object, builtins.type)
+# #         strict=True, **keywords: (builtins.object, builtins.type)
 # #     ) -> (builtins.object, builtins.type):
     def get_known_types(self, *arguments, **keywords):
 # #
@@ -2430,6 +2435,11 @@ class Dictionary(Object, builtins.dict):
             Converts dictionary where each type will be tried to converted to \
             a native python type. This method provides the same interface as \
             "convert()".
+
+            **strict** - If set to "False" a non convertible value will be \
+                         given back as it is. If set to "True" an exception \
+                         will be raised and if set to "None" "None" will be \
+                         given back for none convertible values.
 
             Examples:
 
@@ -2443,8 +2453,11 @@ class Dictionary(Object, builtins.dict):
 # #                     key
 # #                 ).camel_case_to_delimited.content if builtins.isinstance(
 # #                     key, builtins.str
-# #                 ) else key
-# #             ), value_wrapper=self._convert_to_known_type, **keywords)
+# #                 ) else key, strict=True if strict is None else strict
+# #             ), value_wrapper=lambda key, value:
+# #                self._convert_to_known_type(key, value, strict), **keywords)
+        strict, keywords = Dictionary(keywords).pop(
+            name='strict', default_value=True)
         return self.convert(
             *arguments,
             key_wrapper=lambda key, value: self._convert_to_known_type(
@@ -2452,8 +2465,9 @@ class Dictionary(Object, builtins.dict):
                     key
                 ).camel_case_to_delimited.content if builtins.isinstance(
                     key, (builtins.unicode, builtins.str)
-                ) else key
-            ), value_wrapper=self._convert_to_known_type, **keywords)
+                ) else key, strict=True if strict is None else strict
+            ), value_wrapper=lambda key, value:
+                self._convert_to_known_type(key, value, strict), **keywords)
 # #
 
         # # endregion
@@ -2702,13 +2716,13 @@ class Dictionary(Object, builtins.dict):
     @JointPoint(builtins.classmethod)
 # # python3.4
 # #     def _convert_to_known_type(
-# #         cls, key: (builtins.object, builtins.type), value=Null
+# #         cls, key: (builtins.object, builtins.type), value=Null, strict=True
 # #     ) -> (builtins.object, builtins.type):
-    def _convert_to_known_type(cls, key, value=Null):
+    def _convert_to_known_type(cls, key, value=Null, strict=True):
 # #
         '''Converts interpretable data to python specific data objects.'''
         return Object(content=key if value is Null else value).get_known_type(
-            description=None if value is Null else key)
+            description=None if value is Null else key, strict=strict)
 
     @JointPoint(builtins.classmethod)
 # # python3.4

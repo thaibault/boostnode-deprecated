@@ -2325,10 +2325,19 @@ class CGIHTTPRequestHandler(
         if not (self.content_type_sent or __test_mode__):
             self.content_type_sent = True
             self.send_response(response_code)
-            self.send_header('Content-Type', '%s; charset=%s' % (
-                mime_type, (
-                    self.server.web.encoding if encoding is None else encoding
-                ).replace('_', '-')))
+            charset = ''
+            # TODO check new branch
+            if encoding is None:
+                charset = '; charset=%s' % self.server.web.encoding.replace(
+                    '_', '-')
+# # python3.4
+# #             elif builtins.isinstance(encoding, builtins.str):
+            elif builtins.isinstance(encoding, (
+                builtins.unicode, builtins.str
+            )):
+# #
+                charset = '; charset=%s' % encoding.replace('_', '-')
+            self.send_header('Content-Type', '%s%s' % (mime_type, charset))
         return self
 
     @JointPoint
@@ -2378,7 +2387,7 @@ class CGIHTTPRequestHandler(
                     self._encoded_output = self._gzip(content=dynamic_output)
                 else:
                     self._encoded_output = self._gzip(
-                        content=self.requested_file.content)
+                        content=self.requested_file.get_content(mode='rb'))
                 self.send_header('Content-Length', builtins.len(
                     self._encoded_output))
             else:
@@ -3706,11 +3715,18 @@ class CGIHTTPRequestHandler(
         '''
         threshold = self.server.web.file_size_stream_threshold_in_byte
         if threshold < self.requested_file.size:
-            self.send_content_type_header(mime_type='application/octet-stream')
+            self.send_content_type_header(
+                mime_type='application/octet-stream', encoding=False)
             self.send_header('Content-Transfer-Encoding', 'binary')
         else:
+# # python3.4
+# #             self.send_content_type_header(
+# #                 mime_type=self.requested_file.get_mime_type(web=True),
+# #                 encoding=builtins.isinstance(output, builtins.unicode))
             self.send_content_type_header(
-                mime_type=self.requested_file.get_mime_type(web=True))
+                mime_type=self.requested_file.get_mime_type(web=True),
+                encoding=builtins.isinstance(output, builtins.str))
+# #
         self.send_static_file_cache_header(
             timestamp=self.requested_file.timestamp)
         self.send_content_length_header(
@@ -3783,14 +3799,11 @@ class CGIHTTPRequestHandler(
         output = StringIO.StringIO()
         gzip_file_handler = gzip.GzipFile(
             fileobj=output, mode='w', compresslevel=5)
-# # python3.4
-# #         if builtins.isinstance(content, builtins.bytes):
-# #             gzip_file_handler.write(content)
-# #         else:
-# #             gzip_file_handler.write(content.encode(
-# #                 encoding=self.server.web.encoding))
-        gzip_file_handler.write(content.encode(self.server.web.encoding))
-# #
+        if builtins.isinstance(content, builtins.bytes):
+            gzip_file_handler.write(content)
+        else:
+            gzip_file_handler.write(content.encode(
+                encoding=self.server.web.encoding))
         gzip_file_handler.close()
         return output.getvalue()
 
