@@ -663,7 +663,6 @@ class Object(Class):
 
         # # endregion
 
-    # TODO check
     @JointPoint(Class.pseudo_property)
 # # python3.4
 # #     def get_compatible_type(self: Self) -> (
@@ -671,7 +670,26 @@ class Object(Class):
 # #     ):
     def get_compatible_type(self):
 # #
-        '''Converts data to python cross platform compatible data objects.'''
+        '''
+            Converts data to python cross platform compatible data objects.
+
+            Examples:
+
+            >>> Object('hans').compatible_type
+            'hans'
+
+            >>> Object(1).compatible_type
+            1
+
+            >>> Object(None).compatible_type is None
+            True
+
+            >>> Object(.1).compatible_type
+            0.1
+
+            # TODO
+            >>> Object(NativeDate(1970, 1, 1)).compatible_type
+        '''
 # # python3.4
 # #         if builtins.isinstance(self.content, NativeDate):
 # #             return time.mktime(self.content.timetuple())
@@ -2583,7 +2601,7 @@ class Dictionary(Object, builtins.dict):
             ... ).content == {'_a_': {'_b_'}, '_b_': ['_0_', '_1_']}
             True
         '''
-        for key, value in copy(self.content).items():
+        for key, value in self.content.items():
             # TODO check new branches.
             if key == no_wrap_indicator:
                 if remove_wrap_indicator:
@@ -2612,10 +2630,6 @@ class Dictionary(Object, builtins.dict):
                  not builtins.isinstance(value, (
                      builtins.unicode, builtins.str))):
 # #
-                '''
-                    Take this method type by the abstract class via \
-                    introspection.
-                '''
                 self.content[key] = self._convert_iterable(
                     iterable=value, key_wrapper=key_wrapper,
                     value_wrapper=value_wrapper,

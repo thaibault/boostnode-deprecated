@@ -437,7 +437,7 @@ class Runnable(builtins.object):
 # # python3.4
 # #     def trigger_stop(
 # #         self=None, *arguments: builtins.object, exit=True,
-# #         force_stopping=None, signal_name=None
+# #         force_stopping=None, signal_name=None,
 # #         **keywords: builtins.object
 # #     ) -> Self:
     def trigger_stop(self=None, *arguments, **keywords):
