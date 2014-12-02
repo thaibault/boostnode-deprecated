@@ -165,9 +165,12 @@ def Dictionary_convert(
     for key, value in self.content.items():
         if key == no_wrap_indicator:
             if remove_wrap_indicator:
+                if len(self.content) > 1:
+                    del self.content[key]
+                    self.update(other=value)
+                    continue
                 self.content = value
-            else:
-                self.content[key] = value
+                return self
             return self
         del self.content[key]
         key = key_wrapper(key, value)

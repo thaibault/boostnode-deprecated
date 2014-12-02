@@ -3722,10 +3722,10 @@ class CGIHTTPRequestHandler(
 # # python3.4
 # #             self.send_content_type_header(
 # #                 mime_type=self.requested_file.get_mime_type(web=True),
-# #                 encoding=builtins.isinstance(output, builtins.unicode))
+# #                 encoding=builtins.isinstance(output, builtins.str))
             self.send_content_type_header(
                 mime_type=self.requested_file.get_mime_type(web=True),
-                encoding=builtins.isinstance(output, builtins.str))
+                encoding=builtins.isinstance(output, builtins.unicode))
 # #
         self.send_static_file_cache_header(
             timestamp=self.requested_file.timestamp)

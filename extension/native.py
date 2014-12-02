@@ -236,12 +236,12 @@ class Model(builtins.object):
 # # python3.4
 # #     def get_dictionary(
 # #         self: Self, key_wrapper=lambda key, value: key,
-# #         value_wrapper=lambda key, value: value, prefix_filter='password',
-# #         property_names=()
+# #         value_wrapper=lambda key, value: value,
+# #         prefix_filter=('password',), property_names=()
 # #     ) -> builtins.dict:
     def get_dictionary(
         self, key_wrapper=lambda key, value: key,
-        value_wrapper=lambda key, value: value, prefix_filter='password',
+        value_wrapper=lambda key, value: value, prefix_filter=('password',),
         property_names=()
     ):
 # #
@@ -256,9 +256,7 @@ class Model(builtins.object):
                                  value in returned dictionary.
 
             **prefix_filter**  - Indicates weather all columns with the \
-                                 specified prefix will be filtered. If the \
-                                 empty string is given nothing will be \
-                                 filtered.
+                                 specified prefixes will be filtered.
 
             **property_names** - A list of column names to export. If empty \
                                  (default) all columns will be given back.
@@ -287,7 +285,7 @@ class Model(builtins.object):
             >>> user.password = 'secret'
             >>> user.get_dictionary() == {'a': 5}
             True
-            >>> user.get_dictionary(prefix_filter='') == {
+            >>> user.get_dictionary(prefix_filter=()) == {
             ...     'a': 5, 'password': 'secret'}
             True
 
@@ -317,11 +315,16 @@ class Model(builtins.object):
                 property_names = builtins.tuple(builtins.map(
                     lambda column: column.name, self.__table__.columns))
             else:
+                # TODO check branches.
+                def filter(name):
+                    if name.startswith('_'):
+                        return False
+                    for prefix in prefix_filter:
+                        if name.startswith(prefix_filter):
+                            return False
+                    return True
                 property_names = builtins.tuple(builtins.filter(
-                    lambda name: not (
-                        name.startswith('_') or prefix_filter and
-                        name.startswith(prefix_filter)
-                    ), self.__dict__))
+                    filter, self.__dict__))
         for name in property_names:
             value = builtins.getattr(self, name)
             key = key_wrapper(key=name, value=value)
@@ -2605,9 +2608,12 @@ class Dictionary(Object, builtins.dict):
             # TODO check new branches.
             if key == no_wrap_indicator:
                 if remove_wrap_indicator:
+                    if builtins.len(self.content) > 1:
+                        del self.content[key]
+                        self.update(other=value)
+                        continue
                     self.content = value
-                else:
-                    self.content[key] = value
+                    return self
                 return self
             del self.content[key]
             key = key_wrapper(key, value)
