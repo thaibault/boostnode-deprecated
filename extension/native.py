@@ -664,6 +664,21 @@ class Object(Class):
 # # python3.4         return builtins.str(self.content)
         return convert_to_unicode(self.content)
 
+    @JointPoint
+# # python3.4
+# #     def __eq__(self: Self, other: SelfClassObject) -> builtins.bool:
+    def __eq__(self, other):
+# #
+        '''
+            Is triggered if this object should be compared to another
+
+            Examples:
+
+            >>> Object('hans') == Object('hans')
+            True
+        '''
+        return self.content == other.content
+
         # # endregion
 
     @JointPoint(Class.pseudo_property)
@@ -4074,7 +4089,25 @@ class TimeDelta(Object):
             >>> TimeDelta(12345).content
             datetime.timedelta(0, 12345)
 
-            TODO
+            >>> TimeDelta('2:2').content
+            datetime.timedelta(0, 7320)
+
+            >>> TimeDelta('10:00') == TimeDelta(10 * 60 ** 2)
+            True
+
+            >>> TimeDelta('1').content
+            datetime.timedelta(0, 1)
+
+            >>> TimeDelta('.5').content == TimeDelta(.5).content
+            True
+
+            >>> TimeDelta(NativeTimeDelta(1, 1)).content
+            datetime.timedelta(1, 1)
+
+            >>> TimeDelta('abc')
+            Traceback (most recent call last):
+            ...
+            NativeError: "abc" couldn't be interpreted as "TimeDelta".
         '''
         # TODO check branches
         if builtins.isinstance(content, NativeTimeDelta):
@@ -4309,6 +4342,12 @@ class PhoneNumber(Object):
 
             >>> PhoneNumber._preserve_only_last_separator('12-34-56')
             '1234-56'
+
+            >>> PhoneNumber._preserve_only_last_separator('12 34 56')
+            '123456'
+
+            >>> PhoneNumber._preserve_only_last_separator('123456')
+            '123456'
         '''
         compiled_pattern = regularExpression.compile(
             '^(?P<base_number>.*[0-9].*)-'
@@ -4343,17 +4382,24 @@ class ZipCode(Object):
 
             Examples:
 
-            TODO
-        '''
-        # TODO check branches
+            >>> ZipCode('12345').content
+            '12345'
 
+            >>> ZipCode(12345).content
+            '12345'
+
+            >>> ZipCode('abc')
+            Traceback (most recent call last):
+            ...
+            NativeError: "abc" couldn't be interpreted as "ZipCode".
+        '''
 # # python3.4
-# #         if(builtins.isinstance(content, builtins.str) and
+# #         if(builtins.isinstance(content, (builtins.str, builtins.int)) and
 # #            regularExpression.compile('[0-9]+').search(self.content)):
 # #             self.content = regularExpression.compile('[^0-9]+').sub(
-# #                 '', content)
+# #                 '', builtins.str(content))
         if builtins.isinstance(content, (
-            builtins.unicode, builtins.str
+            builtins.unicode, builtins.str, builtins.int
         )) and regularExpression.compile('[0-9]+').search(
             convert_to_unicode(content)
         ):
