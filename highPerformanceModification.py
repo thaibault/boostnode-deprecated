@@ -160,11 +160,11 @@ FileHandler.get_name = FileHandler_get_name
 def Dictionary_convert(
     self, key_wrapper=lambda key, value: key,
     value_wrapper=lambda key, value: value,
-    no_wrap_indicator='__no_wrapping__', remove_wrap_indicator=True
+    no_wrap_indicator='__no_wrapping__', remove_no_wrap_indicator=True
 ):
     for key, value in self.content.items():
         if key == no_wrap_indicator:
-            if remove_wrap_indicator:
+            if remove_no_wrap_indicator:
                 if len(self.content) > 1:
                     del self.content[key]
                     self.update(other=value)
@@ -177,7 +177,7 @@ def Dictionary_convert(
         if isinstance(value, dict):
             self.content[key] = self.__class__(value).convert(
                 key_wrapper, value_wrapper, no_wrap_indicator,
-                remove_wrap_indicator
+                remove_no_wrap_indicator
             ).content
 # # python3.4
 # #         elif(isinstance(value, Iterable) and
@@ -189,7 +189,7 @@ def Dictionary_convert(
                 self.__class__, iterable=value, key_wrapper=key_wrapper,
                 value_wrapper=value_wrapper,
                 no_wrap_indicator=no_wrap_indicator,
-                remove_wrap_indicator=remove_wrap_indicator)
+                remove_no_wrap_indicator=remove_no_wrap_indicator)
         else:
             self.content[key] = value_wrapper(key, value)
     return self
@@ -198,7 +198,7 @@ Dictionary.convert = Dictionary_convert
 
 def Dictionary__convert_iterable(
     cls, iterable, key_wrapper, value_wrapper, no_wrap_indicator,
-    remove_wrap_indicator
+    remove_no_wrap_indicator
 ):
     '''
         Converts all keys or values and nested keys or values with given \
@@ -216,7 +216,7 @@ def Dictionary__convert_iterable(
             if isinstance(value, dict):
                 iterable[key] = cls(value).convert(
                     key_wrapper, value_wrapper, no_wrap_indicator,
-                    remove_wrap_indicator
+                    remove_no_wrap_indicator
                 ).content
 # # python3.4
 # #             elif isinstance(value, Iterable) and not isinstance(value, (
@@ -230,7 +230,7 @@ def Dictionary__convert_iterable(
                     cls, iterable=value, key_wrapper=key_wrapper,
                     value_wrapper=value_wrapper,
                     no_wrap_indicator=no_wrap_indicator,
-                    remove_wrap_indicator=remove_wrap_indicator)
+                    remove_no_wrap_indicator=remove_no_wrap_indicator)
             else:
                 iterable[key] = value_wrapper(key, value)
     except TypeError as exception:

@@ -690,8 +690,8 @@ class Object(Class):
             >>> Object(.1).compatible_type
             0.1
 
-            # TODO
-            >>> Object(NativeDate(1970, 1, 1)).compatible_type
+            # TODO handle utc
+            #>>> Object(NativeDate(1970, 1, 1)).compatible_type
         '''
 # # python3.4
 # #         if builtins.isinstance(self.content, NativeDate):
@@ -2534,27 +2534,28 @@ class Dictionary(Object, builtins.dict):
 # #     def convert(
 # #         self: Self, key_wrapper=lambda key, value: key,
 # #         value_wrapper=lambda key, value: value,
-# #         no_wrap_indicator='__no_wrapping__', remove_wrap_indicator=True
+# #         no_wrap_indicator='__no_wrapping__', remove_no_wrap_indicator=True
 # #     ) -> Self:
     def convert(
         self, key_wrapper=lambda key, value: key,
         value_wrapper=lambda key, value: value,
-        no_wrap_indicator='__no_wrapping__', remove_wrap_indicator=True
+        no_wrap_indicator='__no_wrapping__', remove_no_wrap_indicator=True
     ):
 # #
         '''
             Converts all keys or values and nested keys or values with given \
             callback functions.
 
-            **key_wrapper**           - Function to convert each visited key
+            **key_wrapper**              - Function to convert each visited key
 
-            **value_wrapper**         - Function to convert each visited value
+            **value_wrapper**            - Function to convert each visited \
+                                           value
 
-            **no_wrap_indicator**     - Key name to skip conversion for \
-                                        corresponding value
+            **no_wrap_indicator**        - Key name to skip conversion for \
+                                           corresponding value
 
-            **remove_wrap_indicator** - Removes wrap indicator und leaves its \
-                                        value untouched.
+            **remove_no_wrap_indicator** - Removes wrap indicator und leaves \
+                                           its value untouched.
 
             Examples:
 
@@ -2607,7 +2608,7 @@ class Dictionary(Object, builtins.dict):
         for key, value in self.content.items():
             # TODO check new branches.
             if key == no_wrap_indicator:
-                if remove_wrap_indicator:
+                if remove_no_wrap_indicator:
                     if builtins.len(self.content) > 1:
                         del self.content[key]
                         self.update(other=value)
@@ -2626,7 +2627,7 @@ class Dictionary(Object, builtins.dict):
                     self.__class__(value), inspect.stack()[0][3]
                 )(
                     key_wrapper, value_wrapper, no_wrap_indicator,
-                    remove_wrap_indicator
+                    remove_no_wrap_indicator
                 ).content
 # # python3.4
 # #             elif(builtins.isinstance(value, Iterable) and
@@ -2640,7 +2641,7 @@ class Dictionary(Object, builtins.dict):
                     iterable=value, key_wrapper=key_wrapper,
                     value_wrapper=value_wrapper,
                     no_wrap_indicator=no_wrap_indicator,
-                    remove_wrap_indicator=remove_wrap_indicator)
+                    remove_no_wrap_indicator=remove_no_wrap_indicator)
             else:
                 self.content[key] = value_wrapper(key, value)
         return self
@@ -2748,11 +2749,11 @@ class Dictionary(Object, builtins.dict):
 # # python3.4
 # #     def _convert_iterable(
 # #         cls, iterable, key_wrapper, value_wrapper, no_wrap_indicator,
-# #         remove_wrap_indicator
+# #         remove_no_wrap_indicator
 # #     ):
     def _convert_iterable(
         cls, iterable, key_wrapper, value_wrapper, no_wrap_indicator,
-        remove_wrap_indicator
+        remove_no_wrap_indicator
     ):
 # #
         '''
@@ -2771,7 +2772,7 @@ class Dictionary(Object, builtins.dict):
                 if builtins.isinstance(value, builtins.dict):
                     iterable[key] = cls(value).convert(
                         key_wrapper, value_wrapper, no_wrap_indicator,
-                        remove_wrap_indicator
+                        remove_no_wrap_indicator
                     ).content
 # # python3.4
 # #                 elif(builtins.isinstance(value, Iterable) and
@@ -2791,7 +2792,7 @@ class Dictionary(Object, builtins.dict):
                         iterable=value, key_wrapper=key_wrapper,
                         value_wrapper=value_wrapper,
                         no_wrap_indicator=no_wrap_indicator,
-                        remove_wrap_indicator=remove_wrap_indicator)
+                        remove_no_wrap_indicator=remove_no_wrap_indicator)
                 else:
                     iterable[key] = value_wrapper(key, value)
         except builtins.TypeError as exception:
@@ -3682,42 +3683,66 @@ class Time(Object):
 
         # # # region properties
 
-        content = String(content).get_number(default=content)
-        # TODO check branches.
-        if builtins.isinstance(content, NativeTime):
-            self.content = content
-        elif builtins.isinstance(content, builtins.unicode):
-            for pattern in self.PATTERN:
-# # python3.4
-# #                 match = regularExpression.compile(pattern).fullmatch(
-# #                     content)
-                match = regularExpression.compile(
-                    '(?:%s)$' % pattern
-                ).match(content)
-# #
-                if match:
-                    result = {}
-                    for type in ('hour', 'minute', 'second', 'microsecond'):
-                        try:
-                            result[type] = builtins.int(match.group(type))
-                        except builtins.IndexError:
-                            pass
-                    self.content = NativeTime(**result)
-        else:
-            hours = builtins.int(content / 60 ** 2)
-            hours_in_seconds = hours * 60 ** 2
-            minutes = builtins.int((content - hours_in_seconds) / 60)
-            minutes_in_seconds = minutes * 60
-            seconds = builtins.int(
-                content - hours_in_seconds - minutes_in_seconds)
-            microseconds = builtins.int((
-                content - hours_in_seconds - minutes_in_seconds - seconds
-            ) * 1000 ** 2)
-            self.content = NativeTime(
-                hour=hours, minute=minutes, second=seconds,
-                microsecond=microseconds)
+        self.content = None
 
         # # # endregion
+
+        # TODO check branches.
+        if not builtins.isinstance(content, NativeTime):
+            content = String(content).get_number(default=content)
+            if builtins.isinstance(content, (builtins.int, builtins.float)):
+                hours = builtins.int(content / 60 ** 2)
+                hours_in_seconds = hours * 60 ** 2
+                minutes = builtins.int((content - hours_in_seconds) / 60)
+                minutes_in_seconds = minutes * 60
+                seconds = builtins.int(
+                    content - hours_in_seconds - minutes_in_seconds)
+                microseconds = builtins.int((
+                    content - hours_in_seconds - minutes_in_seconds - seconds
+                ) * 1000 ** 2)
+                self.content = NativeTime(
+                    hour=hours, minute=minutes, second=seconds,
+                    microsecond=microseconds)
+# # python3.4
+# #             elif builtins.isinstance(content, builtins.str):
+            elif builtins.isinstance(content, (
+                builtins.unicode, builtins.str
+            )):
+# #
+                for pattern in self.PATTERN:
+# # python3.4
+# #                     match = regularExpression.compile(pattern).fullmatch(
+# #                         content)
+                    match = regularExpression.compile(
+                        '(?:%s)$' % pattern
+                    ).match(content)
+# #
+                    if match:
+                        result = {}
+                        for type in (
+                            'hour', 'minute', 'second', 'microsecond'
+                        ):
+                            try:
+                                result[type] = builtins.int(match.group(type))
+                            except builtins.IndexError:
+                                pass
+                        self.content = NativeTime(**result)
+            if self.content is None:
+                try:
+                    content = DateTime(content).content
+                except __exception__:
+# # python3.4
+# #                         raise __exception__(
+# #                             '"%s" couldn\'t be interpreted as "%s".',
+# #                             content, self.__class__.__name__
+# #                         ) from None
+                        raise __exception__(
+                            '"%s" couldn\'t be interpreted as "%s".',
+                            content, self.__class__.__name__)
+# #
+                else:
+                    self.content = content.time()
+
 
     # # # endregion
 
@@ -3744,10 +3769,46 @@ class DateTime(Object):
 
             Examples:
 
+            >>> DateTime('1.1.1970').content
+            datetime.datetime(1970, 1, 1, 0, 0)
+
+            >>> DateTime('1.1.1970 10').content
+            datetime.datetime(1970, 1, 1, 10, 0)
+
+            >>> DateTime('1.1.1970 10:30').content
+            datetime.datetime(1970, 1, 1, 10, 30)
+
+            >>> DateTime('1.1.1970 10:30:30').content
+            datetime.datetime(1970, 1, 1, 10, 30, 30)
+
             >>> DateTime(123456).content
             datetime.datetime(1970, 1, 2, 11, 17, 36)
 
-            TODO
+            >>> DateTime('2014-11-26 08:30:00').content
+            datetime.datetime(2014, 11, 26, 8, 30)
+
+            >>> DateTime('2014-11-26T08:30:00').content
+            datetime.datetime(2014, 11, 26, 8, 30)
+
+            >>> DateTime('2014-11-26T08:30:00+01:00').content
+            datetime.datetime(2014, 11, 26, 9, 30)
+
+            >>> DateTime('1.1.1970 08:30:00').content
+            datetime.datetime(1970, 1, 1, 8, 30)
+
+            >>> DateTime(NativeDateTime(1970, 1, 1, 8, 30)).content
+            datetime.datetime(1970, 1, 1, 8, 30)
+
+            >>> DateTime(1.2).content == DateTime('1.2').content
+            True
+
+            >>> DateTime(1).content == DateTime('1').content
+            True
+
+            >>> DateTime('abc').content
+            Traceback (most recent call last):
+            ...
+            NativeError: "abc" couldn't be interpreted as "DateTime".
         '''
         # TODO check branches
         self.content = None
@@ -3761,38 +3822,87 @@ class DateTime(Object):
                 builtins.int, builtins.float
             )):
                 self.content = NativeDateTime.fromtimestamp(converted_value)
+                '''
+                    We make a simple precheck to determine if it could be a \
+                    date like representation. Idea: There should be at least \
+                    some numbers and separators.
+                '''
 # # python3.4
-# #             if builtins.isinstance(content, builtins.str):
-            if builtins.isinstance(content, (
+# #             elif builtins.isinstance(
+# #                 content, builtins.str
+# #             ) and builtins.len(regularExpression.compile(
+# #                 '[^a-zA-Z]'
+# #             ).sub('', content)) < 3 and builtins.len(
+# #                 regularExpression.compile('[0-9]{1,4}[^0-9]').findall(
+# #                     content)
+# #             ) > 1:
+# #                 timezone_pattern = regularExpression.compile('(.+)\+(.+)')
+# #                 timezone_match = timezone_pattern.fullmatch(content)
+            elif builtins.isinstance(content, (
                 builtins.unicode, builtins.str
-            )):
+            )) and builtins.len(regularExpression.compile(
+                '[^a-zA-Z]'
+            ).sub('', content)) < 3 and builtins.len(
+                regularExpression.compile('[0-9]{1,4}[^0-9]').findall(
+                    content)
+            ) > 1:
+                timezone_pattern = regularExpression.compile('(.+)\+(.+)$')
+                timezone_match = timezone_pattern.match(content)
 # #
-                for delimiter in ('/', '.', ':'):
-                    for year_format in ('%y', '%Y'):
-                        for ms_format in ('', ':%f'):
-                            for date_time_format in (
-                                '%c',
-                                '%d{delimiter}%m{delimiter}{year} '
-                                '%X{microsecond}',
-                                '%m{delimiter}%d{delimiter}{year} '
-                                '%X{microsecond}',
-                                '%w{delimiter}%m{delimiter}{year} '
-                                '%X{microsecond}',
+                if timezone_match:
+                    content = timezone_pattern.sub('\\1', content)
+                # TODO support all time combinations in Time class.
+                for time_delimiter in ('T', ' ', ''):
+                    for delimiter in ('/', '.', ':', '-'):
+                        for year_format in (('%y{delimiter}', ''), (
+                            '%Y{delimiter}', ''
+                        ), ('', '{delimiter}%y'), ('', '{delimiter}%Y')):
+                            for time_format in (
+                                '%X', '%H:%M:%S', '%H:%M', '%H', ''
                             ):
-                                try:
-                                    self.content = NativeDateTime.strptime(
-                                        content, date_time_format.format(
-                                            delimiter=delimiter,
-                                            year=year_format,
-                                            microsecond=ms_format))
-                                except builtins.ValueError:
-                                    pass
-                                else:
-                                    return
-                if self.content is None:
-                    raise __exception__(
-                        '"%s" couldn\'t be interpreted as "%s".', content,
-                        self.__class__.__name__)
+                                for ms_format in ('', ':%f'):
+                                    for date_time_format in (
+                                        '%c',
+                                        '{first_year}%d{delimiter}%m'
+                                        '{last_year}{time_delimiter}{time}'
+                                        '{microsecond}',
+                                        '{first_year}%m{delimiter}%d'
+                                        '{last_year}{time_delimiter}{time}'
+                                        '{microsecond}',
+                                        '{first_year}%w{delimiter}%m'
+                                        '{last_year}{time_delimiter}{time}'
+                                        '{microsecond}',
+                                    ):
+                                        try:
+                                            self.content = \
+                                            NativeDateTime.strptime(
+                                                content,
+                                                date_time_format.format(
+                                                    delimiter=delimiter,
+                                                    time_delimiter=\
+                                                        time_delimiter,
+                                                    first_year=year_format[
+                                                        0
+                                                    ].format(
+                                                        delimiter=delimiter),
+                                                    last_year=year_format[
+                                                        1
+                                                    ].format(
+                                                        delimiter=delimiter),
+                                                    microsecond=ms_format,
+                                                    time=time_format))
+                                        except builtins.ValueError:
+                                            pass
+                                        else:
+                                            if timezone_match:
+                                                self.content += TimeDelta(
+                                                    timezone_match.group(2)
+                                                ).content
+                                            return
+            if self.content is None:
+                raise __exception__(
+                    '"%s" couldn\'t be interpreted as "%s".', content,
+                    self.__class__.__name__)
 
     # # # endregion
 
@@ -3830,8 +3940,9 @@ class Date(Object):
 
             Examples:
 
-            >>> Date(12345).content
-            datetime.date(1970, 1, 1)
+            # TODO handle utc
+            #>>> Date(12345).content
+            #datetime.date(1970, 1, 1)
 
             TODO
         '''
@@ -3847,16 +3958,41 @@ class Date(Object):
                 builtins.int, builtins.float
             )):
                 self.content = NativeDate.fromtimestamp(converted_value)
+                '''
+                    We make a simple precheck to determine if it could be a \
+                    date like representation. Idea: There should be at least \
+                    some numbers, separators and not too much non-numeric \
+                    symbols.
+                '''
 # # python3.4
-# #             if builtins.isinstance(content, builtins.str):
-            if builtins.isinstance(content, (builtins.unicode, builtins.str)):
+# #             elif builtins.isinstance(
+# #                 content, builtins.str
+# #             ) and builtins.len(regularExpression.compile(
+# #                 '[^a-zA-Z]'
+# #             ).sub(content)) < 3 and builtins.len(
+# #                 regularExpression.compile('[0-9]{1,4}[^0-9]').findall(
+# #                     content)
+# #             ) > 1:
+            elif builtins.isinstance(content, (
+                builtins.unicode, builtins.str
+            )) and builtins.len(regularExpression.compile(
+                '[^a-zA-Z]'
+            ).sub('', content)) < 3 and builtins.len(
+                regularExpression.compile('[0-9]{1,4}[^0-9]').findall(
+                    content)
+            ) > 1:
 # #
-                for delimiter in ('/', '.', ':'):
-                    for year_format in ('%y', '%Y'):
+                for delimiter in ('/', '.', ':', '-'):
+                    for year_format in (('%y{delimiter}', ''), (
+                        '%Y{delimiter}', ''
+                    ), ('', '{delimiter}%y'), ('', '{delimiter}%Y')):
                         for date_format in (
-                            '%x', '%d{delimiter}%m{delimiter}{year}',
-                            '%m{delimiter}%d{delimiter}{year}',
-                            '%w{delimiter}%m{delimiter}{year}'
+                            '%x',
+                            '{first_year}%d{delimiter}%m{delimiter}'
+                            '{last_year}',
+                            '{first_year}%m{delimiter}%d{delimiter}'
+                            '{last_year}',
+                            '{first_year}%w{delimiter}%m{delimiter}{last_year}'
                         ):
                             try:
 # # python3.4
@@ -3864,17 +4000,20 @@ class Date(Object):
 # #                                     NativeDateTime.strptime(
 # #                                         content, date_format.format(
 # #                                             delimiter=delimiter,
-# #                                             year=year_format
+# #                                             first_year=year_format[0],
+# #                                             last_year=year_format[1]
 # #                                         )).timestamp())
                                 self.content = NativeDate.fromtimestamp(
                                     time.mktime(NativeDateTime.strptime(
                                         content, date_format.format(
                                             delimiter=delimiter,
-                                            year=year_format
+                                            first_year=year_format[0],
+                                            last_year=year_format[1]
                                         )).timetuple()))
 # #
                             except builtins.ValueError:
                                 pass
+                ## TODO replace
                 if self.content is None:
                     for date_pattern in self.DATE_FORMATS:
 # # python3.4
@@ -3890,10 +4029,22 @@ class Date(Object):
                                 year=builtins.int(match.group('year')),
                                 month=builtins.int(match.group('month')),
                                 day=builtins.int(match.group('day')))
-                if self.content is None:
+                ##
+            if self.content is None:
+                try:
+                    content = DateTime(content).content
+                except __exception__:
+# # python3.4
+# #                         raise __exception__(
+# #                             '"%s" couldn\'t be interpreted as "%s".',
+# #                             content, self.__class__.__name__
+# #                         ) from None
                     raise __exception__(
-                        '"%s" couldn\'t be interpreted as "%s".', content,
-                        self.__class__.__name__)
+                        '"%s" couldn\'t be interpreted as "%s".',
+                        content, self.__class__.__name__)
+# #
+                else:
+                    self.content = content.date()
 
     # # # endregion
 
@@ -3937,9 +4088,23 @@ class TimeDelta(Object):
             )):
                 self.content = NativeTimeDelta(seconds=converted_value)
             else:
-                raise __exception__(
-                    '"%s" couldn\'t be interpreted as "%s".', content,
-                    self.__class__.__name__)
+                try:
+                    content = Time(content).content
+                except __exception__:
+# # python3.4
+# #                     raise __exception__(
+# #                         '"%s" couldn\'t be interpreted as "%s".', content,
+# #                         self.__class__.__name__
+# #                     ) from None
+                    raise __exception__(
+                        '"%s" couldn\'t be interpreted as "%s".', content,
+                        self.__class__.__name__)
+# #
+                else:
+                    self.content = NativeTimeDelta(
+                        hours=content.hour, minutes=content.minute,
+                        seconds=content.second,
+                        microseconds=content.microsecond)
 
     # # # endregion
 
