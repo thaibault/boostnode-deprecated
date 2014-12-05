@@ -68,6 +68,8 @@ from boostNode.paradigm.objectOrientation import Class
 
 # endregion
 
+# TODO check branches.
+# TODO check complexity everywhere
 
 # region classes
 
@@ -315,7 +317,6 @@ class Model(builtins.object):
                 property_names = builtins.tuple(builtins.map(
                     lambda column: column.name, self.__table__.columns))
             else:
-                # TODO check branches.
                 def filter(name):
                     if name.startswith('_'):
                         return False
@@ -734,8 +735,6 @@ class Object(Class):
             return convert_to_unicode(self.content)
         return self.content
 
-    # TODO check
-    # TODO check complexity everywhere
     @JointPoint(Class.pseudo_property)
 # # python3.4
 # #     def get_known_type(self: Self, description=None, strict=True) -> (
@@ -747,6 +746,8 @@ class Object(Class):
             Converts interpretable data to python specific data objects.
 
             Examples:
+
+            >>> Object('ap9c').get_known_type('phone_number')
 
             >>> Object('ap9c').get_known_type('phone_number')
             '9'
@@ -2418,7 +2419,6 @@ class Dictionary(Object, builtins.dict):
 # #
         return builtins.tuple(builtins.sorted(immutable.items()))
 
-    # TODO check
     @JointPoint(Class.pseudo_property)
 # # python3.4
 # #     def get_compatible_types(
@@ -2458,7 +2458,6 @@ class Dictionary(Object, builtins.dict):
             ), value_wrapper=self._convert_to_compatible_type, **keywords)
 # #
 
-    # TODO check
     @JointPoint(Class.pseudo_property)
 # # python3.4
 # #     def get_known_types(
