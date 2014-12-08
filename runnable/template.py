@@ -1253,9 +1253,13 @@ class Parser(Class, Runnable):
         self._builtins = {}
         '''Saves a rendered python code for caching.'''
         self.cache = None
-        if self.cache_path:
+        if builtins.isinstance(self.cache_path, (
+            FileHandler, builtins.str
+        )):
             self.cache = FileHandler(
                 location=self.cache_path, make_directory=True)
+            if not self.cache:
+                self.cache.make_directories()
 
         # # # endregion
 
