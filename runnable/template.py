@@ -1074,7 +1074,7 @@ class Parser(Class, Runnable):
 # #         self: Self, template: (builtins.str, FileHandler), string=None,
 # #         cache_path=None, full_caching=False, propagate_full_caching=False,
 # #         file_encoding=ENCODING, placeholder_name_pattern='[a-zA-Z0-9+\-*/'
-# #             '_\[\]\'"\.()\\\\, :={}$]+',
+# #             '_\[\]\'"\.()\\\\, :={}$&]+',
 # #         command_line_placeholder_name_pattern='(?s)'
 # #                                               '[a-zA-Z0-9_\[\]\.(),\-+]+',
 # #         command_line_placeholder_pattern=(
@@ -1135,7 +1135,7 @@ class Parser(Class, Runnable):
         self, template, string=None, cache_path=None, full_caching=False,
         propagate_full_caching=False, file_encoding=ENCODING,
         placeholder_name_pattern='[a-zA-Z0-9+\-*/'
-            '_\[\]\'"\.()\\\\, :={}$]+',
+            '_\[\]\'"\.()\\\\, :={}$&]+',
         command_line_placeholder_name_pattern='(?s)'
                                               '[a-zA-Z0-9_\[\]\.(),\-+]+',
         command_line_placeholder_pattern='^(?P<variable_name>'
@@ -1258,8 +1258,7 @@ class Parser(Class, Runnable):
         )):
             self.cache = FileHandler(
                 location=self.cache_path, make_directory=True)
-            if not self.cache:
-                self.cache.make_directories()
+            self.cache.make_directories()
 
         # # # endregion
 

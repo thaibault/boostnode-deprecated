@@ -747,7 +747,7 @@ class Object(Class):
 
             Examples:
 
-            >>> Object('ap9c').get_known_type('phone_number')
+            # TODO
 
             >>> Object('ap9c').get_known_type('phone_number')
             '9'
@@ -3807,6 +3807,9 @@ class DateTime(Object):
             >>> DateTime('2014-11-26T08:30:00+01:00').content
             datetime.datetime(2014, 11, 26, 9, 30)
 
+            >>> DateTime('2014-11-10T08:30:00+01:00').content
+            datetime.datetime(2014, 11, 10, 9, 30)
+
             >>> DateTime('1.1.1970 08:30:00').content
             datetime.datetime(1970, 1, 1, 8, 30)
 
@@ -3877,10 +3880,10 @@ class DateTime(Object):
                                 for ms_format in ('', ':%f'):
                                     for date_time_format in (
                                         '%c',
-                                        '{first_year}%d{delimiter}%m'
+                                        '{first_year}%m{delimiter}%d'
                                         '{last_year}{time_delimiter}{time}'
                                         '{microsecond}',
-                                        '{first_year}%m{delimiter}%d'
+                                        '{first_year}%d{delimiter}%m'
                                         '{last_year}{time_delimiter}{time}'
                                         '{microsecond}',
                                         '{first_year}%w{delimiter}%m'
