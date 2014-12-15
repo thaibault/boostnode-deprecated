@@ -1258,7 +1258,8 @@ class Parser(Class, Runnable):
         )):
             self.cache = FileHandler(
                 location=self.cache_path, make_directory=True)
-            self.cache.make_directories()
+            if self.cache:
+                self.cache.make_directories()
 
         # # # endregion
 
