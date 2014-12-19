@@ -37,7 +37,7 @@ __version__ = '1.0'
 import __builtin__ as builtins
 # #
 from collections import Iterable
-from copy import copy
+from copy import copy, deepcopy
 from datetime import datetime as NativeDateTime
 from datetime import time as NativeTime
 from datetime import date as NativeDate
@@ -173,6 +173,7 @@ class InstancePropertyInitializer(ClassPropertyInitializer):
     # endregion
 
 
+# # python3.4 class Model:
 class Model(builtins.object):
 
     '''Represents an abstract data holding class for an orm based model.'''
@@ -488,6 +489,90 @@ class Model(builtins.object):
         return cls
 
         # endregion
+
+    # endregion
+
+
+# # python3.4 class Copyable:
+class Copyable(builtins.object):
+
+    '''
+        Represents copyable and deep copyable objects. Provides generic \
+        copy and recursive deep copy methods.
+    '''
+
+    # region dynamic methods
+
+    # # region public
+
+    # # # region special
+
+    @JointPoint
+# # python3.4     def __copy__(self: Self) -> SelfClassObject:
+    def __copy__(self):
+        '''
+            Triggers if python native copy method is used on current object.
+
+            Examples:
+
+            >>> class Test(Copyable):
+            ...     @InstancePropertyInitializer
+            ...     def __init__(self, test): pass
+
+            >>> test = Test(5)
+            >>> test_copy = copy(test)
+            >>> test_copy.test = 4
+            >>> test.test
+            5
+            >>> test_copy.test
+            4
+
+            >>> class Test(Copyable):
+            ...     @InstancePropertyInitializer
+            ...     def __init__(self, test): pass
+            >>> test = Test([5])
+            >>> test_copy = copy(test)
+            >>> test_copy.test[0] = 4
+            >>> test.test
+            [4]
+            >>> test_copy.test
+            [4]
+        '''
+        return self.__class__(**dict(filter(
+            lambda mapping: mapping[0] in inspect.signature(
+                self.__class__
+            ).parameters.keys(), self.__dict__.items())))
+
+    @JointPoint
+# # python3.4
+# #     def __deepcopy__(self: Self, memory: builtins.dict) -> SelfClassObject:
+    def __deepcopy__(self, memory):
+# #
+        '''
+            Triggers if python native deep copy method is used on current \
+            object.
+
+            Examples:
+
+            >>> class Test(Copyable):
+            ...     @InstancePropertyInitializer
+            ...     def __init__(self, test): pass
+            >>> test = Test([5])
+            >>> test_copy = deepcopy(test)
+            >>> test_copy.test[0] = 4
+            >>> test.test
+            [5]
+            >>> test_copy.test
+            [4]
+        '''
+        return self.__class__(**dict(filter(
+            lambda mapping: mapping[0] in inspect.signature(
+                self.__class__
+            ).parameters.keys(), deepcopy(self.__dict__, memory).items())))
+
+    # # # endregion
+
+    # # endregion
 
     # endregion
 
@@ -2619,7 +2704,12 @@ class Dictionary(Object, builtins.dict):
             ... ).content == {'_a_': {'_b_'}, '_b_': ['_0_', '_1_']}
             True
         '''
-        for key, value in self.content.items():
+        '''
+            NOTE: We have to copy to avoid double convert of some keys or \
+            values.
+        '''
+# # python3.4         for key, value in self.content.copy().items():
+        for key, value in copy(self.content).items():
             # TODO check new branches.
             if key == no_wrap_indicator:
                 if remove_no_wrap_indicator:
@@ -4396,8 +4486,11 @@ class ZipCode(Object):
             NativeError: "abc" couldn't be interpreted as "ZipCode".
         '''
 # # python3.4
-# #         if(builtins.isinstance(content, (builtins.str, builtins.int)) and
-# #            regularExpression.compile('[0-9]+').search(self.content)):
+# #         if builtins.isinstance(content, (
+# #             builtins.str, builtins.int
+# #         )) and regularExpression.compile('[0-9]+').search(builtins.str(
+# #             content
+# #         )):
 # #             self.content = regularExpression.compile('[^0-9]+').sub(
 # #                 '', builtins.str(content))
         if builtins.isinstance(content, (

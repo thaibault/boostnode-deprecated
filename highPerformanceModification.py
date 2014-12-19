@@ -30,6 +30,7 @@ import os
 from boostNode import convert_to_string, convert_to_unicode
 from boostNode.extension.file import Handler as FileHandler
 from boostNode.extension.native import Dictionary, Module
+from boostNode.extension.native import String as StringExtension
 from boostNode.runnable.template import Parser as TemplateParser
 from boostNode.paradigm.objectOrientation import Class
 
