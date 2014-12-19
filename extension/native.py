@@ -538,10 +538,16 @@ class Copyable(builtins.object):
             >>> test_copy.test
             [4]
         '''
+        initializer = self.__class__.__init__
+        while builtins.hasattr(initializer, '__wrapped__'):
+            initializer = initializer.__wrapped__
+# # python3.4
+# #         parameter_names = inspect.signature(initializer).parameters.keys()
+        parameter_names = inspect.getargspec(initializer).args
+# #
         return self.__class__(**dict(filter(
-            lambda mapping: mapping[0] in inspect.signature(
-                self.__class__
-            ).parameters.keys(), self.__dict__.items())))
+            lambda mapping: mapping[0] in parameter_names,
+            self.__dict__.items())))
 
     @JointPoint
 # # python3.4
@@ -565,10 +571,16 @@ class Copyable(builtins.object):
             >>> test_copy.test
             [4]
         '''
+        initializer = self.__class__.__init__
+        while builtins.hasattr(initializer, '__wrapped__'):
+            initializer = initializer.__wrapped__
+# # python3.4
+# #         parameter_names = inspect.signature(initializer).parameters.keys()
+        parameter_names = inspect.getargspec(initializer).args
+# #
         return self.__class__(**dict(filter(
-            lambda mapping: mapping[0] in inspect.signature(
-                self.__class__
-            ).parameters.keys(), deepcopy(self.__dict__, memory).items())))
+            lambda mapping: mapping[0] in parameter_names,
+            deepcopy(self.__dict__, memory).items())))
 
     # # # endregion
 
@@ -2520,7 +2532,8 @@ class Dictionary(Object, builtins.dict):
 
             Examples:
 
-            TODO
+            Dictionary({}).compatible_types
+            {}
         '''
 # # python3.4
 # #         return self.convert(

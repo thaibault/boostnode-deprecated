@@ -2324,14 +2324,13 @@ class CommandLine(builtins.object):
 # #                 else:
 # #                     scope['__initializer_default_value__'] = \
 # #                         parameters[scope['__name__']].default
-            if inspect.getargspec(initializer).defaults:
+            argument_specification = inspect.getargspec(initializer)
+            if argument_specification.defaults:
                 parameters = builtins.dict(builtins.zip(
-                    inspect.getargspec(initializer).args[builtins.len(
-                        inspect.getargspec(initializer).args
-                    ) - builtins.len(inspect.getargspec(
-                        initializer
-                    ).defaults):],
-                    inspect.getargspec(initializer).defaults))
+                    argument_specification.args[builtins.len(
+                        argument_specification.args
+                    ) - builtins.len(argument_specification.defaults):],
+                    argument_specification.defaults))
                 if scope['__name__'] in parameters:
                     '''
                         Set default value to default value of specified \
