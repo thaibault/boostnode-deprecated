@@ -538,16 +538,8 @@ class Copyable(builtins.object):
             >>> test_copy.test
             [4]
         '''
-        initializer = self.__class__.__init__
-        while builtins.hasattr(initializer, '__wrapped__'):
-            initializer = initializer.__wrapped__
-# # python3.4
-# #         parameter_names = inspect.signature(initializer).parameters.keys()
-        parameter_names = inspect.getargspec(initializer).args
-# #
-        return self.__class__(**dict(filter(
-            lambda mapping: mapping[0] in parameter_names,
-            self.__dict__.items())))
+        return self._copy(self.__dict__)
+
 
     @JointPoint
 # # python3.4
@@ -571,6 +563,14 @@ class Copyable(builtins.object):
             >>> test_copy.test
             [4]
         '''
+        return self._copy(deepcopy(self.__dict__, memory))
+
+    @JointPoint
+# # python3.4
+# #     def _copy(self: Self, scope: builtins.dict) -> SelfClassObject:
+    def _copy(self, scope):
+# #
+        '''Creates and returns a new copy of current instance.'''
         initializer = self.__class__.__init__
         while builtins.hasattr(initializer, '__wrapped__'):
             initializer = initializer.__wrapped__
@@ -578,9 +578,8 @@ class Copyable(builtins.object):
 # #         parameter_names = inspect.signature(initializer).parameters.keys()
         parameter_names = inspect.getargspec(initializer).args
 # #
-        return self.__class__(**dict(filter(
-            lambda mapping: mapping[0] in parameter_names,
-            deepcopy(self.__dict__, memory).items())))
+        return self.__class__(**builtins.dict(builtins.filter(
+            lambda mapping: mapping[0] in parameter_names, scope.items())))
 
     # # # endregion
 
@@ -803,6 +802,18 @@ class Object(Class):
             >>> Object(.1).compatible_type
             0.1
 
+            >>> Object(False).compatible_type
+            False
+
+            >>> Object(True).compatible_type
+            True
+
+            >>> Object({'A'}).compatible_type == str(['A'])
+            True
+
+            >>> Object(('A',)).compatible_type == str(['A'])
+            True
+
             # TODO handle utc
             #>>> Object(NativeDate(1970, 1, 1)).compatible_type
         '''
@@ -825,12 +836,15 @@ class Object(Class):
                 self.content.second + self.content.microsecond / 1000 ** 2)
         if builtins.isinstance(self.content, NativeTimeDelta):
             return self.content.total_seconds()
-        if not builtins.isinstance(self.content, (
+        content = self.content
+        if builtins.isinstance(content, (builtins.set, builtins.tuple)):
+            content = builtins.list(content)
+        if not builtins.isinstance(content, (
             builtins.int, builtins.float, builtins.type(None)
         )):
-# # python3.4             return builtins.str(self.content)
-            return convert_to_unicode(self.content)
-        return self.content
+# # python3.4             return builtins.str(content)
+            return convert_to_unicode(content)
+        return content
 
     @JointPoint(Class.pseudo_property)
 # # python3.4
@@ -844,10 +858,39 @@ class Object(Class):
 
             Examples:
 
-            # TODO
+            >>> Object(0).get_known_type(
+            ...     'date_time'
+            ... ) == NativeDateTime.fromtimestamp(0)
+            True
+
+            >>> Object(0).get_known_type('date') == NativeDate.fromtimestamp(0)
+            True
+
+            >>> Object(0).get_known_type('time') == NativeTime(0)
+            True
+
+            >>> Object(0).get_known_type('time_delta') == NativeTimeDelta(0)
+            True
 
             >>> Object('ap9c').get_known_type('phone_number')
             '9'
+
+            >>> Object('abc').get_known_type('zip_code')
+            Traceback (most recent call last):
+            ...
+            NativeError: "abc" couldn't be interpreted as "ZipCode".
+
+            >>> Object('abc').get_known_type('zip_code', strict=False)
+            'abc'
+
+            >>> Object('abc').get_known_type('zip_code', strict=None) is None
+            True
+
+            >>> Object('ap9c').known_type
+            'ap9c'
+
+            >>> Object('9').known_type
+            9
         '''
         if self.content is not None:
 # # python3.4
@@ -2575,6 +2618,9 @@ class Dictionary(Object, builtins.dict):
                          given back for none convertible values.
 
             Examples:
+
+            >>> Object('12.234').known_type
+            12.234
 
             TODO
         '''
