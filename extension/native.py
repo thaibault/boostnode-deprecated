@@ -814,9 +814,6 @@ class Object(Class):
 
             >>> Object(('A',)).compatible_type == str(['A'])
             True
-
-            # TODO handle utc
-            #>>> Object(NativeDate(1970, 1, 1)).compatible_type
         '''
 # # python3.4
 # #         if builtins.isinstance(self.content, NativeDate):
@@ -2764,8 +2761,32 @@ class Dictionary(Object, builtins.dict):
 
             >>> Dictionary({'key': {'__no_wrapping__': 'value'}}).convert(
             ...     value_wrapper=lambda key, value: '_%s_' % value
-            ... ).content == {'key': 'value'}
+            ... ).content
+            {'key': 'value'}
+
+            >>> Dictionary({'key': {'__no_wrapping__': 'value'}}).convert(
+            ...     value_wrapper=lambda key, value: '_%s_' % value
+            ... ).content
+            {'key': 'value'}
+
+            >>> Dictionary(
+            ...     {'a': {'__no_wrapping__': 'value'}, 'b': 5}
+            ... ).convert(
+            ...     value_wrapper=lambda key, value: '_%s_' % value
+            ... ).content == {'a': 'value', 'b': '_5_'}
             True
+
+            >>> Dictionary({'key': {'__no_wrapping__': 'value'}}).convert(
+            ...     value_wrapper=lambda key, value: '_%s_' % value,
+            ...     remove_no_wrap_indicator=False
+            ... ).content
+            {'key': {'__no_wrapping__': 'value'}}
+
+            >>> Dictionary({'key': {'__no_wrapping__': 'value'}}).convert(
+            ...     value_wrapper=lambda key, value: '_%s_' % value,
+            ...     no_wrap_indicator=''
+            ... ).content
+            {'key': {'__no_wrapping__': '_value_'}}
         '''
         '''
             NOTE: We have to copy to avoid double convert of some keys or \
@@ -2773,7 +2794,6 @@ class Dictionary(Object, builtins.dict):
         '''
 # # python3.4         for key, value in self.content.copy().items():
         for key, value in copy(self.content).items():
-            # TODO check new branches.
             if key == no_wrap_indicator:
                 if remove_no_wrap_indicator:
                     if builtins.len(self.content) > 1:
@@ -3465,7 +3485,6 @@ class Module(Object):
             ... ) == {('b', a.b), ('a', 'hans')}
             True
         '''
-        # TODO check branches
         if builtins.isinstance(object, builtins.dict):
             scope = object
             only_module_level = False
