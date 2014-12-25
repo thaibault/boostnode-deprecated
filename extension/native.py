@@ -70,6 +70,7 @@ from boostNode.paradigm.objectOrientation import Class
 
 # TODO check branches.
 # TODO check complexity everywhere
+# TODO handle utc
 
 # region classes
 
@@ -3814,12 +3815,6 @@ class Time(Object):
 
     '''This class adds some features for dealing with times.'''
 
-    # region properties
-
-    PATTERN = '(?P<hour>[0-9]{1,2}):(?P<minute>[0-9]{1,2})',
-
-    # endregion
-
     # region dynamic methods
 
     # # region public
@@ -3840,18 +3835,30 @@ class Time(Object):
             >>> Time()
             Object of "time" (datetime.time(0, 0)).
 
+            >>> Time(NativeTime(0, 0)).content
+            datetime.time(0, 0)
+
+            >>> Time('08').content
+            datetime.time(0, 0, 8)
+
             >>> Time('08:30').content
             datetime.time(8, 30)
+
+            >>> Time('08:30+1:0').content
+            datetime.time(9, 30)
+
+            >>> Time('1.1.1970 10').content
+            datetime.time(10, 0)
+
+            >>> Time('abc')
+            Traceback (most recent call last):
+            ...
+            NativeError: "abc" couldn't be interpreted as "Time".
         '''
-
-        # # # region properties
-
         self.content = None
-
-        # # # endregion
-
-        # TODO check branches.
-        if not builtins.isinstance(content, NativeTime):
+        if builtins.isinstance(content, NativeTime):
+            self.content = content
+        else:
             content = String(content).get_number(default=content)
             if builtins.isinstance(content, (builtins.int, builtins.float)):
                 hours = builtins.int(content / 60 ** 2)
@@ -3868,28 +3875,30 @@ class Time(Object):
                     microsecond=microseconds)
 # # python3.4
 # #             elif builtins.isinstance(content, builtins.str):
+# #                 timezone_pattern = regularExpression.compile('(.+)\+(.+)')
+# #                 timezone_match = timezone_pattern.fullmatch(content)
             elif builtins.isinstance(content, (
                 builtins.unicode, builtins.str
             )):
+                timezone_pattern = regularExpression.compile('(.+)\+(.+)$')
+                timezone_match = timezone_pattern.match(content)
 # #
-                for pattern in self.PATTERN:
-# # python3.4
-# #                     match = regularExpression.compile(pattern).fullmatch(
-# #                         content)
-                    match = regularExpression.compile(
-                        '(?:%s)$' % pattern
-                    ).match(content)
-# #
-                    if match:
-                        result = {}
-                        for type in (
-                            'hour', 'minute', 'second', 'microsecond'
-                        ):
-                            try:
-                                result[type] = builtins.int(match.group(type))
-                            except builtins.IndexError:
-                                pass
-                        self.content = NativeTime(**result)
+                if timezone_match:
+                    content = timezone_pattern.sub('\\1', content)
+                for time_format in (
+                    '%X', '%H:%M:%S:%f', '%H:%M:%S', '%H:%M', '%H'
+                ):
+                    try:
+                        content = NativeDateTime.strptime(content, time_format)
+                    except builtins.ValueError:
+                        pass
+                    else:
+                        if timezone_match:
+                            content += TimeDelta(
+                                timezone_match.group(2)
+                            ).content
+                        self.content = content.time()
+                        return
             if self.content is None:
                 try:
                     content = DateTime(content).content
@@ -3905,7 +3914,6 @@ class Time(Object):
 # #
                 else:
                     self.content = content.time()
-
 
     # # # endregion
 
@@ -3931,6 +3939,15 @@ class DateTime(Object):
             Generates a new high level wrapper for date times.
 
             Examples:
+
+            >>> DateTime(NativeDateTime(1970, 1, 1, 0, 0)).content
+            datetime.datetime(1970, 1, 1, 0, 0)
+
+            >>> DateTime(1.2).content == DateTime('1.2').content
+            True
+
+            >>> DateTime(1).content == DateTime('1').content
+            True
 
             >>> DateTime('1.1.1970').content
             datetime.datetime(1970, 1, 1, 0, 0)
@@ -3965,18 +3982,11 @@ class DateTime(Object):
             >>> DateTime(NativeDateTime(1970, 1, 1, 8, 30)).content
             datetime.datetime(1970, 1, 1, 8, 30)
 
-            >>> DateTime(1.2).content == DateTime('1.2').content
-            True
-
-            >>> DateTime(1).content == DateTime('1').content
-            True
-
             >>> DateTime('abc').content
             Traceback (most recent call last):
             ...
             NativeError: "abc" couldn't be interpreted as "DateTime".
         '''
-        # TODO check branches
         self.content = None
         if builtins.isinstance(content, NativeDateTime):
             self.content = content
@@ -4017,7 +4027,6 @@ class DateTime(Object):
 # #
                 if timezone_match:
                     content = timezone_pattern.sub('\\1', content)
-                # TODO support all time combinations in Time class.
                 for time_delimiter in ('T', ' ', ''):
                     for delimiter in ('/', '.', ':', '-'):
                         for year_format in (('%y{delimiter}', ''), (
@@ -4081,17 +4090,6 @@ class Date(Object):
 
     '''This class adds some features for dealing with date times.'''
 
-    # region properties
-
-    DATE_FORMATS = (
-        '^(?:[A-Za-z]{2}\. )?(?P<day>[0-9]{1,2})\.(?P<month>[0-9]{1,2})\.'
-        '(?P<year>[0-9]{4})',
-        '^(?:[A-Za-z]{2}\. )?(?P<month>[0-9]{1,2})/(?P<day>[0-9]{1,2})/'
-        '(?P<year>[0-9]{4})')
-    '''Known date formats to parse date strings.'''
-
-    # endregion
-
     # region dynamic methods
 
     # # region public
@@ -4106,13 +4104,29 @@ class Date(Object):
 
             Examples:
 
-            # TODO handle utc
-            #>>> Date(12345).content
-            #datetime.date(1970, 1, 1)
+            >>> Date(NativeDate(1970, 1, 1)).content
+            datetime.date(1970, 1, 1)
 
-            TODO
+            >>> Date(12345) == Date('12345')
+            True
+
+            >>> Date('1.1.1970').content
+            datetime.date(1970, 1, 1)
+
+            >>> Date('Mo. 1.1.1970').content
+            datetime.date(1970, 1, 1)
+
+            >>> Date('Mo. 1/1/1970').content
+            datetime.date(1970, 1, 1)
+
+            >>> Date('1.1.1970 10:30:30').content
+            datetime.date(1970, 1, 1)
+
+            >>> Date('abc').content
+            Traceback (most recent call last):
+            ...
+            NativeError: "abc" couldn't be interpreted as "Date".
         '''
-        # TODO check branches
         self.content = None
         if builtins.isinstance(content, NativeDate):
             self.content = content
@@ -4131,86 +4145,78 @@ class Date(Object):
                     symbols.
                 '''
 # # python3.4
-# #             elif builtins.isinstance(
-# #                 content, builtins.str
-# #             ) and builtins.len(regularExpression.compile(
-# #                 '[^a-zA-Z]'
-# #             ).sub(content)) < 3 and builtins.len(
-# #                 regularExpression.compile('[0-9]{1,4}[^0-9]').findall(
-# #                     content)
-# #             ) > 1:
+# #             elif builtins.isinstance(content, builtins.str):
+# #                 weekday_pattern = regularExpression.compile(
+# #                     '[A-Za-z]{2}\. (.+)')
+# #                 weekday_match = weekday_pattern.fullmatch(content)
+# #                 if weekday_match:
+# #                     content = weekday_pattern.sub('\\1', content)
+# #                 if builtins.len(regularExpression.compile('[^a-zA-Z]').sub(
+# #                     '', content
+# #                 )) < 3 and builtins.len(regularExpression.compile(
+# #                     '[0-9]{1,4}[^0-9]').findall(content)
+# #                 ) > 1:
             elif builtins.isinstance(content, (
                 builtins.unicode, builtins.str
-            )) and builtins.len(regularExpression.compile(
-                '[^a-zA-Z]'
-            ).sub('', content)) < 3 and builtins.len(
-                regularExpression.compile('[0-9]{1,4}[^0-9]').findall(
-                    content)
-            ) > 1:
+            )):
+                weekday_pattern = regularExpression.compile(
+                    '[A-Za-z]{2}\. (.+)$')
+                weekday_match = weekday_pattern.match(content)
+                if weekday_match:
+                    content = weekday_pattern.sub('\\1', content)
+                if builtins.len(regularExpression.compile(
+                    '[^a-zA-Z]'
+                ).sub('', content)) < 3 and builtins.len(
+                    regularExpression.compile('[0-9]{1,4}[^0-9]').findall(
+                        content)
+                ) > 1:
 # #
-                for delimiter in ('/', '.', ':', '-'):
-                    for year_format in (('%y{delimiter}', ''), (
-                        '%Y{delimiter}', ''
-                    ), ('', '{delimiter}%y'), ('', '{delimiter}%Y')):
-                        for date_format in (
-                            '%x',
-                            '{first_year}%d{delimiter}%m{delimiter}'
-                            '{last_year}',
-                            '{first_year}%m{delimiter}%d{delimiter}'
-                            '{last_year}',
-                            '{first_year}%w{delimiter}%m{delimiter}{last_year}'
-                        ):
-                            try:
+                    for delimiter in ('/', '.', ':', '-'):
+                        for year_format in (('%y{delimiter}', ''), (
+                            '%Y{delimiter}', ''
+                        ), ('', '{delimiter}%y'), ('', '{delimiter}%Y')):
+                            for date_format in (
+                                '%x',
+                                '{first_year}%d{delimiter}%m{delimiter}'
+                                '{last_year}',
+                                '{first_year}%m{delimiter}%d{delimiter}'
+                                '{last_year}',
+                                '{first_year}%w{delimiter}%m{delimiter}{last_year}'
+                            ):
+                                try:
 # # python3.4
-# #                                 self.content = NativeDate.fromtimestamp(
-# #                                     NativeDateTime.strptime(
-# #                                         content, date_format.format(
-# #                                             delimiter=delimiter,
-# #                                             first_year=year_format[0],
-# #                                             last_year=year_format[1]
-# #                                         )).timestamp())
-                                self.content = NativeDate.fromtimestamp(
-                                    time.mktime(NativeDateTime.strptime(
-                                        content, date_format.format(
-                                            delimiter=delimiter,
-                                            first_year=year_format[0],
-                                            last_year=year_format[1]
-                                        )).timetuple()))
+# #                                     self.content = NativeDate.fromtimestamp(
+# #                                         NativeDateTime.strptime(
+# #                                             content, date_format.format(
+# #                                                 delimiter=delimiter,
+# #                                                 first_year=year_format[0],
+# #                                                 last_year=year_format[1]
+# #                                             )).timestamp())
+                                    self.content = NativeDate.fromtimestamp(
+                                        time.mktime(NativeDateTime.strptime(
+                                            content, date_format.format(
+                                                delimiter=delimiter,
+                                                first_year=year_format[0],
+                                                last_year=year_format[1]
+                                            )).timetuple()))
 # #
-                            except builtins.ValueError:
-                                pass
-                ## TODO replace
+                                except builtins.ValueError:
+                                    pass
                 if self.content is None:
-                    for date_pattern in self.DATE_FORMATS:
+                    try:
+                        content = DateTime(content).content
+                    except __exception__:
 # # python3.4
-# #                         match = regularExpression.compile(
-# #                             date_pattern
-# #                         ).match(content)
-                        match = regularExpression.compile(
-                            '(?:%s)$' % date_pattern
-                        ).match(content)
+# #                             raise __exception__(
+# #                                 '"%s" couldn\'t be interpreted as "%s".',
+# #                                 content, self.__class__.__name__
+# #                             ) from None
+                        raise __exception__(
+                            '"%s" couldn\'t be interpreted as "%s".',
+                            content, self.__class__.__name__)
 # #
-                        if match:
-                            self.content = NativeDate(
-                                year=builtins.int(match.group('year')),
-                                month=builtins.int(match.group('month')),
-                                day=builtins.int(match.group('day')))
-                ##
-            if self.content is None:
-                try:
-                    content = DateTime(content).content
-                except __exception__:
-# # python3.4
-# #                         raise __exception__(
-# #                             '"%s" couldn\'t be interpreted as "%s".',
-# #                             content, self.__class__.__name__
-# #                         ) from None
-                    raise __exception__(
-                        '"%s" couldn\'t be interpreted as "%s".',
-                        content, self.__class__.__name__)
-# #
-                else:
-                    self.content = content.date()
+                    else:
+                        self.content = content.date()
 
     # # # endregion
 
@@ -4237,14 +4243,11 @@ class TimeDelta(Object):
 
             Examples:
 
-            >>> TimeDelta(12345).content
+            >>> TimeDelta(NativeTimeDelta(0, 12345)).content
             datetime.timedelta(0, 12345)
 
-            >>> TimeDelta('2:2').content
-            datetime.timedelta(0, 7320)
-
-            >>> TimeDelta('10:00') == TimeDelta(10 * 60 ** 2)
-            True
+            >>> TimeDelta(12345).content
+            datetime.timedelta(0, 12345)
 
             >>> TimeDelta('1').content
             datetime.timedelta(0, 1)
@@ -4252,15 +4255,17 @@ class TimeDelta(Object):
             >>> TimeDelta('.5').content == TimeDelta(.5).content
             True
 
-            >>> TimeDelta(NativeTimeDelta(1, 1)).content
-            datetime.timedelta(1, 1)
+            >>> TimeDelta('2:2').content
+            datetime.timedelta(0, 7320)
+
+            >>> TimeDelta('10:00') == TimeDelta(10 * 60 ** 2)
+            True
 
             >>> TimeDelta('abc')
             Traceback (most recent call last):
             ...
             NativeError: "abc" couldn't be interpreted as "TimeDelta".
         '''
-        # TODO check branches
         if builtins.isinstance(content, NativeTimeDelta):
             self.content = content
         elif builtins.isinstance(content, (builtins.int, builtins.float)):
@@ -4415,8 +4420,6 @@ class PhoneNumber(Object):
         ):
             content = convert_to_unicode(content)
 # #
-            # TODO
-            a = content
             '''Normalize country code prefix.'''
             self.content = regularExpression.compile('^[^0-9]*\+(.+)$').sub(
                 '00\\1', content.strip())
