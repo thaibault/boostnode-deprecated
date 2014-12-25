@@ -3133,14 +3133,7 @@ class Handler(Class):
 
         if self:
             if self._path == '\\' and Platform().operating_system == 'windows':
-                for letter_number in builtins.range(
-                        builtins.ord('A'), builtins.ord('Z') + 1):
-                    path = '%s:\\' % builtins.chr(letter_number)
-# # python3.4
-# #                     if os.path.exists(path):
-                    if os.path.exists(convert_to_string(path)):
-# #
-                        yield self.__class__(location=path)
+                yield self._list_windows_root()
             elif self.is_directory():
                 try:
 # # python3.4
@@ -4450,6 +4443,19 @@ class Handler(Class):
         # endregion
 
         # region protected
+
+    @JointPoint
+# # python3.4      def _list_windows_root(self: Self) -> types.GeneratorType:
+    def _list_windows_root(self):
+        '''List partitions on windows root file systems.'''
+        for letter_number in builtins.range(
+                builtins.ord('A'), builtins.ord('Z') + 1):
+            path = '%s:\\' % builtins.chr(letter_number)
+# # python3.4
+# #             if os.path.exists(path):
+            if os.path.exists(convert_to_string(path)):
+# #
+                yield self.__class__(location=path)
 
     @JointPoint
 # # python3.4

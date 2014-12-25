@@ -214,9 +214,6 @@ class Buffer(Class, LoggingStreamHandler):
             ... ).queue # doctest: +ELLIPSIS
             <multiprocessing.queues.Queue object at ...>
         '''
-
-        # # # region properties
-
 # # python3.4         pass
         self.force_string = force_string
         '''Saves the last written input.'''
@@ -243,14 +240,10 @@ class Buffer(Class, LoggingStreamHandler):
         '''
         self._lock = threading.Lock()
         '''Saves the current buffer content.'''
-        self._content = ''
 # # python3.4
-# #         pass
-        if self.force_string:
-            self._content = builtins.str()
+# #         self._content = ''
+        self._content = builtins.str() if self.force_string else ''
 # #
-
-        # # # endregion
 
     @JointPoint
 # # python3.4     def __repr__(self: Self) -> builtins.str:
@@ -591,14 +584,8 @@ class Print(Class):
             'buffer': self.__class__.default_buffer,
             'flush': codewords.get('replace', False)}
         keywords.update(codewords)
-
-        # # # region properties
-
         '''Redirect print output to this buffer.'''
         self.buffer = keywords['buffer']
-
-        # # # endregion
-
         output = builtins.list(output)
         for index, out in builtins.enumerate(output):
             if builtins.isinstance(out, native_queue.Queue):
@@ -631,9 +618,9 @@ class Print(Class):
 # #         builtins.print(
 # #             *output, sep='', end='', file=keywords['buffer'],
 # #             flush=keywords['flush'])
-        for key, value in builtins.enumerate(output):
-            output[key] = convert_to_string(value)
-        builtins.print(*output, sep='', end='', file=keywords['buffer'])
+        builtins.print(*filter(lambda content: convert_to_string(
+            content
+        ), output), sep='', end='', file=keywords['buffer'])
         if keywords['flush']:
             sys.stdout.flush()
 # #

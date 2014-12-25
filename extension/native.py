@@ -69,7 +69,6 @@ from boostNode.paradigm.objectOrientation import Class
 # endregion
 
 # TODO check branches.
-# TODO check complexity everywhere
 # TODO handle utc
 
 # region classes
@@ -898,30 +897,9 @@ class Object(Class):
             )):
 # #
                 try:
-                    if description == 'date_time' or description.endswith(
-                        '_date_time'
-                    ) or description.endswith('DateTime'):
-                        return DateTime(self.content).content
-                    elif description == 'date' or description.endswith(
-                        '_date'
-                    ) or description.endswith('Date'):
-                        return Date(self.content).content
-                    elif description == 'time' or description.endswith(
-                        '_time'
-                    ) or description.endswith('Time'):
-                        return Time(self.content).content
-                    elif description == 'time_delta' or description.endswith(
-                        '_time_delta'
-                    ) or description.endswith('TimeDelta'):
-                        return TimeDelta(self.content).content
-                    elif description == 'phone_number' or description.endswith(
-                        '_phone_number'
-                    ) or description.endswith('PhoneNumber'):
-                        return PhoneNumber(self.content).content
-                    elif description == 'zip_code' or description.endswith(
-                        '_zip_code'
-                    ) or description.endswith('ZipCode'):
-                        return ZipCode(self.content).content
+                    result = self._create_known_type(description)
+                    if result is not None:
+                        return result
                 except __exception__:
                     if strict:
                         raise
@@ -1050,6 +1028,30 @@ class Object(Class):
 # #
 
         # endregion
+
+    @JointPoint
+# # python3.4
+# #     def _create_known_type(self: Self, description: (
+# #         builtins.str, None
+# #     )) -> (
+# #         NativeDateTime, NativeDate, NativeTime, NativeTimeDelta,
+# #         builtins.str, None
+# #     ):
+    def _create_known_type(self, description):
+# #
+        '''Creates a known type depending on given description.'''
+        for type_description in (
+            'date_time', 'date', 'time', 'phone_number', 'zip_code',
+            'time_delta'
+        ):
+            class_name = String(
+                type_description
+            ).delimited_to_camel_case.camel_case_capitalize.content
+            if description == type_description or description.endswith(
+                '_%s' % type_description
+            ) or description.endswith(class_name):
+                return builtins.globals()[class_name](self.content).content
+
 
     # endregion
 
@@ -3485,16 +3487,8 @@ class Module(Object):
             ... ) == {('b', a.b), ('a', 'hans')}
             True
         '''
-        if builtins.isinstance(object, builtins.dict):
-            scope = object
-            only_module_level = False
-        else:
-            scope = {}
-            for object_name in builtins.dir(object):
-# # python3.4                 pass
-                object_name = convert_to_unicode(object_name)
-                scope[object_name] = builtins.getattr(
-                    object, object_name, None)
+        scope, only_module_level = cls._determine_scope(
+            object, only_module_level)
         for object_name, defined_object in scope.items():
             defined_object = cls._determine_object(defined_object)
             if(not (object_name.startswith('__') and
@@ -3770,6 +3764,22 @@ class Module(Object):
         # endregion
 
         # region protected
+
+    @JointPoint(builtins.classmethod)
+# # python3.4     def _determine_scope(cls, object, only_module_level):
+    def _determine_scope(cls, object, only_module_level):
+        '''Determines needed scope to find module objects.'''
+        if builtins.isinstance(object, builtins.dict):
+            scope = object
+            only_module_level = False
+        else:
+            scope = {}
+            for object_name in builtins.dir(object):
+# # python3.4                 pass
+                object_name = convert_to_unicode(object_name)
+                scope[object_name] = builtins.getattr(
+                    object, object_name, None)
+        return scope, only_module_level
 
     @JointPoint(builtins.classmethod)
 # # python3.4
@@ -4061,64 +4071,69 @@ class DateTime(Object):
                 regularExpression.compile('[0-9]{1,4}[^0-9]').findall(
                     content)
             ) > 1:
+                content = Date.slice_weekday(content)
                 timezone_pattern = regularExpression.compile('(.+)\+(.+)$')
                 timezone_match = timezone_pattern.match(content)
 # #
                 if timezone_match:
                     content = timezone_pattern.sub('\\1', content)
-                for time_delimiter in ('T', ' ', ''):
-                    for delimiter in ('/', '.', ':', '-'):
-                        for year_format in (('%y{delimiter}', ''), (
-                            '%Y{delimiter}', ''
-                        ), ('', '{delimiter}%y'), ('', '{delimiter}%Y')):
-                            for time_format in (
-                                '%X', '%H:%M:%S', '%H:%M', '%H', ''
-                            ):
-                                for ms_format in ('', ':%f'):
-                                    for date_time_format in (
-                                        '%c',
-                                        '{first_year}%m{delimiter}%d'
-                                        '{last_year}{time_delimiter}{time}'
-                                        '{microsecond}',
-                                        '{first_year}%d{delimiter}%m'
-                                        '{last_year}{time_delimiter}{time}'
-                                        '{microsecond}',
-                                        '{first_year}%w{delimiter}%m'
-                                        '{last_year}{time_delimiter}{time}'
-                                        '{microsecond}',
-                                    ):
-                                        try:
-                                            self.content = \
-                                            NativeDateTime.strptime(
-                                                content,
-                                                date_time_format.format(
-                                                    delimiter=delimiter,
-                                                    time_delimiter=\
-                                                        time_delimiter,
-                                                    first_year=year_format[
-                                                        0
-                                                    ].format(
-                                                        delimiter=delimiter),
-                                                    last_year=year_format[
-                                                        1
-                                                    ].format(
-                                                        delimiter=delimiter),
-                                                    microsecond=ms_format,
-                                                    time=time_format))
-                                        except builtins.ValueError:
-                                            pass
-                                        else:
-                                            if timezone_match:
-                                                self.content += TimeDelta(
-                                                    timezone_match.group(2)
-                                                ).content
-                                            return
+                self._interpret_date_time(content, timezone_match)
             if self.content is None:
                 raise __exception__(
                     '"%s" couldn\'t be interpreted as "%s".', content,
                     self.__class__.__name__)
 
     # # # endregion
+
+    # # endregion
+
+    # # region protected
+
+    @JointPoint
+# # python3.4
+# #     def _interpret_date_time(
+# #         self: Self, content: builtins.str, timezone_match: (
+# #             None, builtins.type(regularExpression.compile('').match(''))
+# #         )) -> None:
+    def _interpret_date_time(self, content, timezone_match):
+# #
+        '''Interprets given content string as date time.'''
+        for time_delimiter in ('T', ' ', ''):
+            for delimiter in ('/', '.', ':', '-'):
+                for year_format in (('%y{delimiter}', ''), (
+                    '%Y{delimiter}', ''
+                ), ('', '{delimiter}%y'), ('', '{delimiter}%Y')):
+                    for time_format in ('%X', '%H:%M:%S', '%H:%M', '%H', ''):
+                        for ms_format in ('', ':%f'):
+                            for date_time_format in (
+                                '%c', '{first_year}%m{delimiter}%d{last_year}'
+                                '{time_delimiter}{time}{microsecond}',
+                                '{first_year}%d{delimiter}%m{last_year}'
+                                '{time_delimiter}{time}{microsecond}',
+                                '{first_year}%w{delimiter}%m{last_year}'
+                                '{time_delimiter}{time}{microsecond}'
+                            ):
+                                try:
+                                    self.content = NativeDateTime.strptime(
+                                        content, date_time_format.format(
+                                            delimiter=delimiter,
+                                            time_delimiter=time_delimiter,
+                                            first_year=year_format[
+                                                0
+                                            ].format(delimiter=delimiter),
+                                            last_year=year_format[
+                                                1
+                                            ].format(delimiter=delimiter),
+                                            microsecond=ms_format,
+                                            time=time_format))
+                                except builtins.ValueError:
+                                    pass
+                                else:
+                                    if timezone_match:
+                                        self.content += TimeDelta(
+                                            timezone_match.group(2)
+                                        ).content
+                                    return
 
     # # endregion
 
@@ -4198,11 +4213,7 @@ class Date(Object):
             elif builtins.isinstance(content, (
                 builtins.unicode, builtins.str
             )):
-                weekday_pattern = regularExpression.compile(
-                    '[A-Za-z]{2}\. (.+)$')
-                weekday_match = weekday_pattern.match(content)
-                if weekday_match:
-                    content = weekday_pattern.sub('\\1', content)
+                content = self.slice_weekday(content)
                 if builtins.len(regularExpression.compile(
                     '[^a-zA-Z]'
                 ).sub('', content)) < 3 and builtins.len(
@@ -4210,37 +4221,7 @@ class Date(Object):
                         content)
                 ) > 1:
 # #
-                    for delimiter in ('/', '.', ':', '-'):
-                        for year_format in (('%y{delimiter}', ''), (
-                            '%Y{delimiter}', ''
-                        ), ('', '{delimiter}%y'), ('', '{delimiter}%Y')):
-                            for date_format in (
-                                '%x',
-                                '{first_year}%d{delimiter}%m{delimiter}'
-                                '{last_year}',
-                                '{first_year}%m{delimiter}%d{delimiter}'
-                                '{last_year}',
-                                '{first_year}%w{delimiter}%m{delimiter}{last_year}'
-                            ):
-                                try:
-# # python3.4
-# #                                     self.content = NativeDate.fromtimestamp(
-# #                                         NativeDateTime.strptime(
-# #                                             content, date_format.format(
-# #                                                 delimiter=delimiter,
-# #                                                 first_year=year_format[0],
-# #                                                 last_year=year_format[1]
-# #                                             )).timestamp())
-                                    self.content = NativeDate.fromtimestamp(
-                                        time.mktime(NativeDateTime.strptime(
-                                            content, date_format.format(
-                                                delimiter=delimiter,
-                                                first_year=year_format[0],
-                                                last_year=year_format[1]
-                                            )).timetuple()))
-# #
-                                except builtins.ValueError:
-                                    pass
+                    self._interpret_date(content)
                 if self.content is None:
                     try:
                         content = DateTime(content).content
@@ -4259,6 +4240,68 @@ class Date(Object):
 
     # # # endregion
 
+    # # endregion
+
+    # endregion
+
+    # region static methods
+
+    # # region public
+
+    @JointPoint(builtins.classmethod)
+# # python3.4
+# #     def slice_weekday(
+# #         cls: SelfClass, content: builtins.str
+# #     ) -> builtins.str:
+    def slice_weekday(cls, content):
+# #
+        '''Slice weekday from given date representation.'''
+        weekday_pattern = regularExpression.compile('[A-Za-z]{2}\. (.+)$')
+        weekday_match = weekday_pattern.match(content)
+        if weekday_match:
+            return weekday_pattern.sub('\\1', content)
+        return content
+
+    @JointPoint
+# # python3.4
+# #     def _interpret_date(self: Self, content: builtins.str) -> None:
+    def _interpret_date(self, content):
+# #
+        '''Interprets given content string as date.'''
+        for delimiter in ('/', '.', ':', '-'):
+            for year_format in (
+                ('%y{delimiter}', ''), ('%Y{delimiter}', ''),
+                ('', '{delimiter}%y'), ('', '{delimiter}%Y')
+            ):
+                for date_format in (
+                    '%x', '{first_year}%d{delimiter}%m{delimiter}'
+                    '{last_year}',
+                    '{first_year}%m{delimiter}%d{delimiter}{last_year}',
+                    '{first_year}%w{delimiter}%m{delimiter}{last_year}'
+                ):
+                    try:
+# # python3.4
+# #                         self.content = NativeDate.fromtimestamp(
+# #                             NativeDateTime.strptime(
+# #                                 content, date_format.format(
+# #                                     delimiter=delimiter,
+# #                                     first_year=year_format[0],
+# #                                     last_year=year_format[1]
+# #                                 )).timestamp())
+                        self.content = NativeDate.fromtimestamp(
+                            time.mktime(NativeDateTime.strptime(
+                                content, date_format.format(
+                                    delimiter=delimiter,
+                                        first_year=year_format[0],
+                                        last_year=year_format[1]
+                                    )).timetuple()))
+# #
+                    except builtins.ValueError:
+                        pass
+                    else:
+                        return
+
+    # # endregion
     # # endregion
 
     # endregion
