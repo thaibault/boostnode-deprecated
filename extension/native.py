@@ -2622,8 +2622,6 @@ class Dictionary(Object, builtins.dict):
 
             >>> Object('12.234').known_type
             12.234
-
-            TODO
         '''
 # # python3.4
 # #         return self.convert(
@@ -4409,7 +4407,6 @@ class PhoneNumber(Object):
             >>> PhoneNumber('02 91 / 14 55').content
             '0291-1455'
         '''
-        # TODO check branches
 # # python3.4
 # #         if(builtins.isinstance(content, builtins.str) and
 # #            regularExpression.compile('[0-9]+').search(content)):
