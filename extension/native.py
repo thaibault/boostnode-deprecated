@@ -2761,6 +2761,11 @@ class Dictionary(Object, builtins.dict):
             ...     value_wrapper=lambda key, value: '_%s_' % value
             ... ).content == {'_a_': {'_b_'}, '_b_': ['_0_', '_1_']}
             True
+
+            >>> Dictionary({'key': {'__no_wrapping__': 'value'}}).convert(
+            ...     value_wrapper=lambda key, value: '_%s_' % value
+            ... ).content == {'key': 'value'}
+            True
         '''
         '''
             NOTE: We have to copy to avoid double convert of some keys or \
@@ -2881,7 +2886,6 @@ class Dictionary(Object, builtins.dict):
 
         # region protected methods
 
-    # TODO check
     @JointPoint(builtins.classmethod)
 # # python3.4
 # #     def _convert_to_compatible_type(
@@ -2889,13 +2893,21 @@ class Dictionary(Object, builtins.dict):
 # #     ) -> (builtins.object, builtins.type):
     def _convert_to_compatible_type(cls, key, value=Null):
 # #
-        '''Converts data to python cross platform compatible data objects.'''
+        '''
+            Converts data to python cross platform compatible data objects.
+
+            Examples:
+
+            >>> Dictionary({})._convert_to_compatible_type('key')
+            'key'
+
+            >>> Dictionary({})._convert_to_compatible_type('key', 'value')
+            'value'
+        '''
         if value is Null:
             value = key
         return Object(content=value).compatible_type
 
-    # TODO check
-    # TODO check complexity everywhere
     @JointPoint(builtins.classmethod)
 # # python3.4
 # #     def _convert_to_known_type(
@@ -2903,7 +2915,17 @@ class Dictionary(Object, builtins.dict):
 # #     ) -> (builtins.object, builtins.type):
     def _convert_to_known_type(cls, key, value=Null, strict=True):
 # #
-        '''Converts interpretable data to python specific data objects.'''
+        '''
+            Converts interpretable data to python specific data objects.
+
+            Examples:
+
+            >>> Dictionary({})._convert_to_known_type('key')
+            'key'
+
+            >>> Dictionary({})._convert_to_known_type('key', 'value')
+            'value'
+        '''
         return Object(content=key if value is Null else value).get_known_type(
             description=None if value is Null else key, strict=strict)
 
@@ -4303,7 +4325,6 @@ class TimeDelta(Object):
 class PhoneNumber(Object):
 
     '''This class adds some features for dealing with phone numbers.'''
-
 
     # region dynamic methods
 
