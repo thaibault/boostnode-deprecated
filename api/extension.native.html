@@ -228,8 +228,36 @@
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Dictionary</span><span class="p">({</span><span class="s">&#39;key&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;__no_wrapping__&#39;</span><span class="p">:</span> <span class="s">&#39;value&#39;</span><span class="p">}})</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">value_wrapper</span><span class="o">=</span><span class="k">lambda</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="s">&#39;_</span><span class="si">%s</span><span class="s">_&#39;</span> <span class="o">%</span> <span class="n">value</span>
-<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">content</span> <span class="o">==</span> <span class="p">{</span><span class="s">&#39;key&#39;</span><span class="p">:</span> <span class="s">&#39;value&#39;</span><span class="p">}</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
+<span class="go">{&#39;key&#39;: &#39;value&#39;}</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Dictionary</span><span class="p">({</span><span class="s">&#39;key&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;__no_wrapping__&#39;</span><span class="p">:</span> <span class="s">&#39;value&#39;</span><span class="p">}})</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">value_wrapper</span><span class="o">=</span><span class="k">lambda</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="s">&#39;_</span><span class="si">%s</span><span class="s">_&#39;</span> <span class="o">%</span> <span class="n">value</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
+<span class="go">{&#39;key&#39;: &#39;value&#39;}</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Dictionary</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;__no_wrapping__&#39;</span><span class="p">:</span> <span class="s">&#39;value&#39;</span><span class="p">},</span> <span class="s">&#39;b&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">}</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">value_wrapper</span><span class="o">=</span><span class="k">lambda</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="s">&#39;_</span><span class="si">%s</span><span class="s">_&#39;</span> <span class="o">%</span> <span class="n">value</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">content</span> <span class="o">==</span> <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="s">&#39;value&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">:</span> <span class="s">&#39;_5_&#39;</span><span class="p">}</span>
 <span class="go">True</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Dictionary</span><span class="p">({</span><span class="s">&#39;key&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;__no_wrapping__&#39;</span><span class="p">:</span> <span class="s">&#39;value&#39;</span><span class="p">}})</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">value_wrapper</span><span class="o">=</span><span class="k">lambda</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="s">&#39;_</span><span class="si">%s</span><span class="s">_&#39;</span> <span class="o">%</span> <span class="n">value</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">remove_no_wrap_indicator</span><span class="o">=</span><span class="bp">False</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
+<span class="go">{&#39;key&#39;: {&#39;__no_wrapping__&#39;: &#39;value&#39;}}</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Dictionary</span><span class="p">({</span><span class="s">&#39;key&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;__no_wrapping__&#39;</span><span class="p">:</span> <span class="s">&#39;value&#39;</span><span class="p">}})</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">value_wrapper</span><span class="o">=</span><span class="k">lambda</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="s">&#39;_</span><span class="si">%s</span><span class="s">_&#39;</span> <span class="o">%</span> <span class="n">value</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">no_wrap_indicator</span><span class="o">=</span><span class="s">&#39;&#39;</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
+<span class="go">{&#39;key&#39;: {&#39;__no_wrapping__&#39;: &#39;_value_&#39;}}</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -683,7 +711,7 @@
 
 <dl class="classmethod">
 <dt id="boostNode.extension.native.Module.get_context_path">
-<em class="property">classmethod </em><tt class="descname">get_context_path</tt><big>(</big><em>path=None</em>, <em>frame=&lt;frame object at 0x7f4938ae25d8&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_context_path" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><tt class="descname">get_context_path</tt><big>(</big><em>path=None</em>, <em>frame=&lt;frame object at 0x7fe1890c85d8&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_context_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines the package and module level context path to a given             context or file.</p>
 <p><strong>path</strong>  - relative or absolute context or file path to normalize</p>
 <p><strong>frame</strong> - stack frame to analyse again context</p>
@@ -973,8 +1001,6 @@
 <span class="go">True</span>
 </pre></div>
 </div>
-<p># TODO handle utc
-#&gt;&gt;&gt; Object(NativeDate(1970, 1, 1)).compatible_type</p>
 </dd></dl>
 
 <dl class="staticmethod">
