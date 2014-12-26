@@ -717,7 +717,7 @@
 
 <dl class="classmethod">
 <dt id="boostNode.extension.native.Module.get_context_path">
-<em class="property">classmethod </em><tt class="descname">get_context_path</tt><big>(</big><em>path=None</em>, <em>frame=&lt;frame object at 0x7f1bacac25d8&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_context_path" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><tt class="descname">get_context_path</tt><big>(</big><em>path=None</em>, <em>frame=&lt;frame object at 0x7f23f7fd75d8&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_context_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines the package and module level context path to a given             context or file.</p>
 <p><strong>path</strong>  - relative or absolute context or file path to normalize</p>
 <p><strong>frame</strong> - stack frame to analyse again context</p>
@@ -1535,7 +1535,7 @@
 <span class="gp">... </span><span class="k">else</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">String</span><span class="p">(</span>
 <span class="gp">... </span>        <span class="s">&#39;[+</span><span class="si">%20%</span><span class="s">22</span><span class="si">%2F%7E</span><span class="s">%C3%A4%C3</span><span class="si">%84%</span><span class="s">C3%B6]&#39;</span>
-<span class="gp">... </span>    <span class="p">)</span><span class="o">.</span><span class="n">url_validated</span><span class="o">.</span><span class="n">content</span> <span class="o">==</span> <span class="s">&#39;[  &quot;/~Ã¤ÃÃ¶]&#39;</span>
+<span class="gp">... </span>    <span class="p">)</span><span class="o">.</span><span class="n">url_validated</span><span class="o">.</span><span class="n">content</span> <span class="o">==</span> <span class="s">&#39;[  &quot;/~ÃÂ¤ÃÂÃÂ¶]&#39;</span>
 <span class="go">True</span>
 </pre></div>
 </div>
@@ -1544,7 +1544,7 @@
 <span class="gp">... </span><span class="k">else</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">String</span><span class="p">(</span>
 <span class="gp">... </span>        <span class="s">&#39;[%C3</span><span class="si">%96%</span><span class="s">C3%BC%C3%9C]&#39;</span>
-<span class="gp">... </span>    <span class="p">)</span><span class="o">.</span><span class="n">url_validated</span><span class="o">.</span><span class="n">content</span> <span class="o">==</span> <span class="s">&#39;[ÃÃ¼Ã]&#39;</span>
+<span class="gp">... </span>    <span class="p">)</span><span class="o">.</span><span class="n">url_validated</span><span class="o">.</span><span class="n">content</span> <span class="o">==</span> <span class="s">&#39;[ÃÂÃÂ¼ÃÂ]&#39;</span>
 <span class="go">True</span>
 </pre></div>
 </div>
@@ -1635,8 +1635,8 @@
 </dd></dl>
 
 <dl class="staticmethod">
-<dt id="boostNode.extension.native.String.sub">
-<em class="property">static </em><tt class="descname">sub</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.sub" title="Permalink to this definition">¶</a></dt>
+<dt id="boostNode.extension.native.String.substitute">
+<em class="property">static </em><tt class="descname">substitute</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.substitute" title="Permalink to this definition">¶</a></dt>
 <dd><blockquote>
 <div><p>Implements the pythons native &#8220;regularExpression.sub()&#8221; method in             an object oriented way. This method serves additionally             dictionaries as &#8220;search&#8221; parameter for multiple replacements. If             you use dictionaries, the second parameter &#8220;replace&#8221; becomes             useless.</p>
 <p><strong>search</strong>  - regular expression search pattern</p>
@@ -1655,23 +1655,23 @@
 <p>The pattern may be a string or an RE object. The optional             argument count is the maximum number of pattern occurrences to be             replaced; count must be a non-negative integer. If omitted or             zero, all occurrences will be replaced. Empty matches for the             pattern are replaced only when not adjacent to a previous match,             so sub(&#8216;x*&#8217;, &#8216;-&#8216;, &#8216;abc&#8217;) returns &#8216;-a-b-c-&#8216;.</p>
 <p>In addition to character escapes and back references as described             above, &#8220;g&lt;name&gt;&#8221; will use the substring matched by the group             named name, as defined by the &#8220;(?P&lt;name&gt;...)&#8221; syntax.             &#8220;g&lt;number&gt;&#8221; uses the corresponding group number; &#8220;g&lt;2&gt;&#8221; is             therefore equivalent to &#8220;&#8221;, but isn&#8217;t ambiguous in a             replacement such as &#8220;g&lt;2&gt;0&#8221;. &#8220;&#8221; would be interpreted as a             reference to group 20, not a reference to group 2 followed by the             literal character &#8220;0&#8221;. The backreference &#8220;g&lt;0&gt;&#8221; substitutes in             the entire substring matched by the regularExpression.</p>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s">&#39;([^a]+)&#39;</span><span class="p">,</span> <span class="s">&#39; jau-suffix &#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="s">&#39;([^a]+)&#39;</span><span class="p">,</span> <span class="s">&#39; jau-suffix &#39;</span><span class="p">)</span>
 <span class="go">Object of &quot;str&quot; (&#39; jau-suffix a jau-suffix &#39;).</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s">&#39;n&#39;</span><span class="p">,</span> <span class="s">&#39;l&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="s">&#39;n&#39;</span><span class="p">,</span> <span class="s">&#39;l&#39;</span><span class="p">)</span>
 <span class="go">Object of &quot;str&quot; (&#39;hals&#39;).</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">()</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s">&#39;n&#39;</span><span class="p">,</span> <span class="s">&#39;l&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">()</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="s">&#39;n&#39;</span><span class="p">,</span> <span class="s">&#39;l&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">,</span> <span class="s">&#39;peter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">,</span> <span class="s">&#39;peter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;peter&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sub</span><span class="p">({</span><span class="s">&#39;hans&#39;</span><span class="p">:</span> <span class="s">&#39;peter&#39;</span><span class="p">})</span><span class="o">.</span><span class="n">content</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">substitute</span><span class="p">({</span><span class="s">&#39;hans&#39;</span><span class="p">:</span> <span class="s">&#39;peter&#39;</span><span class="p">})</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;peter&#39;</span>
 </pre></div>
 </div>
@@ -1679,22 +1679,22 @@
 </dd></dl>
 
 <dl class="staticmethod">
-<dt id="boostNode.extension.native.String.subn">
-<em class="property">static </em><tt class="descname">subn</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.subn" title="Permalink to this definition">¶</a></dt>
+<dt id="boostNode.extension.native.String.substitute_n">
+<em class="property">static </em><tt class="descname">substitute_n</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.String.substitute_n" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implements the pythons native &#8220;regularExpression.subn()&#8221; method             in an object oriented way. This method serves additionally             dictionaries as &#8220;search&#8221; parameter for multiple replacements. If             you use dictionaries, the second parameter &#8220;replace&#8221; becomes             useless.</p>
 <p>Perform the same operation as &#8220;regularExpression.sub()&#8221;, but             returns a tuple: (&#8220;new_string&#8221;, &#8220;number_of_subs_made&#8221;).</p>
 <p><strong>search</strong>  - regular expression search pattern</p>
 <p><strong>replace</strong> - string to replace with given search sequence</p>
 <p>Additional arguments and keywords are forwarded to pythons&#8217;s             native &#8220;regularExpression.subn()&#8221; method.</p>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">String</span><span class="p">()</span><span class="o">.</span><span class="n">subn</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">String</span><span class="p">()</span><span class="o">.</span><span class="n">substitute_n</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 <span class="go">0</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">String</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">subn</span><span class="p">({</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="s">&#39;n&#39;</span><span class="p">:</span> <span class="s">&#39;c&#39;</span><span class="p">})</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">String</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">substitute_n</span><span class="p">({</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="s">&#39;n&#39;</span><span class="p">:</span> <span class="s">&#39;c&#39;</span><span class="p">})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;hbcs&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -1709,6 +1709,12 @@
 <dt id="boostNode.extension.native.Time">
 <em class="property">class </em><tt class="descclassname">boostNode.extension.native.</tt><tt class="descname">Time</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Time" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class adds some features for dealing with times.</p>
+<dl class="staticmethod">
+<dt id="boostNode.extension.native.Time.derive_date_time">
+<em class="property">static </em><tt class="descname">derive_date_time</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Time.derive_date_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>If nothing could be determined try to interpret a date time             representation.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
