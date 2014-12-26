@@ -477,32 +477,20 @@ class Runnable(builtins.object):
         signal_name, keywords = keywords_dictionary.pop(
             name='signal_name', default_value=False)
 # #
-        '''Enforce termination if we have given a stop signal a second time.'''
-        # TODO check new branches.
-        if signal_name in Platform.TERMINATION_SIGNALS:
-            if(signal_name in self._given_termination_signals and
-               force_stopping is None):
-                force_stopping = True
-                self._given_termination_signals.remove(signal_name)
-                __logger__.warning('Application will be enforced to stop now.')
-            else:
-                __logger__.info(
-                    'Sending a second "%s" signal will enforce to stop '
-                    'ungracefully.', signal_name)
-                self._given_termination_signals.add(signal_name)
-        if force_stopping is None:
-            force_stopping = False
-        if(force_stopping or not (self is None or self._in_test_mode()) and
-           self.__stop_lock.acquire(False)):
-            reason = ''
-            if self._given_order and self._given_order in (
-                self.stop_order, self.restart_order
-            ):
-                reason = 'given order "%s"' % self._given_order
-            self.stop(
-                *arguments, reason=reason, force_stopping=force_stopping,
-                **keywords)
-            self._handle_given_order(arguments, exit)
+        if self is not None:
+            force_stopping = self._handle_termination_enforcement(
+                force_stopping, signal_name, arguments, keywords)
+            if(force_stopping or not self._in_test_mode() and
+               self.__stop_lock.acquire(False)):
+                reason = ''
+                if self._given_order and self._given_order in (
+                    self.stop_order, self.restart_order
+                ):
+                    reason = 'given order "%s"' % self._given_order
+                self.stop(
+                    *arguments, reason=reason, force_stopping=force_stopping,
+                    **keywords)
+                self._handle_given_order(arguments, exit)
         return self
 
         # endregion
@@ -577,6 +565,39 @@ class Runnable(builtins.object):
              self._childrens_module.__test_mode__))
 
         # # endregion
+
+    @JointPoint
+# # python3.4
+# #     def _handle_termination_enforcement(
+# #         self: Self, force_stopping, signal_name: builtins.str,
+# #         arguments: builtins.tuple, keywords: builtins.dict
+# #     ) -> Self:
+    def _handle_termination_enforcement(
+        self, force_stopping, signal_name, arguments, keywords
+    ):
+# #
+        '''
+            Determines if application termination should be enforced. Enforce \
+            termination if we have given a stop signal a second time.
+
+            Examples:
+
+            TODO
+        '''
+        if signal_name in Platform.TERMINATION_SIGNALS:
+            if(signal_name in self._given_termination_signals and
+               force_stopping is None):
+                force_stopping = True
+                self._given_termination_signals.remove(signal_name)
+                __logger__.warning('Application will be enforced to stop now.')
+            else:
+                __logger__.info(
+                    'Sending a second "%s" signal will enforce to stop '
+                    'ungracefully.', signal_name)
+                self._given_termination_signals.add(signal_name)
+        if force_stopping is None:
+            force_stopping = False
+        return force_stopping
 
     @JointPoint
 # # python3.4

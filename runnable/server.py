@@ -959,25 +959,7 @@ class Web(Class, Runnable):
                         os.kill(worker.pid, signal.SIGKILL)
                     return self
             else:
-                shown_number = 0
-                while number_of_running_workers > 0:
-                    if(number_of_running_workers !=
-                       self.number_of_running_threads +
-                       builtins.len(multiprocessing.active_children())):
-                        number_of_running_workers = \
-                            self.number_of_running_threads + \
-                            builtins.len(multiprocessing.active_children())
-                    if(shown_number != number_of_running_workers and
-                       number_of_running_workers > 0):
-                        __logger__.info(
-                            'Waiting for %d running workers (%d threads and '
-                            '%d processes).', number_of_running_workers,
-                            self.number_of_running_threads,
-                            builtins.len(multiprocessing.active_children()))
-                        shown_number = number_of_running_workers
-                    time.sleep(2)
-                __logger__.info('Shutting down web server.')
-                self.__class__.instances.remove(self)
+                self._stop_graceful(number_of_running_workers)
             if not __test_mode__:
                 '''Terminates the serve forever loop.'''
                 self.service.shutdown()
@@ -1157,6 +1139,35 @@ class Web(Class, Runnable):
         return self._start_server_thread()
 
         # # endregion
+
+    @JointPoint
+# # python3.4
+# #     def _stop_graceful(
+# #         self: Self, number_of_running_workers: builtins.int
+# #     ) -> Self:
+    def _stop_graceful(self, number_of_running_workers):
+# #
+        '''Waits until all child processes and threads have been terminated.'''
+        shown_number = 0
+        while number_of_running_workers > 0:
+            if(number_of_running_workers !=
+               self.number_of_running_threads +
+               builtins.len(multiprocessing.active_children())):
+                number_of_running_workers = \
+                    self.number_of_running_threads + \
+                    builtins.len(multiprocessing.active_children())
+            if(shown_number != number_of_running_workers and
+               number_of_running_workers > 0):
+                __logger__.info(
+                    'Waiting for %d running workers (%d threads and '
+                    '%d processes).', number_of_running_workers,
+                    self.number_of_running_threads,
+                    builtins.len(multiprocessing.active_children()))
+                shown_number = number_of_running_workers
+            time.sleep(2)
+        __logger__.info('Shutting down web server.')
+        self.__class__.instances.remove(self)
+        return self
 
     @JointPoint
 # # python3.4     def _start_server_thread(self: Self) -> Self:
@@ -2509,22 +2520,7 @@ class CGIHTTPRequestHandler(
             request_description = convert_to_unicode(
                 request_description)
 # #
-        # TODO check branches.
-        longest_match = 0
-        color_wrapper = '', ''
-        for status_code_prefix, output_color in (
-            self.server.web.STATUS_PREFIX_CODE_LOGGING_COLOR_MAPPING.items()
-        ):
-            if longest_match < builtins.len(builtins.str(
-                status_code_prefix
-            )) and builtins.str(response_code).startswith(builtins.str(
-                status_code_prefix
-            )):
-                color_wrapper = (
-                    SET_OUTPUT_ATTRIBUTE_MODE % output_color,
-                    SET_OUTPUT_ATTRIBUTE_MODE % RESET_OUTPUT_ATTRIBUTE_MODE)
-                longest_match = builtins.len(builtins.str(status_code_prefix))
-        ##
+        color_wrapper = self._determine_logging_color(response_code)
         __logger__.info((format % color_wrapper).format(
             client_ip=self.client_address[0],
             client_port=self.client_address[1],
@@ -2733,6 +2729,60 @@ class CGIHTTPRequestHandler(
             self.requested_file.mime_type))
 
         # # endregion
+
+    @JointPoint
+# # python3.4
+# #     def _determine_logging_color(
+# #         self: Self, response_code: builtins.int
+# #     ) -> builtins.tuple:
+    def _determine_logging_color(self, response_code):
+# #
+        '''
+            Determines a start and stop console escape sequence to mark given \
+            http status code with a suitable color.
+
+            Examples:
+
+            >>> server = MultiProcessingHTTPServer()
+            >>> server.web = Web(__test_folder__)
+            >>> handler = CGIHTTPRequestHandler(
+            ...     socket.socket(socket.AF_INET, socket.SOCK_STREAM),
+            ...     ('127.0.0.1', 12345), server)
+
+            >>> handler._determine_logging_color(100)
+            ('', '')
+
+            >>> handler._determine_logging_color(200) == (
+            ...     '\\x1b[32m', '\\x1b[0m')
+            True
+
+            >>> handler._determine_logging_color(300) == (
+            ...     '\\x1b[34m', '\x1b[0m')
+            True
+
+            >>> handler._determine_logging_color(400) == (
+            ...     '\\x1b[33m', '\x1b[0m')
+            True
+
+            >>> handler._determine_logging_color(500) == (
+            ...     '\\x1b[31m', '\\x1b[0m')
+            True
+        '''
+        longest_match = 0
+        color_wrapper = '', ''
+        for status_code_prefix, output_color in (
+            self.server.web.STATUS_PREFIX_CODE_LOGGING_COLOR_MAPPING.items()
+        ):
+            if longest_match < builtins.len(builtins.str(
+                status_code_prefix
+            )) and builtins.str(response_code).startswith(builtins.str(
+                status_code_prefix
+            )):
+                color_wrapper = (
+                    SET_OUTPUT_ATTRIBUTE_MODE % output_color,
+                    SET_OUTPUT_ATTRIBUTE_MODE % RESET_OUTPUT_ATTRIBUTE_MODE)
+                longest_match = builtins.len(builtins.str(status_code_prefix))
+        return color_wrapper
 
     @JointPoint
 # # python3.4

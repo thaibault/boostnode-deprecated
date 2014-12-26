@@ -1,8 +1,6 @@
 #!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 
-# TODO handle utc dates.
-
 # region header
 
 """
@@ -407,14 +405,34 @@ ENCODING = 'utf_8'
 '''
 
 
+def convert_type_to_unicode(object):
+    '''Converts a generic string representable object to unicode.'''
+    if builtins.hasattr(object, '__unicode__'):
+        return object.__unicode__()
+    elif builtins.hasattr(object, '__str__'):
+        try:
+            object = object.__str__()
+        except builtins.UnicodeEncodeError:
+            if builtins.isinstance(object, Iterable):
+                for index, item in builtins.enumerate(object):
+                    object[index] = convert_to_unicode(item)
+                object = object.__str__()
+            else:
+                raise
+        if builtins.isinstance(object, builtins.unicode):
+            return object
+        return builtins.unicode(object, ENCODING)
+    return builtins.unicode(object)
+
+
 def convert_to_unicode(object):
     '''
         Converts given object to its unicode string representation like \
         python's native "builtins.str()" method.
     '''
-    if builtins.isinstance(
-        object, builtins.Exception
-    ) and builtins.hasattr(object, 'message'):
+    if builtins.isinstance(object, builtins.Exception) and builtins.hasattr(
+        object, 'message'
+    ):
         object = object.message
     if builtins.isinstance(object, builtins.unicode):
         '''
@@ -422,24 +440,10 @@ def convert_to_unicode(object):
             decode here.
         '''
         return object
-    elif builtins.isinstance(object, builtins.str):
+    if builtins.isinstance(object, builtins.str):
         return builtins.unicode(object, ENCODING)
-    elif not builtins.isinstance(object, builtins.type):
-        if builtins.hasattr(object, '__unicode__'):
-            return object.__unicode__()
-        elif builtins.hasattr(object, '__str__'):
-            try:
-                object = object.__str__()
-            except builtins.UnicodeEncodeError:
-                if builtins.isinstance(object, Iterable):
-                    for index, item in enumerate(object):
-                        object[index] = convert_to_unicode(item)
-                    object = object.__str__()
-                else:
-                    raise
-            if builtins.isinstance(object, builtins.unicode):
-                return object
-            return builtins.unicode(object, ENCODING)
+    if not builtins.isinstance(object, builtins.type):
+        return convert_type_to_unicode(object)
     '''
         NOTE: We have to avoid using an explicit encoding to mimic python \
         native "builtins.str()" method behavior for getting a string \
@@ -453,6 +457,9 @@ def convert_to_string(object):
         Converts given object to its str string representation like \
         python's native "builtins.str()" method.
     '''
+    '''NOTE: We check for string type to boost already converted values.'''
+    if builtins.isinstance(object, builtins.str):
+        return object
     return convert_to_unicode(object).encode(ENCODING)
 # #
 

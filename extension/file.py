@@ -4445,7 +4445,7 @@ class Handler(Class):
         # region protected
 
     @JointPoint
-# # python3.4      def _list_windows_root(self: Self) -> types.GeneratorType:
+# # python3.4     def _list_windows_root(self: Self) -> types.GeneratorType:
     def _list_windows_root(self):
         '''List partitions on windows root file systems.'''
         for letter_number in builtins.range(

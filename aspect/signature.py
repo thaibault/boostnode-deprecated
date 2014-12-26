@@ -394,6 +394,8 @@ class CheckObject(builtins.object):
             >>> a._check_type(Self, B, b) # doctest: +ELLIPSIS
             Object of "A" with class object "B", object "...
 
+            Check if self type instances can be distinguished.
+
             >>> a = A()
             >>> a.class_object = B
             >>> a.object = B()
@@ -442,7 +444,7 @@ class CheckObject(builtins.object):
             SignatureError: "B.b()" expects instance of "bool" for "return ...
         '''
         if not (expected_type is builtins.type(None) or
-                expected_type is Null, expected_type is given_type or
+                expected_type is Null or expected_type is given_type or
                 builtins.issubclass(given_type, expected_type)):
             if expected_type is Self:
                 self._handle_self(given_type, name, value)
@@ -451,9 +453,8 @@ class CheckObject(builtins.object):
                 self._handle_self_class(expected_type, given_type, name, value)
             else:
                 raise __exception__(
-                    '"{function_path}()" expects instance of '
-                    '"{object}" for "{name}" but received "{type}" '
-                    '({value}).'.format(
+                    '"{function_path}()" expects instance of "{object}" for '
+                    '"{name}" but received "{type}" ({value}).'.format(
                         function_path=self.get_function_path(),
                         object=expected_type.__name__, name=name,
                         type=given_type.__name__, value=builtins.repr(value)))
@@ -505,14 +506,14 @@ class CheckObject(builtins.object):
         '''
         if self.object is None:
             raise __exception__(
-                '"{function_path}()" wasn\'t called from '
-                'an instance so "self" for "{name}" couldn\'t be '
+                '"{function_path}()" wasn\'t called from an instance so '
+                '"self" for parameter "{name}" couldn\'t be '
                 'determined.'.format(
                     function_path=self.get_function_path(), name=name))
         elif value is not self.object:
             raise __exception__(
-                '"{function_path}()" expects "{object} '
-                '(self)" for "{name}" but "{type}" ({value}) received.'.format(
+                '"{function_path}()" expects "{object} (self)" for "{name}" '
+                'but "{type}" ({value}) received.'.format(
                     function_path=self.get_function_path(),
                     object=builtins.repr(self.object), name=name,
                     type=given_type.__name__, value=builtins.repr(value)))

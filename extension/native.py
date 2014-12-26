@@ -1157,9 +1157,9 @@ class String(Object, builtins.str):
     '''
     SPECIAL_URL_SEQUENCES = {
         '+': ' ', '%20': ' ', '%22': '"', '%2F': '/', '%7E': '~',
-        '%C3%A4': 'Ã¤', '%C3%84': 'Ã',
-        '%C3%B6': 'Ã¶', '%C3%96': 'Ã',
-        '%C3%BC': 'Ã¼', '%C3%9C': 'Ã'}
+        '%C3%A4': 'ÃÂ¤', '%C3%84': 'ÃÂ',
+        '%C3%B6': 'ÃÂ¶', '%C3%96': 'ÃÂ',
+        '%C3%BC': 'ÃÂ¼', '%C3%9C': 'ÃÂ'}
     '''All chars wich should be observed by handling with url sequences.'''
     SPECIAL_HTML_SEQUENCES = {
         # Note only needed in very old browsers.
@@ -1167,73 +1167,73 @@ class String(Object, builtins.str):
         # ' ': '&nbsp;',
         # Note: is only shown if word is to long.
         # '"soft hyphen"': '&shy;',
-        "'": '&apos;', 'Â´': '&acute;', 'Â¯': '&macr;',
+        "'": '&apos;', 'ÃÂ´': '&acute;', 'ÃÂ¯': '&macr;',
 
         '<': '&lt;', '>': '&gt;',
 
-        'Âº': '&ordm;', 'Â¹': '&sup1;', 'Â²': '&sup2;', 'Â³': '&sup3;',
+        'ÃÂº': '&ordm;', 'ÃÂ¹': '&sup1;', 'ÃÂ²': '&sup2;', 'ÃÂ³': '&sup3;',
 
-        'Â¼': '&frac14;', 'Â½': '&frac12;', 'Â¾': '&frac34;',
+        'ÃÂ¼': '&frac14;', 'ÃÂ½': '&frac12;', 'ÃÂ¾': '&frac34;',
 
-        'Ã': '&Agrave;', 'Ã': '&Aacute;', 'Ã': '&Acirc;', 'Ã': '&Atilde;',
-        'Ã': '&Auml;', 'Ã': '&Aring;', 'Ã': '&AElig;',
+        'ÃÂ': '&Agrave;', 'ÃÂ': '&Aacute;', 'ÃÂ': '&Acirc;', 'ÃÂ': '&Atilde;',
+        'ÃÂ': '&Auml;', 'ÃÂ': '&Aring;', 'ÃÂ': '&AElig;',
 
-        'Ã': '&Egrave;', 'Ã': '&Eacute;', 'Ã': '&Ecirc;', 'Ã': '&Euml;',
+        'ÃÂ': '&Egrave;', 'ÃÂ': '&Eacute;', 'ÃÂ': '&Ecirc;', 'ÃÂ': '&Euml;',
 
-        'Ã': '&Igrave;', 'Ã': '&Iacute;', 'Ã': '&Icirc;', 'Ã': '&Iuml;',
+        'ÃÂ': '&Igrave;', 'ÃÂ': '&Iacute;', 'ÃÂ': '&Icirc;', 'ÃÂ': '&Iuml;',
 
-        'Ã': '&Ograve;', 'Ã': '&Oacute;', 'Ã': '&Ocirc;', 'Ã': '&Otilde;',
-        'Ã': '&Ouml;', 'Ã': '&Oslash;',
+        'ÃÂ': '&Ograve;', 'ÃÂ': '&Oacute;', 'ÃÂ': '&Ocirc;', 'ÃÂ': '&Otilde;',
+        'ÃÂ': '&Ouml;', 'ÃÂ': '&Oslash;',
 
-        'Ã': '&Ugrave;', 'Ã': '&Uacute;', 'Ã': '&Ucirc;', 'Ã': '&Uuml;',
+        'ÃÂ': '&Ugrave;', 'ÃÂ': '&Uacute;', 'ÃÂ': '&Ucirc;', 'ÃÂ': '&Uuml;',
 
-        'Ã ': '&agrave;', 'Ã¡': '&aacute;', 'Ã¢': '&acirc;', 'Ã£': '&atilde;',
-        'Ã¤': '&auml;', 'Ã¥': '&aring;', 'Ã¦': '&aelig;',
+        'ÃÂ ': '&agrave;', 'ÃÂ¡': '&aacute;', 'ÃÂ¢': '&acirc;', 'ÃÂ£': '&atilde;',
+        'ÃÂ¤': '&auml;', 'ÃÂ¥': '&aring;', 'ÃÂ¦': '&aelig;',
 
-        'Ã¨': '&egrave;', 'Ã©': '&eacute;', 'Ãª': '&ecirc;', 'Ã«': '&euml;',
+        'ÃÂ¨': '&egrave;', 'ÃÂ©': '&eacute;', 'ÃÂª': '&ecirc;', 'ÃÂ«': '&euml;',
 
-        'Ã¬': '&igrave;', 'Ã­': '&iacute;', 'Ã®': '&icirc;', 'Ã¯': '&iuml;',
+        'ÃÂ¬': '&igrave;', 'ÃÂ­': '&iacute;', 'ÃÂ®': '&icirc;', 'ÃÂ¯': '&iuml;',
 
-        'Ã²': '&ograve;', 'Ã³': '&oacute;', 'Ã´': '&ocirc;', 'Ãµ': '&otilde;',
-        'Ã¶': '&ouml;', 'Ã¸': '&oslash;',
+        'ÃÂ²': '&ograve;', 'ÃÂ³': '&oacute;', 'ÃÂ´': '&ocirc;', 'ÃÂµ': '&otilde;',
+        'ÃÂ¶': '&ouml;', 'ÃÂ¸': '&oslash;',
 
-        'Ã¹': '&ugrave;', 'Ãº': '&uacute;', 'Ã»': '&ucirc;', 'Ã¼': '&uuml;',
+        'ÃÂ¹': '&ugrave;', 'ÃÂº': '&uacute;', 'ÃÂ»': '&ucirc;', 'ÃÂ¼': '&uuml;',
 
-        'Ã½': '&yacute;', 'Ã¿': '&yuml;',
+        'ÃÂ½': '&yacute;', 'ÃÂ¿': '&yuml;',
 
-        'Â¡': '&iexcl;',
-        'Â¢': '&cent;',
-        'Â£': '&pound;',
-        'Â¤': '&curren;',
-        'Â¥': '&yen;',
-        'Â¦': '&brvbar;',
-        'Â§': '&sect;',
-        'Â¨': '&uml;',
-        'Â©': '&copy;',
-        'Âª': '&ordf;',
-        'Â«': '&laquo;',
-        'Â¬': '&not;',
-        'Â®': '&reg;',
-        'Â°': '&deg;',
-        'Â±': '&plusmn;',
-        'Âµ': '&micro;',
-        'Â¶': '&para;',
-        'Â·': '&middot;',
-        'Â¸': '&cedil;',
-        'Â»': '&raquo;',
-        'Â¿': '&iquest;',
-        'Ã': '&times;',
-        'Ã·': '&divide;',
-        'Ã': '&Ccedil;',
-        'Ã': '&ETH;',
-        'Ã': '&Ntilde;',
-        'Ã': '&Yacute;',
-        'Ã': '&THORN;',
-        'Ã': '&szlig;',
-        'Ã§': '&ccedil;',
-        'Ã°': '&eth;',
-        'Ã±': '&ntilde;',
-        'Ã¾': '&thorn;'}
+        'ÃÂ¡': '&iexcl;',
+        'ÃÂ¢': '&cent;',
+        'ÃÂ£': '&pound;',
+        'ÃÂ¤': '&curren;',
+        'ÃÂ¥': '&yen;',
+        'ÃÂ¦': '&brvbar;',
+        'ÃÂ§': '&sect;',
+        'ÃÂ¨': '&uml;',
+        'ÃÂ©': '&copy;',
+        'ÃÂª': '&ordf;',
+        'ÃÂ«': '&laquo;',
+        'ÃÂ¬': '&not;',
+        'ÃÂ®': '&reg;',
+        'ÃÂ°': '&deg;',
+        'ÃÂ±': '&plusmn;',
+        'ÃÂµ': '&micro;',
+        'ÃÂ¶': '&para;',
+        'ÃÂ·': '&middot;',
+        'ÃÂ¸': '&cedil;',
+        'ÃÂ»': '&raquo;',
+        'ÃÂ¿': '&iquest;',
+        'ÃÂ': '&times;',
+        'ÃÂ·': '&divide;',
+        'ÃÂ': '&Ccedil;',
+        'ÃÂ': '&ETH;',
+        'ÃÂ': '&Ntilde;',
+        'ÃÂ': '&Yacute;',
+        'ÃÂ': '&THORN;',
+        'ÃÂ': '&szlig;',
+        'ÃÂ§': '&ccedil;',
+        'ÃÂ°': '&eth;',
+        'ÃÂ±': '&ntilde;',
+        'ÃÂ¾': '&thorn;'}
     '''All chars wich should be observed by handling with html sequences.'''
     abbreviations = 'html', 'id', 'url', 'us', 'de', 'api'
     '''Saves a mapping of typical shortcut words to improve camel casing.'''
@@ -1332,7 +1332,7 @@ class String(Object, builtins.str):
             ...     False
             ... else:
             ...     String(
-            ...         'ö'.encode('latin1')
+            ...         'Ã¶'.encode('latin1')
             ...     ).encoding  == String.IMPORTANT_ENCODINGS[0]
             False
         '''
@@ -1441,6 +1441,28 @@ class String(Object, builtins.str):
             True
         '''
         return builtins.bool(self.content)
+
+    @JointPoint
+# # python3.4
+# #     def __eq__(self: Self, other: (
+# #         SelfClassObject, builtins.str
+# #     )) -> builtins.bool:
+    def __eq__(self, other):
+# #
+        '''
+            Is triggered if this object should be compared to another
+
+            Examples:
+
+            >>> String('hans') == String('hans')
+            True
+
+            >>> String('hans') == str('hans')
+            True
+        '''
+        if builtins.isinstance(other, builtins.str):
+            return self.content == other
+        return self.content == other.content
 
         # # endregion
 
@@ -1776,11 +1798,11 @@ class String(Object, builtins.str):
             >>> String("I'm cool").delimited.content
             'I-m-cool'
         '''
-        return self.sub(
+        return self.substitute(
             '^[^{pattern}]*(.*?)[^{pattern}]*$'.format(
                 pattern=search_pattern
             ), '\\1'
-        ).sub('[^%s]+' % search_pattern, delimiter)
+        ).substitute('[^%s]+' % search_pattern, delimiter)
 
         # # # region validation
 
@@ -1914,7 +1936,7 @@ class String(Object, builtins.str):
             ... else:
             ...     String(
             ...         '[+%20%22%2F%7E%C3%A4%C3%84%C3%B6]'
-            ...     ).url_validated.content == '[  "/~Ã¤ÃÃ¶]'
+            ...     ).url_validated.content == '[  "/~ÃÂ¤ÃÂÃÂ¶]'
             True
 
             >>> if sys.version_info.major < 3:
@@ -1922,7 +1944,7 @@ class String(Object, builtins.str):
             ... else:
             ...     String(
             ...         '[%C3%96%C3%BC%C3%9C]'
-            ...     ).url_validated.content == '[ÃÃ¼Ã]'
+            ...     ).url_validated.content == '[ÃÂÃÂ¼ÃÂ]'
             True
         '''
         search = self.SPECIAL_URL_SEQUENCES
@@ -2031,11 +2053,11 @@ class String(Object, builtins.str):
 
     @JointPoint
 # # python3.4
-# #     def sub(
+# #     def substitute(
 # #         self: Self, search: (builtins.str, builtins.dict), replace=None,
 # #         *arguments: builtins.object, **keywords: builtins.object
 # #     ) -> Self:
-    def sub(self, search, replace=None, *arguments, **keywords):
+    def substitute(self, search, replace=None, *arguments, **keywords):
 # #
         '''
             Implements the pythons native "regularExpression.sub()" method in \
@@ -2087,52 +2109,43 @@ class String(Object, builtins.str):
 
             Examples:
 
-            >>> String('hans').sub('([^a]+)', ' jau-suffix ')
+            >>> String('hans').substitute('([^a]+)', ' jau-suffix ')
             Object of "str" (' jau-suffix a jau-suffix ').
 
-            >>> String('hans').sub('n', 'l')
+            >>> String('hans').substitute('n', 'l')
             Object of "str" ('hals').
 
-            >>> String().sub('n', 'l').content
+            >>> String().substitute('n', 'l').content
             ''
 
-            >>> String('hans').sub('hans', 'peter').content
+            >>> String('hans').substitute('hans', 'peter').content
             'peter'
 
-            >>> String('hans').sub({'hans': 'peter'}).content
+            >>> String('hans').substitute({'hans': 'peter'}).content
             'peter'
         '''
         if builtins.isinstance(search, builtins.dict):
             for search_string, replacement in search.items():
-                '''Take this method name via introspection.'''
-                self.content = builtins.getattr(
-                    regularExpression.compile(search_string),
-                    inspect.stack()[0][3]
-                )(replacement, self.content, *arguments, **keywords)
+                self.content = regularExpression.compile(search_string).sub(
+                    replacement, self.content, *arguments, **keywords)
         else:
-            '''
-                Take this method name from regular expression object via \
-                introspection.
-            '''
 # # python3.4
-# #             self.content = builtins.getattr(
-# #                 regularExpression.compile(search), inspect.stack()[0][3]
-# #             )(replace, self.content, *arguments, **keywords)
-            self.content = builtins.getattr(
-                regularExpression.compile(search), inspect.stack()[0][3]
-            )(replace, convert_to_unicode(
-                self.content
-            ), *arguments, **keywords).encode(ENCODING)
+# #             self.content = regularExpression.compile(search).sub(
+# #                 replace, self.content, *arguments, **keywords)
+            self.content = regularExpression.compile(search).sub(
+                replace, convert_to_unicode(self.content), *arguments,
+                **keywords
+            ).encode(ENCODING)
 # #
         return self
 
     @JointPoint
 # # python3.4
-# #     def subn(
+# #     def substitute_n(
 # #         self: Self, search: (builtins.str, builtins.dict), replace='',
 # #         *arguments: builtins.object, **keywords: builtins.object
 # #     ) -> builtins.tuple:
-    def subn(self, search, replace='', *arguments, **keywords):
+    def substitute_n(self, search, replace='', *arguments, **keywords):
 # #
         '''
             Implements the pythons native "regularExpression.subn()" method \
@@ -2153,13 +2166,13 @@ class String(Object, builtins.str):
 
             Examples:
 
-            >>> result = String().subn('a')
+            >>> result = String().substitute_n('a')
             >>> result[0].content
             ''
             >>> result[1]
             0
 
-            >>> result = String('hans').subn({'a': 'b', 'n': 'c'})
+            >>> result = String('hans').substitute_n({'a': 'b', 'n': 'c'})
             >>> result[0].content
             'hbcs'
             >>> result[1]
@@ -2169,32 +2182,32 @@ class String(Object, builtins.str):
             number_of_replaces = 0
             for search_string, replacement in search.items():
 # # python3.4
-# #                 self.content, temp_number_of_replaces = builtins.getattr(
-# #                     regularExpression.compile(builtins.str(search_string)),
-# #                     inspect.stack()[0][3]
-# #                 )(
-# #                     builtins.str(replacement), self.content,
-# #                     *arguments, **keywords)
-                self.content, temp_number_of_replaces = builtins.getattr(
-                    regularExpression.compile(convert_to_unicode(
-                        search_string
-                    )), inspect.stack()[0][3]
-                )(convert_to_unicode(replacement), self.content,
-                  *arguments, **keywords)
+# #                 self.content, temp_number_of_replaces = \
+# #                 regularExpression.compile(builtins.str(
+# #                     search_string
+# #                 )).subn(builtins.str(
+# #                     replacement
+# #                 ), self.content, *arguments, **keywords)
+                self.content, temp_number_of_replaces = \
+                regularExpression.compile(convert_to_unicode(
+                    search_string
+                )).subn(convert_to_unicode(
+                    replacement
+                ), self.content, *arguments, **keywords)
 # #
                 number_of_replaces += temp_number_of_replaces
         else:
 # # python3.4
-# #             self.content, number_of_replaces = builtins.getattr(
-# #                 regularExpression.compile(builtins.str(search)),
-# #                 inspect.stack()[0][3]
-# #             )(builtins.str(replace), self.content, *arguments,
-# #               **keywords)
-            self.content, number_of_replaces = builtins.getattr(
-                regularExpression.compile(convert_to_unicode(search)),
-                inspect.stack()[0][3]
-            )(convert_to_unicode(replace), self.content, *arguments,
-              **keywords)
+# #             self.content, number_of_replaces = regularExpression.compile(
+# #                 builtins.str(search)
+# #             ).subn(builtins.str(
+# #                 replace
+# #             ), self.content, *arguments, **keywords)
+            self.content, number_of_replaces = regularExpression.compile(
+                convert_to_unicode(search)
+            ).subn(convert_to_unicode(
+                replace
+            ), self.content, *arguments, **keywords)
 # #
         return self, number_of_replaces
 
@@ -2292,7 +2305,9 @@ class String(Object, builtins.str):
             ... ).delete_variables_from_regex()
             Object of "str" ('^--(.+)--(.+)--$').
         '''
-        return self.subn('\(\?P<[a-z]+>(?P<pattern>.+?)\)', '(\g<pattern>)')[0]
+        return self.substitute_n(
+            '\(\?P<[a-z]+>(?P<pattern>.+?)\)', '(\g<pattern>)'
+        )[0]
 
         # endregion
 
@@ -3871,12 +3886,15 @@ class Time(Object):
     # # # region special
 
     @JointPoint
-# # python3.4     def __init__(self: Self, content=0) -> None:
-    def __init__(self, content=0):
+# # python3.4     def __init__(self: Self, content=None) -> None:
+    def __init__(self, content=None):
         '''
             Generates a new high level wrapper for times.
 
             Examples:
+
+            >>> Time().content == NativeTime()
+            True
 
             >>> Time(5)
             Object of "time" (datetime.time(0, 0, 5)).
@@ -3905,7 +3923,9 @@ class Time(Object):
             NativeError: "abc" couldn't be interpreted as "Time".
         '''
         self.content = None
-        if builtins.isinstance(content, NativeTime):
+        if content is None:
+            self.content = NativeTime()
+        elif builtins.isinstance(content, NativeTime):
             self.content = content
         else:
             content = String(content).get_number(default=content)
@@ -3932,39 +3952,83 @@ class Time(Object):
                 timezone_pattern = regularExpression.compile('(.+)\+(.+)$')
                 timezone_match = timezone_pattern.match(content)
 # #
-                if timezone_match:
-                    content = timezone_pattern.sub('\\1', content)
-                for time_format in (
-                    '%X', '%H:%M:%S:%f', '%H:%M:%S', '%H:%M', '%H'
-                ):
-                    try:
-                        content = NativeDateTime.strptime(content, time_format)
-                    except builtins.ValueError:
-                        pass
-                    else:
-                        if timezone_match:
-                            content += TimeDelta(
-                                timezone_match.group(2)
-                            ).content
-                        self.content = content.time()
-                        return
+                self._interpret_time(
+                    content=timezone_pattern.sub(
+                        '\\1', content
+                    ) if timezone_match else content,
+                    timezone_match=timezone_match)
             if self.content is None:
-                try:
-                    content = DateTime(content).content
-                except __exception__:
-# # python3.4
-# #                         raise __exception__(
-# #                             '"%s" couldn\'t be interpreted as "%s".',
-# #                             content, self.__class__.__name__
-# #                         ) from None
-                        raise __exception__(
-                            '"%s" couldn\'t be interpreted as "%s".',
-                            content, self.__class__.__name__)
-# #
-                else:
-                    self.content = content.time()
+                self.content = self.derive_date_time(content)
 
     # # # endregion
+
+    # # endregion
+
+    # # region protected
+
+    @JointPoint
+# # python3.4
+# #     def _interpret_time(
+# #         self: Self, content: builtins.str, timezone_match: (
+# #             None, builtins.type(regularExpression.compile('').match(''))
+# #         )) -> Self:
+    def _interpret_time(self, content, timezone_match):
+# #
+        '''Interprets given content string as time.'''
+        for time_format in (
+            '%X', '%H:%M:%S:%f', '%H:%M:%S', '%H:%M', '%H'
+        ):
+            try:
+                content = NativeDateTime.strptime(content, time_format)
+            except builtins.ValueError:
+                pass
+            else:
+                if timezone_match:
+                    content += TimeDelta(
+                        timezone_match.group(2)
+                    ).content
+                self.content = content.time()
+                return self
+        return self
+
+    # # endregion
+
+    # endregion
+
+    # region static methods
+
+    # # region public
+
+    @JointPoint(builtins.classmethod)
+# # python3.4
+# #     def derive_date_time(
+# #         cls: SelfClass, content: builtins.str, property_name='time',
+# #         type_name=None
+# #     ) -> (builtins.type(None), NativeTime, NativeDate):
+    def derive_date_time(
+        cls, content, property_name='time', type_name=None
+    ):
+# #
+        '''
+            If nothing could be determined try to interpret a date time \
+            representation.
+        '''
+        try:
+            content = DateTime(content).content
+        except __exception__:
+            if type_name is None:
+                type_name = cls.__name__
+# # python3.4
+# #             raise __exception__(
+# #                 '"%s" couldn\'t be interpreted as "%s".', content,
+# #                 type_name
+# #             ) from None
+            raise __exception__(
+                '"%s" couldn\'t be interpreted as "%s".', content,
+                type_name)
+# #
+        else:
+            return builtins.getattr(content, property_name)()
 
     # # endregion
 
@@ -3982,12 +4046,17 @@ class DateTime(Object):
     # # # region special
 
     @JointPoint
-# # python3.4     def __init__(self: Self, content=0) -> None:
-    def __init__(self, content=0):
+# # python3.4     def __init__(self: Self, content=None) -> None:
+    def __init__(self, content=None):
         '''
             Generates a new high level wrapper for date times.
 
             Examples:
+
+            >>> DateTime().content.replace(
+            ...     second=0, microsecond=0
+            ... ) == NativeDateTime.now().replace(second=0, microsecond=0)
+            True
 
             >>> DateTime(NativeDateTime(1970, 1, 1, 0, 0)).content
             datetime.datetime(1970, 1, 1, 0, 0)
@@ -4037,7 +4106,9 @@ class DateTime(Object):
             NativeError: "abc" couldn't be interpreted as "DateTime".
         '''
         self.content = None
-        if builtins.isinstance(content, NativeDateTime):
+        if content is None:
+            self.content = NativeDateTime.now()
+        elif builtins.isinstance(content, NativeDateTime):
             self.content = content
         elif builtins.isinstance(content, (builtins.int, builtins.float)):
             self.content = NativeDateTime.fromtimestamp(content)
@@ -4075,9 +4146,11 @@ class DateTime(Object):
                 timezone_pattern = regularExpression.compile('(.+)\+(.+)$')
                 timezone_match = timezone_pattern.match(content)
 # #
-                if timezone_match:
-                    content = timezone_pattern.sub('\\1', content)
-                self._interpret_date_time(content, timezone_match)
+                self._interpret_date_time(
+                    content=timezone_pattern.sub(
+                        '\\1', content
+                    ) if timezone_match else content,
+                    timezone_match=timezone_match)
             if self.content is None:
                 raise __exception__(
                     '"%s" couldn\'t be interpreted as "%s".', content,
@@ -4094,7 +4167,7 @@ class DateTime(Object):
 # #     def _interpret_date_time(
 # #         self: Self, content: builtins.str, timezone_match: (
 # #             None, builtins.type(regularExpression.compile('').match(''))
-# #         )) -> None:
+# #         )) -> Self:
     def _interpret_date_time(self, content, timezone_match):
 # #
         '''Interprets given content string as date time.'''
@@ -4133,7 +4206,8 @@ class DateTime(Object):
                                         self.content += TimeDelta(
                                             timezone_match.group(2)
                                         ).content
-                                    return
+                                    return self
+        return self
 
     # # endregion
 
@@ -4151,12 +4225,15 @@ class Date(Object):
     # # # region special
 
     @JointPoint
-# # python3.4     def __init__(self: Self, content=0) -> None:
-    def __init__(self, content=0, **keywords):
+# # python3.4     def __init__(self: Self, content=None) -> None:
+    def __init__(self, content=None, **keywords):
         '''
             Generates a new high level wrapper for dates.
 
             Examples:
+
+            >>> Date().content == NativeDate.today()
+            True
 
             >>> Date(NativeDate(1970, 1, 1)).content
             datetime.date(1970, 1, 1)
@@ -4182,7 +4259,9 @@ class Date(Object):
             NativeError: "abc" couldn't be interpreted as "Date".
         '''
         self.content = None
-        if builtins.isinstance(content, NativeDate):
+        if content is None:
+            self.content = NativeDate.today()
+        elif builtins.isinstance(content, NativeDate):
             self.content = content
         elif builtins.isinstance(content, (builtins.int, builtins.float)):
             self.content = NativeDate.fromtimestamp(content)
@@ -4200,71 +4279,46 @@ class Date(Object):
                 '''
 # # python3.4
 # #             elif builtins.isinstance(content, builtins.str):
-# #                 weekday_pattern = regularExpression.compile(
-# #                     '[A-Za-z]{2}\. (.+)')
-# #                 weekday_match = weekday_pattern.fullmatch(content)
-# #                 if weekday_match:
-# #                     content = weekday_pattern.sub('\\1', content)
-# #                 if builtins.len(regularExpression.compile('[^a-zA-Z]').sub(
-# #                     '', content
-# #                 )) < 3 and builtins.len(regularExpression.compile(
-# #                     '[0-9]{1,4}[^0-9]').findall(content)
-# #                 ) > 1:
             elif builtins.isinstance(content, (
                 builtins.unicode, builtins.str
             )):
-                content = self.slice_weekday(content)
-                if builtins.len(regularExpression.compile(
-                    '[^a-zA-Z]'
-                ).sub('', content)) < 3 and builtins.len(
-                    regularExpression.compile('[0-9]{1,4}[^0-9]').findall(
-                        content)
-                ) > 1:
 # #
-                    self._interpret_date(content)
-                if self.content is None:
-                    try:
-                        content = DateTime(content).content
-                    except __exception__:
-# # python3.4
-# #                             raise __exception__(
-# #                                 '"%s" couldn\'t be interpreted as "%s".',
-# #                                 content, self.__class__.__name__
-# #                             ) from None
-                        raise __exception__(
-                            '"%s" couldn\'t be interpreted as "%s".',
-                            content, self.__class__.__name__)
-# #
-                    else:
-                        self.content = content.date()
+                self._interpret_date_string(content)
 
     # # # endregion
 
     # # endregion
 
-    # endregion
-
-    # region static methods
-
-    # # region public
-
-    @JointPoint(builtins.classmethod)
-# # python3.4
-# #     def slice_weekday(
-# #         cls: SelfClass, content: builtins.str
-# #     ) -> builtins.str:
-    def slice_weekday(cls, content):
-# #
-        '''Slice weekday from given date representation.'''
-        weekday_pattern = regularExpression.compile('[A-Za-z]{2}\. (.+)$')
-        weekday_match = weekday_pattern.match(content)
-        if weekday_match:
-            return weekday_pattern.sub('\\1', content)
-        return content
+    # # region protected
 
     @JointPoint
 # # python3.4
-# #     def _interpret_date(self: Self, content: builtins.str) -> None:
+# #     def _interpret_date_string(self: Self, content: builtins.str) -> Self:
+    def _interpret_date_string(self, content):
+# #
+        content = self.slice_weekday(content)
+# # python3.4
+# #         if builtins.len(regularExpression.compile('[^a-zA-Z]').sub(
+# #             '', content
+# #         )) < 3 and builtins.len(regularExpression.compile(
+# #             '[0-9]{1,4}[^0-9]'
+# #         ).findall(content)) > 1:
+        if builtins.len(regularExpression.compile('[^a-zA-Z]').sub(
+            '', content
+        )) < 3 and builtins.len(regularExpression.compile(
+            '[0-9]{1,4}[^0-9]'
+        ).findall(content)) > 1:
+# #
+            self._interpret_date(content)
+        if self.content is None:
+            self.content = Time.derive_date_time(
+                content, property_name='date',
+                type_name=self.__class__.__name__)
+        return self
+
+    @JointPoint
+# # python3.4
+# #     def _interpret_date(self: Self, content: builtins.str) -> Self:
     def _interpret_date(self, content):
 # #
         '''Interprets given content string as date.'''
@@ -4299,9 +4353,35 @@ class Date(Object):
                     except builtins.ValueError:
                         pass
                     else:
-                        return
+                        return self
+        return self
 
     # # endregion
+
+    # endregion
+
+    # region static methods
+
+    # # region public
+
+    @JointPoint(builtins.classmethod)
+# # python3.4
+# #     def slice_weekday(
+# #         cls: SelfClass, content: builtins.str
+# #     ) -> builtins.str:
+    def slice_weekday(cls, content):
+# #
+        '''Slice weekday from given date representation.'''
+# # python3.4
+# #         weekday_pattern = regularExpression.compile('[A-Za-z]{2}\. (.+)')
+# #         weekday_match = weekday_pattern.fullmatch(content)
+        weekday_pattern = regularExpression.compile('[A-Za-z]{2}\. (.+)$')
+        weekday_match = weekday_pattern.match(content)
+# #
+        if weekday_match:
+            return weekday_pattern.sub('\\1', content)
+        return content
+
     # # endregion
 
     # endregion
@@ -4318,12 +4398,15 @@ class TimeDelta(Object):
     # # # region special
 
     @JointPoint
-# # python3.4     def __init__(self: Self, content=0) -> None:
-    def __init__(self, content=0):
+# # python3.4     def __init__(self: Self, content=None) -> None:
+    def __init__(self, content=None):
         '''
             Generates a new high level wrapper for dates.
 
             Examples:
+
+            >>> TimeDelta().content == NativeTimeDelta()
+            True
 
             >>> TimeDelta(NativeTimeDelta(0, 12345)).content
             datetime.timedelta(0, 12345)
@@ -4348,7 +4431,9 @@ class TimeDelta(Object):
             ...
             NativeError: "abc" couldn't be interpreted as "TimeDelta".
         '''
-        if builtins.isinstance(content, NativeTimeDelta):
+        if content is None:
+            self.content = NativeTimeDelta()
+        elif builtins.isinstance(content, NativeTimeDelta):
             self.content = content
         elif builtins.isinstance(content, (builtins.int, builtins.float)):
             self.content = NativeTimeDelta(seconds=content)

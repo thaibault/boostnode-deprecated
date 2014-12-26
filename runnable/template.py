@@ -464,7 +464,7 @@ class Parser(Class, Runnable):
         Saves a generic python code template used for saving python code \
         caches.
     '''
-    DEFAULT_FILE_EXTENSION_SUFFIX = 'tpl'
+    DEFAULT_FILE_EXTENSION = 'tpl'
     '''Saves the default template file extension suffix.'''
 
     # endregion
@@ -1377,7 +1377,7 @@ class Parser(Class, Runnable):
                 self.file = FileHandler(
                     location='%s%s%s' % (
                         self.file.path, os.extsep,
-                        self.DEFAULT_FILE_EXTENSION_SUFFIX),
+                        self.DEFAULT_FILE_EXTENSION),
                     encoding=self.file_encoding)
             if not self.file.is_file():
                 raise __exception__(
@@ -1808,12 +1808,14 @@ class Parser(Class, Runnable):
 # # python3.4
 # #         return regularExpression.compile(String(
 # #             SET_OUTPUT_ATTRIBUTE_MODE
-# #         ).regex_validated.sub('%d', '(?P<mode>[0-9]+)').content).sub(
-# #             replace_handler, builtins.str(content))
+# #         ).regex_validated.substitute(
+# #             '%d', '(?P<mode>[0-9]+)'
+# #         ).content).sub(replace_handler, builtins.str(content))
         return regularExpression.compile(convert_to_unicode(String(
             convert_to_string(SET_OUTPUT_ATTRIBUTE_MODE)
-        ).regex_validated.sub('%d', '(?P<mode>[0-9]+)').content)).sub(
-            replace_handler, convert_to_unicode(content))
+        ).regex_validated.substitute(
+            '%d', '(?P<mode>[0-9]+)'
+        ).content)).sub(replace_handler, convert_to_unicode(content))
 # #
 
     # NOTE: This method is heavily used during rendering. It should be as fast
@@ -1917,11 +1919,18 @@ class Parser(Class, Runnable):
             >>> parser._convert_to_string(['hans', 3, True]).replace('"', "'")
             "['hans', 3, True]"
         '''
-        # TODO test
         if builtins.isinstance(object, builtins.dict):
             return json.dumps(object)
 # # python3.4
 # #         return builtins.str(object)
+        return self._convert_object_to_string(object, quote_string)
+
+    @JointPoint
+    def _convert_object_to_string(self, object, quote_string):
+        '''
+            Converts given object to python version independent string \
+            representation.
+        '''
         if builtins.isinstance(object, (
             builtins.tuple, builtins.list, builtins.set
         )):
@@ -1929,11 +1938,7 @@ class Parser(Class, Runnable):
             for index, sub_object in builtins.enumerate(object):
                 if index:
                     result += ', '
-                '''
-                    Take this method type by another instance of this \
-                    class via introspection.
-                '''
-                result += builtins.getattr(self, inspect.stack()[0][3])(
+                result += self._convert_to_string(
                     sub_object, quote_string=True)
             if builtins.isinstance(object, builtins.tuple):
                 return '(%s%s)' % (result, ',' if index < 1 else '')
@@ -1944,9 +1949,7 @@ class Parser(Class, Runnable):
         if builtins.isinstance(object, (builtins.unicode, builtins.str)):
             is_string = True
         object = convert_to_unicode(object)
-        if is_string and quote_string:
-            return '"%s"' % object
-        return object
+        return '"%s"' % object if is_string and quote_string else object
 # #
 
     @JointPoint
