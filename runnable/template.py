@@ -471,6 +471,86 @@ class Parser(Class, Runnable):
 
     # region static methods
 
+    # # region public
+
+    @JointPoint(builtins.classmethod)
+# # python3.4
+# #     def convert_escape_sequences_to_html(
+# #         cls: SelfClass, content
+# #     ) -> builtins.str:
+    def convert_escape_sequences_to_html(cls, content):
+# #
+        '''
+            Represents the print function which will be used for all plain \
+            text wraps and print expressions by compiling the source template.
+
+            Examples:
+
+            >>> Parser.convert_escape_sequences_to_html('hans ' + (
+            ...     SET_OUTPUT_ATTRIBUTE_MODE %
+            ...         OUTPUT_COLOR['foreground']['red']
+            ... ) + 'peter' + SET_OUTPUT_ATTRIBUTE_MODE %
+            ...     RESET_OUTPUT_ATTRIBUTE_MODE)
+            'hans <span style="color: red">peter</span>'
+        '''
+        # TODO check branches.
+        def replace_handler(match):
+            '''Replaces each console sequence with corresponding html code.'''
+            mode = builtins.int(match.group('mode'))
+            if mode in (
+                RESET_OUTPUT_ATTRIBUTE_MODE, OUTPUT_UNDERLINE_OFF,
+                OUTPUT_BLINK_OFF, OUTPUT_REVEAL_OFF, OUTPUT_CROSSED_OUT_OFF,
+                OUTPUT_IDEOGRAM_OFF, OUTPUT_FRAMED_ENCIRCLED_OFF,
+                OUTPUT_OVERLINED_OFF
+            ):
+                return '</span>'
+            mapping = {
+                OUTPUT_HIDDEN: 'visibility: hidden',
+                OUTPUT_BOLD: 'font-weight: bold',
+                OUTPUT_DIM: 'opacity: .5',
+                OUTPUT_ITALIC: 'font-style: italic',
+                OUTPUT_UNDERLINE: 'text-decoration: underline',
+                OUTPUT_BLINK: 'text-decoration: blink',
+                OUTPUT_CROSSED_OUT: 'text-decoration: line-through',
+                OUTPUT_DEFAULT_FONT: 'font-family: initial',
+                OUTPUT_FRAKTUR_HARDLY: 'font-family: UnifrakturCook',
+                OUTPUT_BOLD_OFF: 'font-weight: normal',
+                OUTPUT_BOLD_INTENSITY_OFF: 'font-weight: normal',
+                OUTPUT_ITALIC_OFF: 'font-style: normal',
+                OUTPUT_FRAMED: 'border: 1px solid',
+                OUTPUT_ENCIRCLED:
+                    'border-radius: 50%; text-align: center; border: 1px '
+                    'solid',
+                OUTPUT_OVERLINED: 'text-decoration: overline',
+                OUTPUT_IDEOGRAM_UNDERLINE: 'text-decoration: underline',
+                OUTPUT_IDEOGRAM_DOUBLE_UNDERLINE: 'border-bottom: 1px double',
+                OUTPUT_IDEOGRAM_OVERLINE: 'text-decoration: overline',
+                OUTPUT_IDEOGRAM_DOUBLE_OVERLINE: 'border-top: 1px double',
+                OUTPUT_IDEOGRAM_STRESS_MARKING:
+                    'font-weight: bold, color: red'}
+            if mode in mapping:
+                return '<span style="%s">' % mapping[mode]
+            for type, directive_prefix in {
+                'foreground': '', 'background': 'background-'
+            }.items():
+                for color, color_mode in OUTPUT_COLOR[type].items():
+                    if mode == color_mode:
+                        return '<span style="%scolor: %s">' % (
+                            directive_prefix, color.lower())
+            return '<span class="console-output-mode-%d">' % mode
+# # python3.4
+# #         return regularExpression.compile(String(
+# #             SET_OUTPUT_ATTRIBUTE_MODE
+# #         ).regex_validated.substitute(
+# #             '%d', '(?P<mode>[0-9]+)'
+# #         ).content).sub(replace_handler, builtins.str(content))
+        return regularExpression.compile(convert_to_unicode(String(
+            convert_to_string(SET_OUTPUT_ATTRIBUTE_MODE)
+        ).regex_validated.substitute(
+            '%d', '(?P<mode>[0-9]+)'
+        ).content)).sub(replace_handler, convert_to_unicode(content))
+# #
+
     # # region protected
 
     # # # region helper
@@ -671,7 +751,7 @@ class Parser(Class, Runnable):
             'StringExtension': String, 'List': builtins.list,
             'hasAttribute': builtins.hasattr, 'TemplateParser': self.__class__,
             'crypt': crypt, 'convertEscapeSequencesToHTML':
-                self._convert_escape_sequences_to_html,
+                self.convert_escape_sequences_to_html,
             'console': {
                 'SET_ATTRIBUTE_MODE': SET_OUTPUT_ATTRIBUTE_MODE,
                 'RESET_ATTRIBUTE_MODE': RESET_OUTPUT_ATTRIBUTE_MODE,
@@ -1738,85 +1818,6 @@ class Parser(Class, Runnable):
         return 0
 
         # # region wrapper methods for template context
-
-    @JointPoint
-# # python3.4
-# #     def _convert_escape_sequences_to_html(
-# #         self: Self, content
-# #     ) -> builtins.str:
-    def _convert_escape_sequences_to_html(self, content):
-# #
-        '''
-            Represents the print function which will be used for all plain \
-            text wraps and print expressions by compiling the source template.
-
-            Examples:
-
-            >>> Parser('', string=True)._convert_escape_sequences_to_html(
-            ...     'hans ' + (
-            ...         SET_OUTPUT_ATTRIBUTE_MODE %
-            ...             OUTPUT_COLOR['foreground']['red']
-            ...     ) + 'peter' + SET_OUTPUT_ATTRIBUTE_MODE %
-            ...         RESET_OUTPUT_ATTRIBUTE_MODE)
-            'hans <span style="color: red">peter</span>'
-        '''
-        # TODO check branches.
-        def replace_handler(match):
-            '''Replaces each console sequence with corresponding html code.'''
-            mode = builtins.int(match.group('mode'))
-            if mode in (
-                RESET_OUTPUT_ATTRIBUTE_MODE, OUTPUT_UNDERLINE_OFF,
-                OUTPUT_BLINK_OFF, OUTPUT_REVEAL_OFF, OUTPUT_CROSSED_OUT_OFF,
-                OUTPUT_IDEOGRAM_OFF, OUTPUT_FRAMED_ENCIRCLED_OFF,
-                OUTPUT_OVERLINED_OFF
-            ):
-                return '</span>'
-            mapping = {
-                OUTPUT_HIDDEN: 'visibility: hidden',
-                OUTPUT_BOLD: 'font-weight: bold',
-                OUTPUT_DIM: 'opacity: .5',
-                OUTPUT_ITALIC: 'font-style: italic',
-                OUTPUT_UNDERLINE: 'text-decoration: underline',
-                OUTPUT_BLINK: 'text-decoration: blink',
-                OUTPUT_CROSSED_OUT: 'text-decoration: line-through',
-                OUTPUT_DEFAULT_FONT: 'font-family: initial',
-                OUTPUT_FRAKTUR_HARDLY: 'font-family: UnifrakturCook',
-                OUTPUT_BOLD_OFF: 'font-weight: normal',
-                OUTPUT_BOLD_INTENSITY_OFF: 'font-weight: normal',
-                OUTPUT_ITALIC_OFF: 'font-style: normal',
-                OUTPUT_FRAMED: 'border: 1px solid',
-                OUTPUT_ENCIRCLED:
-                    'border-radius: 50%; text-align: center; border: 1px '
-                    'solid',
-                OUTPUT_OVERLINED: 'text-decoration: overline',
-                OUTPUT_IDEOGRAM_UNDERLINE: 'text-decoration: underline',
-                OUTPUT_IDEOGRAM_DOUBLE_UNDERLINE: 'border-bottom: 1px double',
-                OUTPUT_IDEOGRAM_OVERLINE: 'text-decoration: overline',
-                OUTPUT_IDEOGRAM_DOUBLE_OVERLINE: 'border-top: 1px double',
-                OUTPUT_IDEOGRAM_STRESS_MARKING:
-                    'font-weight: bold, color: red'}
-            if mode in mapping:
-                return '<span style="%s">' % mapping[mode]
-            for type, directive_prefix in {
-                'foreground': '', 'background': 'background-'
-            }.items():
-                for color, color_mode in OUTPUT_COLOR[type].items():
-                    if mode == color_mode:
-                        return '<span style="%scolor: %s">' % (
-                            directive_prefix, color.lower())
-            return '<span class="console-output-mode-%d">' % mode
-# # python3.4
-# #         return regularExpression.compile(String(
-# #             SET_OUTPUT_ATTRIBUTE_MODE
-# #         ).regex_validated.substitute(
-# #             '%d', '(?P<mode>[0-9]+)'
-# #         ).content).sub(replace_handler, builtins.str(content))
-        return regularExpression.compile(convert_to_unicode(String(
-            convert_to_string(SET_OUTPUT_ATTRIBUTE_MODE)
-        ).regex_validated.substitute(
-            '%d', '(?P<mode>[0-9]+)'
-        ).content)).sub(replace_handler, convert_to_unicode(content))
-# #
 
     # NOTE: This method is heavily used during rendering. It should be as fast
     # as possible. So the JointPoint is deactivated.

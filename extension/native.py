@@ -4173,9 +4173,10 @@ class DateTime(Object):
         '''Interprets given content string as date time.'''
         for time_delimiter in ('T', ' ', ''):
             for delimiter in ('/', '.', ':', '-'):
-                for year_format in (('%y{delimiter}', ''), (
-                    '%Y{delimiter}', ''
-                ), ('', '{delimiter}%y'), ('', '{delimiter}%Y')):
+                for year_format in (
+                    ('', '{delimiter}%y'), ('', '{delimiter}%Y'),
+                    ('%y{delimiter}', ''), ('%Y{delimiter}', '')
+                ):
                     for time_format in ('%X', '%H:%M:%S', '%H:%M', '%H', ''):
                         for ms_format in ('', ':%f'):
                             for date_time_format in (
@@ -4324,14 +4325,13 @@ class Date(Object):
         '''Interprets given content string as date.'''
         for delimiter in ('/', '.', ':', '-'):
             for year_format in (
-                ('%y{delimiter}', ''), ('%Y{delimiter}', ''),
-                ('', '{delimiter}%y'), ('', '{delimiter}%Y')
+                ('', '{delimiter}%y'), ('', '{delimiter}%Y'),
+                ('%y{delimiter}', ''), ('%Y{delimiter}', '')
             ):
                 for date_format in (
-                    '%x', '{first_year}%d{delimiter}%m{delimiter}'
-                    '{last_year}',
-                    '{first_year}%m{delimiter}%d{delimiter}{last_year}',
-                    '{first_year}%w{delimiter}%m{delimiter}{last_year}'
+                    '%x', '{first_year}%d{delimiter}%m{last_year}',
+                    '{first_year}%m{delimiter}%d{last_year}',
+                    '{first_year}%w{delimiter}%m{last_year}'
                 ):
                     try:
 # # python3.4
@@ -4339,15 +4339,19 @@ class Date(Object):
 # #                             NativeDateTime.strptime(
 # #                                 content, date_format.format(
 # #                                     delimiter=delimiter,
-# #                                     first_year=year_format[0],
-# #                                     last_year=year_format[1]
+# #                                     first_year=year_format[0].format(
+# #                                         delimiter=delimiter),
+# #                                     last_year=year_format[1].format(
+# #                                         delimiter=delimiter)
 # #                                 )).timestamp())
                         self.content = NativeDate.fromtimestamp(
                             time.mktime(NativeDateTime.strptime(
                                 content, date_format.format(
                                     delimiter=delimiter,
-                                        first_year=year_format[0],
-                                        last_year=year_format[1]
+                                        first_year=year_format[0].format(
+                                            delimiter=delimiter),
+                                        last_year=year_format[1].format(
+                                            delimiter=delimiter)
                                     )).timetuple()))
 # #
                     except builtins.ValueError:

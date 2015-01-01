@@ -82,7 +82,7 @@ def template_parser__load_template(self):
 TemplateParser._load_template = template_parser__load_template
 
 
-def _render_template_handle_cache(self):
+def _template_parser_render_handle_cache(self, mapping):
     '''Handles prerendered templates to support caching.'''
     template_hash = builtins.str(builtins.hash(
         self.content
@@ -138,7 +138,7 @@ def template_parser_render(
     mapping.update({'__builtins__': self.builtins})
     mapping.update(keywords)
     if self.cache:
-        _template_parser_render_handle_cache()
+        _template_parser_render_handle_cache(self, mapping)
     else:
         self.rendered_python_code = self._render_content()
         self._run_template(

@@ -1972,7 +1972,9 @@ class CommandLine(builtins.object):
         '''
         if temp_file_patterns is None:
             temp_file_patterns = cls.DEFAULT_TEMP_FILE_PATTERNS
-        if name == '__main__':
+        if name == '__main__' and CommandLine.generic_module_interface(
+            module=Module.extend(name, frame), default_caller=False
+        ):
             all, arguments, current_working_directory_backup = \
                 cls._package_start_helper(name, frame, command_line_arguments)
             try:
@@ -2000,7 +2002,7 @@ class CommandLine(builtins.object):
 # #         cls: SelfClass, module: builtins.dict,
 # #         temp_file_patterns=None, test=False, default_caller=None,
 # #         caller_arguments=(), caller_keywords={}
-# #     ) -> SelfClass:
+# #     ) -> builtins.bool:
     def generic_module_interface(
         cls, module, temp_file_patterns=None, test=False,
         default_caller=None, caller_arguments=(), caller_keywords={}
@@ -2008,7 +2010,9 @@ class CommandLine(builtins.object):
 # #
         '''
             Provides a generic command line interface for modules. Things \
-            like unit testing or calling objects in module are provided.
+            like unit testing or calling objects in module are provided. \
+            Returns "True" if module handling was needed and "False" if some \
+            action has ran.
 
             **module**             - module object to provide an interface for
 
@@ -2053,7 +2057,10 @@ class CommandLine(builtins.object):
                     object_name=given_arguments.module_object,
                     caller_arguments=caller_arguments,
                     caller_keywords=caller_keywords)
-        return cls
+            else:
+                return True
+            return False
+        return True
 
     @JointPoint(builtins.classmethod)
 # # python3.4
