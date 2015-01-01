@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.4
+#!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 
 # region header
@@ -7,10 +7,10 @@
     Provides web api parsers and a simple webserver to offer the prepared data.
 '''
 
-# # python2.7
-# # from __future__ import absolute_import, division, print_function, \
-# #     unicode_literals
-pass
+# # python3.4
+# # pass
+from __future__ import absolute_import, division, print_function, \
+    unicode_literals
 # #
 
 __author__ = 'Torben Sickert'
@@ -22,14 +22,14 @@ __maintainer_email__ = 't.sickert["~at~"]gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-# # python2.7 import __builtin__ as builtins
-import builtins
+# # python3.4 import builtins
+import __builtin__ as builtins
 from collections import Iterable
 import inspect
 import os
 
-# # python2.7 from boostNode import convert_to_string, convert_to_unicode
-pass
+# # python3.4 pass
+from boostNode import convert_to_string, convert_to_unicode
 from boostNode.extension.file import Handler as FileHandler
 from boostNode.extension.native import Dictionary, Module
 from boostNode.extension.native import String as StringExtension
@@ -37,10 +37,10 @@ from boostNode.runnable.template import Parser as TemplateParser
 from boostNode.paradigm.objectOrientation import Class
 
 
-# # python2.7
-# # String = lambda content: StringExtension(convert_to_string(content))
-# NOTE: Should be removed if we drop python2.X support.
-String = StringExtension
+# # python3.4
+# # # NOTE: Should be removed if we drop python2.X support.
+# # String = StringExtension
+String = lambda content: StringExtension(convert_to_string(content))
 # #
 
 # endregion
@@ -118,8 +118,8 @@ def _template_parser_render_handle_cache(self, mapping):
         with builtins.open(cache_file_path, 'w') as file:
             file.write(convert_to_string(
                 '# -*- coding: utf-8 -*-\n%s' % self.rendered_python_code))
-# # python2.7         exec self.rendered_python_code in mapping
-         builtins.exec(self.rendered_python_code, mapping)
+# # python3.4          builtins.exec(self.rendered_python_code, mapping)
+        exec self.rendered_python_code in mapping
     if self.full_caching:
         with builtins.open(full_cache_file_path, 'w') as file:
             file.write(self._output.content)
@@ -190,8 +190,8 @@ def dictionary_convert(
                 key_wrapper, value_wrapper, no_wrap_indicator,
                 remove_no_wrap_indicator
             ).content
-# # python2.7 # #         elif(builtins.isinstance(value, Iterable) and
-
+# # python3.4
+# #         elif(builtins.isinstance(value, Iterable) and
 # #              not builtins.isinstance(value, (
 # #                  builtins.bytes, builtins.str))
 # #         ):
@@ -221,10 +221,10 @@ def dictionary__convert_iterable(
     '''
     if builtins.isinstance(iterable, builtins.set):
         return cls._convert_set(iterable, key_wrapper, value_wrapper)
-# # python2.7
-# #     pass
-    if isinstance(iterable, range):
-        iterable = list(iterable)
+# # python3.4
+# #     if isinstance(iterable, range):
+# #         iterable = list(iterable)
+    pass
 # #
     try:
         for key, value in builtins.enumerate(iterable):
@@ -233,14 +233,14 @@ def dictionary__convert_iterable(
                     key_wrapper, value_wrapper, no_wrap_indicator,
                     remove_no_wrap_indicator
                 ).content
-# # python2.7
-# #             elif builtins.isinstance(
-# #                 value, Iterable
-# #             ) and not builtins.isinstance(value, (
-# #                 builtins.unicode, builtins.str
+# # python3.4
+# #             elif isinstance(value, Iterable) and not isinstance(value, (
+# #                 builtins.bytes, builtins.str
 # #             )):
-            elif isinstance(value, Iterable) and not isinstance(value, (
-                builtins.bytes, builtins.str
+            elif builtins.isinstance(
+                value, Iterable
+            ) and not builtins.isinstance(value, (
+                builtins.unicode, builtins.str
             )):
 # #
                 iterable[key] = dictionary__convert_iterable(
@@ -255,13 +255,13 @@ def dictionary__convert_iterable(
             NOTE: We have visited a non indexable value (e.g. an uploaded
             file).
         '''
-# # python2.7
+# # python3.4
 # #         __logger__.debug(
 # #             '%s: %s (%s)', exception.__class__.__name__,
-# #             convert_to_unicode(exception), builtins.type(iterable))
+# #             builtins.str(exception), builtins.type(iterable))
         __logger__.debug(
             '%s: %s (%s)', exception.__class__.__name__,
-            builtins.str(exception), builtins.type(iterable))
+            convert_to_unicode(exception), builtins.type(iterable))
 # #
     return iterable
 Dictionary._convert_iterable = dictionary__convert_iterable

@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.4
+#!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 
 # region header
@@ -341,10 +341,10 @@
     '\\n    Module documentation which should be useable as help message fo...'
 """
 
-# # python2.7
-# # from __future__ import absolute_import, division, print_function, \
-# #     unicode_literals
-pass
+# # python3.4
+# # pass
+from __future__ import absolute_import, division, print_function, \
+    unicode_literals
 # #
 
 __author__ = 'Torben Sickert'
@@ -356,11 +356,11 @@ __maintainer_email__ = 't.sickert["~at~"]gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-# # python2.7
-# # import __builtin__ as builtins
-# # from collections import Iterable
-# # from copy import deepcopy
-import builtins
+# # python3.4
+# # import builtins
+import __builtin__ as builtins
+from collections import Iterable
+from copy import deepcopy
 # #
 import inspect
 import logging
@@ -391,81 +391,81 @@ ENCODING = 'utf_8'
 
 # region functions
 
-# # python2.7
-# # '''
-# #     Handling "builtins.str" and "builtins.unicode" in python2.7.X needs \
-# #     some much attention. Because different API's uses different types. \
-# #     The main development goes to "builtins.unicode" so working with \
-# #     boostNode means you should use them.
-# #
-# #     Every content which could contain a "builtins.str" type and may have \
-# #     non ascii-characters should be converted via the \
-# #     "boostNode.convert_to_unicode()" method.
-# # '''
-# #
-# #
-# # def convert_type_to_unicode(object):
-# #     '''Converts a generic string representable object to unicode.'''
-# #     if builtins.hasattr(object, '__unicode__'):
-# #         return object.__unicode__()
-# #     elif builtins.hasattr(object, '__str__'):
-# #         try:
-# #             object = object.__str__()
-# #         except builtins.UnicodeEncodeError:
-# #             if builtins.isinstance(object, Iterable):
-# #                 for index, item in builtins.enumerate(object):
-# #                     object[index] = convert_to_unicode(item)
-# #                 object = object.__str__()
-# #             else:
-# #                 raise
-# #         if builtins.isinstance(object, builtins.unicode):
-# #             return object
-# #         return builtins.unicode(object, ENCODING)
-# #     return builtins.unicode(object)
-# #
-# #
-# # def convert_to_unicode(object):
-# #     '''
-# #         Converts given object to its unicode string representation like \
-# #         python's native "builtins.str()" method.
-# #     '''
-# #     if builtins.isinstance(object, builtins.Exception) and builtins.hasattr(
-# #         object, 'message'
-# #     ):
-# #         object = object.message
-# #     if builtins.isinstance(object, builtins.unicode):
-# #         '''
-# #             NOTE: To force specified encoding we should encode and than \
-# #             decode here.
-# #         '''
-# #         return object
-# #     if builtins.isinstance(object, builtins.str):
-# #         return builtins.unicode(object, ENCODING)
-# #     if not builtins.isinstance(object, builtins.type):
-# #         return convert_type_to_unicode(object)
-# #     '''
-# #         NOTE: We have to avoid using an explicit encoding to mimic python \
-# #         native "builtins.str()" method behavior for getting a string \
-# #         representation.
-# #     '''
-# #     return builtins.unicode(object)
-# #
-# #
-# # def convert_to_string(object):
-# #     '''
-# #         Converts given object to its str string representation like \
-# #         python's native "builtins.str()" method.
-# #     '''
-# #     '''NOTE: We check for string type to boost already converted values.'''
-# #     if builtins.isinstance(object, builtins.str):
-# #         return object
-# #     return convert_to_unicode(object).encode(ENCODING)
-pass
+# # python3.4
+# # pass
+'''
+    Handling "builtins.str" and "builtins.unicode" in python2.7.X needs \
+    some much attention. Because different API's uses different types. \
+    The main development goes to "builtins.unicode" so working with \
+    boostNode means you should use them.
+
+    Every content which could contain a "builtins.str" type and may have \
+    non ascii-characters should be converted via the \
+    "boostNode.convert_to_unicode()" method.
+'''
+
+
+def convert_type_to_unicode(object):
+    '''Converts a generic string representable object to unicode.'''
+    if builtins.hasattr(object, '__unicode__'):
+        return object.__unicode__()
+    elif builtins.hasattr(object, '__str__'):
+        try:
+            object = object.__str__()
+        except builtins.UnicodeEncodeError:
+            if builtins.isinstance(object, Iterable):
+                for index, item in builtins.enumerate(object):
+                    object[index] = convert_to_unicode(item)
+                object = object.__str__()
+            else:
+                raise
+        if builtins.isinstance(object, builtins.unicode):
+            return object
+        return builtins.unicode(object, ENCODING)
+    return builtins.unicode(object)
+
+
+def convert_to_unicode(object):
+    '''
+        Converts given object to its unicode string representation like \
+        python's native "builtins.str()" method.
+    '''
+    if builtins.isinstance(object, builtins.Exception) and builtins.hasattr(
+        object, 'message'
+    ):
+        object = object.message
+    if builtins.isinstance(object, builtins.unicode):
+        '''
+            NOTE: To force specified encoding we should encode and than \
+            decode here.
+        '''
+        return object
+    if builtins.isinstance(object, builtins.str):
+        return builtins.unicode(object, ENCODING)
+    if not builtins.isinstance(object, builtins.type):
+        return convert_type_to_unicode(object)
+    '''
+        NOTE: We have to avoid using an explicit encoding to mimic python \
+        native "builtins.str()" method behavior for getting a string \
+        representation.
+    '''
+    return builtins.unicode(object)
+
+
+def convert_to_string(object):
+    '''
+        Converts given object to its str string representation like \
+        python's native "builtins.str()" method.
+    '''
+    '''NOTE: We check for string type to boost already converted values.'''
+    if builtins.isinstance(object, builtins.str):
+        return object
+    return convert_to_unicode(object).encode(ENCODING)
 # #
 
 
-# # python2.7 def __get_all_modules__(path=convert_to_unicode(sys.path[0])):
-def __get_all_modules__(path=sys.path[0]) -> builtins.list:
+# # python3.4 def __get_all_modules__(path=sys.path[0]) -> builtins.list:
+def __get_all_modules__(path=convert_to_unicode(sys.path[0])):
     '''
         This method provides a generic way to determine all modules in \
         current package or folder. It is useful for "__init__.py" files.
@@ -496,8 +496,11 @@ def __get_all_modules__(path=sys.path[0]) -> builtins.list:
         True
         >>> __get_all_modules__(__test_folder__.path + '__get_all_modules__')
         []
+
+        >>> __get_all_modules__('')
+        ['highPerformanceModification']
     '''
-# # python2.7
+# # python3.4
 # #     if not path:
 # #         path = os.getcwd()
 # #     return builtins.list(builtins.set(builtins.map(
@@ -506,11 +509,10 @@ def __get_all_modules__(path=sys.path[0]) -> builtins.list:
 # #             lambda name: (
 # #                 (name.endswith('.py') or name.endswith('.pyc')) and
 # #                 not name.startswith('__init__.') and os.path.isfile(
-# #                     convert_to_string('%s%s%s' % (path, os.sep, name)))),
-# #             builtins.map(
-# #                 lambda name: convert_to_unicode(name), os.listdir(
-# #                     path[:-(builtins.len(os.path.basename(path)) + 1)] if
-# #                     os.path.isfile(path) else path))))))
+# #                     '%s%s%s' % (path, os.sep, name))),
+# #             os.listdir(
+# #                 path[:-(builtins.len(os.path.basename(path)) + 1)] if
+# #                 os.path.isfile(path) else path)))))
     if not path:
         path = os.getcwd()
     return builtins.list(builtins.set(builtins.map(
@@ -519,10 +521,11 @@ def __get_all_modules__(path=sys.path[0]) -> builtins.list:
             lambda name: (
                 (name.endswith('.py') or name.endswith('.pyc')) and
                 not name.startswith('__init__.') and os.path.isfile(
-                    '%s%s%s' % (path, os.sep, name))),
-            os.listdir(
-                path[:-(builtins.len(os.path.basename(path)) + 1)] if
-                os.path.isfile(path) else path)))))
+                    convert_to_string('%s%s%s' % (path, os.sep, name)))),
+            builtins.map(
+                lambda name: convert_to_unicode(name), os.listdir(
+                    path[:-(builtins.len(os.path.basename(path)) + 1)] if
+                    os.path.isfile(path) else path))))))
 # #
 
 # endregion
@@ -553,10 +556,10 @@ if __name__ != '__main__':
     from boostNode.aspect.signature import add_check as add_signature_check
     from boostNode.extension.native import Module
 
-# # python2.7
-# #     builtins.reload(sys)
-# #     sys.setdefaultencoding(ENCODING)
-    pass
+# # python3.4
+# #     pass
+    builtins.reload(sys)
+    sys.setdefaultencoding(ENCODING)
 # #
     try:
         '''
@@ -566,15 +569,15 @@ if __name__ != '__main__':
         add_signature_check(point_cut='%s\..*' % Module.get_package_name(
             frame=inspect.currentframe()))
     except WindowsError as exception:
-# # python2.7
+# # python3.4
 # #         logging.error(
 # #             'Running subprocesses on windows without being administrator '
 # #             "isn't possible. %s: %s", exception.__class__.__name__,
-# #             convert_to_unicode(exception))
+# #             builtins.str(exception))
         logging.error(
             'Running subprocesses on windows without being administrator '
             "isn't possible. %s: %s", exception.__class__.__name__,
-            builtins.str(exception))
+            convert_to_unicode(exception))
 # #
         sys.exit(1)
 
