@@ -97,6 +97,21 @@
 </pre></div>
 </div>
 <dl class="staticmethod">
+<dt id="boostNode.runnable.template.Parser.convert_escape_sequences_to_html">
+<em class="property">static </em><tt class="descname">convert_escape_sequences_to_html</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.template.Parser.convert_escape_sequences_to_html" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents the print function which will be used for all plain             text wraps and print expressions by compiling the source template.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Parser</span><span class="o">.</span><span class="n">convert_escape_sequences_to_html</span><span class="p">(</span><span class="s">&#39;hans &#39;</span> <span class="o">+</span> <span class="p">(</span>
+<span class="gp">... </span>    <span class="n">SET_OUTPUT_ATTRIBUTE_MODE</span> <span class="o">%</span>
+<span class="gp">... </span>        <span class="n">OUTPUT_COLOR</span><span class="p">[</span><span class="s">&#39;foreground&#39;</span><span class="p">][</span><span class="s">&#39;red&#39;</span><span class="p">]</span>
+<span class="gp">... </span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;peter&#39;</span> <span class="o">+</span> <span class="n">SET_OUTPUT_ATTRIBUTE_MODE</span> <span class="o">%</span>
+<span class="gp">... </span>    <span class="n">RESET_OUTPUT_ATTRIBUTE_MODE</span><span class="p">)</span>
+<span class="go">&#39;hans &lt;span style=&quot;color: red&quot;&gt;peter&lt;/span&gt;&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
 <dt id="boostNode.runnable.template.Parser.get_builtins">
 <em class="property">static </em><tt class="descname">get_builtins</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.template.Parser.get_builtins" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines minimum needed native python features for each template             scope. It adds user-defined additionally python functions. The             minimum needed functions (e.g. &#8220;print()&#8221;) will never be             overwritten.</p>
