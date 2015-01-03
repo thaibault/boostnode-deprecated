@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.4
 # -*- coding: utf-8 -*-
 
 # region header
@@ -8,10 +8,10 @@
     implementing object orientated code.
 '''
 
-# # python3.4
-# # pass
-from __future__ import absolute_import, division, print_function, \
-    unicode_literals
+# # python2.7
+# # from __future__ import absolute_import, division, print_function, \
+# #     unicode_literals
+pass
 # #
 
 '''
@@ -103,13 +103,13 @@ __maintainer_email__ = 't.sickert["~at~"]gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-# # python3.4 import builtins
-import __builtin__ as builtins
+# # python2.7 import __builtin__ as builtins
+import builtins
 import inspect
 import os
 import sys
-# # python3.4 import types
-pass
+# # python2.7 pass
+import types
 
 '''Make boostNode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
@@ -119,8 +119,8 @@ sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
 # region abstract classes
 
-# # python3.4 class Class:
-class Class(builtins.object):
+# # python2.7 class Class(builtins.object):
+class Class:
 
     '''
         The main class which is intended for passing on other class. It \
@@ -135,8 +135,8 @@ class Class(builtins.object):
     # # # region special
 
     @builtins.classmethod
-# # python3.4     def __repr__(cls: builtins.type) -> builtins.str:
-    def __repr__(cls):
+# # python2.7     def __repr__(cls):
+    def __repr__(cls: builtins.type) -> builtins.str:
         '''
             Invokes if this object should describe itself by a string.
 
@@ -148,8 +148,8 @@ class Class(builtins.object):
         return 'Object of "%s".' % cls.__name__
 
     @builtins.classmethod
-# # python3.4     def __str__(cls: builtins.type) -> builtins.str:
-    def __str__(cls):
+# # python2.7     def __str__(cls):
+    def __str__(cls: builtins.type) -> builtins.str:
         '''
             Is triggered if the current object is tried to be converted into \
             a string object.
@@ -168,11 +168,11 @@ class Class(builtins.object):
         # # region decorator
 
     @builtins.classmethod
-# # python3.4
-# #     def pseudo_property(
-# #         cls: builtins.object, function: types.MethodType
-# #     ) -> types.MethodType:
-    def pseudo_property(cls, function):
+# # python2.7
+# #     def pseudo_property(cls, function):
+    def pseudo_property(
+        cls: builtins.object, function: types.MethodType
+    ) -> types.MethodType:
 # #
         '''
             Attaches a property to given function for indicating that given \
@@ -197,11 +197,11 @@ class Class(builtins.object):
 
         # # region special
 
-# # python3.4
-# #     def __getattr__(
-# #         self: builtins.object, name: builtins.str
-# #     ) -> builtins.object:
-    def __getattr__(self, name):
+# # python2.7
+# #     def __getattr__(self, name):
+    def __getattr__(
+        self: builtins.object, name: builtins.str
+    ) -> builtins.object:
 # #
         '''
             Is triggered if a property was tried to be read but is \
@@ -261,11 +261,11 @@ class Class(builtins.object):
             'Property "%s" doesn\'t exist in given instance of "%s".' %
             (name[1:], self.__class__.__name__))
 
-# # python3.4
-# #     def __setattr__(
-# #         self, name: builtins.str, value: builtins.object
-# #     ) -> builtins.object:
-    def __setattr__(self, name, value):
+# # python2.7
+# #     def __setattr__(self, name, value):
+    def __setattr__(
+        self, name: builtins.str, value: builtins.object
+    ) -> builtins.object:
 # #
         '''
             Is triggered if a property was tried to overwrite but is \
@@ -313,8 +313,8 @@ class Class(builtins.object):
 
         # # region boolean
 
-# # python3.4     def is_method(self, name: builtins.str) -> builtins.bool:
-    def is_method(self, name):
+# # python2.7     def is_method(self, name):
+    def is_method(self, name: builtins.str) -> builtins.bool:
         '''
             Determines if the given class attribute is a callable method or \
             something else.
@@ -346,8 +346,8 @@ class Class(builtins.object):
             return False
         return True
 
-# # python3.4     def is_property(self, name: builtins.str) -> builtins.bool:
-    def is_property(self, name):
+# # python2.7     def is_property(self, name):
+    def is_property(self, name: builtins.str) -> builtins.bool:
         '''
             Determines if the given class attribute is a property or \
             something else.
@@ -382,9 +382,9 @@ class Class(builtins.object):
 
         # region protected
 
-# # python3.4
-# #     def _is_callable(self, object: builtins.object) -> builtins.bool:
-    def _is_callable(self, object):
+# # python2.7
+# #     def _is_callable(self, object):
+    def _is_callable(self, object: builtins.object) -> builtins.bool:
 # #
         '''Indicates if given method is a callable or a callable wrapper.'''
         return(
@@ -392,11 +392,11 @@ class Class(builtins.object):
             builtins.isinstance(object, builtins.classmethod) or
             builtins.isinstance(object, builtins.staticmethod))
 
-# # python3.4
-# #     def _setattr_helper(
-# #         self, name: builtins.str, value: builtins.object
-# #     ) -> builtins.bool:
-    def _setattr_helper(self, name, value):
+# # python2.7
+# #     def _setattr_helper(self, name, value):
+    def _setattr_helper(
+        self, name: builtins.str, value: builtins.object
+    ) -> builtins.bool:
 # #
         '''
             Helper method for "self.__setattr__()". Does the actual overwrite \

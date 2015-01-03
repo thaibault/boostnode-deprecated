@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.4
 # -*- coding: utf-8 -*-
 
 # region header
@@ -9,10 +9,10 @@
     their context.
 '''
 
-# # python3.4
-# # pass
-from __future__ import absolute_import, division, print_function, \
-    unicode_literals
+# # python2.7
+# # from __future__ import absolute_import, division, print_function, \
+# #     unicode_literals
+pass
 # #
 
 '''
@@ -29,8 +29,8 @@ __maintainer_email__ = 't.sickert["~at~"]gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-# # python3.4 import builtins
-import __builtin__ as builtins
+# # python2.7 import __builtin__ as builtins
+import builtins
 import inspect
 import os
 import sys
@@ -76,16 +76,16 @@ class Model(builtins.type):
 
     # # # region special
 
-# # python3.4
+# # python2.7
 # #     def __new__(
-# #         cls: SelfClass, class_name: builtins.str,
-# #         base_classes: builtins.tuple, class_scope: builtins.dict,
-# #         *arguments: (builtins.type, builtins.object),
-# #         **keywords: (builtins.type, builtins.object)
-# #     ) -> builtins.type:
+# #         cls, class_name, base_classes, class_scope, *arguments, **keywords
+# #     ):
     def __new__(
-        cls, class_name, base_classes, class_scope, *arguments, **keywords
-    ):
+        cls: SelfClass, class_name: builtins.str,
+        base_classes: builtins.tuple, class_scope: builtins.dict,
+        *arguments: (builtins.type, builtins.object),
+        **keywords: (builtins.type, builtins.object)
+    ) -> builtins.type:
 # #
         '''
             Triggers if a new instance is created. Set the default name for \
