@@ -57,238 +57,14 @@
 <p>This module provides functions for checking function call&#8217;s against a     given signature.</p>
 <dl class="class">
 <dt id="boostNode.aspect.signature.Check">
-<em class="property">class </em><tt class="descclassname">boostNode.aspect.signature.</tt><tt class="descname">Check</tt><big>(</big><em>method: (&lt;class 'function'&gt;</em>, <em>&lt;class 'method'&gt;)</em>, <em>function=None</em><big>)</big> &rarr; None<a class="headerlink" href="#boostNode.aspect.signature.Check" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function provides function and method signature checking. An         exception is raised on invalid signature implementation.</p>
-<p>There are several possibilities to specify a given argument or         the return value:</p>
-<ol class="arabic simple">
-<li>Specify a type.         2. Specify a number of types via a tuple.         3. Specify a number of types expected as values explicit via            list.         4. Specify an explicit value.         5. Specify type implicit by setting a default value.         6. Specify current instance via &#8220;Self&#8221;.         7. Specify any instance of the current class via
-&#8220;SelfClassObject&#8221;.         8. Specify the current Class type (interpret as value) for static            methods via &#8220;SelfClass&#8221;.</li>
-</ol>
-<p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nd">@Check</span>
-<span class="gp">... </span><span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="n">num</span><span class="p">:</span> <span class="n">builtins</span><span class="o">.</span><span class="n">int</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">builtins</span><span class="o">.</span><span class="n">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="k">return</span> <span class="n">num</span><span class="p">,</span> <span class="n">name</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">test</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s">&#39;hans&#39;</span><span class="p">)</span>
-<span class="go">(3, &#39;hans&#39;)</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nd">@Check</span>
-<span class="gp">... </span><span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="n">num</span><span class="p">:</span> <span class="n">builtins</span><span class="o">.</span><span class="n">int</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">builtins</span><span class="o">.</span><span class="n">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="k">return</span> <span class="n">num</span><span class="p">,</span> <span class="n">name</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">test</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s">&#39;hans&#39;</span><span class="p">)</span>
-<span class="go">(3, &#39;hans&#39;)</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">test</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">,</span> <span class="s">&#39;hans&#39;</span><span class="p">)</span> 
-<span class="gt">Traceback (most recent call last):</span>
-<span class="c">...</span>
-<span class="gr">boostNode.extension.native.SignatureError</span>: <span class="n">...&quot;int&quot; for &quot;num&quot; b...</span>
-<span class="gt">Traceback (most recent call last):</span>
-<span class="c">...</span>
-<span class="gr">boostNode.extension.native.SignatureError</span>: <span class="n">...&quot;int&quot; for &quot;num&quot; b...</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nd">@Check</span>
-<span class="gp">... </span><span class="k">def</span> <span class="nf">test</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">builtins</span><span class="o">.</span><span class="n">int</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="k">return</span> <span class="s">&#39;hans&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">test</span><span class="p">()</span> 
-<span class="gt">Traceback (most recent call last):</span>
-<span class="c">...</span>
-<span class="gr">boostNode.extension.native.SignatureError</span>: <span class="n">...int&quot; for &quot;return ...</span>
-<span class="gt">Traceback (most recent call last):</span>
-<span class="c">...</span>
-<span class="gr">boostNode.extension.native.SignatureError</span>: <span class="n">...int&quot; for &quot;return ...</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nd">@Check</span>
-<span class="gp">... </span><span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="n">param</span><span class="p">:</span> <span class="mi">5</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="n">variable</span> <span class="o">=</span> <span class="n">param</span> <span class="o">*</span> <span class="mi">2</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">test</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> 
-<span class="gt">Traceback (most recent call last):</span>
-<span class="c">...</span>
-<span class="gr">boostNode.extension.native.SignatureError</span>: <span class="n">...m&quot; but received &quot;4&quot;.</span>
-<span class="gt">Traceback (most recent call last):</span>
-<span class="c">...</span>
-<span class="gr">boostNode.extension.native.SignatureError</span>: <span class="n">...m&quot; but received &quot;4&quot;.</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nd">@Check</span>
-<span class="gp">... </span><span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="n">param</span><span class="p">:</span> <span class="p">(</span><span class="n">builtins</span><span class="o">.</span><span class="n">str</span><span class="p">,</span> <span class="n">builtins</span><span class="o">.</span><span class="n">bool</span><span class="p">))</span> <span class="o">-&gt;</span> <span class="bp">True</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="k">return</span> <span class="bp">True</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">test</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-<span class="go">True</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">test</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">)</span>
-<span class="go">True</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">test</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> 
-<span class="gt">Traceback (most recent call last):</span>
-<span class="c">...</span>
-<span class="gr">boostNode.extension.native.SignatureError</span>: <span class="n">...r&quot; or &quot;bool&quot; for ...</span>
-<span class="gt">Traceback (most recent call last):</span>
-<span class="c">...</span>
-<span class="gr">boostNode.extension.native.SignatureError</span>: <span class="n">...r&quot; or &quot;bool&quot; for ...</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nd">@Check</span>
-<span class="gp">... </span><span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="n">param</span><span class="o">=</span><span class="s">&#39;hans&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">builtins</span><span class="o">.</span><span class="n">str</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="k">return</span> <span class="n">param</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">test</span><span class="p">(</span><span class="s">&#39;peter&#39;</span><span class="p">)</span>
-<span class="go">&#39;peter&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">test</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">)</span>
-<span class="go">&#39;hans&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">test</span><span class="p">(</span><span class="n">param</span><span class="o">=</span><span class="s">&#39;klaus&#39;</span><span class="p">)</span>
-<span class="go">&#39;klaus&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">test</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> 
-<span class="gt">Traceback (most recent call last):</span>
-<span class="c">...</span>
-<span class="gr">boostNode.extension.native.SignatureError</span>: <span class="n">...tr&quot; for &quot;param&quot; b...</span>
-<span class="gt">Traceback (most recent call last):</span>
-<span class="c">...</span>
-<span class="gr">boostNode.extension.native.SignatureError</span>: <span class="n">...tr&quot; for &quot;param&quot; b...</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nd">@Check</span>
-<span class="gp">... </span><span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="s">&#39;hans&#39;</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="s">&#39;and peter&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">builtins</span><span class="o">.</span><span class="n">str</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="n">b</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">test</span><span class="p">(</span><span class="s">&#39;klaus&#39;</span><span class="p">)</span>
-<span class="go">&#39;klaus and peter&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">test</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">,</span> <span class="s">&#39;and fritz&#39;</span><span class="p">)</span>
-<span class="go">&#39;hans and fritz&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">test</span><span class="p">(</span><span class="s">&#39;peter&#39;</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="s">&#39;and hans&#39;</span><span class="p">)</span>
-<span class="go">&#39;peter and hans&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">test</span><span class="p">(</span><span class="n">b</span><span class="o">=</span><span class="s">&#39;and hans&#39;</span><span class="p">)</span>
-<span class="go">&#39;hans and hans&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nd">@Check</span>
-<span class="gp">... </span><span class="k">def</span> <span class="nf">test</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="k">pass</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">test</span><span class="p">(</span><span class="s">&#39;klaus&#39;</span><span class="p">)</span> 
-<span class="gt">Traceback (most recent call last):</span>
-<span class="c">...</span>
-<span class="gr">TypeError</span>: <span class="n">too many positional arguments</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">test</span><span class="p">(</span><span class="n">b</span><span class="o">=</span><span class="s">&#39;and hans&#39;</span><span class="p">)</span>
-<span class="gt">Traceback (most recent call last):</span>
-<span class="c">...</span>
-<span class="gr">TypeError</span>: <span class="n">too many keyword arguments</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">test</span><span class="p">()</span>
-<span class="gt">Traceback (most recent call last):</span>
-<span class="c">...</span>
-<span class="gr">TypeError</span>: <span class="n">too many keyword arguments</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nd">@Check</span>
-<span class="gp">... </span><span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">builtins</span><span class="o">.</span><span class="n">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">:</span> <span class="n">builtins</span><span class="o">.</span><span class="n">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="k">pass</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">test</span><span class="p">(</span><span class="s">&#39;klaus&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">test</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">test</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> 
-<span class="gt">Traceback (most recent call last):</span>
-<span class="c">...</span>
-<span class="gr">boostNode.extension.native.SignatureError</span>: <span class="n">... for &quot;2. argument&quot;...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">test</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="s">&#39;peter&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">test</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="s">&#39;peter&#39;</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span> 
-<span class="gt">Traceback (most recent call last):</span>
-<span class="c">...</span>
-<span class="gr">boostNode.extension.native.SignatureError</span>: <span class="n">...&quot;str&quot; for &quot;b&quot; but...</span>
-<span class="gt">Traceback (most recent call last):</span>
-<span class="c">...</span>
-<span class="gr">boostNode.extension.native.SignatureError</span>: <span class="n">...&quot;str&quot; for &quot;b&quot; but...</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nd">@Check</span>
-<span class="gp">... </span><span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="p">(</span><span class="n">builtins</span><span class="o">.</span><span class="n">str</span><span class="p">,</span> <span class="n">builtins</span><span class="o">.</span><span class="n">int</span><span class="p">))</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="k">pass</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">test</span><span class="p">(</span><span class="s">&#39;klaus&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">test</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span> 
-<span class="gt">Traceback (most recent call last):</span>
-<span class="c">...</span>
-<span class="gr">boostNode.extension.native.SignatureError</span>: <span class="n">...r&quot; or &quot;int&quot; for &quot;...</span>
-<span class="gt">Traceback (most recent call last):</span>
-<span class="c">...</span>
-<span class="gr">boostNode.extension.native.SignatureError</span>: <span class="n">...r&quot; or &quot;int&quot; for &quot;...</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nd">@Check</span>
-<span class="gp">... </span><span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">:</span> <span class="p">(</span><span class="n">builtins</span><span class="o">.</span><span class="n">str</span><span class="p">,</span> <span class="n">builtins</span><span class="o">.</span><span class="n">int</span><span class="p">))</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="k">pass</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">test</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="s">&#39;klaus&#39;</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">test</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> 
-<span class="gt">Traceback (most recent call last):</span>
-<span class="c">...</span>
-<span class="gr">boostNode.extension.native.SignatureError</span>: <span class="n">...r&quot; or &quot;int&quot; for &quot;...</span>
-<span class="gt">Traceback (most recent call last):</span>
-<span class="c">...</span>
-<span class="gr">boostNode.extension.native.SignatureError</span>: <span class="n">...r&quot; or &quot;int&quot; for &quot;...</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nd">@Check</span>
-<span class="gp">... </span><span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="n">give</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">builtins</span><span class="o">.</span><span class="n">str</span><span class="p">,</span> <span class="n">builtins</span><span class="o">.</span><span class="n">int</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="k">return</span> <span class="n">give</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">test</span><span class="p">(</span><span class="s">&#39;klaus&#39;</span><span class="p">)</span>
-<span class="go">&#39;klaus&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">test</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-<span class="go">5</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">test</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span> 
-<span class="gt">Traceback (most recent call last):</span>
-<span class="c">...</span>
-<span class="gr">boostNode.extension.native.SignatureError</span>: <span class="n">...r&quot; or &quot;int&quot; for &quot;...</span>
-<span class="gt">Traceback (most recent call last):</span>
-<span class="c">...</span>
-<span class="gr">boostNode.extension.native.SignatureError</span>: <span class="n">...r&quot; or &quot;int&quot; for &quot;...</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Mockup</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="nd">@Check</span>
-<span class="gp">... </span>    <span class="k">def</span> <span class="nf">method</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span> <span class="k">return</span> <span class="mi">5</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Mockup</span><span class="p">()</span><span class="o">.</span><span class="n">method</span><span class="p">()</span> 
-<span class="gt">Traceback (most recent call last):</span>
-<span class="c">...</span>
-<span class="gr">boostNode.extension.native.SignatureError</span>: <span class="n">...self...turn value...</span>
-<span class="gt">Traceback (most recent call last):</span>
-<span class="c">...</span>
-<span class="gr">boostNode.extension.native.SignatureError</span>: <span class="n">...self...turn value...</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Mockup</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="nd">@Check</span>
-<span class="gp">... </span>    <span class="k">def</span> <span class="nf">method</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-<span class="gp">... </span>        <span class="k">return</span> <span class="bp">self</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Mockup</span><span class="p">()</span><span class="o">.</span><span class="n">method</span><span class="p">()</span> 
-<span class="go">&lt;...Mockup object at 0x...&gt;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Mockup</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="nd">@Check</span>
-<span class="gp">... </span>    <span class="k">def</span> <span class="nf">method</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span> <span class="k">return</span> <span class="n">Mockup</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Mockup</span><span class="p">()</span><span class="o">.</span><span class="n">method</span><span class="p">()</span> 
-<span class="gt">Traceback (most recent call last):</span>
-<span class="c">...</span>
-<span class="gr">boostNode.extension.native.SignatureError</span>: <span class="n">...method()&quot; expects...</span>
-<span class="gt">Traceback (most recent call last):</span>
-<span class="c">...</span>
-<span class="gr">boostNode.extension.native.SignatureError</span>: <span class="n">...method()&quot; expects...</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Mockup</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="nd">@Check</span>
-<span class="gp">... </span>    <span class="k">def</span> <span class="nf">m</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SelfClassObject</span><span class="p">:</span> <span class="k">return</span> <span class="n">Mockup</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Mockup</span><span class="p">()</span><span class="o">.</span><span class="n">m</span><span class="p">()</span> 
-<span class="go">&lt;...Mockup object at 0x...&gt;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Mockup</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="nd">@Check</span>
-<span class="gp">... </span>    <span class="k">def</span> <span class="nf">method</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span> <span class="k">return</span> <span class="bp">self</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Mockup</span><span class="p">()</span><span class="o">.</span><span class="n">method</span><span class="p">()</span> 
-<span class="go">&lt;...Mockup object at 0x...&gt;</span>
-</pre></div>
-</div>
-<dl class="method">
+<em class="property">class </em><tt class="descclassname">boostNode.aspect.signature.</tt><tt class="descname">Check</tt><big>(</big><em>method</em>, <em>function=None</em><big>)</big><a class="headerlink" href="#boostNode.aspect.signature.Check" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is needed to be compatible with future implementations.</p>
+<dl class="staticmethod">
 <dt id="boostNode.aspect.signature.Check.get_wrapper_function">
-<tt class="descname">get_wrapper_function</tt><big>(</big><em>) -&gt; (&lt;class 'function'&gt;</em>, <em>&lt;class 'method'&gt;</em><big>)</big><a class="headerlink" href="#boostNode.aspect.signature.Check.get_wrapper_function" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a wrapper function for the function to be checked.</p>
+<em class="property">static </em><tt class="descname">get_wrapper_function</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.aspect.signature.Check.get_wrapper_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dummy method to be compatible to newer features.</p>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">a</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span> <span class="k">return</span> <span class="n">a</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">a</span><span class="p">(</span><span class="n">a</span><span class="p">):</span> <span class="k">return</span> <span class="n">a</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Check</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">get_wrapper_function</span><span class="p">()</span> 
 <span class="go">&lt;function a at ...&gt;</span>
 </pre></div>
@@ -297,43 +73,13 @@
 <span class="go">5</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Check</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">get_wrapper_function</span><span class="p">()(</span>
-<span class="gp">... </span>    <span class="s">&#39;hans&#39;</span><span class="p">)</span> 
-<span class="gt">Traceback (most recent call last):</span>
-<span class="c">...</span>
-<span class="gr">boostNode.extension.native.SignatureError</span>: <span class="n">&quot;a()&quot; expects ins...</span>
-<span class="gt">Traceback (most recent call last):</span>
-<span class="c">...</span>
-<span class="gr">boostNode.extension.native.SignatureError</span>: <span class="n">&quot;a()&quot; expects ins...</span>
-</pre></div>
-</div>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="boostNode.aspect.signature.CheckArguments">
-<em class="property">class </em><tt class="descclassname">boostNode.aspect.signature.</tt><tt class="descname">CheckArguments</tt><big>(</big><em>class_object: type</em>, <em>object: object</em>, <em>function: (&lt;class 'function'&gt;</em>, <em>&lt;class 'method'&gt;)</em>, <em>arguments: collections.abc.Iterable</em>, <em>keywords: dict</em><big>)</big> &rarr; None<a class="headerlink" href="#boostNode.aspect.signature.CheckArguments" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks arguments given to a function again their specification.</p>
-<dl class="method">
-<dt id="boostNode.aspect.signature.CheckArguments.aspect">
-<tt class="descname">aspect</tt><big>(</big><big>)</big> &rarr; boostNode.extension.type.Self<a class="headerlink" href="#boostNode.aspect.signature.CheckArguments.aspect" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function could be used as decorator function or aspects to             implement argument type check for each function call.</p>
-<p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Mockup</span><span class="p">:</span> <span class="k">pass</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">CheckArguments</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">Mockup</span><span class="p">,</span> <span class="n">Mockup</span><span class="p">(),</span> <span class="n">Mockup</span><span class="p">,</span> <span class="p">(),</span> <span class="p">{}</span>
-<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">aspect</span><span class="p">()</span> 
-<span class="go">Object of &quot;CheckArguments&quot; with class object &quot;Mockup&quot;, object &quot;...</span>
-</pre></div>
-</div>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="boostNode.aspect.signature.CheckObject">
-<em class="property">class </em><tt class="descclassname">boostNode.aspect.signature.</tt><tt class="descname">CheckObject</tt> &rarr; None<a class="headerlink" href="#boostNode.aspect.signature.CheckObject" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">boostNode.aspect.signature.</tt><tt class="descname">CheckObject</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.aspect.signature.CheckObject" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks a function call against a given specification. This class         serves as helper class.</p>
 <dl class="attribute">
 <dt id="boostNode.aspect.signature.CheckObject.class_object">
@@ -341,9 +87,9 @@
 <dd><p>Saves informations in which way the give method is used. It could by something like &#8220;builtins.staticmethod&#8221; or &#8220;builtins.classmethod&#8221;.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="boostNode.aspect.signature.CheckObject.get_function_path">
-<tt class="descname">get_function_path</tt><big>(</big><big>)</big> &rarr; str<a class="headerlink" href="#boostNode.aspect.signature.CheckObject.get_function_path" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">get_function_path</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.aspect.signature.CheckObject.get_function_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns an object depended function description.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">test</span><span class="p">():</span> <span class="k">pass</span>
@@ -382,11 +128,11 @@
 
 <dl class="class">
 <dt id="boostNode.aspect.signature.CheckReturnValue">
-<em class="property">class </em><tt class="descclassname">boostNode.aspect.signature.</tt><tt class="descname">CheckReturnValue</tt><big>(</big><em>*arguments: object</em>, <em>**keywords: object</em><big>)</big> &rarr; None<a class="headerlink" href="#boostNode.aspect.signature.CheckReturnValue" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">boostNode.aspect.signature.</tt><tt class="descname">CheckReturnValue</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.aspect.signature.CheckReturnValue" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks return value from a function again their specification.</p>
 <dl class="method">
 <dt id="boostNode.aspect.signature.CheckReturnValue.aspect">
-<tt class="descname">aspect</tt><big>(</big><big>)</big> &rarr; object<a class="headerlink" href="#boostNode.aspect.signature.CheckReturnValue.aspect" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">aspect</tt><big>(</big><big>)</big><a class="headerlink" href="#boostNode.aspect.signature.CheckReturnValue.aspect" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks the given return value.</p>
 <p>Returns the original value of the given wrapped function if             everything goes right.</p>
 <p>Examples:</p>
