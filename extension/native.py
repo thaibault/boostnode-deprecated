@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.4
+#!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 
 # region header
@@ -11,10 +11,10 @@
     object.
 '''
 
-# # python2.7
-# # from __future__ import absolute_import, division, print_function, \
-# #     unicode_literals
-pass
+# # python3.4
+# # pass
+from __future__ import absolute_import, division, print_function, \
+    unicode_literals
 # #
 
 '''
@@ -31,10 +31,10 @@ __maintainer_email__ = 't.sickert["~at~"]gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-# # python2.7
-# # import __builtin__ as builtins
-from base64 import b64encode as base64encode
-import builtins
+# # python3.4
+# # from base64 import b64encode as base64encode
+# # import builtins
+import __builtin__ as builtins
 # #
 from collections import Iterable
 from copy import copy, deepcopy
@@ -50,17 +50,17 @@ import os
 import re as regularExpression
 import sys
 import time
-# # python2.7 pass
-import types
+# # python3.4 import types
+pass
 
 '''Make boostNode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
 import boostNode
-# # python2.7
-# # from boostNode import ENCODING, convert_to_string, convert_to_unicode
-from boostNode import ENCODING
-from boostNode.extension.type import Self, SelfClass, SelfClassObject
+# # python3.4
+# # from boostNode import ENCODING
+# # from boostNode.extension.type import Self, SelfClass, SelfClassObject
+from boostNode import ENCODING, convert_to_string, convert_to_unicode
 # #
 from boostNode.extension.type import Null
 from boostNode.paradigm.aspectOrientation import FunctionDecorator, JointPoint
@@ -105,11 +105,11 @@ class ClassPropertyInitializer(FunctionDecorator):
     # # region public
 
     @JointPoint
-# # python2.7
-# #     def get_wrapper_function(self):
-    def get_wrapper_function(
-        self: Self
-    ) -> (types.FunctionType, types.MethodType):
+# # python3.4
+# #     def get_wrapper_function(
+# #         self: Self
+# #     ) -> (types.FunctionType, types.MethodType):
+    def get_wrapper_function(self):
 # #
         '''This methods returns the wrapped function.'''
         @functools.wraps(self.__func__)
@@ -132,8 +132,8 @@ class ClassPropertyInitializer(FunctionDecorator):
                     else:
                         builtins.setattr(self.class_object, name, value)
             return self.__func__(*arguments, **keywords)
-# # python2.7         wrapper_function.__wrapped__ = self.__func__
-        pass
+# # python3.4         pass
+        wrapper_function.__wrapped__ = self.__func__
         return wrapper_function
 
         # endregion
@@ -172,8 +172,8 @@ class InstancePropertyInitializer(ClassPropertyInitializer):
     # endregion
 
 
-# # python2.7 class Model(builtins.object):
-class Model:
+# # python3.4 class Model:
+class Model(builtins.object):
 
     '''Represents an abstract data holding class for an orm based model.'''
 
@@ -184,8 +184,8 @@ class Model:
     # # # region special
 
     @JointPoint
-# # python2.7     def __repr__(self):
-    def __repr__(self: Self) -> builtins.str:
+# # python3.4     def __repr__(self: Self) -> builtins.str:
+    def __repr__(self):
         '''
             Describes the model as string.
 
@@ -235,17 +235,17 @@ class Model:
         # # region getter
 
     @JointPoint(Class.pseudo_property)
-# # python2.7
+# # python3.4
 # #     def get_dictionary(
-# #         self, key_wrapper=lambda key, value: key,
-# #         value_wrapper=lambda key, value: value, prefix_filter=('password',),
-# #         property_names=()
-# #     ):
+# #         self: Self, key_wrapper=lambda key, value: key,
+# #         value_wrapper=lambda key, value: value,
+# #         prefix_filter=('password',), property_names=()
+# #     ) -> builtins.dict:
     def get_dictionary(
-        self: Self, key_wrapper=lambda key, value: key,
-        value_wrapper=lambda key, value: value,
-        prefix_filter=('password',), property_names=()
-    ) -> builtins.dict:
+        self, key_wrapper=lambda key, value: key,
+        value_wrapper=lambda key, value: value, prefix_filter=('password',),
+        property_names=()
+    ):
 # #
         '''
             Returns the dictionary representation of the model instance. All \
@@ -343,18 +343,18 @@ class Model:
         # region public
 
     @JointPoint(builtins.staticmethod)
-# # python2.7
+# # python3.4
 # #     def validate_property(
-# #         model_instance, name, value,
+# #         model_instance: builtins.object, name: builtins.str,
+# #         value: builtins.object,
 # #         information_determiner=lambda model_instance,
-# #         name: builtins.getattr(
-# #             model_instance, '_%s_information' % name)):
+# #         name: builtins.getattr(model_instance, '_%s_information' % name)
+# #     ):
     def validate_property(
-        model_instance: builtins.object, name: builtins.str,
-        value: builtins.object,
+        model_instance, name, value,
         information_determiner=lambda model_instance,
-        name: builtins.getattr(model_instance, '_%s_information' % name)
-    ):
+        name: builtins.getattr(
+            model_instance, '_%s_information' % name)):
 # #
         '''
             Intercepts each property set of any derived model.
@@ -420,11 +420,11 @@ class Model:
             if builtins.isinstance(value, builtins.int):
                 model_instance._validate_number_property(
                     name, value, property_information)
-# # python2.7
-# #             elif builtins.isinstance(value, (
-# #                 builtins.unicode, builtins.str
-# #             )):
-            elif builtins.isinstance(value, builtins.str):
+# # python3.4
+# #             elif builtins.isinstance(value, builtins.str):
+            elif builtins.isinstance(value, (
+                builtins.unicode, builtins.str
+            )):
 # #
                 model_instance._validate_string_property(
                     name, value, property_information)
@@ -472,13 +472,13 @@ class Model:
                 'but given value "%s" has length %d.' % (
                     name, cls.__name__, property_information['maximum_length'],
                     value, builtins.len(value)))
-# # python2.7
+# # python3.4
 # #         if 'pattern' in property_information and regularExpression.compile(
-# #             '(?:%s)$' % property_information['pattern']
-# #         ).match(value) is None:
+# #             property_information['pattern']
+# #         ).fullmatch(value) is None:
         if 'pattern' in property_information and regularExpression.compile(
-            property_information['pattern']
-        ).fullmatch(value) is None:
+            '(?:%s)$' % property_information['pattern']
+        ).match(value) is None:
 # #
             raise builtins.ValueError(
                 'Property "%s" of model "%s" has pattern "%s" but '
@@ -492,8 +492,8 @@ class Model:
     # endregion
 
 
-# # python2.7 class Copyable(builtins.object):
-class Copyable:
+# # python3.4 class Copyable:
+class Copyable(builtins.object):
 
     '''
         Represents copyable and deep copyable objects. Provides generic \
@@ -509,8 +509,8 @@ class Copyable:
     # NOTE We can't specify the type of the "self" parameter since python's
     # native "copy()" methods calls this method as static classmethod.
     @JointPoint
-# # python2.7     def __copy__(self):
-    def __copy__(self) -> SelfClassObject:
+# # python3.4     def __copy__(self) -> SelfClassObject:
+    def __copy__(self):
         '''
             Triggers if python native copy method is used on current object.
 
@@ -542,9 +542,9 @@ class Copyable:
         return self._copy(self.__dict__)
 
     @JointPoint
-# # python2.7
-# #     def __deepcopy__(self, memory):
-    def __deepcopy__(self: Self, memory: builtins.dict) -> SelfClassObject:
+# # python3.4
+# #     def __deepcopy__(self: Self, memory: builtins.dict) -> SelfClassObject:
+    def __deepcopy__(self, memory):
 # #
         '''
             Triggers if python native deep copy method is used on current \
@@ -566,17 +566,17 @@ class Copyable:
         return self._copy(deepcopy(self.__dict__, memory))
 
     @JointPoint
-# # python2.7
-# #     def _copy(self, scope):
-    def _copy(self: Self, scope: builtins.dict) -> SelfClassObject:
+# # python3.4
+# #     def _copy(self: Self, scope: builtins.dict) -> SelfClassObject:
+    def _copy(self, scope):
 # #
         '''Creates and returns a new copy of current instance.'''
         initializer = self.__class__.__init__
         while builtins.hasattr(initializer, '__wrapped__'):
             initializer = initializer.__wrapped__
-# # python2.7
-# #         parameter_names = inspect.getargspec(initializer).args
-        parameter_names = inspect.signature(initializer).parameters.keys()
+# # python3.4
+# #         parameter_names = inspect.signature(initializer).parameters.keys()
+        parameter_names = inspect.getargspec(initializer).args
 # #
         return self.__class__(**builtins.dict(builtins.filter(
             lambda mapping: mapping[0] in parameter_names, scope.items())))
@@ -639,23 +639,23 @@ class AuthenticationModel(Model):
             Password setter which provides automatic salt and hash generation.
         '''
         self.validate_property(self, 'password', value)
-# # python2.7
-# #         self.password_salt = os.urandom(
+# # python3.4
+# #         self.password_salt = base64encode(os.urandom(
 # #             self._password_information['salt']['length']
-# #         ).encode('base_64')
+# #         )).decode(ENCODING)
 # #         self.password_hash = sha224(
-# #             '%s%s%s' % (
+# #             ('%s%s%s' % (
 # #                 value, self._password_information['pepper'],
-# #                 self.password_salt)
+# #                 self.password_salt
+# #             )).encode(ENCODING)
 # #         ).hexdigest()
-        self.password_salt = base64encode(os.urandom(
+        self.password_salt = os.urandom(
             self._password_information['salt']['length']
-        )).decode(ENCODING)
+        ).encode('base_64')
         self.password_hash = sha224(
-            ('%s%s%s' % (
+            '%s%s%s' % (
                 value, self._password_information['pepper'],
-                self.password_salt
-            )).encode(ENCODING)
+                self.password_salt)
         ).hexdigest()
 # #
 
@@ -675,17 +675,17 @@ class AuthenticationModel(Model):
             >>> authentication_model.has_password('peter')
             False
         '''
-# # python2.7
+# # python3.4
 # #         return self.password_hash == sha224(
-# #             '%s%s%s' % (
+# #             ('%s%s%s' % (
 # #                 value, self._password_information['pepper'],
-# #                 self.password_salt)
+# #                 self.password_salt
+# #             )).encode(ENCODING)
 # #         ).hexdigest()
         return self.password_hash == sha224(
-            ('%s%s%s' % (
+            '%s%s%s' % (
                 value, self._password_information['pepper'],
-                self.password_salt
-            )).encode(ENCODING)
+                self.password_salt)
         ).hexdigest()
 # #
 
@@ -711,13 +711,13 @@ class Object(Class):
     # # # region special
 
     @JointPoint(InstancePropertyInitializer)
-# # python2.7
-# #     def __init__(self, content=None, *arguments, **keywords):
-    def __init__(
-        self: Self, content=None,
-        *arguments: (builtins.object, builtins.type),
-        **keywords: (builtins.object, builtins.type)
-    ) -> None:
+# # python3.4
+# #     def __init__(
+# #         self: Self, content=None,
+# #         *arguments: (builtins.object, builtins.type),
+# #         **keywords: (builtins.object, builtins.type)
+# #     ) -> None:
+    def __init__(self, content=None, *arguments, **keywords):
 # #
         '''
             Generates a new high level wrapper around given object.
@@ -740,16 +740,16 @@ class Object(Class):
         # # # endregion
 
     @JointPoint
-# # python2.7     def __repr__(self):
-    def __repr__(self: Self) -> builtins.str:
+# # python3.4     def __repr__(self: Self) -> builtins.str:
+    def __repr__(self):
         '''Invokes if this object should describe itself by a string.'''
         return 'Object of "{class_name}" ({content}).'.format(
             class_name=self.content.__class__.__name__,
             content=builtins.repr(self.content))
 
     @JointPoint
-# # python2.7     def __str__(self):
-    def __str__(self: Self) -> builtins.str:
+# # python3.4     def __str__(self: Self) -> builtins.str:
+    def __str__(self):
         '''
             Is triggered if this object should be converted to string.
 
@@ -758,13 +758,13 @@ class Object(Class):
             >>> str(Object(['hans']))
             "['hans']"
         '''
-# # python2.7         return convert_to_unicode(self.content)
-        return builtins.str(self.content)
+# # python3.4         return builtins.str(self.content)
+        return convert_to_unicode(self.content)
 
     @JointPoint
-# # python2.7
-# #     def __eq__(self, other):
-    def __eq__(self: Self, other: SelfClassObject) -> builtins.bool:
+# # python3.4
+# #     def __eq__(self: Self, other: SelfClassObject) -> builtins.bool:
+    def __eq__(self, other):
 # #
         '''
             Is triggered if this object should be compared to another
@@ -779,11 +779,11 @@ class Object(Class):
         # # endregion
 
     @JointPoint(Class.pseudo_property)
-# # python2.7
-# #     def get_compatible_type(self):
-    def get_compatible_type(self: Self) -> (
-        builtins.object, builtins.type
-    ):
+# # python3.4
+# #     def get_compatible_type(self: Self) -> (
+# #         builtins.object, builtins.type
+# #     ):
+    def get_compatible_type(self):
 # #
         '''
             Converts data to python cross platform compatible data objects.
@@ -834,16 +834,16 @@ class Object(Class):
             >>> Object(('A',)).compatible_type == str(['A'])
             True
         '''
-# # python2.7
+# # python3.4
 # #         if builtins.isinstance(self.content, NativeDateTime):
-# #             return(
-# #                 time.mktime(self.content.timetuple()) +
-# #                 self.content.microsecond / 1000 ** 2)
+# #             return self.content.timestamp(
+# #             ) + builtins.float(self.content.microsecond) / 1000 ** 2
 # #         if builtins.isinstance(self.content, NativeDate):
 # #             return time.mktime(self.content.timetuple())
         if builtins.isinstance(self.content, NativeDateTime):
-            return self.content.timestamp(
-            ) + builtins.float(self.content.microsecond) / 1000 ** 2
+            return(
+                time.mktime(self.content.timetuple()) +
+                self.content.microsecond / 1000 ** 2)
         if builtins.isinstance(self.content, NativeDate):
             return time.mktime(self.content.timetuple())
 # #
@@ -859,16 +859,16 @@ class Object(Class):
         if not builtins.isinstance(content, (
             builtins.int, builtins.float, builtins.type(None)
         )):
-# # python2.7             return convert_to_unicode(content)
-            return builtins.str(content)
+# # python3.4             return builtins.str(content)
+            return convert_to_unicode(content)
         return content
 
     @JointPoint(Class.pseudo_property)
-# # python2.7
-# #     def get_known_type(self, description=None, strict=None):
-    def get_known_type(self: Self, description=None, strict=None) -> (
-        builtins.object, builtins.type
-    ):
+# # python3.4
+# #     def get_known_type(self: Self, description=None, strict=None) -> (
+# #         builtins.object, builtins.type
+# #     ):
+    def get_known_type(self, description=None, strict=None):
 # #
         '''
             Converts interpretable data to python specific data objects.
@@ -920,11 +920,11 @@ class Object(Class):
         '''
         if self.content is None:
             return self.content
-# # python2.7
-# #         if builtins.isinstance(description, (
-# #             builtins.unicode, builtins.str
-# #         )):
-        if builtins.isinstance(description, builtins.str):
+# # python3.4
+# #         if builtins.isinstance(description, builtins.str):
+        if builtins.isinstance(description, (
+            builtins.unicode, builtins.str
+        )):
 # #
             try:
                 result = self._create_known_type(description)
@@ -934,22 +934,22 @@ class Object(Class):
                 if strict:
                     raise
                 return self.content if strict is None else None
-# # python2.7
-# #         if builtins.isinstance(self.content, (
-# #             builtins.unicode, builtins.str
-# #         )):
-# #             number = String(self.content).number
-# #             if builtins.isinstance(number, builtins.str):
-# #                 return convert_to_unicode(number)
-# #             return number
-        if builtins.isinstance(self.content, builtins.str):
-            return String(self.content).number
+# # python3.4
+# #         if builtins.isinstance(self.content, builtins.str):
+# #             return String(self.content).number
+        if builtins.isinstance(self.content, (
+            builtins.unicode, builtins.str
+        )):
+            number = String(self.content).number
+            if builtins.isinstance(number, builtins.str):
+                return convert_to_unicode(number)
+            return number
 # #
         return self.content
 
     @JointPoint
-# # python2.7     def copy(self):
-    def copy(self: Self) -> builtins.dict:
+# # python3.4     def copy(self: Self) -> builtins.dict:
+    def copy(self):
         '''
             Copies a given object's attributes and returns them.
 
@@ -984,8 +984,8 @@ class Object(Class):
         return self._content_copy
 
     @JointPoint
-# # python2.7     def restore(self):
-    def restore(self: Self) -> (builtins.object, builtins.type):
+# # python3.4     def restore(self: Self) -> (builtins.object, builtins.type):
+    def restore(self):
         '''
             Restores a given object's attributes by a given copy are last \
             copied item.
@@ -1019,8 +1019,8 @@ class Object(Class):
         return self.content
 
     @JointPoint
-# # python2.7     def is_binary(self):
-    def is_binary(self: Self) -> builtins.bool:
+# # python3.4     def is_binary(self: Self) -> builtins.bool:
+    def is_binary(self):
         '''
             Determines if given data is binary.
 
@@ -1041,33 +1041,33 @@ class Object(Class):
             ...     Object('hans').is_binary()
             False
         '''
-# # python2.7
-# #         '''
-# #             NOTE: This is a dirty workaround to handle python2.7 lack of \
-# #             differentiation between "string" and "bytes" objects.
-# #         '''
-# #         content = self.content
-# #         if builtins.isinstance(content, builtins.unicode):
-# #             content = content.encode(ENCODING)
-# #         text_chars = builtins.str().join(builtins.map(
-# #             builtins.chr,
-# #             builtins.range(7, 14) + [27] + builtins.range(0x20, 0x100)))
-# #         return builtins.hasattr(content, 'translate') and builtins.bool(
-# #             content.translate(None, text_chars))
-        return builtins.isinstance(self.content, builtins.bytes)
+# # python3.4
+# #         return builtins.isinstance(self.content, builtins.bytes)
+        '''
+            NOTE: This is a dirty workaround to handle python2.7 lack of \
+            differentiation between "string" and "bytes" objects.
+        '''
+        content = self.content
+        if builtins.isinstance(content, builtins.unicode):
+            content = content.encode(ENCODING)
+        text_chars = builtins.str().join(builtins.map(
+            builtins.chr,
+            builtins.range(7, 14) + [27] + builtins.range(0x20, 0x100)))
+        return builtins.hasattr(content, 'translate') and builtins.bool(
+            content.translate(None, text_chars))
 # #
 
         # endregion
 
     @JointPoint
-# # python2.7
-# #     def _create_known_type(self, description):
-    def _create_known_type(self: Self, description: (
-        builtins.str, builtins.type(None)
-    )) -> (
-        NativeDateTime, NativeDate, NativeTime, NativeTimeDelta,
-        builtins.str, builtins.type(None)
-    ):
+# # python3.4
+# #     def _create_known_type(self: Self, description: (
+# #         builtins.str, builtins.type(None)
+# #     )) -> (
+# #         NativeDateTime, NativeDate, NativeTime, NativeTimeDelta,
+# #         builtins.str, builtins.type(None)
+# #     ):
+    def _create_known_type(self, description):
 # #
         '''Creates a known type depending on given description.'''
         for type_description in (
@@ -1090,13 +1090,13 @@ class Object(Class):
         # region public
 
     @JointPoint(builtins.classmethod)
-# # python2.7
+# # python3.4
 # #     def determine_abstract_method_exception(
-# #         cls, abstract_class_name, class_name=None
-# #     ):
+# #         cls: SelfClass, abstract_class_name: builtins.str, class_name=None
+# #     ) -> builtins.NotImplementedError:
     def determine_abstract_method_exception(
-        cls: SelfClass, abstract_class_name: builtins.str, class_name=None
-    ) -> builtins.NotImplementedError:
+        cls, abstract_class_name, class_name=None
+    ):
 # #
         '''
             Generates a suitable exception for raising if a method is called \
@@ -1293,13 +1293,13 @@ class String(Object, builtins.str):
 
     @JointPoint(builtins.classmethod)
     @Class.pseudo_property
-# # python2.7
+# # python3.4
 # #     def get_escaping_replace_dictionary(
-# #         cls, sequence, escape_sequence='\{symbole}'
-# #     ):
+# #         cls: SelfClass, sequence: Iterable, escape_sequence='\{symbole}'
+# #     ) -> builtins.dict:
     def get_escaping_replace_dictionary(
-        cls: SelfClass, sequence: Iterable, escape_sequence='\{symbole}'
-    ) -> builtins.dict:
+        cls, sequence, escape_sequence='\{symbole}'
+    ):
 # #
         '''
             Creates a replacement dictionary form a given iterable. Every \
@@ -1342,12 +1342,12 @@ class String(Object, builtins.str):
         # # region special
 
     @JointPoint
-# # python2.7
-# #     def __init__(self, content=None, *arguments, **keywords):
-    def __init__(
-        self: Self, content=None, *arguments: builtins.object,
-        **keywords: builtins.object
-    ) -> None:
+# # python3.4
+# #     def __init__(
+# #         self: Self, content=None, *arguments: builtins.object,
+# #         **keywords: builtins.object
+# #     ) -> None:
+    def __init__(self, content=None, *arguments, **keywords):
 # #
         '''
             Initialize a new "String" object.
@@ -1392,26 +1392,26 @@ class String(Object, builtins.str):
         if content is None:
             content = ''
         self.encoding = self.IMPORTANT_ENCODINGS[0]
-# # python2.7
-# #         '''
-# #             NOTE: We don't support automatic encoding detection for python2.X \
-# #             because it would be too expensive if we can't distinguish \
-# #             between bytes and strings.
-# #         '''
+# # python3.4
+# #         if builtins.isinstance(content, builtins.bytes):
+# #             self.encoding, content = self._determine_encoding(content)
 # #         if not builtins.isinstance(content, builtins.str):
-# #             content = convert_to_string(content)
-        if builtins.isinstance(content, builtins.bytes):
-            self.encoding, content = self._determine_encoding(content)
+# #             content = builtins.str(content)
+        '''
+            NOTE: We don't support automatic encoding detection for python2.X \
+            because it would be too expensive if we can't distinguish \
+            between bytes and strings.
+        '''
         if not builtins.isinstance(content, builtins.str):
-            content = builtins.str(content)
+            content = convert_to_string(content)
 # #
         self.content = content
 
         # # # endregion
 
     @JointPoint
-# # python2.7     def __len__(self):
-    def __len__(self: Self) -> builtins.int:
+# # python3.4     def __len__(self: Self) -> builtins.int:
+    def __len__(self):
         '''
             Triggers if the pythons native "builtins.len()" function tries to \
             handle current instance. Returns the number of symbols given in \
@@ -1428,8 +1428,8 @@ class String(Object, builtins.str):
         return builtins.len(self.__str__())
 
     @JointPoint
-# # python2.7     def __unicode__(self):
-    def __str__(self: Self) -> builtins.str:
+# # python3.4     def __str__(self: Self) -> builtins.str:
+    def __unicode__(self):
         '''
             Triggers if the current object should be directly interpreted as \
             pythons native string implementation.
@@ -1442,12 +1442,12 @@ class String(Object, builtins.str):
             >>> str(String())
             ''
         '''
-# # python2.7         return convert_to_unicode(self.content)
-        return self.content
+# # python3.4         return self.content
+        return convert_to_unicode(self.content)
 
     @JointPoint
-# # python2.7     def __nonzero__(self):
-    def __bool__(self: Self) -> builtins.bool:
+# # python3.4     def __bool__(self: Self) -> builtins.bool:
+    def __nonzero__(self):
         '''
             Triggers if the current object should be interpreted as a boolean \
             value directly.
@@ -1466,11 +1466,11 @@ class String(Object, builtins.str):
         return builtins.bool(self.content)
 
     @JointPoint
-# # python2.7
-# #     def __eq__(self, other):
-    def __eq__(self: Self, other: (
-        SelfClassObject, builtins.str, builtins.object
-    )) -> builtins.bool:
+# # python3.4
+# #     def __eq__(self: Self, other: (
+# #         SelfClassObject, builtins.str, builtins.object
+# #     )) -> builtins.bool:
+    def __eq__(self, other):
 # #
         '''
             Is triggered if this object should be compared to another
@@ -1495,8 +1495,8 @@ class String(Object, builtins.str):
         # # region getter
 
     @JointPoint(Class.pseudo_property)
-# # python2.7     def get_number(self, default=None, slice=False):
-    def get_number(self: Self, default=None, slice=False):
+# # python3.4     def get_number(self: Self, default=None, slice=False):
+    def get_number(self, default=None, slice=False):
         '''
             Returns a number representation of current string content if \
             possible. If no conversion is possible given default value will \
@@ -1553,8 +1553,8 @@ class String(Object, builtins.str):
                 return default
 
     @JointPoint(Class.pseudo_property)
-# # python2.7     def get_camel_case_capitalize(self):
-    def get_camel_case_capitalize(self: Self) -> Self:
+# # python3.4     def get_camel_case_capitalize(self: Self) -> Self:
+    def get_camel_case_capitalize(self):
         '''
             Acts like pythons native "builtins.str.capitalize()" method but \
             preserves camel case characters.
@@ -1572,15 +1572,15 @@ class String(Object, builtins.str):
         return self
 
     @JointPoint(Class.pseudo_property)
-# # python2.7
+# # python3.4
 # #     def get_delimited_to_camel_case(
-# #         self, delimiter='_', abbreviations=None,
+# #         self: Self, delimiter='_', abbreviations=None,
 # #         preserve_wrong_formatted_abbreviations=False
-# #     ):
+# #     ) -> Self:
     def get_delimited_to_camel_case(
-        self: Self, delimiter='_', abbreviations=None,
+        self, delimiter='_', abbreviations=None,
         preserve_wrong_formatted_abbreviations=False
-    ) -> Self:
+    ):
 # #
         '''
             Converts a delimited string to its camel case representation.
@@ -1673,46 +1673,46 @@ class String(Object, builtins.str):
                 lambda abbreviation: '%s)|(?:%s' % (
                     abbreviation.capitalize(), abbreviation),
                 abbreviations))
-# # python2.7
+# # python3.4
 # #         self.content = regularExpression.compile(
 # #             '(?!^)(?P<before>%s)(?P<abbreviation>(?:%s))'
 # #             '(?P<after>%s|$)' % (delimiter, abbreviations, delimiter)
 # #         ).sub(
 # #             lambda match: '%s%s%s' % (
-# #                 match.group('before'), match.group('abbreviation').upper(),
+# #                 match.group('before'),
+# #                 match.group('abbreviation').upper(),
 # #                 match.group('after')
-# #             ), convert_to_unicode(self.content))
+# #             ), self.content)
 # #         self.content = regularExpression.compile(
 # #             '(?!^)%s(?P<first_letter>[a-zA-Z0-9])' % delimiter
 # #         ).sub(
 # #             lambda match: match.group('first_letter').upper(),
-# #             self.content
-# #         ).encode(ENCODING)
+# #             self.content)
         self.content = regularExpression.compile(
             '(?!^)(?P<before>%s)(?P<abbreviation>(?:%s))'
             '(?P<after>%s|$)' % (delimiter, abbreviations, delimiter)
         ).sub(
             lambda match: '%s%s%s' % (
-                match.group('before'),
-                match.group('abbreviation').upper(),
+                match.group('before'), match.group('abbreviation').upper(),
                 match.group('after')
-            ), self.content)
+            ), convert_to_unicode(self.content))
         self.content = regularExpression.compile(
             '(?!^)%s(?P<first_letter>[a-zA-Z0-9])' % delimiter
         ).sub(
             lambda match: match.group('first_letter').upper(),
-            self.content)
+            self.content
+        ).encode(ENCODING)
 # #
         return self
 
     @JointPoint(Class.pseudo_property)
-# # python2.7
+# # python3.4
 # #     def get_camel_case_to_delimited(
-# #         self, delimiter='_', abbreviations=None
-# #     ):
+# #         self: Self, delimiter='_', abbreviations=None
+# #     ) -> Self:
     def get_camel_case_to_delimited(
-        self: Self, delimiter='_', abbreviations=None
-    ) -> Self:
+        self, delimiter='_', abbreviations=None
+    ):
 # #
         '''
             Converts a camel cased string to its delimited string version.
@@ -1754,34 +1754,34 @@ class String(Object, builtins.str):
         escaped_delimiter = self.__class__(delimiter).regex_validated.content
         abbreviations = ')|(?:'.join(builtins.map(
             lambda abbreviation: abbreviation.upper(), abbreviations))
-# # python2.7
+# # python3.4
 # #         self.content = regularExpression.compile(
 # #             '((?:%s))((?:%s))' % (abbreviations, abbreviations)
-# #         ).sub('\\1%s\\2' % delimiter, convert_to_unicode(self.content))
+# #         ).sub('\\1%s\\2' % delimiter, self.content)
         self.content = regularExpression.compile(
             '((?:%s))((?:%s))' % (abbreviations, abbreviations)
-        ).sub('\\1%s\\2' % delimiter, self.content)
+        ).sub('\\1%s\\2' % delimiter, convert_to_unicode(self.content))
 # #
         self.content = regularExpression.compile(
             '([^%s])([A-Z][a-z]+)' % escaped_delimiter
         ).sub('\\1%s\\2' % delimiter, self.content)
-# # python2.7
+# # python3.4
 # #         self.content = regularExpression.compile(
 # #             '([a-z0-9])([A-Z])'
-# #         ).sub('\\1%s\\2' % delimiter, self.content).lower().encode(
-# #             ENCODING)
+# #         ).sub('\\1%s\\2' % delimiter, self.content).lower()
         self.content = regularExpression.compile(
             '([a-z0-9])([A-Z])'
-        ).sub('\\1%s\\2' % delimiter, self.content).lower()
+        ).sub('\\1%s\\2' % delimiter, self.content).lower().encode(
+            ENCODING)
 # #
         return self
 
     @JointPoint(Class.pseudo_property)
-# # python2.7
-# #     def get_delimited(self, delimiter='-', search_pattern='a-zA-Z'):
-    def get_delimited(
-        self: Self, delimiter='-', search_pattern='a-zA-Z'
-    ) -> Self:
+# # python3.4
+# #     def get_delimited(
+# #         self: Self, delimiter='-', search_pattern='a-zA-Z'
+# #     ) -> Self:
+    def get_delimited(self, delimiter='-', search_pattern='a-zA-Z'):
 # #
         '''
             Replaces all typical delimiting chars with given delimiter.
@@ -1833,8 +1833,8 @@ class String(Object, builtins.str):
         # # # region validation
 
     @JointPoint(Class.pseudo_property)
-# # python2.7     def get_shell_validated(self):
-    def get_shell_validated(self: Self) -> Self:
+# # python3.4     def get_shell_validated(self: Self) -> Self:
+    def get_shell_validated(self):
         '''
             Validates the current string for using as a command in shell. \
             Special shell command chars will be escaped.
@@ -1865,8 +1865,8 @@ class String(Object, builtins.str):
                 self.SPECIAL_SHELL_SEQUENCES))
 
     @JointPoint(Class.pseudo_property)
-# # python2.7     def get_html_validated(self):
-    def get_html_validated(self: Self) -> Self:
+# # python3.4     def get_html_validated(self: Self) -> Self:
+    def get_html_validated(self):
 # #
         '''
             Validates current string for using as snippet in a html document.
@@ -1879,8 +1879,8 @@ class String(Object, builtins.str):
         return self.replace(self.SPECIAL_HTML_SEQUENCES)
 
     @JointPoint(Class.pseudo_property)
-# # python2.7     def get_regex_validated(self, exclude_symbols=()):
-    def get_regex_validated(self: Self, exclude_symbols=()) -> Self:
+# # python3.4     def get_regex_validated(self: Self, exclude_symbols=()) -> Self:
+    def get_regex_validated(self, exclude_symbols=()):
         '''
             Validates the current string for using in a regular expression \
             pattern. Special regular expression chars will be escaped.
@@ -1917,8 +1917,8 @@ class String(Object, builtins.str):
                     builtins.set(exclude_symbols))))
 
     @JointPoint(Class.pseudo_property)
-# # python2.7     def get_format_validated(self):
-    def get_format_validated(self: Self) -> Self:
+# # python3.4     def get_format_validated(self: Self) -> Self:
+    def get_format_validated(self):
         '''
             Validates the current string for using in a string with \
             placeholder like "{name}". It will be escaped to not interpreted \
@@ -1932,18 +1932,18 @@ class String(Object, builtins.str):
             >>> String().format_validated.content
             ''
         '''
-# # python2.7
+# # python3.4
 # #         self.content = regularExpression.compile('{([a-z]+)}').sub(
-# #             '\{\\1\}', convert_to_unicode(self.content)
-# #         ).encode(ENCODING)
+# #             '\{\\1\}', self.content)
         self.content = regularExpression.compile('{([a-z]+)}').sub(
-            '\{\\1\}', self.content)
+            '\{\\1\}', convert_to_unicode(self.content)
+        ).encode(ENCODING)
 # #
         return self
 
     @JointPoint(Class.pseudo_property)
-# # python2.7     def get_url_validated(self):
-    def get_url_validated(self: Self) -> Self:
+# # python3.4     def get_url_validated(self: Self) -> Self:
+    def get_url_validated(self):
         '''
             Validates a given url by escaping special chars.
 
@@ -1982,11 +1982,11 @@ class String(Object, builtins.str):
         # # endregion
 
     @JointPoint
-# # python2.7
-# #     def find_python_code_end_bracket(self):
-    def find_python_code_end_bracket(
-        self: Self
-    ) -> (builtins.int, builtins.bool):
+# # python3.4
+# #     def find_python_code_end_bracket(
+# #         self: Self
+# #     ) -> (builtins.int, builtins.bool):
+    def find_python_code_end_bracket(self):
 # #
         '''
             Searches for the next not escaped closing end clamped in current \
@@ -2014,13 +2014,13 @@ class String(Object, builtins.str):
         return False
 
     @JointPoint
-# # python2.7
-# #     def replace(self, search, replace='', *arguments, **keywords):
-    def replace(
-        self: Self, search: (builtins.str, builtins.dict),
-        replace='', *arguments: builtins.object,
-        **keywords: builtins.object
-    ) -> Self:
+# # python3.4
+# #     def replace(
+# #         self: Self, search: (builtins.str, builtins.dict),
+# #         replace='', *arguments: builtins.object,
+# #         **keywords: builtins.object
+# #     ) -> Self:
+    def replace(self, search, replace='', *arguments, **keywords):
 # #
         '''
             Implements the pythons native string method "str.replace()" in an \
@@ -2065,25 +2065,25 @@ class String(Object, builtins.str):
                     search_string, replacement, *arguments, **keywords
                 ).content
         else:
-# # python2.7
-# #             self.content = convert_to_unicode(
-# #                 self.content
-# #             ).replace(convert_to_unicode(search), convert_to_unicode(
-# #                 replace
-# #             ), *arguments, **keywords).encode(ENCODING)
-            self.content = self.content.replace(
-                builtins.str(search), builtins.str(replace),
-                *arguments, **keywords)
+# # python3.4
+# #             self.content = self.content.replace(
+# #                 builtins.str(search), builtins.str(replace),
+# #                 *arguments, **keywords)
+            self.content = convert_to_unicode(
+                self.content
+            ).replace(convert_to_unicode(search), convert_to_unicode(
+                replace
+            ), *arguments, **keywords).encode(ENCODING)
 # #
         return self
 
     @JointPoint
-# # python2.7
-# #     def substitute(self, search, replace=None, *arguments, **keywords):
-    def substitute(
-        self: Self, search: (builtins.str, builtins.dict), replace=None,
-        *arguments: builtins.object, **keywords: builtins.object
-    ) -> Self:
+# # python3.4
+# #     def substitute(
+# #         self: Self, search: (builtins.str, builtins.dict), replace=None,
+# #         *arguments: builtins.object, **keywords: builtins.object
+# #     ) -> Self:
+    def substitute(self, search, replace=None, *arguments, **keywords):
 # #
         '''
             Implements the pythons native "regularExpression.sub()" method in \
@@ -2155,23 +2155,23 @@ class String(Object, builtins.str):
                 self.content = regularExpression.compile(search_string).sub(
                     replacement, self.content, *arguments, **keywords)
         else:
-# # python2.7
+# # python3.4
 # #             self.content = regularExpression.compile(search).sub(
-# #                 replace, convert_to_unicode(self.content), *arguments,
-# #                 **keywords
-# #             ).encode(ENCODING)
+# #                 replace, self.content, *arguments, **keywords)
             self.content = regularExpression.compile(search).sub(
-                replace, self.content, *arguments, **keywords)
+                replace, convert_to_unicode(self.content), *arguments,
+                **keywords
+            ).encode(ENCODING)
 # #
         return self
 
     @JointPoint
-# # python2.7
-# #     def substitute_n(self, search, replace='', *arguments, **keywords):
-    def substitute_n(
-        self: Self, search: (builtins.str, builtins.dict), replace='',
-        *arguments: builtins.object, **keywords: builtins.object
-    ) -> builtins.tuple:
+# # python3.4
+# #     def substitute_n(
+# #         self: Self, search: (builtins.str, builtins.dict), replace='',
+# #         *arguments: builtins.object, **keywords: builtins.object
+# #     ) -> builtins.tuple:
+    def substitute_n(self, search, replace='', *arguments, **keywords):
 # #
         '''
             Implements the pythons native "regularExpression.subn()" method \
@@ -2207,39 +2207,39 @@ class String(Object, builtins.str):
         if builtins.isinstance(search, builtins.dict):
             number_of_replaces = 0
             for search_string, replacement in search.items():
-# # python2.7
+# # python3.4
 # #                 self.content, temp_number_of_replaces = \
-# #                 regularExpression.compile(convert_to_unicode(
+# #                 regularExpression.compile(builtins.str(
 # #                     search_string
-# #                 )).subn(convert_to_unicode(
+# #                 )).subn(builtins.str(
 # #                     replacement
 # #                 ), self.content, *arguments, **keywords)
                 self.content, temp_number_of_replaces = \
-                regularExpression.compile(builtins.str(
+                regularExpression.compile(convert_to_unicode(
                     search_string
-                )).subn(builtins.str(
+                )).subn(convert_to_unicode(
                     replacement
                 ), self.content, *arguments, **keywords)
 # #
                 number_of_replaces += temp_number_of_replaces
         else:
-# # python2.7
+# # python3.4
 # #             self.content, number_of_replaces = regularExpression.compile(
-# #                 convert_to_unicode(search)
-# #             ).subn(convert_to_unicode(
+# #                 builtins.str(search)
+# #             ).subn(builtins.str(
 # #                 replace
 # #             ), self.content, *arguments, **keywords)
             self.content, number_of_replaces = regularExpression.compile(
-                builtins.str(search)
-            ).subn(builtins.str(
+                convert_to_unicode(search)
+            ).subn(convert_to_unicode(
                 replace
             ), self.content, *arguments, **keywords)
 # #
         return self, number_of_replaces
 
     @JointPoint
-# # python2.7     def readline(self):
-    def readline(self: Self) -> (SelfClassObject, builtins.bool):
+# # python3.4     def readline(self: Self) -> (SelfClassObject, builtins.bool):
+    def readline(self):
         '''
             Implements the pythons native "bz2.BZ2File.readline()" method in \
             an object oriented way.
@@ -2277,12 +2277,12 @@ class String(Object, builtins.str):
         return False
 
     @JointPoint
-# # python2.7
-# #     def readlines(self, *arguments, **keywords):
-    def readlines(
-        self: Self, *arguments: builtins.object,
-        **keywords: builtins.object
-    ) -> builtins.list:
+# # python3.4
+# #     def readlines(
+# #         self: Self, *arguments: builtins.object,
+# #         **keywords: builtins.object
+# #     ) -> builtins.list:
+    def readlines(self, *arguments, **keywords):
 # #
         '''
             Implements the pythons native "builtins.str.splitlines()" method \
@@ -2313,8 +2313,8 @@ class String(Object, builtins.str):
         return self.content.splitlines(*arguments, **keywords)
 
     @JointPoint
-# # python2.7     def delete_variables_from_regex(self):
-    def delete_variables_from_regex(self: Self) -> Self:
+# # python3.4     def delete_variables_from_regex(self: Self) -> Self:
+    def delete_variables_from_regex(self):
         '''
             Removes python supported variables in regular expression strings. \
             This method is useful if a python regular expression should be \
@@ -2340,9 +2340,9 @@ class String(Object, builtins.str):
         # region protected
 
     @JointPoint(Class.pseudo_property)
-# # python2.7
-# #     def _determine_encoding(self, content):
-    def _determine_encoding(self: Self, content) -> builtins.tuple:
+# # python3.4
+# #     def _determine_encoding(self: Self, content) -> builtins.tuple:
+    def _determine_encoding(self, content):
 # #
         '''
             Guesses the encoding used in current string (bytes). Encodings \
@@ -2366,15 +2366,15 @@ class String(Object, builtins.str):
         # # region find python code end bracket helper
 
     @JointPoint
-# # python2.7
+# # python3.4
 # #     def _handle_char_to_find_end_bracket(
-# #         self, index, char, quote, skip, brackets
-# #     ):
+# #         self: Self, index: builtins.int, char: builtins.str,
+# #         quote: (builtins.str, builtins.bool), skip: builtins.int,
+# #         brackets: builtins.int
+# #     ) -> (builtins.tuple, builtins.int):
     def _handle_char_to_find_end_bracket(
-        self: Self, index: builtins.int, char: builtins.str,
-        quote: (builtins.str, builtins.bool), skip: builtins.int,
-        brackets: builtins.int
-    ) -> (builtins.tuple, builtins.int):
+        self, index, char, quote, skip, brackets
+    ):
 # #
         '''
             Helper method for "find_python_code_end_bracket()".
@@ -2428,14 +2428,14 @@ class String(Object, builtins.str):
         return index + 1, char, quote, skip, brackets
 
     @JointPoint
-# # python2.7
+# # python3.4
 # #     def _handle_start_quotes_to_find_end_bracket(
-# #         self, index, char, quote, skip
-# #     ):
+# #         self: Self, index: builtins.int, char: builtins.str,
+# #         quote: (builtins.str, builtins.bool), skip: builtins.int
+# #     ) -> builtins.tuple:
     def _handle_start_quotes_to_find_end_bracket(
-        self: Self, index: builtins.int, char: builtins.str,
-        quote: (builtins.str, builtins.bool), skip: builtins.int
-    ) -> builtins.tuple:
+        self, index, char, quote, skip
+    ):
 # #
         '''
             Helper method for "find_python_code_end_bracket()".
@@ -2454,12 +2454,12 @@ class String(Object, builtins.str):
         return quote, skip
 
     @JointPoint
-# # python2.7
-# #     def _handle_quotes_to_find_end_bracket(self, index, char, quote, skip):
-    def _handle_quotes_to_find_end_bracket(
-        self: Self, index: builtins.int, char: builtins.str,
-        quote: (builtins.str, builtins.bool), skip: builtins.int
-    ) -> builtins.tuple:
+# # python3.4
+# #     def _handle_quotes_to_find_end_bracket(
+# #         self: Self, index: builtins.int, char: builtins.str,
+# #         quote: (builtins.str, builtins.bool), skip: builtins.int
+# #     ) -> builtins.tuple:
+    def _handle_quotes_to_find_end_bracket(self, index, char, quote, skip):
 # #
         '''
             Helper method for "find_python_code_end_bracket()".
@@ -2505,11 +2505,11 @@ class Dictionary(Object, builtins.dict):
     # # # region special
 
     @JointPoint
-# # python2.7
-# #     def __init__(self, content=None, **keywords):
-    def __init__(
-        self: Self, content=None, **keywords: builtins.object
-    ) -> None:
+# # python3.4
+# #     def __init__(
+# #         self: Self, content=None, **keywords: builtins.object
+# #     ) -> None:
+    def __init__(self, content=None, **keywords):
 # #
         '''
             Generates a new high level wrapper around given object.
@@ -2535,8 +2535,8 @@ class Dictionary(Object, builtins.dict):
         # # # endregion
 
     @JointPoint
-# # python2.7     def __hash__(self):
-    def __hash__(self: Self) -> builtins.int:
+# # python3.4     def __hash__(self: Self) -> builtins.int:
+    def __hash__(self):
         '''
             Invokes if this object should describe itself by a hash value.
 
@@ -2548,11 +2548,11 @@ class Dictionary(Object, builtins.dict):
         return builtins.hash(self.immutable)
 
     @JointPoint
-# # python2.7
-# #     def __getitem__(self, key):
-    def __getitem__(
-        self: Self, key: (builtins.object, builtins.type)
-    ) -> (builtins.object, builtins.type):
+# # python3.4
+# #     def __getitem__(
+# #         self: Self, key: (builtins.object, builtins.type)
+# #     ) -> (builtins.object, builtins.type):
+    def __getitem__(self, key):
 # #
         '''
             Invokes if this object should returns current value stored at \
@@ -2574,8 +2574,8 @@ class Dictionary(Object, builtins.dict):
         # # region getter methods
 
     @JointPoint(Class.pseudo_property)
-# # python2.7     def get_immutable(self, exclude=()):
-    def get_immutable(self: Self, exclude=()) -> builtins.tuple:
+# # python3.4     def get_immutable(self: Self, exclude=()) -> builtins.tuple:
+    def get_immutable(self, exclude=()):
         '''
             Generates an immutable copy of the current dictionary. Mutable \
             iterables are generally translated to sorted tuples.
@@ -2592,21 +2592,21 @@ class Dictionary(Object, builtins.dict):
             if key in exclude:
                 del immutable[key]
             else:
-# # python2.7
-# #                 immutable[key] = convert_to_unicode(
-# #                     self._immutable_helper(value, exclude))
-                immutable[key] = builtins.str(self._immutable_helper(
-                    value, exclude))
+# # python3.4
+# #                 immutable[key] = builtins.str(self._immutable_helper(
+# #                     value, exclude))
+                immutable[key] = convert_to_unicode(
+                    self._immutable_helper(value, exclude))
 # #
         return builtins.tuple(builtins.sorted(immutable.items()))
 
     @JointPoint(Class.pseudo_property)
-# # python2.7
-# #     def get_compatible_types(self, *arguments, **keywords):
-    def get_compatible_types(
-        self: Self, *arguments: (builtins.object, builtins.type),
-        **keywords: (builtins.object, builtins.type)
-    ) -> (builtins.object, builtins.type):
+# # python3.4
+# #     def get_compatible_types(
+# #         self: Self, *arguments: (builtins.object, builtins.type),
+# #         **keywords: (builtins.object, builtins.type)
+# #     ) -> (builtins.object, builtins.type):
+    def get_compatible_types(self, *arguments, **keywords):
 # #
         '''
             Converts dictionary where each type will be converted to a cross \
@@ -2622,7 +2622,7 @@ class Dictionary(Object, builtins.dict):
             >>> Dictionary({2: 2}).compatible_types.content
             {2: 2}
         '''
-# # python2.7
+# # python3.4
 # #         return self.convert(
 # #             *arguments,
 # #             key_wrapper=lambda key,
@@ -2630,7 +2630,7 @@ class Dictionary(Object, builtins.dict):
 # #                 String(key).get_delimited_to_camel_case(
 # #                     preserve_wrong_formatted_abbreviations=True
 # #                 ).content if builtins.isinstance(
-# #                     key, (builtins.unicode, builtins.str)
+# #                     key, builtins.str
 # #                 ) else key
 # #             ), value_wrapper=self._convert_to_compatible_type, **keywords)
         return self.convert(
@@ -2640,18 +2640,18 @@ class Dictionary(Object, builtins.dict):
                 String(key).get_delimited_to_camel_case(
                     preserve_wrong_formatted_abbreviations=True
                 ).content if builtins.isinstance(
-                    key, builtins.str
+                    key, (builtins.unicode, builtins.str)
                 ) else key
             ), value_wrapper=self._convert_to_compatible_type, **keywords)
 # #
 
     @JointPoint(Class.pseudo_property)
-# # python2.7
-# #     def get_known_types(self, *arguments, **keywords):
-    def get_known_types(
-        self: Self, *arguments: (builtins.object, builtins.type),
-        strict=True, **keywords: (builtins.object, builtins.type)
-    ) -> (builtins.object, builtins.type):
+# # python3.4
+# #     def get_known_types(
+# #         self: Self, *arguments: (builtins.object, builtins.type),
+# #         strict=True, **keywords: (builtins.object, builtins.type)
+# #     ) -> (builtins.object, builtins.type):
+    def get_known_types(self, *arguments, **keywords):
 # #
         '''
             Converts dictionary where each type will be tried to converted to \
@@ -2668,39 +2668,39 @@ class Dictionary(Object, builtins.dict):
             >>> Dictionary({'value': '12.234'}).known_types.content
             {'value': 12.234}
         '''
-# # python2.7
-# #         strict, keywords = Dictionary(keywords).pop(
-# #             name='strict', default_value=True)
+# # python3.4
 # #         return self.convert(
 # #             *arguments,
 # #             key_wrapper=lambda key, value: self._convert_to_known_type(
 # #                 String(
 # #                     key
 # #                 ).camel_case_to_delimited.content if builtins.isinstance(
-# #                     key, (builtins.unicode, builtins.str)
+# #                     key, builtins.str
 # #                 ) else key, strict=True if strict is None else strict
 # #             ), value_wrapper=lambda key, value:
-# #                 self._convert_to_known_type(key, value, strict), **keywords)
+# #                self._convert_to_known_type(key, value, strict), **keywords)
+        strict, keywords = Dictionary(keywords).pop(
+            name='strict', default_value=True)
         return self.convert(
             *arguments,
             key_wrapper=lambda key, value: self._convert_to_known_type(
                 String(
                     key
                 ).camel_case_to_delimited.content if builtins.isinstance(
-                    key, builtins.str
+                    key, (builtins.unicode, builtins.str)
                 ) else key, strict=True if strict is None else strict
             ), value_wrapper=lambda key, value:
-               self._convert_to_known_type(key, value, strict), **keywords)
+                self._convert_to_known_type(key, value, strict), **keywords)
 # #
 
         # # endregion
 
     @JointPoint
-# # python2.7
-# #     def pop(self, name, default_value=None):
-    def pop(
-        self: Self, name: builtins.str, default_value=None
-    ) -> builtins.tuple:
+# # python3.4
+# #     def pop(
+# #         self: Self, name: builtins.str, default_value=None
+# #     ) -> builtins.tuple:
+    def pop(self, name, default_value=None):
 # #
         '''
             Get a keyword element as it would be set by a default value. If \
@@ -2732,17 +2732,17 @@ class Dictionary(Object, builtins.dict):
         return default_value, self.content
 
     @JointPoint
-# # python2.7
+# # python3.4
 # #     def convert(
-# #         self, key_wrapper=lambda key, value: key,
+# #         self: Self, key_wrapper=lambda key, value: key,
 # #         value_wrapper=lambda key, value: value,
 # #         no_wrap_indicator='__no_wrapping__', remove_no_wrap_indicator=True
-# #     ):
+# #     ) -> Self:
     def convert(
-        self: Self, key_wrapper=lambda key, value: key,
+        self, key_wrapper=lambda key, value: key,
         value_wrapper=lambda key, value: value,
         no_wrap_indicator='__no_wrapping__', remove_no_wrap_indicator=True
-    ) -> Self:
+    ):
 # #
         '''
             Converts all keys or values and nested keys or values with given \
@@ -2840,8 +2840,8 @@ class Dictionary(Object, builtins.dict):
             NOTE: We have to copy to avoid double convert of some keys or \
             values.
         '''
-# # python2.7         for key, value in copy(self.content).items():
-        for key, value in self.content.copy().items():
+# # python3.4         for key, value in self.content.copy().items():
+        for key, value in copy(self.content).items():
             if key == no_wrap_indicator:
                 if remove_no_wrap_indicator:
                     if builtins.len(self.content) > 1:
@@ -2865,13 +2865,13 @@ class Dictionary(Object, builtins.dict):
                     key_wrapper, value_wrapper, no_wrap_indicator,
                     remove_no_wrap_indicator
                 ).content
-# # python2.7
+# # python3.4
 # #             elif(builtins.isinstance(value, Iterable) and
-# #                  not builtins.isinstance(value, (
-# #                      builtins.unicode, builtins.str))):
+# #                  not builtins.isinstance(
+# #                      value, (builtins.bytes, builtins.str))):
             elif(builtins.isinstance(value, Iterable) and
-                 not builtins.isinstance(
-                     value, (builtins.bytes, builtins.str))):
+                 not builtins.isinstance(value, (
+                     builtins.unicode, builtins.str))):
 # #
                 self.content[key] = self._convert_iterable(
                     iterable=value, key_wrapper=key_wrapper,
@@ -2883,12 +2883,12 @@ class Dictionary(Object, builtins.dict):
         return self
 
     @JointPoint
-# # python2.7
-# #     def update(self, other, append_list_indicator='__append__'):
-    def update(
-        self: Self, other: (SelfClassObject, builtins.dict),
-        append_list_indicator='__append__'
-    ) -> Self:
+# # python3.4
+# #     def update(
+# #         self: Self, other: (SelfClassObject, builtins.dict),
+# #         append_list_indicator='__append__'
+# #     ) -> Self:
+    def update(self, other, append_list_indicator='__append__'):
 # #
         '''
             Performs a recursive update.
@@ -2956,11 +2956,11 @@ class Dictionary(Object, builtins.dict):
         # region protected methods
 
     @JointPoint(builtins.classmethod)
-# # python2.7
-# #     def _convert_to_compatible_type(cls, key, value=Null):
-    def _convert_to_compatible_type(
-        cls, key: (builtins.object, builtins.type), value=Null
-    ) -> (builtins.object, builtins.type):
+# # python3.4
+# #     def _convert_to_compatible_type(
+# #         cls, key: (builtins.object, builtins.type), value=Null
+# #     ) -> (builtins.object, builtins.type):
+    def _convert_to_compatible_type(cls, key, value=Null):
 # #
         '''
             Converts data to python cross platform compatible data objects.
@@ -2978,11 +2978,11 @@ class Dictionary(Object, builtins.dict):
         return Object(content=value).compatible_type
 
     @JointPoint(builtins.classmethod)
-# # python2.7
-# #     def _convert_to_known_type(cls, key, value=Null, strict=True):
-    def _convert_to_known_type(
-        cls, key: (builtins.object, builtins.type), value=Null, strict=True
-    ) -> (builtins.object, builtins.type):
+# # python3.4
+# #     def _convert_to_known_type(
+# #         cls, key: (builtins.object, builtins.type), value=Null, strict=True
+# #     ) -> (builtins.object, builtins.type):
+    def _convert_to_known_type(cls, key, value=Null, strict=True):
 # #
         '''
             Converts interpretable data to python specific data objects.
@@ -2999,7 +2999,7 @@ class Dictionary(Object, builtins.dict):
             description=None if value is Null else key, strict=strict)
 
     @JointPoint(builtins.classmethod)
-# # python2.7
+# # python3.4
 # #     def _convert_iterable(
 # #         cls, iterable, key_wrapper, value_wrapper, no_wrap_indicator,
 # #         remove_no_wrap_indicator
@@ -3021,10 +3021,10 @@ class Dictionary(Object, builtins.dict):
         '''
         if builtins.isinstance(iterable, builtins.set):
             return cls._convert_set(iterable, key_wrapper, value_wrapper)
-# # python2.7
-# #         pass
-        if builtins.isinstance(iterable, builtins.range):
-            iterable = builtins.list(iterable)
+# # python3.4
+# #         if builtins.isinstance(iterable, builtins.range):
+# #             iterable = builtins.list(iterable)
+        pass
 # #
         try:
             for key, value in builtins.enumerate(iterable):
@@ -3033,13 +3033,13 @@ class Dictionary(Object, builtins.dict):
                         key_wrapper, value_wrapper, no_wrap_indicator,
                         remove_no_wrap_indicator
                     ).content
-# # python2.7
+# # python3.4
 # #                 elif(builtins.isinstance(value, Iterable) and
-# #                      not builtins.isinstance(value, (
-# #                          builtins.unicode, builtins.str))):
+# #                      not builtins.isinstance(
+# #                          value, (builtins.bytes, builtins.str))):
                 elif(builtins.isinstance(value, Iterable) and
-                     not builtins.isinstance(
-                         value, (builtins.bytes, builtins.str))):
+                     not builtins.isinstance(value, (
+                         builtins.unicode, builtins.str))):
 # #
                     '''
                         Take this method type by the abstract class via \
@@ -3059,18 +3059,18 @@ class Dictionary(Object, builtins.dict):
                 NOTE: We have visited a non indexable value (e.g. an uploaded \
                 file).
             '''
-# # python2.7
+# # python3.4
 # #             __logger__.debug(
 # #                 '%s: %s (%s)', exception.__class__.__name__,
-# #                 convert_to_unicode(exception), builtins.type(iterable))
+# #                 builtins.str(exception), builtins.type(iterable))
             __logger__.debug(
                 '%s: %s (%s)', exception.__class__.__name__,
-                builtins.str(exception), builtins.type(iterable))
+                convert_to_unicode(exception), builtins.type(iterable))
 # #
         return iterable
 
     @JointPoint(builtins.classmethod)
-# # python2.7
+# # python3.4
 # #     def _convert_set(cls, set, key_wrapper, value_wrapper):
     def _convert_set(cls, set, key_wrapper, value_wrapper):
 # #
@@ -3085,12 +3085,12 @@ class Dictionary(Object, builtins.dict):
         return new_set
 
     @JointPoint
-# # python2.7
-# #     def _immutable_helper(self, value, exclude):
-    def _immutable_helper(
-        self: Self, value: (builtins.object, builtins.type),
-        exclude: builtins.tuple
-    ) -> (builtins.object, builtins.type):
+# # python3.4
+# #     def _immutable_helper(
+# #         self: Self, value: (builtins.object, builtins.type),
+# #         exclude: builtins.tuple
+# #     ) -> (builtins.object, builtins.type):
+    def _immutable_helper(self, value, exclude):
 # #
         '''
             Helper methods for potential immutable given value.
@@ -3105,13 +3105,13 @@ class Dictionary(Object, builtins.dict):
         '''
         if builtins.isinstance(value, builtins.dict):
             value = self.__class__(content=value).get_immutable(exclude)
-# # python2.7
+# # python3.4
 # #         elif(builtins.isinstance(value, Iterable) and
-# #              not builtins.isinstance(value, (
-# #                 builtins.unicode, builtins.str
-# #              ))):
+# #              not builtins.isinstance(value, builtins.str)):
         elif(builtins.isinstance(value, Iterable) and
-             not builtins.isinstance(value, builtins.str)):
+             not builtins.isinstance(value, (
+                builtins.unicode, builtins.str
+             ))):
 # #
             value = builtins.list(copy(value))
             for key, sub_value in builtins.enumerate(value):
@@ -3134,11 +3134,11 @@ class Module(Object):
 
     # region properties
 
-# # python2.7
-# #     HIDDEN_BUILTIN_CALLABLES = (
-# #         'GFileDescriptorBased', 'GInitiallyUnowned',
-# #         'GPollableInputStream', 'GPollableOutputStream')
-    HIDDEN_BUILTIN_CALLABLES = ()
+# # python3.4
+# #     HIDDEN_BUILTIN_CALLABLES = ()
+    HIDDEN_BUILTIN_CALLABLES = (
+        'GFileDescriptorBased', 'GInitiallyUnowned',
+        'GPollableInputStream', 'GPollableOutputStream')
 # #
     '''Stores all magically defined globals.'''
     PREFERRED_ENTRY_POINT_FUNCTION_NAMES = (
@@ -3157,8 +3157,8 @@ class Module(Object):
     # # # region special
 
     @JointPoint(builtins.classmethod)
-# # python2.7     def __repr__(cls):
-    def __repr__(cls: SelfClass) -> builtins.str:
+# # python3.4     def __repr__(cls: SelfClass) -> builtins.str:
+    def __repr__(cls):
         '''
             Invokes if this object should describe itself by a string.
 
@@ -3181,11 +3181,11 @@ class Module(Object):
     # dependencies.
     @builtins.classmethod
     @Class.pseudo_property
-# # python2.7
-# #     def get_context_path(cls, path=None, frame=inspect.currentframe()):
-    def get_context_path(
-        cls: SelfClass, path=None, frame=inspect.currentframe(),
-    ) -> builtins.str:
+# # python3.4
+# #     def get_context_path(
+# #         cls: SelfClass, path=None, frame=inspect.currentframe(),
+# #     ) -> builtins.str:
+    def get_context_path(cls, path=None, frame=inspect.currentframe()):
 # #
         '''
             Determines the package and module level context path to a given \
@@ -3223,14 +3223,14 @@ class Module(Object):
 
     @JointPoint(builtins.classmethod)
     @Class.pseudo_property
-# # python2.7
+# # python3.4
 # #     def get_name(
-# #         cls, frame=None, module=None, extension=False, path=False
-# #     ):
+# #         cls: SelfClass, frame=None, module=None, extension=False,
+# #         path=False
+# #     ) -> builtins.str:
     def get_name(
-        cls: SelfClass, frame=None, module=None, extension=False,
-        path=False
-    ) -> builtins.str:
+        cls, frame=None, module=None, extension=False, path=False
+    ):
 # #
         '''
             Returns name of the given context "frame". If no frame is defined \
@@ -3272,11 +3272,11 @@ class Module(Object):
 
     @JointPoint(builtins.classmethod)
     @Class.pseudo_property
-# # python2.7
-# #     def get_package_name(cls, frame=inspect.currentframe(), path=False):
-    def get_package_name(
-        cls: SelfClass, frame=inspect.currentframe(), path=False
-    ) -> builtins.str:
+# # python3.4
+# #     def get_package_name(
+# #         cls: SelfClass, frame=inspect.currentframe(), path=False
+# #     ) -> builtins.str:
+    def get_package_name(cls, frame=inspect.currentframe(), path=False):
 # #
         '''
             Determines package context of given frame. If current context \
@@ -3318,13 +3318,13 @@ class Module(Object):
 
     @JointPoint(builtins.classmethod)
     @Class.pseudo_property
-# # python2.7
+# # python3.4
 # #     def get_file_path(
-# #         cls, context_path, only_source_files=False
-# #     ):
+# #         cls: SelfClass, context_path: builtins.str, only_source_files=False
+# #     ) -> (builtins.str, builtins.bool):
     def get_file_path(
-        cls: SelfClass, context_path: builtins.str, only_source_files=False
-    ) -> (builtins.str, builtins.bool):
+        cls, context_path, only_source_files=False
+    ):
 # #
         '''
             Returns the path to given context path.
@@ -3366,9 +3366,9 @@ class Module(Object):
         # # region boolean
 
     @builtins.classmethod
-# # python2.7
-# #     def is_package(cls, path):
-    def is_package(cls: SelfClass, path: builtins.str) -> builtins.bool:
+# # python3.4
+# #     def is_package(cls: SelfClass, path: builtins.str) -> builtins.bool:
+    def is_package(cls, path):
 # #
         '''
             Checks if given location is pointed to a python package.
@@ -3395,13 +3395,13 @@ class Module(Object):
         # # endregion
 
     @JointPoint(builtins.classmethod)
-# # python2.7
-# #     def determine_caller(cls, callable_objects, caller=None):
-    def determine_caller(
-        cls: SelfClass, callable_objects: Iterable, caller=None
-    ) -> (
-        builtins.bool, builtins.str, builtins.tuple, builtins.type(None)
-    ):
+# # python3.4
+# #     def determine_caller(
+# #         cls: SelfClass, callable_objects: Iterable, caller=None
+# #     ) -> (
+# #         builtins.bool, builtins.str, builtins.tuple, builtins.type(None)
+# #     ):
+    def determine_caller(cls, callable_objects, caller=None):
 # #
         '''
             Searches for a useful caller object in given module objects via \
@@ -3452,12 +3452,12 @@ class Module(Object):
 
     @JointPoint(builtins.classmethod)
     @Class.pseudo_property
-# # python2.7
-# #     def get_defined_callables(cls, *arguments, **keywords):
-    def get_defined_callables(
-        cls: SelfClass, *arguments: (builtins.type, builtins.object),
-        **keywords: (builtins.type, builtins.object)
-    ) -> types.GeneratorType:
+# # python3.4
+# #     def get_defined_callables(
+# #         cls: SelfClass, *arguments: (builtins.type, builtins.object),
+# #         **keywords: (builtins.type, builtins.object)
+# #     ) -> types.GeneratorType:
+    def get_defined_callables(cls, *arguments, **keywords):
 # #
         '''
             Takes a module and gives a list of callables explicit defined in \
@@ -3498,13 +3498,13 @@ class Module(Object):
 
     @JointPoint(builtins.classmethod)
     @Class.pseudo_property
-# # python2.7
-# #     def get_defined_objects(cls, object, only_module_level=True):
-    def get_defined_objects(
-        cls: SelfClass, object: (
-            builtins.type, builtins.object, builtins.dict
-        ), only_module_level=True
-    ) -> types.GeneratorType:
+# # python3.4
+# #     def get_defined_objects(
+# #         cls: SelfClass, object: (
+# #             builtins.type, builtins.object, builtins.dict
+# #         ), only_module_level=True
+# #     ) -> types.GeneratorType:
+    def get_defined_objects(cls, object, only_module_level=True):
 # #
         '''
             Takes a module and gives a list of objects explicit defined in \
@@ -3553,23 +3553,23 @@ class Module(Object):
                     object_name in sys.builtin_module_names or
                     (only_module_level and inspect.getmodule(defined_object) !=
                         object))):
-# # python2.7
-# #                 if object_name != 'String':
-# #                     yield object_name, defined_object
-                yield object_name, defined_object
+# # python3.4
+# #                 yield object_name, defined_object
+                if object_name != 'String':
+                    yield object_name, defined_object
 # #
 
     @JointPoint(builtins.classmethod)
-# # python2.7
+# # python3.4
 # #     def execute_program_for_modules(
-# #         cls, program_type, program, modules, arguments=(),
-# #         extension='py', delimiter=', ', log=True, **keywords
-# #     ):
+# #         cls: SelfClass, program_type: builtins.str, program: builtins.str,
+# #         modules: Iterable, arguments=(), extension='py', delimiter=', ',
+# #         log=True, **keywords: builtins.object
+# #     ) -> builtins.tuple:
     def execute_program_for_modules(
-        cls: SelfClass, program_type: builtins.str, program: builtins.str,
-        modules: Iterable, arguments=(), extension='py', delimiter=', ',
-        log=True, **keywords: builtins.object
-    ) -> builtins.tuple:
+        cls, program_type, program, modules, arguments=(),
+        extension='py', delimiter=', ', log=True, **keywords
+    ):
 # #
         '''
             Runs a given program for every given module. Returns "False" if \
@@ -3642,15 +3642,15 @@ class Module(Object):
         return builtins.tuple(result)
 
     @JointPoint(builtins.classmethod)
-# # python2.7
+# # python3.4
 # #     def extend(
-# #         cls, name=__name__, frame=None, module=None,
+# #         cls: SelfClass, name=__name__, frame=None, module=None,
 # #         post_extend_others=True
-# #     ):
+# #     ) -> builtins.dict:
     def extend(
-        cls: SelfClass, name=__name__, frame=None, module=None,
+        cls, name=__name__, frame=None, module=None,
         post_extend_others=True
-    ) -> builtins.dict:
+    ):
 # #
         '''
             Extends a given scope of an module for useful things like own \
@@ -3727,15 +3727,15 @@ class Module(Object):
         return {'name': name, 'scope': module}
 
     @JointPoint(builtins.classmethod)
-# # python2.7
+# # python3.4
 # #     def default(
-# #         cls, name, frame, default_caller=None, caller_arguments=(),
-# #         caller_keywords={}
-# #     ):
+# #         cls: SelfClass, name: builtins.str, frame: types.FrameType,
+# #         default_caller=None, caller_arguments=(), caller_keywords={}
+# #     ) -> SelfClass:
     def default(
-        cls: SelfClass, name: builtins.str, frame: types.FrameType,
-        default_caller=None, caller_arguments=(), caller_keywords={}
-    ) -> SelfClass:
+        cls, name, frame, default_caller=None, caller_arguments=(),
+        caller_keywords={}
+    ):
 # #
         '''
             Serves a common way to extend a given module. The given module's \
@@ -3775,14 +3775,14 @@ class Module(Object):
         return cls
 
     @JointPoint(builtins.classmethod)
-# # python2.7
+# # python3.4
 # #     def default_package(
-# #         cls, name, frame, command_line_arguments=(), *arguments, **keywords
-# #     ):
+# #         cls: SelfClass, name: builtins.str, frame: types.FrameType,
+# #         *arguments: builtins.object, **keywords: builtins.object
+# #     ) -> (builtins.tuple, builtins.bool):
     def default_package(
-        cls: SelfClass, name: builtins.str, frame: types.FrameType,
-        *arguments: builtins.object, **keywords: builtins.object
-    ) -> (builtins.tuple, builtins.bool):
+        cls, name, frame, command_line_arguments=(), *arguments, **keywords
+    ):
 # #
         '''
             Serves a common way to extend a given package. The given \
@@ -3819,7 +3819,7 @@ class Module(Object):
         # region protected
 
     @JointPoint(builtins.classmethod)
-# # python2.7     def _determine_scope(cls, object, only_module_level):
+# # python3.4     def _determine_scope(cls, object, only_module_level):
     def _determine_scope(cls, object, only_module_level):
         '''
             Determines needed scope to find module objects.
@@ -3835,18 +3835,18 @@ class Module(Object):
         else:
             scope = {}
             for object_name in builtins.dir(object):
-# # python2.7                 object_name = convert_to_unicode(object_name)
-                pass
+# # python3.4                 pass
+                object_name = convert_to_unicode(object_name)
                 scope[object_name] = builtins.getattr(
                     object, object_name, None)
         return scope, only_module_level
 
     @JointPoint(builtins.classmethod)
-# # python2.7
-# #     def _determine_object(cls, object):
-    def _determine_object(
-        cls: SelfClass, object: (builtins.type, builtins.object)
-    ) -> (builtins.object, builtins.type):
+# # python3.4
+# #     def _determine_object(
+# #         cls: SelfClass, object: (builtins.type, builtins.object)
+# #     ) -> (builtins.object, builtins.type):
+    def _determine_object(cls, object):
 # #
         '''Determines a potentially wrapped object.'''
         if(builtins.isinstance(JointPoint, builtins.type) and
@@ -3855,12 +3855,12 @@ class Module(Object):
         return object
 
     @JointPoint(builtins.classmethod)
-# # python2.7
-# #     def _get_module_file(cls, frame, module):
-    def _get_module_file(
-        cls: SelfClass, frame: (builtins.type(None), types.FrameType),
-        module: (builtins.type(None), types.ModuleType)
-    ) -> (Class, builtins.bool):
+# # python3.4
+# #     def _get_module_file(
+# #         cls: SelfClass, frame: (builtins.type(None), types.FrameType),
+# #         module: (builtins.type(None), types.ModuleType)
+# #     ) -> (Class, builtins.bool):
+    def _get_module_file(cls, frame, module):
 # #
         '''
             Determines the file of a given module or frame context.
@@ -3890,14 +3890,14 @@ class Module(Object):
         return file
 
     @JointPoint(builtins.classmethod)
-# # python2.7
+# # python3.4
 # #     def _search_library_file(
-# #         cls, location, context_path, only_source_files=False
-# #     ):
+# #         cls: SelfClass, location: Class, context_path: builtins.str,
+# #         only_source_files: builtins.bool
+# #     ) -> (builtins.str, builtins.bool):
     def _search_library_file(
-        cls: SelfClass, location: Class, context_path: builtins.str,
-        only_source_files: builtins.bool
-    ) -> (builtins.str, builtins.bool):
+        cls, location, context_path, only_source_files=False
+    ):
 # #
         '''
             Searches for full path to a given context path in given locations.
@@ -3931,8 +3931,8 @@ class Time(Object):
     # # # region special
 
     @JointPoint
-# # python2.7     def __init__(self, content=None):
-    def __init__(self: Self, content=None) -> None:
+# # python3.4     def __init__(self: Self, content=None) -> None:
+    def __init__(self, content=None):
         '''
             Generates a new high level wrapper for times.
 
@@ -3992,15 +3992,15 @@ class Time(Object):
                 self.content = NativeTime(
                     hour=hours, minute=minutes, second=seconds,
                     microsecond=microseconds)
-# # python2.7
-# #             elif builtins.isinstance(content, (
-# #                 builtins.unicode, builtins.str
-# #             )):
-# #                 timezone_pattern = regularExpression.compile('(.+)\+(.+)$')
-# #                 timezone_match = timezone_pattern.match(content)
-            elif builtins.isinstance(content, builtins.str):
-                timezone_pattern = regularExpression.compile('(.+)\+(.+)')
-                timezone_match = timezone_pattern.fullmatch(content)
+# # python3.4
+# #             elif builtins.isinstance(content, builtins.str):
+# #                 timezone_pattern = regularExpression.compile('(.+)\+(.+)')
+# #                 timezone_match = timezone_pattern.fullmatch(content)
+            elif builtins.isinstance(content, (
+                builtins.unicode, builtins.str
+            )):
+                timezone_pattern = regularExpression.compile('(.+)\+(.+)$')
+                timezone_match = timezone_pattern.match(content)
 # #
                 self._interpret_time(
                     content=timezone_pattern.sub(
@@ -4017,13 +4017,13 @@ class Time(Object):
     # # region protected
 
     @JointPoint
-# # python2.7
-# #     def _interpret_time(self, content, timezone_match):
-    def _interpret_time(
-        self: Self, content: builtins.str, timezone_match: (
-            builtins.type(None),
-            builtins.type(regularExpression.compile('').match(''))
-        )) -> Self:
+# # python3.4
+# #     def _interpret_time(
+# #         self: Self, content: builtins.str, timezone_match: (
+# #             builtins.type(None),
+# #             builtins.type(regularExpression.compile('').match(''))
+# #         )) -> Self:
+    def _interpret_time(self, content, timezone_match):
 # #
         '''Interprets given content string as time.'''
         for time_format in (
@@ -4051,13 +4051,13 @@ class Time(Object):
     # # region public
 
     @JointPoint(builtins.classmethod)
-# # python2.7
+# # python3.4
 # #     def derive_date_time(
-# #         cls, content, property_name='time', type_name=None
-# #     ):
+# #         cls: SelfClass, content, property_name='time', type_name=None
+# #     ) -> (builtins.type(None), NativeTime, NativeDate):
     def derive_date_time(
-        cls: SelfClass, content, property_name='time', type_name=None
-    ) -> (builtins.type(None), NativeTime, NativeDate):
+        cls, content, property_name='time', type_name=None
+    ):
 # #
         '''
             If nothing could be determined try to interpret a date time \
@@ -4068,14 +4068,14 @@ class Time(Object):
         except __exception__:
             if type_name is None:
                 type_name = cls.__name__
-# # python2.7
+# # python3.4
 # #             raise __exception__(
 # #                 '"%s" couldn\'t be interpreted as "%s".', content,
-# #                 type_name)
+# #                 type_name
+# #             ) from None
             raise __exception__(
                 '"%s" couldn\'t be interpreted as "%s".', content,
-                type_name
-            ) from None
+                type_name)
 # #
         else:
             return builtins.getattr(content, property_name)()
@@ -4096,8 +4096,8 @@ class DateTime(Object):
     # # # region special
 
     @JointPoint
-# # python2.7     def __init__(self, content=None):
-    def __init__(self: Self, content=None) -> None:
+# # python3.4     def __init__(self: Self, content=None) -> None:
+    def __init__(self, content=None):
         '''
             Generates a new high level wrapper for date times.
 
@@ -4178,28 +4178,28 @@ class DateTime(Object):
                     date like representation. Idea: There should be at least \
                     some numbers and separators.
                 '''
-# # python2.7
-# #             elif builtins.isinstance(content, (
-# #                 builtins.unicode, builtins.str
-# #             )) and builtins.len(regularExpression.compile(
+# # python3.4
+# #             elif builtins.isinstance(
+# #                 content, builtins.str
+# #             ) and builtins.len(regularExpression.compile(
 # #                 '[^a-zA-Z]'
 # #             ).sub('', content)) < 3 and builtins.len(
 # #                 regularExpression.compile('[0-9]{1,4}[^0-9]').findall(
 # #                     content)
 # #             ) > 1:
-# #                 content = Date.slice_weekday(content)
-# #                 timezone_pattern = regularExpression.compile('(.+)\+(.+)$')
-# #                 timezone_match = timezone_pattern.match(content)
-            elif builtins.isinstance(
-                content, builtins.str
-            ) and builtins.len(regularExpression.compile(
+# #                 timezone_pattern = regularExpression.compile('(.+)\+(.+)')
+# #                 timezone_match = timezone_pattern.fullmatch(content)
+            elif builtins.isinstance(content, (
+                builtins.unicode, builtins.str
+            )) and builtins.len(regularExpression.compile(
                 '[^a-zA-Z]'
             ).sub('', content)) < 3 and builtins.len(
                 regularExpression.compile('[0-9]{1,4}[^0-9]').findall(
                     content)
             ) > 1:
-                timezone_pattern = regularExpression.compile('(.+)\+(.+)')
-                timezone_match = timezone_pattern.fullmatch(content)
+                content = Date.slice_weekday(content)
+                timezone_pattern = regularExpression.compile('(.+)\+(.+)$')
+                timezone_match = timezone_pattern.match(content)
 # #
                 self._interpret_date_time(
                     content=timezone_pattern.sub(
@@ -4218,13 +4218,13 @@ class DateTime(Object):
     # # region protected
 
     @JointPoint
-# # python2.7
-# #     def _interpret_date_time(self, content, timezone_match):
-    def _interpret_date_time(
-        self: Self, content: builtins.str, timezone_match: (
-            builtins.type(None),
-            builtins.type(regularExpression.compile('').match(''))
-        )) -> Self:
+# # python3.4
+# #     def _interpret_date_time(
+# #         self: Self, content: builtins.str, timezone_match: (
+# #             builtins.type(None),
+# #             builtins.type(regularExpression.compile('').match(''))
+# #         )) -> Self:
+    def _interpret_date_time(self, content, timezone_match):
 # #
         '''Interprets given content string as date time.'''
         for time_delimiter in ('T', ' ', ''):
@@ -4282,8 +4282,8 @@ class Date(Object):
     # # # region special
 
     @JointPoint
-# # python2.7     def __init__(self, content=None, **keywords):
-    def __init__(self: Self, content=None) -> None:
+# # python3.4     def __init__(self: Self, content=None) -> None:
+    def __init__(self, content=None, **keywords):
         '''
             Generates a new high level wrapper for dates.
 
@@ -4339,11 +4339,11 @@ class Date(Object):
                     some numbers, separators and not too much non-numeric \
                     symbols.
                 '''
-# # python2.7
-# #             elif builtins.isinstance(content, (
-# #                 builtins.unicode, builtins.str
-# #             )):
-            elif builtins.isinstance(content, builtins.str):
+# # python3.4
+# #             elif builtins.isinstance(content, builtins.str):
+            elif builtins.isinstance(content, (
+                builtins.unicode, builtins.str
+            )):
 # #
                 self._interpret_date_string(content)
             if self.content is None:
@@ -4358,12 +4358,12 @@ class Date(Object):
     # # region protected
 
     @JointPoint
-# # python2.7
-# #     def _interpret_date_string(self, content):
-    def _interpret_date_string(self: Self, content: builtins.str) -> Self:
+# # python3.4
+# #     def _interpret_date_string(self: Self, content: builtins.str) -> Self:
+    def _interpret_date_string(self, content):
 # #
         content = self.slice_weekday(content)
-# # python2.7
+# # python3.4
 # #         if builtins.len(regularExpression.compile('[^a-zA-Z]').sub(
 # #             '', content
 # #         )) < 3 and builtins.len(regularExpression.compile(
@@ -4383,9 +4383,9 @@ class Date(Object):
         return self
 
     @JointPoint
-# # python2.7
-# #     def _interpret_date(self, content):
-    def _interpret_date(self: Self, content: builtins.str) -> Self:
+# # python3.4
+# #     def _interpret_date(self: Self, content: builtins.str) -> Self:
+    def _interpret_date(self, content):
 # #
         '''Interprets given content string as date.'''
         for delimiter in ('/', '.', ':', '-'):
@@ -4399,25 +4399,25 @@ class Date(Object):
                     '{first_year}%w{delimiter}%m{last_year}'
                 ):
                     try:
-# # python2.7
+# # python3.4
 # #                         self.content = NativeDate.fromtimestamp(
-# #                             time.mktime(NativeDateTime.strptime(
+# #                             NativeDateTime.strptime(
 # #                                 content, date_format.format(
 # #                                     delimiter=delimiter,
-# #                                         first_year=year_format[0].format(
-# #                                             delimiter=delimiter),
-# #                                         last_year=year_format[1].format(
-# #                                             delimiter=delimiter)
-# #                                     )).timetuple()))
+# #                                     first_year=year_format[0].format(
+# #                                         delimiter=delimiter),
+# #                                     last_year=year_format[1].format(
+# #                                         delimiter=delimiter)
+# #                                 )).timestamp())
                         self.content = NativeDate.fromtimestamp(
-                            NativeDateTime.strptime(
+                            time.mktime(NativeDateTime.strptime(
                                 content, date_format.format(
                                     delimiter=delimiter,
-                                    first_year=year_format[0].format(
-                                        delimiter=delimiter),
-                                    last_year=year_format[1].format(
-                                        delimiter=delimiter)
-                                )).timestamp())
+                                        first_year=year_format[0].format(
+                                            delimiter=delimiter),
+                                        last_year=year_format[1].format(
+                                            delimiter=delimiter)
+                                    )).timetuple()))
 # #
                     except builtins.ValueError:
                         pass
@@ -4434,18 +4434,18 @@ class Date(Object):
     # # region public
 
     @JointPoint(builtins.classmethod)
-# # python2.7
-# #     def slice_weekday(cls, content):
-    def slice_weekday(
-        cls: SelfClass, content: builtins.str
-    ) -> builtins.str:
+# # python3.4
+# #     def slice_weekday(
+# #         cls: SelfClass, content: builtins.str
+# #     ) -> builtins.str:
+    def slice_weekday(cls, content):
 # #
         '''Slice weekday from given date representation.'''
-# # python2.7
-# #         weekday_pattern = regularExpression.compile('[A-Za-z]{2}\. (.+)$')
-# #         weekday_match = weekday_pattern.match(content)
-        weekday_pattern = regularExpression.compile('[A-Za-z]{2}\. (.+)')
-        weekday_match = weekday_pattern.fullmatch(content)
+# # python3.4
+# #         weekday_pattern = regularExpression.compile('[A-Za-z]{2}\. (.+)')
+# #         weekday_match = weekday_pattern.fullmatch(content)
+        weekday_pattern = regularExpression.compile('[A-Za-z]{2}\. (.+)$')
+        weekday_match = weekday_pattern.match(content)
 # #
         if weekday_match:
             return weekday_pattern.sub('\\1', content)
@@ -4467,8 +4467,8 @@ class TimeDelta(Object):
     # # # region special
 
     @JointPoint
-# # python2.7     def __init__(self, content=None):
-    def __init__(self: Self, content=None) -> None:
+# # python3.4     def __init__(self: Self, content=None) -> None:
+    def __init__(self, content=None):
         '''
             Generates a new high level wrapper for dates.
 
@@ -4516,14 +4516,14 @@ class TimeDelta(Object):
                 try:
                     content = Time(content).content
                 except __exception__:
-# # python2.7
+# # python3.4
 # #                     raise __exception__(
 # #                         '"%s" couldn\'t be interpreted as "%s".', content,
-# #                         self.__class__.__name__)
+# #                         self.__class__.__name__
+# #                     ) from None
                     raise __exception__(
                         '"%s" couldn\'t be interpreted as "%s".', content,
-                        self.__class__.__name__
-                    ) from None
+                        self.__class__.__name__)
 # #
                 else:
                     self.content = NativeTimeDelta(
@@ -4549,8 +4549,8 @@ class PhoneNumber(Object):
     # # # region special
 
     @JointPoint
-# # python2.7     def __init__(self, content):
-    def __init__(self: Self, content=None) -> None:
+# # python3.4     def __init__(self: Self, content=None) -> None:
+    def __init__(self, content):
         '''
             Generates a new high level wrapper phone numbers.
 
@@ -4647,25 +4647,25 @@ class PhoneNumber(Object):
             >>> PhoneNumber('02 91 / 14 55').content
             '0291-1455'
         '''
-# # python2.7
-# #         if builtins.isinstance(content, (
-# #             builtins.unicode, builtins.str, builtins.int
-# #         )) and regularExpression.compile('[0-9]+').search(
-# #             convert_to_unicode(content)
-# #         ):
-# #             content = convert_to_unicode(content)
-        if(builtins.isinstance(content, (builtins.str, builtins.int)) and
-           regularExpression.compile('[0-9]+').search(builtins.str(
-               content
-          ))):
+# # python3.4
+# #         if(builtins.isinstance(content, (builtins.str, builtins.int)) and
+# #            regularExpression.compile('[0-9]+').search(builtins.str(
+# #                content
+# #           ))):
+        if builtins.isinstance(content, (
+            builtins.unicode, builtins.str, builtins.int
+        )) and regularExpression.compile('[0-9]+').search(
+            convert_to_unicode(content)
+        ):
+            content = convert_to_unicode(content)
 # #
             '''Normalize country code prefix.'''
-# # python2.7
-# #             self.content = regularExpression.compile(
-# #                 '^[^0-9]*\+(.+)$'
-# #             ).sub('00\\1', convert_to_unicode(content).strip())
-            self.content = regularExpression.compile('^[^0-9]*\+(.+)$').sub(
-                '00\\1', builtins.str(content).strip())
+# # python3.4
+# #             self.content = regularExpression.compile('^[^0-9]*\+(.+)$').sub(
+# #                 '00\\1', builtins.str(content).strip())
+            self.content = regularExpression.compile(
+                '^[^0-9]*\+(.+)$'
+            ).sub('00\\1', convert_to_unicode(content).strip())
 # #
             separator_pattern = '(?:[ /\\-]+)'
             '''Remove unneeded area code zero in brackets.'''
@@ -4729,9 +4729,9 @@ class PhoneNumber(Object):
     # # region protected
 
     @JointPoint(builtins.classmethod)
-# # python2.7
-# #     def _preserve_only_last_separator(cls, number):
-    def _preserve_only_last_separator(cls: SelfClass, number: builtins.str):
+# # python3.4
+# #     def _preserve_only_last_separator(cls: SelfClass, number: builtins.str):
+    def _preserve_only_last_separator(cls, number):
 # #
         '''
             Slices all none numbers but preserves last separator.
@@ -4773,8 +4773,8 @@ class ZipCode(Object):
     # # # region special
 
     @JointPoint
-# # python2.7     def __init__(self, content):
-    def __init__(self: Self, content=None) -> None:
+# # python3.4     def __init__(self: Self, content=None) -> None:
+    def __init__(self, content):
         '''
             Generates a new high level wrapper zip codes.
 
@@ -4791,21 +4791,21 @@ class ZipCode(Object):
             ...
             NativeError: "abc" couldn't be interpreted as "ZipCode".
         '''
-# # python2.7
+# # python3.4
 # #         if builtins.isinstance(content, (
-# #             builtins.unicode, builtins.str, builtins.int
-# #         )) and regularExpression.compile('[0-9]+').search(
-# #             convert_to_unicode(content)
-# #         ):
+# #             builtins.str, builtins.int
+# #         )) and regularExpression.compile('[0-9]+').search(builtins.str(
+# #             content
+# #         )):
 # #             self.content = regularExpression.compile('[^0-9]+').sub(
-# #                 '', convert_to_unicode(content))
+# #                 '', builtins.str(content))
         if builtins.isinstance(content, (
-            builtins.str, builtins.int
-        )) and regularExpression.compile('[0-9]+').search(builtins.str(
-            content
-        )):
+            builtins.unicode, builtins.str, builtins.int
+        )) and regularExpression.compile('[0-9]+').search(
+            convert_to_unicode(content)
+        ):
             self.content = regularExpression.compile('[^0-9]+').sub(
-                '', builtins.str(content))
+                '', convert_to_unicode(content))
 # #
         else:
             raise __exception__(

@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.4
+#!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 
 # region header
@@ -22,75 +22,93 @@
     Additional conventions beside pep8 (bcX := boostNode convention number X)
     -------------------------------------------------------------------------
 
-    TODO except(...)
-    TODO return{}
+    - bc1 Don't use tabulators instead of whitespaces. Always indent with 4 \
+          whitespaces.
 
-    - bc1 Capitalized variables are constant and shouldn't be mutable.
+    - bc2 Capitalized variables are constant and shouldn't be mutable.
 
-    - bc2 Properties with preceding underscores shouldn't be accessed from \
+    - bc3 Properties with preceding underscores shouldn't be accessed from \
           the outer scope. They could accessed in inherited objects \
           (protected attributes).
 
-    - bc3 Property with two preceding underscore shouldn't be accessed from \
+    - bc4 Property with two preceding underscore shouldn't be accessed from \
           any location then the object itself (private attributes).
 
-    - bc4 Follow the python object orientated programming conventions like \
-          camel-case class-names or underscore separated methods and property \
-          names.
+    - bc5 Don't use any whitespaces between except or return statements and \
+          preceding statements if not needed.
 
-    - bc5 Class-names have a leading upper case letter.
+    >>> try:
+    ...     pass
+    ... except(...):
+    ...     pass
 
-    - bc6 Methods and functions are complete lower case. Different word can \
-          be concatenated via an underscore.
+    or
 
-    - bc7 Do not use more chars then 79 in one line.
+    >>> return{}
 
-    - bc8 Use short and/or long description doc-strings for all definitions.
+    instead of
 
-    - bc9 Write doctest for each unit it is possible and try to reach 100% \
+    >>> try:
+    ...     pass
+    ... except (...):
+    ...     pass
+
+    or
+
+    >>> return {}
+
+    - bc6 Do not use more chars then 79 in one line.
+
+    - bc7 Use short and/or long description doc-strings for all definitions.
+
+    - bc8 Write doctest for each unit it is possible and try to reach 100% \
           path coverage.
 
-    - bc10 Sorting imports as following: \
+    - bc9 Sorting imports as following: \
         1. Import all standard modules and packages, \
         2. then all from third party, \
         3. now import your own modules or packages. \
         4. Sort import names alphabetically and separate the previous \
            defined parts with blank lines.
 
-    - bc11 Use builtin names with the "builtins." prefix.
+    - bc10 Use builtin names with the "builtins." prefix.
 
-    - bc12 Don't use any abbreviations.
+    - bc11 Don't use any abbreviations.
 
-    - bc13 Use smaller or equal cyclomatic complexity to eight.
+    - bc12 Use smaller or equal cyclomatic complexity to eight.
 
-    - bc14 Use the modules pattern described below.
+    - bc13 Use the modules pattern described below.
 
-    - bc15 Use the area statement syntax to structure your code and make it \
+    - bc14 Use the area statement syntax to structure your code and make it \
            possible to fold them in many IDE's (see Structure of meta \
            documenting below). If you are forced to indent an area nearer to \
            left border as in the logic of meta structuring use one "#" for \
            each less of indention.
 
-    - bc16 If a module could offer a usable command line interface to provide \
+    - bc15 If a module could offer a usable command line interface to provide \
            their functionality directly for other programs (maybe not written \
            in python) implement the "Runnable" interface from \
            "boostNode.extension.system.Runnable".
 
-    - bc17 Make every script or package standalone runnable. That means you \
+    - bc16 Make every script or package standalone runnable. That means you \
            should use relative import references or append your own import \
-           path dynamically generated.
+           path which is dynamically generated.
 
-    - bc18 Always think that code is more red than written.
+    - bc17 Always think that code is more red than written.
 
-    - bc19 By choosing witch quotes to use follow this priority. \
+    - bc18 By choosing witch quotes to use follow this priority. \
         1. Single quote (') \
         2. Double quote (") \
         3. Triple single quote (''') \
         4. Triple double quote (three times ") \
 
-    - bc20 Always access a static class property via the class reference \
+    - bc19 Always write a static class property via the class reference \
            like: "self.__class__.static_property". Don't use any implicit \
            references like "self.static_property".
+
+    - bc20 Always read for object properties directly, no matter if they are \
+           static or dynamic. Use "self.static_property" instead of \
+           "self.__class__.static_property".
 
     - bc21 Indent function parameter which doesn't match in one line like:
 
@@ -122,8 +140,8 @@
     ...     'parameter1', 'parameter2', 'parameter3').get('a')
     5
 
-    Structure of meta documenting classes. (see bc14 and bc15)
-    ----------------------------------------------------------
+    Structure of meta documenting classes. (see bc14)
+    -------------------------------------------------
 
     >>> # region header
     ...
@@ -263,7 +281,7 @@
     from a higher level ("j < i") you could try to use the \
     "from ... import ..." statement in the needed context dependent scope.
 
-    Module pattern (see bc16)
+    Module pattern (see bc13)
     -------------------------
 
     >>> #!/usr/bin/env python3.4
@@ -344,10 +362,10 @@
     '\\n    Module documentation which should be useable as help message fo...'
 """
 
-# # python2.7
-# # from __future__ import absolute_import, division, print_function, \
-# #     unicode_literals
-pass
+# # python3.4
+# # pass
+from __future__ import absolute_import, division, print_function, \
+    unicode_literals
 # #
 
 __author__ = 'Torben Sickert'
@@ -359,11 +377,11 @@ __maintainer_email__ = 't.sickert["~at~"]gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-# # python2.7
-# # import __builtin__ as builtins
-# # from collections import Iterable
-# # from copy import deepcopy
-import builtins
+# # python3.4
+# # import builtins
+import __builtin__ as builtins
+from collections import Iterable
+from copy import deepcopy
 # #
 import inspect
 import logging
@@ -394,81 +412,81 @@ ENCODING = 'utf_8'
 
 # region functions
 
-# # python2.7
-# # '''
-# #     Handling "builtins.str" and "builtins.unicode" in python2.7.X needs \
-# #     some much attention. Because different API's uses different types. \
-# #     The main development goes to "builtins.unicode" so working with \
-# #     boostNode means you should use them.
-# #
-# #     Every content which could contain a "builtins.str" type and may have \
-# #     non ascii-characters should be converted via the \
-# #     "boostNode.convert_to_unicode()" method.
-# # '''
-# #
-# #
-# # def convert_type_to_unicode(object):
-# #     '''Converts a generic string representable object to unicode.'''
-# #     if builtins.hasattr(object, '__unicode__'):
-# #         return object.__unicode__()
-# #     elif builtins.hasattr(object, '__str__'):
-# #         try:
-# #             object = object.__str__()
-# #         except builtins.UnicodeEncodeError:
-# #             if builtins.isinstance(object, Iterable):
-# #                 for index, item in builtins.enumerate(object):
-# #                     object[index] = convert_to_unicode(item)
-# #                 object = object.__str__()
-# #             else:
-# #                 raise
-# #         if builtins.isinstance(object, builtins.unicode):
-# #             return object
-# #         return builtins.unicode(object, ENCODING)
-# #     return builtins.unicode(object)
-# #
-# #
-# # def convert_to_unicode(object):
-# #     '''
-# #         Converts given object to its unicode string representation like \
-# #         python's native "builtins.str()" method.
-# #     '''
-# #     if builtins.isinstance(object, builtins.Exception) and builtins.hasattr(
-# #         object, 'message'
-# #     ):
-# #         object = object.message
-# #     if builtins.isinstance(object, builtins.unicode):
-# #         '''
-# #             NOTE: To force specified encoding we should encode and than \
-# #             decode here.
-# #         '''
-# #         return object
-# #     if builtins.isinstance(object, builtins.str):
-# #         return builtins.unicode(object, ENCODING)
-# #     if not builtins.isinstance(object, builtins.type):
-# #         return convert_type_to_unicode(object)
-# #     '''
-# #         NOTE: We have to avoid using an explicit encoding to mimic python \
-# #         native "builtins.str()" method behavior for getting a string \
-# #         representation.
-# #     '''
-# #     return builtins.unicode(object)
-# #
-# #
-# # def convert_to_string(object):
-# #     '''
-# #         Converts given object to its str string representation like \
-# #         python's native "builtins.str()" method.
-# #     '''
-# #     '''NOTE: We check for string type to boost already converted values.'''
-# #     if builtins.isinstance(object, builtins.str):
-# #         return object
-# #     return convert_to_unicode(object).encode(ENCODING)
-pass
+# # python3.4
+# # pass
+'''
+    Handling "builtins.str" and "builtins.unicode" in python2.7.X needs \
+    some much attention. Because different API's uses different types. \
+    The main development goes to "builtins.unicode" so working with \
+    boostNode means you should use them.
+
+    Every content which could contain a "builtins.str" type and may have \
+    non ascii-characters should be converted via the \
+    "boostNode.convert_to_unicode()" method.
+'''
+
+
+def convert_type_to_unicode(object):
+    '''Converts a generic string representable object to unicode.'''
+    if builtins.hasattr(object, '__unicode__'):
+        return object.__unicode__()
+    elif builtins.hasattr(object, '__str__'):
+        try:
+            object = object.__str__()
+        except builtins.UnicodeEncodeError:
+            if builtins.isinstance(object, Iterable):
+                for index, item in builtins.enumerate(object):
+                    object[index] = convert_to_unicode(item)
+                object = object.__str__()
+            else:
+                raise
+        if builtins.isinstance(object, builtins.unicode):
+            return object
+        return builtins.unicode(object, ENCODING)
+    return builtins.unicode(object)
+
+
+def convert_to_unicode(object):
+    '''
+        Converts given object to its unicode string representation like \
+        python's native "builtins.str()" method.
+    '''
+    if builtins.isinstance(object, builtins.Exception) and builtins.hasattr(
+        object, 'message'
+    ):
+        object = object.message
+    if builtins.isinstance(object, builtins.unicode):
+        '''
+            NOTE: To force specified encoding we should encode and than \
+            decode here.
+        '''
+        return object
+    if builtins.isinstance(object, builtins.str):
+        return builtins.unicode(object, ENCODING)
+    if not builtins.isinstance(object, builtins.type):
+        return convert_type_to_unicode(object)
+    '''
+        NOTE: We have to avoid using an explicit encoding to mimic python \
+        native "builtins.str()" method behavior for getting a string \
+        representation.
+    '''
+    return builtins.unicode(object)
+
+
+def convert_to_string(object):
+    '''
+        Converts given object to its str string representation like \
+        python's native "builtins.str()" method.
+    '''
+    '''NOTE: We check for string type to boost already converted values.'''
+    if builtins.isinstance(object, builtins.str):
+        return object
+    return convert_to_unicode(object).encode(ENCODING)
 # #
 
 
-# # python2.7 def __get_all_modules__(path=convert_to_unicode(sys.path[0])):
-def __get_all_modules__(path=sys.path[0]) -> builtins.list:
+# # python3.4 def __get_all_modules__(path=sys.path[0]) -> builtins.list:
+def __get_all_modules__(path=convert_to_unicode(sys.path[0])):
     '''
         This method provides a generic way to determine all modules in \
         current package or folder. It is useful for "__init__.py" files.
@@ -503,7 +521,7 @@ def __get_all_modules__(path=sys.path[0]) -> builtins.list:
         >>> __get_all_modules__('')
         ['highPerformanceModification']
     '''
-# # python2.7
+# # python3.4
 # #     if not path:
 # #         path = os.getcwd()
 # #     return builtins.list(builtins.set(builtins.map(
@@ -512,11 +530,10 @@ def __get_all_modules__(path=sys.path[0]) -> builtins.list:
 # #             lambda name: (
 # #                 (name.endswith('.py') or name.endswith('.pyc')) and
 # #                 not name.startswith('__init__.') and os.path.isfile(
-# #                     convert_to_string('%s%s%s' % (path, os.sep, name)))),
-# #             builtins.map(
-# #                 lambda name: convert_to_unicode(name), os.listdir(
-# #                     path[:-(builtins.len(os.path.basename(path)) + 1)] if
-# #                     os.path.isfile(path) else path))))))
+# #                     '%s%s%s' % (path, os.sep, name))),
+# #             os.listdir(
+# #                 path[:-(builtins.len(os.path.basename(path)) + 1)] if
+# #                 os.path.isfile(path) else path)))))
     if not path:
         path = os.getcwd()
     return builtins.list(builtins.set(builtins.map(
@@ -525,10 +542,11 @@ def __get_all_modules__(path=sys.path[0]) -> builtins.list:
             lambda name: (
                 (name.endswith('.py') or name.endswith('.pyc')) and
                 not name.startswith('__init__.') and os.path.isfile(
-                    '%s%s%s' % (path, os.sep, name))),
-            os.listdir(
-                path[:-(builtins.len(os.path.basename(path)) + 1)] if
-                os.path.isfile(path) else path)))))
+                    convert_to_string('%s%s%s' % (path, os.sep, name)))),
+            builtins.map(
+                lambda name: convert_to_unicode(name), os.listdir(
+                    path[:-(builtins.len(os.path.basename(path)) + 1)] if
+                    os.path.isfile(path) else path))))))
 # #
 
 # endregion
@@ -559,10 +577,10 @@ if __name__ != '__main__':
     from boostNode.aspect.signature import add_check as add_signature_check
     from boostNode.extension.native import Module
 
-# # python2.7
-# #     builtins.reload(sys)
-# #     sys.setdefaultencoding(ENCODING)
-    pass
+# # python3.4
+# #     pass
+    builtins.reload(sys)
+    sys.setdefaultencoding(ENCODING)
 # #
     try:
         '''
@@ -572,15 +590,15 @@ if __name__ != '__main__':
         add_signature_check(point_cut='%s\..*' % Module.get_package_name(
             frame=inspect.currentframe()))
     except WindowsError as exception:
-# # python2.7
+# # python3.4
 # #         logging.error(
 # #             'Running subprocesses on windows without being administrator '
 # #             "isn't possible. %s: %s", exception.__class__.__name__,
-# #             convert_to_unicode(exception))
+# #             builtins.str(exception))
         logging.error(
             'Running subprocesses on windows without being administrator '
             "isn't possible. %s: %s", exception.__class__.__name__,
-            builtins.str(exception))
+            convert_to_unicode(exception))
 # #
         sys.exit(1)
 

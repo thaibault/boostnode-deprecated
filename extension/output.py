@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.4
+#!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 
 # region header
@@ -8,10 +8,10 @@
     strings to any output stream.
 '''
 
-# # python2.7
-# # from __future__ import absolute_import, division, print_function, \
-# #     unicode_literals
-pass
+# # python3.4
+# # pass
+from __future__ import absolute_import, division, print_function, \
+    unicode_literals
 # #
 
 '''
@@ -28,31 +28,31 @@ __maintainer_email__ = 't.sickert["~at~"]gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-# # python2.7 import __builtin__ as builtins
-import builtins
+# # python3.4 import builtins
+import __builtin__ as builtins
 from copy import copy
 import inspect
 import logging
-# # python2.7 from logging import getLoggerClass, getLogger
-from logging import getLoggerClass, getLogger, LogRecord
+# # python3.4 from logging import getLoggerClass, getLogger, LogRecord
+from logging import getLoggerClass, getLogger
 from logging import StreamHandler as LoggingStreamHandler
 from logging import Formatter as LoggingFormatter
 import multiprocessing
 import os
 import sys
 import threading
-# # python2.7 import Queue as native_queue
-import queue as native_queue
+# # python3.4 import queue as native_queue
+import Queue as native_queue
 
 '''Make boostNode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
-# # python2.7 from boostNode import convert_to_string, convert_to_unicode
-pass
+# # python3.4 pass
+from boostNode import convert_to_string, convert_to_unicode
 from boostNode.extension.file import Handler as FileHandler
 from boostNode.extension.native import Module
-# # python2.7 pass
-from boostNode.extension.type import Self, SelfClass
+# # python3.4 from boostNode.extension.type import Self, SelfClass
+pass
 from boostNode.paradigm.aspectOrientation import JointPoint
 from boostNode.paradigm.objectOrientation import Class
 
@@ -189,14 +189,14 @@ class Buffer(Class, LoggingStreamHandler):
     # # # region special
 
     @JointPoint
-# # python2.7
+# # python3.4
 # #     def __init__(
-# #         self, file=None, queue=None, support_multiprocessing=False,
-# #         force_string=False
-# #     ):
+# #         self: Self, file=None, queue=None, support_multiprocessing=False
+# #     ) -> None:
     def __init__(
-        self: Self, file=None, queue=None, support_multiprocessing=False
-    ) -> None:
+        self, file=None, queue=None, support_multiprocessing=False,
+        force_string=False
+    ):
 # #
         '''
             Saves the file path in the current instance. If "file" is "None" \
@@ -214,8 +214,8 @@ class Buffer(Class, LoggingStreamHandler):
             ... ).queue # doctest: +ELLIPSIS
             <multiprocessing.queues.Queue object at ...>
         '''
-# # python2.7         self.force_string = force_string
-        pass
+# # python3.4         pass
+        self.force_string = force_string
         '''Saves the last written input.'''
         self.last_written = ''
         if support_multiprocessing:
@@ -240,14 +240,14 @@ class Buffer(Class, LoggingStreamHandler):
         '''
         self._lock = threading.Lock()
         '''Saves the current buffer content.'''
-# # python2.7
-# #         self._content = builtins.str() if self.force_string else ''
-        self._content = ''
+# # python3.4
+# #         self._content = ''
+        self._content = builtins.str() if self.force_string else ''
 # #
 
     @JointPoint
-# # python2.7     def __repr__(self):
-    def __repr__(self: Self) -> builtins.str:
+# # python3.4     def __repr__(self: Self) -> builtins.str:
+    def __repr__(self):
         '''
             Invokes if this object should describe itself by a string.
 
@@ -273,15 +273,15 @@ class Buffer(Class, LoggingStreamHandler):
             type_addition = ' with "%s"' % builtins.repr(self.file)
         elif self.queue:
             buffer_type = 'queue'
-# # python2.7
-# #         if self.force_string:
-# #             return(
-# #                 'Object of "{class_name}" ({type} buffered{type_addition})'
-# #                 ' with content "{content}".'.format(
-# #                     class_name=self.__class__.__name__,
-# #                     type=buffer_type, type_addition=type_addition,
-# #                     content=convert_to_unicode(self.content)))
-        pass
+# # python3.4
+# #         pass
+        if self.force_string:
+            return(
+                'Object of "{class_name}" ({type} buffered{type_addition})'
+                ' with content "{content}".'.format(
+                    class_name=self.__class__.__name__,
+                    type=buffer_type, type_addition=type_addition,
+                    content=convert_to_unicode(self.content)))
 # #
         return(
             'Object of "{class_name}" ({type} buffered{type_addition}) '
@@ -290,8 +290,8 @@ class Buffer(Class, LoggingStreamHandler):
                 type_addition=type_addition, content=self.content))
 
     @JointPoint
-# # python2.7     def __str__(self):
-    def __str__(self: Self) -> builtins.str:
+# # python3.4     def __str__(self: Self) -> builtins.str:
+    def __str__(self):
         '''
             Invokes if this object is tried to interpreted as string.
 
@@ -303,8 +303,8 @@ class Buffer(Class, LoggingStreamHandler):
         return self.content
 
     @JointPoint
-# # python2.7     def __nonzero__(self):
-    def __bool__(self: Self) -> builtins.bool:
+# # python3.4     def __bool__(self: Self) -> builtins.bool:
+    def __nonzero__(self):
         '''
             Invokes if this object is tried to interpreted as boolean.
 
@@ -325,8 +325,8 @@ class Buffer(Class, LoggingStreamHandler):
         # region getter
 
     @JointPoint
-# # python2.7     def get_content(self):
-    def get_content(self: Self) -> builtins.str:
+# # python3.4     def get_content(self: Self) -> builtins.str:
+    def get_content(self):
         '''
             Getter for the current content.
 
@@ -345,28 +345,28 @@ class Buffer(Class, LoggingStreamHandler):
                 self._content = ''
                 temp_buffer = []
                 while not self.queue.empty():
-# # python2.7
-# #                     temp_buffer.append(convert_to_unicode(
-# #                         self.queue.get()))
-                    temp_buffer.append(self.queue.get())
+# # python3.4
+# #                     temp_buffer.append(self.queue.get())
+                    temp_buffer.append(convert_to_unicode(
+                        self.queue.get()))
 # #
                     self._content += temp_buffer[-1]
                 for content in temp_buffer:
                     self.queue.put(content)
-# # python2.7
-# #         if self.force_string and builtins.isinstance(
-# #             self._content, builtins.unicode
-# #         ):
-# #             self._content = convert_to_string(self._content)
-        pass
+# # python3.4
+# #         pass
+        if self.force_string and builtins.isinstance(
+            self._content, builtins.unicode
+        ):
+            self._content = convert_to_string(self._content)
 # #
         return self._content
 
         # endregion
 
     @JointPoint
-# # python2.7     def write(self, content):
-    def write(self: Self, content: builtins.str) -> Self:
+# # python3.4     def write(self: Self, content: builtins.str) -> Self:
+    def write(self, content):
         '''
             Writes content to the current output buffer file. If the current \
             given file "Buffer.file" doesn't exists it will be created.
@@ -389,12 +389,12 @@ class Buffer(Class, LoggingStreamHandler):
             >>> buffer.content
             'hans'
         '''
-# # python2.7
-# #         if self.force_string and builtins.isinstance(
-# #             content, builtins.unicode
-# #         ):
-# #             content = convert_to_string(content)
-        pass
+# # python3.4
+# #         pass
+        if self.force_string and builtins.isinstance(
+            content, builtins.unicode
+        ):
+            content = convert_to_string(content)
 # #
         with self._lock:
             self.last_written = content
@@ -407,8 +407,8 @@ class Buffer(Class, LoggingStreamHandler):
         return self
 
     @JointPoint
-# # python2.7     def flush(self):
-    def flush(self: Self) -> Self:
+# # python3.4     def flush(self: Self) -> Self:
+    def flush(self):
         '''
             Flush methods usually called to guarantee that all objects putted \
             to "write()" are materialized on their provided media. This \
@@ -422,8 +422,8 @@ class Buffer(Class, LoggingStreamHandler):
         return self
 
     @JointPoint
-# # python2.7     def clear(self, delete=True):
-    def clear(self: Self, delete=True) -> builtins.str:
+# # python3.4     def clear(self: Self, delete=True) -> builtins.str:
+    def clear(self, delete=True):
         '''
             Removes the current output buffer content.
 
@@ -480,11 +480,11 @@ class Buffer(Class, LoggingStreamHandler):
             else:
                 content = self._content
                 self._content = ''
-# # python2.7
-# #         if self.force_string:
-# #             self._content = builtins.str()
-# #             content = convert_to_string(content)
-        pass
+# # python3.4
+# #         pass
+        if self.force_string:
+            self._content = builtins.str()
+            content = convert_to_string(content)
 # #
         return content
 
@@ -536,11 +536,11 @@ class Print(Class):
     # # # region special
 
     @JointPoint
-# # python2.7
-# #     def __init__(self, *output, **codewords):
-    def __init__(
-        self: Self, *output: builtins.object, **codewords: builtins.object
-    ) -> None:
+# # python3.4
+# #     def __init__(
+# #         self: Self, *output: builtins.object, **codewords: builtins.object
+# #     ) -> None:
+    def __init__(self, *output, **codewords):
 # #
         '''
             Writes something to the output buffer or prints to standard \
@@ -592,42 +592,42 @@ class Print(Class):
                 result = ''
                 while not out.empty():
                     if index != 0 and keywords['separator']:
-# # python2.7
-# #                         result += convert_to_unicode(
-# #                             keywords['separator'])
-# #                     result += convert_to_unicode(out.get())
-                        result += builtins.str(keywords['separator'])
-                    result += out.get()
+# # python3.4
+# #                         result += builtins.str(keywords['separator'])
+# #                     result += out.get()
+                        result += convert_to_unicode(
+                            keywords['separator'])
+                    result += convert_to_unicode(out.get())
 # #
                 output[index] = result
             elif index == 0:
-# # python2.7                 output[index] = convert_to_unicode(out)
-                output[index] = builtins.str(out)
+# # python3.4                 output[index] = builtins.str(out)
+                output[index] = convert_to_unicode(out)
             else:
-# # python2.7
-# #                 output[index] = '%s%s' % (convert_to_unicode(
+# # python3.4
+# #                 output[index] = '%s%s' % (builtins.str(
 # #                     keywords['separator']
-# #                 ), convert_to_unicode(out))
-                output[index] = '%s%s' % (builtins.str(
+# #                 ), builtins.str(out))
+                output[index] = '%s%s' % (convert_to_unicode(
                     keywords['separator']
-                ), builtins.str(out))
+                ), convert_to_unicode(out))
 # #
         line_replace = '\033[1A\r\033[2K' if keywords['replace'] else ''
         output = [keywords['start'], line_replace] + output + [keywords['end']]
-# # python2.7
-# #         builtins.print(*filter(lambda content: convert_to_string(
-# #             content
-# #         ), output), sep='', end='', file=keywords['buffer'])
-# #         if keywords['flush']:
-# #             sys.stdout.flush()
-        builtins.print(
-            *output, sep='', end='', file=keywords['buffer'],
-            flush=keywords['flush'])
+# # python3.4
+# #         builtins.print(
+# #             *output, sep='', end='', file=keywords['buffer'],
+# #             flush=keywords['flush'])
+        builtins.print(*filter(lambda content: convert_to_string(
+            content
+        ), output), sep='', end='', file=keywords['buffer'])
+        if keywords['flush']:
+            sys.stdout.flush()
 # #
 
     @JointPoint
-# # python2.7     def __str__(self):
-    def __str__(self: Self) -> builtins.str:
+# # python3.4     def __str__(self: Self) -> builtins.str:
+    def __str__(self):
         '''
             Is triggered if this object should be converted to string.
 
@@ -642,13 +642,13 @@ class Print(Class):
             ''
         '''
         if builtins.isinstance(self.buffer, Buffer):
-# # python2.7             return convert_to_unicode(self.buffer)
-            return builtins.str(self.buffer)
+# # python3.4             return builtins.str(self.buffer)
+            return convert_to_unicode(self.buffer)
         return ''
 
     @JointPoint
-# # python2.7     def __repr__(self):
-    def __repr__(self: Self) -> builtins.str:
+# # python3.4     def __repr__(self: Self) -> builtins.str:
+    def __repr__(self):
         '''
             Invokes if this object should describe itself by a string.
 
@@ -687,8 +687,8 @@ class ColoredFormatter(LoggingFormatter):
     '''Defines the level to color mapping.'''
 
     @JointPoint
-# # python2.7     def format(self, record):
-    def format(self: Self, record: LogRecord) -> builtins.str:
+# # python3.4     def format(self: Self, record: LogRecord) -> builtins.str:
+    def format(self, record):
         '''Appends the level specified color to the logging output.'''
         levelname = record.levelname
         if levelname in self.COLOR_TO_LEVEL_MAPPING:
@@ -740,8 +740,8 @@ class Logger(Class):
     # # # region special
 
     @JointPoint(builtins.classmethod)
-# # python2.7     def __str__(cls):
-    def __str__(cls: SelfClass) -> builtins.str:
+# # python3.4     def __str__(cls: SelfClass) -> builtins.str:
+    def __str__(cls):
         '''
             Is triggered if a "Logger" object should be converted to string.
 
@@ -759,13 +759,13 @@ class Logger(Class):
         result = ''
         for buffer in cls.buffer:
             if builtins.isinstance(buffer, Buffer):
-# # python2.7                 result += convert_to_unicode(buffer)
-                result += builtins.str(buffer)
+# # python3.4                 result += builtins.str(buffer)
+                result += convert_to_unicode(buffer)
         return result
 
     @JointPoint(builtins.classmethod)
-# # python2.7     def __repr__(cls):
-    def __repr__(cls: SelfClass) -> builtins.str:
+# # python3.4     def __repr__(cls: SelfClass) -> builtins.str:
+    def __repr__(cls):
         '''
             Invokes if this object should describe itself by a string.
 
@@ -796,26 +796,26 @@ class Logger(Class):
             formatter_string += start + builtins.repr(
                 logger.handlers[0].formatter
             ) + end
-# # python2.7
+# # python3.4
 # #         return(
 # #             'Object of "{class_name}" with logger "{handler}", formatter '
 # #             '"{formatter}" and buffer "{buffer}".'.format(
 # #                 class_name=cls.__name__, handler=handler_string,
 # #                 formatter=formatter_string,
-# #                 buffer=convert_to_unicode(cls.buffer)))
+# #                 buffer=builtins.str(cls.buffer)))
         return(
             'Object of "{class_name}" with logger "{handler}", formatter '
             '"{formatter}" and buffer "{buffer}".'.format(
                 class_name=cls.__name__, handler=handler_string,
                 formatter=formatter_string,
-                buffer=builtins.str(cls.buffer)))
+                buffer=convert_to_unicode(cls.buffer)))
 # #
 
         # # endregion
 
     @JointPoint(builtins.classmethod)
-# # python2.7     def flush(cls):
-    def flush(cls: SelfClass) -> SelfClass:
+# # python3.4     def flush(cls: SelfClass) -> SelfClass:
+    def flush(cls):
         '''
             Flushes all buffers in all logger handlers.
 
@@ -830,14 +830,14 @@ class Logger(Class):
         return cls
 
     @JointPoint(builtins.classmethod)
-# # python2.7
+# # python3.4
 # #     def get(
-# #         cls, name=__name__, level=(), buffer=(), terminator=(), format=()
-# #     ):
+# #         cls: SelfClass, name=__name__, level=(), buffer=(), terminator=(),
+# #         format=()
+# #     ) -> getLoggerClass():
     def get(
-        cls: SelfClass, name=__name__, level=(), buffer=(), terminator=(),
-        format=()
-    ) -> getLoggerClass():
+        cls, name=__name__, level=(), buffer=(), terminator=(), format=()
+    ):
 # #
         '''
             Returns a new or existing instance of a logger with given \
@@ -882,11 +882,11 @@ class Logger(Class):
         return cls.instances[-1]
 
     @JointPoint(builtins.classmethod)
-# # python2.7
-# #     def change_all(cls, level=(), buffer=(), terminator=(), format=()):
-    def change_all(
-        cls: SelfClass, level=(), buffer=(), terminator=(), format=()
-    ) -> SelfClass:
+# # python3.4
+# #     def change_all(
+# #         cls: SelfClass, level=(), buffer=(), terminator=(), format=()
+# #     ) -> SelfClass:
+    def change_all(cls, level=(), buffer=(), terminator=(), format=()):
 # #
         '''
             This method changes the given properties to all created logger \
@@ -913,8 +913,8 @@ class Logger(Class):
         '''
         cls._set_properties(level, buffer, terminator, format)
         for logger in cls.instances:
-# # python2.7             new_handler = copy(logger.handlers)
-            new_handler = logger.handlers.copy()
+# # python3.4             new_handler = logger.handlers.copy()
+            new_handler = copy(logger.handlers)
             if buffer:
                 new_handler = []
                 for new_buffer in cls.buffer:
@@ -939,12 +939,12 @@ class Logger(Class):
         # region protected
 
     @JointPoint(builtins.classmethod)
-# # python2.7
-# #     def _set_properties(cls, level, buffer, terminator, format):
-    def _set_properties(
-        cls: SelfClass, level: builtins.tuple, buffer: builtins.tuple,
-        terminator: builtins.tuple, format: builtins.tuple
-    ) -> SelfClass:
+# # python3.4
+# #     def _set_properties(
+# #         cls: SelfClass, level: builtins.tuple, buffer: builtins.tuple,
+# #         terminator: builtins.tuple, format: builtins.tuple
+# #     ) -> SelfClass:
+    def _set_properties(cls, level, buffer, terminator, format):
 # #
         '''
             This method sets the class properties.
@@ -968,13 +968,13 @@ class Logger(Class):
         return cls
 
     @JointPoint(builtins.classmethod)
-# # python2.7
-# #     def _generate_logger(cls, name, level, buffer, terminator, format):
-    def _generate_logger(
-        cls: SelfClass, name: builtins.str, level: builtins.tuple,
-        buffer: builtins.tuple, terminator: builtins.tuple,
-        format: builtins.tuple
-    ) -> getLoggerClass():
+# # python3.4
+# #     def _generate_logger(
+# #         cls: SelfClass, name: builtins.str, level: builtins.tuple,
+# #         buffer: builtins.tuple, terminator: builtins.tuple,
+# #         format: builtins.tuple
+# #     ) -> getLoggerClass():
+    def _generate_logger(cls, name, level, buffer, terminator, format):
 # #
         '''
             Creates a new logger instance by initializing all its components \
