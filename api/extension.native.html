@@ -382,6 +382,83 @@
 </dd></dl>
 
 <dl class="class">
+<dt id="boostNode.extension.native.EnsureNewMutableDefaultObject">
+<em class="property">class </em><tt class="descclassname">boostNode.extension.native.</tt><tt class="descname">EnsureNewMutableDefaultObject</tt><big>(</big><em>method</em>, <em>function=None</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.EnsureNewMutableDefaultObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>Examples:</p>
+<p>Normal Problem illustration:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="p">{}):</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">a</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">A</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">a</span>
+<span class="go">{}</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="p">()</span><span class="o">.</span><span class="n">a</span>
+<span class="go">{2: 3}</span>
+</pre></div>
+</div>
+<p>Solution with default value copy.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="p">{}):</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">a</span>
+<span class="gp">... </span>    <span class="n">__init__</span> <span class="o">=</span> <span class="n">EnsureNewMutableDefaultObject</span><span class="p">(</span><span class="n">__init__</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">A</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">a</span>
+<span class="go">{}</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="p">()</span><span class="o">.</span><span class="n">a</span>
+<span class="go">{}</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="p">{}):</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">a</span>
+<span class="gp">... </span>    <span class="n">__init__</span> <span class="o">=</span> <span class="n">EnsureNewMutableDefaultObject</span><span class="p">(</span><span class="n">__init__</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">A</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">a</span>
+<span class="go">{}</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="p">{</span><span class="mi">2</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span><span class="o">.</span><span class="n">a</span>
+<span class="go">{2: 1}</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">a</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="p">{},</span> <span class="n">d</span><span class="o">=</span><span class="p">{</span><span class="mi">2</span><span class="p">}):</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">=</span> <span class="n">c</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">pass</span>
+<span class="gp">... </span>    <span class="n">__init__</span><span class="o">.</span><span class="n">__func__</span> <span class="o">=</span> <span class="n">a</span>
+<span class="gp">... </span>    <span class="n">__init__</span> <span class="o">=</span> <span class="n">EnsureNewMutableDefaultObject</span><span class="p">(</span><span class="n">__init__</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">c</span>
+<span class="go">{}</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">c</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">c</span>
+<span class="go">{}</span>
+</pre></div>
+</div>
+<p>TODO Check branches.</p>
+<dl class="staticmethod">
+<dt id="boostNode.extension.native.EnsureNewMutableDefaultObject.get_wrapper_function">
+<em class="property">static </em><tt class="descname">get_wrapper_function</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.EnsureNewMutableDefaultObject.get_wrapper_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>This methods returns the wrapped function.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="boostNode.extension.native.InstancePropertyInitializer">
 <em class="property">class </em><tt class="descclassname">boostNode.extension.native.</tt><tt class="descname">InstancePropertyInitializer</tt><big>(</big><em>method</em>, <em>function=None</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.InstancePropertyInitializer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decorator class for automatically setting instance properties for         corresponding arguments of wrapped function.</p>
@@ -722,7 +799,7 @@
 
 <dl class="classmethod">
 <dt id="boostNode.extension.native.Module.get_context_path">
-<em class="property">classmethod </em><tt class="descname">get_context_path</tt><big>(</big><em>path=None</em>, <em>frame=&lt;frame object at 0x7f1c83a9b5d8&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_context_path" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><tt class="descname">get_context_path</tt><big>(</big><em>path=None</em>, <em>frame=&lt;frame object at 0x7ffebad5f7b0&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_context_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines the package and module level context path to a given             context or file.</p>
 <p><strong>path</strong>  - relative or absolute context or file path to normalize</p>
 <p><strong>frame</strong> - stack frame to analyse again context</p>
