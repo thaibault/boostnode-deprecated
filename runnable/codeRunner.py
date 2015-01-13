@@ -694,7 +694,7 @@ class Run(Class, Runnable):
 
             Examples:
 
-            >>> log_level_backup = Logger.default_level
+            >>> log_level_backup = Logger.level
             >>> Logger.change_all(level=('error',))
             <class 'boostNode.extension.output.Logger'>
             >>> FileHandler('temp_log_command_run_main.py').content = ''

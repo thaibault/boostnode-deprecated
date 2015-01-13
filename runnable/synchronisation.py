@@ -1120,7 +1120,7 @@ class Reflector(Class, Runnable):
             'exclude paths: "{exclude_locations}"\n'
             'native symbolic links: "{native_symbolic_link_option}"\n'.format(
                 class_name=self.__class__.__name__,
-                log_level=Logger.default_level[0],
+                log_level=Logger.level[0],
                 source_path=self.source_location.path,
                 target_path=self.target_location.path,
                 rights=self.target_rights, limit=builtins.int(self.limit),

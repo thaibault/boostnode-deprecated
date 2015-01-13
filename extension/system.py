@@ -1654,12 +1654,15 @@ class CommandLine(builtins.object):
              'action': 'store',
              'default': 'critical',
              'type': builtins.str,
-             'choices': ('debug', 'info', 'warning', 'error',
-                         'critical'),
+             'choices': (
+                'debug', 'text-debug', 'info', 'text-info', 'warning',
+                'text-warning', 'error', 'text-error', 'critical',
+                'text-critical'),
              'help': {'execute':
                       '"Defines log level of current program '
-                      'instance. (Level: \\"%s\\")" % '
-                      '"\\", \\"".join(__default_arguments__[1]'
+                      'instance. (Available level: \\"%s\\"). You can prefix '
+                      'each log level with \\"text-\\" to disable escape '
+                      'sequences." % "\\", \\"".join(__default_arguments__[1]'
                       '["specification"]["choices"])'},
              'dest': 'log_level',
              'metavar': 'LOG_LEVEL'}})
@@ -1786,7 +1789,7 @@ class CommandLine(builtins.object):
 
             Examples:
 
-            >>> log_level = Logger.default_level
+            >>> log_level = Logger.level
             >>> sys_argv_backup = copy(sys.argv)
             >>> del sys.argv[1:]
             >>> docstring_backup = sys.modules[__name__].__doc__
@@ -1854,7 +1857,15 @@ class CommandLine(builtins.object):
         '''
         if(builtins.hasattr(arguments, 'log_level') and
            arguments.log_level is not None):
-            Logger.change_all(level=(arguments.log_level,))
+            # TODO check new branches.
+            if arguments.log_level.startswith('text-'):
+                arguments.log_level = arguments.log_level[builtins.len(
+                    'text-'
+                ):]
+                Logger.change_all(
+                    level=(arguments.log_level,), colored_format=(None,))
+            else:
+                Logger.change_all(level=(arguments.log_level,))
         return cls
 
     @JointPoint(builtins.classmethod)
@@ -2122,7 +2133,7 @@ class CommandLine(builtins.object):
         platform_process_lock_directory_backup = \
             Platform.process_lock_directory
         default_print_buffer_backup = Print.default_buffer
-        log_level_backup = Logger.default_level
+        log_level_backup = Logger.level
         logger_buffer_backup = Logger.buffer
         '''Set test environment.'''
         Platform.process_lock_directory = module['scope'].__test_folder__

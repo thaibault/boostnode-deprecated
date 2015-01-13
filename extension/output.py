@@ -670,7 +670,7 @@ class Print(Class):
     # endregion
 
 
-class ColoredFormatter(LoggingFormatter):
+class ColoredLoggingFormatter(LoggingFormatter):
 
     '''
         Wraps python's native logging formatter to support level specific \
@@ -717,12 +717,14 @@ class Logger(Class):
 
     # region properties
 
-    default_level = 'critical',
+    level = 'critical',
     '''Defines the default logging level for new created logger handler.'''
-    format = (SET_ATTRIBUTE_MODE % COLOR['foreground']['cyan']) + (
+    colored_format = (SET_ATTRIBUTE_MODE % COLOR['foreground']['cyan']) + (
         '%(asctime)s - %(name)s' + (
             SET_ATTRIBUTE_MODE % RESET_ATTRIBUTE_MODE
         ) + ' - %(levelname)s - %(message)s'),
+    '''Colored output format.'''
+    format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     '''Output format.'''
     terminator = '\n',
     '''Suffix in each logging output.'''
@@ -833,10 +835,11 @@ class Logger(Class):
 # # python3.4
 # #     def get(
 # #         cls: SelfClass, name=__name__, level=(), buffer=(), terminator=(),
-# #         format=()
+# #         colored_format=(), format=()
 # #     ) -> getLoggerClass():
     def get(
-        cls, name=__name__, level=(), buffer=(), terminator=(), format=()
+        cls, name=__name__, level=(), buffer=(), terminator=(),
+        colored_format=(), format=()
     ):
 # #
         '''
@@ -844,16 +847,21 @@ class Logger(Class):
             properties. If a logger was already registered under given name \
             the existing instance is given back and a new instance otherwise.
 
-            **name**       - logger name to get
+            **name**           - logger name to get
 
-            **level**      - sets levels for all logger
+            **level**          - sets levels for all logger
 
-            **buffer**     - sets buffers for all logger
+            **buffer**         - sets buffers for all logger
 
-            **terminator** - sets an ending char for each log message in each \
-                             logger
+            **terminator**     - sets an ending char for each log message in \
+                                 each logger
 
-            **format**     - sets templates for logging messages in each logger
+            **colored_format** - sets templates for colored logging messages \
+                                 in returned logger, if "None" is given \
+                                 normal format will be used instead.
+
+            **format**         - sets templates for logging messages in each \
+                                 logger
 
             Examples:
 
@@ -869,24 +877,29 @@ class Logger(Class):
             >>> __test_buffer__.clear() # doctest: +ELLIPSIS
             '... - test... - ...CRITICAL... - Log some information.\\n'
         '''
-        for logger in cls.instances:
-            if logger.name == name:
-                if level or buffer or terminator or format:
-                    cls.instances[cls.instances.index(
-                        logger
-                    )] = cls._generate_logger(
-                        name, level, buffer, terminator, format)
-                return logger
+        for logger in builtins.filter(
+            lambda logger: logger.name == name, cls.instances
+        ):
+            if level or buffer or terminator or colored_format or format:
+                cls.instances[cls.instances.index(
+                    logger
+                )] = cls._generate_logger(
+                    name, level, buffer, terminator, colored_format, format)
+            return logger
         cls.instances.append(cls._generate_logger(
-            name, level, buffer, terminator, format))
+            name, level, buffer, terminator, colored_format, format))
         return cls.instances[-1]
 
     @JointPoint(builtins.classmethod)
 # # python3.4
 # #     def change_all(
-# #         cls: SelfClass, level=(), buffer=(), terminator=(), format=()
+# #         cls: SelfClass, level=(), buffer=(), terminator=(),
+# #         colored_format=(), format=()
 # #     ) -> SelfClass:
-    def change_all(cls, level=(), buffer=(), terminator=(), format=()):
+    def change_all(
+        cls, level=(), buffer=(), terminator=(), colored_format=(),
+        format=()
+    ):
 # #
         '''
             This method changes the given properties to all created logger \
@@ -897,41 +910,50 @@ class Logger(Class):
             edit this logger component. If you don't want to change buffer \
             leave it by its default value.
 
-            **level**      - sets levels for all logger
+            **level**          - sets levels for all logger
 
-            **buffer**     - sets buffers for all logger
+            **buffer**         - sets buffers for all logger
 
-            **terminator** - sets an ending char for each log message in each \
-                             logger
+            **terminator**     - sets an ending char for each log message in \
+                                 each logger
 
-            **format**     - sets templates for logging messages in each logger
+            **colored_format** - sets templates for colored logging messages \
+                                 in returned logger
+
+            **format**         - sets templates for logging messages in each \
+                                 logger
 
             Examples:
 
             >>> Logger.change_all() # doctest: +ELLIPSIS
             <class ...Logger...>
         '''
-        cls._set_properties(level, buffer, terminator, format)
+        cls._set_properties(level, buffer, terminator, colored_format, format)
         for logger in cls.instances:
 # # python3.4             new_handler = logger.handlers.copy()
             new_handler = copy(logger.handlers)
             if buffer:
                 new_handler = []
                 for new_buffer in cls.buffer:
-                    new_handler.append(LoggingStreamHandler(
-                        stream=new_buffer))
-            for handler, level, terminator, format in builtins.zip(
-                new_handler, cls.default_level, cls.terminator, cls.format
+                    new_handler.append(LoggingStreamHandler(stream=new_buffer))
+            for handler, level, terminator, colored_format, format in \
+            builtins.zip(
+                new_handler, cls.level, cls.terminator, cls.colored_format,
+                cls.format
             ):
-                handler.setFormatter(ColoredFormatter(format))
+                # TODO check new branches.
+                if colored_format is None:
+                    handler.setFormatter(LoggingFormatter(format))
+                else:
+                    handler.setFormatter(ColoredLoggingFormatter(
+                        colored_format))
                 handler.terminator = terminator
                 handler.setLevel(level.upper())
             for handler in logger.handlers:
                 logger.removeHandler(handler)
             for handler in new_handler:
                 logger.addHandler(handler)
-            logger.setLevel(builtins.getattr(
-                logging, cls.default_level[0].upper()))
+            logger.setLevel(builtins.getattr(logging, cls.level[0].upper()))
         return cls
 
         # endregion
@@ -942,9 +964,12 @@ class Logger(Class):
 # # python3.4
 # #     def _set_properties(
 # #         cls: SelfClass, level: builtins.tuple, buffer: builtins.tuple,
-# #         terminator: builtins.tuple, format: builtins.tuple
+# #         terminator: builtins.tuple, colored_format: builtins.tuple,
+# #         format: builtins.tuple
 # #     ) -> SelfClass:
-    def _set_properties(cls, level, buffer, terminator, format):
+    def _set_properties(
+        cls, level, buffer, terminator, colored_format, format
+    ):
 # #
         '''
             This method sets the class properties.
@@ -952,19 +977,18 @@ class Logger(Class):
             Examples:
 
             >>> Logger._set_properties(
-            ...     level=Logger.default_level, buffer=Logger.buffer,
-            ...     terminator=Logger.terminator, format=Logger.format
+            ...     level=Logger.level, buffer=Logger.buffer,
+            ...     terminator=Logger.terminator,
+            ...     colored_format=Logger.colored_format, format=Logger.format
             ... ) # doctest: +ELLIPSIS
             <class '...Logger'>
         '''
-        if level:
-            cls.default_level = level
-        if buffer:
-            cls.buffer = buffer
-        if terminator:
-            cls.terminator = terminator
-        if format:
-            cls.format = format
+        # TODO check branches.
+        scope = builtins.locals()
+        for name in builtins.filter(lambda name: scope[name], (
+            'level', 'buffer', 'terminator', 'colored_format', 'format'
+        )):
+            builtins.setattr(cls, name, scope[name])
         return cls
 
     @JointPoint(builtins.classmethod)
@@ -972,9 +996,11 @@ class Logger(Class):
 # #     def _generate_logger(
 # #         cls: SelfClass, name: builtins.str, level: builtins.tuple,
 # #         buffer: builtins.tuple, terminator: builtins.tuple,
-# #         format: builtins.tuple
+# #         colored_format: builtins.tuple, format: builtins.tuple
 # #     ) -> getLoggerClass():
-    def _generate_logger(cls, name, level, buffer, terminator, format):
+    def _generate_logger(
+        cls, name, level, buffer, terminator, colored_format, format
+    ):
 # #
         '''
             Creates a new logger instance by initializing all its components \
@@ -984,32 +1010,39 @@ class Logger(Class):
             Examples:
 
             >>> Logger._generate_logger(
-            ...     'test', ('info',), (Buffer(),), ('',), ('',)
+            ...     'test', ('info',), (Buffer(),), ('',), (''), ('',)
             ... ) # doctest: +ELLIPSIS
             <logging.Logger object at ...>
         '''
-        if not level:
-            level = cls.default_level
-        if not buffer:
-            buffer = cls.buffer
-        if not terminator:
-            terminator = cls.terminator
-        if not format:
-            format = cls.format
+        # TODO check branches.
+        properties = []
+        for property_name in (
+            'level', 'buffer', 'terminator', 'colored_format', 'format'
+        ):
+            properties.append(
+                builtins.locals()[property_name] if builtins.locals()[
+                    property_name
+                ] else builtins.getattr(cls, property_name))
         for handler in getLogger(name).handlers:
             getLogger(name).removeHandler(handler)
         logger = getLogger(name)
         logger.propagate = False
-        for _buffer, _terminator, _level, _format in builtins.zip(
-            buffer, terminator, level, format
-        ):
+        for _level, _buffer, _terminator, _colored_format, _format in \
+        builtins.zip(properties[0], properties[1], properties[2], properties[3], properties[4]):
             handler = LoggingStreamHandler(stream=_buffer)
             handler.terminator = _terminator
             handler.setLevel(_level.upper())
-            handler.setFormatter(ColoredFormatter(_format))
+            # TODO check new branches
+            if _colored_format is None:
+                handler.setFormatter(LoggingFormatter(_format))
+            else:
+                handler.setFormatter(ColoredLoggingFormatter(_colored_format))
             logger.addHandler(handler)
-        '''Set meta logger level to first given level.'''
-        logger.setLevel(builtins.getattr(logging, level[0].upper()))
+        '''
+            Set meta logger level to first given level (level is first \
+            property).
+        '''
+        logger.setLevel(builtins.getattr(logging, properties[0][0].upper()))
         return logger
 
         # endregion
