@@ -3403,8 +3403,7 @@ class Handler(Class):
                     self.change_right(
                         right=os.stat(convert_to_string(
                             self._path
-                        )).st_mode | stat.S_IWRITE,
-                        octal=False)
+                        )).st_mode | stat.S_IWRITE, octal=False)
                     shutil.rmtree(convert_to_string(
                         self._path
                     ), *arguments, **keywords)
@@ -3531,8 +3530,7 @@ class Handler(Class):
                     self.change_right(
                         right=os.stat(convert_to_string(
                             self._path
-                        )).st_mode | stat.S_IWRITE,
-                        octal=False)
+                        )).st_mode | stat.S_IWRITE, octal=False)
                     os.remove(convert_to_sting(
                         self._path
                     ), *arguments, **keywords)

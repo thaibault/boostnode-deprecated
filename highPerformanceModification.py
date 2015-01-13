@@ -25,6 +25,7 @@ __version__ = '1.0'
 # # python3.4 import builtins
 import __builtin__ as builtins
 from collections import Iterable
+from copy import copy
 import inspect
 import os
 import sys
@@ -141,6 +142,11 @@ def template_parser_render(
     if '<%' not in self.content:
         self.output = self.content
         return self
+    '''
+        NOTE: We have to copy mapping to avoid changing the mutable default \
+        value in this function signature.
+    '''
+    mapping = copy(mapping)
     mapping.update({'__builtins__': self.builtins})
     mapping.update(keywords)
     if self.cache:

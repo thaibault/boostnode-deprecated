@@ -1672,7 +1672,7 @@ class CommandLine(builtins.object):
              'type': builtins.str,
              'choices': {'execute': 'objects'},
              'help': {'execute':
-                      '"Select a callable module object to run. '
+                      '"Select a callable module object to run or test. '
                       '(Objects: \\"%s\\")" % "\\", \\"".join(objects)'},
              'dest': 'module_object',
              'metavar': 'CALLABLE_MODULE_OBJECT'}},
@@ -1680,13 +1680,13 @@ class CommandLine(builtins.object):
          'specification': {
              'action': 'store_true',
              'default': False,
-             'help': 'Test current library.',
+             'help': 'Test current module or given callable.',
              'dest': 'test'}},
         {'arguments': ('-v', '--verbose-test'),
          'specification': {
              'action': 'store_true',
              'default': False,
-             'help': 'Test current library verbosely.',
+             'help': 'Test current module or given callable verbosely.',
              'dest': 'verbose_test'}},
         {'arguments': ('-m', '--meta-help'),
          'specification': {
@@ -1786,8 +1786,6 @@ class CommandLine(builtins.object):
 
             Examples:
 
-            >>> from copy import copy
-
             >>> log_level = Logger.default_level
             >>> sys_argv_backup = copy(sys.argv)
             >>> del sys.argv[1:]
@@ -1812,6 +1810,11 @@ class CommandLine(builtins.object):
         '''
         version = cls._get_version(version, module_name)
         description = cls._get_description(description, module_name, version)
+        '''
+            NOTE: We have to copy scope to avoid changing the mutable default \
+            value in this function signature.
+        '''
+        scope = copy(scope)
         scope.update({
             '__version_string__': version,
             '__default_arguments__': cls.DEFAULT_ARGUMENTS,
@@ -2073,13 +2076,19 @@ class CommandLine(builtins.object):
             elif given_arguments.verbose_test or given_arguments.test or test:
                 cls.test_module(
                     module, temp_file_patterns,
-                    verbose=given_arguments.verbose_test)
+                    verbose=given_arguments.verbose_test,
+                    callable_name=None if given_arguments.module_object is \
+                    False else given_arguments.module_object)
             elif given_arguments.module_object is not False:
+                '''
+                    NOTE: We have to copy caller keywords to avoid changing \
+                    the mutable default value in this function signature.
+                '''
                 cls._call_module_object(
                     module, callable_object_names,
                     object_name=given_arguments.module_object,
                     caller_arguments=caller_arguments,
-                    caller_keywords=caller_keywords)
+                    caller_keywords=copy(caller_keywords))
             else:
                 return True
             return False
@@ -2089,9 +2098,11 @@ class CommandLine(builtins.object):
 # # python3.4
 # #     def test_module(
 # #         cls: SelfClass, module: builtins.dict,
-# #         temp_file_patterns: Iterable, verbose=False
+# #         temp_file_patterns: Iterable, verbose=False, callable_name=None
 # #     ) -> SelfClass:
-    def test_module(cls, module, temp_file_patterns, verbose):
+    def test_module(
+        cls, module, temp_file_patterns, verbose, callable_name=None
+    ):
 # #
         '''
             Test a given module's doctests.
@@ -2102,6 +2113,9 @@ class CommandLine(builtins.object):
 
             **verbose**            - indicates weather testing output should \
                                      be verbose
+
+            **callable_name**      - if provided only given callable name \
+                                     will be checked.
         '''
         module = cls._extend_module_for_testing(module)
         '''Backup old runtime environment.'''
@@ -2116,10 +2130,19 @@ class CommandLine(builtins.object):
         Logger.change_all(
             level=('info',), buffer=(module['scope'].__test_buffer__,))
 # # python3.4
-# #         doctest.testmod(
-# #             module['scope'], verbose=verbose,
-# #             optionflags=doctest.DONT_ACCEPT_TRUE_FOR_1 |
-# #             doctest.REPORT_ONLY_FIRST_FAILURE | doctest.FAIL_FAST)
+# #         # TODO check new branches.
+# #         if callable_name is None:
+# #             doctest.testmod(
+# #                 module['scope'], verbose=verbose,
+# #                 optionflags=doctest.DONT_ACCEPT_TRUE_FOR_1 |
+# #                 doctest.REPORT_ONLY_FIRST_FAILURE | doctest.FAIL_FAST)
+# #         else:
+# #             doctest.run_docstring_examples(
+# #                 builtins.getattr(module['scope'], callable_name),
+# #                 module['scope'].__dict__, verbose=verbose,
+# #                 name=callable_name,
+# #                 optionflags=doctest.DONT_ACCEPT_TRUE_FOR_1 |
+# #                 doctest.REPORT_ONLY_FIRST_FAILURE | doctest.FAIL_FAST)
         native_output_checker = doctest.OutputChecker.check_output
 
         def check_output(
@@ -2139,10 +2162,18 @@ class CommandLine(builtins.object):
             return native_output_checker(
                 output_checker_instance, want, got, *arguments, **keywords)
         doctest.OutputChecker.check_output = check_output
-        doctest.testmod(
-            module['scope'], verbose=verbose,
-            optionflags=doctest.DONT_ACCEPT_TRUE_FOR_1 |
-            doctest.REPORT_ONLY_FIRST_FAILURE)
+        if callable_name is None:
+            doctest.testmod(
+                module['scope'], verbose=verbose,
+                optionflags=doctest.DONT_ACCEPT_TRUE_FOR_1 |
+                doctest.REPORT_ONLY_FIRST_FAILURE)
+        else:
+            doctest.run_docstring_examples(
+                builtins.getattr(module['scope'], callable_name),
+                module['scope'].__dict__, verbose=verbose,
+                name=callable_name,
+                optionflags=doctest.DONT_ACCEPT_TRUE_FOR_1 |
+                doctest.REPORT_ONLY_FIRST_FAILURE)
 # #
         '''Recover old runtime environment.'''
         Logger.change_all(level=log_level_backup, buffer=logger_buffer_backup)
@@ -2864,8 +2895,6 @@ class CommandLine(builtins.object):
             Handle packages in current directory or package.
 
             Examples:
-
-            >>> from copy import copy
 
             >>> sys_argv_backup = copy(sys.argv)
 

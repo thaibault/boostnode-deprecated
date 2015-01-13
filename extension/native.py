@@ -50,8 +50,7 @@ import os
 import re as regularExpression
 import sys
 import time
-# # python3.4 import types
-pass
+import types
 
 '''Make boostNode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
@@ -71,6 +70,134 @@ from boostNode.paradigm.objectOrientation import Class
 # TODO handle utc
 
 # region classes
+
+class EnsureNewMutableDefaultObject(FunctionDecorator):
+
+    '''
+        TODO
+
+        Examples:
+
+        Normal Problem illustration:
+
+        >>> class A:
+        ...     def __init__(self, a={}): self.a = a
+
+        >>> a = A()
+        >>> a.a
+        {}
+
+        >>> a.a[2] = 3
+        >>> A().a
+        {2: 3}
+
+        Solution with default value copy.
+
+        >>> class A:
+        ...     def __init__(self, a={}): self.a = a
+        ...     __init__ = EnsureNewMutableDefaultObject(__init__)
+
+        >>> a = A()
+        >>> a.a
+        {}
+
+        >>> a.a[2] = 3
+        >>> A().a
+        {}
+
+        >>> class A:
+        ...     def __init__(self, a={}): self.a = a
+        ...     __init__ = EnsureNewMutableDefaultObject(__init__)
+
+        >>> a = A()
+        >>> a.a
+        {}
+
+        >>> a.a[2] = 3
+        >>> A(a={2: 1}).a
+        {2: 1}
+
+        >>> class A:
+        ...     def a(self, a, b=3, c={}, d={2}): self.c = c
+        ...     def __init__(self): pass
+        ...     __init__.__func__ = a
+        ...     __init__ = EnsureNewMutableDefaultObject(__init__)
+
+        >>> a = A(2)
+        >>> a.c
+        {}
+
+        >>> a.c[2] = 3
+        >>> A(2).c
+        {}
+
+        TODO Check branches.
+    '''
+
+    # region properties
+
+    IMMUTABLE_OBJECTS = (
+        builtins.tuple, builtins.bool, builtins.str, builtins.int,
+        builtins.float, types.FunctionType, types.MethodType)
+    '''
+        Defines all argument names which will be ignored by generating \
+        instance properties.
+    '''
+
+    # endregion
+
+    # region dynamic methods
+
+    # # region public
+
+    @JointPoint
+# # python3.4
+# #     def get_wrapper_function(
+# #         self: Self
+# #     ) -> (types.FunctionType, types.MethodType):
+    def get_wrapper_function(self):
+# #
+        '''This methods returns the wrapped function.'''
+        @functools.wraps(self.__func__)
+        def wrapper_function(*arguments, **keywords):
+            '''
+                Wrapper function for coping mutable default values.
+
+                Given arguments and keywords are forwarded to wrapped function.
+            '''
+            '''Unpack wrapper methods.'''
+            while builtins.hasattr(self.__func__, '__func__'):
+                self.__func__ = self.__func__.__func__
+            arguments = self._determine_arguments(arguments)
+            '''
+                We have to bind variables to recognize keyword arguments \
+                which are given as positional arguments.
+            '''
+            given_arguments = inspect.signature(self.__func__).bind(
+                *arguments, **keywords
+            ).arguments
+            for name, parameter in inspect.signature(
+                self.__func__
+            ).parameters.items():
+                '''
+                    Ignore given, immutable or arguments without a default \
+                    value.
+                '''
+                if not (
+                    parameter.default in (parameter.empty, None, Null) or
+                    name in given_arguments or builtins.isinstance(
+                        parameter.default, self.IMMUTABLE_OBJECTS)
+                ):
+                    keywords[name] = copy(parameter.default)
+            return self.__func__(*arguments, **keywords)
+# # python3.4         pass
+        wrapper_function.__wrapped__ = self.__func__
+        return wrapper_function
+
+        # endregion
+
+    # endregion
+
 
 class ClassPropertyInitializer(FunctionDecorator):
 
@@ -3621,11 +3748,9 @@ class Module(Object):
         for module in modules:
             module_file = FileHandler(location=module + os.extsep + extension)
             results.append(Platform.run(
-                command=program,
-                command_arguments=builtins.list(
+                command=program, command_arguments=builtins.list(
                     arguments
-                ) + [module_file.path],
-                log=log, **keywords))
+                ) + [module_file.path], log=log, **keywords))
         result = ['', '']
         first_standard_output = first_error_output = True
         for result_element in results:
@@ -3768,10 +3893,14 @@ class Module(Object):
             >>> sys.argv = command_line_arguments_save
         '''
         from boostNode.extension.system import CommandLine
+        '''
+            NOTE: We have to copy caller keywords to avoid changing the \
+            mutable default value in this function signature.
+        '''
         CommandLine.generic_module_interface(
             module=cls.extend(name, frame),
             default_caller=default_caller, caller_arguments=caller_arguments,
-            caller_keywords=caller_keywords)
+            caller_keywords=copy(caller_keywords))
         return cls
 
     @JointPoint(builtins.classmethod)

@@ -460,8 +460,8 @@ class Reflector(Class, Runnable):
                 source_path=self.source_location.path,
                 target_path=self.target_location.path,
                 limit=FileHandler.determine_size_from_string(
-                    size_and_unit=self.given_limit),
-                priority_locations='", "'.join(self.priority_locations),
+                    size_and_unit=self.given_limit
+                ), priority_locations='", "'.join(self.priority_locations),
                 exclude_locations='", "'.join(self.exclude_locations)))
 
         # # endregion
@@ -688,8 +688,7 @@ class Reflector(Class, Runnable):
         __logger__.info('Create reflection structure.')
         self.source_location.iterate_directory(
             function=self._create_reflection_structure,
-            target=self.target_location,
-            recursive_in_link=False)
+            target=self.target_location, recursive_in_link=False)
         __logger__.info('Create reflection files.')
         return self._create_reflection_files()
 
@@ -1426,8 +1425,7 @@ class Reflector(Class, Runnable):
                     source_file.path)
                 if source_file.is_file():
                     source_file.remove_file()
-                return source_file.make_directory(
-                    right=self.target_rights)
+                return source_file.make_directory(right=self.target_rights)
             return True
         return False
 

@@ -466,9 +466,13 @@ class JointPointHandler(Class):
 # #         argument_specifications = inspect.signature(
 # #             self.__func__
 # #         ).parameters
-# #         bound_arguments = inspect.signature(self.__func__).bind(
-# #             *self.arguments, **self.keywords)
-# #         for name, value in bound_arguments.arguments.items():
+# #         '''
+# #             We have to bind variables to recognize keyword arguments which \
+# #             are given as positional arguments.
+# #         '''
+# #         for name, value in inspect.signature(self.__func__).bind(
+# #             *self.arguments, **self.keywords
+# #         ).arguments.items():
 # #             if(argument_specifications[name].kind is
 # #                inspect.Parameter.VAR_POSITIONAL):
 # #                 for index, positional_value in builtins.enumerate(

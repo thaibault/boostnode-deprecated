@@ -1005,6 +1005,10 @@ class Parser(Class, Runnable):
             '''Avoid a lot of calculations if possible.'''
             self.output = self.content.rstrip()
             return self
+        '''
+            NOTE: We have to copy mapping to avoid changing the mutable \
+            default value in this function signature.
+        '''
         mapping = copy(mapping)
         mapping.update({'__builtins__': self.builtins})
         mapping.update(keywords)
@@ -1014,16 +1018,15 @@ class Parser(Class, Runnable):
             else:
                 template_hash = self.file.path.replace(os.sep, '_')
             if self.full_caching:
-                full_cache_file = FileHandler(
-                    location='%s/%s.txt' % (
-                        FileHandler(
-                            location=self.cache.path + template_hash,
-                            make_directory=True
-                        ).path, builtins.str(
-                            builtins.hash(Dictionary(
-                                content=mapping
-                            ).get_immutable(exclude=builtins.tuple(
-                                self._builtins.keys()))))))
+                full_cache_file = FileHandler(location='%s/%s.txt' % (
+                    FileHandler(
+                        location=self.cache.path + template_hash,
+                        make_directory=True
+                    ).path, builtins.str(
+                        builtins.hash(Dictionary(
+                            content=mapping
+                        ).get_immutable(exclude=builtins.tuple(
+                            self._builtins.keys()))))))
                 if full_cache_file:
                     self._output.write(full_cache_file.content)
                     return self
@@ -1984,8 +1987,8 @@ class Parser(Class, Runnable):
             in template context.
         '''
         '''
-            NOTE: Force python to swap reference to default scope value. This \
-            enables a real namespace for included files.
+            NOTE: We have to copy mapping to avoid changing the mutable \
+            default value in this function signature.
         '''
         internal_scope = copy(scope)
         internal_scope.update(keywords)
