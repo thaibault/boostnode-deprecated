@@ -173,12 +173,12 @@
 </dd></dl>
 
 <dl class="class">
-<dt id="boostNode.extension.output.ColoredFormatter">
-<em class="property">class </em><tt class="descclassname">boostNode.extension.output.</tt><tt class="descname">ColoredFormatter</tt><big>(</big><em>fmt=None</em>, <em>datefmt=None</em><big>)</big><a class="headerlink" href="#boostNode.extension.output.ColoredFormatter" title="Permalink to this definition">¶</a></dt>
+<dt id="boostNode.extension.output.ColoredLoggingFormatter">
+<em class="property">class </em><tt class="descclassname">boostNode.extension.output.</tt><tt class="descname">ColoredLoggingFormatter</tt><big>(</big><em>fmt=None</em>, <em>datefmt=None</em><big>)</big><a class="headerlink" href="#boostNode.extension.output.ColoredLoggingFormatter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wraps python&#8217;s native logging formatter to support level specific         colors.</p>
 <dl class="staticmethod">
-<dt id="boostNode.extension.output.ColoredFormatter.format">
-<em class="property">static </em><tt class="descname">format</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.output.ColoredFormatter.format" title="Permalink to this definition">¶</a></dt>
+<dt id="boostNode.extension.output.ColoredLoggingFormatter.format">
+<em class="property">static </em><tt class="descname">format</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.output.ColoredLoggingFormatter.format" title="Permalink to this definition">¶</a></dt>
 <dd><p>Appends the level specified color to the logging output.</p>
 </dd></dl>
 
@@ -193,10 +193,11 @@
 <em class="property">static </em><tt class="descname">change_all</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.output.Logger.change_all" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method changes the given properties to all created logger             instances and saves the given properties as default properties             for future created logger instances.</p>
 <p>Note that every argument except buffer setted to &#8220;None&#8221; will not             edit this logger component. If you don&#8217;t want to change buffer             leave it by its default value.</p>
-<p><strong>level</strong>      - sets levels for all logger</p>
-<p><strong>buffer</strong>     - sets buffers for all logger</p>
-<p><strong>terminator</strong> - sets an ending char for each log message in each                              logger</p>
-<p><strong>format</strong>     - sets templates for logging messages in each logger</p>
+<p><strong>level</strong>          - sets levels for all logger</p>
+<p><strong>buffer</strong>         - sets buffers for all logger</p>
+<p><strong>terminator</strong>     - sets an ending char for each log message in                                  each logger</p>
+<p><strong>colored_format</strong> - sets templates for colored logging messages                                  in returned logger</p>
+<p><strong>format</strong>         - sets templates for logging messages in each                                  logger</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Logger</span><span class="o">.</span><span class="n">change_all</span><span class="p">()</span> 
 <span class="go">&lt;class ...Logger...&gt;</span>
@@ -219,11 +220,12 @@
 <dt id="boostNode.extension.output.Logger.get">
 <em class="property">static </em><tt class="descname">get</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.output.Logger.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a new or existing instance of a logger with given             properties. If a logger was already registered under given name             the existing instance is given back and a new instance otherwise.</p>
-<p><strong>name</strong>       - logger name to get</p>
-<p><strong>level</strong>      - sets levels for all logger</p>
-<p><strong>buffer</strong>     - sets buffers for all logger</p>
-<p><strong>terminator</strong> - sets an ending char for each log message in each                              logger</p>
-<p><strong>format</strong>     - sets templates for logging messages in each logger</p>
+<p><strong>name</strong>           - logger name to get</p>
+<p><strong>level</strong>          - sets levels for all logger</p>
+<p><strong>buffer</strong>         - sets buffers for all logger</p>
+<p><strong>terminator</strong>     - sets an ending char for each log message in                                  each logger</p>
+<p><strong>colored_format</strong> - sets templates for colored logging messages                                  in returned logger, if &#8220;None&#8221; is given                                  normal format will be used instead.</p>
+<p><strong>format</strong>         - sets templates for logging messages in each                                  logger</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">logger_a</span> <span class="o">=</span> <span class="n">Logger</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">,</span> <span class="nb">buffer</span><span class="o">=</span><span class="p">(</span><span class="n">__test_buffer__</span><span class="p">,))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">logger_b</span> <span class="o">=</span> <span class="n">Logger</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">)</span>
