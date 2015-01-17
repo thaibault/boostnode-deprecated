@@ -22,9 +22,9 @@
     Additional conventions beside pep8 (bcX := boostNode convention number X)
     -------------------------------------------------------------------------
 
-    - bc1 Only use utf-8 file encoding and unix line feeds (\n)
-        - bad: text...\r\n or text...\r
-        - good: text...\n
+    - bc1 Only use utf-8 file encoding and unix line feeds (\\n)
+        - bad: text...\\r\\n or text...\\r
+        - good: text...\\n
 
     - bc2 Don't use tabulators instead of whitespaces. Always indent with 4 \
           whitespaces.
