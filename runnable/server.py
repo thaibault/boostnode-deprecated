@@ -943,7 +943,7 @@ class Web(Class, Runnable):
         '''
 # # python3.4
 # #         pass
-        force_stopping, keywords = Dictionary(keywords).pop(
+        force_stopping, keywords = Dictionary(keywords).pop_from_keywords(
             name='force_stopping', default_value=False)
 # #
         if self.__dict__.get('service'):

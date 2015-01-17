@@ -2806,7 +2806,7 @@ class Dictionary(Object, builtins.dict):
 # #                 ) else key, strict=True if strict is None else strict
 # #             ), value_wrapper=lambda key, value:
 # #                self._convert_to_known_type(key, value, strict), **keywords)
-        strict, keywords = Dictionary(keywords).pop(
+        strict, keywords = Dictionary(keywords).pop_from_keywords(
             name='strict', default_value=True)
         return self.convert(
             *arguments,
@@ -2824,10 +2824,10 @@ class Dictionary(Object, builtins.dict):
 
     @JointPoint
 # # python3.4
-# #     def pop(
+# #     def pop_from_keywords(
 # #         self: Self, name: builtins.str, default_value=None
 # #     ) -> builtins.tuple:
-    def pop(self, name, default_value=None):
+    def pop_from_keywords(self, name, default_value=None):
 # #
         '''
             Get a keyword element as it would be set by a default value. If \
@@ -2840,16 +2840,19 @@ class Dictionary(Object, builtins.dict):
             **default_value** - value to return if requested key isn't \
                                 present in current dictionary instance.
 
+            Returns a tuple with requested value as first item and internal \
+            dictionary as second.
+
             Examples:
 
             >>> dictionary = Dictionary({'hans': 'peter', 5: 3})
-            >>> dictionary.pop('hans', 5)
+            >>> dictionary.pop_from_keywords('hans', 5)
             ('peter', {5: 3})
 
-            >>> dictionary.pop('hans', 5)
+            >>> dictionary.pop_from_keywords('hans', 5)
             (5, {5: 3})
 
-            >>> Dictionary({5: 3}).pop('hans', True)
+            >>> Dictionary({5: 3}).pop_from_keywords('hans', True)
             (True, {5: 3})
         '''
         if name in self.content:

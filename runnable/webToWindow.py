@@ -370,7 +370,7 @@ class Browser(Class, Runnable):
         '''
 # # python3.4
 # #         pass
-        reason, keywords = Dictionary(content=keywords).pop(
+        reason, keywords = Dictionary(content=keywords).pop_from_keywords(
             name='reason', default_value='')
 # #
         if self.__dict__.get('window') is not None:

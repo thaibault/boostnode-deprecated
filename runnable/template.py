@@ -1869,9 +1869,9 @@ class Parser(Class, Runnable):
 # # python3.4
 # #             pass
             keywords_dictionary = Dictionary(content=keywords)
-            indent, keywords = keywords_dictionary.pop(
+            indent, keywords = keywords_dictionary.pop_from_keywords(
                 name='indent', default_value=True)
-            indent_space, keywords = keywords_dictionary.pop(
+            indent_space, keywords = keywords_dictionary.pop_from_keywords(
                 name='indent_space', default_value='')
 # #
             if indent and indent_space:

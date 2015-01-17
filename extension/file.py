@@ -1587,9 +1587,11 @@ class Handler(Class):
 # # python3.4
 # #         pass
         keywords_dictionary = Dictionary(content=keywords)
-        output_with_root_prefix, keywords = keywords_dictionary.pop(
+        output_with_root_prefix, keywords = \
+        keywords_dictionary.pop_from_keywords(
             name='output_with_root_prefix')
-        force_windows_behavior, keywords = keywords_dictionary.pop(
+        force_windows_behavior, keywords = \
+        keywords_dictionary.pop_from_keywords(
             name='force_windows_behavior', default_value=False)
 # #
         path = self.get_path(output_with_root_prefix=output_with_root_prefix)
@@ -1649,7 +1651,7 @@ class Handler(Class):
 # #         pass
         output_with_root_prefix, keywords = Dictionary(
             content=keywords
-        ).pop(name='output_with_root_prefix')
+        ).pop_from_keywords(name='output_with_root_prefix')
 # #
         if self._has_extension:
 # # python3.4
@@ -2229,8 +2231,9 @@ class Handler(Class):
         '''
 # # python3.4
 # #         pass
-        respect_root_path, keywords = Dictionary(content=keywords).pop(
-            name='respect_root_path')
+        respect_root_path, keywords = Dictionary(
+            content=keywords
+        ).pop_from_keywords(name='respect_root_path')
 # #
         return self.move(
             target=self.get_path(
@@ -3313,8 +3316,9 @@ class Handler(Class):
         '''
 # # python3.4
 # #         pass
-        respect_root_path, keywords = Dictionary(content=keywords).pop(
-            name='respect_root_path')
+        respect_root_path, keywords = Dictionary(
+            content=keywords
+        ).pop_from_keywords(name='respect_root_path')
 # #
         target = self.get_path(
             location=target, respect_root_path=respect_root_path,
@@ -3503,7 +3507,8 @@ class Handler(Class):
 # #         pass
         force_windows_behavior, keywords = Dictionary(
             content=keywords
-        ).pop(name='force_windows_behavior', default_value=False)
+        ).pop_from_keywords(
+            name='force_windows_behavior', default_value=False)
 # #
         if self.is_file():
             if(self.is_symbolic_link(allow_portable_link=False) and
@@ -3671,8 +3676,8 @@ class Handler(Class):
 # # python3.4
 # #         pass
         default_keywords = Dictionary(content=keywords)
-        right, keywords = default_keywords.pop(name='right')
-        octal, keywords = default_keywords.pop(
+        right, keywords = default_keywords.pop_from_keywords(name='right')
+        octal, keywords = default_keywords.pop_from_keywords(
             name='octal', default_value=True)
 # #
         target = self.__class__(location=target)
@@ -3778,9 +3783,9 @@ class Handler(Class):
 # # python3.4
 # #         os.mkdir(self._path, *arguments, **keywords)
         default_keywords = Dictionary(content=keywords)
-        right, keywords = default_keywords.pop(
+        right, keywords = default_keywords.pop_from_keywords(
             name='right', default_value=700)
-        octal, keywords = default_keywords.pop(
+        octal, keywords = default_keywords.pop_from_keywords(
             name='octal', default_value=True)
         os.mkdir(convert_to_string(self._path), *arguments, **keywords)
 # #
@@ -4076,8 +4081,9 @@ class Handler(Class):
         '''
 # # python3.4
 # #         pass
-        respect_root_path, keywords = Dictionary(content=keywords).pop(
-            name='respect_root_path')
+        respect_root_path, keywords = Dictionary(
+            content=keywords
+        ).pop_from_keywords(name='respect_root_path')
 # #
         shutil.copytree(
             src=self._path, dst=self.get_path(
@@ -4554,9 +4560,10 @@ class Handler(Class):
 # # python3.4
 # #         pass
         keywords_dictionary = Dictionary(content=keywords)
-        force, keywords = keywords_dictionary.pop(
+        force, keywords = keywords_dictionary.pop_from_keywords(
             name='force', default_value=False)
-        relative, keywords = keywords_dictionary.pop(name='relative')
+        relative, keywords = keywords_dictionary.pop_from_keywords(
+            name='relative')
 # #
         target = self.__class__(location=target)
         if force:
@@ -4986,7 +4993,8 @@ class Handler(Class):
 # #         pass
         force_windows_behavior, keywords = Dictionary(
             content=keywords
-        ).pop(name='force_windows_behavior', default_value=False)
+        ).pop_from_keywords(
+            name='force_windows_behavior', default_value=False)
 # #
         target_path = target._path
         if target._path.endswith(os.sep):

@@ -413,11 +413,12 @@ class Runnable(builtins.object):
 # # python3.4
 # #         pass
         keywords_dictionary = Dictionary(keywords)
-        reason, keywords = keywords_dictionary.pop(
+        reason, keywords = keywords_dictionary.pop_from_keywords(
             name='reason', default_value='')
-        given_signal_number, keywords = keywords_dictionary.pop(
+        given_signal_number, keywords = \
+        keywords_dictionary.pop_from_keywords(
             name='given_signal_number')
-        force_stopping, keywords = keywords_dictionary.pop(
+        force_stopping, keywords = keywords_dictionary.pop_from_keywords(
             name='force_stopping', default_value=False)
 # #
         if not reason:
@@ -469,11 +470,11 @@ class Runnable(builtins.object):
 # # python3.4
 # #         pass
         keywords_dictionary = Dictionary(keywords)
-        exit, keywords = keywords_dictionary.pop(
+        exit, keywords = keywords_dictionary.pop_from_keywords(
             name='exit', default_value=True)
-        force_stopping, keywords = keywords_dictionary.pop(
+        force_stopping, keywords = keywords_dictionary.pop_from_keywords(
             name='force_stopping')
-        signal_name, keywords = keywords_dictionary.pop(
+        signal_name, keywords = keywords_dictionary.pop_from_keywords(
             name='signal_name', default_value=False)
 # #
         if self is not None:
