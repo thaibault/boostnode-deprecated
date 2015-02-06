@@ -848,6 +848,7 @@
 <p><strong>request_whitelist</strong>                   - A whitelist for requests.                                                   All requests which doesn&#8217;t                                                   match to one of these will                                                   be answered with an 404                                                   error code.</p>
 <p><strong>request_blacklist</strong>                   - A blacklist for requests to                                                   answer with a 404 error code.</p>
 <p><strong>same_process_request_whitelist</strong>      - Requests which matches one                                                   one of theses patterns                                                   should be run in same                                                   process as the server                                                   itself. This is usually                                                   necessary if you plan to                                                   write in inter thread                                                   shared data.</p>
+<p><strong>same_process_request_blacklist</strong>      - Requests which matches one                                                   one of theses patterns                                                   could be run in different                                                   processes as the server                                                   itself. This is usually                                                   possible if you not plan to                                                   write in inter thread                                                   shared data.</p>
 <p><strong>static_mime_type_pattern</strong>            - Defines which mime types                                                   should be interpreted as                                                   static.</p>
 <p><strong>dynamic_mime_type_pattern</strong>           - Defines which mime types                                                   should be interpreted as                                                   dynamic.</p>
 <p><strong>compressible_mime_type_pattern</strong>      - Defines which mime types                                                   could be returned in a                                                   compressed way.</p>
@@ -882,9 +883,6 @@
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Web</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">public_key_file</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span>
 <span class="gp">... </span><span class="p">)</span> 
-<span class="gt">Traceback (most recent call last):</span>
-<span class="c">...</span>
-<span class="gr">ServerError</span>: <span class="n">Given public key file path &quot;...&quot; ...</span>
 <span class="gt">Traceback (most recent call last):</span>
 <span class="c">...</span>
 <span class="gr">ServerError</span>: <span class="n">Given public key file path &quot;...&quot; ...</span>
