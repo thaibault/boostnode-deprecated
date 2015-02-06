@@ -270,7 +270,20 @@ class MultiProcessingHTTPServer(
             ):
 # #
                 return True
-        return False
+        if self.web.same_process_request_blacklist:
+            for pattern in self.web.same_process_request_blacklist:
+# # python3.4
+# #                 if regularExpression.compile(pattern).fullmatch(
+# #                     first_request_line.decode()
+# #                 ):
+                if regularExpression.compile('(?:%s)$' % pattern).match(
+                    first_request_line
+                ):
+# #
+                    return False
+        else:
+            return False
+        return True
 
     @JointPoint
 # # python3.4
@@ -361,6 +374,10 @@ class MultiProcessingHTTPServer(
         '''Determine this method name via introspection.'''
         parent_function = builtins.getattr(
             server.HTTPServer, inspect.stack()[0][3])
+        '''
+            NOTE: "self.is_same_process_request()" has to be called, because \
+            we expect to read the request head twice from the buffer.
+        '''
         if(not self.is_same_process_request(request_socket) and
            self.web.number_of_running_processes <
            self.web.maximum_number_of_processes):
@@ -453,6 +470,15 @@ class Web(Class, Runnable):
                                                   process as the server \
                                                   itself. This is usually \
                                                   necessary if you plan to \
+                                                  write in inter thread \
+                                                  shared data.
+
+        **same_process_request_blacklist**      - Requests which matches one \
+                                                  one of theses patterns \
+                                                  could be run in different \
+                                                  processes as the server \
+                                                  itself. This is usually \
+                                                  possible if you not plan to \
                                                   write in inter thread \
                                                   shared data.
 
@@ -1039,8 +1065,9 @@ class Web(Class, Runnable):
 # #     def _initialize(
 # #         self: Self, root=None, host_name='', port=0, default='',
 # #         public_key_file=None, stop_order='stop', encoding=ENCODING,
-# #         request_whitelist=('*:/.*',), request_blacklist=(),
+# #         request_whitelist=('*:/.*',), request_blacklist=(),/*region*//*endregion*/
 # #         same_process_request_whitelist=(),
+# #         same_process_request_blacklist=(),
 # #         # NOTE: Tuple for explicit web_server file reference validation.
 # #         # ('text/.+$', 'image/.+$', 'application/(x-)?javascript$')
 # #         static_mime_type_pattern=('.+/.+$',),
@@ -1067,6 +1094,7 @@ class Web(Class, Runnable):
         public_key_file=None, stop_order='stop', encoding=ENCODING,
         request_whitelist=('*:/.*',), request_blacklist=(),
         same_process_request_whitelist=(),
+        same_process_request_blacklist=(),
         # NOTE: Tuple for explicit web_server file reference validation.
         # ('text/.+$', 'image/.+$', 'application/(x-)?javascript$')
         static_mime_type_pattern=('.+/.+$',),
@@ -2515,10 +2543,15 @@ class CGIHTTPRequestHandler(
             request_description = response_code_or_message
             response_code = message_or_error_code
 # # python3.4
-# #         pass
+# #         if builtins.isinstance(request_description, builtins.bytes):
+# #             # TODO check branch
+# #             request_description = '...bytes...'
         if builtins.isinstance(request_description, builtins.str):
-            request_description = convert_to_unicode(
-                request_description)
+            try:
+                request_description = convert_to_unicode(
+                    request_description)
+            except builtins.UnicodeDecodeError:
+                request_description = '...bytes...'
 # #
         color_wrapper = self._determine_logging_color(response_code)
         __logger__.info((format % color_wrapper).format(
@@ -2813,30 +2846,45 @@ class CGIHTTPRequestHandler(
                         self.data[name] = {'content': value}
             elif self.data_type == 'multipart/form-data':
                 self.data = self._determine_data()
-            elif self.data_type == 'application/json':
+            elif self.data_type in ['application/json', 'text/plain']:
+                try:
 # # python3.4
-# #                 self.data = json.loads(self.rfile.read(
-# #                     content_length
-# #                 ).decode(self.server.web.encoding))
-                self.data = json.loads(
-                    self.rfile.read(content_length),
-                    encoding=self.server.web.encoding)
-                return self.do_GET()
+# #                     self.data = json.loads(self.rfile.read(
+# #                         content_length
+# #                     ).decode(self.server.web.encoding))
+                    self.data = json.loads(
+                        self.rfile.read(content_length),
+                        encoding=self.server.web.encoding)
 # #
+                except builtins.ValueError:
+                    self.data = {
+                        'type': self.data_type,
+                        'content': self.rfile.read(content_length)}
             else:
                 self.data = {
                     'type': self.data_type,
                     'content': self.rfile.read(content_length)}
 # # python3.4
 # #             pass
-            self.data = Dictionary(self.data).convert(
-                key_wrapper=lambda key, value: convert_to_unicode(
-                    key
-                ) if builtins.isinstance(key, builtins.str) else key,
-                value_wrapper=lambda key, value: convert_to_unicode(
-                    value
-                ) if builtins.isinstance(key, builtins.str) else value
-            ).content
+            if builtins.isinstance(self.data, builtins.dict):
+                self.data = Dictionary(self.data).convert(
+                    key_wrapper=lambda key, value: convert_to_unicode(
+                        key
+                    ) if builtins.isinstance(key, builtins.str) else key,
+                    value_wrapper=lambda key, value: convert_to_unicode(
+                        value
+                    ) if builtins.isinstance(key, builtins.str) else value
+                ).content
+            else:
+                for key, value in builtins.enumerate(self.data):
+                    self.data[key] = Dictionary(value).convert(
+                        key_wrapper=lambda key, value: convert_to_unicode(
+                            key
+                        ) if builtins.isinstance(key, builtins.str) else key,
+                        value_wrapper=lambda key, value: convert_to_unicode(
+                            value
+                        ) if builtins.isinstance(key, builtins.str) else value
+                    ).content
 # #
         return self.do_GET()
 

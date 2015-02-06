@@ -1171,7 +1171,7 @@ class Parser(Class, Runnable):
 # #         self: Self, template: (builtins.str, FileHandler), string=None,
 # #         cache_path=None, full_caching=False, propagate_full_caching=False,
 # #         file_encoding=ENCODING, placeholder_name_pattern='[a-zA-Z0-9+\-*/'
-# #             '_\[\]\'"\.()\\\\, :={}$&]+',
+# #             '_\[\]\'"\.()\\\\, :={}$&#~]+',
 # #         command_line_placeholder_name_pattern='(?s)'
 # #                                               '[a-zA-Z0-9_\[\]\.(),\-+]+',
 # #         command_line_placeholder_pattern=(
@@ -1232,7 +1232,7 @@ class Parser(Class, Runnable):
         self, template, string=None, cache_path=None, full_caching=False,
         propagate_full_caching=False, file_encoding=ENCODING,
         placeholder_name_pattern='[a-zA-Z0-9+\-*/'
-            '_\[\]\'"\.()\\\\, :={}$&]+',
+            '_\[\]\'"\.()\\\\, :={}$&#~]+',
         command_line_placeholder_name_pattern='(?s)'
                                               '[a-zA-Z0-9_\[\]\.(),\-+]+',
         command_line_placeholder_pattern='^(?P<variable_name>'
@@ -1961,9 +1961,8 @@ class Parser(Class, Runnable):
             if builtins.isinstance(object, builtins.list):
                 return '[%s]' % result
             return '{%s}' % result
-        is_string = False
-        if builtins.isinstance(object, (builtins.unicode, builtins.str)):
-            is_string = True
+        is_string = builtins.isinstance(object, (
+            builtins.unicode, builtins.str))
         object = convert_to_unicode(object)
         return '"%s"' % object if is_string and quote_string else object
 # #

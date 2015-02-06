@@ -24,6 +24,7 @@ __version__ = '1.0'
 
 # # python3.4 import builtins
 import __builtin__ as builtins
+from cgi import FieldStorage as CGIFieldStorage
 from collections import Iterable
 from copy import copy
 import inspect
@@ -202,14 +203,14 @@ def dictionary_convert(
                 key_wrapper, value_wrapper, no_wrap_indicator,
                 remove_no_wrap_indicator
             ).content
-# # python3.4 # #         elif(builtins.isinstance(value, Iterable) and
-
-# #              not builtins.isinstance(value, (
-# #                  builtins.bytes, builtins.str))
+# # python3.4
+# #         elif(builtins.isinstance(value, Iterable) and
+# #              not builtins.isinstance(value, builtins.tuple(
+# #                  self.NONE_CONVERTABLE_ITERABLES)))
 # #         ):
         elif(builtins.isinstance(value, Iterable) and
-             not builtins.isinstance(value, (
-                 builtins.unicode, builtins.str))):
+             not builtins.isinstance(value, builtins.tuple(
+                 self.NONE_CONVERTABLE_ITERABLES))):
 # #
             self.content[key] = dictionary__convert_iterable(
                 self.__class__, iterable=value, key_wrapper=key_wrapper,
@@ -245,14 +246,14 @@ def dictionary__convert_iterable(
                     remove_no_wrap_indicator
                 ).content
 # # python3.4
-# #             elif isinstance(value, Iterable) and not isinstance(value, (
-# #                 builtins.bytes, builtins.str
-# #             )):
+# #             elif isinstance(value, Iterable) and not isinstance(
+# #                 value, builtins.tuple(cls.NONE_CONVERTABLE_ITERABLES)
+# #             ):
             elif builtins.isinstance(
                 value, Iterable
-            ) and not builtins.isinstance(value, (
-                builtins.unicode, builtins.str
-            )):
+            ) and not builtins.isinstance(
+                value, builtins.tuple(cls.NONE_CONVERTABLE_ITERABLES)
+            ):
 # #
                 iterable[key] = dictionary__convert_iterable(
                     cls, iterable=value, key_wrapper=key_wrapper,

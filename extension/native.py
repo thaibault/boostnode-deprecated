@@ -36,6 +36,7 @@ __version__ = '1.0'
 # # import builtins
 import __builtin__ as builtins
 # #
+from cgi import FieldStorage as CGIFieldStorage
 from collections import Iterable
 from copy import copy, deepcopy
 from datetime import datetime as NativeDateTime
@@ -49,7 +50,7 @@ import inspect
 import os
 import re as regularExpression
 import sys
-import time
+from time import mktime as make_time
 import types
 
 '''Make boostNode packages and modules importable via relative paths.'''
@@ -173,12 +174,11 @@ class EnsureNewMutableDefaultObject(FunctionDecorator):
                 We have to bind variables to recognize keyword arguments \
                 which are given as positional arguments.
             '''
-            given_arguments = inspect.signature(self.__func__).bind(
-                *arguments, **keywords
-            ).arguments
-            for name, parameter in inspect.signature(
-                self.__func__
-            ).parameters.items():
+            # TODO write python2.7 version
+            signature = inspect.signature(self.__func__).bind(
+                *arguments, **keywords)
+            given_arguments = signature.arguments
+            for name, parameter in signature.parameters.items():
                 '''
                     Ignore given, immutable or arguments without a default \
                     value.
@@ -254,8 +254,10 @@ class ClassPropertyInitializer(FunctionDecorator):
                 self.__func__, *arguments, **keywords
             ).items():
                 if name not in self.EXCLUDED_ARGUMENT_NAMES:
+                    # TODO
+                    #print(self.__func__.__name__, name, value)
                     if 'self' in self.EXCLUDED_ARGUMENT_NAMES:
-                        self.object.__dict__[name] = value
+                        builtins.setattr(self.object, name, value)
                     else:
                         builtins.setattr(self.class_object, name, value)
             return self.__func__(*arguments, **keywords)
@@ -366,12 +368,12 @@ class Model(builtins.object):
 # #     def get_dictionary(
 # #         self: Self, key_wrapper=lambda key, value: key,
 # #         value_wrapper=lambda key, value: value,
-# #         prefix_filter=('password',), property_names=()
+# #         prefix_filter=('password', 'session'), property_names=()
 # #     ) -> builtins.dict:
     def get_dictionary(
         self, key_wrapper=lambda key, value: key,
-        value_wrapper=lambda key, value: value, prefix_filter=('password',),
-        property_names=()
+        value_wrapper=lambda key, value: value,
+        prefix_filter=('password', 'session'), property_names=()
     ):
 # #
         '''
@@ -831,13 +833,21 @@ class Object(Class):
         **content** - Object value to save.
     '''
 
+    # region properties
+
+    EXPORTABLE_FILE_ATTRIBUTES = (
+        'path', 'name', 'basename', 'encoding', 'extension',
+        'extension_suffix', 'timestamp', 'size', 'human_readable_size',
+        'type', 'mime_type')
+
+    # endregion
+
     # region dynamic methods
 
     # # region public
 
     # # # region special
 
-    @JointPoint(InstancePropertyInitializer)
 # # python3.4
 # #     def __init__(
 # #         self: Self, content=None,
@@ -857,10 +867,22 @@ class Object(Class):
             Object of "str" ('hans').
             >>> object.content
             'hans'
+
+            >>> object = Object()
+            >>> object.compatible_type is None
+            True
+            >>> object.content is None
+            True
         '''
 
         # # # region properties
 
+        '''
+            NOTE: This property shouldn't be set via an instance property \
+            initializer since there nondeterministic problems in \
+            multiprocessing application.
+        '''
+        self.content = content
         '''Saves a copy of currently saved object.'''
         self._content_copy = {}
 
@@ -961,18 +983,20 @@ class Object(Class):
             >>> Object(('A',)).compatible_type == str(['A'])
             True
         '''
+        from boostNode.extension.file import Handler as FileHandler
+
 # # python3.4
 # #         if builtins.isinstance(self.content, NativeDateTime):
 # #             return self.content.timestamp(
 # #             ) + builtins.float(self.content.microsecond) / 1000 ** 2
 # #         if builtins.isinstance(self.content, NativeDate):
-# #             return time.mktime(self.content.timetuple())
+# #             return make_time(self.content.timetuple())
         if builtins.isinstance(self.content, NativeDateTime):
             return(
-                time.mktime(self.content.timetuple()) +
+                make_time(self.content.timetuple()) +
                 self.content.microsecond / 1000 ** 2)
         if builtins.isinstance(self.content, NativeDate):
-            return time.mktime(self.content.timetuple())
+            return make_time(self.content.timetuple())
 # #
         if builtins.isinstance(self.content, NativeTime):
             return(
@@ -980,6 +1004,44 @@ class Object(Class):
                 self.content.second + self.content.microsecond / 1000 ** 2)
         if builtins.isinstance(self.content, NativeTimeDelta):
             return self.content.total_seconds()
+        if builtins.isinstance(self.content, CGIFieldStorage):
+            '''
+                Convert form field values and potential binary data into a \
+                simple dictionary.
+            '''
+            try:
+                result = {}
+                for name in self.content:
+                    data[name] = []
+                    if builtins.hasattr(
+                        self.content[name], 'file'
+                    ) and self.content[name].filename:
+                        data[name].append('__binary_file_data__')
+                    elif builtins.isinstance(
+                        self.content[name], builtins.list
+                    ):
+                        for value in self.content[name]:
+                            if builtins.hasattr(
+                                value, 'file'
+                            ) and value.filename:
+                                data[name].append('__binary_file_data__')
+                            else:
+                                data[name].append(value.value)
+                    else:
+                        data[name].append(self.content[name].value)
+                return result
+            except builtins.TypeError:
+                if builtins.hasattr(
+                    self.content, 'file'
+                ) and self.content.filename:
+                    return{self.content.filename: '__binary_file_data__'}
+                return{name: value.value}
+        # TODO check branches
+        if builtins.isinstance(self.content, FileHandler):
+            result = {}
+            for name in self.EXPORTABLE_FILE_ATTRIBUTES:
+                result[name] = builtins.getattr(self.content, name)
+            return result
         content = self.content
         if builtins.isinstance(content, (builtins.set, builtins.tuple)):
             content = builtins.list(content)
@@ -2625,6 +2687,17 @@ class Dictionary(Object, builtins.dict):
         "dict()" method.
     '''
 
+    # region properties
+
+# # python3.4
+# #     NONE_CONVERTABLE_ITERABLES = {
+# #         builtins.bytes, builtins.str, CGIFieldStorage}
+    NONE_CONVERTABLE_ITERABLES = {
+        builtins.bytes, builtins.str, builtins.unicode, CGIFieldStorage}
+# #
+
+    # endregion
+
     # region dynamic methods
 
     # # region public
@@ -2649,9 +2722,11 @@ class Dictionary(Object, builtins.dict):
             >>> Dictionary() # doctest: +ELLIPSIS
             Object of "dict" ({}).
         '''
+        from boostNode.extension.file import Handler as FileHandler
 
         # # # region properties
 
+        self.__class__.NONE_CONVERTABLE_ITERABLES.add(FileHandler)
         '''The main property. It saves the current dictionary.'''
         if builtins.isinstance(content, self.__class__):
             content = content.content
@@ -2997,11 +3072,11 @@ class Dictionary(Object, builtins.dict):
                 ).content
 # # python3.4
 # #             elif(builtins.isinstance(value, Iterable) and
-# #                  not builtins.isinstance(
-# #                      value, (builtins.bytes, builtins.str))):
+# #                  not builtins.isinstance(value, builtins.tuple(
+# #                      self.NONE_CONVERTABLE_ITERABLES))):
             elif(builtins.isinstance(value, Iterable) and
-                 not builtins.isinstance(value, (
-                     builtins.unicode, builtins.str))):
+                 not builtins.isinstance(value, builtins.tuple(
+                     self.NONE_CONVERTABLE_ITERABLES))):
 # #
                 self.content[key] = self._convert_iterable(
                     iterable=value, key_wrapper=key_wrapper,
@@ -3060,25 +3135,52 @@ class Dictionary(Object, builtins.dict):
             ...     other={'a': {'__append__': [4]}}
             ... ).content
             {'a': {'__append__': [4]}}
+
+            >>> Dictionary({'a': {'__append__': [4]}}).update(
+            ...     other={'a': {'__append__': [3]}}
+            ... ).content
+            {'a': [4, 3]}
+
+            >>> Dictionary({'a': {'__append__': [4]}}).update(
+            ...     other={'a': [3]}
+            ... ).content
+            {'a': [4, 3]}
+
+            >>> Dictionary({'a': {'__append__': 4}}).update(
+            ...     other={'a': [3]}
+            ... ).content
+            {'a': [3]}
         '''
         for key, value in self.__class__(other).content.items():
-            if(builtins.isinstance(value, (builtins.dict, self.__class__)) and
-               key in self.content):
-                nested_value = value.get(append_list_indicator)
-                if builtins.isinstance(
-                    nested_value, builtins.list
-                ) and builtins.isinstance(self.content[key], builtins.list):
-                    self.content[key] = self.content[key] + nested_value
-                elif builtins.isinstance(self.content[key], (
-                    builtins.dict, self.__class__
-                )):
-                    self.content[key] = builtins.getattr(self.__class__(
-                        self.content[key]
-                    ), inspect.stack()[0][3])(other=value).content
-                else:
-                    self.content[key] = value
-            else:
-                self.content[key] = value
+            if key in self.content:
+                if builtins.isinstance(value, (builtins.dict, self.__class__)):
+                    nested_value = value.get(append_list_indicator)
+                    if builtins.isinstance(nested_value, builtins.list):
+                        if builtins.isinstance(self.content[key], builtins.list):
+                            self.content[key] += nested_value
+                            continue
+                        elif builtins.isinstance(self.content[key], (
+                            builtins.dict, self.__class__
+                        )):
+                            self.content[key] = self.content[key].get(
+                                append_list_indicator
+                            ) + nested_value
+                            continue
+                    elif builtins.isinstance(self.content[key], builtins.dict):
+                        self.content[key] = builtins.getattr(self.__class__(
+                            self.content[key]
+                        ), inspect.stack()[0][3])(other=value).content
+                        continue
+                elif builtins.isinstance(value, builtins.list):
+                    if builtins.isinstance(self.content[key], builtins.dict):
+                        nested_source_value = self.content[key].get(
+                            append_list_indicator)
+                        if builtins.isinstance(
+                            nested_source_value, builtins.list
+                        ):
+                            self.content[key] = nested_source_value + value
+                            continue
+            self.content[key] = value
         return self
 
         # endregion
@@ -4542,7 +4644,7 @@ class Date(Object):
 # #                                         delimiter=delimiter)
 # #                                 )).timestamp())
                         self.content = NativeDate.fromtimestamp(
-                            time.mktime(NativeDateTime.strptime(
+                            make_time(NativeDateTime.strptime(
                                 content, date_format.format(
                                     delimiter=delimiter,
                                         first_year=year_format[0].format(
