@@ -678,6 +678,19 @@ class Web(Class, Runnable):
                      "aren't allowed for being interpreted.",
              'dest': 'request_blacklist',
              'metavar': 'REGEX_PATTERN'}},
+        {'arguments': ('-K', '--known-big-web-mime-types'),
+         'specification': {
+             'action': 'store',
+             'nargs': '*',
+             'default': {'execute': '__initializer_default_value__'},
+             'type': builtins.str,
+             'required': {'execute': '__initializer_default_value__ is None'},
+             'help': 'A whitelist of file mime types which should be '
+                     'associated with a typical browser extension. This files '
+                     'will be send with their respective mime type no matter '
+                     'how big they are.',
+             'dest': 'known_big_web_mime_types',
+             'metavar': 'MIME_TYPES'}},
         {'arguments': ('-I', '--internal-redirects'),
          'specification': {
              'action': 'store',
@@ -1087,7 +1100,9 @@ class Web(Class, Runnable):
 # #         request_parameter_delimiter='\?',
 # #         file_size_stream_threshold_in_byte=1048576,  # 1 MB
 # #         directory_listing=True, internal_redirects=None,
-# #         external_redirects=None, **keywords: builtins.object
+# #         external_redirects=None,
+# #         known_big_web_mime_types=('application/x-shockwave-flash',),
+# #         **keywords: builtins.object
 # #     ) -> Self:
     def _initialize(
         self, root=None, host_name='', port=0, default='',
@@ -1114,7 +1129,9 @@ class Web(Class, Runnable):
         request_parameter_delimiter='\?',
         file_size_stream_threshold_in_byte=2097152,  # 2 MB
         directory_listing=True, internal_redirects=None,
-        external_redirects=None, **keywords
+        external_redirects=None,
+        known_big_web_mime_types=('application/x-shockwave-flash',),
+        **keywords
     ):
 # #
         '''
@@ -3812,19 +3829,21 @@ class CGIHTTPRequestHandler(
             Object of "CGIHTTPRequestHandler" with request uri "" and parame...
         '''
         threshold = self.server.web.file_size_stream_threshold_in_byte
-        if threshold < self.requested_file.size:
+        mime_type = self.requested_file.get_mime_type(web=True)
+        if(self.requested_file.size < threshold or
+           mime_type in self.server.web.known_big_web_mime_types):
+# # python3.4
+# #             self.send_content_type_header(
+# #                 mime_type=mime_type, encoding=builtins.isinstance(
+# #                     output, builtins.str))
+            self.send_content_type_header(
+                mime_type=mime_type, encoding=builtins.isinstance(
+                    output, builtins.unicode))
+# #
+        else:
             self.send_content_type_header(
                 mime_type='application/octet-stream', encoding=False)
             self.send_header('Content-Transfer-Encoding', 'binary')
-        else:
-# # python3.4
-# #             self.send_content_type_header(
-# #                 mime_type=self.requested_file.get_mime_type(web=True),
-# #                 encoding=builtins.isinstance(output, builtins.str))
-            self.send_content_type_header(
-                mime_type=self.requested_file.get_mime_type(web=True),
-                encoding=builtins.isinstance(output, builtins.unicode))
-# #
         self.send_static_file_cache_header(
             timestamp=self.requested_file.timestamp)
         self.send_content_length_header(

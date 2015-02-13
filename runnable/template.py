@@ -1170,8 +1170,7 @@ class Parser(Class, Runnable):
 # #     def _initialize(
 # #         self: Self, template: (builtins.str, FileHandler), string=None,
 # #         cache_path=None, full_caching=False, propagate_full_caching=False,
-# #         file_encoding=ENCODING, placeholder_name_pattern='[a-zA-Z0-9+\-*/'
-# #             '_\[\]\'"\.()\\\\, :={}$&#~]+',
+# #         file_encoding=ENCODING, placeholder_name_pattern='.+?',
 # #         command_line_placeholder_name_pattern='(?s)'
 # #                                               '[a-zA-Z0-9_\[\]\.(),\-+]+',
 # #         command_line_placeholder_pattern=(
@@ -1231,8 +1230,7 @@ class Parser(Class, Runnable):
     def _initialize(
         self, template, string=None, cache_path=None, full_caching=False,
         propagate_full_caching=False, file_encoding=ENCODING,
-        placeholder_name_pattern='[a-zA-Z0-9+\-*/'
-            '_\[\]\'"\.()\\\\, :={}$&#~]+',
+        placeholder_name_pattern='.+?',
         command_line_placeholder_name_pattern='(?s)'
                                               '[a-zA-Z0-9_\[\]\.(),\-+]+',
         command_line_placeholder_pattern='^(?P<variable_name>'
@@ -1645,14 +1643,14 @@ class Parser(Class, Runnable):
             (...Native exception object:...)
 
             >>> class TestException(Exception):
-            ...     property = 'Ã¤'
+            ...     property = 'ä'
             >>> parser._handle_template_exception(
             ...     TestException('test'), force_native_exception=True
             ... ) # doctest: +ELLIPSIS
             (...Native exception object:...)
 
             >>> class TestException(Exception):
-            ...     property = ('Ã¤', 'Ã¶')
+            ...     property = ('ä', 'ö')
             >>> parser._handle_template_exception(
             ...     TestException('test'), force_native_exception=True
             ... ) # doctest: +ELLIPSIS
