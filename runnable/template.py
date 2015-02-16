@@ -272,16 +272,6 @@ class Parser(Class, Runnable):
              'help': 'Indicates if an activated full caching should be '
                      'propagated to nested template includes.',
              'dest': 'propagate_full_caching'}},
-        {'arguments': ('-u', '--cache-path'),
-         'specification': {
-             'action': 'store',
-             'default': {'execute': '__initializer_default_value__'},
-             'type': builtins.str,
-             'required': {'execute': '__initializer_default_value__ is None'},
-             'help': 'Determines if a cached compiled version of template '
-                     'should be saved in given path.',
-             'dest': 'cache_path',
-             'metavar': 'PATH'}},
         {'arguments': ('-q', '--file-encoding'),
          'specification': {
              'action': 'store',
