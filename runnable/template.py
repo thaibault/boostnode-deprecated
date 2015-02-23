@@ -1925,6 +1925,8 @@ class Parser(Class, Runnable):
         '''
         if builtins.isinstance(object, builtins.dict):
             return json.dumps(object)
+        if builtins.isinstance(object, builtins.bool):
+            return 'true' if object else 'false'
 # # python3.4
 # #         return builtins.str(object)
         return self._convert_object_to_string(object, quote_string)

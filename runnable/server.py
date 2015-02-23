@@ -561,7 +561,7 @@ class Web(Class, Runnable):
         Examples:
 
         >>> Web(
-        ...     maximum_number_of_processes=1, public_key_file_path='.'
+        ...     maximum_number_of_processes=1, public_key_file='.'
         ... ) # doctest: +ELLIPSIS
         Object of "Web" with root path "...", port "0" and stop order ...
 
@@ -642,7 +642,7 @@ class Web(Class, Runnable):
                             ''' ssl encryption (default: "%s").' % '''
                             "__initializer_default_value__.replace('%', "
                             "'%%')"},
-             'dest': 'public_key_file_path',
+             'dest': 'public_key_file',
              'metavar': 'PATH'}},
         {'arguments': ('-o', '--stop-order'),
          'specification': {
@@ -1700,8 +1700,9 @@ class CGIHTTPRequestHandler(
         '''
         self.external_request_type = self.request_type = \
             self.request_type if self.request_type else 'get'
-        self._create_environment_variables()
-        if self._is_authenticated():
+        self.create_environment_variables()
+        authentication = self._is_authenticated()
+        if authentication[0]:
             valid_request = self._is_valid_request()
             if valid_request:
                 if self._handle_redirect():
@@ -1713,7 +1714,7 @@ class CGIHTTPRequestHandler(
                 elif self._default_get():
                     return self
             return self._send_no_file_error(valid_request)
-        return self._send_no_authorization_error()
+        return self._send_no_authorization_error(output=authentication[1])
 
     @JointPoint
 # # python3.4     def do_POST(self: Self) -> Self:
@@ -2599,6 +2600,56 @@ class CGIHTTPRequestHandler(
         self.rfile = self.server.web.service.read_file_socket
         return result
 
+    @JointPoint
+# # python3.4
+# #     def create_environment_variables(self: Self) -> builtins.str:
+    def create_environment_variables(self):
+# #
+        '''Creates all request specified environment-variables.'''
+# # python3.4
+# #         self._determine_host().request_uri = self.external_request_uri = \
+# #             self.path
+        self._determine_host().request_uri = self.external_request_uri = \
+            convert_to_unicode(self.path)
+# #
+        self._handle_redirect(external=False)
+# # python3.4
+# #         match = regularExpression.compile(
+# #             '[^/]*/+(?P<path>.*?)(?:{delimiter}(?P<parameter>.*))?'.format(
+# #                 delimiter=self.server.web.request_parameter_delimiter)
+# #         ).fullmatch(self.request_uri)
+        match = regularExpression.compile(
+            '[^/]*/+(?P<path>.*?)'
+            '(?:{delimiter}(?P<parameter>.*))?$'.format(
+                delimiter=self.server.web.request_parameter_delimiter)
+        ).match(self.request_uri)
+# #
+        self.path = ''
+        if match:
+# # python3.4
+# #             self.path = posixpath.normpath(unquote_url(match.group(
+# #                 'path')))
+            self.path = convert_to_unicode(posixpath.normpath(unquote_url(
+                convert_to_string(match.group('path')))))
+# #
+            if self.path == '.':
+                self.path = ''
+            self.parameter = match.group('parameter')
+        self.requested_file = FileHandler(
+            location=self.server.web.root.path + self.path)
+        self._authentication_location = self.server.web.root
+        if self.requested_file:
+            self._authentication_location = self.requested_file
+            if self.requested_file.is_file():
+                self._authentication_location = self.requested_file.directory
+        cookie_handler = self.get_cookie()
+        if cookie_handler is not None:
+            for key, morsel in cookie_handler.items():
+                self.cookie[key] = morsel.value
+        self.get = self.parse_url(self.request_uri)[1]
+# #
+        return self.path
+
         # endregion
 
         # region protected
@@ -2635,14 +2686,14 @@ class CGIHTTPRequestHandler(
             ...     __test_folder__.path + '_is_authenticated',
             ...     make_directory=True)
             >>> handler.path = '/' + file.name
-            >>> handler._create_environment_variables()
+            >>> handler.create_environment_variables()
             '_is_authenticated'
             >>> handler._is_authenticated()
             True
 
             >>> FileHandler(file.path + '.htpasswd').content = 'login:password'
             >>> handler.path = '/' + file.name
-            >>> handler._create_environment_variables()
+            >>> handler.create_environment_variables()
             '_is_authenticated'
             >>> # # python2.7
             >>> if sys.version_info.major < 3:
@@ -2673,7 +2724,7 @@ class CGIHTTPRequestHandler(
                     return(
                         self.headers.get('authorization') ==
                         'Basic %s' % self._get_login_data(
-                            authentication_file))
+                            authentication_file), None)
                 if self._authentication_location == self.server.web.root:
                     break
                 self._authentication_location = \
@@ -2697,10 +2748,9 @@ class CGIHTTPRequestHandler(
                 login_data = {
                     'name': login_data_match.group('name'),
                     'password': login_data_match.group('password')}
-            return builtins.bool(
-                self.server.web.authentication_handler is None or
-                self.server.web.authentication_handler(login_data, self))
-        return True
+            if self.server.web.authentication_handler is not None:
+                return self.server.web.authentication_handler(login_data, self)
+        return True, None
 
     @JointPoint
 # # python3.4     def _is_valid_reference(self: Self) -> builtins.bool:
@@ -3069,8 +3119,8 @@ class CGIHTTPRequestHandler(
 
     @JointPoint
 # # python3.4
-# #     def _send_no_authorization_error(self: Self) -> Self:
-    def _send_no_authorization_error(self):
+# #     def _send_no_authorization_error(self: Self, output=None) -> Self:
+    def _send_no_authorization_error(self, output=None):
 # #
         '''This method is called if authentication failed.'''
         self.send_response(401)
@@ -3087,7 +3137,7 @@ class CGIHTTPRequestHandler(
                 'Content-Type',
                 'text/html; charset=%s' % self.server.web.encoding)
         self.end_headers()
-        return self
+        return self._send_output(output)
 
     @JointPoint
 # # python3.4
@@ -3389,56 +3439,6 @@ class CGIHTTPRequestHandler(
                 if FileHandler(location=self.request_uri):
                     break
         return self
-
-    @JointPoint
-# # python3.4
-# #     def _create_environment_variables(self: Self) -> builtins.str:
-    def _create_environment_variables(self):
-# #
-        '''Creates all request specified environment-variables.'''
-# # python3.4
-# #         self._determine_host().request_uri = self.external_request_uri = \
-# #             self.path
-        self._determine_host().request_uri = self.external_request_uri = \
-            convert_to_unicode(self.path)
-# #
-        self._handle_redirect(external=False)
-# # python3.4
-# #         match = regularExpression.compile(
-# #             '[^/]*/+(?P<path>.*?)(?:{delimiter}(?P<parameter>.*))?'.format(
-# #                 delimiter=self.server.web.request_parameter_delimiter)
-# #         ).fullmatch(self.request_uri)
-        match = regularExpression.compile(
-            '[^/]*/+(?P<path>.*?)'
-            '(?:{delimiter}(?P<parameter>.*))?$'.format(
-                delimiter=self.server.web.request_parameter_delimiter)
-        ).match(self.request_uri)
-# #
-        self.path = ''
-        if match:
-# # python3.4
-# #             self.path = posixpath.normpath(unquote_url(match.group(
-# #                 'path')))
-            self.path = convert_to_unicode(posixpath.normpath(unquote_url(
-                convert_to_string(match.group('path')))))
-# #
-            if self.path == '.':
-                self.path = ''
-            self.parameter = match.group('parameter')
-        self.requested_file = FileHandler(
-            location=self.server.web.root.path + self.path)
-        self._authentication_location = self.server.web.root
-        if self.requested_file:
-            self._authentication_location = self.requested_file
-            if self.requested_file.is_file():
-                self._authentication_location = self.requested_file.directory
-        cookie_handler = self.get_cookie()
-        if cookie_handler is not None:
-            for key, morsel in cookie_handler.items():
-                self.cookie[key] = morsel.value
-        self.get = self.parse_url(self.request_uri)[1]
-# #
-        return self.path
 
     @JointPoint
 # # python3.4
@@ -3872,7 +3872,9 @@ class CGIHTTPRequestHandler(
     def _send_output(self, output):
 # #
         '''Sends the final given output to client.'''
-        if not (__test_mode__ or self.request_type == 'head'):
+        if not (
+            output is None or __test_mode__ or self.request_type == 'head'
+        ):
             if self._encoded_output:
                 self.wfile.write(self._encoded_output)
 # # python3.4
