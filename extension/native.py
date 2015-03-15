@@ -3091,9 +3091,13 @@ class Dictionary(Object, builtins.dict):
 # # python3.4
 # #     def update(
 # #         self: Self, other: (SelfClassObject, builtins.dict),
-# #         append_list_indicator='__append__'
+# #         append_list_indicator='__append__',
+# #         prepend_list_indicator='__prepend__'
 # #     ) -> Self:
-    def update(self, other, append_list_indicator='__append__'):
+    def update(
+        self, other, append_list_indicator='__append__',
+        prepend_list_indicator='__prepend__'
+    ):
 # #
         '''
             Performs a recursive update.
@@ -3151,20 +3155,41 @@ class Dictionary(Object, builtins.dict):
             ... ).content
             {'a': [3]}
         '''
+        # TODO check new prepend branches.
         for key, value in self.__class__(other).content.items():
             if key in self.content:
                 if builtins.isinstance(value, (builtins.dict, self.__class__)):
-                    nested_value = value.get(append_list_indicator)
-                    if builtins.isinstance(nested_value, builtins.list):
-                        if builtins.isinstance(self.content[key], builtins.list):
-                            self.content[key] += nested_value
+                    nested_append_value = value.get(append_list_indicator)
+                    nested_prepend_value = value.get(prepend_list_indicator)
+                    if builtins.isinstance(
+                        nested_append_value, builtins.list
+                    ) or builtins.isinstance(
+                        nested_prepend_value, builtins.list
+                    ):
+                        if builtins.isinstance(
+                            self.content[key], builtins.list
+                        ):
+                            if nested_append_value:
+                                self.content[key] += nested_append_value
+                            else:
+                                self.content[key] = nested_prepend_value + \
+                                    self.content[key]
                             continue
                         elif builtins.isinstance(self.content[key], (
                             builtins.dict, self.__class__
                         )):
-                            self.content[key] = self.content[key].get(
-                                append_list_indicator
-                            ) + nested_value
+                            if nested_append_value:
+                                self.content[key] = (self.content[key].get(
+                                    append_list_indicator
+                                ) or self.content[key].get(
+                                    prepend_list_indicator
+                                )) + nested_append_value
+                            else:
+                                self.content[key] = nested_prepend_value + (
+                                    self.content[key].get(
+                                        append_list_indicator
+                                    ) or self.content[key].get(
+                                        prepend_list_indicator))
                             continue
                     elif builtins.isinstance(self.content[key], builtins.dict):
                         self.content[key] = builtins.getattr(self.__class__(
@@ -3173,12 +3198,21 @@ class Dictionary(Object, builtins.dict):
                         continue
                 elif builtins.isinstance(value, builtins.list):
                     if builtins.isinstance(self.content[key], builtins.dict):
-                        nested_source_value = self.content[key].get(
+                        nested_source_append_value = self.content[key].get(
                             append_list_indicator)
+                        nested_source_prepend_value = self.content[key].get(
+                            prepend_list_indicator)
                         if builtins.isinstance(
-                            nested_source_value, builtins.list
+                            nested_source_append_value, builtins.list
                         ):
-                            self.content[key] = nested_source_value + value
+                            self.content[key] = value + \
+                                nested_source_append_value
+                            continue
+                        elif builtins.isinstance(
+                            nested_source_prepend_value, builtins.list
+                        ):
+                            self.content[key] = nested_source_prepend_value + \
+                                value
                             continue
             self.content[key] = value
         return self

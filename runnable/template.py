@@ -719,7 +719,7 @@ class Parser(Class, Runnable):
             ... ).render().output
             'klaus says\\nwho is hans?\\n'
         '''
-        return self._output.content
+        return convert_to_unicode(self._output.content)
 
     @JointPoint
 # # python3.4     def get_builtins(self: Self) -> builtins.dict:
@@ -745,9 +745,10 @@ class Parser(Class, Runnable):
             'time': time, 'FileHandler': FileHandler, 'print': self._print,
             'include': self._include, 'String': self._convert_to_string,
             'Integer': builtins.int, 'Float': builtins.float,
-            'length': builtins.len, 'Json': json, 'sort': builtins.sorted,
-            'path_name_to_url': pathname2url, 'false': False, 'true': True,
-            'is_type_of': builtins.isinstance, 'Tuple': builtins.tuple,
+            'NativeString': builtins.str, 'length': builtins.len,
+            'Json': json, 'sort': builtins.sorted, 'exit': sys.exit,
+            'pathNameToURL': pathname2url, 'false': False, 'true': True,
+            'isTypeOf': builtins.isinstance, 'Tuple': builtins.tuple,
             'Dictionary': builtins.dict,
             'RegularExpression': regularExpression.compile, 'copy': copy,
             'deepCopy': deepcopy, 'DictionaryExtension': Dictionary,
@@ -1212,10 +1213,11 @@ class Parser(Class, Runnable):
 # #                                 ')',
 # #         left_code_delimiter='<%', right_code_delimiter='%>',
 # #         right_escaped='%',  # For example: "<%%" evaluates to "<%"
-# #         template_context_default_indent=4,
-# #         builtin_names=(builtins.all, builtins.filter, builtins.map,
-# #                        builtins.enumerate, builtins.range),
-# #         pretty_indent=False, **keywords: builtins.object
+# #         template_context_default_indent=4, builtin_names=(
+# #             builtins.all, builtins.filter, builtins.map,
+# #             builtins.enumerate, builtins.range, builtins.locals,
+# #             builtins.type
+# #         ), pretty_indent=False, **keywords: builtins.object
 # #     ) -> Self:
     def _initialize(
         self, template, string=None, cache_path=None, full_caching=False,
@@ -1569,6 +1571,9 @@ class Parser(Class, Runnable):
 # #             builtins.exec(self.rendered_python_code, template_scope)
             exec self.rendered_python_code in template_scope
 # #
+        except builtins.SystemExit:
+            # TODO check branch
+            pass
         except __exception__ as exception:
             '''Propagate nested template exceptions.'''
             '''

@@ -2913,24 +2913,22 @@ class CGIHTTPRequestHandler(
                         self.data[name] = {'content': value}
             elif self.data_type == 'multipart/form-data':
                 self.data = self._determine_data()
-            elif self.data_type in ['application/json', 'text/plain']:
-                try:
-# # python3.4
-# #                     self.data = json.loads(self.rfile.read(
-# #                         content_length
-# #                     ).decode(self.server.web.encoding))
-                    self.data = json.loads(
-                        self.rfile.read(content_length),
-                        encoding=self.server.web.encoding)
-# #
-                except builtins.ValueError:
-                    self.data = {
-                        'type': self.data_type,
-                        'content': self.rfile.read(content_length)}
             else:
-                self.data = {
-                    'type': self.data_type,
-                    'content': self.rfile.read(content_length)}
+                '''NOTE: We could only ready data once from buffer.'''
+                content = self.rfile.read(content_length)
+                if self.data_type in ['application/json', 'text/plain']:
+                    try:
+# # python3.4
+# #                         self.data = json.loads(content).decode(
+# #                             self.server.web.encoding)
+                        self.data = json.loads(
+                            content, encoding=self.server.web.encoding)
+# #
+                    except builtins.ValueError:
+                        self.data = {
+                            'type': self.data_type, 'content': content}
+                else:
+                    self.data = {'type': self.data_type, 'content': content}
 # # python3.4
 # #             pass
             if builtins.isinstance(self.data, builtins.dict):
