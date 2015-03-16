@@ -262,6 +262,20 @@
 <span class="go">{&#39;key&#39;: {&#39;__no_wrapping__&#39;: &#39;_value_&#39;}}</span>
 </pre></div>
 </div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Dictionary</span><span class="p">({</span><span class="s">&#39;__no_wrapping__&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;A&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}})</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">key_wrapper</span><span class="o">=</span><span class="k">lambda</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">key</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span>
+<span class="gp">... </span>    <span class="n">remove_no_wrap_indicator</span><span class="o">=</span><span class="bp">True</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
+<span class="go">{&#39;A&#39;: 2}</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Dictionary</span><span class="p">({</span><span class="s">&#39;B&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;__no_wrapping__&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;A&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}}})</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">key_wrapper</span><span class="o">=</span><span class="k">lambda</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">key</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span>
+<span class="gp">... </span>    <span class="n">remove_no_wrap_indicator</span><span class="o">=</span><span class="bp">True</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
+<span class="go">{&#39;b&#39;: {&#39;A&#39;: 2}}</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="staticmethod">
@@ -384,7 +398,7 @@
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Dictionary</span><span class="p">({</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;__append__&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">4</span><span class="p">]}})</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">other</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">]}</span>
 <span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
-<span class="go">{&#39;a&#39;: [4, 3]}</span>
+<span class="go">{&#39;a&#39;: [3, 4]}</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Dictionary</span><span class="p">({</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;__append__&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
@@ -794,7 +808,7 @@
 
 <dl class="classmethod">
 <dt id="boostNode.extension.native.Module.get_context_path">
-<em class="property">classmethod </em><tt class="descname">get_context_path</tt><big>(</big><em>path=None</em>, <em>frame=&lt;frame object at 0x7f96a5364988&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_context_path" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><tt class="descname">get_context_path</tt><big>(</big><em>path=None</em>, <em>frame=&lt;frame object at 0x7f18b20ae988&gt;</em><big>)</big><a class="headerlink" href="#boostNode.extension.native.Module.get_context_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines the package and module level context path to a given             context or file.</p>
 <p><strong>path</strong>  - relative or absolute context or file path to normalize</p>
 <p><strong>frame</strong> - stack frame to analyse again context</p>
