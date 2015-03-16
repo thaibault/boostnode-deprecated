@@ -3040,6 +3040,18 @@ class Dictionary(Object, builtins.dict):
             ...     no_wrap_indicator=''
             ... ).content
             {'key': {'__no_wrapping__': '_value_'}}
+
+            >>> Dictionary({'__no_wrapping__': {'A': 2}}).convert(
+            ...     key_wrapper=lambda key, value: key.lower(),
+            ...     remove_no_wrap_indicator=True
+            ... ).content
+            {'A': 2}
+
+            >>> Dictionary({'B': {'__no_wrapping__': {'A': 2}}}).convert(
+            ...     key_wrapper=lambda key, value: key.lower(),
+            ...     remove_no_wrap_indicator=True
+            ... ).content
+            {'b': {'A': 2}}
         '''
         '''
             NOTE: We have to copy to avoid double convert of some keys or \
@@ -3148,7 +3160,7 @@ class Dictionary(Object, builtins.dict):
             >>> Dictionary({'a': {'__append__': [4]}}).update(
             ...     other={'a': [3]}
             ... ).content
-            {'a': [4, 3]}
+            {'a': [3, 4]}
 
             >>> Dictionary({'a': {'__append__': 4}}).update(
             ...     other={'a': [3]}
