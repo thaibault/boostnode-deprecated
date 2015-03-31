@@ -184,7 +184,8 @@ FileHandler.get_name = file_handler_get_name
 def dictionary_convert(
     self, key_wrapper=lambda key, value: key,
     value_wrapper=lambda key, value: value,
-    no_wrap_indicator='__no_wrapping__', remove_no_wrap_indicator=True
+    no_wrap_indicator='__no_wrapping__', remove_no_wrap_indicator=True,
+    filter=lambda key, value: True
 ):
     for key, value in self.content.items():
         if key == no_wrap_indicator:
@@ -201,7 +202,7 @@ def dictionary_convert(
         if builtins.isinstance(value, builtins.dict):
             self.content[key] = self.__class__(value).convert(
                 key_wrapper, value_wrapper, no_wrap_indicator,
-                remove_no_wrap_indicator
+                remove_no_wrap_indicator, filter
             ).content
 # # python3.4
 # #         elif(builtins.isinstance(value, Iterable) and
@@ -216,8 +217,9 @@ def dictionary_convert(
                 self.__class__, iterable=value, key_wrapper=key_wrapper,
                 value_wrapper=value_wrapper,
                 no_wrap_indicator=no_wrap_indicator,
-                remove_no_wrap_indicator=remove_no_wrap_indicator)
-        else:
+                remove_no_wrap_indicator=remove_no_wrap_indicator,
+                filter=filter)
+        elif filter(key, value):
             self.content[key] = value_wrapper(key, value)
     return self
 Dictionary.convert = dictionary_convert
@@ -225,14 +227,14 @@ Dictionary.convert = dictionary_convert
 
 def dictionary__convert_iterable(
     cls, iterable, key_wrapper, value_wrapper, no_wrap_indicator,
-    remove_no_wrap_indicator
+    remove_no_wrap_indicator, filter
 ):
     '''
         Converts all keys or values and nested keys or values with given \
         callback function in a given iterable.
     '''
     if builtins.isinstance(iterable, builtins.set):
-        return cls._convert_set(iterable, key_wrapper, value_wrapper)
+        return cls._convert_set(iterable, key_wrapper, value_wrapper, filter)
 # # python3.4
 # #     if isinstance(iterable, range):
 # #         iterable = list(iterable)
@@ -243,7 +245,7 @@ def dictionary__convert_iterable(
             if builtins.isinstance(value, builtins.dict):
                 iterable[key] = cls(value).convert(
                     key_wrapper, value_wrapper, no_wrap_indicator,
-                    remove_no_wrap_indicator
+                    remove_no_wrap_indicator, filter
                 ).content
 # # python3.4
 # #             elif isinstance(value, Iterable) and not isinstance(
@@ -259,9 +261,12 @@ def dictionary__convert_iterable(
                     cls, iterable=value, key_wrapper=key_wrapper,
                     value_wrapper=value_wrapper,
                     no_wrap_indicator=no_wrap_indicator,
-                    remove_no_wrap_indicator=remove_no_wrap_indicator)
-            else:
+                    remove_no_wrap_indicator=remove_no_wrap_indicator,
+                    filter=filter)
+            elif filter(key, value):
                 iterable[key] = value_wrapper(key, value)
+            else:
+                del iterable[key]
     except builtins.TypeError as exception:
         '''
             NOTE: We have visited a non indexable value (e.g. an uploaded

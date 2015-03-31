@@ -44,8 +44,12 @@ import re as regularExpression
 import shutil
 import stat
 import sys
-# # python3.4 import types
+# # python3.4
+# # from types import FunctionType as Function
+# # from types import GeneratorType as Generator
+# # from types import MethodType as Method
 pass
+# #
 
 '''Make boostNode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
@@ -678,7 +682,7 @@ class Handler(Class):
         # # # endregion
 
     @JointPoint
-# # python3.4     def __iter__(self: Self) -> types.GeneratorType:
+# # python3.4     def __iter__(self: Self) -> Generator:
     def __iter__(self):
         '''
             Invokes if the current object is tried to iterate.
@@ -1707,7 +1711,7 @@ class Handler(Class):
 # #     def get_content(
 # #         self: Self, mode='r', strict=False, *arguments: builtins.object,
 # #         **keywords: builtins.object
-# #     ) -> (builtins.str, builtins.bytes, types.GeneratorType):
+# #     ) -> (builtins.str, builtins.bytes, Generator):
     def get_content(self, mode='r', strict=False, *arguments, **keywords):
 # #
         '''
@@ -3053,7 +3057,7 @@ class Handler(Class):
 # #     def list(
 # #         self: Self, *arguments: builtins.object,
 # #         **keywords: builtins.object
-# #     ) -> types.GeneratorType:
+# #     ) -> Generator:
     def list(self, *arguments, **keywords):
 # #
         '''
@@ -4299,9 +4303,7 @@ class Handler(Class):
     @JointPoint
 # # python3.4
 # #     def iterate_directory(
-# #         self: Self,
-# #         function: (builtins.str, types.FunctionType, types.MethodType,
-# #                    JointPoint),
+# #         self: Self, function: (builtins.str, Function, Method, JointPoint),
 # #         recursive=False, recursive_in_link=True,
 # #         deep_first=True, *arguments: builtins.object,
 # #         **keywords: builtins.object
@@ -4463,7 +4465,7 @@ class Handler(Class):
         # region protected
 
     @JointPoint
-# # python3.4     def _list_windows_root(self: Self) -> types.GeneratorType:
+# # python3.4     def _list_windows_root(self: Self) -> Generator:
     def _list_windows_root(self):
         '''List partitions on windows root file systems.'''
         for letter_number in builtins.range(

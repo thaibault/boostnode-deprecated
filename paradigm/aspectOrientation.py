@@ -39,7 +39,8 @@ import inspect
 import os
 import re as regularExpression
 import sys
-import types
+from types import FunctionType as Function
+from types import MethodType as Method
 
 '''Make boostNode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
@@ -117,8 +118,7 @@ class FunctionDecorator(Class):
 
 # # python3.4
 # #     def __init__(
-# #         self: Self, method: (types.FunctionType, types.MethodType),
-# #         function=None
+# #         self: Self, method: (Function, Method), function=None
 # #     ) -> None:
     def __init__(self, method, function=None):
 # #
@@ -177,9 +177,7 @@ class FunctionDecorator(Class):
             self.wrapped_decorator = method
             self.__func__ = method.__func__
             self.method_type = method.method_type
-        elif(builtins.isinstance(
-            method, (types.FunctionType, types.MethodType))
-        ):
+        elif(builtins.isinstance(method, (Function, Method))):
             self.__func__ = method
         else:
             raise builtins.TypeError(
@@ -191,8 +189,8 @@ class FunctionDecorator(Class):
                         lambda decorator: decorator.__name__,
                         self.COMMON_DECORATORS + self.MANAGEABLE_DECORATORS +
                         [FunctionDecorator])),
-                    function_type=types.FunctionType.__name__,
-                    method_type=types.MethodType.__name__,
+                    function_type=Function.__name__,
+                    method_type=Method.__name__,
                     type=builtins.type(method).__name__,
                     value=builtins.str(method)))
 
@@ -282,7 +280,7 @@ class FunctionDecorator(Class):
 # # python3.4
 # #     def __get__(
 # #         self: Self, object: builtins.object, class_object=None
-# #     ) -> (types.FunctionType, types.MethodType):
+# #     ) -> (Function, Method):
     def __get__(self, object, class_object=None):
 # #
         '''
@@ -330,9 +328,7 @@ class FunctionDecorator(Class):
         # # endregion
 
 # # python3.4
-# #     def get_wrapper_function(self: Self) -> (
-# #         types.FunctionType, types.MethodType
-# #     ):
+# #     def get_wrapper_function(self: Self) -> (Function, Method):
     def get_wrapper_function(self):
 # #
         '''
@@ -347,7 +343,7 @@ class FunctionDecorator(Class):
 
 # # python3.4
 # #     def _handle_given_decorator(
-# #         self: Self, function: (types.FunctionType, types.MethodType),
+# #         self: Self, function: (Function, Method),
 # #         method: (builtins.object, builtins.type)
 # #     ) -> Self:
     def _handle_given_decorator(self, function, method):
@@ -435,8 +431,8 @@ class JointPointHandler(Class):
 # # python3.4
 # #     def __init__(
 # #         self: Self, class_object: builtins.type, object: builtins.object,
-# #         function: (types.FunctionType, types.MethodType),
-# #         arguments: Iterable, keywords: builtins.dict
+# #         function: (Function, Method), arguments: Iterable,
+# #         keywords: builtins.dict
 # #     ) -> None:
     def __init__(
         self, class_object, object, function, arguments, keywords
@@ -715,7 +711,7 @@ class Argument(Class):
 # #     def __init__(
 # #         self: Self, parameter: inspect.Parameter,
 # #         value: (builtins.object, builtins.type),
-# #         function: (types.MethodType, types.FunctionType), name=None
+# #         function: (Method, Function), name=None
 # #     ) -> None:
     def __init__(self, parameter, value, function, name=None):
 # #
@@ -845,8 +841,8 @@ class PointCut(ReturnAspect):
 # # python3.4
 # #     def __init__(
 # #         self: Self, class_object: builtins.type, object: builtins.object,
-# #         function: (types.FunctionType, types.MethodType),
-# #         arguments: Iterable, keywords: builtins.dict
+# #         function: (Function, Method), arguments: Iterable,
+# #         keywords: builtins.dict
 # #     ) -> None:
     def __init__(
         self, class_object, object, function, arguments, keywords
@@ -915,7 +911,7 @@ class PointCut(ReturnAspect):
                 if(builtins.hasattr(advice['callback'], 'aspect') and
                    builtins.isinstance(
                        builtins.getattr(advice['callback'], 'aspect'),
-                       (types.MethodType, types.FunctionType))):
+                       (Method, Function))):
                     result = result.aspect()
                 return result is not False
             return True
@@ -960,9 +956,7 @@ class PointCut(ReturnAspect):
         # region protected
 
 # # python3.4
-# #     def _handle_aspects(
-# #         self: Self, handler: types.MethodType
-# #     ) -> builtins.bool:
+# #     def _handle_aspects(self: Self, handler: Method) -> builtins.bool:
     def _handle_aspects(self, handler):
 # #
         '''Iterates through each aspect matching current function call.'''
@@ -994,9 +988,7 @@ class PointCut(ReturnAspect):
 
 if sys.flags.optimize:
 # # python3.4
-# #     def JointPoint(
-# #         function: (types.FunctionType, types.MethodType)
-# #     ) -> (types.FunctionType, types.MethodType):
+# #     def JointPoint(function: (Function, Method)) -> (Function, Method):
     def JointPoint(function):
 # #
         '''
@@ -1088,9 +1080,7 @@ else:
         # # region getter
 
 # # python3.4
-# #         def get_wrapper_function(
-# #             self: Self
-# #         ) -> (types.FunctionType, types.MethodType):
+# #         def get_wrapper_function(self: Self) -> (Function, Method):
         def get_wrapper_function(self):
 # #
             '''This methods returns the joint point's wrapped function.'''

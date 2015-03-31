@@ -51,7 +51,10 @@ import os
 import re as regularExpression
 import sys
 from time import mktime as make_time
-import types
+from types import FrameType as Frame
+from types import FunctionType as Function
+from types import GeneratorType as Generator
+from types import MethodType as Method
 
 '''Make boostNode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
@@ -139,7 +142,7 @@ class EnsureNewMutableDefaultObject(FunctionDecorator):
 
     IMMUTABLE_OBJECTS = (
         builtins.tuple, builtins.bool, builtins.str, builtins.int,
-        builtins.float, types.FunctionType, types.MethodType)
+        builtins.float, Function, Method)
     '''
         Defines all argument names which will be ignored by generating \
         instance properties.
@@ -153,9 +156,7 @@ class EnsureNewMutableDefaultObject(FunctionDecorator):
 
     @JointPoint
 # # python3.4
-# #     def get_wrapper_function(
-# #         self: Self
-# #     ) -> (types.FunctionType, types.MethodType):
+# #     def get_wrapper_function(self: Self) -> (Function, Method):
     def get_wrapper_function(self):
 # #
         '''This methods returns the wrapped function.'''
@@ -233,9 +234,7 @@ class ClassPropertyInitializer(FunctionDecorator):
 
     @JointPoint
 # # python3.4
-# #     def get_wrapper_function(
-# #         self: Self
-# #     ) -> (types.FunctionType, types.MethodType):
+# #     def get_wrapper_function(self: Self) -> (Function, Method):
     def get_wrapper_function(self):
 # #
         '''This methods returns the wrapped function.'''
@@ -368,12 +367,14 @@ class Model(builtins.object):
 # #     def get_dictionary(
 # #         self: Self, key_wrapper=lambda key, value: key,
 # #         value_wrapper=lambda key, value: value,
-# #         prefix_filter=('password', 'session'), property_names=()
+# #         prefix_filter=('password', 'session'), property_names=(),
+# #         property_names=(), filter=lambda key, value: True
 # #     ) -> builtins.dict:
     def get_dictionary(
         self, key_wrapper=lambda key, value: key,
         value_wrapper=lambda key, value: value,
-        prefix_filter=('password', 'session'), property_names=()
+        prefix_filter=('password', 'session'), property_names=(),
+        filter=lambda key, value: True
     ):
 # #
         '''
@@ -391,6 +392,9 @@ class Model(builtins.object):
 
             **property_names** - A list of column names to export. If empty \
                                  (default) all columns will be given back.
+
+            **filter**         - An indicator function to filter specified \
+                                 properties.
 
             Returns the rendered dictionary.
 
@@ -427,6 +431,14 @@ class Model(builtins.object):
             True
 
             >>> user = User()
+            >>> user.a = 1
+            >>> user.b = 2
+            >>> user.get_dictionary(
+            ...     filter=lambda key, value: key == 'b'
+            ... ) == {'b': 2}
+            True
+
+            >>> user = User()
             >>> user.hans_peter = 5
             >>> user.get_dictionary() == {'hans_peter': 5}
             True
@@ -446,7 +458,7 @@ class Model(builtins.object):
                 property_names = builtins.tuple(builtins.map(
                     lambda column: column.name, self.__table__.columns))
             else:
-                def filter(name):
+                def property_filter(name):
                     if name.startswith('_'):
                         return False
                     for prefix in prefix_filter:
@@ -454,11 +466,12 @@ class Model(builtins.object):
                             return False
                     return True
                 property_names = builtins.tuple(builtins.filter(
-                    filter, self.__dict__))
+                    property_filter, self.__dict__))
         for name in property_names:
             value = builtins.getattr(self, name)
-            key = key_wrapper(key=name, value=value)
-            result[key] = value_wrapper(key, value)
+            if filter(name, value):
+                key = key_wrapper(key=name, value=value)
+                result[key] = value_wrapper(key, value)
         return result
 
         # # endregion
@@ -2941,12 +2954,14 @@ class Dictionary(Object, builtins.dict):
 # #     def convert(
 # #         self: Self, key_wrapper=lambda key, value: key,
 # #         value_wrapper=lambda key, value: value,
-# #         no_wrap_indicator='__no_wrapping__', remove_no_wrap_indicator=True
+# #         no_wrap_indicator='__no_wrapping__', remove_no_wrap_indicator=True,
+# #         filter=lambda key, value: True
 # #     ) -> Self:
     def convert(
         self, key_wrapper=lambda key, value: key,
         value_wrapper=lambda key, value: value,
-        no_wrap_indicator='__no_wrapping__', remove_no_wrap_indicator=True
+        no_wrap_indicator='__no_wrapping__', remove_no_wrap_indicator=True,
+        filter=lambda key, value: True
     ):
 # #
         '''
@@ -2963,6 +2978,9 @@ class Dictionary(Object, builtins.dict):
 
             **remove_no_wrap_indicator** - Removes wrap indicator und leaves \
                                            its value untouched.
+
+            **filter**                   - Function to filter properties from \
+                                           given dictionary.
 
             Examples:
 
@@ -3052,6 +3070,13 @@ class Dictionary(Object, builtins.dict):
             ...     remove_no_wrap_indicator=True
             ... ).content
             {'b': {'A': 2}}
+
+            >>> Dictionary({'A': 1, 'B': 2}).convert(
+            ...     key_wrapper=lambda key, value: key.lower(),
+            ...     remove_no_wrap_indicator=True,
+            ...     filter=lambda key, value: value == 2
+            ... ).content
+            {'b': 2}
         '''
         '''
             NOTE: We have to copy to avoid double convert of some keys or \
@@ -3080,7 +3105,7 @@ class Dictionary(Object, builtins.dict):
                     self.__class__(value), inspect.stack()[0][3]
                 )(
                     key_wrapper, value_wrapper, no_wrap_indicator,
-                    remove_no_wrap_indicator
+                    remove_no_wrap_indicator, filter
                 ).content
 # # python3.4
 # #             elif(builtins.isinstance(value, Iterable) and
@@ -3094,8 +3119,9 @@ class Dictionary(Object, builtins.dict):
                     iterable=value, key_wrapper=key_wrapper,
                     value_wrapper=value_wrapper,
                     no_wrap_indicator=no_wrap_indicator,
-                    remove_no_wrap_indicator=remove_no_wrap_indicator)
-            else:
+                    remove_no_wrap_indicator=remove_no_wrap_indicator,
+                    filter=filter)
+            elif filter(key, value):
                 self.content[key] = value_wrapper(key, value)
         return self
 
@@ -3236,7 +3262,7 @@ class Dictionary(Object, builtins.dict):
     @JointPoint(builtins.classmethod)
 # # python3.4
 # #     def _convert_to_compatible_type(
-# #         cls, key: (builtins.object, builtins.type), value=Null
+# #         cls: SelfClass, key: (builtins.object, builtins.type), value=Null
 # #     ) -> (builtins.object, builtins.type):
     def _convert_to_compatible_type(cls, key, value=Null):
 # #
@@ -3258,7 +3284,8 @@ class Dictionary(Object, builtins.dict):
     @JointPoint(builtins.classmethod)
 # # python3.4
 # #     def _convert_to_known_type(
-# #         cls, key: (builtins.object, builtins.type), value=Null, strict=True
+# #         cls: SelfClass, key: (builtins.object, builtins.type), value=Null,
+# #         strict=True
 # #     ) -> (builtins.object, builtins.type):
     def _convert_to_known_type(cls, key, value=Null, strict=True):
 # #
@@ -3279,12 +3306,14 @@ class Dictionary(Object, builtins.dict):
     @JointPoint(builtins.classmethod)
 # # python3.4
 # #     def _convert_iterable(
-# #         cls, iterable, key_wrapper, value_wrapper, no_wrap_indicator,
-# #         remove_no_wrap_indicator
-# #     ):
+# #         cls: SelfClass, iterable: Iterable,
+# #         key_wrapper: (Function, Method), value_wrapper: (Function, Method),
+# #         no_wrap_indicator: builtins.str,
+# #         remove_no_wrap_indicator: builtins.bool, filter: (Function, Method)
+# #     ) -> Iterable:
     def _convert_iterable(
         cls, iterable, key_wrapper, value_wrapper, no_wrap_indicator,
-        remove_no_wrap_indicator
+        remove_no_wrap_indicator, filter
     ):
 # #
         '''
@@ -3294,11 +3323,13 @@ class Dictionary(Object, builtins.dict):
             Examples:
 
             >>> Dictionary({})._convert_iterable(
-            ...     5, lambda key: key, lambda value: value, '', False)
+            ...     5, lambda key, value: key, lambda key, value: value, '',
+            ...     False, lambda key, value: True)
             5
         '''
         if builtins.isinstance(iterable, builtins.set):
-            return cls._convert_set(iterable, key_wrapper, value_wrapper)
+            return cls._convert_set(
+                iterable, key_wrapper, value_wrapper, filter)
 # # python3.4
 # #         if builtins.isinstance(iterable, builtins.range):
 # #             iterable = builtins.list(iterable)
@@ -3309,7 +3340,7 @@ class Dictionary(Object, builtins.dict):
                 if builtins.isinstance(value, builtins.dict):
                     iterable[key] = cls(value).convert(
                         key_wrapper, value_wrapper, no_wrap_indicator,
-                        remove_no_wrap_indicator
+                        remove_no_wrap_indicator, filter
                     ).content
 # # python3.4
 # #                 elif(builtins.isinstance(value, Iterable) and
@@ -3329,9 +3360,13 @@ class Dictionary(Object, builtins.dict):
                         iterable=value, key_wrapper=key_wrapper,
                         value_wrapper=value_wrapper,
                         no_wrap_indicator=no_wrap_indicator,
-                        remove_no_wrap_indicator=remove_no_wrap_indicator)
-                else:
+                        remove_no_wrap_indicator=remove_no_wrap_indicator,
+                        filter=filter)
+                # TODO check new branch
+                elif filter(key, value):
                     iterable[key] = value_wrapper(key, value)
+                else:
+                    del iterable[key]
         except builtins.TypeError as exception:
             '''
                 NOTE: We have visited a non indexable value (e.g. an uploaded \
@@ -3349,15 +3384,19 @@ class Dictionary(Object, builtins.dict):
 
     @JointPoint(builtins.classmethod)
 # # python3.4
-# #     def _convert_set(cls, set, key_wrapper, value_wrapper):
-    def _convert_set(cls, set, key_wrapper, value_wrapper):
+# #     def _convert_set(
+# #         cls: SelfClass, set: builtins.set,
+# #         key_wrapper: (Function, Method), value_wrapper: (Function, Method),
+# #         filter: (Function, Method)
+# #     ) -> builtins.set:
+    def _convert_set(cls, set, key_wrapper, value_wrapper, filter):
 # #
         '''
             Converts all keys or values and nested keys or values with given \
             callback function in a given set.
         '''
         new_set = builtins.set()
-        for value in set:
+        for value in builtins.filter(lambda value: filter(None, value), set):
             '''NOTE: Only hashable objects are allowed in a set.'''
             new_set.add(value_wrapper(key=None, value=value))
         return new_set
@@ -3734,7 +3773,7 @@ class Module(Object):
 # #     def get_defined_callables(
 # #         cls: SelfClass, *arguments: (builtins.type, builtins.object),
 # #         **keywords: (builtins.type, builtins.object)
-# #     ) -> types.GeneratorType:
+# #     ) -> Generator:
     def get_defined_callables(cls, *arguments, **keywords):
 # #
         '''
@@ -3781,7 +3820,7 @@ class Module(Object):
 # #         cls: SelfClass, object: (
 # #             builtins.type, builtins.object, builtins.dict
 # #         ), only_module_level=True
-# #     ) -> types.GeneratorType:
+# #     ) -> Generator:
     def get_defined_objects(cls, object, only_module_level=True):
 # #
         '''
@@ -4005,7 +4044,7 @@ class Module(Object):
     @JointPoint(builtins.classmethod)
 # # python3.4
 # #     def default(
-# #         cls: SelfClass, name: builtins.str, frame: types.FrameType,
+# #         cls: SelfClass, name: builtins.str, frame: Frame,
 # #         default_caller=None, caller_arguments=(), caller_keywords={}
 # #     ) -> SelfClass:
     def default(
@@ -4057,7 +4096,7 @@ class Module(Object):
     @JointPoint(builtins.classmethod)
 # # python3.4
 # #     def default_package(
-# #         cls: SelfClass, name: builtins.str, frame: types.FrameType,
+# #         cls: SelfClass, name: builtins.str, frame: Frame,
 # #         *arguments: builtins.object, **keywords: builtins.object
 # #     ) -> (builtins.tuple, builtins.bool):
     def default_package(
@@ -4137,8 +4176,8 @@ class Module(Object):
     @JointPoint(builtins.classmethod)
 # # python3.4
 # #     def _get_module_file(
-# #         cls: SelfClass, frame: (builtins.type(None), types.FrameType),
-# #         module: (builtins.type(None), types.ModuleType)
+# #         cls: SelfClass, frame: (builtins.type(None), Frame),
+# #         module: (builtins.type(None), Module)
 # #     ) -> (Class, builtins.bool):
     def _get_module_file(cls, frame, module):
 # #

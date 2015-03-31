@@ -38,8 +38,11 @@ pass
 import inspect
 import os
 import sys
-# # python3.4 import types
+# # python3.4
+# # from types import FunctionType as Function
+# # from types import MethodType as Method
 pass
+# #
 
 '''Make boostNode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
@@ -977,9 +980,7 @@ class Check(FunctionDecorator):
 
     @JointPoint
 # # python3.4
-# #     def get_wrapper_function(
-# #         self: Self
-# #     ) -> (types.FunctionType, types.MethodType):
+# #     def get_wrapper_function(self: Self) -> (Function, Method):
 # #         '''
 # #             Returns a wrapper function for the function to be checked.
 # #

@@ -108,8 +108,10 @@ import __builtin__ as builtins
 import inspect
 import os
 import sys
-# # python3.4 import types
+# # python3.4
+# # from types import MethodType as Method
 pass
+# #
 
 '''Make boostNode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
@@ -169,9 +171,7 @@ class Class(builtins.object):
 
     @builtins.classmethod
 # # python3.4
-# #     def pseudo_property(
-# #         cls: builtins.object, function: types.MethodType
-# #     ) -> types.MethodType:
+# #     def pseudo_property(cls: builtins.object, function: Method) -> Method:
     def pseudo_property(cls, function):
 # #
         '''

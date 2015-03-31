@@ -72,7 +72,8 @@ import StringIO
 import threading
 import time
 # # python3.4
-# # import types
+# # from types import FunctionType as Function
+# # from types import ModuleType
 # # from urllib.parse import urlparse as parse_url
 # # from urllib.parse import parse_qs as parse_url_query
 # # from urllib.parse import unquote as unquote_url
@@ -288,7 +289,7 @@ class MultiProcessingHTTPServer(
     @JointPoint
 # # python3.4
 # #     def process_request_no_termination_wrapper(
-# #         self: Self, parent_function: types.FunctionType,
+# #         self: Self, parent_function: Function,
 # #         request: socket.socket, arguments: builtins.tuple,
 # #         keywords: builtins.dict
 # #     ) -> None:
@@ -1920,12 +1921,12 @@ class CGIHTTPRequestHandler(
 # # python3.4
 # #                     get = parse_url_query(
 # #                         qs=parse_result.query, keep_blank_values=True,
-# #                         strict_parsing=True,
+# #                         strict_parsing=False,
 # #                         encoding=self.server.web.encoding,
 # #                         errors='replace')
                     get = parse_url_query(
                         qs=parse_result.query, keep_blank_values=True,
-                        strict_parsing=True)
+                        strict_parsing=False)
 # #
                 except builtins.ValueError:
                     __logger__.info(
@@ -4077,7 +4078,7 @@ class CGIHTTPRequestHandler(
     @JointPoint
 # # python3.4
 # #     def _handle_module_running(
-# #         self: Self, requested_module: types.ModuleType,
+# #         self: Self, requested_module: ModuleType,
 # #         print_default_buffer_backup: builtins.object,
 # #         sys_path_backup: Iterable
 # #     ) -> Self:
@@ -4112,7 +4113,7 @@ class CGIHTTPRequestHandler(
     @JointPoint
 # # python3.4
 # #     def _handle_module_exception(
-# #         self: Self, requested_module: types.ModuleType,
+# #         self: Self, requested_module: ModuleType,
 # #         exception: builtins.BaseException, debug=False
 # #     ) -> Self:
     def _handle_module_exception(

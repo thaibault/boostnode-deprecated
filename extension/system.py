@@ -55,8 +55,13 @@ import sys
 from tempfile import mkdtemp as make_temporary_directory
 import time
 import traceback
-# # python3.4 import types
+# # python3.4
+# # from types import FunctionType as Function
+# # from types import MethodType as Method
+# # from types import FrameType as Frame
+# # from types import ModulType
 pass
+# #
 
 '''Make boostNode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
@@ -1008,8 +1013,7 @@ class Platform(builtins.object):
 # # python3.4
 # #     def change_computer_status(
 # #         cls: SelfClass, host: builtins.str, mac_address: builtins.str,
-# #         broadcast: builtins.str,
-# #         handler: (types.MethodType, types.FunctionType), down=False,
+# #         broadcast: builtins.str, handler: (Method, Function), down=False,
 # #         number_of_tries=10
 # #     ) -> builtins.tuple:
     def change_computer_status(
@@ -1872,15 +1876,17 @@ class CommandLine(builtins.object):
     @JointPoint(builtins.classmethod)
 # # python3.4
 # #     def boolean_input(
-# #         cls: SelfClass, question: builtins.str
-# #     ) -> builtins.bool:
-    def boolean_input(cls, question):
+# #         cls: SelfClass, question: builtins.str, extra=()
+# #     ) -> (builtins.bool, builtins.str):
+    def boolean_input(cls, question, extra=()):
 # #
         '''
             This methods implements a handy way to get "yes" or "no" answers \
             from the user via command line.
 
-            **question** - question to ask via command line interface
+            **question** - Question to ask via command line interface
+
+            **extra**    - Additional states to ask for.
 
             Examples:
 
@@ -1892,8 +1898,11 @@ class CommandLine(builtins.object):
 # # python3.4         input_string = builtins.input(question.format(
         input_string = builtins.raw_input(question.format(
             boolean_arguments='(Choose one of: {choices})'.format(
-                choices=', '.join(cls.POSITIVE_INPUTS + cls.NEGATIVE_INPUTS)))
+                choices=', '.join(
+                    cls.POSITIVE_INPUTS + extra + cls.NEGATIVE_INPUTS)))
         ).lower()
+        if input_string in extra:
+            return input_string
         if input_string in cls.POSITIVE_INPUTS:
             return True
         if input_string in cls.NEGATIVE_INPUTS:
@@ -2541,7 +2550,7 @@ class CommandLine(builtins.object):
 
             >>> import types
 
-            >>> class A(types.ModuleType): pass
+            >>> class A(ModuleType): pass
 
             >>> if sys.version_info.major < 3:
             ...     CommandLine._determine_callable_objects(
@@ -2562,7 +2571,7 @@ class CommandLine(builtins.object):
             ...
             boosteNode.extension.system.SystemError: No callable objects in ...
 
-            >>> class A(types.ModuleType):
+            >>> class A(ModuleType):
             ...     def a(self): pass
             >>> if sys.version_info.major < 3:
             ...     a = A(str('A'))
@@ -2599,7 +2608,7 @@ class CommandLine(builtins.object):
 # #         linter: builtins.str, documentation_path: builtins.str,
 # #         clear_old_documentation: builtins.bool,
 # #         documenter: builtins.str, documenter_arguments: Iterable,
-# #         documentation_file_extension: builtins.str, frame: types.FrameType,
+# #         documentation_file_extension: builtins.str, frame: Frame,
 # #         current_working_directory_backup: builtins.str
 # #     ) -> SelfClass:
     def _test_lint_document_modules(
@@ -2738,7 +2747,7 @@ class CommandLine(builtins.object):
 # # python3.4
 # #     def _put_documentations_together(
 # #         cls: SelfClass, documentation_path: builtins.str,
-# #         frame: types.FrameType,
+# #         frame: Frame,
 # #         current_working_directory_backup: builtins.str,
 # #         documentation_file_extension: builtins.str
 # #     ) -> SelfClass:
@@ -2895,7 +2904,7 @@ class CommandLine(builtins.object):
 # # python3.4
 # #     def _handle_packages_in_package(
 # #         cls: SelfClass, current_working_directory_backup: builtins.str,
-# #         frame: types.FrameType, command_line_arguments: Iterable,
+# #         frame: Frame, command_line_arguments: Iterable,
 # #         exclude_packages: Iterable
 # #     ) -> SelfClass:
     def _handle_packages_in_package(
@@ -2956,7 +2965,7 @@ class CommandLine(builtins.object):
     @JointPoint(builtins.classmethod)
 # # python3.4
 # #     def _package_start_helper(
-# #         cls: SelfClass, name: builtins.str, frame: types.FrameType,
+# #         cls: SelfClass, name: builtins.str, frame: Frame,
 # #         command_line_arguments: Iterable
 # #     ) -> builtins.tuple:
     def _package_start_helper(cls, name, frame, command_line_arguments):
@@ -3068,7 +3077,7 @@ class CommandLine(builtins.object):
 # # python3.4
 # #     def _get_packages(
 # #         cls: SelfClass, current_working_directory_backup: builtins.str,
-# #         frame: types.FrameType
+# #         frame: Frame
 # #     ) -> builtins.list:
     def _get_packages(cls, current_working_directory_backup, frame):
 # #
@@ -3102,7 +3111,7 @@ class CommandLine(builtins.object):
     @JointPoint(builtins.classmethod)
 # # python3.4
 # #     def _package_argument_parser(
-# #         cls: SelfClass, name: builtins.str, frame: types.FrameType,
+# #         cls: SelfClass, name: builtins.str, frame: Frame,
 # #         command_line_arguments: Iterable
 # #     ) -> argparse.Namespace:
     def _package_argument_parser(cls, name, frame, command_line_arguments):
