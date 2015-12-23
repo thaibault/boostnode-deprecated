@@ -8,7 +8,7 @@
     
     <title>boostNode.runnable.macro &mdash; boostNode 1.0 rc documentation</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,8 +27,8 @@
     <link rel="next" title="boostNode.runnable.server" href="runnable.server.html" />
     <link rel="prev" title="boostNode.runnable.synchronisation" href="runnable.synchronisation.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -43,21 +43,21 @@
         <li class="right" >
           <a href="runnable.synchronisation.html" title="boostNode.runnable.synchronisation"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">boostNode 1.0 rc documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">boostNode 1.0 rc documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="module-boostNode.runnable.macro">
 <span id="boostnode-runnable-macro"></span><h1>boostNode.runnable.macro<a class="headerlink" href="#module-boostNode.runnable.macro" title="Permalink to this headline">¶</a></h1>
 <p>This module provides an interpreter to run a simple macro language     written in text-files. Converts special commented version depending code     snippets in given location to another given version. This code     transformation can always be made in both directions.</p>
 <dl class="class">
 <dt id="boostNode.runnable.macro.Replace">
-<em class="property">class </em><tt class="descclassname">boostNode.runnable.macro.</tt><tt class="descname">Replace</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.macro.Replace" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">boostNode.runnable.macro.</code><code class="descname">Replace</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.runnable.macro.Replace" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse source code and replace version depended code snippets with the         correct given version code snippets.</p>
 <p>NOTE: &#8220;(?s...)&#8221; is equivalent to regular expression flag         &#8220;regularExpression.DOTALL&#8221;.
 NOTE: That alternate version in one line regular expression pattern         could be empty.</p>
@@ -82,7 +82,7 @@ NOTE: That alternate version in one line regular expression pattern         coul
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">__test_globals__</span><span class="p">[</span><span class="s">&#39;__test_mode__&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">file</span> <span class="o">=</span> <span class="n">FileHandler</span><span class="p">(</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;_initialize&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">file</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="s">&#39;#!/bin/python2.7</span><span class="se">\n\n</span><span class="s"># # python3.4 a</span><span class="se">\n</span><span class="s">b</span><span class="se">\n</span><span class="s">&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">file</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="s">&#39;#!/bin/python2.7</span><span class="se">\n\n</span><span class="s"># # python3.5 a</span><span class="se">\n</span><span class="s">b</span><span class="se">\n</span><span class="s">&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Replace</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span> 
 <span class="go">Object of &quot;Replace&quot; with file &quot;..._initialize&quot; to convert to &quot;py...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">__test_globals__</span><span class="p">[</span><span class="s">&#39;__test_mode__&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
@@ -90,13 +90,13 @@ NOTE: That alternate version in one line regular expression pattern         coul
 </div>
 <dl class="attribute">
 <dt id="boostNode.runnable.macro.Replace.COMMAND_LINE_ARGUMENTS">
-<tt class="descname">COMMAND_LINE_ARGUMENTS</tt><em class="property"> = ({u'specification': {u'help': u'Defines files to convert. A directory or file path is supported.', u'default': {u'execute': u'__initializer_default_value__'}, u'required': {u'execute': u'__initializer_default_value__ is None'}, u'dest': u'location', u'action': u'store', u'type': &lt;type 'str'&gt;, u'metavar': u'PATH'}, u'arguments': (u'-p', u'--path')}, {u'specification': {u'help': u'Defines new version of converted files.', u'default': {u'execute': u'__initializer_default_value__'}, u'required': {u'execute': u'__initializer_default_value__ is None'}, u'dest': u'_new_version', u'action': u'store', u'type': {u'execute': u'type(__initializer_default_value__)'}, u'metavar': u'VERSION'}, u'arguments': (u'-n', u'--new-version')}, {u'specification': {u'action': u'store_true', u'default': {u'execute': u'__initializer_default_value__'}, u'dest': u'skip_self_file', u'help': u'Determines if this file should be ignored for running any macros.'}, u'arguments': (u'-s', u'--skip-self-file')}, {u'specification': {u'action': u'store_true', u'default': {u'execute': u'__initializer_default_value__'}, u'dest': u'dry', u'help': u'Define if there really should be done something.'}, u'arguments': (u'-y', u'--dry')}, {u'specification': {u'help': {u'execute': u'\'If setted only files with given extension will be parsed (default: &quot;%s&quot;).\' % __initializer_default_value__.replace(\'%\', \'%%\')'}, u'default': {u'execute': u'__initializer_default_value__'}, u'required': {u'execute': u'__initializer_default_value__ is None'}, u'dest': u'extension', u'action': u'store', u'type': {u'execute': u'type(__initializer_default_value__)'}, u'metavar': u'FILE_EXTENSION'}, u'arguments': (u'-e', u'--extension')}, {u'specification': {u'dest': u'_exclude_locations', u'default': {u'execute': u'__initializer_default_value__'}, u'help': {u'execute': u&quot;'Select locations which should be ignored. %s doesn\\'t touch these files.' % module_name.capitalize()&quot;}, u'action': u'store', u'type': &lt;type 'str'&gt;, u'required': {u'execute': u'__initializer_default_value__ is None'}, u'nargs': u'*', u'metavar': u'PATHS'}, u'arguments': (u'-a', u'--exclude-locations')}, {u'specification': {u'help': {u'execute': u'\'Defines line pattern to determine current version of file to parse (default: &quot;%s&quot;).\' %__initializer_default_value__.replace(\'%\', \'%%\')'}, u'default': {u'execute': u'__initializer_default_value__'}, u'required': {u'execute': u'__initializer_default_value__ is None'}, u'dest': u'first_line_regex_pattern', u'action': u'store', u'type': {u'execute': u'type(__initializer_default_value__)'}, u'metavar': u'REGEX'}, u'arguments': (u'-f', u'--first-line-regex-pattern')}, {u'specification': {u'help': {u'execute': u'\'Defines line to determine current version of file to parse (default: &quot;%s&quot;).\' % __initializer_default_value__.replace(\'%\', \'%%\')'}, u'default': {u'execute': u'__initializer_default_value__'}, u'required': {u'execute': u'__initializer_default_value__ is None'}, u'dest': u'one_line_regex_pattern', u'action': u'store', u'type': {u'execute': u'type(__initializer_default_value__)'}, u'metavar': u'REGEX'}, u'arguments': (u'-o', u'--one-line-regex-pattern')}, {u'specification': {u'help': {u'execute': u'\'Defines line to determine current version of file to parse (default: &quot;%s&quot;).\' % __initializer_default_value__.replace(\'%\', \'%%\')'}, u'default': {u'execute': u'__initializer_default_value__'}, u'required': {u'execute': u'__initializer_default_value__ is None'}, u'dest': u'more_line_regex_pattern', u'action': u'store', u'type': {u'execute': u'type(__initializer_default_value__)'}, u'metavar': u'REGEX'}, u'arguments': (u'-r', u'--more-line-regex-pattern')}, {u'specification': {u'help': {u'execute': u'\'Define which encoding should be used (default: &quot;%s&quot;).\' % __initializer_default_value__.replace(\'%\', \'%%\')'}, u'default': {u'execute': u'__initializer_default_value__'}, u'required': {u'execute': u'__initializer_default_value__ is None'}, u'dest': u'encoding', u'action': u'store', u'type': {u'execute': u'type(__initializer_default_value__)'}, u'metavar': u'ENCODING'}, u'arguments': (u'-g', u'--encoding')})</em><a class="headerlink" href="#boostNode.runnable.macro.Replace.COMMAND_LINE_ARGUMENTS" title="Permalink to this definition">¶</a></dt>
+<code class="descname">COMMAND_LINE_ARGUMENTS</code><em class="property"> = ({u'specification': {u'help': u'Defines files to convert. A directory or file path is supported.', u'default': {u'execute': u'__initializer_default_value__'}, u'required': {u'execute': u'__initializer_default_value__ is None'}, u'dest': u'location', u'action': u'store', u'type': &lt;type 'str'&gt;, u'metavar': u'PATH'}, u'arguments': (u'-p', u'--path')}, {u'specification': {u'help': u'Defines new version of converted files.', u'default': {u'execute': u'__initializer_default_value__'}, u'required': {u'execute': u'__initializer_default_value__ is None'}, u'dest': u'_new_version', u'action': u'store', u'type': {u'execute': u'type(__initializer_default_value__)'}, u'metavar': u'VERSION'}, u'arguments': (u'-n', u'--new-version')}, {u'specification': {u'action': u'store_true', u'default': {u'execute': u'__initializer_default_value__'}, u'dest': u'skip_self_file', u'help': u'Determines if this file should be ignored for running any macros.'}, u'arguments': (u'-s', u'--skip-self-file')}, {u'specification': {u'action': u'store_true', u'default': {u'execute': u'__initializer_default_value__'}, u'dest': u'dry', u'help': u'Define if there really should be done something.'}, u'arguments': (u'-y', u'--dry')}, {u'specification': {u'help': {u'execute': u'\'If setted only files with given extension will be parsed (default: &quot;%s&quot;).\' % __initializer_default_value__.replace(\'%\', \'%%\')'}, u'default': {u'execute': u'__initializer_default_value__'}, u'required': {u'execute': u'__initializer_default_value__ is None'}, u'dest': u'extension', u'action': u'store', u'type': {u'execute': u'type(__initializer_default_value__)'}, u'metavar': u'FILE_EXTENSION'}, u'arguments': (u'-e', u'--extension')}, {u'specification': {u'dest': u'_exclude_locations', u'default': {u'execute': u'__initializer_default_value__'}, u'help': {u'execute': u&quot;'Select locations which should be ignored. %s doesn\\'t touch these files.' % module_name.capitalize()&quot;}, u'action': u'store', u'type': &lt;type 'str'&gt;, u'required': {u'execute': u'__initializer_default_value__ is None'}, u'nargs': u'*', u'metavar': u'PATHS'}, u'arguments': (u'-a', u'--exclude-locations')}, {u'specification': {u'help': {u'execute': u'\'Defines line pattern to determine current version of file to parse (default: &quot;%s&quot;).\' %__initializer_default_value__.replace(\'%\', \'%%\')'}, u'default': {u'execute': u'__initializer_default_value__'}, u'required': {u'execute': u'__initializer_default_value__ is None'}, u'dest': u'first_line_regex_pattern', u'action': u'store', u'type': {u'execute': u'type(__initializer_default_value__)'}, u'metavar': u'REGEX'}, u'arguments': (u'-f', u'--first-line-regex-pattern')}, {u'specification': {u'help': {u'execute': u'\'Defines line to determine current version of file to parse (default: &quot;%s&quot;).\' % __initializer_default_value__.replace(\'%\', \'%%\')'}, u'default': {u'execute': u'__initializer_default_value__'}, u'required': {u'execute': u'__initializer_default_value__ is None'}, u'dest': u'one_line_regex_pattern', u'action': u'store', u'type': {u'execute': u'type(__initializer_default_value__)'}, u'metavar': u'REGEX'}, u'arguments': (u'-o', u'--one-line-regex-pattern')}, {u'specification': {u'help': {u'execute': u'\'Defines line to determine current version of file to parse (default: &quot;%s&quot;).\' % __initializer_default_value__.replace(\'%\', \'%%\')'}, u'default': {u'execute': u'__initializer_default_value__'}, u'required': {u'execute': u'__initializer_default_value__ is None'}, u'dest': u'more_line_regex_pattern', u'action': u'store', u'type': {u'execute': u'type(__initializer_default_value__)'}, u'metavar': u'REGEX'}, u'arguments': (u'-r', u'--more-line-regex-pattern')}, {u'specification': {u'help': {u'execute': u'\'Define which encoding should be used (default: &quot;%s&quot;).\' % __initializer_default_value__.replace(\'%\', \'%%\')'}, u'default': {u'execute': u'__initializer_default_value__'}, u'required': {u'execute': u'__initializer_default_value__ is None'}, u'dest': u'encoding', u'action': u'store', u'type': {u'execute': u'type(__initializer_default_value__)'}, u'metavar': u'ENCODING'}, u'arguments': (u'-g', u'--encoding')})</em><a class="headerlink" href="#boostNode.runnable.macro.Replace.COMMAND_LINE_ARGUMENTS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines options for manipulating the programs default behavior.</p>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="boostNode.runnable.macro.Replace.set_exclude_locations">
-<em class="property">static </em><tt class="descname">set_exclude_locations</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.macro.Replace.set_exclude_locations" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_exclude_locations</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.runnable.macro.Replace.set_exclude_locations" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts all paths setted to &#8220;_exclude_locations&#8221; via string to             high level file objects.</p>
 <p><strong>paths</strong> - A list of paths to exclude from processing the macro.</p>
 <p>Returns a list of file objects to ignore.</p>
@@ -112,9 +112,9 @@ NOTE: That alternate version in one line regular expression pattern         coul
 </div>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="boostNode.runnable.macro.Replace.set_new_version">
-<em class="property">static </em><tt class="descname">set_new_version</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.runnable.macro.Replace.set_new_version" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_new_version</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.runnable.macro.Replace.set_new_version" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if an explicit new version was given or a useful should be             determined.</p>
 <p><strong>version</strong> - New version of current text file. Could be                           &#8220;__determine_useful__&#8221; if it should be guessed.</p>
 <p>Returns new version.</p>
@@ -122,8 +122,8 @@ NOTE: That alternate version in one line regular expression pattern         coul
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">replace</span> <span class="o">=</span> <span class="n">Replace</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="n">__file_path__</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">replace</span><span class="o">.</span><span class="n">set_new_version</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s">&#39;python3.4&#39;</span><span class="p">)</span>
-<span class="go">&#39;python3.4&#39;</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">replace</span><span class="o">.</span><span class="n">set_new_version</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s">&#39;python3.5&#39;</span><span class="p">)</span>
+<span class="go">&#39;python3.5&#39;</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">replace</span><span class="o">.</span><span class="n">new_version</span> <span class="o">=</span> <span class="s">&#39;__determine_useful__&#39;</span>
@@ -161,7 +161,7 @@ NOTE: That alternate version in one line regular expression pattern         coul
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
   <p class="topless"><a href="runnable.synchronisation.html"
@@ -169,12 +169,14 @@ NOTE: That alternate version in one line regular expression pattern         coul
   <h4>Next topic</h4>
   <p class="topless"><a href="runnable.server.html"
                         title="next chapter">boostNode.runnable.server</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/runnable.macro.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/runnable.macro.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
@@ -191,7 +193,7 @@ NOTE: That alternate version in one line regular expression pattern         coul
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -206,12 +208,12 @@ NOTE: That alternate version in one line regular expression pattern         coul
         <li class="right" >
           <a href="runnable.synchronisation.html" title="boostNode.runnable.synchronisation"
              >previous</a> |</li>
-        <li><a href="index.html">boostNode 1.0 rc documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">boostNode 1.0 rc documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 16.12.2012, Torben Sickert.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.3.
     </div>
   </body>
 </html>

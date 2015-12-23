@@ -8,7 +8,7 @@
     
     <title>boostNode &mdash; boostNode 1.0 rc documentation</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,8 +27,8 @@
     <link rel="next" title="boostNode.aspect" href="aspect.html" />
     <link rel="prev" title="boostNode" href="index.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -43,14 +43,14 @@
         <li class="right" >
           <a href="index.html" title="boostNode"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">boostNode 1.0 rc documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">boostNode 1.0 rc documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="boostnode">
 <h1>boostNode<a class="headerlink" href="#boostnode" title="Permalink to this headline">¶</a></h1>
@@ -82,20 +82,9 @@
 </li>
 <li><p class="first">bc5 Property with two preceding underscore shouldn&#8217;t be accessed from           any location then the object itself (private attributes).</p>
 </li>
-<li><p class="first">bc6 Don&#8217;t use any whitespaces between except or return statements and           preceding statements if not needed.</p>
+<li><p class="first">bc6 Always use one whitespace between except or return statements and           preceding statements.</p>
 </li>
 </ul>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">try</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="k">pass</span>
-<span class="gp">... </span><span class="k">except</span><span class="p">(</span><span class="o">...</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="k">pass</span>
-</pre></div>
-</div>
-<p>or</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">return</span><span class="p">{}</span>
-</pre></div>
-</div>
-<p>instead of</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">try</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="k">pass</span>
 <span class="gp">... </span><span class="k">except</span> <span class="p">(</span><span class="o">...</span><span class="p">):</span>
@@ -106,11 +95,22 @@
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">return</span> <span class="p">{}</span>
 </pre></div>
 </div>
+<p>instead of</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">try</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">pass</span>
+<span class="gp">... </span><span class="k">except</span><span class="p">(</span><span class="o">...</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">pass</span>
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">return</span><span class="p">{}</span>
+</pre></div>
+</div>
 <ul class="simple">
 <li>bc7 Do not use more chars then 79 in one line.</li>
 <li>bc8 Use short and/or long description doc-strings for all definitions.</li>
 <li>bc9 Write doctest for each unit it is possible and try to reach 100%           path coverage.</li>
-<li>bc10 Sorting imports as following:         1. Import all standard modules and packages,         2. then all from third party,         3. now import your own modules or packages.         4. Sort import names alphabetically and separate the previous            defined parts with blank lines.</li>
+<li>bc10 Sorting imports as following:         1. Standard libraries,         2. Published third party libraries,         3. Your own unpublished libraries,         4. Your own modules or packages,         5. Sort import names alphabetically and separate the previous defined            parts with blank lines.</li>
 <li>bc11 Use builtin names with the &#8220;builtins.&#8221; prefix.</li>
 <li>bc12 Don&#8217;t use any abbreviations.</li>
 <li>bc13 Use smaller or equal cyclomatic complexity to eight.</li>
@@ -197,40 +197,32 @@
 <span class="gp">...</span>
 <span class="gp">... </span>    <span class="c"># region static methods</span>
 <span class="gp">...</span>
-<span class="gp">... </span>        <span class="c"># region public</span>
+<span class="gp">... </span>    <span class="c"># # region public</span>
 <span class="gp">...</span>
 <span class="gp">... </span>    <span class="c"># ...</span>
 <span class="gp">...</span>
-<span class="gp">... </span>        <span class="c"># - region compensate right indention</span>
+<span class="gp">... </span>                <span class="c"># - region compensate right indention</span>
 <span class="gp">...</span>
 <span class="gp">... </span>    <span class="c"># ...</span>
 <span class="gp">...</span>
-<span class="gp">... </span>        <span class="c">#+ endregion</span>
-<span class="gp">...</span>
-<span class="gp">... </span><span class="c"># # # # region compensate more right indention</span>
+<span class="gp">... </span>            <span class="c"># endregion</span>
 <span class="gp">...</span>
 <span class="gp">... </span>    <span class="c"># ...</span>
 <span class="gp">...</span>
-<span class="gp">... </span>        <span class="c"># endregion</span>
-<span class="gp">...</span>
-<span class="gp">... </span>            <span class="c"># - compensate left indention</span>
-<span class="gp">...</span>
-<span class="gp">... </span>    <span class="c"># ...</span>
-<span class="gp">...</span>
-<span class="gp">... </span>        <span class="c"># endregion</span>
+<span class="gp">... </span>    <span class="c"># # endregion</span>
 <span class="gp">...</span>
 <span class="gp">... </span>    <span class="c"># endregion</span>
 <span class="gp">...</span>
 <span class="gp">... </span>    <span class="c"># region dynamic methods</span>
 <span class="gp">...</span>
-<span class="gp">... </span>        <span class="c"># region public</span>
+<span class="gp">... </span>    <span class="c"># # region public</span>
 <span class="gp">...</span>
-<span class="gp">... </span>            <span class="c"># region special</span>
+<span class="gp">... </span>    <span class="c"># # # region special</span>
 <span class="gp">...</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="gp">... </span>        <span class="sd">&#39;&#39;&#39;Initializer&#39;s docstring.&#39;&#39;&#39;</span>
 <span class="gp">...</span>
-<span class="gp">... </span>                <span class="c"># region properties</span>
+<span class="gp">... </span>        <span class="c"># # region properties</span>
 <span class="gp">...</span>
 <span class="gp">... </span>        <span class="n">a</span> <span class="o">=</span> <span class="mi">5</span>
 <span class="gp">... </span>        <span class="sd">&#39;&#39;&#39;Description for public dynamic property.&#39;&#39;&#39;</span>
@@ -239,19 +231,19 @@
 <span class="gp">... </span>        <span class="n">__b</span> <span class="o">=</span> <span class="s">&#39;privat&#39;</span>
 <span class="gp">... </span>        <span class="sd">&#39;&#39;&#39;Description for private dynamic property.&#39;&#39;&#39;</span>
 <span class="gp">...</span>
-<span class="gp">... </span>                <span class="c"># endregion</span>
+<span class="gp">... </span>        <span class="c"># # endregion</span>
 <span class="gp">...</span>
-<span class="gp">... </span>            <span class="c"># endregion</span>
-<span class="gp">...</span>
-<span class="gp">... </span>    <span class="c"># ...</span>
-<span class="gp">...</span>
-<span class="gp">... </span>        <span class="c"># endregion</span>
-<span class="gp">...</span>
-<span class="gp">... </span>        <span class="c"># region protected</span>
+<span class="gp">... </span>    <span class="c"># # # endregion</span>
 <span class="gp">...</span>
 <span class="gp">... </span>    <span class="c"># ...</span>
 <span class="gp">...</span>
-<span class="gp">... </span>        <span class="c"># endregion</span>
+<span class="gp">... </span>    <span class="c"># # endregion</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="c"># endregion</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="c"># region protected</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="c"># ...</span>
 <span class="gp">...</span>
 <span class="gp">... </span>    <span class="c"># endregion</span>
 <span class="gp">...</span>
@@ -297,7 +289,7 @@
 </div>
 <div class="section" id="module-pattern-see-bc14">
 <h3>Module pattern (see bc14)<a class="headerlink" href="#module-pattern-see-bc14" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c">#!/usr/bin/env python3.4</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c">#!/usr/bin/env python3.5</span>
 <span class="gp">... </span><span class="c"># -*- coding: utf-8 -*-</span>
 <span class="gp">...</span>
 <span class="gp">... </span><span class="c"># region header</span>
@@ -383,7 +375,7 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
@@ -406,12 +398,14 @@
   <h4>Next topic</h4>
   <p class="topless"><a href="aspect.html"
                         title="next chapter">boostNode.aspect</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/init.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/init.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
@@ -428,7 +422,7 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -443,12 +437,12 @@
         <li class="right" >
           <a href="index.html" title="boostNode"
              >previous</a> |</li>
-        <li><a href="index.html">boostNode 1.0 rc documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">boostNode 1.0 rc documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 16.12.2012, Torben Sickert.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.3.
     </div>
   </body>
 </html>

@@ -8,7 +8,7 @@
     
     <title>boostNode.aspect.signature &mdash; boostNode 1.0 rc documentation</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,8 +27,8 @@
     <link rel="next" title="boostNode.extension" href="extension.html" />
     <link rel="prev" title="boostNode.aspect" href="aspect.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -43,25 +43,25 @@
         <li class="right" >
           <a href="aspect.html" title="boostNode.aspect"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">boostNode 1.0 rc documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">boostNode 1.0 rc documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="module-boostNode.aspect.signature">
 <span id="boostnode-aspect-signature"></span><h1>boostNode.aspect.signature<a class="headerlink" href="#module-boostNode.aspect.signature" title="Permalink to this headline">¶</a></h1>
 <p>This module provides functions for checking function call&#8217;s against a     given signature.</p>
 <dl class="class">
 <dt id="boostNode.aspect.signature.Check">
-<em class="property">class </em><tt class="descclassname">boostNode.aspect.signature.</tt><tt class="descname">Check</tt><big>(</big><em>method</em>, <em>function=None</em><big>)</big><a class="headerlink" href="#boostNode.aspect.signature.Check" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">boostNode.aspect.signature.</code><code class="descname">Check</code><span class="sig-paren">(</span><em>method</em>, <em>function=None</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.aspect.signature.Check" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class is needed to be compatible with future implementations.</p>
-<dl class="staticmethod">
+<dl class="method">
 <dt id="boostNode.aspect.signature.Check.get_wrapper_function">
-<em class="property">static </em><tt class="descname">get_wrapper_function</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.aspect.signature.Check.get_wrapper_function" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_wrapper_function</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.aspect.signature.Check.get_wrapper_function" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dummy method to be compatible to newer features.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">a</span><span class="p">(</span><span class="n">a</span><span class="p">):</span> <span class="k">return</span> <span class="n">a</span>
@@ -79,24 +79,26 @@
 
 <dl class="class">
 <dt id="boostNode.aspect.signature.CheckObject">
-<em class="property">class </em><tt class="descclassname">boostNode.aspect.signature.</tt><tt class="descname">CheckObject</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.aspect.signature.CheckObject" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">boostNode.aspect.signature.</code><code class="descname">CheckObject</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.aspect.signature.CheckObject" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks a function call against a given specification. This class         serves as helper class.</p>
 <dl class="attribute">
 <dt id="boostNode.aspect.signature.CheckObject.class_object">
-<tt class="descname">class_object</tt><em class="property"> = None</em><a class="headerlink" href="#boostNode.aspect.signature.CheckObject.class_object" title="Permalink to this definition">¶</a></dt>
+<code class="descname">class_object</code><em class="property"> = None</em><a class="headerlink" href="#boostNode.aspect.signature.CheckObject.class_object" title="Permalink to this definition">¶</a></dt>
 <dd><p>Saves informations in which way the give method is used. It could by something like &#8220;builtins.staticmethod&#8221; or &#8220;builtins.classmethod&#8221;.</p>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="boostNode.aspect.signature.CheckObject.get_function_path">
-<em class="property">static </em><tt class="descname">get_function_path</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.aspect.signature.CheckObject.get_function_path" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_function_path</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.aspect.signature.CheckObject.get_function_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns an object depended function description.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">test</span><span class="p">():</span> <span class="k">pass</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">A</span><span class="p">(</span><span class="n">CheckObject</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="gp">... </span>        <span class="nb">getattr</span><span class="p">(</span>
-<span class="gp">... </span>            <span class="nb">super</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="p">,</span> <span class="bp">self</span><span class="p">),</span> <span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span>
+<span class="gp">... </span>        <span class="n">builtins</span><span class="o">.</span><span class="n">getattr</span><span class="p">(</span>
+<span class="gp">... </span>            <span class="n">builtins</span><span class="o">.</span><span class="n">super</span><span class="p">(</span>
+<span class="gp">... </span>                <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="p">,</span> <span class="bp">self</span>
+<span class="gp">... </span>            <span class="p">),</span> <span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span>
 <span class="gp">... </span>        <span class="p">)()</span>
 <span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">__func__</span> <span class="o">=</span> <span class="n">test</span>
 <span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">_method_type</span> <span class="o">=</span> <span class="nb">staticmethod</span>
@@ -120,7 +122,7 @@
 
 <dl class="attribute">
 <dt id="boostNode.aspect.signature.CheckObject.object">
-<tt class="descname">object</tt><em class="property"> = None</em><a class="headerlink" href="#boostNode.aspect.signature.CheckObject.object" title="Permalink to this definition">¶</a></dt>
+<code class="descname">object</code><em class="property"> = None</em><a class="headerlink" href="#boostNode.aspect.signature.CheckObject.object" title="Permalink to this definition">¶</a></dt>
 <dd><p>Saves informations in which way the give method is used. It could by something like &#8220;builtins.staticmethod&#8221; or &#8220;builtins.classmethod&#8221;.</p>
 </dd></dl>
 
@@ -128,11 +130,11 @@
 
 <dl class="class">
 <dt id="boostNode.aspect.signature.CheckReturnValue">
-<em class="property">class </em><tt class="descclassname">boostNode.aspect.signature.</tt><tt class="descname">CheckReturnValue</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.aspect.signature.CheckReturnValue" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">boostNode.aspect.signature.</code><code class="descname">CheckReturnValue</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.aspect.signature.CheckReturnValue" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks return value from a function again their specification.</p>
 <dl class="method">
 <dt id="boostNode.aspect.signature.CheckReturnValue.aspect">
-<tt class="descname">aspect</tt><big>(</big><big>)</big><a class="headerlink" href="#boostNode.aspect.signature.CheckReturnValue.aspect" title="Permalink to this definition">¶</a></dt>
+<code class="descname">aspect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.aspect.signature.CheckReturnValue.aspect" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks the given return value.</p>
 <p>Returns the original value of the given wrapped function if             everything goes right.</p>
 <p>Examples:</p>
@@ -156,7 +158,7 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
   <p class="topless"><a href="aspect.html"
@@ -164,12 +166,14 @@
   <h4>Next topic</h4>
   <p class="topless"><a href="extension.html"
                         title="next chapter">boostNode.extension</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/aspect.signature.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/aspect.signature.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
@@ -186,7 +190,7 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -201,12 +205,12 @@
         <li class="right" >
           <a href="aspect.html" title="boostNode.aspect"
              >previous</a> |</li>
-        <li><a href="index.html">boostNode 1.0 rc documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">boostNode 1.0 rc documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 16.12.2012, Torben Sickert.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.3.
     </div>
   </body>
 </html>

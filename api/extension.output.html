@@ -8,7 +8,7 @@
     
     <title>boostNode.extension.output &mdash; boostNode 1.0 rc documentation</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,8 +27,8 @@
     <link rel="next" title="boostNode.extension.type" href="extension.type.html" />
     <link rel="prev" title="boostNode.extension" href="extension.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -43,21 +43,21 @@
         <li class="right" >
           <a href="extension.html" title="boostNode.extension"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">boostNode 1.0 rc documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">boostNode 1.0 rc documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="module-boostNode.extension.output">
 <span id="boostnode-extension-output"></span><h1>boostNode.extension.output<a class="headerlink" href="#module-boostNode.extension.output" title="Permalink to this headline">¶</a></h1>
 <p>This module provides classes for dealing with python&#8217;s way to transport     strings to any output stream.</p>
 <dl class="class">
 <dt id="boostNode.extension.output.Buffer">
-<em class="property">class </em><tt class="descclassname">boostNode.extension.output.</tt><tt class="descname">Buffer</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.output.Buffer" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">boostNode.extension.output.</code><code class="descname">Buffer</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.output.Buffer" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class represents a layer for writing and reading to an output         buffer realized as file, queue or variable.</p>
 <p><strong>file</strong>                    - a file path or file handler to use as                                       buffer</p>
 <p><strong>queue</strong>                   - a queue object to use as buffer</p>
@@ -71,9 +71,9 @@
 <span class="go">&#39;hans+&#39;</span>
 </pre></div>
 </div>
-<dl class="staticmethod">
+<dl class="method">
 <dt id="boostNode.extension.output.Buffer.clear">
-<em class="property">static </em><tt class="descname">clear</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.output.Buffer.clear" title="Permalink to this definition">¶</a></dt>
+<code class="descname">clear</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.output.Buffer.clear" title="Permalink to this definition">¶</a></dt>
 <dd><p>Removes the current output buffer content.</p>
 <p><strong>delete</strong> - indicates weather a file buffer should be deleted or                          truncated</p>
 <p>Examples:</p>
@@ -120,9 +120,9 @@
 </div>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="boostNode.extension.output.Buffer.flush">
-<em class="property">static </em><tt class="descname">flush</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.output.Buffer.flush" title="Permalink to this definition">¶</a></dt>
+<code class="descname">flush</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.output.Buffer.flush" title="Permalink to this definition">¶</a></dt>
 <dd><p>Flush methods usually called to guarantee that all objects putted             to &#8220;write()&#8221; are materialized on their provided media. This             implementation exists only for compatibility reasons.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Buffer</span><span class="p">()</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
@@ -131,9 +131,9 @@
 </div>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="boostNode.extension.output.Buffer.get_content">
-<em class="property">static </em><tt class="descname">get_content</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.output.Buffer.get_content" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_content</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.output.Buffer.get_content" title="Permalink to this definition">¶</a></dt>
 <dd><p>Getter for the current content.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Buffer</span><span class="p">()</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
@@ -146,9 +146,9 @@
 </div>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="boostNode.extension.output.Buffer.write">
-<em class="property">static </em><tt class="descname">write</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.output.Buffer.write" title="Permalink to this definition">¶</a></dt>
+<code class="descname">write</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.output.Buffer.write" title="Permalink to this definition">¶</a></dt>
 <dd><p>Writes content to the current output buffer file. If the current             given file &#8220;Buffer.file&#8221; doesn&#8217;t exists it will be created.</p>
 <p><strong>content</strong> - content to write into current buffer instance</p>
 <p>Examples:</p>
@@ -174,11 +174,11 @@
 
 <dl class="class">
 <dt id="boostNode.extension.output.ColoredLoggingFormatter">
-<em class="property">class </em><tt class="descclassname">boostNode.extension.output.</tt><tt class="descname">ColoredLoggingFormatter</tt><big>(</big><em>fmt=None</em>, <em>datefmt=None</em><big>)</big><a class="headerlink" href="#boostNode.extension.output.ColoredLoggingFormatter" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">boostNode.extension.output.</code><code class="descname">ColoredLoggingFormatter</code><span class="sig-paren">(</span><em>fmt=None</em>, <em>datefmt=None</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.output.ColoredLoggingFormatter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wraps python&#8217;s native logging formatter to support level specific         colors.</p>
-<dl class="staticmethod">
+<dl class="method">
 <dt id="boostNode.extension.output.ColoredLoggingFormatter.format">
-<em class="property">static </em><tt class="descname">format</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.output.ColoredLoggingFormatter.format" title="Permalink to this definition">¶</a></dt>
+<code class="descname">format</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.output.ColoredLoggingFormatter.format" title="Permalink to this definition">¶</a></dt>
 <dd><p>Appends the level specified color to the logging output.</p>
 </dd></dl>
 
@@ -186,11 +186,11 @@
 
 <dl class="class">
 <dt id="boostNode.extension.output.Logger">
-<em class="property">class </em><tt class="descclassname">boostNode.extension.output.</tt><tt class="descname">Logger</tt><a class="headerlink" href="#boostNode.extension.output.Logger" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">boostNode.extension.output.</code><code class="descname">Logger</code><a class="headerlink" href="#boostNode.extension.output.Logger" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class provides handling with all components dealing with logger         object. It stores all logger components in a single data structure.</p>
-<dl class="staticmethod">
+<dl class="method">
 <dt id="boostNode.extension.output.Logger.change_all">
-<em class="property">static </em><tt class="descname">change_all</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.output.Logger.change_all" title="Permalink to this definition">¶</a></dt>
+<code class="descname">change_all</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.output.Logger.change_all" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method changes the given properties to all created logger             instances and saves the given properties as default properties             for future created logger instances.</p>
 <p>Note that every argument except buffer setted to &#8220;None&#8221; will not             edit this logger component. If you don&#8217;t want to change buffer             leave it by its default value.</p>
 <p><strong>level</strong>          - sets levels for all logger</p>
@@ -205,9 +205,9 @@
 </div>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="boostNode.extension.output.Logger.flush">
-<em class="property">static </em><tt class="descname">flush</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.output.Logger.flush" title="Permalink to this definition">¶</a></dt>
+<code class="descname">flush</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.output.Logger.flush" title="Permalink to this definition">¶</a></dt>
 <dd><p>Flushes all buffers in all logger handlers.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Logger</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span> 
@@ -216,9 +216,9 @@
 </div>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="boostNode.extension.output.Logger.get">
-<em class="property">static </em><tt class="descname">get</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.output.Logger.get" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.output.Logger.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a new or existing instance of a logger with given             properties. If a logger was already registered under given name             the existing instance is given back and a new instance otherwise.</p>
 <p><strong>name</strong>           - logger name to get</p>
 <p><strong>level</strong>          - sets levels for all logger</p>
@@ -247,7 +247,7 @@
 
 <dl class="class">
 <dt id="boostNode.extension.output.Print">
-<em class="property">class </em><tt class="descclassname">boostNode.extension.output.</tt><tt class="descname">Print</tt><big>(</big><em>*arguments</em>, <em>**keywords</em><big>)</big><a class="headerlink" href="#boostNode.extension.output.Print" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">boostNode.extension.output.</code><code class="descname">Print</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.output.Print" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provides a high level printing class on top of pythons native print         function.</p>
 <p><strong>output</strong>    - are the strings which should be printed or saved.</p>
 <dl class="docutils">
@@ -267,7 +267,7 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
   <p class="topless"><a href="extension.html"
@@ -275,12 +275,14 @@
   <h4>Next topic</h4>
   <p class="topless"><a href="extension.type.html"
                         title="next chapter">boostNode.extension.type</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/extension.output.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/extension.output.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
@@ -297,7 +299,7 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -312,12 +314,12 @@
         <li class="right" >
           <a href="extension.html" title="boostNode.extension"
              >previous</a> |</li>
-        <li><a href="index.html">boostNode 1.0 rc documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">boostNode 1.0 rc documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 16.12.2012, Torben Sickert.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.3.
     </div>
   </body>
 </html>
