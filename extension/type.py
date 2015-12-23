@@ -9,7 +9,7 @@
     their context.
 '''
 
-# # python3.4
+# # python3.5
 # # pass
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
@@ -29,7 +29,7 @@ __maintainer_email__ = 't.sickert["~at~"]gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-# # python3.4 import builtins
+# # python3.5 import builtins
 import __builtin__ as builtins
 import inspect
 import os
@@ -76,7 +76,7 @@ class Model(builtins.type):
 
     # # # region special
 
-# # python3.4
+# # python3.5
 # #     def __new__(
 # #         cls: SelfClass, class_name: builtins.str,
 # #         base_classes: builtins.tuple, class_scope: builtins.dict,
@@ -122,9 +122,9 @@ class Model(builtins.type):
             builtins.super(Model, cls), inspect.stack()[0][3]
         )(cls, class_name, base_classes, class_scope, *arguments, **keywords)
 
-        # # endregion
+    # # # endregion
 
-        # endregion
+    # # endregion
 
     # endregion
 

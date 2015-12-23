@@ -7,7 +7,7 @@
     Provides web api parsers and a simple webserver to offer the prepared data.
 '''
 
-# # python3.4
+# # python3.5
 # # pass
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
@@ -22,7 +22,7 @@ __maintainer_email__ = 't.sickert["~at~"]gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-# # python3.4 import builtins
+# # python3.5 import builtins
 import __builtin__ as builtins
 from cgi import FieldStorage as CGIFieldStorage
 from collections import Iterable
@@ -34,20 +34,12 @@ import sys
 '''Make boostNode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 1 * (os.sep + '..')))
 
-# # python3.4 pass
+# # python3.5 pass
 from boostNode import convert_to_string, convert_to_unicode
 from boostNode.extension.file import Handler as FileHandler
 from boostNode.extension.native import Dictionary, Module
-from boostNode.extension.native import String as StringExtension
 from boostNode.runnable.template import Parser as TemplateParser
 from boostNode.paradigm.objectOrientation import Class
-
-
-# # python3.4
-# # # NOTE: Should be removed if we drop python2.X support.
-# # String = StringExtension
-String = lambda content: StringExtension(convert_to_string(content))
-# #
 
 # endregion
 
@@ -90,29 +82,21 @@ TemplateParser._load_template = template_parser__load_template
 
 def _template_parser_render_handle_cache(self, mapping):
     '''Handles prerendered templates to support caching.'''
-    template_hash = builtins.str(builtins.hash(
-        self.content
-    )) if self.string else self.file.path.replace(os.sep, '_')
+    if self.string:
+        template_hash = builtins.str(builtins.hash(self.content))
+    else:
+        template_hash = self.file.path.replace(os.sep, '_')
     if self.full_caching:
         full_cache_dir_path = '%s%s%s' % (
             ROOT_PATH, self.cache.path, template_hash)
         if not os.path.isdir(full_cache_dir_path):
             os.mkdir(full_cache_dir_path)
-        '''
-            NOTE: Hack to improve caching caused by no changing scope \
-            values.
-        '''
-        if 'accountData' in mapping:
-            if 'lastUpdateDateTime' in mapping['accountData']:
-                del mapping['accountData']['lastUpdateDateTime']
-            if 'sessionExpirationDateTime' in mapping['accountData']:
-                del mapping['accountData']['sessionExpirationDateTime']
         full_cache_file_path = '%s/%s.txt' % (
             full_cache_dir_path, builtins.str(builtins.hash(Dictionary(
                 content=mapping
-            ).get_immutable(exclude=self._builtins.keys() + [
-                'userPropertyNames', 'options', 'templates',
-                'styleFileBasenames', 'availableOutputTemplateNames']))))
+            ).get_immutable(
+                exclude=self._builtins.keys() +
+                self.keys_to_ignore_for_hashing_by_caching))))
         if os.path.isfile(full_cache_file_path):
             with builtins.open(full_cache_file_path, 'r') as file:
                 self._output.content = file.read()
@@ -126,7 +110,7 @@ def _template_parser_render_handle_cache(self, mapping):
         with builtins.open(cache_file_path, 'w') as file:
             file.write(convert_to_string(
                 '# -*- coding: utf-8 -*-\n%s' % self.rendered_python_code))
-# # python3.4         builtins.exec(self.rendered_python_code, mapping)
+# # python3.5         builtins.exec(self.rendered_python_code, mapping)
         exec self.rendered_python_code in mapping
     if self.full_caching:
         with builtins.open(full_cache_file_path, 'w') as file:
@@ -175,113 +159,6 @@ def file_handler_get_name(self, *arguments, **keywords):
         path = path[:-builtins.len(os.sep)]
     return os.path.basename(path)
 FileHandler.get_name = file_handler_get_name
-
-# # endregion
-
-
-# # region native dictionary
-
-def dictionary_convert(
-    self, key_wrapper=lambda key, value: key,
-    value_wrapper=lambda key, value: value,
-    no_wrap_indicator='__no_wrapping__', remove_no_wrap_indicator=True,
-    filter=lambda key, value: True
-):
-    for key, value in self.content.items():
-        if key == no_wrap_indicator:
-            if remove_no_wrap_indicator:
-                if builtins.len(self.content) > 1:
-                    del self.content[key]
-                    self.update(other=value)
-                    continue
-                self.content = value
-                return self
-            return self
-        del self.content[key]
-        key = key_wrapper(key, value)
-        if builtins.isinstance(value, builtins.dict):
-            self.content[key] = self.__class__(value).convert(
-                key_wrapper, value_wrapper, no_wrap_indicator,
-                remove_no_wrap_indicator, filter
-            ).content
-# # python3.4
-# #         elif(builtins.isinstance(value, Iterable) and
-# #              not builtins.isinstance(value, builtins.tuple(
-# #                  self.NONE_CONVERTABLE_ITERABLES)))
-# #         ):
-        elif(builtins.isinstance(value, Iterable) and
-             not builtins.isinstance(value, builtins.tuple(
-                 self.NONE_CONVERTABLE_ITERABLES))):
-# #
-            self.content[key] = dictionary__convert_iterable(
-                self.__class__, iterable=value, key_wrapper=key_wrapper,
-                value_wrapper=value_wrapper,
-                no_wrap_indicator=no_wrap_indicator,
-                remove_no_wrap_indicator=remove_no_wrap_indicator,
-                filter=filter)
-        elif filter(key, value):
-            self.content[key] = value_wrapper(key, value)
-    return self
-Dictionary.convert = dictionary_convert
-
-
-def dictionary__convert_iterable(
-    cls, iterable, key_wrapper, value_wrapper, no_wrap_indicator,
-    remove_no_wrap_indicator, filter
-):
-    '''
-        Converts all keys or values and nested keys or values with given \
-        callback function in a given iterable.
-    '''
-    if builtins.isinstance(iterable, builtins.set):
-        return cls._convert_set(iterable, key_wrapper, value_wrapper, filter)
-# # python3.4
-# #     if isinstance(iterable, range):
-# #         iterable = list(iterable)
-    pass
-# #
-    try:
-        for key, value in builtins.enumerate(iterable):
-            if builtins.isinstance(value, builtins.dict):
-                iterable[key] = cls(value).convert(
-                    key_wrapper, value_wrapper, no_wrap_indicator,
-                    remove_no_wrap_indicator, filter
-                ).content
-# # python3.4
-# #             elif isinstance(value, Iterable) and not isinstance(
-# #                 value, builtins.tuple(cls.NONE_CONVERTABLE_ITERABLES)
-# #             ):
-            elif builtins.isinstance(
-                value, Iterable
-            ) and not builtins.isinstance(
-                value, builtins.tuple(cls.NONE_CONVERTABLE_ITERABLES)
-            ):
-# #
-                iterable[key] = dictionary__convert_iterable(
-                    cls, iterable=value, key_wrapper=key_wrapper,
-                    value_wrapper=value_wrapper,
-                    no_wrap_indicator=no_wrap_indicator,
-                    remove_no_wrap_indicator=remove_no_wrap_indicator,
-                    filter=filter)
-            elif filter(key, value):
-                iterable[key] = value_wrapper(key, value)
-            else:
-                del iterable[key]
-    except builtins.TypeError as exception:
-        '''
-            NOTE: We have visited a non indexable value (e.g. an uploaded
-            file).
-        '''
-# # python3.4
-# #         __logger__.debug(
-# #             '%s: %s (%s)', exception.__class__.__name__,
-# #             builtins.str(exception), builtins.type(iterable))
-        __logger__.debug(
-            '%s: %s (%s)', exception.__class__.__name__,
-            convert_to_unicode(exception), builtins.type(iterable))
-# #
-    return iterable
-Dictionary._convert_iterable = dictionary__convert_iterable
 
 # # endregion
 

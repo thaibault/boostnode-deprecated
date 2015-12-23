@@ -10,7 +10,7 @@
     transformation can always be made in both directions.
 '''
 
-# # python3.4
+# # python3.5
 # # pass
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
@@ -30,7 +30,7 @@ __maintainer_email__ = 't.sickert["~at~"]gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-# # python3.4
+# # python3.5
 # # import builtins
 # # from collections import Iterable
 import __builtin__ as builtins
@@ -44,24 +44,18 @@ import sys
 '''Make boostNode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
-# # python3.4
+# # python3.5
 # # from boostNode import ENCODING
 from boostNode import ENCODING, convert_to_string, convert_to_unicode
 # #
 from boostNode.extension.file import Handler as FileHandler
 from boostNode.extension.native import Module, InstancePropertyInitializer
-from boostNode.extension.native import String as StringExtension
+from boostNode.extension.native import String as String
 from boostNode.extension.system import CommandLine, Runnable
-# # python3.4 from boostNode.extension.type import Self
+# # python3.5 from boostNode.extension.type import Self
 pass
 from boostNode.paradigm.aspectOrientation import JointPoint
 from boostNode.paradigm.objectOrientation import Class
-
-# # python3.4
-# # # NOTE: Should be removed if we drop python2.X support.
-# # String = StringExtension
-String = lambda content: StringExtension(convert_to_string(content))
-# #
 
 # endregion
 
@@ -118,7 +112,7 @@ class Replace(Class, Runnable):
 
         >>> __test_globals__['__test_mode__'] = False
         >>> file = FileHandler(__test_folder__.path + '_initialize')
-        >>> file.content = '#!/bin/python2.7\\n\\n# # python3.4 a\\nb\\n'
+        >>> file.content = '#!/bin/python2.7\\n\\n# # python3.5 a\\nb\\n'
         >>> Replace(file) # doctest: +ELLIPSIS
         Object of "Replace" with file "..._initialize" to convert to "py...
         >>> __test_globals__['__test_mode__'] = True
@@ -247,7 +241,7 @@ class Replace(Class, Runnable):
     # # # region special
 
     @JointPoint
-# # python3.4     def __repr__(self: Self) -> builtins.str:
+# # python3.5     def __repr__(self: Self) -> builtins.str:
     def __repr__(self):
         '''
             Invokes if this object should describe itself by a string.
@@ -255,23 +249,23 @@ class Replace(Class, Runnable):
             Examples:
 
             >>> repr(Replace(
-            ...     location=__file_path__, _new_version='python3.4'
+            ...     location=__file_path__, _new_version='python3.5'
             ... )) # doctest: +ELLIPSIS
-            '...Replace...file "...macro.py" to ...to "python3.4".'
+            '...Replace...file "...macro.py" to ...to "python3.5".'
         '''
-        return(
+        return (
             'Object of "{class_name}" with {type} "{path}" to convert to '
             '"{new_version}".'.format(
                 class_name=self.__class__.__name__,
                 type=self.location.type, path=self.location.path,
                 new_version=self._new_version))
 
-        # # endregion
+    # # # endregion
 
-        # # region setter
+    # # # region setter
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def set_new_version(self: Self, version: builtins.str) -> builtins.str:
     def set_new_version(self, version):
 # #
@@ -288,8 +282,8 @@ class Replace(Class, Runnable):
 
             >>> replace = Replace(location=__file_path__)
 
-            >>> replace.set_new_version(version='python3.4')
-            'python3.4'
+            >>> replace.set_new_version(version='python3.5')
+            'python3.5'
 
             >>> replace.new_version = '__determine_useful__'
             >>> replace._new_version # doctest: +ELLIPSIS
@@ -322,7 +316,7 @@ class Replace(Class, Runnable):
         return self._new_version
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def set_exclude_locations(
 # #         self: Self, paths: Iterable
 # #     ) -> builtins.list:
@@ -352,16 +346,16 @@ class Replace(Class, Runnable):
                 self._exclude_locations.append(file)
         return self._exclude_locations
 
-        # # endregion
+    # # # endregion
 
-        # endregion
+    # # endregion
 
-        # region protected
+    # # region protected
 
-        # # region runnable implementation
+    # # # region runnable implementation
 
     @JointPoint
-# # python3.4     def _run(self: Self) -> Self:
+# # python3.5     def _run(self: Self) -> Self:
     def _run(self):
         '''
             Entry point for command line call of this program. Validates the \
@@ -386,7 +380,7 @@ class Replace(Class, Runnable):
             namespace=command_line_arguments))
 
     @JointPoint(InstancePropertyInitializer)
-# # python3.4
+# # python3.5
 # #     def _initialize(
 # #         self: Self, location=None, skip_self_file=False, extension='',
 # #         first_line_regex_pattern='(?P<constant_version_pattern>^#!.*?'
@@ -446,12 +440,12 @@ class Replace(Class, Runnable):
             self._convert_path()
         return self
 
-        # # endregion
+    # # # endregion
 
-        # # region boolean
+    # # # region boolean
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _in_exclude_location(
 # #         self: Self, location: FileHandler
 # #     ) -> builtins.bool:
@@ -481,12 +475,12 @@ class Replace(Class, Runnable):
                 return True
         return False
 
-        # # endregion
+    # # # endregion
 
-        # # region core concern
+    # # # region core concern
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _determine_useful_version_in_location(
 # #         self: Self, location: FileHandler
 # #     ) -> builtins.str:
@@ -526,7 +520,7 @@ class Replace(Class, Runnable):
         return ''
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _determine_useful_version_in_file(
 # #         self: Self, file: FileHandler
 # #     ) -> builtins.str:
@@ -562,7 +556,7 @@ class Replace(Class, Runnable):
         return ''
 
     @JointPoint
-# # python3.4     def _convert_path(self: Self) -> Self:
+# # python3.5     def _convert_path(self: Self) -> Self:
     def _convert_path(self):
         '''
             Converts the given path to the specified format.
@@ -583,22 +577,22 @@ class Replace(Class, Runnable):
 
             >>> file.content = 'hans'
             >>> Replace(
-            ...     file, _new_version='python3.4'
+            ...     file, _new_version='python3.5'
             ... )._convert_path() # doctest: +ELLIPSIS
             Object of "Replace" with file "..._convert_path" to convert to ...
 
             >>> replace.location = file
             >>> replace._exclude_locations = []
-            >>> file.content = ('#!/usr/bin/python3.4\\n'
+            >>> file.content = ('#!/usr/bin/python3.5\\n'
             ...                 '\\n'
             ...                 '# # python2.7 hans\\n'
             ...                 'AB\\n')
             >>> replace._convert_path() # doctest: +ELLIPSIS
             Object of "Replace" with file "..._convert_path" to convert to ...
             >>> file.content
-            '#!/usr/bin/python2.7\\n\\n# # python3.4 AB\\nhans\\n'
+            '#!/usr/bin/python2.7\\n\\n# # python3.5 AB\\nhans\\n'
 
-            >>> file.content = ('#!/bin/python3.4\\n'
+            >>> file.content = ('#!/bin/python3.5\\n'
             ...                 '\\n'
             ...                 '# # python2.7\\n'
             ...                 '# # A\\n'
@@ -608,24 +602,24 @@ class Replace(Class, Runnable):
             >>> replace._convert_path() # doctest: +ELLIPSIS
             Object of "Replace" with file "..." to convert to "python2.7".
             >>> file.content
-            '#!/bin/python2.7\\n\\n# # python3.4\\n# # C\\n# # D\\nA\\n# #\\n'
+            '#!/bin/python2.7\\n\\n# # python3.5\\n# # C\\n# # D\\nA\\n# #\\n'
 
             >>> file.content = ('#!/bin/python2.7\\n'
             ...                 '\\n'
-            ...                 '# # python3.4\\n'
+            ...                 '# # python3.5\\n'
             ...                 '# # A\\n'
             ...                 'B\\n'
             ...                 '#\\n'
             ...                 '# #\\n')
             >>> replace = Replace(
             ...     location=__test_folder__.path + '_convert_path',
-            ...     _new_version='python3.4')
+            ...     _new_version='python3.5')
             >>> replace._convert_path() # doctest: +ELLIPSIS
-            Object of "Replace" with file "..." to convert to "python3.4".
+            Object of "Replace" with file "..." to convert to "python3.5".
             >>> file.content
-            '#!/bin/python3.4\\n\\n# # python2.7\\n# # B\\n# # #\\nA\\n# #\\n'
+            '#!/bin/python3.5\\n\\n# # python2.7\\n# # B\\n# # #\\nA\\n# #\\n'
 
-            >>> file.content = ('#!/bin/python3.4\\n'
+            >>> file.content = ('#!/bin/python3.5\\n'
             ...                 '\\n'
             ...                 '# # python2.7\\n'
             ...                 '# # A\\n'
@@ -634,40 +628,40 @@ class Replace(Class, Runnable):
             ...                 'B\\n'
             ...                 '# #\\n')
             >>> replace._convert_path() # doctest: +ELLIPSIS
-            Object of "Replace" with file "..." to convert to "python3.4".
+            Object of "Replace" with file "..." to convert to "python3.5".
             >>> file.content # doctest: +ELLIPSIS
-            '#!/bin/python3.4\\n\\n# # python2.7\\n# # A\\n# #\\n# # B\\nB...'
+            '#!/bin/python3.5\\n\\n# # python2.7\\n# # A\\n# #\\n# # B\\nB...'
 
             >>> file.content = ('#!/bin/python2.7\\n'
             ...                 '\\n'
-            ...                 '# # python3.4\\n'
+            ...                 '# # python3.5\\n'
             ...                 '# # A\\n'
             ...                 'B\\n'
             ...                 '\\n'
             ...                 'C\\n'
             ...                 '# #\\n')
             >>> replace._convert_path() # doctest: +ELLIPSIS
-            Object of "Replace" with file "..." to convert to "python3.4".
+            Object of "Replace" with file "..." to convert to "python3.5".
             >>> file.content # doctest: +ELLIPSIS
-            '#!/bin/python3.4\\n\\n# # python2.7\\n# # B\\n# #\\n# # C\\nA\...'
+            '#!/bin/python3.5\\n\\n# # python2.7\\n# # B\\n# #\\n# # C\\nA\...'
 
             >>> file.content = ('#!/bin/python2.7\\n'
             ...                 '\\n'
-            ...                 '# # python3.4\\n'
+            ...                 '# # python3.5\\n'
             ...                 'A\\n')
             >>> replace._convert_path() # doctest: +ELLIPSIS
-            Object of "Replace" with file "..." to convert to "python3.4".
+            Object of "Replace" with file "..." to convert to "python3.5".
             >>> file.content
-            '#!/bin/python3.4\\n\\n# # python2.7 A\\n\\n'
+            '#!/bin/python3.5\\n\\n# # python2.7 A\\n\\n'
 
             >>> file.content = ('#!/bin/python2.7\\n'
             ...                 '\\n'
-            ...                 '# # python3.4 A\\n'
+            ...                 '# # python3.5 A\\n'
             ...                 '\\n')
             >>> replace._convert_path() # doctest: +ELLIPSIS
-            Object of "Replace" with file "..." to convert to "python3.4".
+            Object of "Replace" with file "..." to convert to "python3.5".
             >>> file.content
-            '#!/bin/python3.4\\n\\n# # python2.7\\nA\\n'
+            '#!/bin/python3.5\\n\\n# # python2.7\\nA\\n'
         '''
         if not self._in_exclude_location(location=self.location):
             if(self.location.is_file() and (
@@ -680,7 +674,7 @@ class Replace(Class, Runnable):
         return self
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _convert_directory(self: Self, directory: FileHandler) -> Self:
     def _convert_directory(self, directory):
 # #
@@ -723,7 +717,7 @@ class Replace(Class, Runnable):
         return self
 
     @JointPoint
-# # python3.4     def _convert_file(self: Self, file: FileHandler) -> Self:
+# # python3.5     def _convert_file(self: Self, file: FileHandler) -> Self:
     def _convert_file(self, file):
         '''
             Opens a given file and parses its content and convert it through \
@@ -754,7 +748,7 @@ class Replace(Class, Runnable):
         return self
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _convert_file_content(self: Self, file: FileHandler) -> Self:
     def _convert_file_content(self, file):
 # #
@@ -786,12 +780,12 @@ class Replace(Class, Runnable):
             >>> __test_buffer__.clear() # doctest: +ELLIPSIS
             '...decode file "..._file_content" with given encoding "ascii"...'
 
-            >>> file.content = '#!/usr/bin/env python3.4\\na'
+            >>> file.content = '#!/usr/bin/env python3.5\\na'
             >>> replace.dry = True
             >>> replace._convert_file_content(file) # doctest: +ELLIPSIS
             Object of "Replace" with directory "..." to convert to "...".
         '''
-# # python3.4         with builtins.open(
+# # python3.5         with builtins.open(
         with codecs.open(
             file.path, mode='r', encoding=self.encoding
         ) as file_handler:
@@ -802,7 +796,7 @@ class Replace(Class, Runnable):
                     'Can\'t decode file "%s" with given encoding "%s".',
                     file.path, self.encoding)
                 return self
-# # python3.4
+# # python3.5
 # #             match = regularExpression.compile(
 # #                 self.first_line_regex_pattern
 # #             ).fullmatch(first_line)
@@ -843,7 +837,7 @@ class Replace(Class, Runnable):
         return self
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _replace_alternate_lines(
 # #         self: Self, match: type(regularExpression.compile('').match(''))
 # #     ) -> builtins.str:
@@ -863,28 +857,7 @@ class Replace(Class, Runnable):
                 consecutive lines with whitespace at the end of line aren't \
                 matched in first run.
             '''
-# # python3.4
-# #             return(
-# #                 '\n{prefix} {current_version}\n{prefix} {current_text}\n'
-# #                 '{alternate_text}{prefix}\n'.format(
-# #                     prefix=match.group('prefix'),
-# #                     current_version=self._current_version,
-# #                     current_text=match.group('current_text').replace(
-# #                         '\n', '\n%s ' % match.group('prefix')
-# #                     )[:-builtins.len(match.group('prefix')) - 2].replace(
-# #                         '\n%s \n' % match.group('prefix'),
-# #                         '\n%s\n' % match.group('prefix')
-# #                     ).replace(
-# #                         '\n%s \n' % match.group('prefix'),
-# #                         '\n%s\n' % match.group('prefix')
-# #                     ).rstrip(), alternate_text=regularExpression.compile(
-# #                         '\n%s ?' % String(
-# #                             match.group('prefix')
-# #                         ).regex_validated.content
-# #                     ).sub('\n', match.group(
-# #                         'alternate_text'
-# #                     ))[builtins.len(match.group('prefix')) + 1:]))
-            return(
+            return (
                 '\n{prefix} {current_version}\n{prefix} {current_text}\n'
                 '{alternate_text}{prefix}\n'.format(
                     prefix=match.group('prefix'),
@@ -898,17 +871,16 @@ class Replace(Class, Runnable):
                         '\n%s \n' % match.group('prefix'),
                         '\n%s\n' % match.group('prefix')
                     ).rstrip(), alternate_text=regularExpression.compile(
-                        '\n%s ?' % convert_to_unicode(String(
-                            match.group('prefix')
-                        ).regex_validated.content)
+                        '\n%s ?' % String(match.group(
+                            'prefix'
+                        )).regex_validated.content
                     ).sub('\n', match.group(
                         'alternate_text'
                     ))[builtins.len(match.group('prefix')) + 1:]))
-# #
         return match.group()
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _replace_alternate_line(
 # #         self: Self, match: type(regularExpression.compile('').match(''))
 # #     ) -> builtins.str:
@@ -926,7 +898,7 @@ class Replace(Class, Runnable):
             current_text = match.group('current_text')
             if current_text:
                 current_text = ' ' + current_text
-            return(
+            return (
                 '\n{prefix} {current_version}{current_text}\n{alternate_text}'
                 '\n'.format(
                     prefix=match.group('prefix'),
@@ -936,7 +908,7 @@ class Replace(Class, Runnable):
         return match.group()
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _determine_useful_version_in_location_helper(
 # #         self: Self, location: FileHandler
 # #     ) -> builtins.str:
@@ -958,9 +930,9 @@ class Replace(Class, Runnable):
                 return version
         return ''
 
-        # # endregion
+    # # # endregion
 
-        # endregion
+    # # endregion
 
     # endregion
 

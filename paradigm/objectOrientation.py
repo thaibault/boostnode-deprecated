@@ -8,7 +8,7 @@
     implementing object orientated code.
 '''
 
-# # python3.4
+# # python3.5
 # # pass
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
@@ -103,12 +103,12 @@ __maintainer_email__ = 't.sickert["~at~"]gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-# # python3.4 import builtins
+# # python3.5 import builtins
 import __builtin__ as builtins
 import inspect
 import os
 import sys
-# # python3.4
+# # python3.5
 # # from types import MethodType as Method
 pass
 # #
@@ -121,7 +121,7 @@ sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
 # region abstract classes
 
-# # python3.4 class Class:
+# # python3.5 class Class:
 class Class(builtins.object):
 
     '''
@@ -137,7 +137,7 @@ class Class(builtins.object):
     # # # region special
 
     @builtins.classmethod
-# # python3.4     def __repr__(cls: builtins.type) -> builtins.str:
+# # python3.5     def __repr__(cls: builtins.type) -> builtins.str:
     def __repr__(cls):
         '''
             Invokes if this object should describe itself by a string.
@@ -150,7 +150,7 @@ class Class(builtins.object):
         return 'Object of "%s".' % cls.__name__
 
     @builtins.classmethod
-# # python3.4     def __str__(cls: builtins.type) -> builtins.str:
+# # python3.5     def __str__(cls: builtins.type) -> builtins.str:
     def __str__(cls):
         '''
             Is triggered if the current object is tried to be converted into \
@@ -165,12 +165,12 @@ class Class(builtins.object):
         '''
         return cls.__name__
 
-        # # endregion
+    # # # endregion
 
-        # # region decorator
+    # # # region decorator
 
     @builtins.classmethod
-# # python3.4
+# # python3.5
 # #     def pseudo_property(cls: builtins.object, function: Method) -> Method:
     def pseudo_property(cls, function):
 # #
@@ -187,17 +187,17 @@ class Class(builtins.object):
 
         # # endregion
 
-        # endregion
+    # # endregion
 
     # endregion
 
     # region dynamic methods
 
-        # region public method
+    # # region public method
 
-        # # region special
+    # # # region special
 
-# # python3.4
+# # python3.5
 # #     def __getattr__(
 # #         self: builtins.object, name: builtins.str
 # #     ) -> builtins.object:
@@ -246,22 +246,22 @@ class Class(builtins.object):
             ...
             AttributeError: Property "c" doesn't exist in given instance of ...
         '''
-        name = '_' + name
-        getter_name = 'get' + name
+        internal_name = '_%s' % name
+        getter_name = 'get%s' % internal_name
         special_method = None
         if self.is_method(name=getter_name):
             special_method = builtins.getattr(self, getter_name)
-        if(self.is_property(name) or special_method is not None and
+        if(self.is_property(internal_name) or special_method is not None and
            builtins.hasattr(special_method, 'pseudo_property')):
             if special_method is not None:
                 return special_method()
             elif self.is_method(name='get'):
-                return self.get(name)
+                return self.get(internal_name)
         raise builtins.AttributeError(
-            'Property "%s" doesn\'t exist in given instance of "%s".' %
-            (name[1:], self.__class__.__name__))
+             'Property "%s" doesn\'t exist in given instance of "%s".' %
+            (name, self.__class__.__name__))
 
-# # python3.4
+# # python3.5
 # #     def __setattr__(
 # #         self, name: builtins.str, value: builtins.object
 # #     ) -> builtins.object:
@@ -302,18 +302,18 @@ class Class(builtins.object):
             >>> test_b._a
             'hans and peter'
         '''
-        if not self._setattr_helper(name, value):
+        if not self._set_attribute_helper(name, value):
             if name in self.__class__.__dict__:
                 builtins.setattr(self.__class__, name, value)
             else:
                 self.__dict__[name] = value
         return value
 
-        # # endregion
+    # # # endregion
 
-        # # region boolean
+    # # # region boolean
 
-# # python3.4     def is_method(self, name: builtins.str) -> builtins.bool:
+# # python3.5     def is_method(self, name: builtins.str) -> builtins.bool:
     def is_method(self, name):
         '''
             Determines if the given class attribute is a callable method or \
@@ -334,19 +334,18 @@ class Class(builtins.object):
             >>> Class().is_method('not existing')
             False
         '''
-        if not (
-            name in self.__class__.__dict__ and
-            self._is_callable(self.__class__.__dict__[name]) or
-            name in self.__dict__ and self._is_callable(self.__dict__[name])
-        ):
-            for base_class in self.__class__.__bases__:
-                if(name in base_class.__dict__ and
-                   self._is_callable(base_class.__dict__[name])):
-                    return True
-            return False
-        return True
+        if name in self.__class__.__dict__ and self._is_callable(
+            self.__class__.__dict__[name]
+        ) or name in self.__dict__ and self._is_callable(self.__dict__[name]):
+            return True
+        for base_class in self.__class__.__bases__:
+            if name in base_class.__dict__ and self._is_callable(
+                base_class.__dict__[name]
+            ):
+                return True
+        return False
 
-# # python3.4     def is_property(self, name: builtins.str) -> builtins.bool:
+# # python3.5     def is_property(self, name: builtins.str) -> builtins.bool:
     def is_property(self, name):
         '''
             Determines if the given class attribute is a property or \
@@ -368,35 +367,39 @@ class Class(builtins.object):
             >>> A().is_property('test')
             True
         '''
-        if not (name in self.__class__.__dict__ or name in self.__dict__):
-            for base_class in self.__class__.__bases__:
-                if(name in base_class.__dict__ and
-                   not self._is_callable(base_class.__dict__[name])):
-                    return True
-            return False
-        return not self.is_method(name)
+        if name in self.__class__.__dict__ and not self._is_callable(
+            self.__class__.__dict__[name]
+        ) or name in self.__dict__ and not self._is_callable(
+            self.__dict__[name]
+        ):
+            return True
+        for base_class in self.__class__.__bases__:
+            if(name in base_class.__dict__ and
+               not self._is_callable(base_class.__dict__[name])):
+                return True
+        return False
 
-        # # endregion
+    # # # endregion
 
-        # endregion
+    # # endregion
 
-        # region protected
+    # # region protected
 
-# # python3.4
+# # python3.5
 # #     def _is_callable(self, object: builtins.object) -> builtins.bool:
     def _is_callable(self, object):
 # #
         '''Indicates if given method is a callable or a callable wrapper.'''
-        return(
+        return (
             builtins.callable(object) or
             builtins.isinstance(object, builtins.classmethod) or
             builtins.isinstance(object, builtins.staticmethod))
 
-# # python3.4
-# #     def _setattr_helper(
+# # python3.5
+# #     def _set_attribute_helper(
 # #         self, name: builtins.str, value: builtins.object
 # #     ) -> builtins.bool:
-    def _setattr_helper(self, name, value):
+    def _set_attribute_helper(self, name, value):
 # #
         '''
             Helper method for "self.__setattr__()". Does the actual overwrite \
@@ -409,8 +412,8 @@ class Class(builtins.object):
             Returns "True" if the given property was successful overwritten \
             or "False" otherwise.
         '''
-        name = '_' + name
-        setter_name = 'set' + name
+        name = '_%s' % name
+        setter_name = 'set%s' % name
         if self.is_method(name=setter_name):
             builtins.getattr(self, setter_name)(value)
             return True
@@ -419,7 +422,7 @@ class Class(builtins.object):
             return True
         return False
 
-        # endregion
+    # # endregion
 
     # endregion
 

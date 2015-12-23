@@ -8,7 +8,7 @@
     public methods implements the general features of the whole application.
 '''
 
-# # python3.4
+# # python3.5
 # # pass
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
@@ -28,7 +28,7 @@ __maintainer_email__ = 't.sickert["~at~"]gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-# # python3.4
+# # python3.5
 # # import builtins
 # # from collections import Iterable
 import __builtin__ as builtins
@@ -44,7 +44,7 @@ from boostNode.extension.file import Handler as FileHandler
 from boostNode.extension.native import Module, InstancePropertyInitializer
 from boostNode.extension.output import Logger
 from boostNode.extension.system import CommandLine, Platform, Runnable
-# # python3.4 from boostNode.extension.type import Self, SelfClass
+# # python3.5 from boostNode.extension.type import Self, SelfClass
 pass
 from boostNode.paradigm.aspectOrientation import JointPoint
 from boostNode.paradigm.objectOrientation import Class
@@ -313,7 +313,7 @@ class Reflector(Class, Runnable):
     # # # region boolean
 
     @JointPoint(builtins.classmethod)
-# # python3.4
+# # python3.5
 # #     def is_location_in_paths(
 # #         cls: SelfClass, search: FileHandler, paths: Iterable
 # #     ) -> builtins.bool:
@@ -351,10 +351,10 @@ class Reflector(Class, Runnable):
                 return True
         return False
 
-        # # endregion
+    # # # endregion
 
     @JointPoint(builtins.classmethod)
-# # python3.4
+# # python3.5
 # #     def open(cls: SelfClass, files: Iterable) -> SelfClass:
     def open(cls, files):
 # #
@@ -399,18 +399,18 @@ class Reflector(Class, Runnable):
             Platform.open(location=file)
         return cls
 
-        # endregion
+    # # endregion
 
     # endregion
 
     # region dynamic methods
 
-        # region public
+    # # region public
 
-        # # region special
+    # # # region special
 
     @JointPoint
-# # python3.4     def __repr__(self: Self) -> builtins.str:
+# # python3.5     def __repr__(self: Self) -> builtins.str:
     def __repr__(self):
         '''
             Invokes if this object should describe itself by a string.
@@ -451,7 +451,7 @@ class Reflector(Class, Runnable):
             ... ) # doctest: +ELLIPSIS
             '...s..."...t..."...ority locations "" and exclude locations "".'
         '''
-        return(
+        return (
             'Object of "{class_name}" with source path "{source_path}" and '
             'target path "{target_path}". Limit is {limit} byte, priority '
             'locations "{priority_locations}" and exclude locations '
@@ -464,12 +464,12 @@ class Reflector(Class, Runnable):
                 ), priority_locations='", "'.join(self.priority_locations),
                 exclude_locations='", "'.join(self.exclude_locations)))
 
-        # # endregion
+    # # # endregion
 
-        # # region getter
+    # # # region getter
 
     @JointPoint(Class.pseudo_property)
-# # python3.4     def get_status_in_percent(self: Self) -> builtins.float:
+# # python3.5     def get_status_in_percent(self: Self) -> builtins.float:
     def get_status_in_percent(self):
         '''
             Calculates the edited part of files in percent and returns the \
@@ -507,10 +507,10 @@ class Reflector(Class, Runnable):
             (builtins.float(self._edited_number_of_files) /
              builtins.float(self._number_of_files)) * 100, 2)
 
-        # # endregion
+    # # # endregion
 
     @JointPoint
-# # python3.4     def create_cache(self: Self) -> Self:
+# # python3.5     def create_cache(self: Self) -> Self:
     def create_cache(self):
         '''
             Creates a new reflection cache of the given source object.
@@ -693,7 +693,7 @@ class Reflector(Class, Runnable):
         return self._create_reflection_files()
 
     @JointPoint
-# # python3.4     def synchronize_back_to_source(self: Self) -> Self:
+# # python3.5     def synchronize_back_to_source(self: Self) -> Self:
     def synchronize_back_to_source(self):
         '''
             Syncs the current cache location back to the source.
@@ -835,21 +835,21 @@ class Reflector(Class, Runnable):
             __logger__.info('Delete source files not existing in target.')
             self.source_location.iterate_directory(
                 function=self._delete_source_file_not_existing_in_target,
-                recursive=True, recursive_in_link=False)
+                recursive=True, recursive_in_link=False, deep_first=True)
             Platform.set_process_lock(description=__module_name__)
         __logger__.info('Clear cache.')
         self.target_location.clear_directory()
         Platform.clear_process_lock(description=__module_name__)
         return self
 
-        # endregion
+    # # endregion
 
-        # region protected
+    # # region protected
 
-        # # region runnable implementation
+    # # # region runnable implementation
 
     @JointPoint
-# # python3.4     def _run(self: Self) -> Self:
+# # python3.5     def _run(self: Self) -> Self:
     def _run(self):
         '''
             Entry point for command line call of this program. Initializes a \
@@ -891,7 +891,7 @@ class Reflector(Class, Runnable):
             namespace=self._command_line_arguments))
 
     @JointPoint(InstancePropertyInitializer)
-# # python3.4
+# # python3.5
 # #     def _initialize(
 # #         self: Self, source_location: (FileHandler, builtins.str),
 # #         target_location=None, limit='100 MB', priority_locations=(),
@@ -952,10 +952,10 @@ class Reflector(Class, Runnable):
                 status=__status__))
         return self
 
-        # # endregion
+    # # # endregion
 
     @JointPoint
-# # python3.4     def _synchronize_back(self: Self) -> Self:
+# # python3.5     def _synchronize_back(self: Self) -> Self:
     def _synchronize_back(self):
         '''
             Synchronizes and/or creates a new reflection cache dependent on \
@@ -994,15 +994,16 @@ class Reflector(Class, Runnable):
         return self
 
     @JointPoint
-# # python3.4     def _validate_inputs(self: Self) -> Self:
+# # python3.5     def _validate_inputs(self: Self) -> Self:
     def _validate_inputs(self):
         '''
             Validates the given parameters to the "self.__init__()" method. \
             Checks if all paths makes sense and all inputs are in the right \
             format.
         '''
-        if(self.target_location.path.startswith(self.source_location.path) or
-           self.source_location.path.startswith(self.target_location.path)):
+        if self.target_location.path.startswith((
+            self.source_location.path, self.target_location.path
+        )):
             raise __exception__(
                 'Source path "%s" and reflection path "%s" have to be in '
                 'different locations.', self.source_location.path,
@@ -1020,7 +1021,7 @@ class Reflector(Class, Runnable):
         return self._check_path_lists()
 
     @JointPoint
-# # python3.4     def _check_path_lists(self: Self) -> Self:
+# # python3.5     def _check_path_lists(self: Self) -> Self:
     def _check_path_lists(self):
         '''
             Checks if all given paths lists are in locations which makes \
@@ -1032,7 +1033,7 @@ class Reflector(Class, Runnable):
             paths=self.exclude_locations, path_type='Exclude')
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _check_path_in_source(
 # #         self: Self, paths: Iterable, path_type='Given'
 # #     ) -> Self:
@@ -1080,7 +1081,7 @@ class Reflector(Class, Runnable):
         return self
 
     @JointPoint
-# # python3.4     def _log_status(self: Self) -> Self:
+# # python3.5     def _log_status(self: Self) -> Self:
     def _log_status(self):
         '''
             Logs the initial status of the current Reflector instance. Output \
@@ -1130,10 +1131,10 @@ class Reflector(Class, Runnable):
                 native_symbolic_link_option=native_symbolic_link_option))
         return self
 
-        # # region core concern
+    # # # region core concern
 
     @JointPoint
-# # python3.4     def _create_reflection_files(self: Self) -> Self:
+# # python3.5     def _create_reflection_files(self: Self) -> Self:
     def _create_reflection_files(self):
         '''
             Iterates throw all files which should be included in the \
@@ -1182,7 +1183,7 @@ class Reflector(Class, Runnable):
         return self
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _copy_reflection_file(
 # #         self: Self, source: FileHandler, path: builtins.str,
 # #         size: builtins.float
@@ -1214,7 +1215,7 @@ class Reflector(Class, Runnable):
         return self
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _create_reflection_link(
 # #         self: Self, source: FileHandler, path: builtins.str
 # #     ) -> Self:
@@ -1262,7 +1263,7 @@ class Reflector(Class, Runnable):
         return self
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _relocate_moved_file(
 # #         self: Self, file: FileHandler
 # #     ) -> builtins.bool:
@@ -1312,7 +1313,7 @@ class Reflector(Class, Runnable):
         return True
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _relocate_missing_file(
 # #         self: Self, relocated_file: FileHandler, linked_file: FileHandler
 # #     ) -> builtins.bool:
@@ -1368,7 +1369,7 @@ class Reflector(Class, Runnable):
         return True
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _copy_cache_to_source(
 # #         self: Self, file: FileHandler
 # #     ) -> builtins.bool:
@@ -1430,7 +1431,7 @@ class Reflector(Class, Runnable):
         return False
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _copy_link_in_cache_to_source(
 # #         self: Self, source_file: FileHandler, link_file: FileHandler,
 # #         target_path_length: builtins.int
@@ -1551,7 +1552,7 @@ class Reflector(Class, Runnable):
             new_link = FileHandler(
                 location=self.source_location.path + linked_target.path[
                     target_path_length:])
-# # python3.4
+# # python3.5
 # #             if(not source_file.is_symbolic_link() or
 # #                source_file.read_symbolic_link(as_object=True) != new_link
 # #                ):
@@ -1573,7 +1574,7 @@ class Reflector(Class, Runnable):
         elif(linked_target.path[:builtins.len(self.source_location.path)] !=
              self.source_location.path):
             '''Given link doesn't point to a location in source location.'''
-# # python3.4
+# # python3.5
 # #             if(not source_file.is_symbolic_link() or
 # #                source_file.read_symbolic_link(as_object=True) !=
 # #                linked_target):
@@ -1593,7 +1594,7 @@ class Reflector(Class, Runnable):
         return True
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _copy_link_in_cache_to_source_as_link(
 # #         self: Self, source_file: FileHandler, link_file: FileHandler,
 # #         linked_target: FileHandler
@@ -1611,7 +1612,7 @@ class Reflector(Class, Runnable):
             target=source_file, force=True)
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _delete_source_file_not_existing_in_target(
 # #         self: Self, file: FileHandler
 # #     ) -> builtins.bool:
@@ -1638,7 +1639,7 @@ class Reflector(Class, Runnable):
         return True
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _create_reflection_structure(
 # #         self: Self, file: FileHandler, target: FileHandler, priority=False
 # #     ) -> builtins.bool:
@@ -1671,7 +1672,7 @@ class Reflector(Class, Runnable):
         return True
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _handle_source_element(
 # #         self: Self, source_file: FileHandler, target_file: FileHandler,
 # #         priority: builtins.bool
@@ -1704,9 +1705,7 @@ class Reflector(Class, Runnable):
             target_file.make_directory(right=self.target_rights)
             return source_file.iterate_directory(
                 function=self._create_reflection_structure,
-                target=target_file,
-                priority=priority,
-                recursive_in_link=False)
+                target=target_file, priority=priority, recursive_in_link=False)
         __logger__.info('Analyzing file: "%s".', source_file.path)
         if source_file.is_device_file():
             __logger__.warning(
@@ -1719,7 +1718,7 @@ class Reflector(Class, Runnable):
         return True
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _handle_source_link(
 # #         self: Self, source_file: FileHandler, target_file: FileHandler
 # #     ) -> builtins.bool:
@@ -1789,9 +1788,9 @@ class Reflector(Class, Runnable):
         __logger__.info('Copy link "%s" as link.', source_file.path)
         return link.make_symbolic_link(target_file, force=True)
 
-        # # endregion
+    # # # endregion
 
-        # endregion
+    # # endregion
 
     # endregion
 

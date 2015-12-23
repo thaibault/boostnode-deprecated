@@ -8,7 +8,7 @@
     given signature.
 '''
 
-# # python3.4
+# # python3.5
 # # pass
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
@@ -28,9 +28,9 @@ __maintainer_email__ = 't.sickert["~at~"]gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-# # python3.4 import builtins
+# # python3.5 import builtins
 import __builtin__ as builtins
-# # python3.4
+# # python3.5
 # # import functools
 # # from collections import Iterable, Sequence
 pass
@@ -38,7 +38,7 @@ pass
 import inspect
 import os
 import sys
-# # python3.4
+# # python3.5
 # # from types import FunctionType as Function
 # # from types import MethodType as Method
 pass
@@ -47,10 +47,10 @@ pass
 '''Make boostNode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
-# # python3.4 pass
+# # python3.5 pass
 from boostNode import convert_to_unicode
 from boostNode.extension.type import Self, SelfClass, SelfClassObject, Null
-# # python3.4
+# # python3.5
 # # from boostNode.paradigm.aspectOrientation import Argument, CallJointPoint
 pass
 # #
@@ -63,7 +63,7 @@ from boostNode.paradigm.aspectOrientation import ASPECTS, FunctionDecorator, \
 # region functions
 
 @JointPoint
-# # python3.4 def add_check(point_cut: builtins.str) -> builtins.list:
+# # python3.5 def add_check(point_cut: builtins.str) -> builtins.list:
 def add_check(point_cut):
     '''
         Adds signature checking in functions and methods for given point cuts.
@@ -79,7 +79,7 @@ def add_check(point_cut):
         ... def test():
         ...     pass
     '''
-# # python3.4
+# # python3.5
 # #     ASPECTS.append(
 # #         {'advice': ({'callback': CheckArguments, 'event': 'call'},
 # #                     {'callback': CheckReturnValue, 'event': 'return'}),
@@ -93,7 +93,7 @@ def add_check(point_cut):
 
 # region abstract classes
 
-# # python3.4 class CheckObject:
+# # python3.5 class CheckObject:
 class CheckObject(builtins.object):
 
     '''
@@ -108,7 +108,7 @@ class CheckObject(builtins.object):
     # # # region boolean
 
     @builtins.classmethod
-# # python3.4
+# # python3.5
 # #     def _is_multiple_type(
 # #         cls: SelfClass, type: (builtins.object, builtins.type)
 # #     ) -> builtins.bool:
@@ -140,13 +140,13 @@ class CheckObject(builtins.object):
             >>> CheckObject._is_multiple_type([str])
             False
         '''
-        return(
+        return (
             builtins.isinstance(type, (builtins.tuple, builtins.list)) and
             builtins.len(type) > 1 and
             builtins.isinstance(type[0], builtins.type))
 
     @builtins.classmethod
-# # python3.4
+# # python3.5
 # #     def _is_right_type(
 # #         cls: SelfClass, given_type: builtins.type,
 # #         expected_type: builtins.type
@@ -174,7 +174,7 @@ class CheckObject(builtins.object):
             >>> CheckObject._is_right_type(list, Iterable)
             True
         '''
-        return(
+        return (
             given_type is expected_type or expected_type is Null or
             expected_type is builtins.type(None) or
             builtins.issubclass(given_type, expected_type) and not (
@@ -194,11 +194,11 @@ class CheckObject(builtins.object):
     # # # region special
 
     @JointPoint
-# # python3.4     def __init__(self: Self) -> None:
+# # python3.5     def __init__(self: Self) -> None:
     def __init__(self):
         '''If this method wasn't be overwritten an exception is raised.'''
 
-    # # # # region properties
+        # # # region properties
 
         '''
             Holds informations about the function and their bounding that is \
@@ -212,10 +212,10 @@ class CheckObject(builtins.object):
         '''
         self._method_type = None
 
-    # # # # endregion
+        # # # endregion
 
     @JointPoint
-# # python3.4     def __repr__(self: Self) -> builtins.str:
+# # python3.5     def __repr__(self: Self) -> builtins.str:
     def __repr__(self):
         '''
             Describes current properties of analysing object.
@@ -225,8 +225,10 @@ class CheckObject(builtins.object):
             >>> def test(self): pass
             >>> class A(CheckObject):
             ...     def __init__(self):
-            ...         getattr(
-            ...             super(self.__class__, self), inspect.stack()[0][3]
+            ...         builtins.getattr(
+            ...             builtins.super(
+            ...                 self.__class__, self
+            ...             ), inspect.stack()[0][3]
             ...         )()
             ...         self.__func__ = test
             ...         self._method_type = staticmethod
@@ -242,7 +244,7 @@ class CheckObject(builtins.object):
         class_object_name = 'None'
         if self.class_object is not None:
             class_object_name = self.class_object.__name__
-        return(
+        return (
             'Object of "{class_name}" with class object "{class_object_name}",'
             ' object "{object}", called function "{function}" and method type '
             '"{method_type}".'.format(
@@ -257,7 +259,7 @@ class CheckObject(builtins.object):
     # # # region getter
 
     @JointPoint
-# # python3.4     def get_function_path(self: Self) -> builtins.str:
+# # python3.5     def get_function_path(self: Self) -> builtins.str:
     def get_function_path(self):
         '''
             Returns an object depended function description.
@@ -267,8 +269,10 @@ class CheckObject(builtins.object):
             >>> def test(): pass
             >>> class A(CheckObject):
             ...     def __init__(self):
-            ...         getattr(
-            ...             super(self.__class__, self), inspect.stack()[0][3]
+            ...         builtins.getattr(
+            ...             builtins.super(
+            ...                 self.__class__, self
+            ...             ), inspect.stack()[0][3]
             ...         )()
             ...         self.__func__ = test
             ...         self._method_type = staticmethod
@@ -284,7 +288,7 @@ class CheckObject(builtins.object):
             >>> a.get_function_path()
             'A.test'
         '''
-# # python3.4
+# # python3.5
 # #         return self.__func__.__qualname__
         if self.class_object is not None:
             return '%s.%s' % (
@@ -296,9 +300,9 @@ class CheckObject(builtins.object):
 
     # # endregion
 
-        # region protected
+    # # region protected
 
-# # python3.4
+# # python3.5
 # #     def _handle_multiple_types(
 # #         self: Self, value: builtins.object, given_type: builtins.type,
 # #         expected_types: (builtins.tuple, builtins.list),
@@ -361,7 +365,7 @@ class CheckObject(builtins.object):
                     name=name, type_name=given_type.__name__))
         return self
 
-# # python3.4
+# # python3.5
 # #     def _check_type(
 # #         self: Self, expected_type: builtins.type,
 # #         given_type: builtins.type, value: builtins.object,
@@ -462,7 +466,7 @@ class CheckObject(builtins.object):
                         type=given_type.__name__, value=builtins.repr(value)))
         return self
 
-# # python3.4
+# # python3.5
 # #     def _handle_self(
 # #         self: Self, given_type: builtins.type, name: builtins.str,
 # #         value: builtins.object
@@ -477,8 +481,10 @@ class CheckObject(builtins.object):
             >>> def test(): pass
             >>> class A(CheckObject):
             ...     def __init__(self):
-            ...         getattr(
-            ...             super(self.__class__, self), inspect.stack()[0][3]
+            ...         builtins.getattr(
+            ...             builtins.super(
+            ...                 self.__class__, self
+            ...             ), inspect.stack()[0][3]
             ...         )()
             ...         self.__func__ = test
             ...         self._method_type = staticmethod
@@ -521,7 +527,7 @@ class CheckObject(builtins.object):
                     type=given_type.__name__, value=builtins.repr(value)))
         return self
 
-# # python3.4
+# # python3.5
 # #     def _handle_self_class(
 # #         self: Self, expected_type: [SelfClass, SelfClassObject],
 # #         given_type: builtins.type, name: builtins.str,
@@ -537,8 +543,10 @@ class CheckObject(builtins.object):
             >>> def test(): pass
             >>> class A(CheckObject):
             ...     def __init__(self):
-            ...         getattr(
-            ...             super(self.__class__, self), inspect.stack()[0][3]
+            ...         builtins.getattr(
+            ...             builtins.super(
+            ...                 self.__class__, self
+            ...             ), inspect.stack()[0][3]
             ...         )()
             ...         self.__func__ = test
             ...         self._method_type = staticmethod
@@ -607,7 +615,7 @@ class CheckObject(builtins.object):
         return self
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _check_again_multiple_types(
 # #         self: Self, value: builtins.object, given_type: builtins.type,
 # #         expected_types: Iterable
@@ -632,14 +640,14 @@ class CheckObject(builtins.object):
         for expected_type in expected_types:
             if self._is_right_type(given_type, expected_type):
                 return True
-        return(
+        return (
             Self in expected_types and value is self.object or
             SelfClass in expected_types and value is self.class_object or
             SelfClassObject in expected_types and
             given_type is self.class_object)
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _join_types(
 # #         self: Self, types: Sequence, meta_type=True
 # #     ) -> builtins.str:
@@ -706,7 +714,7 @@ class CheckObject(builtins.object):
         return self._join_distinct_types(types, meta_type)
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _join_distinct_types(
 # #         self: Self, types: Iterable, meta_type: builtins.bool
 # #     ) -> builtins.str:
@@ -716,7 +724,7 @@ class CheckObject(builtins.object):
         result = ''
         for type in types:
             if type is Self:
-# # python3.4
+# # python3.5
 # #                 result += '"%s (self)"' % builtins.str(self.object)
                 result += '"%s (self)"' % convert_to_unicode(self.object)
 # #
@@ -736,7 +744,7 @@ class CheckObject(builtins.object):
         return result
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _check_value(
 # #         self: Self, expected_value: builtins.object,
 # #         value: builtins.object, name='return value'
@@ -772,7 +780,7 @@ class CheckObject(builtins.object):
                     expected_value=expected_value, name=name, value=value))
         return self
 
-        # endregion
+    # # endregion
 
     # endregion
 
@@ -783,7 +791,7 @@ class CheckObject(builtins.object):
 
 class Check(FunctionDecorator):
 
-# # python3.4
+# # python3.5
 # #     '''
 # #         This function provides function and method signature checking. An \
 # #         exception is raised on invalid signature implementation.
@@ -979,7 +987,7 @@ class Check(FunctionDecorator):
     # # region public
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def get_wrapper_function(self: Self) -> (Function, Method):
 # #         '''
 # #             Returns a wrapper function for the function to be checked.
@@ -1039,7 +1047,7 @@ class Check(FunctionDecorator):
 
     # endregion
 
-# # python3.4 pass
+# # python3.5 pass
 """
 
 
@@ -1051,7 +1059,7 @@ class CheckArguments(CallJointPoint, CheckObject):
 
     # # region public
 
-# # python3.4     def aspect(self: Self) -> Self:
+# # python3.5     def aspect(self: Self) -> Self:
     def aspect(self):
         '''
             This function could be used as decorator function or aspects to \
@@ -1074,7 +1082,7 @@ class CheckArguments(CallJointPoint, CheckObject):
 
         # region protected
 
-# # python3.4
+# # python3.5
 # #     def _check_argument_cases(self: Self, argument: Argument) -> Self:
     def _check_argument_cases(self, argument):
 # #
@@ -1096,7 +1104,7 @@ class CheckArguments(CallJointPoint, CheckObject):
             expected_value=argument.annotation, value=argument.value,
             name=argument.name)
 
-# # python3.4
+# # python3.5
 # #     def _check_argument(self: Self, argument: Argument) -> Self:
     def _check_argument(self, argument):
 # #
@@ -1119,7 +1127,7 @@ class CheckArguments(CallJointPoint, CheckObject):
 
     # endregion
 
-# # python3.4 pass
+# # python3.5 pass
 """
 
 
@@ -1131,7 +1139,7 @@ class CheckReturnValue(ReturnJointPoint, CheckObject):
 
     # # region public
 
-# # python3.4     def aspect(self: Self) -> builtins.object:
+# # python3.5     def aspect(self: Self) -> builtins.object:
     def aspect(self):
         '''
             Checks the given return value.
@@ -1149,7 +1157,7 @@ class CheckReturnValue(ReturnJointPoint, CheckObject):
             ... ).aspect()
             'hans'
         '''
-# # python3.4
+# # python3.5
 # #         if 'return' in self.__func__.__annotations__:
 # #             expected_return = self.__func__.__annotations__['return']
 # #             given_return_type = builtins.type(self.return_value)

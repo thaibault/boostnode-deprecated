@@ -38,19 +38,8 @@
     - bc5 Property with two preceding underscore shouldn't be accessed from \
           any location then the object itself (private attributes).
 
-    - bc6 Don't use any whitespaces between except or return statements and \
-          preceding statements if not needed.
-
-    >>> try:
-    ...     pass
-    ... except(...):
-    ...     pass
-
-    or
-
-    >>> return{}
-
-    instead of
+    - bc6 Always use one whitespace between except or return statements and \
+          preceding statements.
 
     >>> try:
     ...     pass
@@ -61,6 +50,17 @@
 
     >>> return {}
 
+    instead of
+
+    >>> try:
+    ...     pass
+    ... except(...):
+    ...     pass
+
+    or
+
+    >>> return{}
+
     - bc7 Do not use more chars then 79 in one line.
 
     - bc8 Use short and/or long description doc-strings for all definitions.
@@ -69,11 +69,12 @@
           path coverage.
 
     - bc10 Sorting imports as following: \
-        1. Import all standard modules and packages, \
-        2. then all from third party, \
-        3. now import your own modules or packages. \
-        4. Sort import names alphabetically and separate the previous \
-           defined parts with blank lines.
+        1. Standard libraries, \
+        2. Published third party libraries, \
+        3. Your own unpublished libraries, \
+        4. Your own modules or packages, \
+        5. Sort import names alphabetically and separate the previous defined \
+           parts with blank lines.
 
     - bc11 Use builtin names with the "builtins." prefix.
 
@@ -186,40 +187,32 @@
     ...
     ...     # region static methods
     ...
-    ...         # region public
+    ...     # # region public
     ...
     ...     # ...
     ...
-    ...         # - region compensate right indention
+    ...                 # - region compensate right indention
     ...
     ...     # ...
     ...
-    ...         #+ endregion
-    ...
-    ... # # # # region compensate more right indention
+    ...             # endregion
     ...
     ...     # ...
     ...
-    ...         # endregion
-    ...
-    ...             # - compensate left indention
-    ...
-    ...     # ...
-    ...
-    ...         # endregion
+    ...     # # endregion
     ...
     ...     # endregion
     ...
     ...     # region dynamic methods
     ...
-    ...         # region public
+    ...     # # region public
     ...
-    ...             # region special
+    ...     # # # region special
     ...
     ...     def __init__(self):
     ...         '''Initializer's docstring.'''
     ...
-    ...                 # region properties
+    ...         # # region properties
     ...
     ...         a = 5
     ...         '''Description for public dynamic property.'''
@@ -228,19 +221,19 @@
     ...         __b = 'privat'
     ...         '''Description for private dynamic property.'''
     ...
-    ...                 # endregion
+    ...         # # endregion
     ...
-    ...             # endregion
-    ...
-    ...     # ...
-    ...
-    ...         # endregion
-    ...
-    ...         # region protected
+    ...     # # # endregion
     ...
     ...     # ...
     ...
-    ...         # endregion
+    ...     # # endregion
+    ...
+    ...     # endregion
+    ...
+    ...     # region protected
+    ...
+    ...     # ...
     ...
     ...     # endregion
     ...
@@ -288,7 +281,7 @@
     Module pattern (see bc14)
     -------------------------
 
-    >>> #!/usr/bin/env python3.4
+    >>> #!/usr/bin/env python3.5
     ... # -*- coding: utf-8 -*-
     ...
     ... # region header
@@ -366,7 +359,7 @@
     '\\n    Module documentation which should be useable as help message fo...'
 """
 
-# # python3.4
+# # python3.5
 # # pass
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
@@ -381,7 +374,7 @@ __maintainer_email__ = 't.sickert["~at~"]gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-# # python3.4
+# # python3.5
 # # import builtins
 import __builtin__ as builtins
 from collections import Iterable
@@ -416,7 +409,7 @@ ENCODING = 'utf_8'
 
 # region functions
 
-# # python3.4
+# # python3.5
 # # pass
 '''
     Handling "builtins.str" and "builtins.unicode" in python2.7.X needs \
@@ -455,10 +448,11 @@ def convert_to_unicode(object):
         Converts given object to its unicode string representation like \
         python's native "builtins.str()" method.
     '''
-    if builtins.isinstance(object, builtins.Exception) and builtins.hasattr(
-        object, 'message'
-    ):
-        object = object.message
+    if builtins.isinstance(object, builtins.Exception):
+        if builtins.hasattr(object, '__unicode__'):
+            return object.__unicode__()
+        if builtins.hasattr(object, 'message'):
+            object = object.message
     if builtins.isinstance(object, builtins.unicode):
         '''
             NOTE: To force specified encoding we should encode and than \
@@ -489,7 +483,7 @@ def convert_to_string(object):
 # #
 
 
-# # python3.4 def __get_all_modules__(path=sys.path[0]) -> builtins.list:
+# # python3.5 def __get_all_modules__(path=sys.path[0]) -> builtins.list:
 def __get_all_modules__(path=convert_to_unicode(sys.path[0])):
     '''
         This method provides a generic way to determine all modules in \
@@ -525,7 +519,7 @@ def __get_all_modules__(path=convert_to_unicode(sys.path[0])):
         >>> __get_all_modules__('')
         ['highPerformanceModification']
     '''
-# # python3.4
+# # python3.5
 # #     if not path:
 # #         path = os.getcwd()
 # #     return builtins.list(builtins.set(builtins.map(
@@ -581,7 +575,7 @@ if __name__ != '__main__':
     from boostNode.aspect.signature import add_check as add_signature_check
     from boostNode.extension.native import Module
 
-# # python3.4
+# # python3.5
 # #     pass
     builtins.reload(sys)
     sys.setdefaultencoding(ENCODING)
@@ -594,7 +588,7 @@ if __name__ != '__main__':
         add_signature_check(point_cut='%s\..*' % Module.get_package_name(
             frame=inspect.currentframe()))
     except WindowsError as exception:
-# # python3.4
+# # python3.5
 # #         logging.error(
 # #             'Running subprocesses on windows without being administrator '
 # #             "isn't possible. %s: %s", exception.__class__.__name__,

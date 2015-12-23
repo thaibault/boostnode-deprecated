@@ -5,7 +5,7 @@
 
 '''Provides server and request handler classes.'''
 
-# # python3.4
+# # python3.5
 # # pass
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
@@ -27,15 +27,15 @@ __version__ = '1.0'
 
 from base64 import b64encode as base64_encode
 from base64 import b64decode as base64_decode
-# # python3.4
+# # python3.5
 # # import builtins
 import __builtin__ as builtins
 import BaseHTTPServer as server
-import CGIHTTPServer
+import CGIHTTPServer as cgi_http_server
 # #
 import cgi
-# # python3.4
-# # from collections import Iterable
+# # python3.5
+# # from collections import Iterable as NativeIterable
 # # from copy import copy, deepcopy
 # # from http import server
 # # import imp
@@ -43,10 +43,10 @@ import Cookie as cookies
 from copy import copy, deepcopy
 # #
 import gzip
-# # python3.4 from http import cookies
+# # python3.5 from http import cookies
 pass
 import inspect
-# # python3.4
+# # python3.5
 # # import _io
 # # import io
 pass
@@ -56,7 +56,7 @@ import logging
 import multiprocessing
 import os
 import posixpath
-# # python3.4 import socketserver
+# # python3.5 import socketserver
 pass
 import ssl
 import re as regularExpression
@@ -64,14 +64,14 @@ import signal
 import socket
 import subprocess
 import sys
-# # python3.4
+# # python3.5
 # # pass
 import SocketServer
 import StringIO
 # #
 import threading
 import time
-# # python3.4
+# # python3.5
 # # from types import FunctionType as Function
 # # from types import ModuleType
 # # from urllib.parse import urlparse as parse_url
@@ -86,12 +86,12 @@ from urlparse import unquote as unquote_url
 '''Make boostNode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
-# # python3.4
+# # python3.5
 # # from boostNode import ENCODING
 from boostNode import ENCODING, convert_to_string, convert_to_unicode
 # #
 from boostNode.extension.file import Handler as FileHandler
-from boostNode.extension.native import Dictionary, Module, Object, \
+from boostNode.extension.native import Iterable, Dictionary, Module, Object, \
     InstancePropertyInitializer, String
 from boostNode.extension.output import Buffer, Print
 from boostNode.extension.output import SET_ATTRIBUTE_MODE as \
@@ -100,7 +100,7 @@ from boostNode.extension.output import RESET_ATTRIBUTE_MODE as \
     RESET_OUTPUT_ATTRIBUTE_MODE
 from boostNode.extension.output import COLOR as OUTPUT_COLOR
 from boostNode.extension.system import CommandLine, Platform, Runnable
-# # python3.4 from boostNode.extension.type import Self
+# # python3.5 from boostNode.extension.type import Self
 pass
 from boostNode.paradigm.aspectOrientation import JointPoint
 from boostNode.paradigm.objectOrientation import Class
@@ -112,7 +112,7 @@ from boostNode.paradigm.objectOrientation import Class
 
 # region classes
 
-# # python3.4
+# # python3.5
 # # pass
 class SocketFileObjectWrapper(socket._fileobject):
 
@@ -197,7 +197,7 @@ class SocketFileObjectWrapper(socket._fileobject):
 # #
 
 
-# # python3.4
+# # python3.5
 # # class MultiProcessingHTTPServer(
 # #     socketserver.ThreadingMixIn, server.HTTPServer
 # # ):
@@ -215,7 +215,7 @@ class MultiProcessingHTTPServer(
     # # # region special
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def __init__(
 # #         self: Self, *arguments: builtins.object,
 # #         **keywords: builtins.object
@@ -248,7 +248,7 @@ class MultiProcessingHTTPServer(
         # endregion
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def is_same_process_request(
 # #         self: Self, request: socket.socket
 # #     ) -> builtins.bool:
@@ -261,33 +261,28 @@ class MultiProcessingHTTPServer(
         first_request_line = self.read_file_socket.readline(
             Web.MAXIMUM_FIRST_GET_REQUEST_LINE_IN_CHARS
         ).strip()
-        for pattern in self.web.same_process_request_whitelist:
-# # python3.4
-# #             if regularExpression.compile(pattern).fullmatch(
-# #                 first_request_line.decode()
-# #             ):
-            if regularExpression.compile('(?:%s)$' % pattern).match(
-                first_request_line
-            ):
+# # python3.5
+# #         if Iterable(self.web.same_process_request_whitelist).is_in_pattern(
+# #             value=first_request_line.decode()
+# #         ):
+        if Iterable(self.web.same_process_request_whitelist).is_in_pattern(
+            value=first_request_line
+        ):
 # #
-                return True
+            return True
         if self.web.same_process_request_blacklist:
-            for pattern in self.web.same_process_request_blacklist:
-# # python3.4
-# #                 if regularExpression.compile(pattern).fullmatch(
-# #                     first_request_line.decode()
-# #                 ):
-                if regularExpression.compile('(?:%s)$' % pattern).match(
-                    first_request_line
-                ):
+# # python3.5
+# #             return not Iterable(
+# #                 self.web.same_process_request_blacklist
+# #             ).is_in_pattern(value=first_request_line.decode())
+            return not Iterable(
+                self.web.same_process_request_blacklist
+            ).is_in_pattern(value=first_request_line)
 # #
-                    return False
-        else:
-            return False
-        return True
+        return False
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def process_request_no_termination_wrapper(
 # #         self: Self, parent_function: Function,
 # #         request: socket.socket, arguments: builtins.tuple,
@@ -306,7 +301,7 @@ class MultiProcessingHTTPServer(
             for signal_number in signal_numbers:
                 signal.signal(signal_number, signal.SIG_IGN)
             parent_function(self, request, *arguments, **keywords)
-# # python3.4
+# # python3.5
 # #         except(
 # #             builtins.BrokenPipeError, socket.gaierror,
 # #             socket.herror, socket.timeout, socket.error
@@ -324,7 +319,7 @@ class MultiProcessingHTTPServer(
 # #
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def process_request(
 # #         self: Self, request_socket: socket.socket,
 # #         *arguments: builtins.object, **keywords: builtins.object
@@ -338,7 +333,7 @@ class MultiProcessingHTTPServer(
         '''
         if self.web.block_new_worker:
             return None
-# # python3.4
+# # python3.5
 # #         self.read_file_socket = request_socket.makefile('rb', -1)
 # #         read_file_socket = self.read_file_socket
 # #
@@ -384,7 +379,7 @@ class MultiProcessingHTTPServer(
            self.web.maximum_number_of_processes):
             self.web.number_of_running_processes += 1
             '''Takes this method via introspection from now on.'''
-# # python3.4
+# # python3.5
 # #             multiprocessing.Process(
 # #                 target=self.process_request_no_termination_wrapper,
 # #                 daemon=True,
@@ -399,7 +394,7 @@ class MultiProcessingHTTPServer(
 # #
         else:
             try:
-# # python3.4
+# # python3.5
 # #                 return parent_function(
 # #                     self, request_socket, *arguments, **keywords)
 # #             except(
@@ -446,7 +441,7 @@ class Web(Class, Runnable):
                                                   file, python module or \
                                                   dynamic executable file.
 
-        **public_key_file**                     - Key file to support a https \
+        **key_file**                            - Key file to support a https \
                                                   connection.
 
         **stop_order**                          - Standard in command to stop \
@@ -561,19 +556,14 @@ class Web(Class, Runnable):
 
         Examples:
 
-        >>> Web(
-        ...     maximum_number_of_processes=1, public_key_file='.'
-        ... ) # doctest: +ELLIPSIS
-        Object of "Web" with root path "...", port "0" and stop order ...
-
-        >>> public_key_file = FileHandler(
-        ...     __test_folder__.path + '_initialize_public_key_file')
-        >>> public_key_file.content = ''
-        >>> Web(public_key_file=public_key_file) # doctest: +ELLIPSIS
+        >>> key_file = FileHandler(
+        ...     __test_folder__.path + '_initialize_key_file')
+        >>> key_file.content = ''
+        >>> Web(key_file=key_file) # doctest: +ELLIPSIS
         Object of "Web" with root path "...", port "0" and stop order ...
 
         >>> Web(
-        ...     public_key_file=__test_folder__.path
+        ...     key_file=__test_folder__.path
         ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
         Traceback (most recent call last):
         ...
@@ -632,18 +622,18 @@ class Web(Class, Runnable):
                             "'%%')"},
              'dest': 'default',
              'metavar': 'PATH'}},
-        {'arguments': ('-u', '--public-key-file-path'),
+        {'arguments': ('-u', '--key-file-path'),
          'specification': {
              'action': 'store',
              'default': {'execute': '__initializer_default_value__'},
              'type': {'execute': 'type(__initializer_default_value__)'},
              'required': {'execute': '__initializer_default_value__ is None'},
              'help': {
-                 'execute': "'Defines a public key file (*.pem) to enable open"
-                            ''' ssl encryption (default: "%s").' % '''
+                 'execute': "'Defines a key file (*.pem) to enable open ssl "
+                            '''encryption (default: "%s").' % '''
                             "__initializer_default_value__.replace('%', "
                             "'%%')"},
-             'dest': 'public_key_file',
+             'dest': 'key_file',
              'metavar': 'PATH'}},
         {'arguments': ('-o', '--stop-order'),
          'specification': {
@@ -932,7 +922,7 @@ class Web(Class, Runnable):
     # # # region special
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def __repr__(self: Self) -> builtins.str:
     def __repr__(self):
 # #
@@ -944,7 +934,7 @@ class Web(Class, Runnable):
             >>> repr(Web()) # doctest: +ELLIPSIS
             'Object of "Web" with root path "...", port "0" and sto..."sto...'
         '''
-        return(
+        return (
             'Object of "{class_name}" with root path "{path}", port "{port}" '
             'and stop order "{stop_order}". Number of running '
             'threads/processes: {number_of_running_threads}/'
@@ -954,10 +944,10 @@ class Web(Class, Runnable):
                 number_of_running_threads=self.number_of_running_threads,
                 number_of_running_processes=self.number_of_running_processes))
 
-        # # endregion
+    # # # endregion
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def stop(
 # #         self: Self, *arguments: builtins.object, force_stopping=False,
 # #         **keywords: builtins.object
@@ -981,7 +971,7 @@ class Web(Class, Runnable):
             >>> web.stop() # doctest: +ELLIPSIS
             Object of "Web" with root path "...", port "0" and stop order "s...
         '''
-# # python3.4
+# # python3.5
 # #         pass
         force_stopping, keywords = Dictionary(keywords).pop_from_keywords(
             name='force_stopping', default_value=False)
@@ -1009,7 +999,7 @@ class Web(Class, Runnable):
                     '''
                     self.service.socket.shutdown(socket.SHUT_RDWR)
                 except socket.error as exception:
-# # python3.4
+# # python3.5
 # #                     __logging__.warning(
 # #                         'Connection couldn\'t be released on both sites. '
 # #                         '%s: %s', exception.__class__.__name__,
@@ -1028,14 +1018,14 @@ class Web(Class, Runnable):
             builtins.super(self.__class__, self), inspect.stack()[0][3]
         )(*arguments, force_stopping=force_stopping, **keywords)
 
-        # endregion
+    # # endregion
 
-        # region protected
+    # # region protected
 
-        # # region runnable implementation
+    # # # region runnable implementation
 
     @JointPoint
-# # python3.4     def _run(self: Self) -> Self:
+# # python3.5     def _run(self: Self) -> Self:
     def _run(self):
         '''
             Entry point for command line call of this program. Starts the \
@@ -1075,14 +1065,14 @@ class Web(Class, Runnable):
             namespace=command_line_arguments))
 
     @JointPoint(InstancePropertyInitializer)
-# # python3.4
+# # python3.5
 # #     def _initialize(
 # #         self: Self, root=None, host_name='', port=0, default='',
-# #         public_key_file=None, stop_order='stop', encoding=ENCODING,
-# #         request_whitelist=('*:/.*',), request_blacklist=(),/*region*//*endregion*/
+# #         key_file=None, stop_order='stop', encoding=ENCODING,
+# #         request_whitelist=('*:/.*',), request_blacklist=(),
 # #         same_process_request_whitelist=(),
 # #         same_process_request_blacklist=(),
-# #         # NOTE: Tuple for explicit web_server file reference validation.
+# #         # NOTE: Tuple for explicit web server file reference validation.
 # #         # ('text/.+$', 'image/.+$', 'application/(x-)?javascript$')
 # #         static_mime_type_pattern=('.+/.+$',),
 # #         dynamic_mime_type_pattern=(
@@ -1090,9 +1080,10 @@ class Web(Class, Runnable):
 # #         compressible_mime_type_pattern=(
 # #             'text/.+$', 'application/javascript$'),
 # #         default_file_name_pattern=(
-# #             '((__main__)|(main)|(index)|(initialize))(?!\.tpl$)'
-# #             '(\.[a-zA-Z0-9]{0,4})?$',),
-# #         default_module_names=('__main__', 'main', 'index', 'initialize'),
+# #             'index(?!\.tpl$)(?:\.[a-zA-Z0-9]{0,4})?$',
+# #             '(?:__main__|main|initialize)(?!\.tpl$)(?:\.[a-zA-Z0-9]{0,4})?'
+# #             '$'
+# #         default_module_names=('index', '__main__', 'main', 'initialize'),
 # #         authentication=True, authentication_file_name='.htpasswd',
 # #         authentication_file_content_pattern=
 # #             '(?P<name>.+):(?P<password>.+)',
@@ -1107,11 +1098,11 @@ class Web(Class, Runnable):
 # #     ) -> Self:
     def _initialize(
         self, root=None, host_name='', port=0, default='',
-        public_key_file=None, stop_order='stop', encoding=ENCODING,
+        key_file=None, stop_order='stop', encoding=ENCODING,
         request_whitelist=('*:/.*',), request_blacklist=(),
         same_process_request_whitelist=(),
         same_process_request_blacklist=(),
-        # NOTE: Tuple for explicit web_server file reference validation.
+        # NOTE: Tuple for explicit web server file reference validation.
         # ('text/.+$', 'image/.+$', 'application/(x-)?javascript$')
         static_mime_type_pattern=('.+/.+$',),
         dynamic_mime_type_pattern=(
@@ -1119,9 +1110,10 @@ class Web(Class, Runnable):
         compressible_mime_type_pattern=(
             'text/.+$', '^application/javascript$'),
         default_file_name_pattern=(
-            '((__main__)|(main)|(index)|(initialize))(?!\.tpl$)'
-            '(\.[a-zA-Z0-9]{0,4})?$',),
-        default_module_names=('__main__', 'main', 'index', 'initialize'),
+            'index(?!\.tpl$)(?:\.[a-zA-Z0-9]{0,4})?$',
+            '(?:__main__|main|initialize)(?!\.tpl$)(?:\.[a-zA-Z0-9]{0,4})?'
+            '$'
+        ), default_module_names=('index', '__main__', 'main', 'initialize'),
         authentication=True, authentication_file_name='.htpasswd',
         authentication_file_content_pattern=
             '(?P<name>.+):(?P<password>.+)',
@@ -1173,21 +1165,21 @@ class Web(Class, Runnable):
             Saves informations how to define authentications in protected \
             directories.
         '''
-        if self.public_key_file:
-            self.public_key_file = FileHandler(location=self.public_key_file)
-            if not self.public_key_file.is_file():
+        if self.key_file:
+            self.key_file = FileHandler(location=self.key_file)
+            if not self.key_file.is_file():
                 raise __exception__(
                     'Given public key file path "%s" doesn\'t points to a '
-                    'file.', self.public_key_file._path)
+                    'file.', self.key_file._path)
 
-                # endregions
+        # # # endregions
 
         return self._start_server_thread()
 
         # # endregion
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _stop_graceful(
 # #         self: Self, number_of_running_workers: builtins.int
 # #     ) -> Self:
@@ -1216,7 +1208,7 @@ class Web(Class, Runnable):
         return self
 
     @JointPoint
-# # python3.4     def _start_server_thread(self: Self) -> Self:
+# # python3.5     def _start_server_thread(self: Self) -> Self:
     def _start_server_thread(self):
         '''
             Starts the server's request handler instance and listens for \
@@ -1232,7 +1224,7 @@ class Web(Class, Runnable):
         return self
 
     @JointPoint
-# # python3.4     def _log_server_status(self: Self) -> Self:
+# # python3.5     def _log_server_status(self: Self) -> Self:
     def _log_server_status(self):
         '''Prints some information about the way the server was started.'''
         determine_ip_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -1240,7 +1232,7 @@ class Web(Class, Runnable):
         if self.host_name == '':
             try:
                 determine_ip_socket.connect(self.DETERMINE_IP_SOCKET)
-# # python3.4
+# # python3.5
 # #             except(
 # #                 builtins.BrokenPipeError, socket.gaierror, socket.herror,
 # #                 socket.timeout, socket.error
@@ -1264,19 +1256,19 @@ class Web(Class, Runnable):
             '"%s". Currently reachable ip is "%s". Maximum parallel processes '
             'is limited to %d.', (
                 ' a secure connection with public key "%s" ' %
-                self.public_key_file._path
-            ) if self.public_key_file else '', self.port, self.root._path,
+                self.key_file._path
+            ) if self.key_file else '', self.port, self.root._path,
             ip, self.maximum_number_of_processes)
         return self
 
     @JointPoint
-# # python3.4     def _start_with_dynamic_port(self: Self) -> Self:
+# # python3.5     def _start_with_dynamic_port(self: Self) -> Self:
     def _start_with_dynamic_port(self):
         '''Searches for the highest free port for listing.'''
         ports = [
             80, 8080, 8008, 8090, 8280, 8887, 9080, 16080, 3128, 4567,
             5000, 4711, 443, 5001, 5104, 5800, 8243, 8888]
-        if self.public_key_file:
+        if self.key_file:
             ports = [443] + ports
         ports += builtins.list(builtins.set(
             builtins.range(self.HIGHEST_AVAILABLE_PORT)
@@ -1287,7 +1279,7 @@ class Web(Class, Runnable):
                     self._initialize_server_thread(port)
                 except socket.error:
                     if port == self.HIGHEST_AVAILABLE_PORT:
-# # python3.4
+# # python3.5
 # #                         raise __exception__(
 # #                             'No port is available to run the web-server '
 # #                             'with given rights.'
@@ -1302,14 +1294,14 @@ class Web(Class, Runnable):
         return self
 
     @JointPoint
-# # python3.4     def _start_with_static_port(self: Self) -> Self:
+# # python3.5     def _start_with_static_port(self: Self) -> Self:
     def _start_with_static_port(self):
         '''Starts the server listing on the given port, if it is free.'''
         if not __test_mode__:
             try:
                 self._initialize_server_thread(port=self.port)
             except socket.error:
-# # python3.4
+# # python3.5
 # #                 raise __exception__(
 # #                     "Port %d isn't available to run the web-server with "
 # #                     'given rights.', self.port
@@ -1321,7 +1313,7 @@ class Web(Class, Runnable):
         return self
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _serve_service_forever_exception_catcher(self: Self) -> Self:
     def _serve_service_forever_exception_catcher(self):
 # #
@@ -1331,7 +1323,7 @@ class Web(Class, Runnable):
         '''
         try:
             return self.service.serve_forever()
-# # python3.4
+# # python3.5
 # #         except builtins.ValueError as exception:
 # #             __logger__.warning(
 # #                 '%s: %s', exception.__class__.__name__,
@@ -1344,7 +1336,7 @@ class Web(Class, Runnable):
         return self
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _initialize_server_thread(
 # #         self: Self, port: builtins.int
 # #     ) -> Self:
@@ -1353,12 +1345,12 @@ class Web(Class, Runnable):
         '''Initializes a new request-handler and starts its own thread.'''
         self.service = MultiProcessingHTTPServer(
             (self.host_name, port), CGIHTTPRequestHandler)
-        if self.public_key_file:
+        if self.key_file:
             self.service.socket = ssl.wrap_socket(
-                self.service.socket, certfile=self.public_key_file._path,
+                self.service.socket, certfile=self.key_file._path,
                 server_side=True)
         self.service.web = self
-# # python3.4
+# # python3.5
 # #         threading.Thread(
 # #             target=self._serve_service_forever_exception_catcher,
 # #             daemon=True
@@ -1370,15 +1362,15 @@ class Web(Class, Runnable):
 # #
         return self
 
-        # endregion
+    # # endregion
 
     # endregion
 
 
-# # python3.4
+# # python3.5
 # # class CGIHTTPRequestHandler(server.CGIHTTPRequestHandler):
 class CGIHTTPRequestHandler(
-    CGIHTTPServer.CGIHTTPRequestHandler, builtins.object
+    cgi_http_server.CGIHTTPRequestHandler, builtins.object
 ):
 # #
 
@@ -1395,7 +1387,7 @@ class CGIHTTPRequestHandler(
     # # # region special
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def __init__(
 # #         self, request_socket: socket.socket,
 # #         request_address: builtins.tuple,
@@ -1431,14 +1423,14 @@ class CGIHTTPRequestHandler(
         self.server = server
         '''Properties defined by incoming request.'''
         self.host = ''
-        self.request_uri = ''
-        self.external_request_uri = ''
+        self.uri = ''
+        self.external_uri = ''
         self.parameter = ''
         self.get = {}
         self.data = {}
         self.cookie = {}
-        self.request_type = ''
-        self.external_request_type = ''
+        self.type = ''
+        self.external_type = ''
         self.data_type = ''
         '''Saves the last started worker thread instance.'''
         self.last_running_worker = None
@@ -1463,7 +1455,7 @@ class CGIHTTPRequestHandler(
         self.respond = False
         self.response_sent = self.headers_ended = self.content_type_sent = \
             self.content_length_sent = False
-# # python3.4
+# # python3.5
 # #         '''Saves the error message format.'''
 # #         self.error_message_format = (
 # #             '<!doctype html>\n'
@@ -1518,7 +1510,7 @@ class CGIHTTPRequestHandler(
                 '_', '-'))
 # #
         '''Saves the error content type header.'''
-# # python3.4
+# # python3.5
 # #         self.error_content_type = 'text/html; charset=%s' % \
 # #             self.server.web.encoding.replace('_', '-')
         self.error_content_type = convert_to_string(
@@ -1549,7 +1541,7 @@ class CGIHTTPRequestHandler(
             )(request_socket, request_address, server, *arguments, **keywords)
 
     @JointPoint
-# # python3.4     def __repr__(self: Self) -> builtins.str:
+# # python3.5     def __repr__(self: Self) -> builtins.str:
     def __repr__(self):
         '''
             Invokes if this object should describe itself by a string.
@@ -1566,15 +1558,15 @@ class CGIHTTPRequestHandler(
         '''
         return 'Object of "{class_name}" with request uri "{url}" and '\
                'parameter "{parameter}".'.format(
-                   class_name=self.__class__.__name__, url=self.request_uri,
+                   class_name=self.__class__.__name__, url=self.uri,
                    parameter=self.parameter)
 
-        # # endregion
+    # # # endregion
 
-        # # region event
+    # # # region event
 
     @JointPoint
-# # python3.4     def do_GET(self: Self) -> Self:
+# # python3.5     def do_GET(self: Self) -> Self:
     def do_GET(self):
         '''
             Is triggered if an incoming get request is detected. Decides if \
@@ -1608,7 +1600,7 @@ class CGIHTTPRequestHandler(
 
             >>> handler.server.web.authentication = True
             >>> handler.server.web.authentication_handler = (
-            ...     lambda login_data, request_handler: False)
+            ...     lambda login_data, request_handler: (False, None))
             >>> # # python2.7
             >>> if sys.version_info.major < 3:
             ...     handler.headers = handler.MessageClass(
@@ -1650,7 +1642,7 @@ class CGIHTTPRequestHandler(
             >>> handler.path = '/not_existing_file'
             >>> handler.server.web.request_whitelist = '*:/not_existing_file',
             >>> handler.server.web.authentication_handler = (
-            ...     lambda login_data, request_handler: True)
+            ...     lambda login_data, request_handler: (True, None))
             >>> handler.do_GET() # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "/not_existin...
 
@@ -1699,8 +1691,7 @@ class CGIHTTPRequestHandler(
             >>> handler.do_GET() # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "/do_GET/" ...
         '''
-        self.external_request_type = self.request_type = \
-            self.request_type if self.request_type else 'get'
+        self.external_type = self.type = self.type if self.type else 'get'
         self.create_environment_variables()
         authentication = self._is_authenticated()
         if authentication[0]:
@@ -1718,7 +1709,7 @@ class CGIHTTPRequestHandler(
         return self._send_no_authorization_error(output=authentication[1])
 
     @JointPoint
-# # python3.4     def do_POST(self: Self) -> Self:
+# # python3.5     def do_POST(self: Self) -> Self:
     def do_POST(self):
         '''
             Is triggered if a post request is coming.
@@ -1746,7 +1737,7 @@ class CGIHTTPRequestHandler(
         return self._do_data_request(type=inspect.stack()[0][3])
 
     @JointPoint
-# # python3.4     def do_PATCH(self: Self) -> Self:
+# # python3.5     def do_PATCH(self: Self) -> Self:
     def do_PATCH(self):
         '''
             Is triggered if a patch request is coming.
@@ -1774,7 +1765,7 @@ class CGIHTTPRequestHandler(
         return self._do_data_request(type=inspect.stack()[0][3])
 
     @JointPoint
-# # python3.4     def do_DELETE(self: Self) -> Self:
+# # python3.5     def do_DELETE(self: Self) -> Self:
     def do_DELETE(self):
         '''
             Is triggered if a delete request is coming.
@@ -1802,7 +1793,7 @@ class CGIHTTPRequestHandler(
         return self._do_data_request(type=inspect.stack()[0][3])
 
     @JointPoint
-# # python3.4     def do_PUT(self: Self) -> Self:
+# # python3.5     def do_PUT(self: Self) -> Self:
     def do_PUT(self):
         '''
             Is triggered if a put request is coming.
@@ -1830,7 +1821,7 @@ class CGIHTTPRequestHandler(
         return self._do_data_request(type=inspect.stack()[0][3])
 
     @JointPoint
-# # python3.4     def do_HEAD(self: Self) -> Self:
+# # python3.5     def do_HEAD(self: Self) -> Self:
     def do_HEAD(self):
         '''
             Is triggered if a head request is coming.
@@ -1855,19 +1846,24 @@ class CGIHTTPRequestHandler(
             >>> handler.do_HEAD() # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "/" and param...
         '''
-        self.request_type = inspect.stack()[0][3][builtins.len('do_'):].lower()
+        self.type = inspect.stack()[0][3][builtins.len('do_'):].lower()
         return self.do_GET()
 
-        # # endregion
+    # # # endregion
 
     @JointPoint
-# # python3.4     def parse_url(self: Self, url=None) -> builtins.tuple:
-    def parse_url(self, url=None):
+# # python3.5
+# #     def parse_url(self: Self, url=None, strict=False) -> builtins.tuple:
+    def parse_url(self, url=None, strict=False):
+# #
         '''
             This method provides an easy way to split a http request string \
             into its components.
 
-            **url** - URL to parse.
+            **url**    - URL to parse.
+
+            **strict** - Determines whether to parse url with no error \
+                         tolerance. Incorrect parameters will be omitted.
 
             Returns a tuple containing of the parse object and a dictionary \
             containing get parameter.
@@ -1895,7 +1891,7 @@ class CGIHTTPRequestHandler(
             >>> sys.argv[1:] = ['?hans=peter&s']
             >>> __test_buffer__.clear() # doctest: +ELLIPSIS
             '...'
-            >>> handler.parse_url() # doctest: +ELLIPSIS
+            >>> handler.parse_url(strict=True) # doctest: +ELLIPSIS
             (ParseResult(...'hans=peter&s'...})
             >>> __test_buffer__.clear() # doctest: +ELLIPSIS
             '... "?hans=peter&s" is not a valid get query string.\\n'
@@ -1905,7 +1901,7 @@ class CGIHTTPRequestHandler(
         if url is None and builtins.len(sys.argv) > 1:
             url = sys.argv[1]
         if url:
-# # python3.4
+# # python3.5
 # #             url = regularExpression.compile(
 # #                 self.server.web.request_parameter_delimiter
 # #             ).sub('?', url, 1)
@@ -1918,21 +1914,21 @@ class CGIHTTPRequestHandler(
             get = {}
             if parse_result.query:
                 try:
-# # python3.4
+# # python3.5
 # #                     get = parse_url_query(
 # #                         qs=parse_result.query, keep_blank_values=True,
-# #                         strict_parsing=False,
+# #                         strict_parsing=strict,
 # #                         encoding=self.server.web.encoding,
 # #                         errors='replace')
                     get = parse_url_query(
                         qs=parse_result.query, keep_blank_values=True,
-                        strict_parsing=False)
+                        strict_parsing=strict)
 # #
                 except builtins.ValueError:
                     __logger__.info(
                         '"%s" is not a valid get query string.', url)
             for key, value in get.items():
-# # python3.4
+# # python3.5
 # #                 get[key] = value[0]
                 get[convert_to_unicode(key)] = convert_to_unicode(
                     value[0])
@@ -1941,7 +1937,7 @@ class CGIHTTPRequestHandler(
         return None, {}
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def send_response(
 # #         self: Self, *arguments: builtins.object,
 # #         **keywords: builtins.object
@@ -1977,7 +1973,7 @@ class CGIHTTPRequestHandler(
         return self
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def send_error(
 # #         self: Self, code: builtins.int, message: builtins.str,
 # #         *arguments: builtins.object, **keywords: builtins.object
@@ -1992,7 +1988,7 @@ class CGIHTTPRequestHandler(
         if not (self.response_sent or __test_mode__):
             self.content_type_sent = self.content_length_sent = True
             self.send_response(code)
-# # python3.4             pass
+# # python3.5             pass
             message = convert_to_string(message)
             '''Take this method via introspection.'''
             builtins.getattr(
@@ -2001,7 +1997,7 @@ class CGIHTTPRequestHandler(
         return self
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def list_directory(
 # #         self: Self, *arguments: builtins.object,
 # #         **keywords: builtins.object
@@ -2039,7 +2035,7 @@ class CGIHTTPRequestHandler(
         return self
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def end_headers(
 # #         self: Self, *arguments: builtins.object,
 # #         **keywords: builtins.object
@@ -2056,7 +2052,7 @@ class CGIHTTPRequestHandler(
         return self
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def send_static_file_cache_header(
 # #         self: Self, timestamp=time.time(), response_code=200,
 # #         cache_control_header='public, max-age=0', expire_time_in_seconds=0
@@ -2088,7 +2084,7 @@ class CGIHTTPRequestHandler(
         return self
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def get_cookie(
 # #         self: Self, name=None
 # #     ) -> (builtins.str, cookies.SimpleCookie, builtins.type(None)):
@@ -2193,18 +2189,16 @@ class CGIHTTPRequestHandler(
             >>> __test_buffer__.clear() # doctest: +ELLIPSIS
             '...WARNING... - Invalid cookie detected ...'
         '''
-# # python3.4         if 'cookie' in self.headers:
+# # python3.5         if 'cookie' in self.headers:
         if self.headers.get('cookie'):
             cookie = cookies.SimpleCookie()
-            cookie_content = self.headers.get('cookie')
-# # python3.4
-# #             pass
-            if builtins.isinstance(cookie_content, builtins.str):
-                cookie_content = convert_to_unicode(cookie_content)
+# # python3.5
+# #             cookie_content = self.headers.get('cookie')
+            cookie_content = convert_to_unicode(self.headers.get('cookie'))
 # #
             while True:
                 try:
-# # python3.4
+# # python3.5
 # #                     cookie.load(cookie_content)
                     cookie.load(convert_to_string(cookie_content))
 # #
@@ -2213,7 +2207,7 @@ class CGIHTTPRequestHandler(
                         '([^=]*)/+([^=]*=[^;]*(?:;|$))'
                     ).sub('\\1\\2', cookie_content)
                     if cookie_content == new_cookie_content:
-# # python3.4
+# # python3.5
 # #                         __logger__.critical(
 # #                             'Invalid cookie detected "%s". %s: %s',
 # #                             cookie_content,
@@ -2226,7 +2220,7 @@ class CGIHTTPRequestHandler(
 # #
                         return None
                     else:
-# # python3.4
+# # python3.5
 # #                         __logger__.warning(
 # #                             'Invalid cookie detected "%s". %s: %s. Trying '
 # #                             '"%s".', cookie_content,
@@ -2242,7 +2236,7 @@ class CGIHTTPRequestHandler(
                         cookie_content = new_cookie_content
                 else:
                     break
-# # python3.4
+# # python3.5
 # #             return cookie[
 # #                 name
 # #             ].value if name and name in cookie else cookie
@@ -2253,7 +2247,7 @@ class CGIHTTPRequestHandler(
         return None
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def send_cookie(
 # #         self: Self,
 # #         cookie: (cookies.SimpleCookie, builtins.str, builtins.dict),
@@ -2333,7 +2327,7 @@ class CGIHTTPRequestHandler(
         '''
         if not builtins.isinstance(cookie, cookies.SimpleCookie):
             cookie_object = cookies.SimpleCookie()
-# # python3.4
+# # python3.5
 # #             if builtins.isinstance(cookie, builtins.str):
             if builtins.isinstance(cookie, (
                 builtins.unicode, builtins.str
@@ -2342,7 +2336,7 @@ class CGIHTTPRequestHandler(
                 cookie_object.load(cookie_object)
             else:
                 for key, value in cookie.items():
-# # python3.4                     cookie_object[key] = value
+# # python3.5                     cookie_object[key] = value
                     cookie_object[convert_to_string(key)] = value
             cookie = cookie_object
         expires = self.date_time_string(time.time() + maximum_age_in_seconds)
@@ -2359,7 +2353,7 @@ class CGIHTTPRequestHandler(
         return self
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def send_content_type_header(
 # #         self: Self, mime_type='text/html', encoding=None,
 # #         response_code=200
@@ -2388,7 +2382,7 @@ class CGIHTTPRequestHandler(
             if encoding is None:
                 charset = '; charset=%s' % self.server.web.encoding.replace(
                     '_', '-')
-# # python3.4
+# # python3.5
 # #             elif builtins.isinstance(encoding, builtins.str):
             elif builtins.isinstance(encoding, (
                 builtins.unicode, builtins.str
@@ -2399,7 +2393,7 @@ class CGIHTTPRequestHandler(
         return self
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def send_content_length_header(
 # #         self: Self, size: builtins.int, dynamic_output='',
 # #         response_code=200
@@ -2423,22 +2417,23 @@ class CGIHTTPRequestHandler(
             self.content_length_sent = True
             self.send_response(response_code)
             threshold = self.server.web.file_size_stream_threshold_in_byte
-# # python3.4
+# # python3.5
 # #             if(size < threshold and
 # #                'accept-encoding' in self.headers and
 # #                gzip.__name__ in self.headers.get('accept-encoding').split(
 # #                    ','
-# #                ) and (dynamic_output or self._check_pattern(
-# #                    patterns=self.server.web.compressible_mime_type_pattern,
-# #                    subject=self.requested_file.mime_type))):
+# #                ) and (dynamic_output or Iterable(
+# #                    self.server.web.compressible_mime_type_pattern
+# #                ).is_in_pattern(value=self.requested_file.mime_type))):
             if(size < threshold and
                self.headers.get('accept-encoding', False) and
-               gzip.__name__ in self.headers.get(
-                   'accept-encoding'
-               ).split(',') and
-               (dynamic_output or self._check_pattern(
-                   patterns=self.server.web.compressible_mime_type_pattern,
-                   subject=self.requested_file.mime_type))):
+               gzip.__name__ in builtins.map(
+                   lambda name: convert_to_unicode(name), self.headers.get(
+                       'accept-encoding'
+                   ).split(',')
+               ) and (dynamic_output or Iterable(
+                   self.server.web.compressible_mime_type_pattern
+               ).is_in_pattern(value=self.requested_file.mime_type))):
 # #
                 self.send_header('Content-Encoding', gzip.__name__)
                 if dynamic_output:
@@ -2453,7 +2448,7 @@ class CGIHTTPRequestHandler(
         return self
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def log_message(
 # #         self: Self, format: builtins.str,
 # #         message_or_error_code: (builtins.int, builtins.str),
@@ -2545,15 +2540,26 @@ class CGIHTTPRequestHandler(
             '%s{response_code}%s')
         forwarded_ip = forwarded_host = forwarded_server = None
         if 'headers' in self.__dict__:
+# # python3.5
+# #             forwarded_ip = self.headers.get('x-forwarded-for')
+# #             forwarded_host = self.headers.get('x-forwarded-host')
+# #             forwarded_server = self.headers.get('x-forwarded-server')
             forwarded_ip = self.headers.get('x-forwarded-for')
             forwarded_host = self.headers.get('x-forwarded-host')
             forwarded_server = self.headers.get('x-forwarded-server')
-            if forwarded_ip:
-                format += ' - forwarded for: {forwarded_ip}'
-            if forwarded_host:
-                format += ' - forwarded host: {forwarded_host}'
-            if forwarded_server:
-                format += ' - forwarded server: {forwarded_server}'
+# #
+            '''
+                NOTE: We habe to save the scope here to forwarded it into the \
+                function since it will be determined by introspection.
+            '''
+            scope = builtins.locals()
+            for header_name in builtins.filter(
+                lambda header_name: scope[header_name], (
+                    'forwarded_ip', 'forwarded_host', 'forwarded_server'
+                )
+            ):
+                scope[header_name] = convert_to_unicode(scope[header_name])
+                format += ' - forwarded for: {%s}' % header_name
         if builtins.len(self.server.web.__class__.instances) > 1:
             format += ' (server port: {server_port})'
         request_description = message_or_error_code
@@ -2561,7 +2567,7 @@ class CGIHTTPRequestHandler(
         if builtins.isinstance(message_or_error_code, builtins.int):
             request_description = response_code_or_message
             response_code = message_or_error_code
-# # python3.4
+# # python3.5
 # #         if builtins.isinstance(request_description, builtins.bytes):
 # #             # TODO check branch
 # #             request_description = '...bytes...'
@@ -2583,7 +2589,7 @@ class CGIHTTPRequestHandler(
         return self
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def setup(
 # #         self: Self, *arguments: builtins.object,
 # #         **keywords: builtins.object
@@ -2602,32 +2608,31 @@ class CGIHTTPRequestHandler(
         return result
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def create_environment_variables(self: Self) -> builtins.str:
     def create_environment_variables(self):
 # #
         '''Creates all request specified environment-variables.'''
-# # python3.4
-# #         self._determine_host().request_uri = self.external_request_uri = \
-# #             self.path
-        self._determine_host().request_uri = self.external_request_uri = \
+# # python3.5
+# #         self._determine_host().uri = self.external_uri = self.path
+        self._determine_host().uri = self.external_uri = \
             convert_to_unicode(self.path)
 # #
         self._handle_redirect(external=False)
-# # python3.4
+# # python3.5
 # #         match = regularExpression.compile(
 # #             '[^/]*/+(?P<path>.*?)(?:{delimiter}(?P<parameter>.*))?'.format(
 # #                 delimiter=self.server.web.request_parameter_delimiter)
-# #         ).fullmatch(self.request_uri)
+# #         ).fullmatch(self.uri)
         match = regularExpression.compile(
             '[^/]*/+(?P<path>.*?)'
             '(?:{delimiter}(?P<parameter>.*))?$'.format(
                 delimiter=self.server.web.request_parameter_delimiter)
-        ).match(self.request_uri)
+        ).match(self.uri)
 # #
         self.path = ''
         if match:
-# # python3.4
+# # python3.5
 # #             self.path = posixpath.normpath(unquote_url(match.group(
 # #                 'path')))
             self.path = convert_to_unicode(posixpath.normpath(unquote_url(
@@ -2647,21 +2652,24 @@ class CGIHTTPRequestHandler(
         if cookie_handler is not None:
             for key, morsel in cookie_handler.items():
                 self.cookie[key] = morsel.value
-        self.get = self.parse_url(self.request_uri)[1]
+        self.get = self.parse_url(self.uri)[1]
 # #
         return self.path
 
-        # endregion
+    # # endregion
 
-        # region protected
+    # # region protected
 
-        # # region boolean
+    # # # region boolean
 
     @JointPoint
-# # python3.4     def _is_authenticated(self: Self) -> builtins.bool:
+# # python3.5     def _is_authenticated(self: Self) -> builtins.tuple:
     def _is_authenticated(self):
         '''
-            Determines weather current request is authenticated.
+            Determines weather current request is authenticated via a tuple. \
+            First item determines if authentication has success and \
+            second item determines html content to send if authentication \
+            fails and "None" if nothing should be sent automatically.
 
             Examples:
 
@@ -2681,7 +2689,7 @@ class CGIHTTPRequestHandler(
 
             >>> handler._authentication_location = __test_folder__
             >>> handler._is_authenticated()
-            True
+            (True, None)
 
             >>> file = FileHandler(
             ...     __test_folder__.path + '_is_authenticated',
@@ -2690,7 +2698,7 @@ class CGIHTTPRequestHandler(
             >>> handler.create_environment_variables()
             '_is_authenticated'
             >>> handler._is_authenticated()
-            True
+            (True, None)
 
             >>> FileHandler(file.path + '.htpasswd').content = 'login:password'
             >>> handler.path = '/' + file.name
@@ -2705,15 +2713,15 @@ class CGIHTTPRequestHandler(
             ...     handler.headers.add_header('key', 'value')
             >>> # #
             >>> handler._is_authenticated()
-            False
+            (False, None)
 
             >>> handler.server.web.authentication_file_name = ''
             >>> handler._is_authenticated()
-            True
+            (True, None)
 
             >>> handler.server.web.authentication = False
             >>> handler._is_authenticated()
-            True
+            (True, None)
         '''
         if self.server.web.authentication:
             while self.server.web.authentication_file_name:
@@ -2722,15 +2730,23 @@ class CGIHTTPRequestHandler(
                     self.server.web.authentication_file_name)
                 authentication_file = FileHandler(location=file_path)
                 if authentication_file:
-                    return(
-                        self.headers.get('authorization') ==
-                        'Basic %s' % self._get_login_data(
-                            authentication_file), None)
+                    return (
+# # python3.5
+# #                         self.headers.get('authorization') ==
+# #                         'Basic %s' % self._get_login_data(
+# #                             authentication_file
+# #                         ), None)
+                        convert_to_unicode(self.headers.get(
+                            'authorization'
+                        )) == 'Basic %s' % self._get_login_data(
+                            authentication_file
+                        ), None)
+# #
                 if self._authentication_location == self.server.web.root:
                     break
                 self._authentication_location = \
                     self._authentication_location.directory
-# # python3.4
+# # python3.5
 # #             login_data_match = regularExpression.compile(
 # #                 '(?P<name>[^:]+):(?P<password>.+)$'
 # #             ).match(base64_decode(
@@ -2754,7 +2770,7 @@ class CGIHTTPRequestHandler(
         return True, None
 
     @JointPoint
-# # python3.4     def _is_valid_reference(self: Self) -> builtins.bool:
+# # python3.5     def _is_valid_reference(self: Self) -> builtins.bool:
     def _is_valid_reference(self):
         '''
             Checks weather the requested is one of a python module-, static- \
@@ -2806,33 +2822,35 @@ class CGIHTTPRequestHandler(
         return False
 
     @JointPoint
-# # python3.4     def _is_valid_requested_file(self: Self) -> builtins.bool:
+# # python3.5     def _is_valid_requested_file(self: Self) -> builtins.bool:
     def _is_valid_requested_file(self):
         '''Determines if the current requested file points to a valid file.'''
         patterns = self.server.web.dynamic_mime_type_pattern + \
             self.server.web.static_mime_type_pattern
-        return(
+        return (
             self.requested_file.is_file() and self.requested_file.name !=
-            self.server.web.authentication_file_name and self._check_pattern(
-                patterns=patterns, subject=self.requested_file.mime_type
+            self.server.web.authentication_file_name and Iterable(
+                patterns
+            ).is_in_pattern(
+                value=self.requested_file.mime_type
             ) is not False or self.server.web.directory_listing and
             self.requested_file.is_directory())
 
     @JointPoint
-# # python3.4     def _is_dynamic(self: Self) -> builtins.bool:
+# # python3.5     def _is_dynamic(self: Self) -> builtins.bool:
     def _is_dynamic(self):
         '''
             Determines if the current request points to a dynamic executable \
             file or is a static type which should be send back unmodified.
         '''
-        return builtins.bool(self.load_module or self._check_pattern(
-            self.server.web.dynamic_mime_type_pattern,
-            self.requested_file.mime_type))
+        return builtins.bool(self.load_module or Iterable(
+            self.server.web.dynamic_mime_type_pattern
+        ).is_in_pattern(value=self.requested_file.mime_type))
 
-        # # endregion
+    # # # endregion
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _determine_logging_color(
 # #         self: Self, response_code: builtins.int
 # #     ) -> builtins.tuple:
@@ -2886,13 +2904,13 @@ class CGIHTTPRequestHandler(
         return color_wrapper
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _do_data_request(self: Self, type: builtins.str) -> Self:
     def _do_data_request(self, type):
 # #
         '''Is triggered if a special request is coming.'''
-        self.request_type = type[builtins.len('do_'):].lower()
-# # python3.4
+        self.type = type[builtins.len('do_'):].lower()
+# # python3.5
 # #         self.data_type, post_data = cgi.parse_header(
 # #             self.headers.get_content_type())
         self.data_type, post_data = cgi.parse_header(
@@ -2901,7 +2919,7 @@ class CGIHTTPRequestHandler(
         content_length = builtins.int(self.headers.get('content-length', 0))
         if not __test_mode__:
             if self.data_type == 'application/x-www-form-urlencoded':
-# # python3.4
+# # python3.5
 # #                 self.data = parse_url_query(self.rfile.read(
 # #                     content_length
 # #                 ).decode(self.server.web.encoding))
@@ -2909,9 +2927,11 @@ class CGIHTTPRequestHandler(
                     self.rfile.read(content_length),
                     keep_blank_values=True)
 # #
-                for name, value in self.data.items():
-                    if Object(content=value).is_binary():
-                        self.data[name] = {'content': value}
+                for name, value in builtins.filter(
+                    lambda item: Object(content=item[1]).is_binary(),
+                    self.data.items()
+                ):
+                    self.data[name] = {'content': value}
             elif self.data_type == 'multipart/form-data':
                 self.data = self._determine_data()
             else:
@@ -2919,7 +2939,7 @@ class CGIHTTPRequestHandler(
                 content = self.rfile.read(content_length)
                 if self.data_type in ['application/json', 'text/plain']:
                     try:
-# # python3.4
+# # python3.5
 # #                         self.data = json.loads(content).decode(
 # #                             self.server.web.encoding)
                         self.data = json.loads(
@@ -2930,7 +2950,7 @@ class CGIHTTPRequestHandler(
                             'type': self.data_type, 'content': content}
                 else:
                     self.data = {'type': self.data_type, 'content': content}
-# # python3.4
+# # python3.5
 # #             pass
             if builtins.isinstance(self.data, builtins.dict):
                 self.data = Dictionary(self.data).convert(
@@ -2946,16 +2966,20 @@ class CGIHTTPRequestHandler(
                     self.data[key] = Dictionary(value).convert(
                         key_wrapper=lambda key, value: convert_to_unicode(
                             key
-                        ) if builtins.isinstance(key, builtins.str) else key,
-                        value_wrapper=lambda key, value: convert_to_unicode(
+                        ) if builtins.isinstance(
+                            key, builtins.str
+                        ) else key, value_wrapper=lambda key, value: \
+                        convert_to_unicode(
                             value
-                        ) if builtins.isinstance(key, builtins.str) else value
+                        ) if builtins.isinstance(
+                            key, builtins.str
+                        ) else value
                     ).content
 # #
         return self.do_GET()
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _get_login_data(
 # #         self: Self, authentication_file: FileHandler
 # #     ) -> builtins.str:
@@ -2964,7 +2988,7 @@ class CGIHTTPRequestHandler(
         '''Determines needed login data for current request.'''
         __logger__.info(
             'Use authentication file "%s".', authentication_file._path)
-# # python3.4
+# # python3.5
 # #         match = regularExpression.compile(
 # #             self.server.web.authentication_file_content_pattern
 # #         ).fullmatch(authentication_file.content.strip())
@@ -2980,13 +3004,13 @@ class CGIHTTPRequestHandler(
 # #
 
     @JointPoint
-# # python3.4     def _determine_data(self: Self) -> builtins.dict:
+# # python3.5     def _determine_data(self: Self) -> builtins.dict:
     def _determine_data(self):
         '''
             Determines the post values given by an html form. File uploads \
             are includes as bytes.
         '''
-# # python3.4
+# # python3.5
 # #         form = cgi.FieldStorage(
 # #             fp=self.rfile, headers=self.headers, keep_blank_values=True,
 # #             strict_parsing=True,
@@ -3013,7 +3037,7 @@ class CGIHTTPRequestHandler(
         return data
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _determine_environment_variables(self: Self) -> os._Environ:
     def _determine_environment_variables(self):
 # #
@@ -3045,10 +3069,9 @@ class CGIHTTPRequestHandler(
 
             >>> # # python2.7
             >>> if sys.version_info.major < 3:
-            ...     handler.headers = handler.MessageClass(
-            ...         String(
-            ...             'accept: text/plain\\nContent-Type: text/plain'
-            ...         ), seekable=False)
+            ...     handler.headers = handler.MessageClass(String(
+            ...         'accept: text/plain\\nContent-Type: text/plain'
+            ...     ), seekable=False)
             ... else:
             ...     handler.headers = handler.MessageClass()
             ...     handler.headers.add_header('accept', 'text/plain')
@@ -3060,8 +3083,9 @@ class CGIHTTPRequestHandler(
 
             >>> # # python2.7
             >>> if sys.version_info.major < 3:
-            ...     handler.headers = handler.MessageClass(
-            ...         String('cookie: hans=peter'), seekable=False)
+            ...     handler.headers = handler.MessageClass(String(
+            ...         'cookie: hans=peter'
+            ...     ), seekable=False)
             ... else:
             ...     handler.headers = handler.MessageClass()
             ...     handler.headers.add_header('cookie', 'hans=peter')
@@ -3076,7 +3100,7 @@ class CGIHTTPRequestHandler(
             for line in self.headers['accept'].split('\n'):
                 accept += line.split(',')
         variables = deepcopy(os.environ)
-# # python3.4
+# # python3.5
 # #         variables.update({
 # #             'HTTP_ACCEPT': ','.join(accept),
 # #             'REQUEST_METHOD': self.command,
@@ -3084,23 +3108,32 @@ class CGIHTTPRequestHandler(
 # #             'QUERY_STRING': self.parameter,
 # #             'REMOTE_HOST': self.host,
 # #             'CONTENT_LENGTH': self.headers.get('content-length', '0'),
-# #             'HTTP_USER_AGENT': '',
-# #             'HTTP_COOKIE': '',
-# #             'HTTP_REFERER': ''})
+# #             'HTTP_USER_AGENT': convert_to_unicode(self.headers.get(
+# #                 'user-agent', '')),
+# #             'HTTP_COOKIE': convert_to_unicode(self.headers.get(
+# #                 'cookie', '')),
+# #             'HTTP_REFERER':  convert_to_unicode(self.headers.get(
+# #                 'referer', ''))
+# #     })
         variables.update({
             'HTTP_ACCEPT': ','.join(accept),
             'REQUEST_METHOD': self.command,
-            'CONTENT_TYPE': self.headers.get('content-type', 'text/plain'),
+            'CONTENT_TYPE': convert_to_unicode(self.headers.get(
+                'content-type', 'text/plain')),
             'QUERY_STRING': self.parameter,
             'REMOTE_HOST': self.host,
             'CONTENT_LENGTH': convert_to_unicode(self.headers.get(
                 'content-length', 0)),
-            'HTTP_USER_AGENT': '',
-            'HTTP_COOKIE': '',
-            'HTTP_REFERER': ''})
+            'HTTP_USER_AGENT': convert_to_unicode(self.headers.get(
+                'user-agent', '')),
+            'HTTP_COOKIE': convert_to_unicode(self.headers.get(
+                'cookie', '')),
+            'HTTP_REFERER':  convert_to_unicode(self.headers.get(
+                'referer', ''))
+        })
 # #
         for variable_name in variables:
-# # python3.4
+# # python3.5
 # #             if variable_name.replace('_', '-').lower() in self.headers:
 # #                 variables[variable_name] = self.headers.get(
 # #                     variable_name.replace('_', '-').lower())
@@ -3111,20 +3144,21 @@ class CGIHTTPRequestHandler(
             if self.headers.get(
                 variable_name.replace('_', '-').lower(), False
             ):
-                variables[variable_name] = self.headers.get(
-                    variable_name.replace('_', '-').lower())
+                variables[variable_name] = convert_to_unicode(
+                    self.headers.get(variable_name.replace(
+                        '_', '-').lower()))
 # #
         return variables
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _send_no_authorization_error(self: Self, output=None) -> Self:
     def _send_no_authorization_error(self, output=None):
 # #
         '''This method is called if authentication failed.'''
         self.send_response(401)
         message = 'You request a protected location'
-# # python3.4
+# # python3.5
 # #         if 'authorization' in self.headers:
         if self.headers.get('authorization', False):
 # #
@@ -3139,7 +3173,7 @@ class CGIHTTPRequestHandler(
         return self._send_output(output)
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _send_no_file_error(
 # #         self: Self, valid_request=True, debug=False
 # #     ) -> Self:
@@ -3218,26 +3252,7 @@ class CGIHTTPRequestHandler(
         return self
 
     @JointPoint
-# # python3.4
-# #     def _check_pattern(
-# #         self: Self, patterns: Iterable, subject: builtins.str
-# #     ) -> (builtins.str, builtins.bool):
-    def _check_pattern(self, patterns, subject):
-# #
-        '''
-            Checks if one of a list of given regular expression patterns \
-            matches the given subject.
-        '''
-        for pattern in patterns:
-# # python3.4
-# #             if regularExpression.compile(pattern).fullmatch(subject):
-            if regularExpression.compile('(?:%s)$' % pattern).match(subject):
-# #
-                return subject
-        return False
-
-    @JointPoint
-# # python3.4     def _is_valid_request(self: Self) -> builtins.bool:
+# # python3.5     def _is_valid_request(self: Self) -> builtins.bool:
     def _is_valid_request(self):
         '''Checks if given request fulfills all restrictions.'''
         return self._request_in_pattern_list(
@@ -3246,41 +3261,41 @@ class CGIHTTPRequestHandler(
             self.server.web.request_blacklist)
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _request_in_pattern_list(
-# #         self: Self, pattern_list: Iterable
+# #         self: Self, pattern_list: NativeIterable
 # #     ) -> builtins.bool:
     def _request_in_pattern_list(self, pattern_list):
 # #
         '''Checks if current request matches on of the given pattern.'''
-# # python3.4
+# # python3.5
 # #         patterns = regularExpression.compile(
-# #             '(?P<request_type>.+?):(?P<request_uri>.*)')
+# #             '(?P<type>.+?):(?P<uri>.*)')
         patterns = regularExpression.compile(
-            '^(?P<request_type>.+?):(?P<request_uri>.*)$')
+            '^(?P<type>.+?):(?P<uri>.*)$')
 # #
-        request_type_uppercase = self.external_request_type.upper()
+        type_uppercase = self.external_type.upper()
         for pattern in pattern_list:
-# # python3.4             match = patterns.fullmatch(pattern)
+# # python3.5             match = patterns.fullmatch(pattern)
             match = patterns.match(pattern)
-            request_types = match.group('request_type').split('|')
-# # python3.4
-# #             if(request_type_uppercase in request_types or
-# #                '*' in request_types
+            types = match.group('type').split('|')
+# # python3.5
+# #             if(type_uppercase in types or
+# #                '*' in types
 # #                ) and regularExpression.compile(match.group(
-# #                    'request_uri'
-# #                )).fullmatch(self.external_request_uri) is not None:
-            if(request_type_uppercase in request_types or
-               '*' in request_types
+# #                    'uri'
+# #                )).fullmatch(self.external_uri) is not None:
+            if(type_uppercase in types or
+               '*' in types
                ) and regularExpression.compile('(?:%s)$' % match.group(
-                   'request_uri'
-               )).match(self.external_request_uri) is not None:
+                   'uri'
+               )).match(self.external_uri) is not None:
 # #
                 return True
         return False
 
     @JointPoint
-# # python3.4     def _determine_host(self: Self) -> Self:
+# # python3.5     def _determine_host(self: Self) -> Self:
     def _determine_host(self):
         '''
             Determines the full host name with port included (if it's not \
@@ -3296,8 +3311,9 @@ class CGIHTTPRequestHandler(
             >>> handler.server.web.host_name = 'test'
             >>> # # python2.7
             >>> if sys.version_info.major < 3:
-            ...     handler.headers = handler.MessageClass(
-            ...         String('test: hans'), seekable=False)
+            ...     handler.headers = handler.MessageClass(String(
+            ...         'test: hans'
+            ...     ), seekable=False)
             ... else:
             ...     handler.headers = handler.MessageClass()
             ...     handler.headers.add_header('test', 'hans')
@@ -3312,8 +3328,9 @@ class CGIHTTPRequestHandler(
             >>> handler.server.web.port = 8080
             >>> # # python2.7
             >>> if sys.version_info.major < 3:
-            ...     handler.headers = handler.MessageClass(
-            ...         String('accept: text/plain'), seekable=False)
+            ...     handler.headers = handler.MessageClass(String(
+            ...         'accept: text/plain'
+            ...     ), seekable=False)
             ... else:
             ...     handler.headers = handler.MessageClass()
             ...     handler.headers.add_header('accept', 'text/plain')
@@ -3354,20 +3371,21 @@ class CGIHTTPRequestHandler(
         self.host = self.server.web.host_name
         if self.server.web.port != 80:
             self.host += ':%d' % self.server.web.port
-# # python3.4
+# # python3.5
 # #         if 'x-forwarded-host' in self.headers:
 # #             self.host = self.headers.get('x-forwarded-host')
 # #         elif 'host' in self.headers:
 # #             self.host = self.headers.get('host')
         if self.headers.get('x-forwarded-host', False):
-            self.host = self.headers.get('x-forwarded-host')
+            self.host = convert_to_unicode(self.headers.get(
+                'x-forwarded-host'))
         elif self.headers.get('host', False):
-            self.host = self.headers.get('host')
+            self.host = convert_to_unicode(self.headers.get('host'))
 # #
         return self
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _handle_redirect(self: Self, external=True) -> builtins.bool:
     def _handle_redirect(self, external=True):
 # #
@@ -3375,32 +3393,31 @@ class CGIHTTPRequestHandler(
             Deals with specified redirects. External Redirects will send an \
             http redirection code.
         '''
-# # python3.4
+# # python3.5
 # #         patterns = regularExpression.compile(
-# #             '(?P<request_type>.+?):(?P<request_uri>.*)')
+# #             '(?P<type>.+?):(?P<uri>.*)')
         patterns = regularExpression.compile(
-            '(?P<request_type>.+?):(?P<request_uri>.*)$')
+            '(?P<type>.+?):(?P<uri>.*)$')
 # #
-        request_type_uppercase = self.request_type.upper()
+        type_uppercase = self.type.upper()
         redirects = self.server.web.internal_redirects
         if external:
             redirects = self.server.web.external_redirects
         for source, target in redirects:
-# # python3.4             source_match = patterns.fullmatch(source)
+# # python3.5             source_match = patterns.fullmatch(source)
             source_match = patterns.match(source)
-            request_types = source_match.group('request_type').split('|')
-# # python3.4
-# #             pattern = regularExpression.compile(source_match.group(
-# #                 'request_uri'))
-# #             if(request_type_uppercase in request_types or
-# #                '*' in request_types
+            types = source_match.group('type').split('|')
+# # python3.5
+# #             pattern = regularExpression.compile(source_match.group('uri'))
+# #             if(type_uppercase in types or
+# #                '*' in types
 # #                ) and pattern.fullmatch(
-# #                    self.external_request_uri) is not None:
+# #                    self.external_uri) is not None:
             pattern = regularExpression.compile(
-                '(?:%s)$' % source_match.group('request_uri'))
-            if(request_type_uppercase in request_types or
-               '*' in request_types
-               ) and pattern.match(self.external_request_uri) is not None:
+                '(?:%s)$' % source_match.group('uri'))
+            if(type_uppercase in types or
+               '*' in types
+               ) and pattern.match(self.external_uri) is not None:
 # #
                 self._handle_matched_redirect(
                     pattern, patterns, target, external)
@@ -3408,7 +3425,7 @@ class CGIHTTPRequestHandler(
         return False
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _handle_matched_redirect(
 # #         self: Self, pattern: builtins.type(regularExpression.compile('')),
 # #         patterns: builtins.type(regularExpression.compile('')),
@@ -3421,26 +3438,25 @@ class CGIHTTPRequestHandler(
         '''Performs an internal or external redirect.'''
         if external:
             if not __test_mode__:
-                self.external_request_uri = pattern.sub(
-                    target, self.external_request_uri)
+                self.external_uri = pattern.sub(target, self.external_uri)
                 self.send_response(301).send_header(
-                    'Location', self.external_request_uri)
+                    'Location', self.external_uri)
                 self.end_headers()
         else:
             target_match = patterns.match(target)
-            if target_match.group('request_type') != '-':
-                self.request_type = target_match.group('request_type')
-            for request in target_match.group('request_uri').split('#'):
-                self.request_uri = pattern.sub(
-                    request, self.external_request_uri
+            if target_match.group('type') != '-':
+                self.type = target_match.group('type')
+            for request in target_match.group('uri').split('#'):
+                self.uri = pattern.sub(
+                    request, self.external_uri
                 ).format(host_name=regularExpression.compile(':[0-9]+$').sub(
                     '', self.host))
-                if FileHandler(location=self.request_uri):
+                if FileHandler(location=self.uri):
                     break
         return self
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _set_dynamic_or_static_get(
 # #         self: Self, file_name: builtins.str
 # #     ) -> Self:
@@ -3475,7 +3491,7 @@ class CGIHTTPRequestHandler(
         return self._static_get()
 
     @JointPoint
-# # python3.4     def _default_get(self: Self) -> builtins.bool:
+# # python3.5     def _default_get(self: Self) -> builtins.bool:
     def _default_get(self):
         '''
             Handles every request which doesn't takes a file or python module \
@@ -3542,10 +3558,19 @@ class CGIHTTPRequestHandler(
         if(self.server.web.module_loading and
            self._is_default_module_requested()):
             return True
-        for file in self.server.web.root:
-            if self._check_pattern(
-                self.server.web.default_file_name_pattern, file.name
+        for pattern in self.server.web.default_file_name_pattern:
+# # python3.5
+# #             for file in builtins.filter(
+# #                 lambda file: regularExpression.compile(
+# #                     '(?:%s)$' % pattern
+# #                 ).fullmatch(file.name), self.server.web.root.list()
+# #             ):
+            for file in builtins.filter(
+                lambda file: regularExpression.compile(
+                    '(?:%s)$' % pattern
+                ).match(file.name), self.server.web.root.list()
             ):
+# #
                 self.requested_file = file
                 self._set_dynamic_or_static_get(file_name=file.name)
                 return True
@@ -3555,7 +3580,7 @@ class CGIHTTPRequestHandler(
         return False
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _is_default_module_requested(self: Self) -> builtins.bool:
     def _is_default_module_requested(self):
 # #
@@ -3587,7 +3612,7 @@ class CGIHTTPRequestHandler(
             True
         '''
         if self.server.web.module_loading:
-# # python3.4
+# # python3.5
 # #             if builtins.isinstance(
 # #                 self.server.web.module_loading, builtins.str
 # #             ) and self._handle_default_modules_get(
@@ -3606,7 +3631,7 @@ class CGIHTTPRequestHandler(
         return False
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _handle_default_modules_get(
 # #         self: Self, module_name: builtins.str
 # #     ) -> (Self, builtins.bool):
@@ -3658,7 +3683,7 @@ class CGIHTTPRequestHandler(
         return False
 
     @JointPoint
-# # python3.4     def _handle_given_default_get(self: Self) -> Self:
+# # python3.5     def _handle_given_default_get(self: Self) -> Self:
     def _handle_given_default_get(self):
         '''
             Handles request with no explicit file or module to run.
@@ -3709,7 +3734,7 @@ class CGIHTTPRequestHandler(
             file_name=self.server.web.default)
 
     @JointPoint
-# # python3.4     def _static_get(self: Self) -> Self:
+# # python3.5     def _static_get(self: Self) -> Self:
     def _static_get(self):
         '''
             Handles a static file-request.
@@ -3751,12 +3776,12 @@ class CGIHTTPRequestHandler(
             '''
             if not regularExpression.compile(
                 '/(%s.*)?$' % self.server.web.request_parameter_delimiter
-            ).search(self.external_request_uri):
+            ).search(self.external_uri):
                 self.send_response(301).send_header(
                     'Location', regularExpression.compile(
                         '((%s.*)?)$' %
                         self.server.web.request_parameter_delimiter
-                    ).sub('/\\1', self.external_request_uri))
+                    ).sub('/\\1', self.external_uri))
                 return self.end_headers()
             return self.list_directory()
         try:
@@ -3764,7 +3789,7 @@ class CGIHTTPRequestHandler(
         except builtins.IOError:
             self._send_no_file_error()
             return self
-# # python3.4
+# # python3.5
 # #         if(self.headers.get('if-modified-since') ==
 # #            self.date_time_string(
 # #                builtins.int(self.requested_file.timestamp))):
@@ -3776,7 +3801,7 @@ class CGIHTTPRequestHandler(
         return self._send_static_file(output=file_handler)
 
     @JointPoint
-# # python3.4     def _save_uploaded_files(self: Self) -> Self:
+# # python3.5     def _save_uploaded_files(self: Self) -> Self:
     def _save_uploaded_files(self):
         '''
             Uploaded data to a directory are saved automatically by this \
@@ -3784,7 +3809,7 @@ class CGIHTTPRequestHandler(
         '''
         for items in self.data.values():
             for item in items:
-# # python3.4
+# # python3.5
 # #                 if(builtins.len(item) == 4 and
 # #                    'content' in item and 'name' in item and
 # #                    'disposition' in item and 'disposition' in item and
@@ -3803,7 +3828,7 @@ class CGIHTTPRequestHandler(
         return self
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _send_static_file(
 # #         self: Self, output: (builtins.str, _io.BufferedReader)
 # #     ) -> Self:
@@ -3831,7 +3856,7 @@ class CGIHTTPRequestHandler(
         mime_type = self.requested_file.get_mime_type(web=True)
         if(self.requested_file.size < threshold or
            mime_type in self.server.web.known_big_web_mime_types):
-# # python3.4
+# # python3.5
 # #             self.send_content_type_header(
 # #                 mime_type=mime_type, encoding=builtins.isinstance(
 # #                     output, builtins.str))
@@ -3842,7 +3867,8 @@ class CGIHTTPRequestHandler(
         else:
             self.send_content_type_header(
                 mime_type='application/octet-stream', encoding=False)
-            self.send_header('Content-Transfer-Encoding', 'binary')
+            if not __test_mode__:
+                self.send_header('Content-Transfer-Encoding', 'binary')
         self.send_static_file_cache_header(
             timestamp=self.requested_file.timestamp)
         self.send_content_length_header(
@@ -3851,7 +3877,7 @@ class CGIHTTPRequestHandler(
         return self._send_output(output)
 
     @JointPoint
-# # python3.4     def _send_not_modified_header(self: Self) -> Self:
+# # python3.5     def _send_not_modified_header(self: Self) -> Self:
     def _send_not_modified_header(self):
         '''Sends a header to client indicating cached file hasn't changed.'''
         self.send_content_type_header(
@@ -3864,7 +3890,7 @@ class CGIHTTPRequestHandler(
         return self
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _send_output(
 # #         self: Self, output: (builtins.str, _io.BufferedReader)
 # #     ) -> Self:
@@ -3872,16 +3898,16 @@ class CGIHTTPRequestHandler(
 # #
         '''Sends the final given output to client.'''
         if not (
-            output is None or __test_mode__ or self.request_type == 'head'
+            output is None or __test_mode__ or self.type == 'head'
         ):
             if self._encoded_output:
                 self.wfile.write(self._encoded_output)
-# # python3.4
+# # python3.5
 # #             elif builtins.isinstance(output, builtins.bytes):
             elif builtins.isinstance(output, builtins.str):
 # #
                 self.wfile.write(output)
-# # python3.4             elif builtins.isinstance(output, builtins.str):
+# # python3.5             elif builtins.isinstance(output, builtins.str):
             elif builtins.isinstance(output, builtins.unicode):
                 self.wfile.write(output.encode(self.server.web.encoding))
             else:
@@ -3890,7 +3916,7 @@ class CGIHTTPRequestHandler(
         return self
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _gzip(
 # #         self: Self, content: (builtins.str, builtins.bytes)
 # #     ) -> builtins.bytes:
@@ -3913,7 +3939,7 @@ class CGIHTTPRequestHandler(
             >>> isinstance(handler._gzip(bytes()), bytes)
             True
         '''
-# # python3.4         output = io.BytesIO()
+# # python3.5         output = io.BytesIO()
         output = StringIO.StringIO()
         gzip_file_handler = gzip.GzipFile(
             fileobj=output, mode='w', compresslevel=5)
@@ -3926,7 +3952,7 @@ class CGIHTTPRequestHandler(
         return output.getvalue()
 
     @JointPoint
-# # python3.4     def _dynamic_get(self: Self) -> Self:
+# # python3.5     def _dynamic_get(self: Self) -> Self:
     def _dynamic_get(self):
         '''
             Handles a dynamic file or python module request. It initializes \
@@ -3935,14 +3961,24 @@ class CGIHTTPRequestHandler(
             expected from client it could be run without its own thread \
             environment.
         '''
+# # python3.5
+# #         self.request_arguments = (
+# #             ('header', convert_to_unicode(self.headers)),
+# #             ('type', self.type), ('handler', self),
+# #             ('requested_file_name', self.requested_file_name),
+# #             ('host', self.host), ('uri', self.uri), ('get', self.get),
+# #             ('external_uri', self.external_uri), ('data', self.data),
+# #             ('cookie', self.cookie), ('external_type', self.external_type),
+# #             ('shared_data', self.server.web.shared_data))
         self.request_arguments = (
+            ('header', builtins.str(self.headers)), ('type', self.type),
+            ('handler', self),
             ('requested_file_name', self.requested_file_name),
-            ('host', self.host), ('request_uri', self.request_uri),
-            ('external_request_uri', self.external_request_uri),
-            ('get', self.get), ('data', self.data), ('cookie', self.cookie),
-            ('request_type', self.request_type),
-            ('external_request_type', self.external_request_type),
-            ('shared_data', self.server.web.shared_data), ('handler', self))
+            ('host', self.host), ('uri', self.uri), ('get', self.get),
+            ('external_uri', self.external_uri), ('data', self.data),
+            ('cookie', self.cookie), ('external_type', self.external_type),
+            ('shared_data', self.server.web.shared_data))
+# #
         if '__no_respond__' not in self.data:
             self.respond = True
             return self._run_request()
@@ -3952,7 +3988,7 @@ class CGIHTTPRequestHandler(
         return self
 
     @JointPoint
-# # python3.4     def _run_request(self: Self) -> Self:
+# # python3.5     def _run_request(self: Self) -> Self:
     def _run_request(self):
         '''
             Decides to run the given script as python-module or standalone \
@@ -3963,7 +3999,7 @@ class CGIHTTPRequestHandler(
         return self._run_requested_file()
 
     @JointPoint
-# # python3.4     def _run_requested_file(self: Self, debug=False) -> Self:
+# # python3.5     def _run_requested_file(self: Self, debug=False) -> Self:
     def _run_requested_file(self, debug=False):
         '''
             Runs a given external process in a subprocess. Output and errors \
@@ -3989,7 +4025,7 @@ class CGIHTTPRequestHandler(
             >>> handler._run_requested_file(True) # doctest: +ELLIPSIS
             Object of "CGIHTTPRequestHandler" with request uri "" and parame...
         '''
-# # python3.4
+# # python3.5
 # #         self.request_arguments = builtins.list(builtins.map(
 # #             lambda element: builtins.str(
 # #                 element[1]
@@ -4009,7 +4045,7 @@ class CGIHTTPRequestHandler(
             ).communicate()
         except builtins.OSError as exception:
             output = ''
-# # python3.4
+# # python3.5
 # #             errors = '%s: %s' % (
 # #                 exception.__class__.__name__, builtins.str(exception))
             errors = '%s: %s' % (
@@ -4018,7 +4054,7 @@ class CGIHTTPRequestHandler(
 # #
         self.server.web.number_of_running_threads -= 1
         size = builtins.len(output)
-# # python3.4
+# # python3.5
 # #         if not builtins.isinstance(errors, builtins.str):
         if not builtins.isinstance(errors, builtins.unicode):
 # #
@@ -4052,7 +4088,7 @@ class CGIHTTPRequestHandler(
         return self
 
     @JointPoint
-# # python3.4     def _run_requested_module(self: Self) -> Self:
+# # python3.5     def _run_requested_module(self: Self) -> Self:
     def _run_requested_module(self):
         '''
             Imports and runs a given python module. Errors and output are \
@@ -4062,7 +4098,7 @@ class CGIHTTPRequestHandler(
         '''Redirect output buffer.'''
         print_default_buffer_backup = Print.default_buffer
         Print.default_buffer = self.server.web.thread_buffer
-# # python3.4         sys_path_backup = sys.path.copy()
+# # python3.5         sys_path_backup = sys.path.copy()
         sys_path_backup = copy(sys.path)
         sys.path = [self.server.web.root.path] + sys.path
         self.server.web.number_of_running_threads += 1
@@ -4076,11 +4112,11 @@ class CGIHTTPRequestHandler(
             requested_module, print_default_buffer_backup, sys_path_backup)
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _handle_module_running(
 # #         self: Self, requested_module: ModuleType,
 # #         print_default_buffer_backup: builtins.object,
-# #         sys_path_backup: Iterable
+# #         sys_path_backup: NativeIterable
 # #     ) -> Self:
     def _handle_module_running(
         self, requested_module, print_default_buffer_backup,
@@ -4111,7 +4147,7 @@ class CGIHTTPRequestHandler(
         return self
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _handle_module_exception(
 # #         self: Self, requested_module: ModuleType,
 # #         exception: builtins.BaseException, debug=False
@@ -4166,33 +4202,63 @@ class CGIHTTPRequestHandler(
         if self.respond:
             if(sys.flags.debug or __logger__.isEnabledFor(logging.DEBUG) or
                debug):
-# # python3.4
-# #                 self.send_error(500, '%s: %s' % (
-# #                     exception.__class__.__name__,
-# #                     regularExpression.compile('\n+').sub(
-# #                         '\n', builtins.str(exception))))
-                self.send_error(500, '%s: %s' % (
-                    exception.__class__.__name__,
-                    regularExpression.compile('\n+').sub(
-                        '\n', convert_to_unicode(exception))))
+# # python3.5
+# #                 self.send_error(
+# #                     500, '%s: %s\n\nRequest informations:\n\n%s' % (
+# #                         exception.__class__.__name__,
+# #                         regularExpression.compile('\n+').sub(
+# #                             '\n', builtins.str(exception)
+# #                         ), json.dumps(
+# #                             self.request_arguments, skipkeys=True,
+# #                             ensure_ascii=False, check_circular=True,
+# #                             allow_nan=True, indent=4,
+# #                             separators=(',', ': '), sort_keys=True,
+# #                             default=lambda object: '__not_serializable__'))
+# #                 )
+                self.send_error(
+                    500, '%s: %s\n\nRequest informations:\n\n%s' % (
+                        exception.__class__.__name__,
+                        regularExpression.compile('\n+').sub(
+                            '\n', convert_to_unicode(exception)
+                        ), json.dumps(
+                            self.request_arguments, skipkeys=True,
+                            ensure_ascii=False, check_circular=True,
+                            allow_nan=True, indent=4,
+                            separators=(',', ': '), sort_keys=True,
+                            default=lambda object: '__not_serializable__')))
 # #
             else:
                 self.send_error(500, 'Internal server error')
         if sys.flags.debug or __logger__.isEnabledFor(logging.DEBUG) or debug:
             raise
         else:
-# # python3.4
+# # python3.5
 # #             __logger__.critical(
-# #                 'Error in module "%s" %s: %s', requested_module.__name__,
-# #                 exception.__class__.__name__, builtins.str(exception))
+# #                 'Error in module "%s" %s: %s\n\nRequest informations:\n\n'
+# #                 '%s', requested_module.__name__,
+# #                 exception.__class__.__name__, builtins.str(exception),
+# #                 json.dumps(
+# #                     self.request_arguments, skipkeys=True,
+# #                     ensure_ascii=False, check_circular=True,
+# #                     allow_nan=True, indent=4, separators=(',', ': '),
+# #                     sort_keys=True,
+# #                     default=lambda object: '__not_serializable__'))
+            # TODO do it on every error handler and in html response.
             __logger__.critical(
-                'Error in module "%s" %s: %s', requested_module.__name__,
+                'Error in module "%s" %s: %s\n\nRequest informations:\n\n'
+                '%s', requested_module.__name__,
                 exception.__class__.__name__, convert_to_unicode(
-                    exception))
+                    exception
+                ), json.dumps(
+                    self.request_arguments, skipkeys=True,
+                    ensure_ascii=False, check_circular=True,
+                    allow_nan=True, indent=4, separators=(',', ': '),
+                    sort_keys=True,
+                    default=lambda object: '__not_serializable__'))
 # #
         return self
 
-        # endregion
+    # # endregion
 
     # endregion
 

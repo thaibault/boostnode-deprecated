@@ -11,7 +11,7 @@
     object.
 '''
 
-# # python3.4
+# # python3.5
 # # pass
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
@@ -31,13 +31,14 @@ __maintainer_email__ = 't.sickert["~at~"]gmail.com'
 __status__ = 'stable'
 __version__ = '1.0'
 
-# # python3.4
+# # python3.5
 # # from base64 import b64encode as base64encode
 # # import builtins
 import __builtin__ as builtins
 # #
 from cgi import FieldStorage as CGIFieldStorage
-from collections import Iterable
+from collections import deque
+from collections import Iterable as NativeIterable
 from copy import copy, deepcopy
 from datetime import datetime as NativeDateTime
 from datetime import time as NativeTime
@@ -55,12 +56,13 @@ from types import FrameType as Frame
 from types import FunctionType as Function
 from types import GeneratorType as Generator
 from types import MethodType as Method
+from types import ModuleType
 
 '''Make boostNode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
 import boostNode
-# # python3.4
+# # python3.5
 # # from boostNode import ENCODING
 # # from boostNode.extension.type import Self, SelfClass, SelfClassObject
 from boostNode import ENCODING, convert_to_string, convert_to_unicode
@@ -72,13 +74,16 @@ from boostNode.paradigm.objectOrientation import Class
 # endregion
 
 # TODO handle utc
+# TODO check branches
 
 # region classes
 
 class EnsureNewMutableDefaultObject(FunctionDecorator):
 
     '''
-        TODO
+        Handles the problem with non native mutuable objects as default \
+        parameter. Normally all function/method calls shares the same mutual \
+        object. This function decorator ensures a new instance for each call.
 
         Examples:
 
@@ -134,8 +139,6 @@ class EnsureNewMutableDefaultObject(FunctionDecorator):
         >>> a.c[2] = 3
         >>> A(2).c
         {}
-
-        TODO Check branches.
     '''
 
     # region properties
@@ -155,7 +158,7 @@ class EnsureNewMutableDefaultObject(FunctionDecorator):
     # # region public
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def get_wrapper_function(self: Self) -> (Function, Method):
     def get_wrapper_function(self):
 # #
@@ -175,23 +178,43 @@ class EnsureNewMutableDefaultObject(FunctionDecorator):
                 We have to bind variables to recognize keyword arguments \
                 which are given as positional arguments.
             '''
-            # TODO write python2.7 version
-            signature = inspect.signature(self.__func__).bind(
-                *arguments, **keywords)
-            given_arguments = signature.arguments
-            for name, parameter in signature.parameters.items():
-                '''
-                    Ignore given, immutable or arguments without a default \
-                    value.
-                '''
-                if not (
-                    parameter.default in (parameter.empty, None, Null) or
-                    name in given_arguments or builtins.isinstance(
-                        parameter.default, self.IMMUTABLE_OBJECTS)
+# # python3.5
+# #             signature = inspect.signature(self.__func__)
+# #             given_arguments = signature.bind(*arguments, **keywords).arguments
+# #             for name, parameter in signature.parameters.items():
+# #                 '''
+# #                     Ignore given, immutable or arguments without a default \
+# #                     value.
+# #                 '''
+# #                 if not (
+# #                     parameter.default in (parameter.empty, None, Null) or
+# #                     name in given_arguments or builtins.isinstance(
+# #                         parameter.default, self.IMMUTABLE_OBJECTS)
+# #                 ):
+# #                     keywords[name] = copy(parameter.default)
+            argument_specification = inspect.getargspec(self.__func__)
+            if argument_specification.defaults:
+                for name, default_parameter in builtins.zip(
+                    argument_specification.args[builtins.len(
+                        argument_specification.args
+                    ) - builtins.len(argument_specification.defaults):],
+                    argument_specification.defaults
                 ):
-                    keywords[name] = copy(parameter.default)
+                    '''
+                        NOTE: This python2.X backport works only for \
+                        explicitly given arguments via keyword.
+                    '''
+                    if not (
+                        default_parameter in (None, Null) or
+                        name in keywords and
+                        keywords[name] != default_parameter or
+                        builtins.isinstance(
+                            default_parameter, self.IMMUTABLE_OBJECTS)
+                    ):
+                        keywords[name] = copy(default_parameter)
+# #
             return self.__func__(*arguments, **keywords)
-# # python3.4         pass
+# # python3.5         pass
         wrapper_function.__wrapped__ = self.__func__
         return wrapper_function
 
@@ -233,7 +256,7 @@ class ClassPropertyInitializer(FunctionDecorator):
     # # region public
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def get_wrapper_function(self: Self) -> (Function, Method):
     def get_wrapper_function(self):
 # #
@@ -253,18 +276,16 @@ class ClassPropertyInitializer(FunctionDecorator):
                 self.__func__, *arguments, **keywords
             ).items():
                 if name not in self.EXCLUDED_ARGUMENT_NAMES:
-                    # TODO
-                    #print(self.__func__.__name__, name, value)
                     if 'self' in self.EXCLUDED_ARGUMENT_NAMES:
                         builtins.setattr(self.object, name, value)
                     else:
                         builtins.setattr(self.class_object, name, value)
             return self.__func__(*arguments, **keywords)
-# # python3.4         pass
+# # python3.5         pass
         wrapper_function.__wrapped__ = self.__func__
         return wrapper_function
 
-        # endregion
+    # # endregion
 
     # endregion
 
@@ -300,7 +321,7 @@ class InstancePropertyInitializer(ClassPropertyInitializer):
     # endregion
 
 
-# # python3.4 class Model:
+# # python3.5 class Model:
 class Model(builtins.object):
 
     '''Represents an abstract data holding class for an orm based model.'''
@@ -312,7 +333,7 @@ class Model(builtins.object):
     # # # region special
 
     @JointPoint
-# # python3.4     def __repr__(self: Self) -> builtins.str:
+# # python3.5     def __repr__(self: Self) -> builtins.str:
     def __repr__(self):
         '''
             Describes the model as string.
@@ -358,23 +379,23 @@ class Model(builtins.object):
                 self.__class__.__name__, property_descriptions)
         return self.__class__.__name__
 
-        # # endregion
+    # # # endregion
 
-        # # region getter
+    # # # region getter
 
     @JointPoint(Class.pseudo_property)
-# # python3.4
+# # python3.5
 # #     def get_dictionary(
 # #         self: Self, key_wrapper=lambda key, value: key,
 # #         value_wrapper=lambda key, value: value,
-# #         prefix_filter=('password', 'session'), property_names=(),
+# #         prefix_filter=('password', 'session', 'login', 'user'),
 # #         property_names=(), filter=lambda key, value: True
 # #     ) -> builtins.dict:
     def get_dictionary(
         self, key_wrapper=lambda key, value: key,
         value_wrapper=lambda key, value: value,
-        prefix_filter=('password', 'session'), property_names=(),
-        filter=lambda key, value: True
+        prefix_filter=('password', 'session', 'login', 'user'),
+        property_names=(), filter=lambda key, value: True
     ):
 # #
         '''
@@ -474,18 +495,18 @@ class Model(builtins.object):
                 result[key] = value_wrapper(key, value)
         return result
 
-        # # endregion
+    # # # endregion
 
-        # endregion
+    # # endregion
 
     # endregion
 
     # region static
 
-        # region public
+    # # region public
 
     @JointPoint(builtins.staticmethod)
-# # python3.4
+# # python3.5
 # #     def validate_property(
 # #         model_instance: builtins.object, name: builtins.str,
 # #         value: builtins.object,
@@ -559,10 +580,10 @@ class Model(builtins.object):
                 values will handle this.
             '''
             property_information = information_determiner(model_instance, name)
-            if builtins.isinstance(value, builtins.int):
+            if builtins.isinstance(value, (builtins.float, builtins.int)):
                 model_instance._validate_number_property(
                     name, value, property_information)
-# # python3.4
+# # python3.5
 # #             elif builtins.isinstance(value, builtins.str):
             elif builtins.isinstance(value, (
                 builtins.unicode, builtins.str
@@ -572,9 +593,9 @@ class Model(builtins.object):
                     name, value, property_information)
         return value
 
-        # endregion
+    # # endregion
 
-        # region protected
+    # # region protected
 
     @JointPoint(builtins.classmethod)
     def _validate_number_property(cls, name, value, property_information):
@@ -614,7 +635,7 @@ class Model(builtins.object):
                 'but given value "%s" has length %d.' % (
                     name, cls.__name__, property_information['maximum_length'],
                     value, builtins.len(value)))
-# # python3.4
+# # python3.5
 # #         if 'pattern' in property_information and regularExpression.compile(
 # #             property_information['pattern']
 # #         ).fullmatch(value) is None:
@@ -629,12 +650,12 @@ class Model(builtins.object):
                     value))
         return cls
 
-        # endregion
+    # # endregion
 
     # endregion
 
 
-# # python3.4 class Copyable:
+# # python3.5 class Copyable:
 class Copyable(builtins.object):
 
     '''
@@ -651,7 +672,7 @@ class Copyable(builtins.object):
     # NOTE We can't specify the type of the "self" parameter since python's
     # native "copy()" methods calls this method as static classmethod.
     @JointPoint
-# # python3.4     def __copy__(self) -> SelfClassObject:
+# # python3.5     def __copy__(self) -> SelfClassObject:
     def __copy__(self):
         '''
             Triggers if python native copy method is used on current object.
@@ -684,7 +705,7 @@ class Copyable(builtins.object):
         return self._copy(self.__dict__)
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def __deepcopy__(self: Self, memory: builtins.dict) -> SelfClassObject:
     def __deepcopy__(self, memory):
 # #
@@ -708,7 +729,7 @@ class Copyable(builtins.object):
         return self._copy(deepcopy(self.__dict__, memory))
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _copy(self: Self, scope: builtins.dict) -> SelfClassObject:
     def _copy(self, scope):
 # #
@@ -716,7 +737,7 @@ class Copyable(builtins.object):
         initializer = self.__class__.__init__
         while builtins.hasattr(initializer, '__wrapped__'):
             initializer = initializer.__wrapped__
-# # python3.4
+# # python3.5
 # #         parameter_names = inspect.signature(initializer).parameters.keys()
         parameter_names = inspect.getargspec(initializer).args
 # #
@@ -781,7 +802,7 @@ class AuthenticationModel(Model):
             Password setter which provides automatic salt and hash generation.
         '''
         self.validate_property(self, 'password', value)
-# # python3.4
+# # python3.5
 # #         self.password_salt = base64encode(os.urandom(
 # #             self._password_information['salt']['length']
 # #         )).decode(ENCODING)
@@ -817,7 +838,7 @@ class AuthenticationModel(Model):
             >>> authentication_model.has_password('peter')
             False
         '''
-# # python3.4
+# # python3.5
 # #         return self.password_hash == sha224(
 # #             ('%s%s%s' % (
 # #                 value, self._password_information['pepper'],
@@ -831,9 +852,9 @@ class AuthenticationModel(Model):
         ).hexdigest()
 # #
 
-        # # endregion
+    # # # endregion
 
-        # endregion
+    # # endregion
 
     # endregion
 
@@ -848,451 +869,33 @@ class Object(Class):
 
     # region properties
 
-    EXPORTABLE_FILE_ATTRIBUTES = (
-        'path', 'name', 'basename', 'encoding', 'extension',
-        'extension_suffix', 'timestamp', 'size', 'human_readable_size',
-        'type', 'mime_type')
-
-    # endregion
-
-    # region dynamic methods
-
-    # # region public
-
-    # # # region special
-
-# # python3.4
-# #     def __init__(
-# #         self: Self, content=None,
-# #         *arguments: (builtins.object, builtins.type),
-# #         **keywords: (builtins.object, builtins.type)
-# #     ) -> None:
-    def __init__(self, content=None, *arguments, **keywords):
+# # python3.5
+# #     NONE_CONVERTABLE_ITERABLES = {
+# #         builtins.str, builtins.bytes, CGIFieldStorage}
+    NONE_CONVERTABLE_ITERABLES = {
+        builtins.unicode, builtins.bytes, builtins.str, CGIFieldStorage}
 # #
-        '''
-            Generates a new high level wrapper around given object.
-
-            Examples:
-
-            >>> object = Object('hans')
-
-            >>> object
-            Object of "str" ('hans').
-            >>> object.content
-            'hans'
-
-            >>> object = Object()
-            >>> object.compatible_type is None
-            True
-            >>> object.content is None
-            True
-        '''
-
-        # # # region properties
-
-        '''
-            NOTE: This property shouldn't be set via an instance property \
-            initializer since there nondeterministic problems in \
-            multiprocessing application.
-        '''
-        self.content = content
-        '''Saves a copy of currently saved object.'''
-        self._content_copy = {}
-
-        # # # endregion
-
-    @JointPoint
-# # python3.4     def __repr__(self: Self) -> builtins.str:
-    def __repr__(self):
-        '''Invokes if this object should describe itself by a string.'''
-        return 'Object of "{class_name}" ({content}).'.format(
-            class_name=self.content.__class__.__name__,
-            content=builtins.repr(self.content))
-
-    @JointPoint
-# # python3.4     def __str__(self: Self) -> builtins.str:
-    def __str__(self):
-        '''
-            Is triggered if this object should be converted to string.
-
-            Examples:
-
-            >>> str(Object(['hans']))
-            "['hans']"
-        '''
-# # python3.4         return builtins.str(self.content)
-        return convert_to_unicode(self.content)
-
-    @JointPoint
-# # python3.4
-# #     def __eq__(self: Self, other: SelfClassObject) -> builtins.bool:
-    def __eq__(self, other):
-# #
-        '''
-            Is triggered if this object should be compared to another
-
-            Examples:
-
-            >>> Object('hans') == Object('hans')
-            True
-        '''
-        return self.content == other.content
-
-        # # endregion
-
-    @JointPoint(Class.pseudo_property)
-# # python3.4
-# #     def get_compatible_type(self: Self) -> (
-# #         builtins.object, builtins.type
-# #     ):
-    def get_compatible_type(self):
-# #
-        '''
-            Converts data to python cross platform compatible data objects.
-
-            Examples:
-
-            >>> isinstance(Object(NativeDateTime(
-            ...     1970, 1, 1, 0, 0
-            ... )).compatible_type, float)
-            True
-
-            >>> isinstance(Object(NativeDate(
-            ...     1970, 1, 1
-            ... )).compatible_type, float)
-            True
-
-            >>> isinstance(Object(NativeTime(
-            ...     1, 1, 1, 0
-            ... )).compatible_type, float)
-            True
-
-            >>> isinstance(Object(NativeTimeDelta(
-            ...     1, 1
-            ... )).compatible_type, float)
-            True
-
-            >>> Object('hans').compatible_type
-            'hans'
-
-            >>> Object(1).compatible_type
-            1
-
-            >>> Object(None).compatible_type is None
-            True
-
-            >>> Object(.1).compatible_type
-            0.1
-
-            >>> Object(False).compatible_type
-            False
-
-            >>> Object(True).compatible_type
-            True
-
-            >>> Object({'A'}).compatible_type == str(['A'])
-            True
-
-            >>> Object(('A',)).compatible_type == str(['A'])
-            True
-        '''
-        from boostNode.extension.file import Handler as FileHandler
-
-# # python3.4
-# #         if builtins.isinstance(self.content, NativeDateTime):
-# #             return self.content.timestamp(
-# #             ) + builtins.float(self.content.microsecond) / 1000 ** 2
-# #         if builtins.isinstance(self.content, NativeDate):
-# #             return make_time(self.content.timetuple())
-        if builtins.isinstance(self.content, NativeDateTime):
-            return(
-                make_time(self.content.timetuple()) +
-                self.content.microsecond / 1000 ** 2)
-        if builtins.isinstance(self.content, NativeDate):
-            return make_time(self.content.timetuple())
-# #
-        if builtins.isinstance(self.content, NativeTime):
-            return(
-                60.0 ** 2 * self.content.hour + 60 * self.content.minute +
-                self.content.second + self.content.microsecond / 1000 ** 2)
-        if builtins.isinstance(self.content, NativeTimeDelta):
-            return self.content.total_seconds()
-        if builtins.isinstance(self.content, CGIFieldStorage):
-            '''
-                Convert form field values and potential binary data into a \
-                simple dictionary.
-            '''
-            try:
-                result = {}
-                for name in self.content:
-                    data[name] = []
-                    if builtins.hasattr(
-                        self.content[name], 'file'
-                    ) and self.content[name].filename:
-                        data[name].append('__binary_file_data__')
-                    elif builtins.isinstance(
-                        self.content[name], builtins.list
-                    ):
-                        for value in self.content[name]:
-                            if builtins.hasattr(
-                                value, 'file'
-                            ) and value.filename:
-                                data[name].append('__binary_file_data__')
-                            else:
-                                data[name].append(value.value)
-                    else:
-                        data[name].append(self.content[name].value)
-                return result
-            except builtins.TypeError:
-                if builtins.hasattr(
-                    self.content, 'file'
-                ) and self.content.filename:
-                    return{self.content.filename: '__binary_file_data__'}
-                return{name: value.value}
-        # TODO check branches
-        if builtins.isinstance(self.content, FileHandler):
-            result = {}
-            for name in self.EXPORTABLE_FILE_ATTRIBUTES:
-                result[name] = builtins.getattr(self.content, name)
-            return result
-        content = self.content
-        if builtins.isinstance(content, (builtins.set, builtins.tuple)):
-            content = builtins.list(content)
-        if not builtins.isinstance(content, (
-            builtins.int, builtins.float, builtins.type(None)
-        )):
-# # python3.4             return builtins.str(content)
-            return convert_to_unicode(content)
-        return content
-
-    @JointPoint(Class.pseudo_property)
-# # python3.4
-# #     def get_known_type(self: Self, description=None, strict=None) -> (
-# #         builtins.object, builtins.type
-# #     ):
-    def get_known_type(self, description=None, strict=None):
-# #
-        '''
-            Converts interpretable data to python specific data objects.
-
-            Examples:
-
-            >>> Object().known_type is None
-            True
-
-            >>> Object(0).get_known_type(
-            ...     'date_time'
-            ... ) == NativeDateTime.fromtimestamp(0)
-            True
-
-            >>> Object(0).get_known_type('date') == NativeDate.fromtimestamp(0)
-            True
-
-            >>> Object(0).get_known_type('time') == NativeTime(0)
-            True
-
-            >>> Object(0).get_known_type('time_delta') == NativeTimeDelta(0)
-            True
-
-            >>> Object(0).known_type
-            0
-
-            >>> Object(True).known_type
-            True
-
-            >>> Object('ap9c').get_known_type('phone_number')
-            '9'
-
-            >>> Object('abc').get_known_type('zip_code', strict=True)
-            Traceback (most recent call last):
-            ...
-            NativeError: "abc" couldn't be interpreted as "ZipCode".
-
-            >>> Object('abc').get_known_type('zip_code')
-            'abc'
-
-            >>> Object('abc').get_known_type('zip_code', strict=False) is None
-            True
-
-            >>> Object('ap9c').known_type
-            'ap9c'
-
-            >>> Object('9').known_type
-            9
-        '''
-        if self.content is None:
-            return self.content
-# # python3.4
-# #         if builtins.isinstance(description, builtins.str):
-        if builtins.isinstance(description, (
-            builtins.unicode, builtins.str
-        )):
-# #
-            try:
-                result = self._create_known_type(description)
-                if result is not None:
-                    return result
-            except __exception__:
-                if strict:
-                    raise
-                return self.content if strict is None else None
-# # python3.4
-# #         if builtins.isinstance(self.content, builtins.str):
-# #             return String(self.content).number
-        if builtins.isinstance(self.content, (
-            builtins.unicode, builtins.str
-        )):
-            number = String(self.content).number
-            if builtins.isinstance(number, builtins.str):
-                return convert_to_unicode(number)
-            return number
-# #
-        return self.content
-
-    @JointPoint
-# # python3.4     def copy(self: Self) -> builtins.dict:
-    def copy(self):
-        '''
-            Copies a given object's attributes and returns them.
-
-            Examples:
-
-            >>> class A: pass
-            >>> a = A()
-            >>> a.string = 'hans'
-            >>> object_copy = Object(a).copy()
-            >>> for key, value in object_copy.items():
-            ...     if 'string' == key:
-            ...         print(value)
-            hans
-
-            >>> class B: hans = 'A'
-            >>> object = Object(B())
-            >>> object_copy = object.copy()
-            >>> object.content.hans = 'B'
-            >>> object.content.hans
-            'B'
-            >>> object_copy['hans']
-            'A'
-        '''
-        self._content_copy = {}
-        for attribute_name in builtins.dir(self.content):
-            attribute = builtins.getattr(self.content, attribute_name)
-            if not ((attribute_name.startswith('__') and
-                     attribute_name.endswith('__')) or
-                    builtins.callable(attribute)):
-                self._content_copy[attribute_name] = copy(
-                    builtins.getattr(self.content, attribute_name))
-        return self._content_copy
-
-    @JointPoint
-# # python3.4     def restore(self: Self) -> (builtins.object, builtins.type):
-    def restore(self):
-        '''
-            Restores a given object's attributes by a given copy are last \
-            copied item.
-
-            Examples:
-
-            >>> class A: pass
-            >>> A.string = 'hans'
-            >>> object = Object(A)
-            >>> object.copy()
-            {'string': 'hans'}
-            >>> A.string = 'peter'
-            >>> object.restore() # doctest: +ELLIPSIS
-            <class ...A...>
-            >>> A.string
-            'hans'
-
-            >>> class A:
-            ...     hans = 'A'
-            ...     __special__ = 'B'
-            >>> object = Object(A())
-            >>> object_copy = object.copy()
-            >>> object.content.hans = 'B'
-            >>> object.content.hans
-            'B'
-            >>> object.restore().hans
-            'A'
-        '''
-        for attribute, value in self._content_copy.items():
-            builtins.setattr(self.content, attribute, value)
-        return self.content
-
-    @JointPoint
-# # python3.4     def is_binary(self: Self) -> builtins.bool:
-    def is_binary(self):
-        '''
-            Determines if given data is binary.
-
-            Examples:
-
-            >>> Object('A').is_binary()
-            False
-
-            >>> if sys.version_info.major < 3:
-            ...     Object(chr(1)).is_binary()
-            ... else:
-            ...     Object(bytes('A', 'utf_8')).is_binary()
-            True
-
-            >>> if sys.version_info.major < 3:
-            ...     Object(unicode('hans')).is_binary()
-            ... else:
-            ...     Object('hans').is_binary()
-            False
-        '''
-# # python3.4
-# #         return builtins.isinstance(self.content, builtins.bytes)
-        '''
-            NOTE: This is a dirty workaround to handle python2.7 lack of \
-            differentiation between "string" and "bytes" objects.
-        '''
-        content = self.content
-        if builtins.isinstance(content, builtins.unicode):
-            content = content.encode(ENCODING)
-        text_chars = builtins.str().join(builtins.map(
-            builtins.chr,
-            builtins.range(7, 14) + [27] + builtins.range(0x20, 0x100)))
-        return builtins.hasattr(content, 'translate') and builtins.bool(
-            content.translate(None, text_chars))
-# #
-
-        # endregion
-
-    @JointPoint
-# # python3.4
-# #     def _create_known_type(self: Self, description: (
-# #         builtins.str, builtins.type(None)
-# #     )) -> (
-# #         NativeDateTime, NativeDate, NativeTime, NativeTimeDelta,
-# #         builtins.str, builtins.type(None)
-# #     ):
-    def _create_known_type(self, description):
-# #
-        '''Creates a known type depending on given description.'''
-        for type_description in (
-            'date_time', 'date', 'time', 'phone_number', 'zip_code',
-            'time_delta'
-        ):
-            class_name = String(
-                type_description
-            ).delimited_to_camel_case.camel_case_capitalize.content
-            if description == type_description or description.endswith(
-                '_%s' % type_description
-            ) or description.endswith(class_name):
-                return builtins.globals()[class_name](self.content).content
-
+    DATE_TIME_CONVERTER = {
+        NativeDateTime: lambda content: (
+            make_time(content.timetuple()) + content.microsecond / \
+            1000 ** 2
+        ),
+        NativeDate: lambda content: make_time(content.timetuple()),
+        NativeTime: lambda content: (
+            60.0 ** 2 * content.hour + 60 * content.minute +
+            content.second + content.microsecond / 1000 ** 2
+        ),
+        NativeTimeDelta: lambda content: content.total_seconds()
+    }
 
     # endregion
 
     # region static methods
 
-        # region public
+    # # region public
 
     @JointPoint(builtins.classmethod)
-# # python3.4
+# # python3.5
 # #     def determine_abstract_method_exception(
 # #         cls: SelfClass, abstract_class_name: builtins.str, class_name=None
 # #     ) -> builtins.NotImplementedError:
@@ -1349,7 +952,805 @@ class Object(Class):
                 name=inspect.stack()[stack_level][3], class_name=class_name,
                 abstract_class=abstract_class_name))
 
-        # endregion
+    # # endregion
+
+    # endregion
+
+    # region dynamic methods
+
+    # # region public
+
+    # # # region special
+
+# # python3.5
+# #     def __init__(
+# #         self: Self, content=None,
+# #         *arguments: (builtins.object, builtins.type),
+# #         **keywords: (builtins.object, builtins.type)
+# #     ) -> None:
+    def __init__(self, content=None, *arguments, **keywords):
+# #
+        '''
+            Generates a new high level wrapper around given object.
+
+            Examples:
+
+            >>> object = Object('hans')
+
+            >>> object
+            Object of "str" ('hans').
+            >>> object.content
+            'hans'
+
+            >>> object = Object(object)
+            >>> object
+            Object of "str" ('hans').
+            >>> object.content
+            'hans'
+
+            >>> object = Object()
+            >>> object.compatible_type is None
+            True
+            >>> object.content is None
+            True
+        '''
+        from boostNode.extension.file import Handler as FileHandler
+
+        # # # region properties
+
+        self.__class__.NONE_CONVERTABLE_ITERABLES.add(FileHandler)
+        if builtins.isinstance(content, self.__class__):
+            content = content.content
+        '''
+            NOTE: This property shouldn't be set via an instance property \
+            initializer since there nondeterministic problems in \
+            multiprocessing application.
+        '''
+        self.content = content
+        '''Saves a copy of currently saved object.'''
+        self._content_copy = {}
+
+        # # # endregion
+
+    @JointPoint
+# # python3.5     def __repr__(self: Self) -> builtins.str:
+    def __repr__(self):
+        '''Invokes if this object should describe itself by a string.'''
+        return 'Object of "{class_name}" ({content}).'.format(
+            class_name=self.content.__class__.__name__,
+            content=builtins.repr(self.content))
+
+    @JointPoint
+# # python3.5     def __str__(self: Self) -> builtins.str:
+    def __str__(self):
+        '''
+            Is triggered if this object should be converted to string.
+
+            Examples:
+
+            >>> str(Object(['hans']))
+            "['hans']"
+        '''
+# # python3.5         return builtins.str(self.content)
+        return convert_to_unicode(self.content)
+
+    @JointPoint
+# # python3.5
+# #     def __eq__(
+# #         self: Self, other: (builtins.object, builtins.type)
+# #     ) -> builtins.bool:
+    def __eq__(self, other):
+# #
+        '''
+            Is triggered if this object should be compared to another
+
+            Examples:
+
+            >>> Object('hans') == Object('hans')
+            True
+
+            >>> Object('hans') == Object(2)
+            False
+
+            >>> Object('hans') == 2
+            False
+        '''
+        if builtins.isinstance(other, self.__class__):
+            return self.content == other.content
+        return False
+
+    # # # endregion
+
+    # # # region boolean
+
+    @JointPoint
+# # python3.5     def is_convertable_iterable(self: Self) -> builtins.bool:
+    def is_convertable_iterable(self):
+        '''
+            Checks if current iterable is convertable.
+
+            Examples:
+
+            >>> Object(True).is_convertable_iterable()
+            False
+        '''
+        return builtins.isinstance(
+            self.content, NativeIterable
+        ) and not builtins.isinstance(self.content, builtins.tuple(
+            self.NONE_CONVERTABLE_ITERABLES))
+
+    @JointPoint
+# # python3.5     def is_hashable(self: Self) -> builtins.bool:
+    def is_hashable(self):
+        '''
+            Checks if current iterable is immutable.
+
+            Examples:
+
+            >>> Object(True).is_hashable()
+            True
+
+            >>> class A(list): pass
+            >>> Object(content=A).is_hashable()
+            True
+
+            >>> Object(A()).is_hashable()
+            False
+
+            >>> A.__hash__ = lambda: True
+            >>> Object(A).is_hashable()
+            True
+
+            >>> A.__hash__ = True
+            >>> Object(A()).is_hashable()
+            False
+
+            >>> Object(type).is_hashable()
+            True
+
+            >>> Object('').is_hashable()
+            True
+
+            >>> Object('s').is_hashable()
+            True
+
+            >>> Object(4).is_hashable()
+            True
+
+            >>> Object([]).is_hashable()
+            False
+
+            >>> Object(()).is_hashable()
+            True
+        '''
+        try:
+            builtins.hash(self.content)
+        except builtins.TypeError:
+            return False
+        else:
+            return True
+
+    # # # endregion
+
+    # # # region getter
+
+    @JointPoint(Class.pseudo_property)
+# # python3.5
+# #     def get_compatible_type(
+# #         self: Self, none_evaluation=True, boolean_evaluation=True,
+# #         number_evaluation=True
+# #     ) -> (builtins.object, builtins.type):
+    def get_compatible_type(
+        self, none_evaluation=True, boolean_evaluation=True,
+        number_evaluation=True
+    ):
+# #
+        '''
+            Converts data to python cross platform compatible data objects.
+
+            Examples:
+
+            >>> isinstance(Object(NativeDateTime(
+            ...     1970, 1, 1, 0, 0
+            ... )).compatible_type, float)
+            True
+
+            >>> isinstance(Object(NativeDate(
+            ...     1970, 1, 1
+            ... )).compatible_type, float)
+            True
+
+            >>> isinstance(Object(NativeTime(
+            ...     1, 1, 1, 0
+            ... )).compatible_type, float)
+            True
+
+            >>> isinstance(Object(NativeTimeDelta(
+            ...     1, 1
+            ... )).compatible_type, float)
+            True
+
+            >>> Object('hans').compatible_type
+            'hans'
+
+            >>> Object(1).compatible_type
+            1
+
+            >>> Object(None).compatible_type is None
+            True
+
+            >>> Object(.1).compatible_type
+            0.1
+
+            >>> Object(False).compatible_type
+            False
+
+            >>> Object(True).compatible_type
+            True
+
+            >>> Object({'A'}).compatible_type == str(['A'])
+            True
+
+            >>> Object(('A',)).compatible_type == str(['A'])
+            True
+
+            >>> from boostNode.extension.file import Handler as FileHandler
+            >>> Object(FileHandler()).compatible_type # doctest: +ELLIPSIS
+            {...}
+
+            >>> backup = FileHandler.EXPORTABLE_ATTRIBUTES
+            >>> FileHandler.EXPORTABLE_ATTRIBUTES = {}
+            >>> Object(FileHandler()).compatible_type
+            {}
+            >>> FileHandler.EXPORTABLE_ATTRIBUTES = backup
+
+            >>> Object(CGIFieldStorage()).compatible_type
+            {}
+        '''
+        from boostNode.extension.file import Handler as FileHandler
+
+        for date_time_type, converter in builtins.filter(
+            lambda item: builtins.isinstance(self.content, item[0]),
+            self.DATE_TIME_CONVERTER.items()
+        ):
+            return converter(self.content)
+        if builtins.isinstance(self.content, CGIFieldStorage):
+            return self._get_compatible_cgi_field_storage_type()
+        if builtins.isinstance(self.content, FileHandler):
+            result = {}
+            for name in FileHandler.EXPORTABLE_ATTRIBUTES:
+                result[name] = builtins.getattr(self.content, name)
+            return result
+        content = self._handle_aggressive_evaluation(
+            none_evaluation, boolean_evaluation, number_evaluation)
+        if builtins.isinstance(content, (builtins.set, builtins.tuple)):
+            content = builtins.list(content)
+        if not builtins.isinstance(content, (
+            builtins.int, builtins.float, builtins.type(None)
+        )):
+# # python3.5             return builtins.str(content)
+            return convert_to_unicode(content)
+        return content
+
+    @JointPoint(Class.pseudo_property)
+# # python3.5
+# #     def get_known_type(
+# #         self: Self, description=None, strict=None,
+# #         none_evaluation=True, boolean_evaluation=True,
+# #         number_evaluation=True
+# #     ) -> (builtins.object, builtins.type):
+    def get_known_type(
+        self, description=None, strict=None, none_evaluation=True,
+        boolean_evaluation=True, number_evaluation=True
+    ):
+# #
+        '''
+            Converts interpretable data to python specific data objects.
+
+            **description**        - Additional information how given input \
+                                     should be interpreted. Possible inputs \
+                                     could be: "date_time", "*_date_time", \
+                                     "*DateTime*, "date", "*_date", "*Date", \
+                                     "time", "*_time", "*Time", \
+                                     "phone_number", "*_phone_number", \
+                                     "*PhoneNumber", "zip_code", \
+                                     "*_zip_code", "*ZipCode", "time_delta", \
+                                     "*_time_delta", "*TimeDelta"
+
+            **strict**             - If evaluates to true and a description \
+                                     is given and exception will be raised if \
+                                     current value couldn't be interpreted. \
+                                     If evaluates to "None" current value \
+                                     will be returned if evaluations fails. \
+                                     If strict evaluates to false "None" will \
+                                     be given back if current value couldn't \
+                                     be interpreted.
+
+            **none_evaluation**    - Tries to evaluate to a none value.
+
+            **boolean_evaluation** - Tries to evaluate to a boolean.
+
+            **number_evaluation**  - Tries to evaluate to a number.
+
+            Examples:
+
+            >>> Object().known_type is None
+            True
+
+            >>> Object(0).get_known_type(
+            ...     'date_time'
+            ... ) == NativeDateTime.fromtimestamp(0)
+            True
+
+            >>> Object(0).get_known_type('date') == NativeDate.fromtimestamp(0)
+            True
+
+            >>> Object(0).get_known_type('time') == NativeTime(0)
+            True
+
+            >>> Object(0).get_known_type('time_delta') == NativeTimeDelta(0)
+            True
+
+            >>> Object(0).known_type
+            0
+
+            >>> Object(True).known_type
+            True
+
+            >>> Object('ap9c').get_known_type('phone_number')
+            '9'
+
+            >>> Object('abc').get_known_type('zip_code', strict=True)
+            Traceback (most recent call last):
+            ...
+            NativeError: "abc" couldn't be interpreted as "ZipCode".
+
+            >>> Object('abc').get_known_type('zip_code')
+            'abc'
+
+            >>> Object('abc').get_known_type('zip_code', strict=False) is None
+            True
+
+            >>> Object('ap9c').known_type
+            'ap9c'
+
+            >>> Object('9').known_type
+            9
+
+            >>> Object('9').get_known_type(number_evaluation=False)
+            '9'
+
+            >>> Object('true').known_type
+            True
+
+            >>> Object('true').get_known_type(boolean_evaluation=False)
+            'true'
+
+            >>> Object('false').known_type
+            False
+
+            >>> Object('false').get_known_type(boolean_evaluation=False)
+            'false'
+
+            >>> Object('none').known_type is None
+            True
+
+            >>> Object('none').get_known_type(none_evaluation=False)
+            'none'
+        '''
+        if self.content is None:
+            return self.content
+# # python3.5
+# #         if builtins.isinstance(description, builtins.str):
+        if builtins.isinstance(description, (
+            builtins.unicode, builtins.str
+        )):
+# #
+            try:
+                result = self._create_known_type(description)
+                if result is not None:
+                    return result
+            except __exception__:
+                if strict:
+                    raise
+                return self.content if strict is None else None
+        return self._handle_aggressive_evaluation(
+            none_evaluation, boolean_evaluation, number_evaluation)
+
+    # # # endregion
+
+    @JointPoint
+# # python3.5
+# #     def calculate_difference(
+# #         self: Self, value: (builtins.object, builtins.type),
+# #         null_value=Null
+# #     ) -> (builtins.object, builtins.type):
+    def calculate_difference(self, value, null_value=Null):
+# #
+        '''
+            Returns the difference between content and given value in a
+            recursive manner.
+
+            **value**      - value to compare with current content.
+
+            **null_value** - placeholder for equal values in both given values
+                             to compare (defaults to
+                             "boostNode.extension.type.Null").
+
+            Returns the difference between content and given value.
+
+            Examples:
+
+            >>> Object(1).calculate_difference(value=2)
+            2
+
+            >>> Object(None).calculate_difference(
+            ...     value=None
+            ... ) # doctest: +ELLIPSIS
+            <class boostNode.extension.type.Null at ...>
+
+            >>> Object(1).calculate_difference(value=1, null_value=2)
+            2
+
+            >>> Object([]).calculate_difference(
+            ...     value=[], null_value=None
+            ... ) is None
+            True
+
+            >>> Object([]).calculate_difference(value=2, null_value=None)
+            2
+
+            >>> Object(2).calculate_difference(value=[], null_value=None)
+            []
+
+            >>> Object([1, 2]).calculate_difference(
+            ...     value=[1, 2], null_value=None
+            ... ) is None
+            True
+
+            >>> Object([1, 2]).calculate_difference(
+            ...     value=[1, 2, 3], null_value=None)
+            [1, 2, 3]
+
+            >>> Object([1, 2, 3]).calculate_difference(
+            ...     value=[1, 2, 4], null_value=None)
+            [None, None, 4]
+
+            >>> Object([1, 2, [1, 2]]).calculate_difference(
+            ...     value=[1, 2, [1, 2]], null_value=None
+            ... ) is None
+            True
+
+            >>> Object([1, 2, [1, 2]]).calculate_difference(
+            ...     value=[1, 2, [1, 3]], null_value=None)
+            [None, None, [None, 3]]
+
+            >>> Object({'a': 1, 'b': 2}).calculate_difference(
+            ...     value={'a': 1, 'b': 2}, null_value=None
+            ... ) is None
+            True
+
+            >>> Object({'a': 1, 'b': 2}).calculate_difference(
+            ...     value={'a': 1, 'b': 3}, null_value=None)
+            {'b': 3}
+
+            >>> Object({'a': 1, 'b': [2]}).calculate_difference(
+            ...     value={'a': 1, 'b': [2]}, null_value=None
+            ... ) is None
+            True
+
+            >>> Object({'a': 1, 'b': [2]}).calculate_difference(
+            ...     value={'a': 1, 'b': [3]}, null_value=None)
+            {'b': [3]}
+
+            >>> Object({'a': 1, 'b': [2]}).calculate_difference(
+            ...     value={'c': 1, 'b': [3]}, null_value=None)
+            {'c': 1, 'b': [3]}
+
+            >>> Object({'a': 1, 'b': [2]}).calculate_difference(
+            ...     value={'c': 1}, null_value=None)
+            {'c': 1}
+        '''
+        if builtins.type(self.content) != builtins.type(value):
+            return value
+# # python3.5
+# #         if builtins.isinstance(
+# #             value, NativeIterable
+# #         ) and not builtins.isinstance(value, builtins.str):
+        if builtins.isinstance(
+            value, NativeIterable
+        ) and not builtins.isinstance(value, builtins.unicode):
+# #
+            result = builtins.type(value)()
+            has_content = False
+            if builtins.isinstance(value, builtins.list):
+                if builtins.len(self.content) != builtins.len(value):
+                    return value
+                for index, sub_value in builtins.enumerate(value):
+                    if builtins.isinstance(sub_value, NativeIterable):
+                        sub_result = self.__class__(
+                            self.content[index]
+                        ).calculate_difference(sub_value, null_value)
+                        if sub_result != null_value:
+                            has_content = True
+                        result.append(sub_result)
+                    elif sub_value == self.content[index]:
+                        result.append(null_value)
+                    else:
+                        has_content = True
+                        result.append(sub_value)
+            else:
+                if builtins.isinstance(value, builtins.dict):
+                    iterator = value.items()
+                else:
+                    iterator = value
+                for key, sub_value in iterator:
+                    if key in self.content:
+# # python3.5
+# #                         if builtins.isinstance(
+# #                             sub_value, NativeIterable
+# #                         ) and not builtins.isinstance(
+# #                             sub_value, builtins.str
+# #                         ):
+                        if builtins.isinstance(
+                            sub_value, NativeIterable
+                        ) and not builtins.isinstance(
+                            sub_value, builtins.unicode
+                        ):
+# #
+                            sub_result = self.__class__(
+                                self.content[key]
+                            ).calculate_difference(sub_value, null_value)
+                            if sub_result != null_value:
+                                has_content = True
+                                result[key] = sub_result
+                        elif sub_value != self.content[key]:
+                            has_content = True
+                            result[key] = sub_value
+                    else:
+                        has_content = True
+                        result[key] = sub_value
+            if not has_content:
+                return null_value
+            return result
+        if self.content == value:
+            return null_value
+        return value
+
+    @JointPoint
+# # python3.5     def copy(self: Self) -> builtins.dict:
+    def copy(self):
+        '''
+            Copies a given object's attributes and returns them.
+
+            Examples:
+
+            >>> class A: pass
+            >>> a = A()
+            >>> a.string = 'hans'
+            >>> object_copy = Object(a).copy()
+            >>> for key, value in object_copy.items():
+            ...     if 'string' == key:
+            ...         print(value)
+            hans
+
+            >>> class B: hans = 'A'
+            >>> object = Object(B())
+            >>> object_copy = object.copy()
+            >>> object.content.hans = 'B'
+            >>> object.content.hans
+            'B'
+            >>> object_copy['hans']
+            'A'
+        '''
+        self._content_copy = {}
+        for attribute_name in builtins.dir(self.content):
+            attribute = builtins.getattr(self.content, attribute_name)
+            if not ((attribute_name.startswith('__') and
+                     attribute_name.endswith('__')) or
+                    builtins.callable(attribute)):
+                self._content_copy[attribute_name] = copy(
+                    builtins.getattr(self.content, attribute_name))
+        return self._content_copy
+
+    @JointPoint
+# # python3.5     def restore(self: Self) -> (builtins.object, builtins.type):
+    def restore(self):
+        '''
+            Restores a given object's attributes by a given copy are last \
+            copied item.
+
+            Examples:
+
+            >>> class A: pass
+            >>> A.string = 'hans'
+            >>> object = Object(A)
+            >>> object.copy()
+            {'string': 'hans'}
+            >>> A.string = 'peter'
+            >>> object.restore() # doctest: +ELLIPSIS
+            <class ...A...>
+            >>> A.string
+            'hans'
+
+            >>> class A:
+            ...     hans = 'A'
+            ...     __special__ = 'B'
+            >>> object = Object(A())
+            >>> object_copy = object.copy()
+            >>> object.content.hans = 'B'
+            >>> object.content.hans
+            'B'
+            >>> object.restore().hans
+            'A'
+        '''
+        for attribute, value in self._content_copy.items():
+            builtins.setattr(self.content, attribute, value)
+        return self.content
+
+    @JointPoint
+# # python3.5     def is_binary(self: Self) -> builtins.bool:
+    def is_binary(self):
+        '''
+            Determines if given data is binary.
+
+            Examples:
+
+            >>> Object('A').is_binary()
+            False
+
+            >>> if sys.version_info.major < 3:
+            ...     Object(chr(1)).is_binary()
+            ... else:
+            ...     Object(bytes('A', 'utf_8')).is_binary()
+            True
+
+            >>> if sys.version_info.major < 3:
+            ...     Object(unicode('hans')).is_binary()
+            ... else:
+            ...     Object('hans').is_binary()
+            False
+        '''
+# # python3.5
+# #         return builtins.isinstance(self.content, builtins.bytes)
+        '''
+            NOTE: This is a dirty workaround to handle python2.7 lack of \
+            differentiation between "string" and "bytes" objects.
+        '''
+        content = self.content
+        if builtins.isinstance(content, builtins.unicode):
+            content = content.encode(ENCODING)
+        text_chars = builtins.str().join(builtins.map(
+            builtins.chr,
+            builtins.range(7, 14) + [27] + builtins.range(0x20, 0x100)))
+        return builtins.hasattr(content, 'translate') and builtins.bool(
+            content.translate(None, text_chars))
+# #
+
+    # # endregion
+
+    # # region protected
+
+    @JointPoint
+# # python3.5
+# #     def _get_compatible_cgi_field_storage_type(self: Self) -> (
+# #         builtins.object, builtins.type
+# #     ):
+    def _get_compatible_cgi_field_storage_type(self):
+# #
+        '''
+            Convert form field values and potential binary data into a simple \
+            dictionary.
+        '''
+        try:
+            result = {}
+            for name in self.content:
+                result[name] = []
+                if builtins.hasattr(
+                    self.content[name], 'file'
+                ) and self.content[name].filename:
+                    result[name].append('__binary_file_data__')
+                elif builtins.isinstance(self.content[name], builtins.list):
+                    for value in self.content[name]:
+                        result[name].append(
+                            self._get_compatible_cgi_file_or_value(value))
+                else:
+                    result[name].append(self.content[name].value)
+            return result
+        except builtins.TypeError:
+            if builtins.hasattr(
+                self.content, 'file'
+            ) and self.content.filename:
+                return {self.content.filename: '__binary_file_data__'}
+            return {name: value.value}
+
+    @JointPoint
+# # python3.5
+# #     def _get_compatible_cgi_file_or_value(
+# #         self, value: CGIFieldStorage
+# #     ) -> builtins.object:
+    def _get_compatible_cgi_file_or_value(self, value):
+# #
+        '''
+            Returns a compatible value for given field storage value. If \
+            binary data detected an indicator string will be returned.
+        '''
+        if builtins.hasattr(value, 'file') and value.filename:
+            return '__binary_file_data__'
+        return value.value
+
+    @JointPoint
+# # python3.5
+# #     def _create_known_type(self: Self, description: (
+# #         builtins.str, builtins.type(None)
+# #     )) -> (
+# #         NativeDateTime, NativeDate, NativeTime, NativeTimeDelta,
+# #         builtins.str, builtins.type(None)
+# #     ):
+    def _create_known_type(self, description):
+# #
+        '''Creates a known type depending on given description.'''
+        for type_description in (
+            'date_time', 'date', 'time', 'phone_number', 'zip_code',
+            'time_delta'
+        ):
+            class_name = String(
+                type_description
+            ).delimited_to_camel_case.camel_case_capitalize.content
+            if description == type_description or description.endswith(
+                '_%s' % type_description
+            ) or description.endswith(class_name):
+                return builtins.globals()[class_name](self.content).content
+
+    @JointPoint
+# # python3.5
+# #     def _handle_aggressive_evaluation(
+# #         self: Self, none_evaluation: builtins.bool,
+# #         boolean_evaluation: builtins.bool, number_evaluation: builtins.bool
+# #     ) -> (
+# #         builtins.str, builtins.int, builtins.float, builtins.bool
+# #     ):
+    def _handle_aggressive_evaluation(
+        self, none_evaluation, boolean_evaluation, number_evaluation
+    ):
+        '''Handles semantic conversion to boolean or numeric values.'''
+# # python3.5
+# #         if none_evaluation and builtins.isinstance(
+# #             self.content, builtins.str
+# #         ) and self.content.lower() == 'none':
+        if none_evaluation and builtins.isinstance(self.content, (
+            builtins.unicode, builtins.str
+        )) and self.content.lower() == 'none':
+# #
+            return None
+# # python3.5
+# #         if boolean_evaluation and builtins.isinstance(
+# #             self.content, builtins.str
+# #         ):
+        if boolean_evaluation and builtins.isinstance(self.content, (
+            builtins.unicode, builtins.str
+        )):
+# #
+            if self.content.lower() == 'true':
+                return True
+            if self.content.lower() == 'false':
+                return False
+# # python3.5
+# #         if number_evaluation and builtins.isinstance(
+# #             self.content, builtins.str
+# #         ):
+# #             return String(self.content).number
+        if number_evaluation and builtins.isinstance(self.content, (
+            builtins.unicode, builtins.str
+        )):
+            number = String(self.content).number
+            if builtins.isinstance(number, builtins.str):
+                return convert_to_unicode(number)
+            return number
+# #
+        return self.content
+
+    # # endregion
 
     # endregion
 
@@ -1484,7 +1885,7 @@ class String(Object, builtins.str):
         'ÃÂ±': '&ntilde;',
         'ÃÂ¾': '&thorn;'}
     '''All chars wich should be observed by handling with html sequences.'''
-    abbreviations = 'html', 'id', 'url', 'us', 'de', 'api'
+    abbreviations =  'html', 'id', 'url', 'us', 'de', 'api', 'href'
     '''Saves a mapping of typical shortcut words to improve camel casing.'''
 
     # endregion
@@ -1495,9 +1896,10 @@ class String(Object, builtins.str):
 
     @JointPoint(builtins.classmethod)
     @Class.pseudo_property
-# # python3.4
+# # python3.5
 # #     def get_escaping_replace_dictionary(
-# #         cls: SelfClass, sequence: Iterable, escape_sequence='\{symbole}'
+# #         cls: SelfClass, sequence: NativeIterable,
+# #         escape_sequence='\{symbole}'
 # #     ) -> builtins.dict:
     def get_escaping_replace_dictionary(
         cls, sequence, escape_sequence='\{symbole}'
@@ -1533,18 +1935,18 @@ class String(Object, builtins.str):
                 symbole=element)
         return escaping_dictionary
 
-        # endregion
+    # # endregion
 
     # endregion
 
     # region dynamic methods
 
-        # region public
+    # # region public
 
-        # # region special
+    # # # region special
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def __init__(
 # #         self: Self, content=None, *arguments: builtins.object,
 # #         **keywords: builtins.object
@@ -1581,7 +1983,7 @@ class String(Object, builtins.str):
             ...     False
             ... else:
             ...     String(
-            ...         'Ã¶'.encode('latin1')
+            ...         'ä'.encode('latin1')
             ...     ).encoding  == String.IMPORTANT_ENCODINGS[0]
             False
         '''
@@ -1594,25 +1996,22 @@ class String(Object, builtins.str):
         if content is None:
             content = ''
         self.encoding = self.IMPORTANT_ENCODINGS[0]
-# # python3.4
+# # python3.5
 # #         if builtins.isinstance(content, builtins.bytes):
 # #             self.encoding, content = self._determine_encoding(content)
-# #         if not builtins.isinstance(content, builtins.str):
-# #             content = builtins.str(content)
+# #         self.content = builtins.str(content)
         '''
             NOTE: We don't support automatic encoding detection for python2.X \
             because it would be too expensive if we can't distinguish \
             between bytes and strings.
         '''
-        if not builtins.isinstance(content, builtins.str):
-            content = convert_to_string(content)
+        self.content = convert_to_unicode(content)
 # #
-        self.content = content
 
         # # # endregion
 
     @JointPoint
-# # python3.4     def __len__(self: Self) -> builtins.int:
+# # python3.5     def __len__(self: Self) -> builtins.int:
     def __len__(self):
         '''
             Triggers if the pythons native "builtins.len()" function tries to \
@@ -1627,10 +2026,11 @@ class String(Object, builtins.str):
             >>> len(String('hans'))
             4
         '''
-        return builtins.len(self.__str__())
+# # python3.5         return builtins.len(self.__str__())
+        return builtins.len(self.__unicode__())
 
     @JointPoint
-# # python3.4     def __str__(self: Self) -> builtins.str:
+# # python3.5     def __str__(self: Self) -> builtins.str:
     def __unicode__(self):
         '''
             Triggers if the current object should be directly interpreted as \
@@ -1644,11 +2044,10 @@ class String(Object, builtins.str):
             >>> str(String())
             ''
         '''
-# # python3.4         return self.content
-        return convert_to_unicode(self.content)
+        return self.content
 
     @JointPoint
-# # python3.4     def __bool__(self: Self) -> builtins.bool:
+# # python3.5     def __bool__(self: Self) -> builtins.bool:
     def __nonzero__(self):
         '''
             Triggers if the current object should be interpreted as a boolean \
@@ -1668,7 +2067,7 @@ class String(Object, builtins.str):
         return builtins.bool(self.content)
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def __eq__(self: Self, other: (
 # #         SelfClassObject, builtins.str, builtins.object
 # #     )) -> builtins.bool:
@@ -1692,12 +2091,171 @@ class String(Object, builtins.str):
             return self.content == other.content
         return self.content == other
 
-        # # endregion
+    # # # endregion
 
-        # # region getter
+    # # # region getter
 
     @JointPoint(Class.pseudo_property)
-# # python3.4     def get_number(self: Self, default=None, slice=False):
+# # python3.5
+# #     def get_escape_sequences_to_html(self: Self) -> Self:
+    def get_escape_sequences_to_html(self):
+# #
+        '''
+            Transforms given text input with shell escape sequences to a \
+            valid html snippet.
+
+            Examples:
+
+            >>> from boostNode.extension.output import SET_ATTRIBUTE_MODE
+            >>> SET_OUTPUT_ATTRIBUTE_MODE = SET_ATTRIBUTE_MODE
+            >>> from boostNode.extension.output import RESET_ATTRIBUTE_MODE
+            >>> RESET_OUTPUT_ATTRIBUTE_MODE = RESET_ATTRIBUTE_MODE
+            >>> from boostNode.extension.output import COLOR as OUTPUT_COLOR
+            >>> from boostNode.extension.output import HIDDEN as OUTPUT_HIDDEN
+
+            >>> String('hans ' + (
+            ...     SET_OUTPUT_ATTRIBUTE_MODE %
+            ...         OUTPUT_COLOR['foreground']['red']
+            ... ) + 'peter' + SET_OUTPUT_ATTRIBUTE_MODE %
+            ...     RESET_OUTPUT_ATTRIBUTE_MODE
+            ... ).escape_sequences_to_html.content
+            'hans <span style="color: red">peter</span>'
+
+            >>> String('hans ' + (
+            ...     SET_OUTPUT_ATTRIBUTE_MODE % OUTPUT_HIDDEN
+            ... ) + 'peter' + SET_OUTPUT_ATTRIBUTE_MODE %
+            ...     RESET_OUTPUT_ATTRIBUTE_MODE
+            ... ).escape_sequences_to_html.content
+            'hans <span style="visibility: hidden">peter</span>'
+
+            >>> String('hans ' + (
+            ...     SET_OUTPUT_ATTRIBUTE_MODE % 9999
+            ... ) + 'peter' + SET_OUTPUT_ATTRIBUTE_MODE %
+            ...     RESET_OUTPUT_ATTRIBUTE_MODE
+            ... ).escape_sequences_to_html.content
+            'hans <span class="console-output-mode-9999">peter</span>'
+
+            >>> String('hans <pre>TEST</pre>').escape_sequences_to_html.content
+            'hans &lt;pre&gt;TEST&lt;/pre&gt;'
+        '''
+        from boostNode.extension.output import SET_ATTRIBUTE_MODE as \
+            SET_OUTPUT_ATTRIBUTE_MODE
+        from boostNode.extension.output import RESET_ATTRIBUTE_MODE as \
+            RESET_OUTPUT_ATTRIBUTE_MODE
+        from boostNode.extension.output import COLOR as OUTPUT_COLOR
+        from boostNode.extension.output import HIGH_COLOR as \
+            HIGH_OUTPUT_COLOR
+        from boostNode.extension.output import HIDDEN as OUTPUT_HIDDEN
+        from boostNode.extension.output import BOLD as OUTPUT_BOLD
+        from boostNode.extension.output import DIM as OUTPUT_DIM
+        from boostNode.extension.output import ITALIC as OUTPUT_ITALIC
+        from boostNode.extension.output import UNDERLINE as OUTPUT_UNDERLINE
+        from boostNode.extension.output import BLINK as OUTPUT_BLINK
+        from boostNode.extension.output import REVERSE as OUTPUT_REVERSE
+        from boostNode.extension.output import CROSSED_OUT as \
+            OUTPUT_CROSSED_OUT
+        from boostNode.extension.output import DEFAULT_FONT as \
+            OUTPUT_DEFAULT_FONT
+        from boostNode.extension.output import FONT_1 as OUTPUT_FONT_1
+        from boostNode.extension.output import FONT_2 as OUTPUT_FONT_2
+        from boostNode.extension.output import FONT_3 as OUTPUT_FONT_3
+        from boostNode.extension.output import FONT_4 as OUTPUT_FONT_4
+        from boostNode.extension.output import FONT_5 as OUTPUT_FONT_5
+        from boostNode.extension.output import FONT_6 as OUTPUT_FONT_6
+        from boostNode.extension.output import FONT_7 as OUTPUT_FONT_7
+        from boostNode.extension.output import FRAKTUR_HARDLY as \
+            OUTPUT_FRAKTUR_HARDLY
+        from boostNode.extension.output import BOLD_OFF as OUTPUT_BOLD_OFF
+        from boostNode.extension.output import BOLD_INTENSITY_OFF as \
+            OUTPUT_BOLD_INTENSITY_OFF
+        from boostNode.extension.output import ITALIC_OFF as OUTPUT_ITALIC_OFF
+        from boostNode.extension.output import UNDERLINE_OFF as \
+            OUTPUT_UNDERLINE_OFF
+        from boostNode.extension.output import BLINK_OFF as OUTPUT_BLINK_OFF
+        from boostNode.extension.output import RESERVERD_1 as \
+            OUTPUT_RESERVERD_1
+        from boostNode.extension.output import REVERSE_OFF as \
+            OUTPUT_REVERSE_OFF
+        from boostNode.extension.output import REVEAL_OFF as OUTPUT_REVEAL_OFF
+        from boostNode.extension.output import CROSSED_OUT_OFF as \
+            OUTPUT_CROSSED_OUT_OFF
+        from boostNode.extension.output import RESERVED_2 as OUTPUT_RESERVED_2
+        from boostNode.extension.output import FRAMED as OUTPUT_FRAMED
+        from boostNode.extension.output import ENCIRCLED as OUTPUT_ENCIRCLED
+        from boostNode.extension.output import OVERLINED as OUTPUT_OVERLINED
+        from boostNode.extension.output import FRAMED_ENCIRCLED_OFF as \
+            OUTPUT_FRAMED_ENCIRCLED_OFF
+        from boostNode.extension.output import OVERLINED_OFF as \
+            OUTPUT_OVERLINED_OFF
+        from boostNode.extension.output import RESERVED_3 as OUTPUT_RESERVED_3
+        from boostNode.extension.output import RESERVED_4 as OUTPUT_RESERVED_4
+        from boostNode.extension.output import RESERVED_5 as OUTPUT_RESERVED_5
+        from boostNode.extension.output import RESERVED_6 as OUTPUT_RESERVED_6
+        from boostNode.extension.output import IDEOGRAM_UNDERLINE as \
+            OUTPUT_IDEOGRAM_UNDERLINE
+        from boostNode.extension.output import IDEOGRAM_DOUBLE_UNDERLINE as \
+            OUTPUT_IDEOGRAM_DOUBLE_UNDERLINE
+        from boostNode.extension.output import IDEOGRAM_OVERLINE as \
+            OUTPUT_IDEOGRAM_OVERLINE
+        from boostNode.extension.output import IDEOGRAM_DOUBLE_OVERLINE as \
+            OUTPUT_IDEOGRAM_DOUBLE_OVERLINE
+        from boostNode.extension.output import IDEOGRAM_STRESS_MARKING as \
+            OUTPUT_IDEOGRAM_STRESS_MARKING
+        from boostNode.extension.output import IDEOGRAM_OFF as \
+            OUTPUT_IDEOGRAM_OFF
+
+        def replace_handler(match):
+            '''Replaces each console sequence with corresponding html code.'''
+            mode = builtins.int(match.group('mode'))
+            if mode in (
+                RESET_OUTPUT_ATTRIBUTE_MODE, OUTPUT_UNDERLINE_OFF,
+                OUTPUT_BLINK_OFF, OUTPUT_REVEAL_OFF, OUTPUT_CROSSED_OUT_OFF,
+                OUTPUT_IDEOGRAM_OFF, OUTPUT_FRAMED_ENCIRCLED_OFF,
+                OUTPUT_OVERLINED_OFF
+            ):
+                return '</span>'
+            mapping = {
+                OUTPUT_HIDDEN: 'visibility: hidden',
+                OUTPUT_BOLD: 'font-weight: bold',
+                OUTPUT_DIM: 'opacity: .5',
+                OUTPUT_ITALIC: 'font-style: italic',
+                OUTPUT_UNDERLINE: 'text-decoration: underline',
+                OUTPUT_BLINK: 'text-decoration: blink',
+                OUTPUT_CROSSED_OUT: 'text-decoration: line-through',
+                OUTPUT_DEFAULT_FONT: 'font-family: initial',
+                OUTPUT_FRAKTUR_HARDLY: 'font-family: UnifrakturCook',
+                OUTPUT_BOLD_OFF: 'font-weight: normal',
+                OUTPUT_BOLD_INTENSITY_OFF: 'font-weight: normal',
+                OUTPUT_ITALIC_OFF: 'font-style: normal',
+                OUTPUT_FRAMED: 'border: 1px solid',
+                OUTPUT_ENCIRCLED:
+                    'border-radius: 50%; text-align: center; border: 1px '
+                    'solid',
+                OUTPUT_OVERLINED: 'text-decoration: overline',
+                OUTPUT_IDEOGRAM_UNDERLINE: 'text-decoration: underline',
+                OUTPUT_IDEOGRAM_DOUBLE_UNDERLINE: 'border-bottom: 1px double',
+                OUTPUT_IDEOGRAM_OVERLINE: 'text-decoration: overline',
+                OUTPUT_IDEOGRAM_DOUBLE_OVERLINE: 'border-top: 1px double',
+                OUTPUT_IDEOGRAM_STRESS_MARKING:
+                    'font-weight: bold, color: red'}
+            if mode in mapping:
+                return '<span style="%s">' % mapping[mode]
+            for type, directive_prefix in {
+                'foreground': '', 'background': 'background-'
+            }.items():
+                for color, color_mode in OUTPUT_COLOR[type].items():
+                    if mode == color_mode:
+                        return '<span style="%scolor: %s">' % (
+                            directive_prefix, color.lower())
+            return '<span class="console-output-mode-%d">' % mode
+        self.content = regularExpression.compile(self.__class__(
+            SET_OUTPUT_ATTRIBUTE_MODE
+        ).regex_validated.substitute('%d', '(?P<mode>[0-9]+)').content
+        ).sub(replace_handler, self.html_validated.content)
+        return self
+
+    @JointPoint(Class.pseudo_property)
+# # python3.5     def get_number(self: Self, default=None, slice=False):
     def get_number(self, default=None, slice=False):
         '''
             Returns a number representation of current string content if \
@@ -1755,7 +2313,7 @@ class String(Object, builtins.str):
                 return default
 
     @JointPoint(Class.pseudo_property)
-# # python3.4     def get_camel_case_capitalize(self: Self) -> Self:
+# # python3.5     def get_camel_case_capitalize(self: Self) -> Self:
     def get_camel_case_capitalize(self):
         '''
             Acts like pythons native "builtins.str.capitalize()" method but \
@@ -1774,7 +2332,7 @@ class String(Object, builtins.str):
         return self
 
     @JointPoint(Class.pseudo_property)
-# # python3.4
+# # python3.5
 # #     def get_delimited_to_camel_case(
 # #         self: Self, delimiter='_', abbreviations=None,
 # #         preserve_wrong_formatted_abbreviations=False
@@ -1867,48 +2425,34 @@ class String(Object, builtins.str):
         '''
         if abbreviations is None:
             abbreviations = self.abbreviations
-        delimiter = self.__class__(delimiter).regex_validated.content
+        '''NOTE: This is only for performance improvements.'''
+        if delimiter in self.SPECIAL_REGEX_SEQUENCES:
+            delimiter = self.__class__(delimiter).regex_validated.content
         if preserve_wrong_formatted_abbreviations:
-            abbreviations = ')|(?:'.join(abbreviations)
+            abbreviations = '|'.join(abbreviations)
         else:
-            abbreviations = ')|(?:'.join(builtins.map(
-                lambda abbreviation: '%s)|(?:%s' % (
+            abbreviations = '|'.join(builtins.map(
+                lambda abbreviation: '%s|%s' % (
                     abbreviation.capitalize(), abbreviation),
                 abbreviations))
-# # python3.4
-# #         self.content = regularExpression.compile(
-# #             '(?!^)(?P<before>%s)(?P<abbreviation>(?:%s))'
-# #             '(?P<after>%s|$)' % (delimiter, abbreviations, delimiter)
-# #         ).sub(
-# #             lambda match: '%s%s%s' % (
-# #                 match.group('before'),
-# #                 match.group('abbreviation').upper(),
-# #                 match.group('after')
-# #             ), self.content)
-# #         self.content = regularExpression.compile(
-# #             '(?!^)%s(?P<first_letter>[a-zA-Z0-9])' % delimiter
-# #         ).sub(
-# #             lambda match: match.group('first_letter').upper(),
-# #             self.content)
         self.content = regularExpression.compile(
-            '(?!^)(?P<before>%s)(?P<abbreviation>(?:%s))'
-            '(?P<after>%s|$)' % (delimiter, abbreviations, delimiter)
+            '(?!^)(?P<before>%s)(?P<abbreviation>%s)(?P<after>%s|$)' % (
+                delimiter, abbreviations, delimiter)
         ).sub(
             lambda match: '%s%s%s' % (
-                match.group('before'), match.group('abbreviation').upper(),
+                match.group('before'),
+                match.group('abbreviation').upper(),
                 match.group('after')
-            ), convert_to_unicode(self.content))
+            ), self.content)
         self.content = regularExpression.compile(
             '(?!^)%s(?P<first_letter>[a-zA-Z0-9])' % delimiter
         ).sub(
             lambda match: match.group('first_letter').upper(),
-            self.content
-        ).encode(ENCODING)
-# #
+            self.content)
         return self
 
     @JointPoint(Class.pseudo_property)
-# # python3.4
+# # python3.5
 # #     def get_camel_case_to_delimited(
 # #         self: Self, delimiter='_', abbreviations=None
 # #     ) -> Self:
@@ -1954,32 +2498,21 @@ class String(Object, builtins.str):
         if abbreviations is None:
             abbreviations = self.abbreviations
         escaped_delimiter = self.__class__(delimiter).regex_validated.content
-        abbreviations = ')|(?:'.join(builtins.map(
+        abbreviations = '|'.join(builtins.map(
             lambda abbreviation: abbreviation.upper(), abbreviations))
-# # python3.4
-# #         self.content = regularExpression.compile(
-# #             '((?:%s))((?:%s))' % (abbreviations, abbreviations)
-# #         ).sub('\\1%s\\2' % delimiter, self.content)
         self.content = regularExpression.compile(
-            '((?:%s))((?:%s))' % (abbreviations, abbreviations)
-        ).sub('\\1%s\\2' % delimiter, convert_to_unicode(self.content))
-# #
+            '(%s)(%s)' % (abbreviations, abbreviations)
+        ).sub('\\1%s\\2' % delimiter, self.content)
         self.content = regularExpression.compile(
             '([^%s])([A-Z][a-z]+)' % escaped_delimiter
         ).sub('\\1%s\\2' % delimiter, self.content)
-# # python3.4
-# #         self.content = regularExpression.compile(
-# #             '([a-z0-9])([A-Z])'
-# #         ).sub('\\1%s\\2' % delimiter, self.content).lower()
         self.content = regularExpression.compile(
             '([a-z0-9])([A-Z])'
-        ).sub('\\1%s\\2' % delimiter, self.content).lower().encode(
-            ENCODING)
-# #
+        ).sub('\\1%s\\2' % delimiter, self.content).lower()
         return self
 
     @JointPoint(Class.pseudo_property)
-# # python3.4
+# # python3.5
 # #     def get_delimited(
 # #         self: Self, delimiter='-', search_pattern='a-zA-Z'
 # #     ) -> Self:
@@ -2032,10 +2565,10 @@ class String(Object, builtins.str):
             ), '\\1'
         ).substitute('[^%s]+' % search_pattern, delimiter)
 
-        # # # region validation
+    # # # # region validation
 
     @JointPoint(Class.pseudo_property)
-# # python3.4     def get_shell_validated(self: Self) -> Self:
+# # python3.5     def get_shell_validated(self: Self) -> Self:
     def get_shell_validated(self):
         '''
             Validates the current string for using as a command in shell. \
@@ -2067,7 +2600,7 @@ class String(Object, builtins.str):
                 self.SPECIAL_SHELL_SEQUENCES))
 
     @JointPoint(Class.pseudo_property)
-# # python3.4     def get_html_validated(self: Self) -> Self:
+# # python3.5     def get_html_validated(self: Self) -> Self:
     def get_html_validated(self):
 # #
         '''
@@ -2081,7 +2614,7 @@ class String(Object, builtins.str):
         return self.replace(self.SPECIAL_HTML_SEQUENCES)
 
     @JointPoint(Class.pseudo_property)
-# # python3.4     def get_regex_validated(self: Self, exclude_symbols=()) -> Self:
+# # python3.5     def get_regex_validated(self: Self, exclude_symbols=()) -> Self:
     def get_regex_validated(self, exclude_symbols=()):
         '''
             Validates the current string for using in a regular expression \
@@ -2109,6 +2642,11 @@ class String(Object, builtins.str):
             >>> String('-').get_regex_validated(('\\\\',)).content
             '\\\\-'
         '''
+        '''NOTE: This is only for performance improvements.'''
+        if builtins.len(
+            self.content
+        ) == 1 and self.content not in self.SPECIAL_REGEX_SEQUENCES:
+            return self
         '''The escape sequence must also be escaped; but at first.'''
         if '\\' not in exclude_symbols:
             self.replace('\\', '\\\\')
@@ -2119,7 +2657,7 @@ class String(Object, builtins.str):
                     builtins.set(exclude_symbols))))
 
     @JointPoint(Class.pseudo_property)
-# # python3.4     def get_format_validated(self: Self) -> Self:
+# # python3.5     def get_format_validated(self: Self) -> Self:
     def get_format_validated(self):
         '''
             Validates the current string for using in a string with \
@@ -2134,17 +2672,12 @@ class String(Object, builtins.str):
             >>> String().format_validated.content
             ''
         '''
-# # python3.4
-# #         self.content = regularExpression.compile('{([a-z]+)}').sub(
-# #             '\{\\1\}', self.content)
         self.content = regularExpression.compile('{([a-z]+)}').sub(
-            '\{\\1\}', convert_to_unicode(self.content)
-        ).encode(ENCODING)
-# #
+            '\{\\1\}', self.content)
         return self
 
     @JointPoint(Class.pseudo_property)
-# # python3.4     def get_url_validated(self: Self) -> Self:
+# # python3.5     def get_url_validated(self: Self) -> Self:
     def get_url_validated(self):
         '''
             Validates a given url by escaping special chars.
@@ -2181,10 +2714,10 @@ class String(Object, builtins.str):
 
         # # # endregion
 
-        # # endregion
+    # # # endregion
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def find_python_code_end_bracket(
 # #         self: Self
 # #     ) -> (builtins.int, builtins.bool):
@@ -2216,7 +2749,7 @@ class String(Object, builtins.str):
         return False
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def replace(
 # #         self: Self, search: (builtins.str, builtins.dict),
 # #         replace='', *arguments: builtins.object,
@@ -2267,7 +2800,7 @@ class String(Object, builtins.str):
                     search_string, replacement, *arguments, **keywords
                 ).content
         else:
-# # python3.4
+# # python3.5
 # #             self.content = self.content.replace(
 # #                 builtins.str(search), builtins.str(replace),
 # #                 *arguments, **keywords)
@@ -2280,7 +2813,7 @@ class String(Object, builtins.str):
         return self
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def substitute(
 # #         self: Self, search: (builtins.str, builtins.dict), replace=None,
 # #         *arguments: builtins.object, **keywords: builtins.object
@@ -2357,18 +2890,12 @@ class String(Object, builtins.str):
                 self.content = regularExpression.compile(search_string).sub(
                     replacement, self.content, *arguments, **keywords)
         else:
-# # python3.4
-# #             self.content = regularExpression.compile(search).sub(
-# #                 replace, self.content, *arguments, **keywords)
             self.content = regularExpression.compile(search).sub(
-                replace, convert_to_unicode(self.content), *arguments,
-                **keywords
-            ).encode(ENCODING)
-# #
+                replace, self.content, *arguments, **keywords)
         return self
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def substitute_n(
 # #         self: Self, search: (builtins.str, builtins.dict), replace='',
 # #         *arguments: builtins.object, **keywords: builtins.object
@@ -2409,7 +2936,7 @@ class String(Object, builtins.str):
         if builtins.isinstance(search, builtins.dict):
             number_of_replaces = 0
             for search_string, replacement in search.items():
-# # python3.4
+# # python3.5
 # #                 self.content, temp_number_of_replaces = \
 # #                 regularExpression.compile(builtins.str(
 # #                     search_string
@@ -2425,7 +2952,7 @@ class String(Object, builtins.str):
 # #
                 number_of_replaces += temp_number_of_replaces
         else:
-# # python3.4
+# # python3.5
 # #             self.content, number_of_replaces = regularExpression.compile(
 # #                 builtins.str(search)
 # #             ).subn(builtins.str(
@@ -2440,7 +2967,7 @@ class String(Object, builtins.str):
         return self, number_of_replaces
 
     @JointPoint
-# # python3.4     def readline(self: Self) -> (SelfClassObject, builtins.bool):
+# # python3.5     def readline(self: Self) -> (SelfClassObject, builtins.bool):
     def readline(self):
         '''
             Implements the pythons native "bz2.BZ2File.readline()" method in \
@@ -2479,7 +3006,7 @@ class String(Object, builtins.str):
         return False
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def readlines(
 # #         self: Self, *arguments: builtins.object,
 # #         **keywords: builtins.object
@@ -2515,7 +3042,7 @@ class String(Object, builtins.str):
         return self.content.splitlines(*arguments, **keywords)
 
     @JointPoint
-# # python3.4     def delete_variables_from_regex(self: Self) -> Self:
+# # python3.5     def delete_variables_from_regex(self: Self) -> Self:
     def delete_variables_from_regex(self):
         '''
             Removes python supported variables in regular expression strings. \
@@ -2537,12 +3064,12 @@ class String(Object, builtins.str):
             '\(\?P<[a-z]+>(?P<pattern>.+?)\)', '(\g<pattern>)'
         )[0]
 
-        # endregion
+    # # endregion
 
-        # region protected
+    # # region protected
 
     @JointPoint(Class.pseudo_property)
-# # python3.4
+# # python3.5
 # #     def _determine_encoding(self: Self, content) -> builtins.tuple:
     def _determine_encoding(self, content):
 # #
@@ -2565,10 +3092,10 @@ class String(Object, builtins.str):
                     return encoding, content
         return self.IMPORTANT_ENCODINGS[0], content
 
-        # # region find python code end bracket helper
+    # # # region find python code end bracket helper
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _handle_char_to_find_end_bracket(
 # #         self: Self, index: builtins.int, char: builtins.str,
 # #         quote: (builtins.str, builtins.bool), skip: builtins.int,
@@ -2630,7 +3157,7 @@ class String(Object, builtins.str):
         return index + 1, char, quote, skip, brackets
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _handle_start_quotes_to_find_end_bracket(
 # #         self: Self, index: builtins.int, char: builtins.str,
 # #         quote: (builtins.str, builtins.bool), skip: builtins.int
@@ -2656,7 +3183,7 @@ class String(Object, builtins.str):
         return quote, skip
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _handle_quotes_to_find_end_bracket(
 # #         self: Self, index: builtins.int, char: builtins.str,
 # #         quote: (builtins.str, builtins.bool), skip: builtins.int
@@ -2682,34 +3209,20 @@ class String(Object, builtins.str):
             quote = False
         return char, quote, skip
 
-        # # endregion
+    # # # endregion
 
-        # endregion
-
-    # endregion
-
-
-class Dictionary(Object, builtins.dict):
-
-    '''
-        This class extends the native dictionary object.
-
-        **content** - content for dictionary object
-
-        Additional arguments and keywords are forwarded to python's native \
-        "dict()" method.
-    '''
-
-    # region properties
-
-# # python3.4
-# #     NONE_CONVERTABLE_ITERABLES = {
-# #         builtins.bytes, builtins.str, CGIFieldStorage}
-    NONE_CONVERTABLE_ITERABLES = {
-        builtins.bytes, builtins.str, builtins.unicode, CGIFieldStorage}
-# #
+    # # endregion
 
     # endregion
+
+
+class Iterable(Object):
+
+    '''
+        This class extends the native iterable object.
+
+        **content** - content for iterable object
+    '''
 
     # region dynamic methods
 
@@ -2718,52 +3231,20 @@ class Dictionary(Object, builtins.dict):
     # # # region special
 
     @JointPoint
-# # python3.4
-# #     def __init__(
-# #         self: Self, content=None, **keywords: builtins.object
-# #     ) -> None:
-    def __init__(self, content=None, **keywords):
-# #
-        '''
-            Generates a new high level wrapper around given object.
-
-            Examples:
-
-            >>> Dictionary((('hans', 5), (4, 3))) # doctest: +ELLIPSIS
-            Object of "dict" (...hans...5...).
-
-            >>> Dictionary() # doctest: +ELLIPSIS
-            Object of "dict" ({}).
-        '''
-        from boostNode.extension.file import Handler as FileHandler
-
-        # # # region properties
-
-        self.__class__.NONE_CONVERTABLE_ITERABLES.add(FileHandler)
-        '''The main property. It saves the current dictionary.'''
-        if builtins.isinstance(content, self.__class__):
-            content = content.content
-        elif content is None:
-            content = {}
-        self.content = builtins.dict(content)
-
-        # # # endregion
-
-    @JointPoint
-# # python3.4     def __hash__(self: Self) -> builtins.int:
+# # python3.5     def __hash__(self: Self) -> builtins.int:
     def __hash__(self):
         '''
             Invokes if this object should describe itself by a hash value.
 
             Examples:
 
-            >>> isinstance(hash(Dictionary({'a': 'hans'})), int)
+            >>> isinstance(hash(Iterable({'a': 'hans'})), int)
             True
         '''
         return builtins.hash(self.immutable)
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def __getitem__(
 # #         self: Self, key: (builtins.object, builtins.type)
 # #     ) -> (builtins.object, builtins.type):
@@ -2773,50 +3254,62 @@ class Dictionary(Object, builtins.dict):
             Invokes if this object should returns current value stored at \
             given key.
 
-            **key** - dictionary key to get.
+            **key** - iterable key to get.
 
-            Returns the requested dictionary value.
+            Returns the requested iterable value.
 
             Examples:
 
-            >>> Dictionary({'a': 'hans'})['a']
+            >>> Iterable({'a': 'hans'})['a']
             'hans'
+
+            >>> Iterable((1, 2))[1]
+            2
         '''
         return self.content[key]
 
-        # # endregion
+    # # # endregion
 
-        # # region getter methods
+    # # # region getter methods
 
     @JointPoint(Class.pseudo_property)
-# # python3.4     def get_immutable(self: Self, exclude=()) -> builtins.tuple:
-    def get_immutable(self, exclude=()):
+# # python3.5
+# #     def get_immutable(self: Self, exclude=(), path=[]) -> builtins.tuple:
+    def get_immutable(self, exclude=(), path=[]):
+# #
         '''
-            Generates an immutable copy of the current dictionary. Mutable \
+            Generates an immutable copy of the current iterable. Mutable \
             iterables are generally translated to sorted tuples.
 
             **exclude** - A tuple of keys to ignore in resulting immutable.
 
+            **path**    - A list of keys to mark current context in nested \
+                          structures.
+
             Examples:
 
-            >>> Dictionary({'a': 'A', 'b': 'B'}).get_immutable(exclude=('a',))
+            >>> Iterable({'a': 'A', 'b': 'B'}).get_immutable(exclude=('a',))
             (('b', 'B'),)
+
+            >>> Iterable({'a': 'A', 'b': {'c': 2}}).get_immutable(
+            ...     exclude=(['b', 'c'],))
+            (('a', 'A'), ('b', ()))
+
+            >>> Iterable({5: 'hans'}).immutable
+            ((5, 'hans'),)
+
+            >>> Iterable([5, 'hans']).immutable
+            (5, 'hans')
         '''
-        immutable = copy(self.content)
-        for key, value in self.content.items():
-            if key in exclude:
-                del immutable[key]
-            else:
-# # python3.4
-# #                 immutable[key] = builtins.str(self._immutable_helper(
-# #                     value, exclude))
-                immutable[key] = convert_to_unicode(
-                    self._immutable_helper(value, exclude))
-# #
-        return builtins.tuple(builtins.sorted(immutable.items()))
+        if builtins.isinstance(self.content, builtins.dict):
+            return self._convert_to_immutable(
+                path=path, items=self.content.items(), exclude=exclude)
+        return self._convert_to_immutable(path=path, items=builtins.enumerate(
+            self.content
+        ), exclude=exclude, explicit_keys=False)
 
     @JointPoint(Class.pseudo_property)
-# # python3.4
+# # python3.5
 # #     def get_compatible_types(
 # #         self: Self, *arguments: (builtins.object, builtins.type),
 # #         **keywords: (builtins.object, builtins.type)
@@ -2824,23 +3317,21 @@ class Dictionary(Object, builtins.dict):
     def get_compatible_types(self, *arguments, **keywords):
 # #
         '''
-            Converts dictionary where each type will be converted to a cross \
-            system compatible type. The result is serialiseable to json for \
-            example. This method provides the same interface as \
-            "convert()".
+            Converts iterable where each type will be converted to a cross \
+            system compatible type. The result is serialiseable (e.g. to \
+            json). This method provides the same interface as "convert()".
 
             Examples:
 
-            >>> Dictionary({}).compatible_types.content
+            >>> Iterable({}).compatible_types.content
             {}
 
-            >>> Dictionary({2: 2}).compatible_types.content
+            >>> Iterable({2: 2}).compatible_types.content
             {2: 2}
         '''
-# # python3.4
+# # python3.5
 # #         return self.convert(
-# #             *arguments,
-# #             key_wrapper=lambda key,
+# #             *arguments, key_wrapper=lambda key,
 # #             value: self._convert_to_compatible_type(
 # #                 String(key).get_delimited_to_camel_case(
 # #                     preserve_wrong_formatted_abbreviations=True
@@ -2849,8 +3340,7 @@ class Dictionary(Object, builtins.dict):
 # #                 ) else key
 # #             ), value_wrapper=self._convert_to_compatible_type, **keywords)
         return self.convert(
-            *arguments,
-            key_wrapper=lambda key,
+            *arguments, key_wrapper=lambda key,
             value: self._convert_to_compatible_type(
                 String(key).get_delimited_to_camel_case(
                     preserve_wrong_formatted_abbreviations=True
@@ -2861,7 +3351,7 @@ class Dictionary(Object, builtins.dict):
 # #
 
     @JointPoint(Class.pseudo_property)
-# # python3.4
+# # python3.5
 # #     def get_known_types(
 # #         self: Self, *arguments: (builtins.object, builtins.type),
 # #         strict=True, **keywords: (builtins.object, builtins.type)
@@ -2869,7 +3359,7 @@ class Dictionary(Object, builtins.dict):
     def get_known_types(self, *arguments, **keywords):
 # #
         '''
-            Converts dictionary where each type will be tried to converted to \
+            Converts iterable where each type will be tried to converted to \
             a native python type. This method provides the same interface as \
             "convert()".
 
@@ -2880,10 +3370,10 @@ class Dictionary(Object, builtins.dict):
 
             Examples:
 
-            >>> Dictionary({'value': '12.234'}).known_types.content
+            >>> Iterable({'value': '12.234'}).known_types.content
             {'value': 12.234}
         '''
-# # python3.4
+# # python3.5
 # #         return self.convert(
 # #             *arguments,
 # #             key_wrapper=lambda key, value: self._convert_to_known_type(
@@ -2908,10 +3398,586 @@ class Dictionary(Object, builtins.dict):
                 self._convert_to_known_type(key, value, strict), **keywords)
 # #
 
-        # # endregion
+    # # # endregion
+
+    # # # region boolean
 
     @JointPoint
-# # python3.4
+# # python3.5
+# #     def is_in_pattern(self: Self, value: builtins.str) -> (
+# #         builtins.str, builtins.bool
+# #     ):
+    def is_in_pattern(self, value):
+# #
+        '''
+            Checks if given value matches current list interpreted as regular \
+            expressions.
+
+            **value** - String to check if it matches on pattern.
+
+            Returns the matching pattern if matches an "False" otherwise.
+
+            Examples:
+
+            >>> Iterable(('a', 'b')).is_in_pattern('a')
+            'a'
+
+            >>> Iterable(('a', 'b')).is_in_pattern('c')
+            False
+
+            >>> Iterable(()).is_in_pattern('a')
+            False
+        '''
+# # python3.5
+# #         for pattern in builtins.filter(
+# #             lambda pattern: regularExpression.compile(pattern).fullmatch(
+# #                 value
+# #             ), self.content
+# #         ):
+        for pattern in builtins.filter(
+            lambda pattern: regularExpression.compile(
+                '(?:%s)$' % pattern
+            ).match(value), self.content
+        ):
+# #
+            return pattern
+        return False
+
+    # # # endregion
+
+    @JointPoint
+# # python3.5
+# #     def convert(
+# #         self: Self, key_wrapper=lambda key, value: key,
+# #         value_wrapper=lambda key, value: value,
+# #         no_wrap_indicator='__no_wrapping__',
+# #         remove_no_wrap_indicator=True, filter=lambda key, value: True
+# #     ) -> Self:
+    def convert(
+        self, key_wrapper=lambda key, value: key,
+        value_wrapper=lambda key, value: value,
+        no_wrap_indicator='__no_wrapping__',
+        remove_no_wrap_indicator=True, filter=lambda key, value: True
+    ):
+# #
+        '''
+            Converts all keys or values and nested keys or values with given \
+            callback functions.
+
+            **key_wrapper**              - Function to convert each visited key
+
+            **value_wrapper**            - Function to convert each visited \
+                                           value
+
+            **no_wrap_indicator**        - Key name to skip conversion for \
+                                           corresponding value
+
+            **remove_no_wrap_indicator** - Removes wrap indicator und leaves \
+                                           its value untouched.
+
+            **filter**                   - Function to filter properties from \
+                                           given iterable.
+
+            Examples:
+
+            >>> Iterable({}).convert().content
+            {}
+
+            >>> Iterable(['a']).convert(
+            ...     value_wrapper=lambda key, value: '_%s_' % value
+            ... ).content
+            ['_a_']
+
+            >>> Iterable({'a', 'b'}).convert(
+            ...     value_wrapper=lambda key, value: '_%s_' % value
+            ... ).content == {'_a_', '_b_'}
+            True
+
+            >>> Iterable({'a', 'b'}).convert(
+            ...     value_wrapper=lambda key, value: '_%s_' % value,
+            ...     filter=lambda key, value: value == 'a'
+            ... ).content == {'_a_'}
+            True
+
+            >>> input = {'hans': 'peter', 5: 3}
+            >>> Iterable(input).convert().content == input
+            True
+
+            >>> Iterable({'a': 'b', 'b': ['a']}).convert(
+            ...     key_wrapper=lambda key, value: '_%s_' % key
+            ... ).content == {'_a_': 'b', '_b_': ['a']}
+            True
+
+            >>> Iterable({'a': 'b', 'b': ['a']}).convert(
+            ...     value_wrapper=lambda key, value: '_%s_' % value
+            ... ).content == {'a': '_b_', 'b': ['_a_']}
+            True
+
+            >>> Iterable({'a': 'b', 'b': ['a']}).convert(
+            ...     key_wrapper=lambda key, value: '_%s_' % key,
+            ...     value_wrapper=lambda key, value: '_%s_' % value
+            ... ).content == {'_a_': '_b_', '_b_': ['_a_']}
+            True
+
+            >>> Iterable({'a': {'a', 'b'}}).convert(
+            ...     key_wrapper=lambda key, value: '_%s_' % key,
+            ...     value_wrapper=lambda key, value: '_%s_' % value
+            ... ).content == {'_a_': {'_a_', '_b_'}}
+            True
+
+            >>> Iterable(
+            ...     {'a': {'b'}, 'b': {'a': [{'a': 'b'}, ['a']]}}
+            ... ).convert(
+            ...     key_wrapper=lambda key, value: '_%s_' % key,
+            ...     value_wrapper=lambda key, value: '_%s_' % value
+            ... ).content == {
+            ...     '_a_': {'_b_'}, '_b_': {'_a_': [{'_a_': '_b_'}, ['_a_']]}}
+            True
+
+            >>> Iterable(
+            ...     {'a': {'b'}, 'b': range(2)}
+            ... ).convert(
+            ...     key_wrapper=lambda key, value: '_%s_' % key,
+            ...     value_wrapper=lambda key, value: '_%s_' % value
+            ... ).content == {'_a_': {'_b_'}, '_b_': ['_0_', '_1_']}
+            True
+
+            >>> Iterable({'key': {'__no_wrapping__': 'value'}}).convert(
+            ...     value_wrapper=lambda key, value: '_%s_' % value
+            ... ).content
+            {'key': 'value'}
+
+            >>> Iterable({'key': {'__no_wrapping__': 'value'}}).convert(
+            ...     value_wrapper=lambda key, value: '_%s_' % value
+            ... ).content
+            {'key': 'value'}
+
+            >>> Iterable(
+            ...     {'a': {'__no_wrapping__': {'b': '1'}, 'b': 2}, 'b': 5}
+            ... ).convert(
+            ...     value_wrapper=lambda key, value: '_%s_' % value
+            ... ).content == {'a': {'b': '_2_'}, 'b': '_5_'}
+            True
+
+            >>> Iterable({'key': {'__no_wrapping__': 'value'}}).convert(
+            ...     value_wrapper=lambda key, value: '_%s_' % value,
+            ...     remove_no_wrap_indicator=False
+            ... ).content
+            {'key': {'__no_wrapping__': 'value'}}
+
+            >>> Iterable({'key': {'__no_wrapping__': 'value'}}).convert(
+            ...     value_wrapper=lambda key, value: '_%s_' % value,
+            ...     no_wrap_indicator=''
+            ... ).content
+            {'key': {'__no_wrapping__': '_value_'}}
+
+            >>> Iterable({'__no_wrapping__': {'A': 2}}).convert(
+            ...     key_wrapper=lambda key, value: key.lower(),
+            ...     remove_no_wrap_indicator=True
+            ... ).content
+            {'A': 2}
+
+            >>> Iterable({'B': {'__no_wrapping__': {'A': 2}}}).convert(
+            ...     key_wrapper=lambda key, value: key.lower(),
+            ...     remove_no_wrap_indicator=True
+            ... ).content
+            {'b': {'A': 2}}
+
+            >>> Iterable({'A': 1, 'B': 2}).convert(
+            ...     key_wrapper=lambda key, value: key.lower(),
+            ...     remove_no_wrap_indicator=True,
+            ...     filter=lambda key, value: value == 2
+            ... ).content
+            {'b': 2}
+
+            >>> Iterable([1, 2]).convert(
+            ...     filter=lambda key, value: value == 2
+            ... ).content
+            [2]
+        '''
+        if builtins.isinstance(self.content, builtins.dict):
+            return self._convert_dictionary(
+                key_wrapper, value_wrapper, no_wrap_indicator,
+                remove_no_wrap_indicator, filter)
+        if builtins.isinstance(self.content, builtins.set):
+            self.content = self._convert_set(
+                key_wrapper, value_wrapper, no_wrap_indicator,
+                remove_no_wrap_indicator, filter)
+            return self
+# # python3.5
+# #         if builtins.isinstance(self.content, builtins.range):
+# #             self.content = builtins.list(self.content)
+        pass
+# #
+        try:
+            was_tuple = False
+            if builtins.isinstance(self.content, builtins.tuple):
+                was_tuple = True
+                self.content = builtins.list(self.content)
+            '''
+                NOTE: We can't sort nested list structures to the end because \
+                the ordering is part of the structure itself.
+            '''
+            key = 0
+            '''
+                NOTE: We have to copy to avoid double convert of some keys or \
+                values.
+            '''
+            for value in copy(self.content):
+                if filter(key, value):
+                    self._convert_value(
+                        key, key, value, key_wrapper, value_wrapper,
+                        no_wrap_indicator, remove_no_wrap_indicator, filter)
+                    key += 1
+                else:
+                    del self.content[key]
+            if was_tuple:
+                self.content = builtins.tuple(self.content)
+        except builtins.TypeError as exception:
+            '''
+                NOTE: We have visited a non indexable value (e.g. an uploaded \
+                file).
+            '''
+# # python3.5
+# #             __logger__.debug(
+# #                 '%s: %s (%s)', exception.__class__.__name__,
+# #                 builtins.str(exception), builtins.type(self.content))
+            __logger__.debug(
+                '%s: %s (%s)', exception.__class__.__name__,
+                convert_to_unicode(exception), builtins.type(self.content))
+# #
+        return self
+
+    # # endregion
+
+    # # region protected methods
+
+    @JointPoint
+# # python3.5
+# #     def _convert_value(
+# #         self: Self, old_key, key, value, key_wrapper: (Function, Method),
+# #         value_wrapper: (Function, Method), no_wrap_indicator: builtins.str,
+# #         remove_no_wrap_indicator: builtins.bool, filter: (Function, Method)
+# #     ) -> Self:
+    def _convert_value(
+        self, old_key, key, value, key_wrapper, value_wrapper,
+        no_wrap_indicator, remove_no_wrap_indicator, filter
+    ):
+# #
+        '''Converts given key value pair in current iterable.'''
+        if Object(content=value).is_convertable_iterable():
+            new_value = Iterable(content=value).convert(
+                key_wrapper, value_wrapper, no_wrap_indicator,
+                remove_no_wrap_indicator, filter
+            ).content
+            if old_key != key and key in self.content and builtins.hasattr(
+                new_value, 'update'
+            ):
+                '''If new key already exists try to merge old and new data.'''
+                if builtins.hasattr(self, 'update'):
+                    self.content[key] = self.__class__(
+                        self.content[key]
+                    ).update(new_value).content
+                elif builtins.hasattr(self.content[key], 'update'):
+                    self.content[key].update(new_value)
+                else:
+                    self.content[key] = new_value
+            else:
+                self.content[key] = new_value
+        else:
+            self.content[key] = value_wrapper(key, value)
+        return self
+
+    @JointPoint
+# # python3.5
+# #     def _convert_to_immutable(
+# #         self: Self, path, items: NativeIterable, exclude: builtins.tuple,
+# #         explicit_keys=True
+# #     ) -> builtins.tuple:
+    def _convert_to_immutable(
+        self, path, items, exclude, explicit_keys=True
+    ):
+# #
+        '''
+            Converts given iterable into an immutable tuple.
+
+            Examples:
+
+            >>> Iterable({})._convert_to_immutable([], {2: 2}.items(), ())
+            ((2, 2),)
+
+            >>> Iterable({})._convert_to_immutable([], {}.items(), ())
+            ()
+
+            >>> Iterable({})._convert_to_immutable([], {2: [1, 2]}.items(), ())
+            ((2, (1, 2)),)
+
+            >>> Iterable({})._convert_to_immutable([], {2: [2, 1]}.items(), ())
+            ((2, (1, 2)),)
+
+            >>> Iterable({})._convert_to_immutable(
+            ...     [], {2: [2, 1]}.items(), (2,))
+            ()
+
+            >>> Iterable({})._convert_to_immutable([], {
+            ...     2: [2, 1], 'a': [1]
+            ... }.items(), (2,))
+            (('a', (1,)),)
+
+            >>> Iterable({})._convert_to_immutable([], {
+            ...     'b': [2, 1], 'a': [1]
+            ... }.items(), ())
+            (('a', (1,)), ('b', (1, 2)))
+        '''
+        result = []
+        for key, value in builtins.filter(lambda item: not builtins.tuple(
+            builtins.filter(lambda excluded_item: builtins.isinstance(
+                excluded_item, builtins.list
+            ) and (path + [item[0]]) == excluded_item or
+            item[0] == excluded_item, exclude)
+        ), items):
+            '''
+                NOTE: We can't use self class by introspection here because \
+                these class was may be derived to some concrete iterable.
+            '''
+            if not Object(content=value).is_hashable():
+                value = Iterable(content=value).get_immutable(
+                    exclude, path=path + [key])
+            result.append((key, value) if explicit_keys else value)
+        return builtins.tuple(builtins.sorted(result, key=builtins.str))
+
+    @JointPoint(builtins.classmethod)
+# # python3.5
+# #     def _convert_to_compatible_type(
+# #         cls: SelfClass, key: (builtins.object, builtins.type), value=Null
+# #     ) -> (builtins.object, builtins.type):
+    def _convert_to_compatible_type(cls, key, value=Null):
+# #
+        '''
+            Converts data to python cross platform compatible data objects.
+
+            Examples:
+
+            >>> Iterable({})._convert_to_compatible_type('key')
+            'key'
+
+            >>> Iterable({})._convert_to_compatible_type('key', 'value')
+            'value'
+        '''
+        if value is Null:
+            value = key
+        return Object(content=value).compatible_type
+
+    @JointPoint(builtins.classmethod)
+# # python3.5
+# #     def _convert_to_known_type(
+# #         cls: SelfClass, key: (builtins.object, builtins.type), value=Null,
+# #         strict=True
+# #     ) -> (builtins.object, builtins.type):
+    def _convert_to_known_type(cls, key, value=Null, strict=True):
+# #
+        '''
+            Converts interpretable data to python specific data objects.
+
+            Examples:
+
+            >>> Iterable({})._convert_to_known_type('key')
+            'key'
+
+            >>> Iterable({})._convert_to_known_type('key', 'value')
+            'value'
+        '''
+        return Object(content=key if value is Null else value).get_known_type(
+            description=None if value is Null else key, strict=strict)
+
+    @JointPoint
+# # python3.5
+# #     def _convert_dictionary(
+# #         self: Self, key_wrapper: (Function, Method),
+# #         value_wrapper: (Function, Method), no_wrap_indicator: builtins.str,
+# #         remove_no_wrap_indicator: builtins.bool, filter: (Function, Method)
+# #     ) -> Self:
+    def _convert_dictionary(
+        self, key_wrapper, value_wrapper, no_wrap_indicator,
+        remove_no_wrap_indicator, filter
+    ):
+# #
+        '''
+            Converts all keys or values and nested keys or values with given \
+            callback function in a given dictionary.
+        '''
+        convertable_iterables = []
+        sorted_content = []
+        for key, value in self.content.items():
+            if Object(content=value).is_convertable_iterable():
+                convertable_iterables.append((key, value))
+            else:
+                sorted_content.append((key, value))
+        sorted_content += convertable_iterables
+        for key, value in sorted_content:
+            if key == no_wrap_indicator:
+                if remove_no_wrap_indicator:
+                    if builtins.len(self.content) > 1:
+                        del self.content[key]
+                        value.update(self.content)
+                        self.content = value
+                        continue
+                    self.content = value
+                return self
+            if filter(key, value):
+                old_key = key
+                key = key_wrapper(key, value)
+                self._convert_value(
+                    old_key, key, value, key_wrapper, value_wrapper,
+                    no_wrap_indicator, remove_no_wrap_indicator, filter)
+                if key != old_key:
+                    del self.content[old_key]
+            else:
+                del self.content[key]
+        return self
+
+    @JointPoint
+# # python3.5
+# #     def _convert_set(
+# #         self: Self, key_wrapper: (Function, Method),
+# #         value_wrapper: (Function, Method), no_wrap_indicator: builtins.str,
+# #         remove_no_wrap_indicator: builtins.bool, filter: (Function, Method)
+# #     ) -> builtins.set:
+    def _convert_set(
+        self, key_wrapper, value_wrapper, no_wrap_indicator,
+        remove_no_wrap_indicator, filter
+    ):
+# #
+        '''
+            Converts all values and nested keys or values with given callback \
+            function in a given set.
+
+            Examples:
+
+            >>> Iterable({(1,)})._convert_set(
+            ...     lambda key, value: key, lambda key, value: value, '',
+            ...     False, lambda key, value: True
+            ... ) == {(1,)}
+            True
+        '''
+        convertable_iterables = []
+        sorted_content = []
+        for value in builtins.filter(
+            lambda value: filter(None, value), self.content
+        ):
+            if Object(content=value).is_convertable_iterable():
+                convertable_iterables.append(value)
+            else:
+                sorted_content.append(value)
+        sorted_content += convertable_iterables
+        new_set = builtins.set()
+        for value in sorted_content:
+            if Object(content=value).is_convertable_iterable():
+                '''
+                    NOTE: We can't use self class by introspection here \
+                    because these class has may be derived to some concrete \
+                    iterable.
+                '''
+                value = Iterable(content=value).convert(
+                    key_wrapper, value_wrapper, no_wrap_indicator,
+                    remove_no_wrap_indicator, filter
+                ).content
+            new_set.add(value_wrapper(key=None, value=value))
+        return new_set
+
+        # endregion
+
+    # endregion
+
+
+class Dictionary(Iterable, builtins.dict):
+
+    '''
+        This class extends the native dictionary object.
+
+        **content** - content for dictionary object
+
+        Additional arguments and keywords are forwarded to python's native \
+        "dict()" method.
+    '''
+
+    # region dynamic methods
+
+    # # region public
+
+    # # # region special
+
+    @JointPoint
+# # python3.5
+# #     def __init__(
+# #         self: Self, content=None, **keywords: builtins.object
+# #     ) -> None:
+    def __init__(self, content=None, **keywords):
+# #
+        '''
+            Generates a new high level wrapper around given object.
+
+            Examples:
+
+            >>> Dictionary((('hans', 5), (4, 3))) # doctest: +ELLIPSIS
+            Object of "dict" (...hans...5...).
+
+            >>> Dictionary() # doctest: +ELLIPSIS
+            Object of "dict" ({}).
+        '''
+
+        # # # region properties
+
+        '''The main property. It saves the current dictionary.'''
+        if builtins.isinstance(content, self.__class__):
+            content = content.content
+        elif content is None:
+            content = {}
+        self.content = builtins.dict(content)
+
+        # # # endregion
+
+    # # # endregion
+
+    # # # region getter
+
+    @JointPoint(Class.pseudo_property)
+# # python3.5
+# #     def get_topological_sorted(self: Self) -> builtins.list:
+    def get_topological_sorted(self):
+# #
+        '''
+            Determines a topological sorted list of current dictionary \
+            interpreted as graph.
+
+            Examples:
+
+            TODO
+        '''
+        order, enter, state = deque(), set(self.content), {}
+
+        def dfs(node):
+            state[node] = False
+            for k in self.content.get(node, ()):
+                sk = state.get(k, None)
+                # TODO
+                if sk == False:
+                    raise __exception__('Given graph has a cycle.')
+                if sk == True:
+                    continue
+                enter.discard(k)
+                dfs(k)
+            order.appendleft(node)
+            state[node] = True
+        while enter:
+            dfs(enter.pop())
+        self.content = builtins.list(order)
+        return self
+
+    # # # endregion
+
+    @JointPoint
+# # python3.5
 # #     def pop_from_keywords(
 # #         self: Self, name: builtins.str, default_value=None
 # #     ) -> builtins.tuple:
@@ -2950,191 +4016,15 @@ class Dictionary(Object, builtins.dict):
         return default_value, self.content
 
     @JointPoint
-# # python3.4
-# #     def convert(
-# #         self: Self, key_wrapper=lambda key, value: key,
-# #         value_wrapper=lambda key, value: value,
-# #         no_wrap_indicator='__no_wrapping__', remove_no_wrap_indicator=True,
-# #         filter=lambda key, value: True
-# #     ) -> Self:
-    def convert(
-        self, key_wrapper=lambda key, value: key,
-        value_wrapper=lambda key, value: value,
-        no_wrap_indicator='__no_wrapping__', remove_no_wrap_indicator=True,
-        filter=lambda key, value: True
-    ):
-# #
-        '''
-            Converts all keys or values and nested keys or values with given \
-            callback functions.
-
-            **key_wrapper**              - Function to convert each visited key
-
-            **value_wrapper**            - Function to convert each visited \
-                                           value
-
-            **no_wrap_indicator**        - Key name to skip conversion for \
-                                           corresponding value
-
-            **remove_no_wrap_indicator** - Removes wrap indicator und leaves \
-                                           its value untouched.
-
-            **filter**                   - Function to filter properties from \
-                                           given dictionary.
-
-            Examples:
-
-            >>> Dictionary({}).convert().content
-            {}
-
-            >>> input = {'hans': 'peter', 5: 3}
-            >>> Dictionary(input).convert().content == input
-            True
-
-            >>> Dictionary({'a': 'b', 'b': ['a']}).convert(
-            ...     key_wrapper=lambda key, value: '_%s_' % key
-            ... ).content == {'_a_': 'b', '_b_': ['a']}
-            True
-
-            >>> Dictionary({'a': 'b', 'b': ['a']}).convert(
-            ...     value_wrapper=lambda key, value: '_%s_' % value
-            ... ).content == {'a': '_b_', 'b': ['_a_']}
-            True
-
-            >>> Dictionary({'a': 'b', 'b': ['a']}).convert(
-            ...     key_wrapper=lambda key, value: '_%s_' % key,
-            ...     value_wrapper=lambda key, value: '_%s_' % value
-            ... ).content == {'_a_': '_b_', '_b_': ['_a_']}
-            True
-
-            >>> Dictionary({'a': {'a', 'b'}}).convert(
-            ...     key_wrapper=lambda key, value: '_%s_' % key,
-            ...     value_wrapper=lambda key, value: '_%s_' % value
-            ... ).content == {'_a_': {'_a_', '_b_'}}
-            True
-
-            >>> Dictionary(
-            ...     {'a': {'b'}, 'b': {'a': [{'a': 'b'}, ['a']]}}
-            ... ).convert(
-            ...     key_wrapper=lambda key, value: '_%s_' % key,
-            ...     value_wrapper=lambda key, value: '_%s_' % value
-            ... ).content == {
-            ...     '_a_': {'_b_'}, '_b_': {'_a_': [{'_a_': '_b_'}, ['_a_']]}}
-            True
-
-            >>> Dictionary(
-            ...     {'a': {'b'}, 'b': range(2)}
-            ... ).convert(
-            ...     key_wrapper=lambda key, value: '_%s_' % key,
-            ...     value_wrapper=lambda key, value: '_%s_' % value
-            ... ).content == {'_a_': {'_b_'}, '_b_': ['_0_', '_1_']}
-            True
-
-            >>> Dictionary({'key': {'__no_wrapping__': 'value'}}).convert(
-            ...     value_wrapper=lambda key, value: '_%s_' % value
-            ... ).content
-            {'key': 'value'}
-
-            >>> Dictionary({'key': {'__no_wrapping__': 'value'}}).convert(
-            ...     value_wrapper=lambda key, value: '_%s_' % value
-            ... ).content
-            {'key': 'value'}
-
-            >>> Dictionary(
-            ...     {'a': {'__no_wrapping__': {'b': '1'}, 'b': 2}, 'b': 5}
-            ... ).convert(
-            ...     value_wrapper=lambda key, value: '_%s_' % value
-            ... ).content == {'a': {'b': '_2_'}, 'b': '_5_'}
-            True
-
-            >>> Dictionary({'key': {'__no_wrapping__': 'value'}}).convert(
-            ...     value_wrapper=lambda key, value: '_%s_' % value,
-            ...     remove_no_wrap_indicator=False
-            ... ).content
-            {'key': {'__no_wrapping__': 'value'}}
-
-            >>> Dictionary({'key': {'__no_wrapping__': 'value'}}).convert(
-            ...     value_wrapper=lambda key, value: '_%s_' % value,
-            ...     no_wrap_indicator=''
-            ... ).content
-            {'key': {'__no_wrapping__': '_value_'}}
-
-            >>> Dictionary({'__no_wrapping__': {'A': 2}}).convert(
-            ...     key_wrapper=lambda key, value: key.lower(),
-            ...     remove_no_wrap_indicator=True
-            ... ).content
-            {'A': 2}
-
-            >>> Dictionary({'B': {'__no_wrapping__': {'A': 2}}}).convert(
-            ...     key_wrapper=lambda key, value: key.lower(),
-            ...     remove_no_wrap_indicator=True
-            ... ).content
-            {'b': {'A': 2}}
-
-            >>> Dictionary({'A': 1, 'B': 2}).convert(
-            ...     key_wrapper=lambda key, value: key.lower(),
-            ...     remove_no_wrap_indicator=True,
-            ...     filter=lambda key, value: value == 2
-            ... ).content
-            {'b': 2}
-        '''
-        '''
-            NOTE: We have to copy to avoid double convert of some keys or \
-            values.
-        '''
-# # python3.4         for key, value in self.content.copy().items():
-        for key, value in copy(self.content).items():
-            if key == no_wrap_indicator:
-                if remove_no_wrap_indicator:
-                    if builtins.len(self.content) > 1:
-                        del self.content[key]
-                        value.update(self.content)
-                        self.content = value
-                        continue
-                    self.content = value
-                    return self
-                return self
-            del self.content[key]
-            key = key_wrapper(key, value)
-            if builtins.isinstance(value, builtins.dict):
-                '''
-                    Take this method type by the abstract class via \
-                    introspection.
-                '''
-                self.content[key] = builtins.getattr(
-                    self.__class__(value), inspect.stack()[0][3]
-                )(
-                    key_wrapper, value_wrapper, no_wrap_indicator,
-                    remove_no_wrap_indicator, filter
-                ).content
-# # python3.4
-# #             elif(builtins.isinstance(value, Iterable) and
-# #                  not builtins.isinstance(value, builtins.tuple(
-# #                      self.NONE_CONVERTABLE_ITERABLES))):
-            elif(builtins.isinstance(value, Iterable) and
-                 not builtins.isinstance(value, builtins.tuple(
-                     self.NONE_CONVERTABLE_ITERABLES))):
-# #
-                self.content[key] = self._convert_iterable(
-                    iterable=value, key_wrapper=key_wrapper,
-                    value_wrapper=value_wrapper,
-                    no_wrap_indicator=no_wrap_indicator,
-                    remove_no_wrap_indicator=remove_no_wrap_indicator,
-                    filter=filter)
-            elif filter(key, value):
-                self.content[key] = value_wrapper(key, value)
-        return self
-
-    @JointPoint
-# # python3.4
+# # python3.5
 # #     def update(
 # #         self: Self, other: (SelfClassObject, builtins.dict),
-# #         append_list_indicator='__append__',
-# #         prepend_list_indicator='__prepend__'
+# #         prepend_list_indicator='__prepend__',
+# #         append_list_indicator='__append__'
 # #     ) -> Self:
     def update(
-        self, other, append_list_indicator='__append__',
-        prepend_list_indicator='__prepend__'
+        self, other, prepend_list_indicator='__prepend__',
+        append_list_indicator='__append__'
     ):
 # #
         '''
@@ -3193,254 +4083,157 @@ class Dictionary(Object, builtins.dict):
             ... ).content
             {'a': [3]}
         '''
-        # TODO check new prepend branches.
-        for key, value in self.__class__(other).content.items():
+        '''
+            NOTE: We can't use self class by introspection here because these \
+            class has may be derived to some concrete iterable.
+        '''
+        for key, value in Dictionary(other).content.items():
             if key in self.content:
-                if builtins.isinstance(value, (builtins.dict, self.__class__)):
-                    nested_append_value = value.get(append_list_indicator)
-                    nested_prepend_value = value.get(prepend_list_indicator)
-                    if builtins.isinstance(
-                        nested_append_value, builtins.list
-                    ) or builtins.isinstance(
-                        nested_prepend_value, builtins.list
-                    ):
-                        if builtins.isinstance(
-                            self.content[key], builtins.list
-                        ):
-                            if nested_append_value:
-                                self.content[key] += nested_append_value
-                            else:
-                                self.content[key] = nested_prepend_value + \
-                                    self.content[key]
-                            continue
-                        elif builtins.isinstance(self.content[key], (
-                            builtins.dict, self.__class__
-                        )):
-                            if nested_append_value:
-                                self.content[key] = (self.content[key].get(
-                                    append_list_indicator
-                                ) or self.content[key].get(
-                                    prepend_list_indicator
-                                )) + nested_append_value
-                            else:
-                                self.content[key] = nested_prepend_value + (
-                                    self.content[key].get(
-                                        append_list_indicator
-                                    ) or self.content[key].get(
-                                        prepend_list_indicator))
-                            continue
-                    elif builtins.isinstance(self.content[key], builtins.dict):
-                        self.content[key] = builtins.getattr(self.__class__(
-                            self.content[key]
-                        ), inspect.stack()[0][3])(other=value).content
-                        continue
-                elif builtins.isinstance(value, builtins.list):
-                    if builtins.isinstance(self.content[key], builtins.dict):
-                        nested_source_append_value = self.content[key].get(
-                            append_list_indicator)
-                        nested_source_prepend_value = self.content[key].get(
-                            prepend_list_indicator)
-                        if builtins.isinstance(
-                            nested_source_append_value, builtins.list
-                        ):
-                            self.content[key] = value + \
-                                nested_source_append_value
-                            continue
-                        elif builtins.isinstance(
-                            nested_source_prepend_value, builtins.list
-                        ):
-                            self.content[key] = nested_source_prepend_value + \
-                                value
-                            continue
+                if self._update_with_iterable(
+                    key, value, prepend_list_indicator, append_list_indicator
+                ):
+                    continue
             self.content[key] = value
         return self
 
-        # endregion
+    # # endregion
 
-        # region protected methods
+    # # region protected
 
-    @JointPoint(builtins.classmethod)
-# # python3.4
-# #     def _convert_to_compatible_type(
-# #         cls: SelfClass, key: (builtins.object, builtins.type), value=Null
-# #     ) -> (builtins.object, builtins.type):
-    def _convert_to_compatible_type(cls, key, value=Null):
-# #
-        '''
-            Converts data to python cross platform compatible data objects.
-
-            Examples:
-
-            >>> Dictionary({})._convert_to_compatible_type('key')
-            'key'
-
-            >>> Dictionary({})._convert_to_compatible_type('key', 'value')
-            'value'
-        '''
-        if value is Null:
-            value = key
-        return Object(content=value).compatible_type
-
-    @JointPoint(builtins.classmethod)
-# # python3.4
-# #     def _convert_to_known_type(
-# #         cls: SelfClass, key: (builtins.object, builtins.type), value=Null,
-# #         strict=True
-# #     ) -> (builtins.object, builtins.type):
-    def _convert_to_known_type(cls, key, value=Null, strict=True):
-# #
-        '''
-            Converts interpretable data to python specific data objects.
-
-            Examples:
-
-            >>> Dictionary({})._convert_to_known_type('key')
-            'key'
-
-            >>> Dictionary({})._convert_to_known_type('key', 'value')
-            'value'
-        '''
-        return Object(content=key if value is Null else value).get_known_type(
-            description=None if value is Null else key, strict=strict)
-
-    @JointPoint(builtins.classmethod)
-# # python3.4
-# #     def _convert_iterable(
-# #         cls: SelfClass, iterable: Iterable,
-# #         key_wrapper: (Function, Method), value_wrapper: (Function, Method),
-# #         no_wrap_indicator: builtins.str,
-# #         remove_no_wrap_indicator: builtins.bool, filter: (Function, Method)
-# #     ) -> Iterable:
-    def _convert_iterable(
-        cls, iterable, key_wrapper, value_wrapper, no_wrap_indicator,
-        remove_no_wrap_indicator, filter
+    @JointPoint
+# # python3.5
+# #     def _update_with_iterable(
+# #         self: Self, key: (builtins.object, builtins.type),
+# #         value: (builtins.object, builtins.type),
+# #         prepend_list_indicator: builtins.str,
+# #         append_list_indicator: builtins.str
+# #     ) -> builtins.bool:
+    def _update_with_iterable(
+        self, key, value, prepend_list_indicator, append_list_indicator
     ):
 # #
         '''
-            Converts all keys or values and nested keys or values with given \
-            callback function in a given iterable.
+            Performs a recursive update on current key with given value \
+            interpreted as an iterable.
 
             Examples:
 
-            >>> Dictionary({})._convert_iterable(
-            ...     5, lambda key, value: key, lambda key, value: value, '',
-            ...     False, lambda key, value: True)
-            5
+            >>> Dictionary({1: {}})._update_with_iterable(1, {}, '', '')
+            True
         '''
-        if builtins.isinstance(iterable, builtins.set):
-            return cls._convert_set(
-                iterable, key_wrapper, value_wrapper, filter)
-# # python3.4
-# #         if builtins.isinstance(iterable, builtins.range):
-# #             iterable = builtins.list(iterable)
-        pass
-# #
-        try:
-            for key, value in builtins.enumerate(iterable):
-                if builtins.isinstance(value, builtins.dict):
-                    iterable[key] = cls(value).convert(
-                        key_wrapper, value_wrapper, no_wrap_indicator,
-                        remove_no_wrap_indicator, filter
-                    ).content
-# # python3.4
-# #                 elif(builtins.isinstance(value, Iterable) and
-# #                      not builtins.isinstance(
-# #                          value, (builtins.bytes, builtins.str))):
-                elif(builtins.isinstance(value, Iterable) and
-                     not builtins.isinstance(value, (
-                         builtins.unicode, builtins.str))):
-# #
-                    '''
-                        Take this method type by the abstract class via \
-                        introspection.
-                    '''
-                    iterable[key] = builtins.getattr(
-                        cls, inspect.stack()[0][3]
-                    )(
-                        iterable=value, key_wrapper=key_wrapper,
-                        value_wrapper=value_wrapper,
-                        no_wrap_indicator=no_wrap_indicator,
-                        remove_no_wrap_indicator=remove_no_wrap_indicator,
-                        filter=filter)
-                # TODO check new branch
-                elif filter(key, value):
-                    iterable[key] = value_wrapper(key, value)
-                else:
-                    del iterable[key]
-        except builtins.TypeError as exception:
-            '''
-                NOTE: We have visited a non indexable value (e.g. an uploaded \
-                file).
-            '''
-# # python3.4
-# #             __logger__.debug(
-# #                 '%s: %s (%s)', exception.__class__.__name__,
-# #                 builtins.str(exception), builtins.type(iterable))
-            __logger__.debug(
-                '%s: %s (%s)', exception.__class__.__name__,
-                convert_to_unicode(exception), builtins.type(iterable))
-# #
-        return iterable
-
-    @JointPoint(builtins.classmethod)
-# # python3.4
-# #     def _convert_set(
-# #         cls: SelfClass, set: builtins.set,
-# #         key_wrapper: (Function, Method), value_wrapper: (Function, Method),
-# #         filter: (Function, Method)
-# #     ) -> builtins.set:
-    def _convert_set(cls, set, key_wrapper, value_wrapper, filter):
-# #
-        '''
-            Converts all keys or values and nested keys or values with given \
-            callback function in a given set.
-        '''
-        new_set = builtins.set()
-        for value in builtins.filter(lambda value: filter(None, value), set):
-            '''NOTE: Only hashable objects are allowed in a set.'''
-            new_set.add(value_wrapper(key=None, value=value))
-        return new_set
+        if builtins.isinstance(value, (builtins.dict, self.__class__)):
+            nested_prepend_value = value.get(prepend_list_indicator)
+            nested_append_value = value.get(append_list_indicator)
+            if builtins.isinstance(
+                nested_append_value, builtins.list
+            ) or builtins.isinstance(
+                nested_prepend_value, builtins.list
+            ):
+                if self._update_dictionary_with_list(
+                    key, nested_prepend_value, nested_append_value,
+                    prepend_list_indicator, append_list_indicator
+                ):
+                    return True
+            elif builtins.isinstance(self.content[key], builtins.dict):
+                '''
+                    NOTE: We can't use self class by introspection here \
+                    because these class has may be derived to some concrete \
+                    iterable.
+                '''
+                self.content[key] = Dictionary(self.content[key]).update(
+                    other=value
+                ).content
+                return True
+        elif builtins.isinstance(value, builtins.list):
+            if self._update_list_with_dictionary(
+                key, value, prepend_list_indicator,
+                append_list_indicator
+            ):
+                return True
+        return False
 
     @JointPoint
-# # python3.4
-# #     def _immutable_helper(
-# #         self: Self, value: (builtins.object, builtins.type),
-# #         exclude: builtins.tuple
-# #     ) -> (builtins.object, builtins.type):
-    def _immutable_helper(self, value, exclude):
+# # python3.5
+# #     def _update_dictionary_with_list(
+# #         self: Self, key: (builtins.object, builtins.type),
+# #         nested_preprend_value: (builtins.object, builtins.type),
+# #         nested_append_value: (builtins.object, builtins.type),
+# #         prepend_list_indicator: builtins.str,
+# #         append_list_indicator: builtins.str
+# #     ) -> builtins.bool:
+    def _update_dictionary_with_list(
+        self, key, nested_prepend_value, nested_append_value,
+        prepend_list_indicator, append_list_indicator
+    ):
 # #
         '''
-            Helper methods for potential immutable given value.
+            Performs a recursive update on given key with given value (coming \
+            from a list) in current dictionary. If "True" is returned \
+            current value should be skipped.
+        '''
+        if builtins.isinstance(self.content[key], builtins.list):
+            if nested_append_value:
+                self.content[key] += nested_append_value
+            else:
+                self.content[key] = nested_prepend_value + self.content[key]
+            return True
+        elif builtins.isinstance(self.content[key], (
+            builtins.dict, self.__class__
+        )):
+            if nested_append_value:
+                self.content[key] = (self.content[key].get(
+                    append_list_indicator
+                ) or self.content[key].get(prepend_list_indicator)
+                ) + nested_append_value
+            else:
+                self.content[key] = nested_prepend_value + (
+                    self.content[key].get(append_list_indicator) or
+                    self.content[key].get(prepend_list_indicator))
+            return True
+        return False
+
+    @JointPoint
+# # python3.5
+# #     def _update_list_with_dictionary(
+# #         self: Self, key: (builtins.object, builtins.type),
+# #         value: (builtins.object, builtins.type),
+# #         prepend_list_indicator: builtins.str,
+# #         append_list_indicator: builtins.str
+# #     ) -> builtins.bool:
+    def _update_list_with_dictionary(
+        self, key, value, prepend_list_indicator, append_list_indicator
+    ):
+# #
+        '''
+            Performs a recursive update on given key with given value (coming \
+            from a dictionary) in current dictionary (where a list should \
+            be). If "True" is returned current value should be skipped.
 
             Examples:
 
-            >>> Dictionary({})._immutable_helper({5: 'hans'}, exclude=())
-            ((5, 'hans'),)
+            >>> Dictionary({1: 2})._update_list_with_dictionary(1, 2, '', '')
+            False
 
-            >>> Dictionary({})._immutable_helper([5, 'hans'], exclude=())
-            (5, 'hans')
+            >>> Dictionary({1: {'a': []}})._update_list_with_dictionary(
+            ...     1, [], 'a', '')
+            True
         '''
-        if builtins.isinstance(value, builtins.dict):
-            value = self.__class__(content=value).get_immutable(exclude)
-# # python3.4
-# #         elif(builtins.isinstance(value, Iterable) and
-# #              not builtins.isinstance(value, builtins.str)):
-        elif(builtins.isinstance(value, Iterable) and
-             not builtins.isinstance(value, (
-                builtins.unicode, builtins.str
-             ))):
-# #
-            value = builtins.list(copy(value))
-            for key, sub_value in builtins.enumerate(value):
-                value[key] = self._immutable_helper(
-                    value=sub_value, exclude=exclude)
-        if not (builtins.type(value) is builtins.type or
-                (builtins.hasattr(value, '__hash__') and
-                 builtins.callable(builtins.getattr(value, '__hash__')))):
-            value = builtins.tuple(builtins.sorted(value, key=builtins.str))
-        return value
+        if builtins.isinstance(self.content[key], builtins.dict):
+            nested_source_prepend_value = self.content[key].get(
+                prepend_list_indicator)
+            nested_source_append_value = self.content[key].get(
+                append_list_indicator)
+            if builtins.isinstance(nested_source_append_value, builtins.list):
+                self.content[key] = value + nested_source_append_value
+                return True
+            elif builtins.isinstance(
+                nested_source_prepend_value, builtins.list
+            ):
+                self.content[key] = nested_source_prepend_value + value
+                return True
+        return False
 
-        # endregion
+    # # endregion
 
     # endregion
 
@@ -3451,7 +4244,7 @@ class Module(Object):
 
     # region properties
 
-# # python3.4
+# # python3.5
 # #     HIDDEN_BUILTIN_CALLABLES = ()
     HIDDEN_BUILTIN_CALLABLES = (
         'GFileDescriptorBased', 'GInitiallyUnowned',
@@ -3474,7 +4267,7 @@ class Module(Object):
     # # # region special
 
     @JointPoint(builtins.classmethod)
-# # python3.4     def __repr__(cls: SelfClass) -> builtins.str:
+# # python3.5     def __repr__(cls: SelfClass) -> builtins.str:
     def __repr__(cls):
         '''
             Invokes if this object should describe itself by a string.
@@ -3490,15 +4283,15 @@ class Module(Object):
                    hidden_builtin_callables='", "'.join(
                        cls.HIDDEN_BUILTIN_CALLABLES))
 
-        # # endregion
+    # # # endregion
 
-        # # region getter
+    # # # region getter
 
     # NOTE: This method couldn't have a joint point for avoiding to have cyclic
     # dependencies.
     @builtins.classmethod
     @Class.pseudo_property
-# # python3.4
+# # python3.5
 # #     def get_context_path(
 # #         cls: SelfClass, path=None, frame=inspect.currentframe(),
 # #     ) -> builtins.str:
@@ -3540,7 +4333,7 @@ class Module(Object):
 
     @JointPoint(builtins.classmethod)
     @Class.pseudo_property
-# # python3.4
+# # python3.5
 # #     def get_name(
 # #         cls: SelfClass, frame=None, module=None, extension=False,
 # #         path=False
@@ -3589,7 +4382,7 @@ class Module(Object):
 
     @JointPoint(builtins.classmethod)
     @Class.pseudo_property
-# # python3.4
+# # python3.5
 # #     def get_package_name(
 # #         cls: SelfClass, frame=inspect.currentframe(), path=False
 # #     ) -> builtins.str:
@@ -3635,7 +4428,7 @@ class Module(Object):
 
     @JointPoint(builtins.classmethod)
     @Class.pseudo_property
-# # python3.4
+# # python3.5
 # #     def get_file_path(
 # #         cls: SelfClass, context_path: builtins.str, only_source_files=False
 # #     ) -> (builtins.str, builtins.bool):
@@ -3678,12 +4471,12 @@ class Module(Object):
                         return location
         return False
 
-        # # endregion
+    # # # endregion
 
-        # # region boolean
+    # # # region boolean
 
     @builtins.classmethod
-# # python3.4
+# # python3.5
 # #     def is_package(cls: SelfClass, path: builtins.str) -> builtins.bool:
     def is_package(cls, path):
 # #
@@ -3709,12 +4502,12 @@ class Module(Object):
                     return True
         return False
 
-        # # endregion
+    # # # endregion
 
     @JointPoint(builtins.classmethod)
-# # python3.4
+# # python3.5
 # #     def determine_caller(
-# #         cls: SelfClass, callable_objects: Iterable, caller=None
+# #         cls: SelfClass, callable_objects: NativeIterable, caller=None
 # #     ) -> (
 # #         builtins.bool, builtins.str, builtins.tuple, builtins.type(None)
 # #     ):
@@ -3769,7 +4562,7 @@ class Module(Object):
 
     @JointPoint(builtins.classmethod)
     @Class.pseudo_property
-# # python3.4
+# # python3.5
 # #     def get_defined_callables(
 # #         cls: SelfClass, *arguments: (builtins.type, builtins.object),
 # #         **keywords: (builtins.type, builtins.object)
@@ -3815,7 +4608,7 @@ class Module(Object):
 
     @JointPoint(builtins.classmethod)
     @Class.pseudo_property
-# # python3.4
+# # python3.5
 # #     def get_defined_objects(
 # #         cls: SelfClass, object: (
 # #             builtins.type, builtins.object, builtins.dict
@@ -3870,18 +4663,18 @@ class Module(Object):
                     object_name in sys.builtin_module_names or
                     (only_module_level and inspect.getmodule(defined_object) !=
                         object))):
-# # python3.4
+# # python3.5
 # #                 yield object_name, defined_object
                 if object_name != 'String':
                     yield object_name, defined_object
 # #
 
     @JointPoint(builtins.classmethod)
-# # python3.4
+# # python3.5
 # #     def execute_program_for_modules(
 # #         cls: SelfClass, program_type: builtins.str, program: builtins.str,
-# #         modules: Iterable, arguments=(), extension='py', delimiter=', ',
-# #         log=True, **keywords: builtins.object
+# #         modules: NativeIterable, arguments=(), extension='py',
+# #         delimiter=', ', log=True, **keywords: builtins.object
 # #     ) -> builtins.tuple:
     def execute_program_for_modules(
         cls, program_type, program, modules, arguments=(),
@@ -3957,7 +4750,7 @@ class Module(Object):
         return builtins.tuple(result)
 
     @JointPoint(builtins.classmethod)
-# # python3.4
+# # python3.5
 # #     def extend(
 # #         cls: SelfClass, name=__name__, frame=None, module=None,
 # #         post_extend_others=True
@@ -4017,15 +4810,24 @@ class Module(Object):
         if(not builtins.hasattr(module, '__module_name__') or
            module.__module_name__ is None):
             module.__module_name__ = cls.get_name(frame, module)
-        module.__exception__ = builtins.type(
-            builtins.str('%sError') % String(
-                module.__module_name__
-            ).camel_case_capitalize.content, (builtins.Exception,), {
-                '__init__': lambda self, message, *arguments:
-                builtins.Exception.__init__(
-                    self, message % arguments
-                ) if arguments else builtins.Exception.__init__(
-                    self, message)})
+# # python3.5
+# #         module.__exception__ = builtins.type('%sError' % String(
+# #             module.__module_name__
+# #         ).camel_case_capitalize.content, (builtins.Exception,), {
+# #             '__init__': lambda self, message,
+# #             *arguments: builtins.Exception.__init__(
+# #                 self, message % arguments
+# #             ) if arguments else builtins.Exception.__init__(
+# #                 self, message)})
+        module.__exception__ = builtins.type(builtins.str('%sError' % String(
+            module.__module_name__
+        ).camel_case_capitalize.content), (builtins.Exception,), {
+            '__init__': lambda self, message,
+            *arguments: builtins.Exception.__init__(
+                self, message % arguments
+            ) if arguments else builtins.Exception.__init__(
+                self, message)})
+# #
         module.__test_mode__ = False
         module.__file_path__ = cls.get_name(
             frame, module, path=True, extension=True)
@@ -4042,7 +4844,7 @@ class Module(Object):
         return {'name': name, 'scope': module}
 
     @JointPoint(builtins.classmethod)
-# # python3.4
+# # python3.5
 # #     def default(
 # #         cls: SelfClass, name: builtins.str, frame: Frame,
 # #         default_caller=None, caller_arguments=(), caller_keywords={}
@@ -4094,7 +4896,7 @@ class Module(Object):
         return cls
 
     @JointPoint(builtins.classmethod)
-# # python3.4
+# # python3.5
 # #     def default_package(
 # #         cls: SelfClass, name: builtins.str, frame: Frame,
 # #         *arguments: builtins.object, **keywords: builtins.object
@@ -4133,12 +4935,12 @@ class Module(Object):
         return CommandLine.generic_package_interface(
             name, frame, *arguments, **keywords)
 
-        # endregion
+    # # endregion
 
-        # region protected
+    # # region protected
 
     @JointPoint(builtins.classmethod)
-# # python3.4     def _determine_scope(cls, object, only_module_level):
+# # python3.5     def _determine_scope(cls, object, only_module_level):
     def _determine_scope(cls, object, only_module_level):
         '''
             Determines needed scope to find module objects.
@@ -4154,14 +4956,14 @@ class Module(Object):
         else:
             scope = {}
             for object_name in builtins.dir(object):
-# # python3.4                 pass
+# # python3.5                 pass
                 object_name = convert_to_unicode(object_name)
                 scope[object_name] = builtins.getattr(
                     object, object_name, None)
         return scope, only_module_level
 
     @JointPoint(builtins.classmethod)
-# # python3.4
+# # python3.5
 # #     def _determine_object(
 # #         cls: SelfClass, object: (builtins.type, builtins.object)
 # #     ) -> (builtins.object, builtins.type):
@@ -4174,10 +4976,10 @@ class Module(Object):
         return object
 
     @JointPoint(builtins.classmethod)
-# # python3.4
+# # python3.5
 # #     def _get_module_file(
 # #         cls: SelfClass, frame: (builtins.type(None), Frame),
-# #         module: (builtins.type(None), Module)
+# #         module: (builtins.type(None), ModuleType)
 # #     ) -> (Class, builtins.bool):
     def _get_module_file(cls, frame, module):
 # #
@@ -4209,7 +5011,7 @@ class Module(Object):
         return file
 
     @JointPoint(builtins.classmethod)
-# # python3.4
+# # python3.5
 # #     def _search_library_file(
 # #         cls: SelfClass, location: Class, context_path: builtins.str,
 # #         only_source_files: builtins.bool
@@ -4234,7 +5036,7 @@ class Module(Object):
                 return False
         return sub_location.path
 
-        # endregion
+    # # endregion
 
     # endregion
 
@@ -4250,7 +5052,7 @@ class Time(Object):
     # # # region special
 
     @JointPoint
-# # python3.4     def __init__(self: Self, content=None) -> None:
+# # python3.5     def __init__(self: Self, content=None) -> None:
     def __init__(self, content=None):
         '''
             Generates a new high level wrapper for times.
@@ -4311,7 +5113,7 @@ class Time(Object):
                 self.content = NativeTime(
                     hour=hours, minute=minutes, second=seconds,
                     microsecond=microseconds)
-# # python3.4
+# # python3.5
 # #             elif builtins.isinstance(content, builtins.str):
 # #                 timezone_pattern = regularExpression.compile('(.+)\+(.+)')
 # #                 timezone_match = timezone_pattern.fullmatch(content)
@@ -4336,7 +5138,7 @@ class Time(Object):
     # # region protected
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _interpret_time(
 # #         self: Self, content: builtins.str, timezone_match: (
 # #             builtins.type(None),
@@ -4370,7 +5172,7 @@ class Time(Object):
     # # region public
 
     @JointPoint(builtins.classmethod)
-# # python3.4
+# # python3.5
 # #     def derive_date_time(
 # #         cls: SelfClass, content, property_name='time', type_name=None
 # #     ) -> (builtins.type(None), NativeTime, NativeDate):
@@ -4387,7 +5189,7 @@ class Time(Object):
         except __exception__:
             if type_name is None:
                 type_name = cls.__name__
-# # python3.4
+# # python3.5
 # #             raise __exception__(
 # #                 '"%s" couldn\'t be interpreted as "%s".', content,
 # #                 type_name
@@ -4415,7 +5217,7 @@ class DateTime(Object):
     # # # region special
 
     @JointPoint
-# # python3.4     def __init__(self: Self, content=None) -> None:
+# # python3.5     def __init__(self: Self, content=None) -> None:
     def __init__(self, content=None):
         '''
             Generates a new high level wrapper for date times.
@@ -4497,7 +5299,7 @@ class DateTime(Object):
                     date like representation. Idea: There should be at least \
                     some numbers and separators.
                 '''
-# # python3.4
+# # python3.5
 # #             elif builtins.isinstance(
 # #                 content, builtins.str
 # #             ) and builtins.len(regularExpression.compile(
@@ -4537,7 +5339,7 @@ class DateTime(Object):
     # # region protected
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _interpret_date_time(
 # #         self: Self, content: builtins.str, timezone_match: (
 # #             builtins.type(None),
@@ -4601,7 +5403,7 @@ class Date(Object):
     # # # region special
 
     @JointPoint
-# # python3.4     def __init__(self: Self, content=None) -> None:
+# # python3.5     def __init__(self: Self, content=None) -> None:
     def __init__(self, content=None, **keywords):
         '''
             Generates a new high level wrapper for dates.
@@ -4658,7 +5460,7 @@ class Date(Object):
                     some numbers, separators and not too much non-numeric \
                     symbols.
                 '''
-# # python3.4
+# # python3.5
 # #             elif builtins.isinstance(content, builtins.str):
             elif builtins.isinstance(content, (
                 builtins.unicode, builtins.str
@@ -4677,12 +5479,12 @@ class Date(Object):
     # # region protected
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _interpret_date_string(self: Self, content: builtins.str) -> Self:
     def _interpret_date_string(self, content):
 # #
         content = self.slice_weekday(content)
-# # python3.4
+# # python3.5
 # #         if builtins.len(regularExpression.compile('[^a-zA-Z]').sub(
 # #             '', content
 # #         )) < 3 and builtins.len(regularExpression.compile(
@@ -4702,7 +5504,7 @@ class Date(Object):
         return self
 
     @JointPoint
-# # python3.4
+# # python3.5
 # #     def _interpret_date(self: Self, content: builtins.str) -> Self:
     def _interpret_date(self, content):
 # #
@@ -4718,7 +5520,7 @@ class Date(Object):
                     '{first_year}%w{delimiter}%m{last_year}'
                 ):
                     try:
-# # python3.4
+# # python3.5
 # #                         self.content = NativeDate.fromtimestamp(
 # #                             NativeDateTime.strptime(
 # #                                 content, date_format.format(
@@ -4753,14 +5555,14 @@ class Date(Object):
     # # region public
 
     @JointPoint(builtins.classmethod)
-# # python3.4
+# # python3.5
 # #     def slice_weekday(
 # #         cls: SelfClass, content: builtins.str
 # #     ) -> builtins.str:
     def slice_weekday(cls, content):
 # #
         '''Slice weekday from given date representation.'''
-# # python3.4
+# # python3.5
 # #         weekday_pattern = regularExpression.compile('[A-Za-z]{2}\. (.+)')
 # #         weekday_match = weekday_pattern.fullmatch(content)
         weekday_pattern = regularExpression.compile('[A-Za-z]{2}\. (.+)$')
@@ -4786,7 +5588,7 @@ class TimeDelta(Object):
     # # # region special
 
     @JointPoint
-# # python3.4     def __init__(self: Self, content=None) -> None:
+# # python3.5     def __init__(self: Self, content=None) -> None:
     def __init__(self, content=None):
         '''
             Generates a new high level wrapper for dates.
@@ -4835,7 +5637,7 @@ class TimeDelta(Object):
                 try:
                     content = Time(content).content
                 except __exception__:
-# # python3.4
+# # python3.5
 # #                     raise __exception__(
 # #                         '"%s" couldn\'t be interpreted as "%s".', content,
 # #                         self.__class__.__name__
@@ -4868,7 +5670,7 @@ class PhoneNumber(Object):
     # # # region special
 
     @JointPoint
-# # python3.4     def __init__(self: Self, content=None) -> None:
+# # python3.5     def __init__(self: Self, content=None) -> None:
     def __init__(self, content):
         '''
             Generates a new high level wrapper phone numbers.
@@ -4966,7 +5768,7 @@ class PhoneNumber(Object):
             >>> PhoneNumber('02 91 / 14 55').content
             '0291-1455'
         '''
-# # python3.4
+# # python3.5
 # #         if(builtins.isinstance(content, (builtins.str, builtins.int)) and
 # #            regularExpression.compile('[0-9]+').search(builtins.str(
 # #                content
@@ -4979,7 +5781,7 @@ class PhoneNumber(Object):
             content = convert_to_unicode(content)
 # #
             '''Normalize country code prefix.'''
-# # python3.4
+# # python3.5
 # #             self.content = regularExpression.compile('^[^0-9]*\+(.+)$').sub(
 # #                 '00\\1', builtins.str(content).strip())
             self.content = regularExpression.compile(
@@ -5048,7 +5850,7 @@ class PhoneNumber(Object):
     # # region protected
 
     @JointPoint(builtins.classmethod)
-# # python3.4
+# # python3.5
 # #     def _preserve_only_last_separator(cls: SelfClass, number: builtins.str):
     def _preserve_only_last_separator(cls, number):
 # #
@@ -5092,7 +5894,7 @@ class ZipCode(Object):
     # # # region special
 
     @JointPoint
-# # python3.4     def __init__(self: Self, content=None) -> None:
+# # python3.5     def __init__(self: Self, content=None) -> None:
     def __init__(self, content):
         '''
             Generates a new high level wrapper zip codes.
@@ -5110,7 +5912,7 @@ class ZipCode(Object):
             ...
             NativeError: "abc" couldn't be interpreted as "ZipCode".
         '''
-# # python3.4
+# # python3.5
 # #         if builtins.isinstance(content, (
 # #             builtins.str, builtins.int
 # #         )) and regularExpression.compile('[0-9]+').search(builtins.str(
