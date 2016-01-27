@@ -92,16 +92,16 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">server</span><span class="o">.</span><span class="n">web</span> <span class="o">=</span> <span class="n">Web</span><span class="p">(</span><span class="n">__test_folder__</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span> <span class="o">=</span> <span class="n">CGIHTTPRequestHandler</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="p">(</span><span class="s">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">12345</span><span class="p">),</span> <span class="n">server</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s">&#39;/&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># # python2.7</span>
+<span class="gp">... </span>    <span class="p">(</span><span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">12345</span><span class="p">),</span> <span class="n">server</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;/&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># # python2.7</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">(</span>
-<span class="gp">... </span>        <span class="n">String</span><span class="p">(</span><span class="s">&#39;test: hans&#39;</span><span class="p">),</span> <span class="n">seekable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="n">String</span><span class="p">(</span><span class="s1">&#39;test: hans&#39;</span><span class="p">),</span> <span class="n">seekable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="gp">... </span><span class="k">else</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">()</span>
-<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">,</span> <span class="s">&#39;hans&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># #</span>
+<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="s1">&#39;hans&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># #</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">do_DELETE</span><span class="p">()</span> 
@@ -119,23 +119,23 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">server</span><span class="o">.</span><span class="n">web</span> <span class="o">=</span> <span class="n">Web</span><span class="p">(</span><span class="n">__test_folder__</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span> <span class="o">=</span> <span class="n">CGIHTTPRequestHandler</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="p">(</span><span class="s">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">12345</span><span class="p">),</span> <span class="n">server</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s">&#39;/&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># # python2.7</span>
+<span class="gp">... </span>    <span class="p">(</span><span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">12345</span><span class="p">),</span> <span class="n">server</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;/&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># # python2.7</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">(</span>
-<span class="gp">... </span>        <span class="n">String</span><span class="p">(</span><span class="s">&#39;test: hans&#39;</span><span class="p">),</span> <span class="n">seekable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="n">String</span><span class="p">(</span><span class="s1">&#39;test: hans&#39;</span><span class="p">),</span> <span class="n">seekable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="gp">... </span><span class="k">else</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">()</span>
-<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">,</span> <span class="s">&#39;hans&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># #</span>
+<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="s1">&#39;hans&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># #</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">do_GET</span><span class="p">()</span> 
 <span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;/&quot; and param...</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">directory_listing</span> <span class="o">=</span> <span class="bp">False</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">do_GET</span><span class="p">()</span> 
 <span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;&quot; and parame...</span>
@@ -144,91 +144,91 @@
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">authentication</span> <span class="o">=</span> <span class="bp">True</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">authentication_handler</span> <span class="o">=</span> <span class="p">(</span>
 <span class="gp">... </span>    <span class="k">lambda</span> <span class="n">login_data</span><span class="p">,</span> <span class="n">request_handler</span><span class="p">:</span> <span class="p">(</span><span class="bp">False</span><span class="p">,</span> <span class="bp">None</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># # python2.7</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># # python2.7</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">(</span>
-<span class="gp">... </span>        <span class="n">String</span><span class="p">(</span><span class="s">&#39;key: value&#39;</span><span class="p">),</span> <span class="n">seekable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="n">String</span><span class="p">(</span><span class="s1">&#39;key: value&#39;</span><span class="p">),</span> <span class="n">seekable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="gp">... </span><span class="k">else</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">()</span>
-<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s">&#39;key&#39;</span><span class="p">,</span> <span class="s">&#39;value&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># #</span>
+<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s1">&#39;key&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># #</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">do_GET</span><span class="p">()</span> 
 <span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;&quot; and parame...</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># # python2.7</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c1"># # python2.7</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">(</span>
 <span class="gp">... </span>        <span class="n">String</span><span class="p">(</span>
-<span class="gp">... </span>            <span class="s">&#39;Authorization: Basic &#39;</span> <span class="o">+</span>
-<span class="gp">... </span>            <span class="n">base64_encode</span><span class="p">(</span><span class="s">&#39;hans:hans&#39;</span><span class="p">)</span>
+<span class="gp">... </span>            <span class="s1">&#39;Authorization: Basic &#39;</span> <span class="o">+</span>
+<span class="gp">... </span>            <span class="n">base64_encode</span><span class="p">(</span><span class="s1">&#39;hans:hans&#39;</span><span class="p">)</span>
 <span class="gp">... </span>        <span class="p">),</span> <span class="n">seekable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="gp">... </span><span class="k">else</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">()</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span>
-<span class="gp">... </span>        <span class="s">&#39;Authorization&#39;</span><span class="p">,</span>
-<span class="gp">... </span>        <span class="s">&#39;Basic &#39;</span> <span class="o">+</span> <span class="n">base64_encode</span><span class="p">(</span><span class="n">b</span><span class="s">&#39;hans:hans&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span>
+<span class="gp">... </span>        <span class="s1">&#39;Authorization&#39;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s1">&#39;Basic &#39;</span> <span class="o">+</span> <span class="n">base64_encode</span><span class="p">(</span><span class="n">b</span><span class="s1">&#39;hans:hans&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span>
 <span class="gp">... </span>            <span class="n">handler</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">encoding</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># #</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># #</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">do_GET</span><span class="p">()</span> 
 <span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;&quot; and parame...</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># # python2.7</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c1"># # python2.7</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">(</span>
-<span class="gp">... </span>        <span class="n">String</span><span class="p">(</span><span class="s">&#39;authorization: value&#39;</span><span class="p">),</span> <span class="n">seekable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="n">String</span><span class="p">(</span><span class="s1">&#39;authorization: value&#39;</span><span class="p">),</span> <span class="n">seekable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="gp">... </span><span class="k">else</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">()</span>
-<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s">&#39;authorization&#39;</span><span class="p">,</span> <span class="s">&#39;value&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># #</span>
+<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s1">&#39;authorization&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># #</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">do_GET</span><span class="p">()</span> 
 <span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;&quot; and parame...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s">&#39;/not_existing_file&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">request_whitelist</span> <span class="o">=</span> <span class="s">&#39;*:/not_existing_file&#39;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;/not_existing_file&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">request_whitelist</span> <span class="o">=</span> <span class="s1">&#39;*:/not_existing_file&#39;</span><span class="p">,</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">authentication_handler</span> <span class="o">=</span> <span class="p">(</span>
 <span class="gp">... </span>    <span class="k">lambda</span> <span class="n">login_data</span><span class="p">,</span> <span class="n">request_handler</span><span class="p">:</span> <span class="p">(</span><span class="bp">True</span><span class="p">,</span> <span class="bp">None</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">do_GET</span><span class="p">()</span> 
 <span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;/not_existin...</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">file</span> <span class="o">=</span> <span class="n">FileHandler</span><span class="p">(</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;do_GET&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">file</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="nb">file</span><span class="o">.</span><span class="n">name</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">request_whitelist</span> <span class="o">=</span> <span class="s">&#39;*:/</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="nb">file</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">file</span> <span class="o">=</span> <span class="n">FileHandler</span><span class="p">(</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s1">&#39;do_GET&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">file</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="nb">file</span><span class="o">.</span><span class="n">name</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">request_whitelist</span> <span class="o">=</span> <span class="s1">&#39;*:/</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">file</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">do_GET</span><span class="p">()</span> 
 <span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;/do_GET&quot; ...</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s">&#39;not_in_whitlist&#39;</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;not_in_whitlist&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">do_GET</span><span class="p">()</span> 
 <span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;not_in_whitl...</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">request_whitelist</span> <span class="o">=</span> <span class="s">&#39;*:/</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="nb">file</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s">&#39;/do_GET&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">external_redirects</span> <span class="o">=</span> <span class="p">((</span><span class="s">&#39;GET:.*&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">),)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">request_whitelist</span> <span class="o">=</span> <span class="s1">&#39;*:/</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">file</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;/do_GET&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">external_redirects</span> <span class="o">=</span> <span class="p">((</span><span class="s1">&#39;GET:.*&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">do_GET</span><span class="p">()</span> 
 <span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;/do_GET&quot; ...</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">request_whitelist</span> <span class="o">=</span> <span class="s">&#39;*:/</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="nb">file</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s">&#39;/do_GET&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">external_redirects</span> <span class="o">=</span> <span class="p">((</span><span class="s">&#39;POST:.*&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">),)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">request_whitelist</span> <span class="o">=</span> <span class="s1">&#39;*:/</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">file</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;/do_GET&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">external_redirects</span> <span class="o">=</span> <span class="p">((</span><span class="s1">&#39;POST:.*&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">do_GET</span><span class="p">()</span> 
 <span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;/do_GET&quot; ...</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">external_redirects</span> <span class="o">=</span> <span class="p">(</span>
-<span class="gp">... </span>    <span class="p">(</span><span class="s">&#39;*:(.+)&#39;</span><span class="p">,</span> <span class="s">&#39;/</span><span class="se">\\</span><span class="s">1/&#39;</span><span class="p">),)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s">&#39;/do_GET&#39;</span>
+<span class="gp">... </span>    <span class="p">(</span><span class="s1">&#39;*:(.+)&#39;</span><span class="p">,</span> <span class="s1">&#39;/</span><span class="se">\\</span><span class="s1">1/&#39;</span><span class="p">),)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;/do_GET&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">do_GET</span><span class="p">()</span> 
 <span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;/do_GET&quot; ...</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">internal_redirects</span> <span class="o">=</span> <span class="p">(</span>
-<span class="gp">... </span>    <span class="p">(</span><span class="s">&#39;*:(.+)&#39;</span><span class="p">,</span> <span class="s">&#39;-:</span><span class="se">\\</span><span class="s">1/&#39;</span><span class="p">),)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s">&#39;/do_GET&#39;</span>
+<span class="gp">... </span>    <span class="p">(</span><span class="s1">&#39;*:(.+)&#39;</span><span class="p">,</span> <span class="s1">&#39;-:</span><span class="se">\\</span><span class="s1">1/&#39;</span><span class="p">),)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;/do_GET&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">do_GET</span><span class="p">()</span> 
 <span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;/do_GET/&quot; ...</span>
 </pre></div>
@@ -239,8 +239,8 @@
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">internal_redirects</span> <span class="o">=</span> <span class="p">(</span>
-<span class="gp">... </span>    <span class="p">(</span><span class="s">&#39;*:(.+)&#39;</span><span class="p">,</span> <span class="s">&#39;PUT:</span><span class="se">\\</span><span class="s">1/&#39;</span><span class="p">),)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s">&#39;/do_GET&#39;</span>
+<span class="gp">... </span>    <span class="p">(</span><span class="s1">&#39;*:(.+)&#39;</span><span class="p">,</span> <span class="s1">&#39;PUT:</span><span class="se">\\</span><span class="s1">1/&#39;</span><span class="p">),)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;/do_GET&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">do_GET</span><span class="p">()</span> 
 <span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;/do_GET/&quot; ...</span>
 </pre></div>
@@ -256,16 +256,16 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">server</span><span class="o">.</span><span class="n">web</span> <span class="o">=</span> <span class="n">Web</span><span class="p">(</span><span class="n">__test_folder__</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span> <span class="o">=</span> <span class="n">CGIHTTPRequestHandler</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="p">(</span><span class="s">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">12345</span><span class="p">),</span> <span class="n">server</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s">&#39;/&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># # python2.7</span>
+<span class="gp">... </span>    <span class="p">(</span><span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">12345</span><span class="p">),</span> <span class="n">server</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;/&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># # python2.7</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">(</span>
-<span class="gp">... </span>        <span class="n">String</span><span class="p">(</span><span class="s">&#39;test: hans&#39;</span><span class="p">),</span> <span class="n">seekable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="n">String</span><span class="p">(</span><span class="s1">&#39;test: hans&#39;</span><span class="p">),</span> <span class="n">seekable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="gp">... </span><span class="k">else</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">()</span>
-<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">,</span> <span class="s">&#39;hans&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># #</span>
+<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="s1">&#39;hans&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># #</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">do_HEAD</span><span class="p">()</span> 
@@ -283,16 +283,16 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">server</span><span class="o">.</span><span class="n">web</span> <span class="o">=</span> <span class="n">Web</span><span class="p">(</span><span class="n">__test_folder__</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span> <span class="o">=</span> <span class="n">CGIHTTPRequestHandler</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="p">(</span><span class="s">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">12345</span><span class="p">),</span> <span class="n">server</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s">&#39;/&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># # python2.7</span>
+<span class="gp">... </span>    <span class="p">(</span><span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">12345</span><span class="p">),</span> <span class="n">server</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;/&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># # python2.7</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">(</span>
-<span class="gp">... </span>        <span class="n">String</span><span class="p">(</span><span class="s">&#39;test: hans&#39;</span><span class="p">),</span> <span class="n">seekable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="n">String</span><span class="p">(</span><span class="s1">&#39;test: hans&#39;</span><span class="p">),</span> <span class="n">seekable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="gp">... </span><span class="k">else</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">()</span>
-<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">,</span> <span class="s">&#39;hans&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># #</span>
+<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="s1">&#39;hans&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># #</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">do_PATCH</span><span class="p">()</span> 
@@ -310,16 +310,16 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">server</span><span class="o">.</span><span class="n">web</span> <span class="o">=</span> <span class="n">Web</span><span class="p">(</span><span class="n">__test_folder__</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span> <span class="o">=</span> <span class="n">CGIHTTPRequestHandler</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="p">(</span><span class="s">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">12345</span><span class="p">),</span> <span class="n">server</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s">&#39;/&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># # python2.7</span>
+<span class="gp">... </span>    <span class="p">(</span><span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">12345</span><span class="p">),</span> <span class="n">server</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;/&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># # python2.7</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">(</span>
-<span class="gp">... </span>        <span class="n">String</span><span class="p">(</span><span class="s">&#39;test: hans&#39;</span><span class="p">),</span> <span class="n">seekable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="n">String</span><span class="p">(</span><span class="s1">&#39;test: hans&#39;</span><span class="p">),</span> <span class="n">seekable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="gp">... </span><span class="k">else</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">()</span>
-<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">,</span> <span class="s">&#39;hans&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># #</span>
+<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="s1">&#39;hans&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># #</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">do_POST</span><span class="p">()</span> 
@@ -337,16 +337,16 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">server</span><span class="o">.</span><span class="n">web</span> <span class="o">=</span> <span class="n">Web</span><span class="p">(</span><span class="n">__test_folder__</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span> <span class="o">=</span> <span class="n">CGIHTTPRequestHandler</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="p">(</span><span class="s">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">12345</span><span class="p">),</span> <span class="n">server</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s">&#39;/&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># # python2.7</span>
+<span class="gp">... </span>    <span class="p">(</span><span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">12345</span><span class="p">),</span> <span class="n">server</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;/&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># # python2.7</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">(</span>
-<span class="gp">... </span>        <span class="n">String</span><span class="p">(</span><span class="s">&#39;test: hans&#39;</span><span class="p">),</span> <span class="n">seekable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="n">String</span><span class="p">(</span><span class="s1">&#39;test: hans&#39;</span><span class="p">),</span> <span class="n">seekable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="gp">... </span><span class="k">else</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">()</span>
-<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">,</span> <span class="s">&#39;hans&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># #</span>
+<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="s1">&#39;hans&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># #</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">do_PUT</span><span class="p">()</span> 
@@ -383,28 +383,28 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">server</span><span class="o">.</span><span class="n">web</span> <span class="o">=</span> <span class="n">Web</span><span class="p">(</span><span class="n">__test_folder__</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span> <span class="o">=</span> <span class="n">CGIHTTPRequestHandler</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="p">(</span><span class="s">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">12345</span><span class="p">),</span> <span class="n">server</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># # python2.7</span>
+<span class="gp">... </span>    <span class="p">(</span><span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">12345</span><span class="p">),</span> <span class="n">server</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># # python2.7</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">(</span>
-<span class="gp">... </span>        <span class="n">String</span><span class="p">(</span><span class="s">&#39;hans: hans&#39;</span><span class="p">),</span> <span class="n">seekable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="n">String</span><span class="p">(</span><span class="s1">&#39;hans: hans&#39;</span><span class="p">),</span> <span class="n">seekable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="gp">... </span><span class="k">else</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">()</span>
-<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">,</span> <span class="s">&#39;hans&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># #</span>
+<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s1">&#39;hans&#39;</span><span class="p">,</span> <span class="s1">&#39;hans&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># #</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">get_cookie</span><span class="p">()</span> 
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># # python2.7</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c1"># # python2.7</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">(</span>
-<span class="gp">... </span>        <span class="n">String</span><span class="p">(</span><span class="s">&#39;Cookie: hans=hans&#39;</span><span class="p">),</span> <span class="n">seekable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="n">String</span><span class="p">(</span><span class="s1">&#39;Cookie: hans=hans&#39;</span><span class="p">),</span> <span class="n">seekable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="gp">... </span><span class="k">else</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">()</span>
-<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s">&#39;Cookie&#39;</span><span class="p">,</span> <span class="s">&#39;hans=hans&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># #</span>
+<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s1">&#39;Cookie&#39;</span><span class="p">,</span> <span class="s1">&#39;hans=hans&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># #</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">get_cookie</span><span class="p">()</span> 
@@ -415,14 +415,14 @@
 <span class="go">&#39;...&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># # python2.7</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c1"># # python2.7</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">(</span>
-<span class="gp">... </span>        <span class="n">String</span><span class="p">(</span><span class="s">&#39;Cookie: ha/ns=hans&#39;</span><span class="p">),</span> <span class="n">seekable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="n">String</span><span class="p">(</span><span class="s1">&#39;Cookie: ha/ns=hans&#39;</span><span class="p">),</span> <span class="n">seekable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="gp">... </span><span class="k">else</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">()</span>
-<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s">&#39;Cookie&#39;</span><span class="p">,</span> <span class="s">&#39;ha/ns=hans&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># #</span>
+<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s1">&#39;Cookie&#39;</span><span class="p">,</span> <span class="s1">&#39;ha/ns=hans&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># #</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">get_cookie</span><span class="p">()</span> 
@@ -433,14 +433,14 @@
 <span class="go">&#39;...WARNING... - Invalid cookie detected &quot;ha/ns=hans&quot;. ...&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># # python2.7</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c1"># # python2.7</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">(</span>
-<span class="gp">... </span>        <span class="n">String</span><span class="p">(</span><span class="s">&#39;Cookie: hans&#39;</span><span class="p">),</span> <span class="n">seekable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="n">String</span><span class="p">(</span><span class="s1">&#39;Cookie: hans&#39;</span><span class="p">),</span> <span class="n">seekable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="gp">... </span><span class="k">else</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">()</span>
-<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s">&#39;Cookie&#39;</span><span class="p">,</span> <span class="s">&#39;hans&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># #</span>
+<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s1">&#39;Cookie&#39;</span><span class="p">,</span> <span class="s1">&#39;hans&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># #</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">get_cookie</span><span class="p">()</span> 
@@ -451,14 +451,14 @@
 <span class="go">&#39;&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># # python2.7</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c1"># # python2.7</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">(</span>
-<span class="gp">... </span>        <span class="n">String</span><span class="p">(</span><span class="s">&#39;Cookie: hans=&#39;</span><span class="p">),</span> <span class="n">seekable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="n">String</span><span class="p">(</span><span class="s1">&#39;Cookie: hans=&#39;</span><span class="p">),</span> <span class="n">seekable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="gp">... </span><span class="k">else</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">()</span>
-<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s">&#39;Cookie&#39;</span><span class="p">,</span> <span class="s">&#39;hans=&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># #</span>
+<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s1">&#39;Cookie&#39;</span><span class="p">,</span> <span class="s1">&#39;hans=&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># #</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">get_cookie</span><span class="p">()</span> 
@@ -469,14 +469,14 @@
 <span class="go">&#39;&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># # python2.7</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c1"># # python2.7</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">(</span>
-<span class="gp">... </span>        <span class="n">String</span><span class="p">(</span><span class="s">&#39;Cookie: h/a//ns////=ha/ns&#39;</span><span class="p">),</span> <span class="n">seekable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="n">String</span><span class="p">(</span><span class="s1">&#39;Cookie: h/a//ns////=ha/ns&#39;</span><span class="p">),</span> <span class="n">seekable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="gp">... </span><span class="k">else</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">()</span>
-<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s">&#39;Cookie&#39;</span><span class="p">,</span> <span class="s">&#39;h/a//ns////=ha/ns&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># #</span>
+<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s1">&#39;Cookie&#39;</span><span class="p">,</span> <span class="s1">&#39;h/a//ns////=ha/ns&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># #</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">get_cookie</span><span class="p">()</span> 
@@ -510,8 +510,8 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">server</span><span class="o">.</span><span class="n">web</span> <span class="o">=</span> <span class="n">Web</span><span class="p">(</span><span class="n">__test_folder__</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span> <span class="o">=</span> <span class="n">CGIHTTPRequestHandler</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="p">(</span><span class="s">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">12345</span><span class="p">),</span> <span class="n">server</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s">&#39;/&#39;</span>
+<span class="gp">... </span>    <span class="p">(</span><span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">12345</span><span class="p">),</span> <span class="n">server</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;/&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">requested_file</span> <span class="o">=</span> <span class="n">FileHandler</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -539,56 +539,56 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">server</span><span class="o">.</span><span class="n">web</span> <span class="o">=</span> <span class="n">Web</span><span class="p">(</span><span class="n">__test_folder__</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span> <span class="o">=</span> <span class="n">CGIHTTPRequestHandler</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="p">(</span><span class="s">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">12345</span><span class="p">),</span> <span class="n">server</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">client_address</span> <span class="o">=</span> <span class="s">&#39;192.168.0.1&#39;</span><span class="p">,</span> <span class="mi">80</span>
+<span class="gp">... </span>    <span class="p">(</span><span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">12345</span><span class="p">),</span> <span class="n">server</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">client_address</span> <span class="o">=</span> <span class="s1">&#39;192.168.0.1&#39;</span><span class="p">,</span> <span class="mi">80</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">__test_buffer__</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span> 
 <span class="go">&#39;...&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">log_message</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="mi">404</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">log_message</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mi">404</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> 
 <span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;&quot; and parame...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">__test_buffer__</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span> 
 <span class="go">&#39;...404...&#39;</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">instances</span> <span class="o">=</span> <span class="p">[</span><span class="n">handler</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">web</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">log_message</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="mi">404</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">log_message</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mi">404</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> 
 <span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;&quot; and parame...</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">log_message</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="mi">404</span><span class="p">)</span> 
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">log_message</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mi">404</span><span class="p">)</span> 
 <span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;&quot; and parame...</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># # python2.7</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c1"># # python2.7</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">(</span>
-<span class="gp">... </span>        <span class="n">String</span><span class="p">(</span><span class="s">&#39;key: value&#39;</span><span class="p">),</span> <span class="n">seekable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="n">String</span><span class="p">(</span><span class="s1">&#39;key: value&#39;</span><span class="p">),</span> <span class="n">seekable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="gp">... </span><span class="k">else</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">()</span>
-<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s">&#39;key&#39;</span><span class="p">,</span> <span class="s">&#39;value&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># #</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">log_message</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="mi">404</span><span class="p">)</span> 
+<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s1">&#39;key&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># #</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">log_message</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mi">404</span><span class="p">)</span> 
 <span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;&quot; and parame...</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># # python2.7</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c1"># # python2.7</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">(</span><span class="n">String</span><span class="p">(</span>
-<span class="gp">... </span>        <span class="s">&#39;x-forwarded-for: 192.168.0.1</span><span class="se">\n</span><span class="s">&#39;</span>
-<span class="gp">... </span>        <span class="s">&#39;x-forwarded-host: 192.168.0.1</span><span class="se">\n</span><span class="s">&#39;</span>
-<span class="gp">... </span>        <span class="s">&#39;x-forwarded-server: 192.168.0.1&#39;</span><span class="p">),</span> <span class="n">seekable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="s1">&#39;x-forwarded-for: 192.168.0.1</span><span class="se">\n</span><span class="s1">&#39;</span>
+<span class="gp">... </span>        <span class="s1">&#39;x-forwarded-host: 192.168.0.1</span><span class="se">\n</span><span class="s1">&#39;</span>
+<span class="gp">... </span>        <span class="s1">&#39;x-forwarded-server: 192.168.0.1&#39;</span><span class="p">),</span> <span class="n">seekable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="gp">... </span><span class="k">else</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">MessageClass</span><span class="p">()</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span>
-<span class="gp">... </span>        <span class="s">&#39;x-forwarded-for&#39;</span><span class="p">,</span> <span class="s">&#39;192.168.0.1&#39;</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="s1">&#39;x-forwarded-for&#39;</span><span class="p">,</span> <span class="s1">&#39;192.168.0.1&#39;</span><span class="p">)</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span>
-<span class="gp">... </span>        <span class="s">&#39;x-forwarded-host&#39;</span><span class="p">,</span> <span class="s">&#39;192.168.0.1&#39;</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="s1">&#39;x-forwarded-host&#39;</span><span class="p">,</span> <span class="s1">&#39;192.168.0.1&#39;</span><span class="p">)</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span>
-<span class="gp">... </span>        <span class="s">&#39;x-forwarded-server&#39;</span><span class="p">,</span> <span class="s">&#39;192.168.0.1&#39;</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="s1">&#39;x-forwarded-server&#39;</span><span class="p">,</span> <span class="s1">&#39;192.168.0.1&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">__test_buffer__</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span> 
 <span class="go">&#39;...&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">log_message</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="mi">404</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">log_message</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mi">404</span><span class="p">)</span> 
 <span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;&quot; and parame...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">__test_buffer__</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span> 
 <span class="go">&#39;...192.168.0.1:80  -&gt; ...404... - forwarded for: 192.168.0.1 - ...</span>
@@ -608,8 +608,8 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">server</span><span class="o">.</span><span class="n">web</span> <span class="o">=</span> <span class="n">Web</span><span class="p">(</span><span class="n">__test_folder__</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span> <span class="o">=</span> <span class="n">CGIHTTPRequestHandler</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="p">(</span><span class="s">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">12345</span><span class="p">),</span> <span class="n">server</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">request_parameter_delimiter</span> <span class="o">=</span> <span class="s">&#39;?&#39;</span>
+<span class="gp">... </span>    <span class="p">(</span><span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">12345</span><span class="p">),</span> <span class="n">server</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">request_parameter_delimiter</span> <span class="o">=</span> <span class="s1">&#39;?&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[:</span><span class="mi">1</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -617,17 +617,17 @@
 <span class="go">(None, {})</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;hans&#39;</span><span class="p">]</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;hans&#39;</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">parse_url</span><span class="p">()</span> 
 <span class="go">(ParseResult(...&#39;hans&#39;...), {})</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;?hans=peter&#39;</span><span class="p">]</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;?hans=peter&#39;</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">parse_url</span><span class="p">()</span> 
 <span class="go">(ParseResult(..., {&#39;hans&#39;: &#39;peter&#39;})</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;?hans=peter&amp;s&#39;</span><span class="p">]</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;?hans=peter&amp;s&#39;</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">__test_buffer__</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span> 
 <span class="go">&#39;...&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">parse_url</span><span class="p">(</span><span class="n">strict</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> 
@@ -703,14 +703,14 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">server</span><span class="o">.</span><span class="n">web</span> <span class="o">=</span> <span class="n">Web</span><span class="p">(</span><span class="n">__test_folder__</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span> <span class="o">=</span> <span class="n">CGIHTTPRequestHandler</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="p">(</span><span class="s">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">12345</span><span class="p">),</span> <span class="n">server</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="p">(</span><span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">12345</span><span class="p">),</span> <span class="n">server</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">send_cookie</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">)</span> 
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">send_cookie</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span> 
 <span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;&quot; and parame...</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">send_cookie</span><span class="p">(</span><span class="s">&#39;key=value;a=1&#39;</span><span class="p">)</span> 
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">send_cookie</span><span class="p">(</span><span class="s1">&#39;key=value;a=1&#39;</span><span class="p">)</span> 
 <span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;&quot; and parame...</span>
 </pre></div>
 </div>
@@ -720,20 +720,20 @@
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">send_cookie</span><span class="p">(</span>
-<span class="gp">... </span>        <span class="p">{</span><span class="nb">str</span><span class="p">(</span><span class="s">&#39;key&#39;</span><span class="p">):</span> <span class="nb">str</span><span class="p">(</span><span class="s">&#39;value&#39;</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">):</span> <span class="mi">1</span><span class="p">}</span>
+<span class="gp">... </span>        <span class="p">{</span><span class="nb">str</span><span class="p">(</span><span class="s1">&#39;key&#39;</span><span class="p">):</span> <span class="nb">str</span><span class="p">(</span><span class="s1">&#39;value&#39;</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">):</span> <span class="mi">1</span><span class="p">}</span>
 <span class="gp">... </span>    <span class="p">)</span> 
 <span class="gp">... </span><span class="k">else</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">send_cookie</span><span class="p">({</span><span class="s">&#39;key&#39;</span><span class="p">:</span> <span class="s">&#39;value&#39;</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+<span class="gp">... </span>    <span class="n">handler</span><span class="o">.</span><span class="n">send_cookie</span><span class="p">({</span><span class="s1">&#39;key&#39;</span><span class="p">:</span> <span class="s1">&#39;value&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
 <span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;&quot; and parame...</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cookie</span> <span class="o">=</span> <span class="n">cookies</span><span class="o">.</span><span class="n">SimpleCookie</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="n">cookie</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="s">&#39;key&#39;</span><span class="p">)]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="s">&#39;value&#39;</span><span class="p">)</span>
-<span class="gp">... </span>    <span class="n">cookie</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="gp">... </span>    <span class="n">cookie</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="s1">&#39;key&#39;</span><span class="p">)]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="s1">&#39;value&#39;</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">cookie</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="gp">... </span><span class="k">else</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="n">cookie</span><span class="p">[</span><span class="s">&#39;key&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;value&#39;</span>
-<span class="gp">... </span>    <span class="n">cookie</span><span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="gp">... </span>    <span class="n">cookie</span><span class="p">[</span><span class="s1">&#39;key&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;value&#39;</span>
+<span class="gp">... </span>    <span class="n">cookie</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">handler</span><span class="o">.</span><span class="n">send_cookie</span><span class="p">(</span><span class="n">cookie</span><span class="p">)</span> 
 <span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;&quot; and parame...</span>
 </pre></div>
@@ -756,7 +756,7 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">server</span><span class="o">.</span><span class="n">web</span> <span class="o">=</span> <span class="n">Web</span><span class="p">(</span><span class="n">__test_folder__</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">CGIHTTPRequestHandler</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="p">(</span><span class="s">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">12345</span><span class="p">),</span> <span class="n">server</span>
+<span class="gp">... </span>    <span class="p">(</span><span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">12345</span><span class="p">),</span> <span class="n">server</span>
 <span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">send_response</span><span class="p">()</span> 
 <span class="go">Object of &quot;CGIHTTPRequestHandler&quot; with request uri &quot;&quot; and parame...</span>
 </pre></div>
@@ -875,8 +875,8 @@
 <p><strong>external_redirects</strong>                  - A mapping of request url                                                   patterns to corresponding                                                   external version. Regular                                                   expression replacements are                                                   supported.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">key_file</span> <span class="o">=</span> <span class="n">FileHandler</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;_initialize_key_file&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">key_file</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+<span class="gp">... </span>    <span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s1">&#39;_initialize_key_file&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">key_file</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Web</span><span class="p">(</span><span class="n">key_file</span><span class="o">=</span><span class="n">key_file</span><span class="p">)</span> 
 <span class="go">Object of &quot;Web&quot; with root path &quot;...&quot;, port &quot;0&quot; and stop order ...</span>
 </pre></div>
@@ -1011,7 +1011,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 16.12.2012, Torben Sickert.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>
 </html>

@@ -63,10 +63,10 @@
 <p><strong>queue</strong>                   - a queue object to use as buffer</p>
 <p><strong>support_multiprocessing</strong> - indicates weather buffer read and write                                       requests should be multiprocessing save</p>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span> <span class="o">=</span> <span class="n">Buffer</span><span class="p">(</span><span class="nb">file</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;Buffer&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span> <span class="o">=</span> <span class="n">Buffer</span><span class="p">(</span><span class="nb">file</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s1">&#39;Buffer&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span> 
 <span class="go">&#39;...&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="nb">buffer</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s">&#39;+&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="s1">&#39;hans&#39;</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="nb">buffer</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;hans+&#39;</span>
 </pre></div>
@@ -77,12 +77,12 @@
 <dd><p>Removes the current output buffer content.</p>
 <p><strong>delete</strong> - indicates weather a file buffer should be deleted or                          truncated</p>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span> <span class="o">=</span> <span class="n">Buffer</span><span class="p">(</span><span class="nb">file</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;clear&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span> <span class="o">=</span> <span class="n">Buffer</span><span class="p">(</span><span class="nb">file</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s1">&#39;clear&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span> 
 <span class="go">&#39;...&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;hans&#39;</span><span class="p">)</span> 
 <span class="go">Objec...(file buffered with &quot;...clear...with content &quot;hans&quot;.</span>
 </pre></div>
 </div>
@@ -93,7 +93,7 @@
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span> <span class="o">=</span> <span class="n">Buffer</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;hans&#39;</span><span class="p">)</span>
 <span class="go">Object of &quot;Buffer&quot; (memory buffered) with content &quot;hans&quot;.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
 <span class="go">&#39;hans&#39;</span>
@@ -108,9 +108,9 @@
 <span class="go">&#39;&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;hans&#39;</span><span class="p">)</span>
 <span class="go">Object of &quot;Buffer&quot; (queue buffered) with content &quot;hans&quot;.</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;hans&#39;</span><span class="p">)</span>
 <span class="go">Object of &quot;Buffer&quot; (queue buffered) with content &quot;hanshans&quot;.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
 <span class="go">&#39;hanshans&#39;</span>
@@ -136,11 +136,11 @@
 <code class="descname">get_content</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.output.Buffer.get_content" title="Permalink to this definition">¶</a></dt>
 <dd><p>Getter for the current content.</p>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Buffer</span><span class="p">()</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Buffer</span><span class="p">()</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;test&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Buffer</span><span class="p">(</span><span class="n">queue</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Buffer</span><span class="p">(</span><span class="n">queue</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;test&#39;</span>
 </pre></div>
 </div>
@@ -152,17 +152,17 @@
 <dd><p>Writes content to the current output buffer file. If the current             given file &#8220;Buffer.file&#8221; doesn&#8217;t exists it will be created.</p>
 <p><strong>content</strong> - content to write into current buffer instance</p>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span> <span class="o">=</span> <span class="n">Buffer</span><span class="p">(</span><span class="nb">file</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;write&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span> <span class="o">=</span> <span class="n">Buffer</span><span class="p">(</span><span class="nb">file</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s1">&#39;write&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span> 
 <span class="go">&#39;...&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;hans&#39;</span><span class="p">)</span> 
 <span class="go">Object of &quot;Buffer&quot; (file buffered with &quot;...write...nt &quot;hans&quot;.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;hans&#39;</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span> <span class="o">=</span> <span class="n">Buffer</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;hans&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;hans&#39;</span><span class="p">)</span>
 <span class="go">Object of &quot;Buffer&quot; (memory buffered) with content &quot;hans&quot;.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;hans&#39;</span>
@@ -227,16 +227,16 @@
 <p><strong>colored_format</strong> - sets templates for colored logging messages                                  in returned logger, if &#8220;None&#8221; is given                                  normal format will be used instead.</p>
 <p><strong>format</strong>         - sets templates for logging messages in each                                  logger</p>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">logger_a</span> <span class="o">=</span> <span class="n">Logger</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">,</span> <span class="nb">buffer</span><span class="o">=</span><span class="p">(</span><span class="n">__test_buffer__</span><span class="p">,))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">logger_b</span> <span class="o">=</span> <span class="n">Logger</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">logger_c</span> <span class="o">=</span> <span class="n">Logger</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">,</span> <span class="nb">buffer</span><span class="o">=</span><span class="p">(</span><span class="n">__test_buffer__</span><span class="p">,))</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">logger_a</span> <span class="o">=</span> <span class="n">Logger</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="nb">buffer</span><span class="o">=</span><span class="p">(</span><span class="n">__test_buffer__</span><span class="p">,))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">logger_b</span> <span class="o">=</span> <span class="n">Logger</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">logger_c</span> <span class="o">=</span> <span class="n">Logger</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="nb">buffer</span><span class="o">=</span><span class="p">(</span><span class="n">__test_buffer__</span><span class="p">,))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">logger_a</span> <span class="ow">is</span> <span class="n">logger_b</span>
 <span class="go">True</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">__test_buffer__</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span> 
 <span class="go">&#39;...&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">logger_a</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s">&#39;Log some information.&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">logger_a</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s1">&#39;Log some information.&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">__test_buffer__</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span> 
 <span class="go">&#39;... - test... - ...CRITICAL... - Log some information.\n&#39;</span>
 </pre></div>
@@ -319,7 +319,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 16.12.2012, Torben Sickert.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>
 </html>

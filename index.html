@@ -240,19 +240,19 @@ for applications in a full generic, reusable and very solid way.
 10
 11
 12
-13</pre></div><td class=code><div class=codehilite><pre><span class=c>#!/usr/bin/env python</span>
+13</pre></div><td class=code><div class=codehilite><pre><span class=ch>#!/usr/bin/env python</span>
 
 <span class=kn>from</span> <span class=nn>boostNode.extension.file</span> <span class=kn>import</span> <span class=n>Handler</span> <span class=k>as</span> <span class=n>FileHandler</span>
 <span class=kn>from</span> <span class=nn>boostNode.extension.native</span> <span class=kn>import</span> <span class=n>Dictionary</span><span class=p>,</span> <span class=n>Module</span><span class=p>,</span> \
     <span class=n>PropertyInitializer</span><span class=p>,</span> <span class=n>String</span>
 <span class=kn>from</span> <span class=nn>boostNode.extension.output</span> <span class=kn>import</span> <span class=n>Buffer</span><span class=p>,</span> <span class=n>Print</span>
 <span class=kn>from</span> <span class=nn>boostNode.extension.system</span> <span class=kn>import</span> <span class=n>CommandLine</span><span class=p>,</span> <span class=n>Runnable</span>
-<span class=c>## python3.4 from boostNode.extension.type import Self, SelfClass</span>
+<span class=c1>## python3.4 from boostNode.extension.type import Self, SelfClass</span>
 <span class=k>pass</span>
 <span class=kn>from</span> <span class=nn>boostNode.paradigm.aspectOrientation</span> <span class=kn>import</span> <span class=n>JointPoint</span>
 <span class=kn>from</span> <span class=nn>boostNode.paradigm.objectOrientation</span> <span class=kn>import</span> <span class=n>Class</span>
 
-<span class=c># some stuff using imported boostNode components...</span>
+<span class=c1># some stuff using imported boostNode components...</span>
 </pre></div>
 </table>
 
@@ -299,22 +299,22 @@ syntax examples:
 13
 14
 15
-16</pre></div><td class=code><div class=codehilite><pre><span class=c>#!/usr/bin/env interpreterA</span>
+16</pre></div><td class=code><div class=codehilite><pre>#!/usr/bin/env interpreterA
 
-<span class=err>##</span> <span class=nx>interpreterB</span>
-<span class=err>##</span> <span class=k>if</span> <span class=nx>True</span> <span class=o>||</span> <span class=nx>False</span> <span class=k>do</span> <span class=p>{</span>
-<span class=err>##</span>     <span class=nx>something</span><span class=p>();</span>
-<span class=err>##</span> <span class=p>}</span>
-<span class=err>#</span> <span class=nx>Your</span> <span class=nx>multiline</span> <span class=nx>code</span> <span class=nx>supported</span> <span class=nx>by</span> <span class=nx>interpreterA</span>
-<span class=k>if</span> <span class=nx>True</span> <span class=nx>or</span> <span class=nx>False</span> <span class=k>do</span>
-    <span class=nx>something</span><span class=p>()</span>
-<span class=nx>endif</span>
-<span class=err>##</span>
+## interpreterB
+## if True || False do {
+##     something();
+## }
+# Your multiline code supported by interpreterA
+if True or False do
+    something()
+endif
+##
 
-<span class=err>#</span> <span class=nx>Your</span> <span class=nx>two</span> <span class=nx>version</span> <span class=nx>of</span> <span class=nx>any</span> <span class=nx>one</span> <span class=nx>line</span> <span class=nx>code</span> <span class=nx>supportted</span> <span class=nx>by</span> <span class=nx>interpreterA</span> <span class=nx>or</span>
-<span class=err>#</span> <span class=nx>interpreterB</span>
-<span class=err>##</span> <span class=nx>interpreterB</span> <span class=nx>functionCall</span><span class=p>();</span>
-<span class=nx>functionCall</span><span class=p>()</span>
+# Your two version of any one line code supportted by interpreterA or
+# interpreterB
+## interpreterB functionCall();
+functionCall()
 </pre></div>
 </table>
 
@@ -410,4 +410,4 @@ indem Sie das unter dem folgenden<a href="http://tools.google.com/dlpage/gaoptou
 of the website author. Any use for commercial purpose, reproduction and
 publication requires the author's written permission. Commercial work
 created in cooperation or bound by contract with third parties are
-specifically marked. Respective copyrights apply.</p></section><!-- endregion--></div><!-- endregion--><!-- region footer--><div class="footer-wrap outer"><footer class=inner><p class="website-start-up-animation-number-11 copyright">boostNode maintained by<!--deDE:boostNode betrieben von--><!--frFR:boostNode exploité par--> <a href=http://torben.website>thaibault</a> &middot; &copy; 2013 Torben Sickert &middot; <a href=#about-this-website>about this website<!--deDE:Impressum--><!--frFR:Mentions légales--></a></p></footer></div><!-- endregion--><a href=#top>top<!--deDE:nach oben--><!--frFR:ascendant--></a><!-- region post load resources--><script src=javaScript/main.js?md5=9d0c77a13f203208e07f1951efcd3dc3></script><!-- endregion--><!-- endregion-->
+specifically marked. Respective copyrights apply.</p></section><!-- endregion--></div><!-- endregion--><!-- region footer--><div class="footer-wrap outer"><footer class=inner><p class="website-start-up-animation-number-11 copyright">boostNode maintained by<!--deDE:boostNode betrieben von--><!--frFR:boostNode exploité par--> <a href=http://torben.website>thaibault</a> &middot; &copy; 2013 Torben Sickert &middot; <a href=#about-this-website>about this website<!--deDE:Impressum--><!--frFR:Mentions légales--></a></p></footer></div><!-- endregion--><a href=#top>top<!--deDE:nach oben--><!--frFR:ascendant--></a><!-- region post load resources--><script src=javaScript/main.js?md5=6fabf6d5dc7af0a3c28adb3e4a288a3a></script><!-- endregion--><!-- endregion-->
