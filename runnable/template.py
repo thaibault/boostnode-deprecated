@@ -265,7 +265,7 @@ class Parser(Class, Runnable):
                      'caches the complete template result. This makes sense '
                      "if given scope variables doesn't change very often.",
              'dest': 'full_caching'}},
-        {'arguments': ('-y', '-propagate-full-caching'),
+        {'arguments': ('-y', '--propagate-full-caching'),
          'specification': {
              'action': 'store_true',
              'default': {'execute': '__initializer_default_value__'},
