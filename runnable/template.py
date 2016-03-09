@@ -23,7 +23,7 @@ __copyright__ = 'see boostNode/__init__.py'
 __credits__ = 'Torben Sickert',
 __license__ = 'see boostNode/__init__.py'
 __maintainer__ = 'Torben Sickert'
-__maintainer_email__ = 't.sickert["~at~"]gmail.com'
+__maintainer_email__ = 'info["~at~"]torben.website'
 __status__ = 'stable'
 __version__ = '1.0'
 
@@ -129,6 +129,13 @@ pathname2url = lambda path: convert_to_unicode(native_pathname2url(
 
 # endregion
 
+# region constants
+
+DEFAULT_CODE_DELIMITER = {'left': '<%', 'right': '%>', 'right_escaped': '%'}
+'''Saves the default template file extension suffix.'''
+
+# endregion
+
 
 # region classes
 
@@ -211,7 +218,9 @@ class Parser(Class, Runnable):
         Examples:
 
         >>> file = FileHandler(__test_folder__.path + '_run')
-        >>> file.content = 'hans <%placeholder%>'
+        >>> file.content = (
+        ...     'hans ' + DEFAULT_CODE_DELIMITER['left'] + 'placeholder' +
+        ...     DEFAULT_CODE_DELIMITER['right'])
         >>> template = Parser(template=file)
         >>> template.substitute(placeholder='also hans')
         Object of "Parser" with template "hans <%placeholder%>".
@@ -1085,125 +1094,135 @@ class Parser(Class, Runnable):
 # #         self: Self, template: (builtins.str, FileHandler), string=None,
 # #         cache_path=None, full_caching=False, propagate_full_caching=False,
 # #         file_encoding=ENCODING, placeholder_name_pattern='(?! *#).+?',
-# #         command_line_placeholder_name_pattern='(?s)'
-# #                                               '[a-zA-Z0-9_\[\]\.(),\-+]+',
-# #         command_line_placeholder_pattern=(
+# #         command_line_placeholder_name_pattern=(
+# #             '(?s)[a-zA-Z0-9_\[\]\.(),\-+]+'
+# #         ), command_line_placeholder_pattern=(
 # #             '^(?P<variable_name>{placeholder})'
-# #             '(?P<separator>.)(?P<value>.*)'),
-# #         placeholder_pattern='{left_delimiter}[ \t]*'
-# #                             '(?P<variable_name>{placeholder})'
-# #                             '[ \t]*{right_delimiter}',
-# #         template_pattern='(?m)(?P<ESCAPED_DELIMITER>'
-# #                          '(?P<before_escaped>'  # in brackets
-# #                          '(?P<indent_escaped>[ \t]*)'  # in two brackets
-# #                          '(?!{left_delimiter})'  # in two brackets
-# #                          '(?:.(?!{left_delimiter}))*?.?'  # in two brackets
-# #                          ')?{left_delimiter}{right_escaped}'  # in brackets
-# #                          '(?P<after_escaped>\n?)'  # in brackets
-# #                          ')|(?P<PLACEHOLDER>'
-# #                          '(?P<before_placeholder>'  # in brackets
-# #                          '(?P<indent_placeholder>'  # in two brackets
-# #                          '[ \t]*)'  # in two brackets
-# #                          '(?!{left_delimiter})'  # in two brackets
-# #                          '(?:.(?!{left_delimiter}))*?.?'  # in two brackets
-# #                          ')?{left_delimiter}[ \t]*'  # in brackets
-# #                          '(?P<placeholder>{placeholder})'  # in brackets
-# #                          '[ \t]*'  # in brackets
-# #                          '{right_delimiter}'  # in brackets
-# #                          '(?P<after_placeholder>\n?)'  # in brackets
-# #                          ')|(?P<CODE>'
-# #                          '^(?P<indent_code>[ \t]*)'  # in brackets
-# #                          '{left_delimiter}'  # in brackets
-# #                          '(?P<code>.+)$'  # in brackets
-# #                          ')|(?P<NONE_CODE>'
-# #                          '(?P<none_code>'  # in brackets
-# #                          '(?P<indent_none_code>'  # in two brackets
-# #                          '[ \t]*'
-# #                          ').+'  # in two brackets
-# #                          ')'  # in brackets
-# #                          '(?P<after_none_code>\n|$)'  # in brackets
-# #                          ')|(?P<EMPTY_LINE>^(?P<indent_line>[ \t]*)\n)',
-# #         native_template_pattern='<%[ \t]*(?:'
-# #                                 '(?P<escaped>%)|'  # in brackets
-# #                                 '(?:(?P<named>'  # in brackets
-# #                                 '[a-zA-Z0-9_]+)'  # in brackets
-# #                                 '[ \t]*% >)|'  # in two brackets
-# #                                 '(?:'  # in brackets
-# #                                 '(?P<braced>'  # in two brackets
-# #                                 '[a-zA-Z0-9_]+)'  # in tree brackets
-# #                                 '[ \t]*%>)|'  # in two brackets
-# #                                 '(?P<invalid>)'  # in brackets
-# #                                 ')',
-# #         left_code_delimiter='<%', right_code_delimiter='%>',
-# #         right_escaped='%',  # For example: "<%%" evaluates to "<%"
+# #             '(?P<separator>.)(?P<value>.*)'
+# #         ), placeholder_pattern=(
+# #             '{left_delimiter}[ \t]*(?P<variable_name>{placeholder})'
+# #             '[ \t]*{right_delimiter}'
+# #         ), template_pattern=(
+# #             '(?m)(?P<ESCAPED_DELIMITER>'
+# #             '(?P<before_escaped>'  # in brackets
+# #             '(?P<indent_escaped>[ \t]*)'  # in two brackets
+# #             '(?!{left_delimiter})'  # in two brackets
+# #             '(?:.(?!{left_delimiter}))*?.?'  # in two brackets
+# #             ')?{left_delimiter}{right_escaped}'  # in brackets
+# #             '(?P<after_escaped>\n?)'  # in brackets
+# #             ')|(?P<PLACEHOLDER>'
+# #             '(?P<before_placeholder>'  # in brackets
+# #             '(?P<indent_placeholder>'  # in two brackets
+# #             '[ \t]*)'  # in two brackets
+# #             '(?!{left_delimiter})'  # in two brackets
+# #             '(?:.(?!{left_delimiter}))*?.?'  # in two brackets
+# #             ')?{left_delimiter}[ \t]*'  # in brackets
+# #             '(?P<placeholder>{placeholder})'  # in brackets
+# #             '[ \t]*'  # in brackets
+# #             '{right_delimiter}'  # in brackets
+# #             '(?P<after_placeholder>\n?)'  # in brackets
+# #             ')|(?P<CODE>'
+# #             '^(?P<indent_code>[ \t]*)'  # in brackets
+# #             '{left_delimiter}'  # in brackets
+# #             '(?P<code>.+)$'  # in brackets
+# #             ')|(?P<NONE_CODE>'
+# #             '(?P<none_code>'  # in brackets
+# #             '(?P<indent_none_code>'  # in two brackets
+# #             '[ \t]*'
+# #             ').+'  # in two brackets
+# #             ')'  # in brackets
+# #             '(?P<after_none_code>\n|$)'  # in brackets
+# #             ')|(?P<EMPTY_LINE>^(?P<indent_line>[ \t]*)\n)'
+# #         ), native_template_pattern=(
+# #             DEFAULT_CODE_DELIMITER['left'] + '[ \t]*(?:'
+# #             '(?P<escaped>%)|'  # in brackets
+# #             '(?:(?P<named>'  # in brackets
+# #             '[a-zA-Z0-9_]+)'  # in brackets
+# #             '[ \t]*% >)|'  # in two brackets
+# #             '(?:'  # in brackets
+# #             '(?P<braced>'  # in two brackets
+# #             '[a-zA-Z0-9_]+)'  # in tree brackets
+# #             '[ \t]*' +
+# #             DEFAULT_CODE_DELIMITER['right'] + ')|'  # in two brackets
+# #             '(?P<invalid>)'  # in brackets
+# #             ')'
+# #         ), left_code_delimiter=DEFAULT_CODE_DELIMITER['left'],
+# #         right_code_delimiter=DEFAULT_CODE_DELIMITER['right'],
+# #         # For example: "<%%" evaluates to "<%"
+# #         right_escaped=DEFAULT_CODE_DELIMITER['right_escaped'],
 # #         template_context_default_indent=4, builtin_names=(
 # #             builtins.all, builtins.filter, builtins.map, builtins.any,
 # #             builtins.enumerate, builtins.range, builtins.locals,
 # #             builtins.type, builtins.hash, builtins.sum
 # #         ), pretty_indent=False, keys_to_ignore_for_hashing_by_caching=[],
+# #         serializer=lambda object, converter: converter(object),
 # #         **keywords: builtins.object
 # #     ) -> Self:
     def _initialize(
         self, template, string=None, cache_path=None, full_caching=False,
         propagate_full_caching=False, file_encoding=ENCODING,
         placeholder_name_pattern='(?! *#).+?',
-        command_line_placeholder_name_pattern='(?s)'
-                                              '[a-zA-Z0-9_\[\]\.(),\-+]+',
-        command_line_placeholder_pattern='^(?P<variable_name>'
-                                         '{placeholder})'
-                                         '(?P<separator>.)(?P<value>.*)',
-        placeholder_pattern='{left_delimiter}[ \t]*'
-                            '(?P<variable_name>{placeholder})[ \t]'
-                            '*{right_delimiter}',
-        template_pattern='(?m)(?P<ESCAPED_DELIMITER>'
-                         '(?P<before_escaped>'  # in brackets
-                         '(?P<indent_escaped>[ \t]*)'  # in two brackets
-                         '(?!{left_delimiter})'  # in two brackets
-                         '(?:.(?!{left_delimiter}))*?.?'  # in two brackets
-                         ')?{left_delimiter}{right_escaped}'  # in brackets
-                         '(?P<after_escaped>\n?)'  # in brackets
-                         ')|(?P<PLACEHOLDER>'
-                         '(?P<before_placeholder>'  # in brackets
-                         '(?P<indent_placeholder>'  # in two brackets
-                         '[ \t]*)'  # in two brackets
-                         '(?!{left_delimiter})'  # in two brackets
-                         '(?:.(?!{left_delimiter}))*?.?'  # in two brackets
-                         ')?{left_delimiter}[ \t]*'  # in brackets
-                         '(?P<placeholder>{placeholder})'  # in brackets
-                         '[ \t]*'  # in brackets
-                         '{right_delimiter}'  # in brackets
-                         '(?P<after_placeholder>\n?)'  # in brackets
-                         ')|(?P<CODE>'
-                         '^(?P<indent_code>[ \t]*)'  # in brackets
-                         '{left_delimiter}'  # in brackets
-                         '(?P<code>.+)$'  # in brackets
-                         ')|(?P<NONE_CODE>'
-                         '(?P<none_code>'  # in brackets
-                         '(?P<indent_none_code>'  # in two brackets
-                         '[ \t]*'
-                         ').+'  # in two brackets
-                         ')'  # in brackets
-                         '(?P<after_none_code>\n|$)'  # in brackets
-                         ')|(?P<EMPTY_LINE>^(?P<indent_line>[ \t]*)\n)',
-        native_template_pattern='<%[ \t]*(?:'
-                                '(?P<escaped>%)|'  # in brackets
-                                '(?:(?P<named>'  # in brackets
-                                '[a-zA-Z0-9_]+)'  # in brackets
-                                '[ \t]*% >)|'  # in two brackets
-                                '(?:'  # in brackets
-                                '(?P<braced>'  # in two brackets
-                                '[a-zA-Z0-9_]+)'  # in tree brackets
-                                '[ \t]*%>)|'  # in two brackets
-                                '(?P<invalid>)'  # in brackets
-                                ')',
-        left_code_delimiter='<%', right_code_delimiter='%>',
-        right_escaped='%',  # For example: "<%%" evaluates to "<%"
+        command_line_placeholder_name_pattern=(
+            '(?s)[a-zA-Z0-9_\[\]\.(),\-+]+'
+        ), command_line_placeholder_pattern=(
+            '^(?P<variable_name>{placeholder})(?P<separator>.)(?P<value>.*)'
+        ), placeholder_pattern=(
+            '{left_delimiter}[ \t]*(?P<variable_name>{placeholder})[ \t]'
+            '*{right_delimiter}'
+        ), template_pattern=(
+            '(?m)(?P<ESCAPED_DELIMITER>'
+            '(?P<before_escaped>'  # in brackets
+            '(?P<indent_escaped>[ \t]*)'  # in two brackets
+            '(?!{left_delimiter})'  # in two brackets
+            '(?:.(?!{left_delimiter}))*?.?'  # in two brackets
+            ')?{left_delimiter}{right_escaped}'  # in brackets
+            '(?P<after_escaped>\n?)'  # in brackets
+            ')|(?P<PLACEHOLDER>'
+            '(?P<before_placeholder>'  # in brackets
+            '(?P<indent_placeholder>'  # in two brackets
+            '[ \t]*)'  # in two brackets
+            '(?!{left_delimiter})'  # in two brackets
+            '(?:.(?!{left_delimiter}))*?.?'  # in two brackets
+            ')?{left_delimiter}[ \t]*'  # in brackets
+            '(?P<placeholder>{placeholder})'  # in brackets
+            '[ \t]*'  # in brackets
+            '{right_delimiter}'  # in brackets
+            '(?P<after_placeholder>\n?)'  # in brackets
+            ')|(?P<CODE>'
+            '^(?P<indent_code>[ \t]*)'  # in brackets
+            '{left_delimiter}'  # in brackets
+            '(?P<code>.+)$'  # in brackets
+            ')|(?P<NONE_CODE>'
+            '(?P<none_code>'  # in brackets
+            '(?P<indent_none_code>'  # in two brackets
+            '[ \t]*'
+            ').+'  # in two brackets
+            ')'  # in brackets
+            '(?P<after_none_code>\n|$)'  # in brackets
+            ')|(?P<EMPTY_LINE>^(?P<indent_line>[ \t]*)\n)'
+        ), native_template_pattern=(
+            DEFAULT_CODE_DELIMITER['left'] + '[ \t]*(?:'
+            '(?P<escaped>%)|'  # in brackets
+            '(?:(?P<named>'  # in brackets
+            '[a-zA-Z0-9_]+)'  # in brackets
+            '[ \t]*% >)|'  # in two brackets
+            '(?:'  # in brackets
+            '(?P<braced>'  # in two brackets
+            '[a-zA-Z0-9_]+)'  # in tree brackets
+            '[ \t]*' + DEFAULT_CODE_DELIMITER['right'] +
+            ')|'  # in two brackets
+            '(?P<invalid>)'  # in brackets
+            ')'
+        ), left_code_delimiter=DEFAULT_CODE_DELIMITER['left'],
+        right_code_delimiter=DEFAULT_CODE_DELIMITER['right'],
+        # For example: "<%%" evaluates to "<%"
+        right_escaped=DEFAULT_CODE_DELIMITER['right_escaped'],
         template_context_default_indent=4, builtin_names=(
             builtins.all, builtins.filter, builtins.map, builtins.any,
             builtins.enumerate, builtins.range, builtins.locals,
             builtins.type, builtins.hash, builtins.sum
         ), pretty_indent=False, keys_to_ignore_for_hashing_by_caching=[],
-        **keywords
+        serializer=lambda object, converter: converter(object), **keywords
     ):
 # #
         '''Initializes output buffer and template scope.'''
@@ -1378,7 +1397,7 @@ class Parser(Class, Runnable):
             ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
-            TemplateError:No suitable template found with given name "...".
+            TemplateError: No suitable template found with given name "...".
         '''
         if self.string:
             self.content = self.template
@@ -1824,20 +1843,25 @@ class Parser(Class, Runnable):
             keywords['file'] = self._output
             parameter = []
             for object in arguments:
-                parameter.append(self._convert_to_string(object))
+                parameter.append(self.serializer(
+                    object, self._convert_to_string))
             return builtins.print(*parameter, **keywords)
         parameter = []
         for object in arguments:
-            parameter.append(self._convert_to_string(object))
+            parameter.append(self.serializer(object, self._convert_to_string))
         return builtins.print(
             *parameter, file=self._output, end=keywords.get('end'))
 
     # NOTE: This method is heavily used during rendering. It should be as fast
     # as possible. So the JointPoint is deactivated.
-    # @JointPoint
+    # @JointPoint(builtins.classmethod)
+    @builtins.classmethod
 # # python3.5
-# #     def _convert_to_string(self, object: Iterable) -> builtins.list:
-    def _convert_to_string(self, object, quote_string=False):
+# #     def _convert_to_string(
+# #         cls: SelfClass, object: (builtins.type, builtins.object),
+# #         quote_string=False
+# #     ) -> builtins.list:
+    def _convert_to_string(cls, object, quote_string=False):
 # #
         '''
             Represents given object as string representation in a way that it \
@@ -1845,22 +1869,19 @@ class Parser(Class, Runnable):
 
             Examples:
 
-            >>> parser = Parser(
-            ...     template='test', string=True, pretty_indent=True)
-
-            >>> parser._convert_to_string('hans')
+            >>> Parser._convert_to_string('hans')
             'hans'
-            >>> parser._convert_to_string(('hans',)).replace('"', "'")
+            >>> Parser._convert_to_string(('hans',)).replace('"', "'")
             "('hans',)"
-            >>> parser._convert_to_string(('hans', 'ä')).replace(
+            >>> Parser._convert_to_string(('hans', 'ä')).replace(
             ...     '"', "'"
             ... ) # doctest: +ELLIPSIS
             "('hans', '...')"
-            >>> parser._convert_to_string(
+            >>> Parser._convert_to_string(
             ...     {'hans', 'ä', 3}
             ... ).replace('"', "'") # doctest: +ELLIPSIS
             "{...}"
-            >>> parser._convert_to_string(['hans', 3, True]).replace('"', "'")
+            >>> Parser._convert_to_string(['hans', 3, True]).replace('"', "'")
             "['hans', 3, true]"
         '''
         if builtins.isinstance(object, builtins.dict):
@@ -1870,10 +1891,16 @@ class Parser(Class, Runnable):
             return 'true' if object else 'false'
 # # python3.5
 # #         return builtins.str(object)
-        return self._convert_object_to_string(object, quote_string)
+        return cls._convert_object_to_string(object, quote_string)
 
-    @JointPoint
-    def _convert_object_to_string(self, object, quote_string):
+    @JointPoint(builtins.classmethod)
+# # python3.5
+# #     def _convert_object_to_string(
+# #         cls: SelfClass, object: (builtins.type, builtins.object),
+# #         quote_string: builtins.bool
+# #     ):
+    def _convert_object_to_string(cls, object, quote_string):
+# #
         '''
             Converts given object to python version independent string \
             representation.
@@ -1885,8 +1912,7 @@ class Parser(Class, Runnable):
             for index, sub_object in builtins.enumerate(object):
                 if index:
                     result += ', '
-                result += self._convert_to_string(
-                    sub_object, quote_string=True)
+                result += cls._convert_to_string(sub_object, quote_string=True)
             if builtins.isinstance(object, builtins.tuple):
                 return '(%s%s)' % (result, ',' if index < 1 else '')
             if builtins.isinstance(object, builtins.list):

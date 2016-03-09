@@ -21,7 +21,7 @@ __copyright__ = 'see boostNode/__init__.py'
 __credits__ = 'Torben Sickert',
 __license__ = 'see boostNode/__init__.py'
 __maintainer__ = 'Torben Sickert'
-__maintainer_email__ = 't.sickert["~at~"]gmail.com'
+__maintainer_email__ = 'info["~at~"]torben.website'
 __status__ = 'stable'
 __version__ = '1.0'
 
@@ -1090,7 +1090,7 @@ class Web(Class, Runnable):
 # #         authentication_handler=None, module_loading=None,
 # #         maximum_number_of_processes=0, shared_data=None,
 # #         request_parameter_delimiter='\?',
-# #         file_size_stream_threshold_in_byte=1048576,  # 1 MB
+# #         file_size_stream_threshold_in_byte=8388608,  # 8 MB
 # #         directory_listing=True, internal_redirects=None,
 # #         external_redirects=None,
 # #         known_big_web_mime_types=('application/x-shockwave-flash',),
@@ -1120,7 +1120,7 @@ class Web(Class, Runnable):
         authentication_handler=None, module_loading=None,
         maximum_number_of_processes=0, shared_data=None,
         request_parameter_delimiter='\?',
-        file_size_stream_threshold_in_byte=2097152,  # 2 MB
+        file_size_stream_threshold_in_byte=8388608,  # 8 MB
         directory_listing=True, internal_redirects=None,
         external_redirects=None,
         known_big_web_mime_types=('application/x-shockwave-flash',),

@@ -18,7 +18,7 @@ __copyright__ = 'see module docstring'
 __credits__ = 'Torben Sickert',
 __license__ = 'see module docstring'
 __maintainer__ = 'Torben Sickert'
-__maintainer_email__ = 't.sickert["~at~"]gmail.com'
+__maintainer_email__ = 'info["~at~"]torben.website'
 __status__ = 'stable'
 __version__ = '1.0'
 

@@ -27,7 +27,7 @@ __copyright__ = 'see boostNode/__init__.py'
 __credits__ = 'Torben Sickert',
 __license__ = 'see boostNode/__init__.py'
 __maintainer__ = 'Torben Sickert'
-__maintainer_email__ = 't.sickert["~at~"]gmail.com'
+__maintainer_email__ = 'info["~at~"]torben.website'
 __status__ = 'stable'
 __version__ = '1.0'
 
@@ -1361,11 +1361,11 @@ class Object(Class):
 
     @JointPoint
 # # python3.5
-# #     def calculate_difference(
+# #     def calculate_patch(
 # #         self: Self, value: (builtins.object, builtins.type),
 # #         null_value=Null
 # #     ) -> (builtins.object, builtins.type):
-    def calculate_difference(self, value, null_value=Null):
+    def calculate_patch(self, value, null_value=Null):
 # #
         '''
             Returns the difference between content and given value in a
@@ -1381,73 +1381,69 @@ class Object(Class):
 
             Examples:
 
-            >>> Object(1).calculate_difference(value=2)
+            >>> Object(1).calculate_patch(value=2)
             2
 
-            >>> Object(None).calculate_difference(
-            ...     value=None
-            ... ) # doctest: +ELLIPSIS
+            >>> Object(None).calculate_patch(value=None) # doctest: +ELLIPSIS
             <class boostNode.extension.type.Null at ...>
 
-            >>> Object(1).calculate_difference(value=1, null_value=2)
+            >>> Object(1).calculate_patch(value=1, null_value=2)
             2
 
-            >>> Object([]).calculate_difference(
-            ...     value=[], null_value=None
-            ... ) is None
+            >>> Object([]).calculate_patch(value=[], null_value=None) is None
             True
 
-            >>> Object([]).calculate_difference(value=2, null_value=None)
+            >>> Object([]).calculate_patch(value=2, null_value=None)
             2
 
-            >>> Object(2).calculate_difference(value=[], null_value=None)
+            >>> Object(2).calculate_patch(value=[], null_value=None)
             []
 
-            >>> Object([1, 2]).calculate_difference(
+            >>> Object([1, 2]).calculate_patch(
             ...     value=[1, 2], null_value=None
             ... ) is None
             True
 
-            >>> Object([1, 2]).calculate_difference(
+            >>> Object([1, 2]).calculate_patch(
             ...     value=[1, 2, 3], null_value=None)
             [1, 2, 3]
 
-            >>> Object([1, 2, 3]).calculate_difference(
+            >>> Object([1, 2, 3]).calculate_patch(
             ...     value=[1, 2, 4], null_value=None)
             [None, None, 4]
 
-            >>> Object([1, 2, [1, 2]]).calculate_difference(
+            >>> Object([1, 2, [1, 2]]).calculate_patch(
             ...     value=[1, 2, [1, 2]], null_value=None
             ... ) is None
             True
 
-            >>> Object([1, 2, [1, 2]]).calculate_difference(
+            >>> Object([1, 2, [1, 2]]).calculate_patch(
             ...     value=[1, 2, [1, 3]], null_value=None)
             [None, None, [None, 3]]
 
-            >>> Object({'a': 1, 'b': 2}).calculate_difference(
+            >>> Object({'a': 1, 'b': 2}).calculate_patch(
             ...     value={'a': 1, 'b': 2}, null_value=None
             ... ) is None
             True
 
-            >>> Object({'a': 1, 'b': 2}).calculate_difference(
+            >>> Object({'a': 1, 'b': 2}).calculate_patch(
             ...     value={'a': 1, 'b': 3}, null_value=None)
             {'b': 3}
 
-            >>> Object({'a': 1, 'b': [2]}).calculate_difference(
+            >>> Object({'a': 1, 'b': [2]}).calculate_patch(
             ...     value={'a': 1, 'b': [2]}, null_value=None
             ... ) is None
             True
 
-            >>> Object({'a': 1, 'b': [2]}).calculate_difference(
+            >>> Object({'a': 1, 'b': [2]}).calculate_patch(
             ...     value={'a': 1, 'b': [3]}, null_value=None)
             {'b': [3]}
 
-            >>> Object({'a': 1, 'b': [2]}).calculate_difference(
+            >>> Object({'a': 1, 'b': [2]}).calculate_patch(
             ...     value={'c': 1, 'b': [3]}, null_value=None)
             {'c': 1, 'b': [3]}
 
-            >>> Object({'a': 1, 'b': [2]}).calculate_difference(
+            >>> Object({'a': 1, 'b': [2]}).calculate_patch(
             ...     value={'c': 1}, null_value=None)
             {'c': 1}
         '''
@@ -1468,9 +1464,9 @@ class Object(Class):
                     return value
                 for index, sub_value in builtins.enumerate(value):
                     if builtins.isinstance(sub_value, NativeIterable):
-                        sub_result = self.__class__(
+                        sub_result = Object(
                             self.content[index]
-                        ).calculate_difference(sub_value, null_value)
+                        ).calculate_patch(sub_value, null_value)
                         if sub_result != null_value:
                             has_content = True
                         result.append(sub_result)
@@ -1498,9 +1494,9 @@ class Object(Class):
                             sub_value, builtins.unicode
                         ):
 # #
-                            sub_result = self.__class__(
+                            sub_result = Object(
                                 self.content[key]
-                            ).calculate_difference(sub_value, null_value)
+                            ).calculate_patch(sub_value, null_value)
                             if sub_result != null_value:
                                 has_content = True
                                 result[key] = sub_result
@@ -3274,6 +3270,42 @@ class Iterable(Object):
 
     @JointPoint(Class.pseudo_property)
 # # python3.5
+# #     def get_rendered(self: Self, mapping={}, **keywords: (
+# #         builtins.type, builtins.object
+# #     )) -> builtins.list:
+    def get_rendered(self, mapping={}, **keywords):
+# #
+        '''
+            Renders current data wich are marked with the corresponding \
+            special key against given mapping recursively.
+
+            Examples:
+
+            TODO
+        '''
+        if builtins.isinstance(self.content, builtins.dict):
+            keys = builtins.tuple(self.content.keys())
+            if builtins.len(keys) and keys[0] == '__execute__':
+                return self._parse(
+                    object=builtins.tuple(self.content.values())[0],
+                    mapping=mapping, **keywords)
+            '''
+                NOTE: We sort nested dictionaries to the end to have a breath \
+                first search.
+            '''
+            for key, value in self.content.items():
+                if builtins.isinstance(value, (builtins.dict, builtins.list)):
+                    self.content[key] = Iterable(content=value).get_rendered(
+                        mapping=mapping, **keywords)
+        elif builtins.isinstance(self.content, builtins.list):
+            for index, value in builtins.enumerate(self.content):
+                if builtins.isinstance(value, (builtins.dict, builtins.list)):
+                    self.content[index] = Iterable(content=value).get_rendered(
+                        mapping=mapping, **keywords)
+        return self.content
+
+    @JointPoint(Class.pseudo_property)
+# # python3.5
 # #     def get_immutable(self: Self, exclude=(), path=[]) -> builtins.tuple:
     def get_immutable(self, exclude=(), path=[]):
 # #
@@ -3651,6 +3683,63 @@ class Iterable(Object):
     # # endregion
 
     # # region protected methods
+
+    @JointPoint(builtins.classmethod)
+# # python3.5
+# #     def _parse(cls: SelfClass, object: (
+# #         builtins.type, builtins.object
+# #     ), mapping: builtins.dict, **keywords: (
+# #         builtins.type, builtins.object
+# #     )) -> builtins.str:
+    def _parse(cls, object, mapping, **keywords):
+# #
+        '''
+            Renders given object against given mapping.
+
+            Examples:
+
+            TODO
+        '''
+        from boostNode.runnable.template import DEFAULT_CODE_DELIMITER
+        from boostNode.runnable.template import Parser
+
+        return Parser(regularExpression.compile(
+            '(^|[^\\\\])\\\\([^\\\\]|$)'
+        ).sub('\\1\\\\\\2', object).replace('%s%s' % (
+            DEFAULT_CODE_DELIMITER['left'],
+            DEFAULT_CODE_DELIMITER['right_escaped']
+        ), '%s%s%s' % (
+            DEFAULT_CODE_DELIMITER['left'],
+            DEFAULT_CODE_DELIMITER['right_escaped'],
+            DEFAULT_CODE_DELIMITER['right_escaped']
+        )), string=True,
+        serializer=lambda object, converter: cls._serialize(
+            object, converter, mapping=mapping, **keywords
+        )).render(mapping=mapping, **keywords).output
+
+    @JointPoint(builtins.classmethod)
+# # python3.5
+# #     def _serialize(
+# #         self: Self, object: (builtins.type, builtins.object),
+# #         converter: (Function, Method), mapping: builtins.dict,
+# #         **keywords: (builtins.type, builtins.object)
+# #     ) -> builtins.str:
+    def _serialize(cls, object, converter, mapping, **keywords):
+# #
+        '''
+            Retrieves nested keys to render if marked.
+
+            Examples:
+
+            TODO
+        '''
+        if builtins.isinstance(object, builtins.dict):
+            keys = tuple(object.keys())
+            if builtins.len(keys) and keys[0] == '__execute__':
+                return converter(cls._parse(
+                    object=builtins.tuple(object.values())[0], mapping=mapping,
+                    **keywords))
+        return converter(object)
 
     @JointPoint
 # # python3.5
