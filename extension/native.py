@@ -1446,6 +1446,10 @@ class Object(Class):
             >>> Object({'a': 1, 'b': [2]}).calculate_patch(
             ...     value={'c': 1}, null_value=None)
             {'c': 1}
+
+            >>> Object({'b': {'a': [2]}}).calculate_patch(
+            ...     value={'b': {'a': [1, 2]}}, null_value=None)
+            {'b': {'a': [1, 2]}}
         '''
         if builtins.type(self.content) != builtins.type(value):
             return value
