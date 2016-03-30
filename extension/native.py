@@ -1450,6 +1450,16 @@ class Object(Class):
             >>> Object({'b': {'a': [2]}}).calculate_patch(
             ...     value={'b': {'a': [1, 2]}}, null_value=None)
             {'b': {'a': [1, 2]}}
+
+            >>> Object({'a': {'b': 2}}).calculate_patch(
+            ...     value={'a': {'b': None}})
+            {'a': {'b': None}}
+
+            >>> Object({'b': 2}).calculate_patch(
+            ...     value={'b': None}, null_value=None)
+
+            >>> Object(['b', 2]).calculate_patch(
+            ...     value=['b', None], null_value=None)
         '''
         if builtins.type(self.content) != builtins.type(value):
             return value
@@ -1474,7 +1484,10 @@ class Object(Class):
                         if sub_result != null_value:
                             has_content = True
                         result.append(sub_result)
-                    elif sub_value == self.content[index]:
+                    elif(
+                        sub_value == null_value or
+                        sub_value == self.content[index]
+                    ):
                         result.append(null_value)
                     else:
                         has_content = True
@@ -1504,7 +1517,10 @@ class Object(Class):
                             if sub_result != null_value:
                                 has_content = True
                                 result[key] = sub_result
-                        elif sub_value != self.content[key]:
+                        elif(
+                            sub_value != null_value and
+                            sub_value != self.content[key]
+                        ):
                             has_content = True
                             result[key] = sub_value
                     else:
