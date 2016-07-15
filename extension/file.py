@@ -52,6 +52,8 @@ import sys
 pass
 # #
 
+from distutils.dir_util import copy_tree as copy_to_existing_directory
+
 '''Make boostNode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
@@ -3781,6 +3783,9 @@ class Handler(Class):
         target = self.__class__(location=target)
         if self.is_file():
             shutil.copy2(self._path, target._path, *arguments, **keywords)
+        # TODO test
+        elif target.is_directory():
+            copy_to_existing_directory(self._path, target._path)
         else:
             shutil.copytree(self._path, target._path)
         if right is not None:

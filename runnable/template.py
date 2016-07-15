@@ -35,7 +35,7 @@ import __builtin__ as builtins
 from copy import copy, deepcopy
 from crypt import crypt
 from datetime import datetime as DateTime
-import time
+import itertools
 import inspect
 import json
 import logging
@@ -43,6 +43,7 @@ import os
 import re as regularExpression
 import string as native_string
 import sys
+import time
 import traceback
 # # python3.5 from urllib.request import pathname2url
 from urllib import pathname2url as native_pathname2url
@@ -662,19 +663,20 @@ class Parser(Class, Runnable):
             '__time_stamp__': time.mktime(
                 now.timetuple()
             ) + now.microsecond / 1000 ** 2, 'DateTime': DateTime,
-            'time': time, 'FileHandler': FileHandler, 'print': self._print,
-            'include': self._include, 'String': self._convert_to_string,
-            'Integer': builtins.int, 'Float': builtins.float,
-            'NativeString': builtins.str, 'length': builtins.len,
-            'Json': json, 'sort': builtins.sorted, 'exit': sys.exit,
-            'pathNameToURL': pathname2url, 'false': False, 'true': True,
-            'getType': builtins.type, 'isTypeOf': builtins.isinstance,
-            'Tuple': builtins.tuple, 'Dictionary': builtins.dict,
+            'Itertools': itertools, 'time': time, 'FileHandler': FileHandler,
+            'print': self._print, 'include': self._include,
+            'String': self._convert_to_string, 'Integer': builtins.int,
+            'Float': builtins.float, 'NativeString': builtins.str,
+            'length': builtins.len, 'Json': json, 'sort': builtins.sorted,
+            'exit': sys.exit, 'pathNameToURL': pathname2url, 'false': False,
+            'true': True, 'getType': builtins.type,
+            'isTypeOf': builtins.isinstance, 'Tuple': builtins.tuple,
+            'Dictionary': builtins.dict,
             'RegularExpression': regularExpression.compile, 'copy': copy,
             'deepCopy': deepcopy, 'DictionaryExtension': Dictionary,
             'StringExtension': String, 'List': builtins.list,
-            'hasAttribute': builtins.hasattr, 'TemplateParser': self.__class__,
-            'crypt': crypt, 'console': {
+            'Set': builtins.set, 'hasAttribute': builtins.hasattr,
+            'TemplateParser': self.__class__, 'crypt': crypt, 'console': {
                 'SET_ATTRIBUTE_MODE': SET_OUTPUT_ATTRIBUTE_MODE,
                 'RESET_ATTRIBUTE_MODE': RESET_OUTPUT_ATTRIBUTE_MODE,
                 'COLOR': OUTPUT_COLOR, 'HIGH_COLOR': HIGH_OUTPUT_COLOR,
@@ -1646,7 +1648,7 @@ class Parser(Class, Runnable):
         '''Determines a useful description for current template.'''
         if self.file:
             return '"%s"' % self.file.path
-        return 'given template string'
+        return 'given template string "%s"' % self.template
 
     @JointPoint
 # # python3.5
