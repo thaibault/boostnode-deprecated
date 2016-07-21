@@ -1080,9 +1080,9 @@ class Web(Class, Runnable):
 # #         compressible_mime_type_pattern=(
 # #             'text/.+$', 'application/javascript$'),
 # #         default_file_name_pattern=(
-# #             'index(?!\.tpl$)(?:\.[a-zA-Z0-9]{0,4})?$',
-# #             '(?:__main__|main|initialize)(?!\.tpl$)(?:\.[a-zA-Z0-9]{0,4})?'
-# #             '$'
+# #             'index(?!\.(tpl|js)$)(?:\.[a-zA-Z0-9]{0,4})?$',
+# #             '(?:index|__main__|main|initialize)(?!\.tpl$)'
+# #             '(?:\.[a-zA-Z0-9]{0,4})?$'
 # #         default_module_names=('index', '__main__', 'main', 'initialize'),
 # #         authentication=True, authentication_file_name='.htpasswd',
 # #         authentication_file_content_pattern=
@@ -1110,9 +1110,9 @@ class Web(Class, Runnable):
         compressible_mime_type_pattern=(
             'text/.+$', '^application/javascript$'),
         default_file_name_pattern=(
-            'index(?!\.tpl$)(?:\.[a-zA-Z0-9]{0,4})?$',
-            '(?:__main__|main|initialize)(?!\.tpl$)(?:\.[a-zA-Z0-9]{0,4})?'
-            '$'
+            'index(?!\.(tpl|js)$)(?:\.[a-zA-Z0-9]{0,4})?$',
+            '(?:index|__main__|main|initialize)(?!\.tpl$)'
+            '(?:\.[a-zA-Z0-9]{0,4})?$'
         ), default_module_names=('index', '__main__', 'main', 'initialize'),
         authentication=True, authentication_file_name='.htpasswd',
         authentication_file_content_pattern=
