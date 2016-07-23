@@ -3855,8 +3855,7 @@ class Handler(Class):
             is "700" (octal). If the directory already exists, \
             "builtins.OSError" is raised.
 
-            **right** - is new the right for the current object's path \
-                        location.
+            **right** - new right for the current object's path location.
 
             **octal** - Indicates weather given right should be interpreted \
                         as octal number.

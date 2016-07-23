@@ -32,7 +32,7 @@ __status__ = 'stable'
 __version__ = '1.0'
 
 # # python3.5
-# # from base64 import b64encode as base64encode
+# # from base64 import b64encode as base64_encode
 # # import builtins
 import __builtin__ as builtins
 # #
@@ -803,7 +803,7 @@ class AuthenticationModel(Model):
         '''
         self.validate_property(self, 'password', value)
 # # python3.5
-# #         self.password_salt = base64encode(os.urandom(
+# #         self.password_salt = base64_encode(os.urandom(
 # #             self._password_information['salt']['length']
 # #         )).decode(ENCODING)
 # #         self.password_hash = sha224(
