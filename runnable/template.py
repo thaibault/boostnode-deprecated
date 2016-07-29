@@ -1025,10 +1025,11 @@ class Parser(Class, Runnable):
                 self._current_rendered_python_code_line_number
             ) + ' | ' + match.group('line')
         if self._number_of_rendered_python_code_lines:
-            headline = 'rendered python code of %s:' % (
+            headline_template = 'rendered python code of %s:'
+            headline = headline_template % (
                 self._determine_template_description())
             return ('\n%s\n%s\n\n%s\n' % (
-                headline, builtins.len(headline) * '-',
+                headline, builtins.len(headline_template) * '-',
                 regularExpression.compile(
                     '^(?P<line>.*)$', regularExpression.MULTILINE
                 ).sub(
@@ -1545,26 +1546,26 @@ class Parser(Class, Runnable):
 # # python3.5
 # #             exception = __exception__(
 # #                 'Error with %s in include statement in line %s '
-# #                 '(line in compiled template: %s).\n%s: %s%s',
-# #                 self._determine_template_description(),
-# #                 source_line, mapped_line, __exception__.__name__,
-# #                 builtins.str(exception), rendered_python_code)
+# #                 '(line in compiled template: %s) and given scope %s.'
+# #                 '\n%s: %s%s', self._determine_template_description(),
+# #                 source_line, mapped_line, template_scope,
+# #                 __exception__.__name__, builtins.str(exception),
+# #                 rendered_python_code)
 # #             raise exception from None
             exception = __exception__(
                 'Error with %s in include statement in line %s (line '
-                'in compiled template: %s).\n%s: %s%s',
+                'in compiled template: %s) and given scope %s.\n%s: %s%s',
                 self._determine_template_description(), source_line,
-                mapped_line, __exception__.__name__, convert_to_unicode(
-                    exception
-                ), rendered_python_code)
+                mapped_line, template_scope, __exception__.__name__,
+                convert_to_unicode(exception), rendered_python_code)
             raise exception
 # #
         except builtins.BaseException as exception:
             line_info, exception_message, native_exception_description = \
                 self._handle_template_exception(exception)
             self._raise_template_exception(
-                line_info, exception_message, native_exception_description,
-                native_exception=exception)
+                line_info, exception_message, template_scope,
+                native_exception_description, native_exception=exception)
         '''Make sure that all outputs during template execution are done.'''
         sys.stdout.flush()
         return self
@@ -1655,13 +1656,15 @@ class Parser(Class, Runnable):
 # #     def _raise_template_exception(
 # #         self: Self, line_info: builtins.str,
 # #         exception_message: builtins.str,
+# #         template_scope: builtins.dict,
 # #         native_exception_description: builtins.str,
 # #         native_exception: builtins.BaseException,
 # #         prevent_rendered_python_code=False
 # #     ) -> None:
     def _raise_template_exception(
-        self, line_info, exception_message, native_exception_description,
-        native_exception, prevent_rendered_python_code=False
+        self, line_info, exception_message, template_scope,
+        native_exception_description, native_exception,
+        prevent_rendered_python_code=False
     ):
 # #
         '''
@@ -1672,7 +1675,7 @@ class Parser(Class, Runnable):
 
             >>> parser = Parser('<% hans', string=True)
             >>> parser._raise_template_exception(
-            ...     '', '', '', IOError('test'), True
+            ...     '', '', {}, '', IOError('test'), True
             ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
@@ -1687,21 +1690,24 @@ class Parser(Class, Runnable):
             rendered_python_code = self.represent_rendered_python_code()
 # # python3.5
 # #         raise __exception__(
-# #             'Error with {template_description}{line_info}.\n'
+# #             'Error with {template_description}{line_info} and scope '
+# #             '{template_scope}.\n'
 # #             '{exception_message}{native_exception_description}'
 # #             '{rendered_python_code}'.format(
 # #                 template_description=self._determine_template_description(
-# #                 ), line_info=line_info,
+# #                 ), line_info=line_info, template_scope=template_scope,
 # #                 exception_message=exception_message,
 # #                 native_exception_description=native_exception_description,
 # #                 rendered_python_code=rendered_python_code)
 # #         ) from None
         raise __exception__(
-            'Error with {template_description}{line_info}.\n'
+            'Error with {template_description}{line_info} and scope '
+            '{template_scope}.\n'
             '{exception_message}{native_exception_description}'
             '{rendered_python_code}'.format(
                 template_description=self._determine_template_description(
-                ), line_info=line_info,
+                ),
+                line_info=line_info, template_scope=template_scope,
                 exception_message=exception_message,
                 native_exception_description=native_exception_description,
                 rendered_python_code=rendered_python_code))
