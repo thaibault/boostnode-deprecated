@@ -3963,21 +3963,21 @@ class CGIHTTPRequestHandler(
         '''
 # # python3.5
 # #         self.request_arguments = (
-# #             ('header', convert_to_unicode(self.headers)),
-# #             ('type', self.type), ('handler', self),
-# #             ('requested_file_name', self.requested_file_name),
+# #             ('header', builtins.str(self.headers)), ('type', self.type),
+# #             ('handler', self),
+# #             ('requestedFileName', self.requested_file_name),
 # #             ('host', self.host), ('uri', self.uri), ('get', self.get),
-# #             ('external_uri', self.external_uri), ('data', self.data),
-# #             ('cookie', self.cookie), ('external_type', self.external_type),
-# #             ('shared_data', self.server.web.shared_data))
+# #             ('externalURI', self.external_uri), ('data', self.data),
+# #             ('cookie', self.cookie), ('externalType', self.external_type),
+# #             ('sharedData', self.server.web.shared_data))
         self.request_arguments = (
-            ('header', builtins.str(self.headers)), ('type', self.type),
-            ('handler', self),
-            ('requested_file_name', self.requested_file_name),
+            ('header', convert_to_unicode(self.headers)),
+            ('type', self.type), ('handler', self),
+            ('requestedFileName', self.requested_file_name),
             ('host', self.host), ('uri', self.uri), ('get', self.get),
-            ('external_uri', self.external_uri), ('data', self.data),
-            ('cookie', self.cookie), ('external_type', self.external_type),
-            ('shared_data', self.server.web.shared_data))
+            ('externalURI', self.external_uri), ('data', self.data),
+            ('cookie', self.cookie), ('externalType', self.external_type),
+            ('sharedData', self.server.web.shared_data))
 # #
         if '__no_respond__' not in self.data:
             self.respond = True
@@ -4103,7 +4103,7 @@ class CGIHTTPRequestHandler(
         sys.path = [self.server.web.root.path] + sys.path
         self.server.web.number_of_running_threads += 1
         requested_module = builtins.__import__(
-            self.request_arguments['requested_file_name'])
+            self.request_arguments['requestedFileName'])
         '''Extend requested scope with request dependent globals.'''
         requested_module.__request_arguments__ = self.request_arguments
         sys.path = sys_path_backup

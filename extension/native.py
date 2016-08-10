@@ -517,7 +517,7 @@ class Model(builtins.object):
         model_instance, name, value,
         information_determiner=lambda model_instance,
         name: builtins.getattr(
-            model_instance, '_%s_information' % name)):
+            model_instance, '_%sInformation' % name)):
 # #
         '''
             Intercepts each property set of any derived model.
@@ -525,8 +525,8 @@ class Model(builtins.object):
             Examples:
 
             >>> class A(Model):
-            ...     _a_information = {
-            ...         'minimum_length': 5, 'maximum_length': 10,
+            ...     _aInformation = {
+            ...         'minimumLength': 5, 'maximumLength': 10,
             ...         'pattern': '[^a]+$'}
             ...     def set_a(self, value):
             ...         return self.validate_property(self, 'a', value)
@@ -551,7 +551,7 @@ class Model(builtins.object):
             ValueError: Property "a" of model "A" has maximum length 10 but...
 
             >>> class A(Model):
-            ...     _a_information = {'minimum': 3, 'maximum': 10}
+            ...     _aInformation = {'minimum': 3, 'maximum': 10}
             ...     def set_a(self, value):
             ...         return self.validate_property(self, 'a', value)
             >>> a = A()
@@ -595,7 +595,7 @@ class Model(builtins.object):
 
     # # endregion
 
-    # # region protected
+    # # region protect ed
 
     @JointPoint(builtins.classmethod)
     def _validate_number_property(cls, name, value, property_information):
@@ -619,21 +619,21 @@ class Model(builtins.object):
     @JointPoint(builtins.classmethod)
     def _validate_string_property(cls, name, value, property_information):
         '''Validates a model property witch represents a string.'''
-        if 'minimum_length' in property_information and builtins.len(
+        if 'minimumLength' in property_information and builtins.len(
             value
-        ) < property_information['minimum_length']:
+        ) < property_information['minimumLength']:
             raise builtins.ValueError(
                 'Property "%s" of model "%s" has minimum length %d '
                 'but given value "%s" has length %d.' % (
-                    name, cls.__name__, property_information['minimum_length'],
+                    name, cls.__name__, property_information['minimumLength'],
                     value, builtins.len(value)))
-        if 'maximum_length' in property_information and builtins.len(
+        if 'maximumLength' in property_information and builtins.len(
             value
-        ) > property_information['maximum_length']:
+        ) > property_information['maximumLength']:
             raise builtins.ValueError(
                 'Property "%s" of model "%s" has maximum length %d '
                 'but given value "%s" has length %d.' % (
-                    name, cls.__name__, property_information['maximum_length'],
+                    name, cls.__name__, property_information['maximumLength'],
                     value, builtins.len(value)))
 # # python3.5
 # #         if 'pattern' in property_information and regularExpression.compile(
@@ -757,13 +757,13 @@ class AuthenticationModel(Model):
 
     # region properties
 
-    _password_information = {
-        'minimum_length': 4, 'maximum_length': 100, 'pattern': '.{4}.*',
+    _passwordInformation = {
+        'minimumLength': 4, 'maximumLength': 100, 'pattern': '.{4}.*',
         'pepper': 'a1b2c3d4e3f5g6h7i8j9k0l1m2n3o4p5x6y7z',
         'salt': {'length': 32}
     }
-    password_salt = ''
-    password_hash = ''
+    passwordSalt = ''
+    passwordHash = ''
 
     # endregion
 
@@ -771,7 +771,7 @@ class AuthenticationModel(Model):
 
     # # region public
 
-    # # # region password handler
+    # # # region pass word handler
 
     @JointPoint(Class.pseudo_property)
     def get_password(self):
@@ -794,7 +794,7 @@ class AuthenticationModel(Model):
             ...
             ValueError: Property "password" of model "..." has minimum lengt...
         '''
-        return self.password_hash
+        return self.passwordHash
 
     @JointPoint
     def set_password(self, value):
@@ -803,27 +803,27 @@ class AuthenticationModel(Model):
         '''
         self.validate_property(self, 'password', value)
 # # python3.5
-# #         self.password_salt = base64_encode(os.urandom(
-# #             self._password_information['salt']['length']
+# #         self.passwordSalt = base64_encode(os.urandom(
+# #             self._passwordInformation['salt']['length']
 # #         )).decode(ENCODING)
-# #         self.password_hash = sha224(
+# #         self.passwordHash = sha224(
 # #             ('%s%s%s' % (
-# #                 value, self._password_information['pepper'],
-# #                 self.password_salt
+# #                 value, self._passwordInformation['pepper'],
+# #                 self.passwordSalt
 # #             )).encode(ENCODING)
 # #         ).hexdigest()
-        self.password_salt = os.urandom(
-            self._password_information['salt']['length']
+        self.passwordSalt = os.urandom(
+            self._passwordInformation['salt']['length']
         ).encode('base_64')
-        self.password_hash = sha224(
+        self.passwordHash = sha224(
             '%s%s%s' % (
-                value, self._password_information['pepper'],
-                self.password_salt)
+                value, self._passwordInformation['pepper'],
+                self.passwordSalt)
         ).hexdigest()
 # #
 
     @JointPoint
-    def has_password(self, value):
+    def hasPassword(self, value):
         '''
             Checks if given password matches the saved hashed one.
 
@@ -832,23 +832,23 @@ class AuthenticationModel(Model):
             >>> authentication_model = AuthenticationModel()
             >>> authentication_model.set_password('hans')
 
-            >>> authentication_model.has_password('hans')
+            >>> authentication_model.hasPassword('hans')
             True
 
-            >>> authentication_model.has_password('peter')
+            >>> authentication_model.hasPassword('peter')
             False
         '''
 # # python3.5
-# #         return self.password_hash == sha224(
+# #         return self.passwordHash == sha224(
 # #             ('%s%s%s' % (
-# #                 value, self._password_information['pepper'],
-# #                 self.password_salt
+# #                 value, self._passwordInformation['pepper'],
+# #                 self.passwordSalt
 # #             )).encode(ENCODING)
 # #         ).hexdigest()
-        return self.password_hash == sha224(
+        return self.passwordHash == sha224(
             '%s%s%s' % (
-                value, self._password_information['pepper'],
-                self.password_salt)
+                value, self._passwordInformation['pepper'],
+                self.passwordSalt)
         ).hexdigest()
 # #
 
