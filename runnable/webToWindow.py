@@ -85,7 +85,7 @@ class Browser(Class, Runnable):
 
         **height_in_pixel**      - Height of opening browser window.
 
-        **fullscreen**           - Indicates weather windows should start in \
+        **fullscreen**           - Indicates whether windows should start in \
                                    fullscreen mode.
 
         **no_window_decoration** - If set to "True" no windows decoration \

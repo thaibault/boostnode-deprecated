@@ -94,7 +94,7 @@ class Replace(Class, Runnable):
 
         **encoding**                 - Encoding to use.
 
-        **dry**                      - Indicates weather a dry run with \
+        **dry**                      - Indicates whether a dry run with \
                                        producing log output should be done.
 
         **_exclude_locations**       - Locations to exclude.

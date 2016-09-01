@@ -353,7 +353,7 @@ class Handler(Class):
 
             **format**        - Format to returns.
 
-            **decimal**       - Indicates weather decimal computation should \
+            **decimal**       - Indicates whether decimal computation should \
                                 be used.
 
             Returns size if determined otherwise "False".
@@ -412,7 +412,7 @@ class Handler(Class):
 
             **given_format** - Input format.
 
-            **decimal**      - Indicates weather decimal or binary \
+            **decimal**      - Indicates whether decimal or binary \
                                computation should be used.
 
             Returns computed size.
@@ -589,7 +589,7 @@ class Handler(Class):
                                           path with or without root path \
                                           prefixed.
 
-            **has_extension**           - Defines weather path interpretation \
+            **has_extension**           - Defines whether path interpretation \
                                           should assume a file extension.
 
             Every additional argument or keyword will be forwarded to the \
@@ -1109,7 +1109,7 @@ class Handler(Class):
                               limit is reached or doesn't if limit is 0. \
                               Limit is interpreted in bytes.
 
-            **follow_link** - Indicates weather to walk into links to \
+            **follow_link** - Indicates whether to walk into links to \
                               aggregate size.
 
             Each additional argument or keyword will be forwarded to the \
@@ -1450,10 +1450,10 @@ class Handler(Class):
             **location**                - If a handle object is provided the \
                                           saved path will be given back.
 
-            **respect_root_path**       - Indicates weather we check the \
+            **respect_root_path**       - Indicates whether we check the \
                                           sandbox feature for this request.
 
-            **output_with_root_prefix** - Indicates weather we should prefix \
+            **output_with_root_prefix** - Indicates whether we should prefix \
                                           the resulting path with the path to \
                                           sandbox.
 
@@ -1559,7 +1559,7 @@ class Handler(Class):
         '''
             Determines the current path of the Directory object without file.
 
-            **output_with_root_prefix** - Indicates weather the path to \
+            **output_with_root_prefix** - Indicates whether the path to \
                                           sandbox should set as prefix.
 
             Examples:
@@ -1783,7 +1783,7 @@ class Handler(Class):
             **mode**   - Mode for opening current file (if not pointing to a \
                          directory).
 
-            **strict** - Indicates weather encoding should through an \
+            **strict** - Indicates whether encoding should through an \
                          exception.
 
             **offset** - Offset for part of file to get (default: 0).
@@ -3536,7 +3536,7 @@ class Handler(Class):
             pythons native "os.remove()"; the unlink name is its traditional \
             Unix name.
 
-            **force_windows_behavior** - Indicates weather windows behavior \
+            **force_windows_behavior** - Indicates whether windows behavior \
                                          should be used on other operating \
                                          systems than windows.
 
@@ -3674,13 +3674,13 @@ class Handler(Class):
             **right**      - Is the new right for the current object's path \
                              location.
 
-            **octal**      - Indicates weather we provide an octal number or \
+            **octal**      - Indicates whether we provide an octal number or \
                              a constant combination from "stat.*".
 
-            **recursive**  - Indicates weather rights should be set \
+            **recursive**  - Indicates whether rights should be set \
                              recursively.
 
-            **allow_link** - Indicates weather links should be followed.
+            **allow_link** - Indicates whether links should be followed.
 
             Examples:
 
@@ -3857,7 +3857,7 @@ class Handler(Class):
 
             **right** - new right for the current object's path location.
 
-            **octal** - Indicates weather given right should be interpreted \
+            **octal** - Indicates whether given right should be interpreted \
                         as octal number.
 
             Additional arguments or keywords are forwarded to "os.mkdir()".
@@ -4154,7 +4154,7 @@ class Handler(Class):
             **target**         - Target location for coping current file \
                                  object.
 
-            **symbolic_links** - Indicates weather symbolic links should be \
+            **symbolic_links** - Indicates whether symbolic links should be \
                                  followed.
 
             Examples:
@@ -4320,7 +4320,7 @@ class Handler(Class):
         '''
             Reads the referenced path of a given portable link file.
 
-            **as_object** - Indicates weather the resulting file should be \
+            **as_object** - Indicates whether the resulting file should be \
                             returned as string or file handler.
 
             Examples:
@@ -4423,12 +4423,12 @@ class Handler(Class):
             **function**          - If is a string, a new instance is created \
                                     otherwise not.
 
-            **recursive**         - Indicates weather iteration should be \
+            **recursive**         - Indicates whether iteration should be \
                                     recursive.
 
-            **recursive_in_link** - Indicates weather links should be followed.
+            **recursive_in_link** - Indicates whether links should be followed.
 
-            **deep_first**        - Indicates weather breath first or deep \
+            **deep_first**        - Indicates whether breath first or deep \
                                     first recursive tree traversal should be \
                                     used.
 
@@ -4971,7 +4971,7 @@ class Handler(Class):
     ):
 # #
         '''
-            Creates a symbolic link weather their exists already a file with \
+            Creates a symbolic link whether their exists already a file with \
             given link location or link target doesn't exist.
 
             Examples:

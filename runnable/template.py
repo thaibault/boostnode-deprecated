@@ -157,11 +157,11 @@ class Parser(Class, Runnable):
                                                     object pointing to a \
                                                     template file.
 
-        **cache_path**                            - Indicates weather to \
+        **cache_path**                            - Indicates whether to \
                                                     cache the compiled \
                                                     template in given path.
 
-        **string**                                - Indicates weather \
+        **string**                                - Indicates whether \
                                                     "template" is a template \
                                                     string or file path.
 

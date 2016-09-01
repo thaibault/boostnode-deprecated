@@ -327,7 +327,7 @@ class MultiProcessingHTTPServer(
     def process_request(self, request_socket, *arguments, **keywords):
 # #
         '''
-            This method indicates weather the request is a read only or not. \
+            This method indicates whether the request is a read only or not. \
             Read only requests will be forked if enough free processors are \
             available.
         '''
@@ -537,7 +537,7 @@ class Web(Class, Runnable):
         **file_size_stream_threshold_in_byte**  - Threshold which will force \
                                                   the server to stream data.
 
-        **directory_listing**                   - Indicates weather the \
+        **directory_listing**                   - Indicates whether the \
                                                   server generates a \
                                                   directory listing for \
                                                   requested directories.
@@ -1442,7 +1442,7 @@ class CGIHTTPRequestHandler(
         '''References the corresponding file handler to requested file name.'''
         self.requested_file = None
         '''
-            Defines weather the handler has decided to run a python module or \
+            Defines whether the handler has decided to run a python module or \
             an external script.
         '''
         self.load_module = False
@@ -2277,7 +2277,7 @@ class CGIHTTPRequestHandler(
             **domain**                 - The domain the cookie should bounded \
                                          to.
 
-            **secure**                 - Indicates weather only secure \
+            **secure**                 - Indicates whether only secure \
                                          connections should be associated \
                                          with given cookie.
 
@@ -2407,7 +2407,7 @@ class CGIHTTPRequestHandler(
 
             **size**           - Content length to send.
 
-            **dynamic_output** - Indicates weather output should be forced to \
+            **dynamic_output** - Indicates whether output should be forced to \
                                  compressed because it is simply a computed \
                                  string.
 
@@ -2666,7 +2666,7 @@ class CGIHTTPRequestHandler(
 # # python3.5     def _is_authenticated(self: Self) -> builtins.tuple:
     def _is_authenticated(self):
         '''
-            Determines weather current request is authenticated via a tuple. \
+            Determines whether current request is authenticated via a tuple. \
             First item determines if authentication has success and \
             second item determines html content to send if authentication \
             fails and "None" if nothing should be sent automatically.
@@ -2773,7 +2773,7 @@ class CGIHTTPRequestHandler(
 # # python3.5     def _is_valid_reference(self: Self) -> builtins.bool:
     def _is_valid_reference(self):
         '''
-            Checks weather the requested is one of a python module-, static- \
+            Checks whether the requested is one of a python module-, static- \
             or dynamic file request. Returns "True" if so and "False" \
             otherwise.
 
@@ -3956,7 +3956,7 @@ class CGIHTTPRequestHandler(
     def _dynamic_get(self):
         '''
             Handles a dynamic file or python module request. It initializes \
-            the given script-file or python module environment weather to \
+            the given script-file or python module environment whether to \
             decide running it in its own thread or not. If no respond is \
             expected from client it could be run without its own thread \
             environment.

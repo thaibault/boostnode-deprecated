@@ -75,13 +75,13 @@ class Reflector(Class, Runnable):
         **target_rights**                   - Rights used to create \
                                               reflection files.
 
-        **synchronize_back**                - Indicates weather to \
+        **synchronize_back**                - Indicates whether to \
                                               synchronize a reflection back.
 
-        **create**                          - Indicates weather to create a \
+        **create**                          - Indicates whether to create a \
                                               new reflection.
 
-        **use_native_symlinks**             - Indicates weather to use native \
+        **use_native_symlinks**             - Indicates whether to use native \
                                               system symbolic links or \
                                               portable links.
 

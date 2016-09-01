@@ -408,7 +408,7 @@ class Model(builtins.object):
             **value_wrapper**  - A function to call for manipulating each \
                                  value in returned dictionary.
 
-            **prefix_filter**  - Indicates weather all columns with the \
+            **prefix_filter**  - Indicates whether all columns with the \
                                  specified prefixes will be filtered.
 
             **property_names** - A list of column names to export. If empty \
@@ -4460,10 +4460,10 @@ class Module(Object):
 
             **module**    - module to determine the name of
 
-            **extension** - Indicates weather the modules file name extension \
+            **extension** - Indicates whether the modules file name extension \
                             should be returned as well
 
-            **path**      - Indicates weather the modules file path should be \
+            **path**      - Indicates whether the modules file path should be \
                             returned as well
 
             Examples:
@@ -4731,7 +4731,7 @@ class Module(Object):
 
             **scope**             - scope to search for callables
 
-            **only_module_level** - indicates weather imported modules should \
+            **only_module_level** - indicates whether imported modules should \
                                     be used.
 
             Examples:
@@ -4807,7 +4807,7 @@ class Module(Object):
             **delimiter**    - delimiter to show between resulting standard \
                                outputs
 
-            **log**          - indicates weather logging should be enabled
+            **log**          - indicates whether logging should be enabled
 
             Additional keywords are forwarded to
             "boostNode.system.Platform.run()".
@@ -4882,7 +4882,7 @@ class Module(Object):
 
             **module**             - module to extend
 
-            **post_extend_others** - indicates weather to check for resolved \
+            **post_extend_others** - indicates whether to check for resolved \
                                      dependencies of other modules and extend \
                                      them if possible.
 

@@ -115,7 +115,7 @@ class CheckObject(builtins.object):
     def _is_multiple_type(cls, type):
 # #
         '''
-            Check weather a given specification allows multiple types.
+            Check whether a given specification allows multiple types.
 
             Examples:
 
@@ -154,7 +154,7 @@ class CheckObject(builtins.object):
     def _is_right_type(cls, given_type, expected_type):
 # #
         '''
-            Check weather a given type is expected type or given type is a \
+            Check whether a given type is expected type or given type is a \
             subclass of expected type.
 
             Fixes bug that in python a boolean is a subtype of an integer.

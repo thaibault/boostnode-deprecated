@@ -397,7 +397,7 @@ class Runnable(builtins.object):
 
             **given_signal_number** - Termination signal number
 
-            **force_stopping**      - Indicates weather we should enforce \
+            **force_stopping**      - Indicates whether we should enforce \
                                       termination process
 
             Examples:
@@ -866,12 +866,12 @@ class Platform(builtins.object):
     '''Saves the current operating system type.'''
     terminate_thread = False
     '''
-        Saves an indicating value weather a currently running thread should \
+        Saves an indicating value whether a currently running thread should \
         be terminated on next possibility.
     '''
     pause_thread = False
     '''
-        Saves an indicating value weather a currently running thread should \
+        Saves an indicating value whether a currently running thread should \
         be paused on next possibility. By setting this value back to "True" \
         paused threads will continue their work.
     '''
@@ -1033,13 +1033,13 @@ class Platform(builtins.object):
             **handler**         - function to execute to change computer's \
                                   status
 
-            **down**            - indicates weather we should check again \
+            **down**            - indicates whether we should check again \
                                   reachability or none reachability after \
                                   performing "handler()"
 
             **number_of_tries** - number of tries to run given "handler()"
 
-            Returns a tuple: first value indicates weather it was successful \
+            Returns a tuple: first value indicates whether it was successful \
             and second is "True" if computer status was needed to be changed \
             and "False" otherwise.
         '''
@@ -1142,7 +1142,7 @@ class Platform(builtins.object):
     def check_thread(cls, waiting_delay_in_seconds=2):
 # #
         '''
-            Checks weather the current thread should be paused or terminated.
+            Checks whether the current thread should be paused or terminated.
 
             **waiting_delay_in_seconds** - time between checking if thread is \
                                            currently running
@@ -1780,7 +1780,7 @@ class CommandLine(builtins.object):
 
             **version**     - version description
 
-            **default**     - indicates weather some default arguments should \
+            **default**     - indicates whether some default arguments should \
                               be added
 
             Additional arguments are forwarded to python's native \
@@ -1917,7 +1917,7 @@ class CommandLine(builtins.object):
 
             **scope**             - scope to check again objects
 
-            **only_module_level** - indicates weather imported object should \
+            **only_module_level** - indicates whether imported object should \
                                     be ignored
 
             Examples:
@@ -1991,7 +1991,7 @@ class CommandLine(builtins.object):
             **documentation_path**           - path to put generated api \
                                                documentation
 
-            **clear_old_documentation**      - indicates weather to delete \
+            **clear_old_documentation**      - indicates whether to delete \
                                                old documentation files
 
             **documentation_file_extension** - documentation file extension \
@@ -2060,7 +2060,7 @@ class CommandLine(builtins.object):
 
             **temp_file_patterns** - temporary file patterns to delete
 
-            **test**               - indicates weather this module should be \
+            **test**               - indicates whether this module should be \
                                      tested or not
 
             **default_caller**     - default callable object in given module
@@ -2226,7 +2226,7 @@ class CommandLine(builtins.object):
 
             **temp_file_patterns**      - temporary file patterns to delete
 
-            **verbose**                 - indicates weather testing output \
+            **verbose**                 - indicates whether testing output \
                                           should be verbose.
 
             **test_only_callable_name** - if provided only given callable \

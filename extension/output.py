@@ -169,7 +169,7 @@ class Buffer(Class, LoggingStreamHandler):
 
         **queue**                   - a queue object to use as buffer
 
-        **support_multiprocessing** - indicates weather buffer read and write \
+        **support_multiprocessing** - indicates whether buffer read and write \
                                       requests should be multiprocessing save
 
         Examples:
@@ -427,7 +427,7 @@ class Buffer(Class, LoggingStreamHandler):
         '''
             Removes the current output buffer content.
 
-            **delete** - indicates weather a file buffer should be deleted or \
+            **delete** - indicates whether a file buffer should be deleted or \
                          truncated
 
             Examples:
@@ -514,7 +514,7 @@ class Print(Class):
     # region properties
 
     replace = False
-    '''Indicates weather last line should be replaced.'''
+    '''Indicates whether last line should be replaced.'''
     start = ''
     '''Print this string before every first argument to every "put()" call.'''
     separator = ' '
