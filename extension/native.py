@@ -4070,9 +4070,9 @@ class Dictionary(Iterable, builtins.dict):
             for k in self.content.get(node, ()):
                 sk = state.get(k, None)
                 # TODO
-                if sk == False:
+                if sk is False:
                     raise __exception__('Given graph has a cycle.')
-                if sk == True:
+                if sk is True:
                     continue
                 enter.discard(k)
                 dfs(k)

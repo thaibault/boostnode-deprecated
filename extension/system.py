@@ -2677,7 +2677,7 @@ class CommandLine(builtins.object):
         '''
         callable_objects = builtins.tuple(Module.get_defined_callables(
             object=module['scope']))
-        if callable_objects or default_caller == False:
+        if callable_objects or default_caller is False:
             default_caller = Module.determine_caller(
                 caller=default_caller, callable_objects=callable_objects)
             if builtins.isinstance(default_caller, builtins.tuple):
