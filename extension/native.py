@@ -1901,7 +1901,8 @@ class String(Object, builtins.str):
         'ÃÂ±': '&ntilde;',
         'ÃÂ¾': '&thorn;'}
     '''All chars wich should be observed by handling with html sequences.'''
-    abbreviations =  'html', 'id', 'url', 'us', 'de', 'api', 'href'
+    abbreviations = (
+        'html', 'id', 'url', 'en', 'us', 'de', 'api', 'href', 'js', 'css')
     '''Saves a mapping of typical shortcut words to improve camel casing.'''
 
     # endregion
