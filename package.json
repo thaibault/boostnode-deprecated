@@ -1,6 +1,9 @@
 {
     "name": "boostNode",
-    "tagline": "a high reliable python library<!--deDE:eine Pythonbibliothek für hochzuverlässigkeits Ansprüche-->",
-    "trackingCode": "UA-40192634-2",
-    "language": {"selection": ["deDE", "enUS"]}
+    "version": "1.0.0",
+    "documentationWebsite": {
+        "tagline": "a high reliable python library<!--deDE:eine Pythonbibliothek für hochzuverlässigkeits Ansprüche-->",
+        "trackingCode": "UA-40192634-2",
+        "language": {"selection": ["deDE", "enUS"]}
+    }
 }
