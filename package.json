@@ -4,6 +4,6 @@
     "documentationWebsite": {
         "tagline": "a high reliable python library<!--deDE:eine Pythonbibliothek für hochzuverlässigkeits Ansprüche-->",
         "trackingCode": "UA-40192634-2",
-        "language": {"selection": ["deDE", "enUS"]}
+        "languages": ["deDE", "enUS"]
     }
 }
