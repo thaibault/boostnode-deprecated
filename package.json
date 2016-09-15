@@ -8,7 +8,7 @@
         "languages": ["deDE", "enUS"]
     },
     "scripts": {
-      "updateDocumentation": "documentationWebsite --log-level info",
+      "updateDocumentation": "documentationWebsite --log-level info"
     },
     "devDependencies": {
       "documentation-website": "latest"
