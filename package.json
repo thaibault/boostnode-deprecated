@@ -1,6 +1,7 @@
 {
     "name": "boostnode",
     "version": "1.0.0",
+    "description": "a high reliable python library",
     "documentationWebsite": {
         "name": "boostNode",
         "tagline": "a high reliable python library<!--deDE:eine Pythonbibliothek für hochzuverlässigkeits Ansprüche-->",
