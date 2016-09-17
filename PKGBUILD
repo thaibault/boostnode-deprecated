@@ -9,9 +9,9 @@
 # This library written by Torben Sickert stand under a creative commons naming
 # 3.0 unported license. see http://creativecommons.org/licenses/by/3.0/deed.de
 # endregion
-pkgname=boostnode-git
+pkgname=boostnode
 pkgver=VERSION
-pkgrel=10
+pkgrel=11
 pkgdesc='a high reliable python library'
 arch=('any')
 url='http://torben.website/boostNode'
