@@ -2,7 +2,7 @@
   "name": "boostnode",
   "version": "1.0.2",
   "description": "a high reliable python library",
-  "main": "__init__,py",
+  "main": "__init__.py",
   "files": [
     "aspect",
     "extension",
