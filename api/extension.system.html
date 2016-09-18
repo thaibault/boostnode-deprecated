@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>boostNode.extension.system &#8212; boostNode 1.0 rc documentation</title>
+    <title>boostnode.extension.system &#8212; boostnode 1.0 rc documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -23,9 +23,9 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="boostNode 1.0 rc documentation" href="index.html" />
-    <link rel="next" title="boostNode.extension.file" href="extension.file.html" />
-    <link rel="prev" title="boostNode.extension.type" href="extension.type.html" /> 
+    <link rel="top" title="boostnode 1.0 rc documentation" href="index.html" />
+    <link rel="next" title="boostnode.extension.file" href="extension.file.html" />
+    <link rel="prev" title="boostnode.extension.type" href="extension.type.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -38,12 +38,12 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="extension.file.html" title="boostNode.extension.file"
+          <a href="extension.file.html" title="boostnode.extension.file"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="extension.type.html" title="boostNode.extension.type"
+          <a href="extension.type.html" title="boostnode.extension.type"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">boostNode 1.0 rc documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">boostnode 1.0 rc documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -52,97 +52,97 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-boostNode.extension.system">
-<span id="boostnode-extension-system"></span><h1>boostNode.extension.system<a class="headerlink" href="#module-boostNode.extension.system" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-boostnode.extension.system">
+<span id="boostnode-extension-system"></span><h1>boostnode.extension.system<a class="headerlink" href="#module-boostnode.extension.system" title="Permalink to this headline">¶</a></h1>
 <p>This module provides classes for handling issues with the operating     system or command line.</p>
 <dl class="class">
-<dt id="boostNode.extension.system.CommandLine">
-<em class="property">class </em><code class="descclassname">boostNode.extension.system.</code><code class="descname">CommandLine</code><a class="headerlink" href="#boostNode.extension.system.CommandLine" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.CommandLine">
+<em class="property">class </em><code class="descclassname">boostnode.extension.system.</code><code class="descname">CommandLine</code><a class="headerlink" href="#boostnode.extension.system.CommandLine" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines which possibilities are supported for boolean interactive         command line user inputs.</p>
 <dl class="attribute">
-<dt id="boostNode.extension.system.CommandLine.ARGUMENT_DEFAULT">
-<code class="descname">ARGUMENT_DEFAULT</code><em class="property"> = None</em><a class="headerlink" href="#boostNode.extension.system.CommandLine.ARGUMENT_DEFAULT" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.CommandLine.ARGUMENT_DEFAULT">
+<code class="descname">ARGUMENT_DEFAULT</code><em class="property"> = None</em><a class="headerlink" href="#boostnode.extension.system.CommandLine.ARGUMENT_DEFAULT" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the global default value for arguments.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="boostNode.extension.system.CommandLine.CONFLICT_HANDLER">
-<code class="descname">CONFLICT_HANDLER</code><em class="property"> = u'resolve'</em><a class="headerlink" href="#boostNode.extension.system.CommandLine.CONFLICT_HANDLER" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.CommandLine.CONFLICT_HANDLER">
+<code class="descname">CONFLICT_HANDLER</code><em class="property"> = u'resolve'</em><a class="headerlink" href="#boostnode.extension.system.CommandLine.CONFLICT_HANDLER" title="Permalink to this definition">¶</a></dt>
 <dd><p>Usually unnecessary, defines strategy to resolve conflicting optionals.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="boostNode.extension.system.CommandLine.DEFAULT_ARGUMENTS">
-<code class="descname">DEFAULT_ARGUMENTS</code><em class="property"> = ({u'specification': {u'action': u'version', u'dest': u'version', u'version': {u'execute': u'__version_string__'}, u'help': u'Show current program version.'}, u'arguments': (u'-x', u'--version')}, {u'specification': {u'help': {u'execute': u'&quot;Defines log level of current program instance. (Available level: \\&quot;%s\\&quot;). You can prefix each log level with \\&quot;text-\\&quot; to disable escape sequences.&quot; % &quot;\\&quot;, \\&quot;&quot;.join(__default_arguments__[1][&quot;specification&quot;][&quot;choices&quot;])'}, u'default': u'critical', u'choices': (u'debug', u'text-debug', u'info', u'text-info', u'warning', u'text-warning', u'error', u'text-error', u'critical', u'text-critical'), u'dest': u'log_level', u'action': u'store', u'type': &lt;type 'str'&gt;, u'metavar': u'LOG_LEVEL'}, u'arguments': (u'-l', u'--log-level')})</em><a class="headerlink" href="#boostNode.extension.system.CommandLine.DEFAULT_ARGUMENTS" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.CommandLine.DEFAULT_ARGUMENTS">
+<code class="descname">DEFAULT_ARGUMENTS</code><em class="property"> = ({u'specification': {u'action': u'version', u'dest': u'version', u'version': {u'execute': u'__version_string__'}, u'help': u'Show current program version.'}, u'arguments': (u'-x', u'--version')}, {u'specification': {u'help': {u'execute': u'&quot;Defines log level of current program instance. (Available level: \\&quot;%s\\&quot;). You can prefix each log level with \\&quot;text-\\&quot; to disable escape sequences.&quot; % &quot;\\&quot;, \\&quot;&quot;.join(__default_arguments__[1][&quot;specification&quot;][&quot;choices&quot;])'}, u'default': u'critical', u'choices': (u'debug', u'text-debug', u'info', u'text-info', u'warning', u'text-warning', u'error', u'text-error', u'critical', u'text-critical'), u'dest': u'log_level', u'action': u'store', u'type': &lt;type 'str'&gt;, u'metavar': u'LOG_LEVEL'}, u'arguments': (u'-l', u'--log-level')})</em><a class="headerlink" href="#boostnode.extension.system.CommandLine.DEFAULT_ARGUMENTS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines standard arguments for every command line interface program.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="boostNode.extension.system.CommandLine.DEFAULT_CALLER_ARGUMENTS">
-<code class="descname">DEFAULT_CALLER_ARGUMENTS</code><em class="property"> = ({u'specification': {u'help': {u'execute': u'&quot;Select a callable module object to run or test. (Objects: \\&quot;%s\\&quot;)&quot; % &quot;\\&quot;, \\&quot;&quot;.join(objects)'}, u'default': {u'execute': u'default_caller'}, u'choices': {u'execute': u'objects'}, u'dest': u'module_object', u'action': u'store', u'type': &lt;type 'str'&gt;, u'metavar': u'CALLABLE_MODULE_OBJECT'}, u'arguments': (u'-c', u'--module-object')}, {u'specification': {u'action': u'store_true', u'default': False, u'dest': u'test', u'help': u'Test current module or given callable.'}, u'arguments': (u'-t', u'--test')}, {u'specification': {u'action': u'store_true', u'default': False, u'dest': u'verbose_test', u'help': u'Test current module or given callable verbosely.'}, u'arguments': (u'-v', u'--verbose-test')}, {u'specification': {u'action': u'store_true', u'default': False, u'dest': u'meta_help', u'help': u'Shows this help message.'}, u'arguments': (u'-m', u'--meta-help')})</em><a class="headerlink" href="#boostNode.extension.system.CommandLine.DEFAULT_CALLER_ARGUMENTS" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.CommandLine.DEFAULT_CALLER_ARGUMENTS">
+<code class="descname">DEFAULT_CALLER_ARGUMENTS</code><em class="property"> = ({u'specification': {u'help': {u'execute': u'&quot;Select a callable module object to run or test. (Objects: \\&quot;%s\\&quot;)&quot; % &quot;\\&quot;, \\&quot;&quot;.join(objects)'}, u'default': {u'execute': u'default_caller'}, u'choices': {u'execute': u'objects'}, u'dest': u'module_object', u'action': u'store', u'type': &lt;type 'str'&gt;, u'metavar': u'CALLABLE_MODULE_OBJECT'}, u'arguments': (u'-c', u'--module-object')}, {u'specification': {u'action': u'store_true', u'default': False, u'dest': u'test', u'help': u'Test current module or given callable.'}, u'arguments': (u'-t', u'--test')}, {u'specification': {u'action': u'store_true', u'default': False, u'dest': u'verbose_test', u'help': u'Test current module or given callable verbosely.'}, u'arguments': (u'-v', u'--verbose-test')}, {u'specification': {u'action': u'store_true', u'default': False, u'dest': u'meta_help', u'help': u'Shows this help message.'}, u'arguments': (u'-m', u'--meta-help')})</em><a class="headerlink" href="#boostnode.extension.system.CommandLine.DEFAULT_CALLER_ARGUMENTS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines standard arguments for every meta command line interface.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="boostNode.extension.system.CommandLine.DEFAULT_TEMP_FILE_PATTERNS">
-<code class="descname">DEFAULT_TEMP_FILE_PATTERNS</code><em class="property"> = (u'^temp_.+$', u'^__pycache__$', u'^.+\\.pyc$', u'^.+~$')</em><a class="headerlink" href="#boostNode.extension.system.CommandLine.DEFAULT_TEMP_FILE_PATTERNS" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.CommandLine.DEFAULT_TEMP_FILE_PATTERNS">
+<code class="descname">DEFAULT_TEMP_FILE_PATTERNS</code><em class="property"> = (u'^temp_.+$', u'^__pycache__$', u'^.+\\.pyc$', u'^.+~$')</em><a class="headerlink" href="#boostnode.extension.system.CommandLine.DEFAULT_TEMP_FILE_PATTERNS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines all file name patterns which should be deleted after running
 tests.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="boostNode.extension.system.CommandLine.EPILOG">
-<code class="descname">EPILOG</code><em class="property"> = u'powered by thaibault'</em><a class="headerlink" href="#boostNode.extension.system.CommandLine.EPILOG" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.CommandLine.EPILOG">
+<code class="descname">EPILOG</code><em class="property"> = u'powered by thaibault'</em><a class="headerlink" href="#boostnode.extension.system.CommandLine.EPILOG" title="Permalink to this definition">¶</a></dt>
 <dd><p>Output on every information request for applications.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="boostNode.extension.system.CommandLine.FROMFILE_PREFIX_CHARS">
-<code class="descname">FROMFILE_PREFIX_CHARS</code><em class="property"> = u'&#64;'</em><a class="headerlink" href="#boostNode.extension.system.CommandLine.FROMFILE_PREFIX_CHARS" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.CommandLine.FROMFILE_PREFIX_CHARS">
+<code class="descname">FROMFILE_PREFIX_CHARS</code><em class="property"> = u'&#64;'</em><a class="headerlink" href="#boostnode.extension.system.CommandLine.FROMFILE_PREFIX_CHARS" title="Permalink to this definition">¶</a></dt>
 <dd><p>The set of characters that prefix files from which additional arguments should be read.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="boostNode.extension.system.CommandLine.NEGATIVE_INPUTS">
-<code class="descname">NEGATIVE_INPUTS</code><em class="property"> = (u'n', u'no', u'not', u'negative')</em><a class="headerlink" href="#boostNode.extension.system.CommandLine.NEGATIVE_INPUTS" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.CommandLine.NEGATIVE_INPUTS">
+<code class="descname">NEGATIVE_INPUTS</code><em class="property"> = (u'n', u'no', u'not', u'negative')</em><a class="headerlink" href="#boostnode.extension.system.CommandLine.NEGATIVE_INPUTS" title="Permalink to this definition">¶</a></dt>
 <dd><p>These strings are accepted to answer question via standard in
 negatively.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="boostNode.extension.system.CommandLine.ORIGINAL_ARGUMENTS">
-<code class="descname">ORIGINAL_ARGUMENTS</code><em class="property"> = [u'/usr/bin/sphinx-build2', u'-b', u'html', u'-d', u'build/doctrees', u'source', u'build/html']</em><a class="headerlink" href="#boostNode.extension.system.CommandLine.ORIGINAL_ARGUMENTS" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.CommandLine.ORIGINAL_ARGUMENTS">
+<code class="descname">ORIGINAL_ARGUMENTS</code><em class="property"> = [u'/usr/bin/sphinx-build2', u'-b', u'html', u'-d', u'build/doctrees', u'source', u'build/html']</em><a class="headerlink" href="#boostnode.extension.system.CommandLine.ORIGINAL_ARGUMENTS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Saves an unmodified list of given command line arguments.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="boostNode.extension.system.CommandLine.PACKAGE_INTERFACE_ARGUMENTS">
-<code class="descname">PACKAGE_INTERFACE_ARGUMENTS</code><em class="property"> = ({u'specification': {u'help': {u'execute': u'&quot;Select commands for performing action with this package. (Command: \\&quot;%s\\&quot;)&quot; % &quot;\\&quot;, \\&quot;&quot;.join(choices)'}, u'default': u'', u'choices': (u'all', u'test', u'clear', u'document', u'lint'), u'action': u'store', u'type': &lt;type 'str'&gt;, u'metavar': u'COMMAND'}, u'arguments': (u'commands',)},)</em><a class="headerlink" href="#boostNode.extension.system.CommandLine.PACKAGE_INTERFACE_ARGUMENTS" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.CommandLine.PACKAGE_INTERFACE_ARGUMENTS">
+<code class="descname">PACKAGE_INTERFACE_ARGUMENTS</code><em class="property"> = ({u'specification': {u'help': {u'execute': u'&quot;Select commands for performing action with this package. (Command: \\&quot;%s\\&quot;)&quot; % &quot;\\&quot;, \\&quot;&quot;.join(choices)'}, u'default': u'', u'choices': (u'all', u'test', u'clear', u'document', u'lint'), u'action': u'store', u'type': &lt;type 'str'&gt;, u'metavar': u'COMMAND'}, u'arguments': (u'commands',)},)</em><a class="headerlink" href="#boostnode.extension.system.CommandLine.PACKAGE_INTERFACE_ARGUMENTS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines arguments for performing actions on python packages.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="boostNode.extension.system.CommandLine.POSITIVE_INPUTS">
-<code class="descname">POSITIVE_INPUTS</code><em class="property"> = (u'y', u'yes', u'positive')</em><a class="headerlink" href="#boostNode.extension.system.CommandLine.POSITIVE_INPUTS" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.CommandLine.POSITIVE_INPUTS">
+<code class="descname">POSITIVE_INPUTS</code><em class="property"> = (u'y', u'yes', u'positive')</em><a class="headerlink" href="#boostnode.extension.system.CommandLine.POSITIVE_INPUTS" title="Permalink to this definition">¶</a></dt>
 <dd><p>These strings are accepted to answer question via standard in
 positively.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="boostNode.extension.system.CommandLine.PREFIX_CHARS">
-<code class="descname">PREFIX_CHARS</code><em class="property"> = u'-'</em><a class="headerlink" href="#boostNode.extension.system.CommandLine.PREFIX_CHARS" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.CommandLine.PREFIX_CHARS">
+<code class="descname">PREFIX_CHARS</code><em class="property"> = u'-'</em><a class="headerlink" href="#boostnode.extension.system.CommandLine.PREFIX_CHARS" title="Permalink to this definition">¶</a></dt>
 <dd><p>The set of characters that prefix optional arguments.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="boostNode.extension.system.CommandLine.USAGE">
-<code class="descname">USAGE</code><em class="property"> = u'\n  %(prog)s [positional arguments] [optional arguments]\n\n Type &quot;%(prog)s --help&quot; for more informations.'</em><a class="headerlink" href="#boostNode.extension.system.CommandLine.USAGE" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.CommandLine.USAGE">
+<code class="descname">USAGE</code><em class="property"> = u'\n  %(prog)s [positional arguments] [optional arguments]\n\n Type &quot;%(prog)s --help&quot; for more informations.'</em><a class="headerlink" href="#boostnode.extension.system.CommandLine.USAGE" title="Permalink to this definition">¶</a></dt>
 <dd><p>Small overview about the right using of this program.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.system.CommandLine.argument_parser">
-<code class="descname">argument_parser</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.system.CommandLine.argument_parser" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.CommandLine.argument_parser">
+<code class="descname">argument_parser</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.system.CommandLine.argument_parser" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represents a basic argument parsing for command line interface             inputs. It&#8217;s used as default pattern for many interface concepts.</p>
 <p><strong>arguments</strong>   - arguments for the command line</p>
 <p><strong>module_name</strong> - module name wich provides the command line</p>
@@ -175,14 +175,14 @@ positively.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">CommandLine</span><span class="o">.</span><span class="n">ORIGINAL_ARGUMENTS</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">__name__</span><span class="p">]</span><span class="o">.</span><span class="n">__doc__</span> <span class="o">=</span> <span class="n">docstring_backup</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Logger</span><span class="o">.</span><span class="n">change_all</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">log_level</span><span class="p">)</span> 
-<span class="go">&lt;class ...boostNode.extension.output.Logger...&gt;</span>
+<span class="go">&lt;class ...boostnode.extension.output.Logger...&gt;</span>
 </pre></div>
 </div>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.system.CommandLine.boolean_input">
-<code class="descname">boolean_input</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.system.CommandLine.boolean_input" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.CommandLine.boolean_input">
+<code class="descname">boolean_input</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.system.CommandLine.boolean_input" title="Permalink to this definition">¶</a></dt>
 <dd><p>This methods implements a handy way to get &#8220;yes&#8221; or &#8220;no&#8221; answers             from the user via command line.</p>
 <p><strong>question</strong> - Question to ask via command line interface</p>
 <p><strong>extra</strong>    - Additional states to ask for.</p>
@@ -196,25 +196,25 @@ positively.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="boostNode.extension.system.CommandLine.current_argument_parser">
-<code class="descname">current_argument_parser</code><em class="property"> = None</em><a class="headerlink" href="#boostNode.extension.system.CommandLine.current_argument_parser" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.CommandLine.current_argument_parser">
+<code class="descname">current_argument_parser</code><em class="property"> = None</em><a class="headerlink" href="#boostnode.extension.system.CommandLine.current_argument_parser" title="Permalink to this definition">¶</a></dt>
 <dd><p>Saves the newest command line argument parser instance.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.system.CommandLine.determine_wrapped_objects">
-<code class="descname">determine_wrapped_objects</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.system.CommandLine.determine_wrapped_objects" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.CommandLine.determine_wrapped_objects">
+<code class="descname">determine_wrapped_objects</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.system.CommandLine.determine_wrapped_objects" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns all aspect orientated wrapped methods in given module.</p>
 <p><strong>scope</strong>             - scope to check again objects</p>
 <p><strong>only_module_level</strong> - indicates whether imported object should                                     be ignored</p>
 <p>Examples:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">boostNode.extension.system</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">boostnode.extension.system</span>
 </pre></div>
 </div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sys</span><span class="o">.</span><span class="n">flags</span><span class="o">.</span><span class="n">optimize</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="p">(</span>
 <span class="gp">... </span>    <span class="s1">&#39;CommandLine.determine_wrapped_objects&#39;</span> <span class="ow">in</span>
 <span class="gp">... </span>    <span class="n">CommandLine</span><span class="o">.</span><span class="n">determine_wrapped_objects</span><span class="p">(</span>
-<span class="gp">... </span>        <span class="n">boostNode</span><span class="o">.</span><span class="n">extension</span><span class="o">.</span><span class="n">system</span><span class="p">))</span>
+<span class="gp">... </span>        <span class="n">boostnode</span><span class="o">.</span><span class="n">extension</span><span class="o">.</span><span class="n">system</span><span class="p">))</span>
 <span class="go">True</span>
 </pre></div>
 </div>
@@ -231,8 +231,8 @@ positively.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.system.CommandLine.generic_module_interface">
-<code class="descname">generic_module_interface</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.system.CommandLine.generic_module_interface" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.CommandLine.generic_module_interface">
+<code class="descname">generic_module_interface</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.system.CommandLine.generic_module_interface" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provides a generic command line interface for modules. Things             like unit testing or calling objects in module are provided.             Returns &#8220;True&#8221; if module handling was needed and &#8220;False&#8221; if some             action has ran.</p>
 <p><strong>module</strong>             - module object to provide an interface for</p>
 <p><strong>temp_file_patterns</strong> - temporary file patterns to delete</p>
@@ -250,8 +250,8 @@ positively.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.system.CommandLine.generic_package_interface">
-<code class="descname">generic_package_interface</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.system.CommandLine.generic_package_interface" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.CommandLine.generic_package_interface">
+<code class="descname">generic_package_interface</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.system.CommandLine.generic_package_interface" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provides a command-line interface like a makefile. Supported             features are linting, generate documentation, testing and             removing temporary files.</p>
 <p><strong>name</strong>                         - package name</p>
 <p><strong>frame</strong>                        - frame bounded to package scope</p>
@@ -279,15 +279,15 @@ positively.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.system.CommandLine.handle_log_level">
-<code class="descname">handle_log_level</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.system.CommandLine.handle_log_level" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.CommandLine.handle_log_level">
+<code class="descname">handle_log_level</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.system.CommandLine.handle_log_level" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handles log level in a generic way. If given command line             arguments contains a log level all logger levels will be setted             to this level.</p>
 <p><strong>arguments</strong> - command line arguments</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.system.CommandLine.is_explicit_argument">
-<code class="descname">is_explicit_argument</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.system.CommandLine.is_explicit_argument" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.CommandLine.is_explicit_argument">
+<code class="descname">is_explicit_argument</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.system.CommandLine.is_explicit_argument" title="Permalink to this definition">¶</a></dt>
 <dd><p>Guesses if given argument name was explicitly provided in given             parsed arguments.</p>
 <p><strong>given_arguments</strong> - parsed command line arguments provided by                                   the application executer.</p>
 <p><strong>specification</strong>   - argument specification to refer to</p>
@@ -348,8 +348,8 @@ positively.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.system.CommandLine.test_module">
-<code class="descname">test_module</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.system.CommandLine.test_module" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.CommandLine.test_module">
+<code class="descname">test_module</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.system.CommandLine.test_module" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test a given module&#8217;s doctests.</p>
 <p><strong>module</strong>                  - module object to test</p>
 <p><strong>temp_file_patterns</strong>      - temporary file patterns to delete</p>
@@ -360,24 +360,24 @@ positively.</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="boostNode.extension.system.Platform">
-<em class="property">class </em><code class="descclassname">boostNode.extension.system.</code><code class="descname">Platform</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.system.Platform" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.Platform">
+<em class="property">class </em><code class="descclassname">boostnode.extension.system.</code><code class="descname">Platform</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.system.Platform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handles issues dealing with the underlying operating system.</p>
 <dl class="attribute">
-<dt id="boostNode.extension.system.Platform.TERMINATION_SIGNALS">
-<code class="descname">TERMINATION_SIGNALS</code><em class="property"> = (u'SIGTERM', u'SIGINT', u'SIGHUP')</em><a class="headerlink" href="#boostNode.extension.system.Platform.TERMINATION_SIGNALS" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.Platform.TERMINATION_SIGNALS">
+<code class="descname">TERMINATION_SIGNALS</code><em class="property"> = (u'SIGTERM', u'SIGINT', u'SIGHUP')</em><a class="headerlink" href="#boostnode.extension.system.Platform.TERMINATION_SIGNALS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Saves a list of process signal codes which should bring the application down.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="boostNode.extension.system.Platform.UNIX_OPEN_APPLICATIONS">
-<code class="descname">UNIX_OPEN_APPLICATIONS</code><em class="property"> = (u'openPath', u'gnome-open', u'kde-open', u'gvfs-open', u'exo-open', u'xdg-open', u'gedit', u'mousepad', u'gvim', u'vim', u'emacs', u'nano', u'vi', u'less', u'cat')</em><a class="headerlink" href="#boostNode.extension.system.Platform.UNIX_OPEN_APPLICATIONS" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.Platform.UNIX_OPEN_APPLICATIONS">
+<code class="descname">UNIX_OPEN_APPLICATIONS</code><em class="property"> = (u'openPath', u'gnome-open', u'kde-open', u'gvfs-open', u'exo-open', u'xdg-open', u'gedit', u'mousepad', u'gvim', u'vim', u'emacs', u'nano', u'vi', u'less', u'cat')</em><a class="headerlink" href="#boostnode.extension.system.Platform.UNIX_OPEN_APPLICATIONS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Saves a list of known unix commands to open a specified file.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.system.Platform.change_computer_status">
-<code class="descname">change_computer_status</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.system.Platform.change_computer_status" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.Platform.change_computer_status">
+<code class="descname">change_computer_status</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.system.Platform.change_computer_status" title="Permalink to this definition">¶</a></dt>
 <dd><p>Shuts down or boot a computer and ensure that is is available             after boot or not available if it should be shut down.</p>
 <p><strong>host</strong>            - host to change</p>
 <p><strong>mac_address</strong>     - mac address of host to change</p>
@@ -389,8 +389,8 @@ positively.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.system.Platform.check_computer_reachability">
-<code class="descname">check_computer_reachability</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.system.Platform.check_computer_reachability" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.Platform.check_computer_reachability">
+<code class="descname">check_computer_reachability</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.system.Platform.check_computer_reachability" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if a remote computer is available by pinging it.</p>
 <p><strong>host</strong>               - host to check</p>
 <p><strong>timeout_in_seconds</strong> - timeout until an unreachable host will                                      be assumed</p>
@@ -404,8 +404,8 @@ positively.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.system.Platform.check_process_lock">
-<code class="descname">check_process_lock</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.system.Platform.check_process_lock" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.Platform.check_process_lock">
+<code class="descname">check_process_lock</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.system.Platform.check_process_lock" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if a lock file with given description exists. NOTE:             Calling this function doesn&#8217;t prevent you from race conditions.</p>
 <p><strong>description</strong> - the process identification</p>
 <p>Examples:</p>
@@ -420,8 +420,8 @@ positively.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.system.Platform.check_thread">
-<code class="descname">check_thread</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.system.Platform.check_thread" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.Platform.check_thread">
+<code class="descname">check_thread</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.system.Platform.check_thread" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks whether the current thread should be paused or terminated.</p>
 <p><strong>waiting_delay_in_seconds</strong> - time between checking if thread is                                            currently running</p>
 <p>If thread should be terminated &#8220;True&#8221; will be given back. In case             of pausing the current thread stay in the current function call             still a continue event is triggered and &#8220;False&#8221; will be given back.</p>
@@ -453,8 +453,8 @@ positively.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.system.Platform.clear_process_lock">
-<code class="descname">clear_process_lock</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.system.Platform.clear_process_lock" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.Platform.clear_process_lock">
+<code class="descname">clear_process_lock</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.system.Platform.clear_process_lock" title="Permalink to this definition">¶</a></dt>
 <dd><p>Removes a prior setted lock file.</p>
 <p><strong>description</strong> - the process identification</p>
 <p>Examples:</p>
@@ -479,8 +479,8 @@ positively.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.system.Platform.make_computer_ready">
-<code class="descname">make_computer_ready</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.system.Platform.make_computer_ready" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.Platform.make_computer_ready">
+<code class="descname">make_computer_ready</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.system.Platform.make_computer_ready" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wakes a remote computer and ensure that it is ready by pinging             till it answers.</p>
 <p>Arguments and keywords are forwarded to &#8220;change_computer_status()&#8221;
 method.</p>
@@ -506,8 +506,8 @@ method.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.system.Platform.open">
-<code class="descname">open</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.system.Platform.open" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.Platform.open">
+<code class="descname">open</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.system.Platform.open" title="Permalink to this definition">¶</a></dt>
 <dd><p>Opens the current file with its default user preference             application.</p>
 <p>On Unix, the return value is the exit state of the process             encoded in the format specified for wait(). Note that &#8220;POSIX&#8221;             does not specify the meaning of the return value of the C             system() function, so the return value of the Python function is             system-dependent. On Windows, the return value is that returned             by the system shell after running command. The shell is given by             the Windows environment variable &#8220;COMSPEC&#8221;: it is usually             &#8220;cmd.exe&#8221;, which returns the exit status of the command run; on             systems using a non-native shell, consult your shell documentation.</p>
 <p><strong>location</strong> - location to open</p>
@@ -521,26 +521,26 @@ method.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="boostNode.extension.system.Platform.operating_system">
-<code class="descname">operating_system</code><em class="property"> = u'linux'</em><a class="headerlink" href="#boostNode.extension.system.Platform.operating_system" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.Platform.operating_system">
+<code class="descname">operating_system</code><em class="property"> = u'linux'</em><a class="headerlink" href="#boostnode.extension.system.Platform.operating_system" title="Permalink to this definition">¶</a></dt>
 <dd><p>Saves the current operating system type.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="boostNode.extension.system.Platform.pause_thread">
-<code class="descname">pause_thread</code><em class="property"> = False</em><a class="headerlink" href="#boostNode.extension.system.Platform.pause_thread" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.Platform.pause_thread">
+<code class="descname">pause_thread</code><em class="property"> = False</em><a class="headerlink" href="#boostnode.extension.system.Platform.pause_thread" title="Permalink to this definition">¶</a></dt>
 <dd><p>Saves an indicating value whether a currently running thread should be paused on next possibility. By setting this value back to &#8220;True&#8221; paused threads will continue their work.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="boostNode.extension.system.Platform.process_lock_directory">
-<code class="descname">process_lock_directory</code><em class="property"> = None</em><a class="headerlink" href="#boostNode.extension.system.Platform.process_lock_directory" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.Platform.process_lock_directory">
+<code class="descname">process_lock_directory</code><em class="property"> = None</em><a class="headerlink" href="#boostnode.extension.system.Platform.process_lock_directory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Saves a location for storing files indicating process locks.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.system.Platform.run">
-<code class="descname">run</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.system.Platform.run" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.Platform.run">
+<code class="descname">run</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.system.Platform.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Runs a command natively on the current operating system using the             command line. Result will be given back as tuple. First element             is standard and second error output.</p>
 <p><strong>command</strong>           - A command line interface command                                     optionally with arguments.</p>
 <p><strong>command_arguments</strong> - A list of arguments passing through the                                     command line interface.</p>
@@ -614,8 +614,8 @@ method.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.system.Platform.set_process_lock">
-<code class="descname">set_process_lock</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.system.Platform.set_process_lock" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.Platform.set_process_lock">
+<code class="descname">set_process_lock</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.system.Platform.set_process_lock" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets a global lock. Creates a file with given name prefix of             &#8220;description&#8221;.</p>
 <p><strong>description</strong> - an identifying description</p>
 <p>Examples:</p>
@@ -645,20 +645,20 @@ method.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="boostNode.extension.system.Platform.terminate_thread">
-<code class="descname">terminate_thread</code><em class="property"> = False</em><a class="headerlink" href="#boostNode.extension.system.Platform.terminate_thread" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.Platform.terminate_thread">
+<code class="descname">terminate_thread</code><em class="property"> = False</em><a class="headerlink" href="#boostnode.extension.system.Platform.terminate_thread" title="Permalink to this definition">¶</a></dt>
 <dd><p>Saves an indicating value whether a currently running thread should be terminated on next possibility.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="boostNode.extension.system.Platform.termination_signal_numbers">
-<code class="descname">termination_signal_numbers</code><em class="property"> = [15, 2, 1]</em><a class="headerlink" href="#boostNode.extension.system.Platform.termination_signal_numbers" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.Platform.termination_signal_numbers">
+<code class="descname">termination_signal_numbers</code><em class="property"> = [15, 2, 1]</em><a class="headerlink" href="#boostnode.extension.system.Platform.termination_signal_numbers" title="Permalink to this definition">¶</a></dt>
 <dd><p>Holds all process termination signal numbers.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.system.Platform.wake_computer">
-<code class="descname">wake_computer</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.system.Platform.wake_computer" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.Platform.wake_computer">
+<code class="descname">wake_computer</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.system.Platform.wake_computer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wakes up a remote computer using a magic package             (wake-on-lan-package).</p>
 <p><strong>mac_address</strong> - physical address of computer to wake</p>
 <p><strong>broadcast</strong>    - broadcast address</p>
@@ -701,19 +701,19 @@ method.</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="boostNode.extension.system.Runnable">
-<em class="property">class </em><code class="descclassname">boostNode.extension.system.</code><code class="descname">Runnable</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.system.Runnable" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.Runnable">
+<em class="property">class </em><code class="descclassname">boostnode.extension.system.</code><code class="descname">Runnable</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.system.Runnable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Abstract class (interface) for implementing reusable classes which         acts directly as an command line interface to provide their features         platform independent.</p>
 <p>Arguments and keywords are forwarded to the protected &#8220;_initialize()&#8221;         method.</p>
 <dl class="attribute">
-<dt id="boostNode.extension.system.Runnable.restart_order">
-<code class="descname">restart_order</code><em class="property"> = None</em><a class="headerlink" href="#boostNode.extension.system.Runnable.restart_order" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.Runnable.restart_order">
+<code class="descname">restart_order</code><em class="property"> = None</em><a class="headerlink" href="#boostnode.extension.system.Runnable.restart_order" title="Permalink to this definition">¶</a></dt>
 <dd><p>Currently given inputs via command line during &#8220;wait_for_order()&#8221; is running.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.system.Runnable.run">
-<code class="descname">run</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.system.Runnable.run" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.Runnable.run">
+<code class="descname">run</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.system.Runnable.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Method for an explicit run of a class implementing this abstract             class (interface).</p>
 <p>Arguments and keywords are forwarded to current instance
 initializer.</p>
@@ -740,8 +740,8 @@ initializer.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.system.Runnable.stop">
-<code class="descname">stop</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.system.Runnable.stop" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.Runnable.stop">
+<code class="descname">stop</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.system.Runnable.stop" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method should usually be overwritten to handle cleanup jobs.</p>
 <p><strong>reason</strong>              - Reason why we should stop</p>
 <p><strong>given_signal_number</strong> - Termination signal number</p>
@@ -766,14 +766,14 @@ initializer.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="boostNode.extension.system.Runnable.stop_order">
-<code class="descname">stop_order</code><em class="property"> = None</em><a class="headerlink" href="#boostNode.extension.system.Runnable.stop_order" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.Runnable.stop_order">
+<code class="descname">stop_order</code><em class="property"> = None</em><a class="headerlink" href="#boostnode.extension.system.Runnable.stop_order" title="Permalink to this definition">¶</a></dt>
 <dd><p>Saves a cli-command for restarting the runnable implementation.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.system.Runnable.trigger_stop">
-<code class="descname">trigger_stop</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.system.Runnable.trigger_stop" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.Runnable.trigger_stop">
+<code class="descname">trigger_stop</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.system.Runnable.trigger_stop" title="Permalink to this definition">¶</a></dt>
 <dd><p>Method for cleaning up running workers.</p>
 <p>Arguments and keywords are forwarded to the &#8220;stop()&#8221; method.</p>
 <p>Examples:</p>
@@ -802,8 +802,8 @@ initializer.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.system.Runnable.wait_for_order">
-<code class="descname">wait_for_order</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.system.Runnable.wait_for_order" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.system.Runnable.wait_for_order">
+<code class="descname">wait_for_order</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.system.Runnable.wait_for_order" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handler for waiting till a server stop order comes through the             command line interface.</p>
 </dd></dl>
 
@@ -819,10 +819,10 @@ initializer.</p>
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
   <p class="topless"><a href="extension.type.html"
-                        title="previous chapter">boostNode.extension.type</a></p>
+                        title="previous chapter">boostnode.extension.type</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="extension.file.html"
-                        title="next chapter">boostNode.extension.file</a></p>
+                        title="next chapter">boostnode.extension.file</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -854,12 +854,12 @@ initializer.</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="extension.file.html" title="boostNode.extension.file"
+          <a href="extension.file.html" title="boostnode.extension.file"
              >next</a> |</li>
         <li class="right" >
-          <a href="extension.type.html" title="boostNode.extension.type"
+          <a href="extension.type.html" title="boostnode.extension.type"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">boostNode 1.0 rc documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">boostnode 1.0 rc documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

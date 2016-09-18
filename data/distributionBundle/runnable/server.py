@@ -12,14 +12,14 @@ from __future__ import absolute_import, division, print_function, \
 # #
 
 '''
-    For conventions see "boostNode/__init__.py" on \
-    https://github.com/thaibault/boostNode
+    For conventions see "boostnode/__init__.py" on \
+    https://github.com/thaibault/boostnode
 '''
 
 __author__ = 'Torben Sickert'
-__copyright__ = 'see boostNode/__init__.py'
+__copyright__ = 'see boostnode/__init__.py'
 __credits__ = 'Torben Sickert',
-__license__ = 'see boostNode/__init__.py'
+__license__ = 'see boostnode/__init__.py'
 __maintainer__ = 'Torben Sickert'
 __maintainer_email__ = 'info["~at~"]torben.website'
 __status__ = 'stable'
@@ -83,27 +83,27 @@ from urlparse import parse_qs as parse_url_query
 from urlparse import unquote as unquote_url
 # #
 
-'''Make boostNode packages and modules importable via relative paths.'''
+'''Make boostnode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
 # # python3.5
-# # from boostNode import ENCODING
-from boostNode import ENCODING, convert_to_string, convert_to_unicode
+# # from boostnode import ENCODING
+from boostnode import ENCODING, convert_to_string, convert_to_unicode
 # #
-from boostNode.extension.file import Handler as FileHandler
-from boostNode.extension.native import Iterable, Dictionary, Module, Object, \
+from boostnode.extension.file import Handler as FileHandler
+from boostnode.extension.native import Iterable, Dictionary, Module, Object, \
     InstancePropertyInitializer, String
-from boostNode.extension.output import Buffer, Print
-from boostNode.extension.output import SET_ATTRIBUTE_MODE as \
+from boostnode.extension.output import Buffer, Print
+from boostnode.extension.output import SET_ATTRIBUTE_MODE as \
     SET_OUTPUT_ATTRIBUTE_MODE
-from boostNode.extension.output import RESET_ATTRIBUTE_MODE as \
+from boostnode.extension.output import RESET_ATTRIBUTE_MODE as \
     RESET_OUTPUT_ATTRIBUTE_MODE
-from boostNode.extension.output import COLOR as OUTPUT_COLOR
-from boostNode.extension.system import CommandLine, Platform, Runnable
-# # python3.5 from boostNode.extension.type import Self
+from boostnode.extension.output import COLOR as OUTPUT_COLOR
+from boostnode.extension.system import CommandLine, Platform, Runnable
+# # python3.5 from boostnode.extension.type import Self
 pass
-from boostNode.paradigm.aspectOrientation import JointPoint
-from boostNode.paradigm.objectOrientation import Class
+from boostnode.paradigm.aspectOrientation import JointPoint
+from boostnode.paradigm.objectOrientation import Class
 
 # endregion
 
@@ -958,7 +958,7 @@ class Web(Class, Runnable):
             Waits for running workers and shuts the server down.
 
             Arguments and keywords are forwarded to \
-            "boostNode.extension.system.Run.stop()".
+            "boostnode.extension.system.Run.stop()".
 
             Examples:
 
@@ -4283,8 +4283,6 @@ Module.default(
 # endregion
 
 # region vim modline
-
 # vim: set tabstop=4 shiftwidth=4 expandtab:
 # vim: foldmethod=marker foldmarker=region,endregion:
-
 # endregion

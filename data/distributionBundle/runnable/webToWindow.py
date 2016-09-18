@@ -15,12 +15,12 @@ from __future__ import absolute_import, division, print_function, \
 # #
 
 '''
-    For conventions see "boostNode/__init__.py" on \
-    https://github.com/thaibault/boostNode
+    For conventions see "boostnode/__init__.py" on \
+    https://github.com/thaibault/boostnode
 '''
 
 __author__ = 'Torben Sickert'
-__copyright__ = 'see boostNode/__init__.py'
+__copyright__ = 'see boostnode/__init__.py'
 __credits__ = 'Torben Sickert',
 __maintainer__ = 'Torben Sickert'
 __maintainer_email__ = 'info["~at~"]torben.website'
@@ -55,16 +55,16 @@ except builtins.ImportError:
 else:
     qt = True
 
-'''Make boostNode packages and modules importable via relative paths.'''
+'''Make boostnode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
-from boostNode.extension.native import Dictionary, Module, \
+from boostnode.extension.native import Dictionary, Module, \
     InstancePropertyInitializer
-from boostNode.extension.system import CommandLine, Runnable
-# # python3.5 from boostNode.extension.type import Self, SelfClass
+from boostnode.extension.system import CommandLine, Runnable
+# # python3.5 from boostnode.extension.type import Self, SelfClass
 pass
-from boostNode.paradigm.aspectOrientation import JointPoint
-from boostNode.paradigm.objectOrientation import Class
+from boostnode.paradigm.aspectOrientation import JointPoint
+from boostnode.paradigm.objectOrientation import Class
 
 # endregion
 
@@ -736,8 +736,6 @@ Module.default(
 # endregion
 
 # region vim modline
-
 # vim: set tabstop=4 shiftwidth=4 expandtab:
 # vim: foldmethod=marker foldmarker=region,endregion:
-
 # endregion

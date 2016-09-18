@@ -16,14 +16,14 @@ from __future__ import absolute_import, division, print_function, \
 # #
 
 '''
-    For conventions see "boostNode/__init__.py" on \
-    https://github.com/thaibault/boostNode
+    For conventions see "boostnode/__init__.py" on \
+    https://github.com/thaibault/boostnode
 '''
 
 __author__ = 'Torben Sickert'
-__copyright__ = 'see boostNode/__init__.py'
+__copyright__ = 'see boostnode/__init__.py'
 __credits__ = 'Torben Sickert',
-__license__ = 'see boostNode/__init__.py'
+__license__ = 'see boostnode/__init__.py'
 __maintainer__ = 'Torben Sickert'
 __maintainer_email__ = 'info["~at~"]torben.website'
 __status__ = 'stable'
@@ -35,7 +35,7 @@ import inspect
 import os
 import sys
 
-'''Make boostNode packages and modules importable via relative paths.'''
+'''Make boostnode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
 # endregion
@@ -110,7 +110,7 @@ class Model(builtins.type):
             ... else:
             ...     exec('class UserModel(metaclass=Model): pass')
         '''
-        from boostNode.extension.native import String
+        from boostnode.extension.native import String
 
         class_scope['__table_name__'] = String(
             class_name
@@ -144,15 +144,13 @@ __logger__ = __exception__ = __module_name__ = __file_path__ = \
     code preprocessing tools is provided by default.
 '''
 if __name__ == '__main__':
-    from boostNode.extension.native import Module
+    from boostnode.extension.native import Module
     Module.default(
         name=__name__, frame=inspect.currentframe(), default_caller=False)
 
 # endregion
 
 # region vim modline
-
 # vim: set tabstop=4 shiftwidth=4 expandtab:
 # vim: foldmethod=marker foldmarker=region,endregion:
-
 # endregion

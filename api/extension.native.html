@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>boostNode.extension.native &#8212; boostNode 1.0 rc documentation</title>
+    <title>boostnode.extension.native &#8212; boostnode 1.0 rc documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -23,9 +23,9 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="boostNode 1.0 rc documentation" href="index.html" />
-    <link rel="next" title="boostNode.paradigm" href="paradigm.html" />
-    <link rel="prev" title="boostNode.extension.file" href="extension.file.html" /> 
+    <link rel="top" title="boostnode 1.0 rc documentation" href="index.html" />
+    <link rel="next" title="boostnode.paradigm" href="paradigm.html" />
+    <link rel="prev" title="boostnode.extension.file" href="extension.file.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -38,12 +38,12 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="paradigm.html" title="boostNode.paradigm"
+          <a href="paradigm.html" title="boostnode.paradigm"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="extension.file.html" title="boostNode.extension.file"
+          <a href="extension.file.html" title="boostnode.extension.file"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">boostNode 1.0 rc documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">boostnode 1.0 rc documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -52,16 +52,16 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-boostNode.extension.native">
-<span id="boostnode-extension-native"></span><h1>boostNode.extension.native<a class="headerlink" href="#module-boostNode.extension.native" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-boostnode.extension.native">
+<span id="boostnode-extension-native"></span><h1>boostnode.extension.native<a class="headerlink" href="#module-boostnode.extension.native" title="Permalink to this headline">¶</a></h1>
 <p>Extension is a high level interface for interaction with pythons native     builtins. This class provides a full object oriented way to handle string     objects. Besides a number of new supported interactions with strings it     offers all core file system methods by the pythons native &#8220;builtins.str&#8221;     object.</p>
 <dl class="class">
-<dt id="boostNode.extension.native.AuthenticationModel">
-<em class="property">class </em><code class="descclassname">boostNode.extension.native.</code><code class="descname">AuthenticationModel</code><a class="headerlink" href="#boostNode.extension.native.AuthenticationModel" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.AuthenticationModel">
+<em class="property">class </em><code class="descclassname">boostnode.extension.native.</code><code class="descname">AuthenticationModel</code><a class="headerlink" href="#boostnode.extension.native.AuthenticationModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represents a model with authentication methods.</p>
 <dl class="method">
-<dt id="boostNode.extension.native.AuthenticationModel.get_password">
-<code class="descname">get_password</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.AuthenticationModel.get_password" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.AuthenticationModel.get_password">
+<code class="descname">get_password</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.AuthenticationModel.get_password" title="Permalink to this definition">¶</a></dt>
 <dd><p>Getter for the password hash.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">authentication_model</span> <span class="o">=</span> <span class="n">AuthenticationModel</span><span class="p">()</span>
@@ -85,8 +85,8 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.native.AuthenticationModel.hasPassword">
-<code class="descname">hasPassword</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.AuthenticationModel.hasPassword" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.AuthenticationModel.hasPassword">
+<code class="descname">hasPassword</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.AuthenticationModel.hasPassword" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if given password matches the saved hashed one.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">authentication_model</span> <span class="o">=</span> <span class="n">AuthenticationModel</span><span class="p">()</span>
@@ -104,16 +104,16 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.native.AuthenticationModel.set_password">
-<code class="descname">set_password</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.AuthenticationModel.set_password" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.AuthenticationModel.set_password">
+<code class="descname">set_password</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.AuthenticationModel.set_password" title="Permalink to this definition">¶</a></dt>
 <dd><p>Password setter which provides automatic salt and hash generation.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="class">
-<dt id="boostNode.extension.native.ClassPropertyInitializer">
-<em class="property">class </em><code class="descclassname">boostNode.extension.native.</code><code class="descname">ClassPropertyInitializer</code><span class="sig-paren">(</span><em>method</em>, <em>function=None</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.ClassPropertyInitializer" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.ClassPropertyInitializer">
+<em class="property">class </em><code class="descclassname">boostnode.extension.native.</code><code class="descname">ClassPropertyInitializer</code><span class="sig-paren">(</span><em>method</em>, <em>function=None</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.ClassPropertyInitializer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decorator class for automatically setting instance properties for         corresponding arguments of wrapped function.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
@@ -128,54 +128,54 @@
 </pre></div>
 </div>
 <dl class="method">
-<dt id="boostNode.extension.native.ClassPropertyInitializer.get_wrapper_function">
-<code class="descname">get_wrapper_function</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.ClassPropertyInitializer.get_wrapper_function" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.ClassPropertyInitializer.get_wrapper_function">
+<code class="descname">get_wrapper_function</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.ClassPropertyInitializer.get_wrapper_function" title="Permalink to this definition">¶</a></dt>
 <dd><p>This methods returns the wrapped function.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="class">
-<dt id="boostNode.extension.native.Copyable">
-<em class="property">class </em><code class="descclassname">boostNode.extension.native.</code><code class="descname">Copyable</code><a class="headerlink" href="#boostNode.extension.native.Copyable" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.Copyable">
+<em class="property">class </em><code class="descclassname">boostnode.extension.native.</code><code class="descname">Copyable</code><a class="headerlink" href="#boostnode.extension.native.Copyable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represents copyable and deep copyable objects. Provides generic         copy and recursive deep copy methods.</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="boostNode.extension.native.Date">
-<em class="property">class </em><code class="descclassname">boostNode.extension.native.</code><code class="descname">Date</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.Date" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.Date">
+<em class="property">class </em><code class="descclassname">boostnode.extension.native.</code><code class="descname">Date</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Date" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class adds some features for dealing with date times.</p>
 <dl class="method">
-<dt id="boostNode.extension.native.Date.slice_weekday">
-<code class="descname">slice_weekday</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.Date.slice_weekday" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.Date.slice_weekday">
+<code class="descname">slice_weekday</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Date.slice_weekday" title="Permalink to this definition">¶</a></dt>
 <dd><p>Slice weekday from given date representation.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="class">
-<dt id="boostNode.extension.native.DateTime">
-<em class="property">class </em><code class="descclassname">boostNode.extension.native.</code><code class="descname">DateTime</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.DateTime" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.DateTime">
+<em class="property">class </em><code class="descclassname">boostnode.extension.native.</code><code class="descname">DateTime</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.DateTime" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class adds some features for dealing with date times.</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="boostNode.extension.native.Dictionary">
-<em class="property">class </em><code class="descclassname">boostNode.extension.native.</code><code class="descname">Dictionary</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.Dictionary" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.Dictionary">
+<em class="property">class </em><code class="descclassname">boostnode.extension.native.</code><code class="descname">Dictionary</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Dictionary" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class extends the native dictionary object.</p>
 <p><strong>content</strong> - content for dictionary object</p>
 <p>Additional arguments and keywords are forwarded to python&#8217;s native         &#8220;dict()&#8221; method.</p>
 <dl class="method">
-<dt id="boostNode.extension.native.Dictionary.get_topological_sorted">
-<code class="descname">get_topological_sorted</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.Dictionary.get_topological_sorted" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.Dictionary.get_topological_sorted">
+<code class="descname">get_topological_sorted</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Dictionary.get_topological_sorted" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines a topological sorted list of current dictionary             interpreted as graph.</p>
 <p>Examples:</p>
 <p>TODO</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.native.Dictionary.pop_from_keywords">
-<code class="descname">pop_from_keywords</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.Dictionary.pop_from_keywords" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.Dictionary.pop_from_keywords">
+<code class="descname">pop_from_keywords</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Dictionary.pop_from_keywords" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a keyword element as it would be set by a default value. If             name is present in current saved dictionary its value will be             returned in a tuple with currently saved dictionary. The             corresponding data will be erased from dictionary.</p>
 <p><strong>name</strong>          - key to get from current dictionary instance</p>
 <p><strong>default_value</strong> - value to return if requested key isn&#8217;t                                 present in current dictionary instance.</p>
@@ -197,8 +197,8 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.native.Dictionary.update">
-<code class="descname">update</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.Dictionary.update" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.Dictionary.update">
+<code class="descname">update</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Dictionary.update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Performs a recursive update.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Dictionary</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">})</span><span class="o">.</span><span class="n">content</span> <span class="o">==</span> <span class="p">{</span>
@@ -268,8 +268,8 @@
 </dd></dl>
 
 <dl class="class">
-<dt id="boostNode.extension.native.EnsureNewMutableDefaultObject">
-<em class="property">class </em><code class="descclassname">boostNode.extension.native.</code><code class="descname">EnsureNewMutableDefaultObject</code><span class="sig-paren">(</span><em>method</em>, <em>function=None</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.EnsureNewMutableDefaultObject" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.EnsureNewMutableDefaultObject">
+<em class="property">class </em><code class="descclassname">boostnode.extension.native.</code><code class="descname">EnsureNewMutableDefaultObject</code><span class="sig-paren">(</span><em>method</em>, <em>function=None</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.EnsureNewMutableDefaultObject" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handles the problem with non native mutuable objects as default         parameter. Normally all function/method calls shares the same mutual         object. This function decorator ensures a new instance for each call.</p>
 <p>Examples:</p>
 <p>Normal Problem illustration:</p>
@@ -336,16 +336,16 @@
 </pre></div>
 </div>
 <dl class="method">
-<dt id="boostNode.extension.native.EnsureNewMutableDefaultObject.get_wrapper_function">
-<code class="descname">get_wrapper_function</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.EnsureNewMutableDefaultObject.get_wrapper_function" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.EnsureNewMutableDefaultObject.get_wrapper_function">
+<code class="descname">get_wrapper_function</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.EnsureNewMutableDefaultObject.get_wrapper_function" title="Permalink to this definition">¶</a></dt>
 <dd><p>This methods returns the wrapped function.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="class">
-<dt id="boostNode.extension.native.InstancePropertyInitializer">
-<em class="property">class </em><code class="descclassname">boostNode.extension.native.</code><code class="descname">InstancePropertyInitializer</code><span class="sig-paren">(</span><em>method</em>, <em>function=None</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.InstancePropertyInitializer" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.InstancePropertyInitializer">
+<em class="property">class </em><code class="descclassname">boostnode.extension.native.</code><code class="descname">InstancePropertyInitializer</code><span class="sig-paren">(</span><em>method</em>, <em>function=None</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.InstancePropertyInitializer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decorator class for automatically setting instance properties for         corresponding arguments of wrapped function.</p>
 <p>This methods returns the wrapped function.</p>
 <p>Examples:</p>
@@ -363,13 +363,13 @@
 </dd></dl>
 
 <dl class="class">
-<dt id="boostNode.extension.native.Iterable">
-<em class="property">class </em><code class="descclassname">boostNode.extension.native.</code><code class="descname">Iterable</code><span class="sig-paren">(</span><em>content=None</em>, <em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.Iterable" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.Iterable">
+<em class="property">class </em><code class="descclassname">boostnode.extension.native.</code><code class="descname">Iterable</code><span class="sig-paren">(</span><em>content=None</em>, <em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Iterable" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class extends the native iterable object.</p>
 <p><strong>content</strong> - content for iterable object</p>
 <dl class="method">
-<dt id="boostNode.extension.native.Iterable.convert">
-<code class="descname">convert</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.Iterable.convert" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.Iterable.convert">
+<code class="descname">convert</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Iterable.convert" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts all keys or values and nested keys or values with given             callback functions.</p>
 <p><strong>key_wrapper</strong>              - Function to convert each visited key</p>
 <p><strong>value_wrapper</strong>            - Function to convert each visited                                            value</p>
@@ -515,8 +515,8 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.native.Iterable.get_compatible_types">
-<code class="descname">get_compatible_types</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.Iterable.get_compatible_types" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.Iterable.get_compatible_types">
+<code class="descname">get_compatible_types</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Iterable.get_compatible_types" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts iterable where each type will be converted to a cross             system compatible type. The result is serialiseable (e.g. to             json). This method provides the same interface as &#8220;convert()&#8221;.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Iterable</span><span class="p">({})</span><span class="o">.</span><span class="n">compatible_types</span><span class="o">.</span><span class="n">content</span>
@@ -530,8 +530,8 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.native.Iterable.get_immutable">
-<code class="descname">get_immutable</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.Iterable.get_immutable" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.Iterable.get_immutable">
+<code class="descname">get_immutable</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Iterable.get_immutable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates an immutable copy of the current iterable. Mutable             iterables are generally translated to sorted tuples.</p>
 <p><strong>exclude</strong> - A tuple of keys to ignore in resulting immutable.</p>
 <p><strong>path</strong>    - A list of keys to mark current context in nested                           structures.</p>
@@ -556,8 +556,8 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.native.Iterable.get_known_types">
-<code class="descname">get_known_types</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.Iterable.get_known_types" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.Iterable.get_known_types">
+<code class="descname">get_known_types</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Iterable.get_known_types" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts iterable where each type will be tried to converted to             a native python type. This method provides the same interface as             &#8220;convert()&#8221;.</p>
 <p><strong>strict</strong> - If set to &#8220;False&#8221; a non convertible value will be                          given back as it is. If set to &#8220;True&#8221; an exception                          will be raised and if set to &#8220;None&#8221; &#8220;None&#8221; will be                          given back for none convertible values.</p>
 <p>Examples:</p>
@@ -568,16 +568,16 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.native.Iterable.get_rendered">
-<code class="descname">get_rendered</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.Iterable.get_rendered" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.Iterable.get_rendered">
+<code class="descname">get_rendered</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Iterable.get_rendered" title="Permalink to this definition">¶</a></dt>
 <dd><p>Renders current data wich are marked with the corresponding             special key against given mapping recursively.</p>
 <p>Examples:</p>
 <p>TODO</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.native.Iterable.is_in_pattern">
-<code class="descname">is_in_pattern</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.Iterable.is_in_pattern" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.Iterable.is_in_pattern">
+<code class="descname">is_in_pattern</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Iterable.is_in_pattern" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if given value matches current list interpreted as regular             expressions.</p>
 <p><strong>value</strong> - String to check if it matches on pattern.</p>
 <p>Returns the matching pattern if matches an &#8220;False&#8221; otherwise.</p>
@@ -599,12 +599,12 @@
 </dd></dl>
 
 <dl class="class">
-<dt id="boostNode.extension.native.Model">
-<em class="property">class </em><code class="descclassname">boostNode.extension.native.</code><code class="descname">Model</code><a class="headerlink" href="#boostNode.extension.native.Model" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.Model">
+<em class="property">class </em><code class="descclassname">boostnode.extension.native.</code><code class="descname">Model</code><a class="headerlink" href="#boostnode.extension.native.Model" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represents an abstract data holding class for an orm based model.</p>
 <dl class="method">
-<dt id="boostNode.extension.native.Model.get_dictionary">
-<code class="descname">get_dictionary</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.Model.get_dictionary" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.Model.get_dictionary">
+<code class="descname">get_dictionary</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Model.get_dictionary" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the dictionary representation of the model instance. All             properties with prefixed underscore will be ignored.</p>
 <p><strong>key_wrapper</strong>    - A function to call for manipulating each                                  key in returned dictionary.</p>
 <p><strong>value_wrapper</strong>  - A function to call for manipulating each                                  value in returned dictionary.</p>
@@ -676,8 +676,8 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.native.Model.validate_property">
-<code class="descname">validate_property</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.Model.validate_property" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.Model.validate_property">
+<code class="descname">validate_property</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Model.validate_property" title="Permalink to this definition">¶</a></dt>
 <dd><p>Intercepts each property set of any derived model.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">A</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
@@ -746,12 +746,12 @@
 </dd></dl>
 
 <dl class="class">
-<dt id="boostNode.extension.native.Module">
-<em class="property">class </em><code class="descclassname">boostNode.extension.native.</code><code class="descname">Module</code><span class="sig-paren">(</span><em>content=None</em>, <em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.Module" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.Module">
+<em class="property">class </em><code class="descclassname">boostnode.extension.native.</code><code class="descname">Module</code><span class="sig-paren">(</span><em>content=None</em>, <em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Module" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class adds some features for dealing with modules.</p>
 <dl class="method">
-<dt id="boostNode.extension.native.Module.default">
-<code class="descname">default</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.Module.default" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.Module.default">
+<code class="descname">default</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Module.default" title="Permalink to this definition">¶</a></dt>
 <dd><p>Serves a common way to extend a given module. The given module&#8217;s             scope will be extended and a common meta command line interface             is provided to test or run objects in given module.</p>
 <p><strong>name</strong>             - module name to extend</p>
 <p><strong>frame</strong>            - frame of module to extend</p>
@@ -773,8 +773,8 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.native.Module.default_package">
-<code class="descname">default_package</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.Module.default_package" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.Module.default_package">
+<code class="descname">default_package</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Module.default_package" title="Permalink to this definition">¶</a></dt>
 <dd><p>Serves a common way to extend a given package. The given             package&#8217;s scope will be extended and a common meta command line             interface is provided to test, lint or document modules.</p>
 <p><strong>name</strong>                   - package name to extend</p>
 <p><strong>frame</strong>                  - frame of package to extend</p>
@@ -796,8 +796,8 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.native.Module.determine_caller">
-<code class="descname">determine_caller</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.Module.determine_caller" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.Module.determine_caller">
+<code class="descname">determine_caller</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Module.determine_caller" title="Permalink to this definition">¶</a></dt>
 <dd><p>Searches for a useful caller object in given module objects via             &#8220;module_objects&#8221;.</p>
 <p><strong>callable_objects</strong> - available caller objects</p>
 <p><strong>caller</strong>           - if provided this value will be returned</p>
@@ -835,8 +835,8 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.native.Module.execute_program_for_modules">
-<code class="descname">execute_program_for_modules</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.Module.execute_program_for_modules" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.Module.execute_program_for_modules">
+<code class="descname">execute_program_for_modules</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Module.execute_program_for_modules" title="Permalink to this definition">¶</a></dt>
 <dd><p>Runs a given program for every given module. Returns &#8220;False&#8221; if             no modules were found or given program isn&#8217;t installed.</p>
 <p><strong>program_type</strong> - program description to show in standard output</p>
 <p><strong>program</strong>      - program name to run</p>
@@ -846,26 +846,26 @@
 <p><strong>delimiter</strong>    - delimiter to show between resulting standard                                outputs</p>
 <p><strong>log</strong>          - indicates whether logging should be enabled</p>
 <p>Additional keywords are forwarded to
-&#8220;boostNode.system.Platform.run()&#8221;.</p>
+&#8220;boostnode.system.Platform.run()&#8221;.</p>
 <p>Examples:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">boostNode.extension</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">boostnode.extension</span>
 </pre></div>
 </div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Module</span><span class="o">.</span><span class="n">execute_program_for_modules</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="s1">&#39;linter&#39;</span><span class="p">,</span> <span class="s1">&#39;pyflakes&#39;</span><span class="p">,</span> <span class="n">boostNode</span><span class="o">.</span><span class="n">extension</span><span class="o">.</span><span class="n">__all__</span>
+<span class="gp">... </span>    <span class="s1">&#39;linter&#39;</span><span class="p">,</span> <span class="s1">&#39;pyflakes&#39;</span><span class="p">,</span> <span class="n">boostnode</span><span class="o">.</span><span class="n">extension</span><span class="o">.</span><span class="n">__all__</span>
 <span class="gp">... </span><span class="p">)</span> 
 <span class="go">[(..., ...), ...]</span>
 </pre></div>
 </div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Module</span><span class="o">.</span><span class="n">execute_program_for_modules</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="s1">&#39;program&#39;</span><span class="p">,</span> <span class="s1">&#39;not_existing&#39;</span><span class="p">,</span> <span class="n">boostNode</span><span class="o">.</span><span class="n">extension</span><span class="o">.</span><span class="n">__all__</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s1">&#39;program&#39;</span><span class="p">,</span> <span class="s1">&#39;not_existing&#39;</span><span class="p">,</span> <span class="n">boostnode</span><span class="o">.</span><span class="n">extension</span><span class="o">.</span><span class="n">__all__</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="n">error</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span>
 <span class="gp">... </span><span class="p">)</span> 
 <span class="go">(&#39;&#39;, ...)</span>
 </pre></div>
 </div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Module</span><span class="o">.</span><span class="n">execute_program_for_modules</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="s1">&#39;program&#39;</span><span class="p">,</span> <span class="s1">&#39;ls&#39;</span><span class="p">,</span> <span class="n">boostNode</span><span class="o">.</span><span class="n">extension</span><span class="o">.</span><span class="n">__all__</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s1">&#39;program&#39;</span><span class="p">,</span> <span class="s1">&#39;ls&#39;</span><span class="p">,</span> <span class="n">boostnode</span><span class="o">.</span><span class="n">extension</span><span class="o">.</span><span class="n">__all__</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="n">error</span><span class="o">=</span><span class="kc">False</span>
 <span class="gp">... </span><span class="p">)</span> 
 <span class="go">(..., ...)</span>
@@ -874,8 +874,8 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.native.Module.extend">
-<code class="descname">extend</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.Module.extend" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.Module.extend">
+<code class="descname">extend</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Module.extend" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extends a given scope of an module for useful things like own             exception class, a logger instance, variable to indicate if             module is running in test mode and a variable that saves the             current module name.</p>
 <p><strong>name</strong>               - name to use for module to extend</p>
 <p><strong>frame</strong>              - frame to determine modules name and file                                      path</p>
@@ -908,8 +908,8 @@
 </dd></dl>
 
 <dl class="classmethod">
-<dt id="boostNode.extension.native.Module.get_context_path">
-<em class="property">classmethod </em><code class="descname">get_context_path</code><span class="sig-paren">(</span><em>path=None</em>, <em>frame=&lt;frame object&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.Module.get_context_path" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.Module.get_context_path">
+<em class="property">classmethod </em><code class="descname">get_context_path</code><span class="sig-paren">(</span><em>path=None</em>, <em>frame=&lt;frame object&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Module.get_context_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines the package and module level context path to a given             context or file.</p>
 <p><strong>path</strong>  - relative or absolute context or file path to normalize</p>
 <p><strong>frame</strong> - stack frame to analyse again context</p>
@@ -918,22 +918,22 @@
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Module</span><span class="o">.</span><span class="n">get_context_path</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">frame</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">currentframe</span><span class="p">()</span>
 <span class="gp">... </span><span class="p">)</span> 
-<span class="go">&#39;...boostNode.extension...doctest...Module&#39;</span>
+<span class="go">&#39;...boostnode.extension...doctest...Module&#39;</span>
 </pre></div>
 </div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Module</span><span class="o">.</span><span class="n">get_context_path</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;./native&#39;</span><span class="p">)</span> 
-<span class="go">&#39;...boostNode.extension.native&#39;</span>
+<span class="go">&#39;...boostnode.extension.native&#39;</span>
 </pre></div>
 </div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Module</span><span class="o">.</span><span class="n">get_context_path</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">)</span> 
-<span class="go">&#39;...boostNode.extension&#39;</span>
+<span class="go">&#39;...boostnode.extension&#39;</span>
 </pre></div>
 </div>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.native.Module.get_defined_callables">
-<code class="descname">get_defined_callables</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.Module.get_defined_callables" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.Module.get_defined_callables">
+<code class="descname">get_defined_callables</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Module.get_defined_callables" title="Permalink to this definition">¶</a></dt>
 <dd><p>Takes a module and gives a list of callables explicit defined in             this module. Arguments and keywords are forwarded to the             &#8220;get_defined_objects()&#8221; method.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">tuple</span><span class="p">(</span><span class="n">Module</span><span class="o">.</span><span class="n">get_defined_callables</span><span class="p">(</span>
@@ -966,8 +966,8 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.native.Module.get_defined_objects">
-<code class="descname">get_defined_objects</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.Module.get_defined_objects" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.Module.get_defined_objects">
+<code class="descname">get_defined_objects</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Module.get_defined_objects" title="Permalink to this definition">¶</a></dt>
 <dd><p>Takes a module and gives a list of objects explicit defined in             this module.</p>
 <p><strong>scope</strong>             - scope to search for callables</p>
 <p><strong>only_module_level</strong> - indicates whether imported modules should                                     be used.</p>
@@ -1001,8 +1001,8 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.native.Module.get_file_path">
-<code class="descname">get_file_path</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.Module.get_file_path" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.Module.get_file_path">
+<code class="descname">get_file_path</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Module.get_file_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the path to given context path.</p>
 <p><strong>context_path</strong>      - the context path to a module to determine</p>
 <p><strong>only_source_files</strong> - ignores compiled python modules</p>
@@ -1027,8 +1027,8 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.native.Module.get_name">
-<code class="descname">get_name</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.Module.get_name" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.Module.get_name">
+<code class="descname">get_name</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Module.get_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns name of the given context &#8220;frame&#8221;. If no frame is defined             this module&#8217;s context will be selected. If &#8220;base&#8221; is set &#8220;True&#8221;             the modules name is given back without any file extension.</p>
 <p><strong>frame</strong>     - Frame of module to determine</p>
 <p><strong>module</strong>    - module to determine the name of</p>
@@ -1044,18 +1044,18 @@
 </pre></div>
 </div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Module</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> 
-<span class="go">&#39;...boostNode...extension...native&#39;</span>
+<span class="go">&#39;...boostnode...extension...native&#39;</span>
 </pre></div>
 </div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Module</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> 
-<span class="go">&#39;...boostNode...extension...native.py&#39;</span>
+<span class="go">&#39;...boostnode...extension...native.py&#39;</span>
 </pre></div>
 </div>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.native.Module.get_package_name">
-<code class="descname">get_package_name</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.Module.get_package_name" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.Module.get_package_name">
+<code class="descname">get_package_name</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Module.get_package_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines package context of given frame. If current context             isn&#8217;t in any package context an empty string is given back.</p>
 <p><strong>frame</strong> - frame of the package name to inspect</p>
 <p><strong>path</strong>  - path to package</p>
@@ -1065,20 +1065,20 @@
 </pre></div>
 </div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Module</span><span class="o">.</span><span class="n">get_package_name</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> 
-<span class="go">&#39;...boostNode...extension...&#39;</span>
+<span class="go">&#39;...boostnode...extension...&#39;</span>
 </pre></div>
 </div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Module</span><span class="o">.</span><span class="n">get_package_name</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">frame</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">currentframe</span><span class="p">(),</span> <span class="n">path</span><span class="o">=</span><span class="kc">True</span>
 <span class="gp">... </span><span class="p">)</span> 
-<span class="go">&#39;...boostNode...extension...&#39;</span>
+<span class="go">&#39;...boostnode...extension...&#39;</span>
 </pre></div>
 </div>
 </dd></dl>
 
 <dl class="classmethod">
-<dt id="boostNode.extension.native.Module.is_package">
-<em class="property">classmethod </em><code class="descname">is_package</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.Module.is_package" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.Module.is_package">
+<em class="property">classmethod </em><code class="descname">is_package</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Module.is_package" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if given location is pointed to a python package.</p>
 <p><strong>path</strong> - given location</p>
 <p>Examples:</p>
@@ -1091,20 +1091,20 @@
 </dd></dl>
 
 <dl class="class">
-<dt id="boostNode.extension.native.Object">
-<em class="property">class </em><code class="descclassname">boostNode.extension.native.</code><code class="descname">Object</code><span class="sig-paren">(</span><em>content=None</em>, <em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.Object" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.Object">
+<em class="property">class </em><code class="descclassname">boostnode.extension.native.</code><code class="descname">Object</code><span class="sig-paren">(</span><em>content=None</em>, <em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Object" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class extends all native python classes.</p>
 <p><strong>content</strong> - Object value to save.</p>
 <dl class="method">
-<dt id="boostNode.extension.native.Object.calculate_patch">
-<code class="descname">calculate_patch</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.Object.calculate_patch" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.Object.calculate_patch">
+<code class="descname">calculate_patch</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Object.calculate_patch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the difference between content and given value in a
 recursive manner.</p>
 <p><strong>value</strong>      - value to compare with current content.</p>
 <dl class="docutils">
 <dt><strong>null_value</strong> - placeholder for equal values in both given values</dt>
 <dd>to compare (defaults to
-&#8220;boostNode.extension.type.Null&#8221;).</dd>
+&#8220;boostnode.extension.type.Null&#8221;).</dd>
 </dl>
 <p>Returns the difference between content and given value.</p>
 <p>Examples:</p>
@@ -1113,7 +1113,7 @@ recursive manner.</p>
 </pre></div>
 </div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Object</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">calculate_patch</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> 
-<span class="go">&lt;class boostNode.extension.type.Null at ...&gt;</span>
+<span class="go">&lt;class boostnode.extension.type.Null at ...&gt;</span>
 </pre></div>
 </div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Object</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">calculate_patch</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">null_value</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
@@ -1212,8 +1212,8 @@ recursive manner.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.native.Object.copy">
-<code class="descname">copy</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.Object.copy" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.Object.copy">
+<code class="descname">copy</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Object.copy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Copies a given object&#8217;s attributes and returns them.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">A</span><span class="p">:</span> <span class="k">pass</span>
@@ -1239,8 +1239,8 @@ recursive manner.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.native.Object.determine_abstract_method_exception">
-<code class="descname">determine_abstract_method_exception</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.Object.determine_abstract_method_exception" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.Object.determine_abstract_method_exception">
+<code class="descname">determine_abstract_method_exception</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Object.determine_abstract_method_exception" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates a suitable exception for raising if a method is called             initially indented to be overwritten.</p>
 <p><strong>abstract_class_name</strong> - Class name of super class.</p>
 <p><strong>class_name</strong>          - Class name which initiates the exception.</p>
@@ -1273,8 +1273,8 @@ recursive manner.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.native.Object.get_compatible_type">
-<code class="descname">get_compatible_type</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.Object.get_compatible_type" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.Object.get_compatible_type">
+<code class="descname">get_compatible_type</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Object.get_compatible_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts data to python cross platform compatible data objects.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">isinstance</span><span class="p">(</span><span class="n">Object</span><span class="p">(</span><span class="n">NativeDateTime</span><span class="p">(</span>
@@ -1333,7 +1333,7 @@ recursive manner.</p>
 <span class="go">True</span>
 </pre></div>
 </div>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">boostNode.extension.file</span> <span class="k">import</span> <span class="n">Handler</span> <span class="k">as</span> <span class="n">FileHandler</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">boostnode.extension.file</span> <span class="k">import</span> <span class="n">Handler</span> <span class="k">as</span> <span class="n">FileHandler</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Object</span><span class="p">(</span><span class="n">FileHandler</span><span class="p">())</span><span class="o">.</span><span class="n">compatible_type</span> 
 <span class="go">{...}</span>
 </pre></div>
@@ -1352,8 +1352,8 @@ recursive manner.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.native.Object.get_known_type">
-<code class="descname">get_known_type</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.Object.get_known_type" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.Object.get_known_type">
+<code class="descname">get_known_type</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Object.get_known_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts interpretable data to python specific data objects.</p>
 <p><strong>description</strong>        - Additional information how given input                                      should be interpreted. Possible inputs                                      could be: &#8220;date_time&#8221;, &#8220;<em>_date_time&#8221;,                                      &#8220;*DateTime</em>, &#8220;date&#8221;, &#8220;<a href="#id1"><span class="problematic" id="id2">*</span></a>_date&#8221;, &#8220;<a href="#id3"><span class="problematic" id="id4">*</span></a>Date&#8221;,                                      &#8220;time&#8221;, &#8220;<a href="#id5"><span class="problematic" id="id6">*</span></a>_time&#8221;, &#8220;<a href="#id7"><span class="problematic" id="id8">*</span></a>Time&#8221;,                                      &#8220;phone_number&#8221;, &#8220;<a href="#id9"><span class="problematic" id="id10">*</span></a>_phone_number&#8221;,                                      &#8220;<a href="#id11"><span class="problematic" id="id12">*</span></a>PhoneNumber&#8221;, &#8220;zip_code&#8221;,                                      &#8220;<a href="#id13"><span class="problematic" id="id14">*</span></a>_zip_code&#8221;, &#8220;<a href="#id15"><span class="problematic" id="id16">*</span></a>ZipCode&#8221;, &#8220;time_delta&#8221;,                                      &#8220;<a href="#id17"><span class="problematic" id="id18">*</span></a>_time_delta&#8221;, &#8220;<a href="#id19"><span class="problematic" id="id20">*</span></a>TimeDelta&#8221;</p>
 <p><strong>strict</strong>             - If evaluates to true and a description                                      is given and exception will be raised if                                      current value couldn&#8217;t be interpreted.                                      If evaluates to &#8220;None&#8221; current value                                      will be returned if evaluations fails.                                      If strict evaluates to false &#8220;None&#8221; will                                      be given back if current value couldn&#8217;t                                      be interpreted.</p>
@@ -1448,8 +1448,8 @@ recursive manner.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.native.Object.is_binary">
-<code class="descname">is_binary</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.Object.is_binary" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.Object.is_binary">
+<code class="descname">is_binary</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Object.is_binary" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines if given data is binary.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Object</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">is_binary</span><span class="p">()</span>
@@ -1473,8 +1473,8 @@ recursive manner.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.native.Object.is_convertable_iterable">
-<code class="descname">is_convertable_iterable</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.Object.is_convertable_iterable" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.Object.is_convertable_iterable">
+<code class="descname">is_convertable_iterable</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Object.is_convertable_iterable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if current iterable is convertable.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Object</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">is_convertable_iterable</span><span class="p">()</span>
@@ -1484,8 +1484,8 @@ recursive manner.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.native.Object.is_hashable">
-<code class="descname">is_hashable</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.Object.is_hashable" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.Object.is_hashable">
+<code class="descname">is_hashable</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Object.is_hashable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if current iterable is immutable.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Object</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">is_hashable</span><span class="p">()</span>
@@ -1538,8 +1538,8 @@ recursive manner.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.native.Object.restore">
-<code class="descname">restore</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.Object.restore" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.Object.restore">
+<code class="descname">restore</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Object.restore" title="Permalink to this definition">¶</a></dt>
 <dd><p>Restores a given object&#8217;s attributes by a given copy are last             copied item.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">A</span><span class="p">:</span> <span class="k">pass</span>
@@ -1571,14 +1571,14 @@ recursive manner.</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="boostNode.extension.native.PhoneNumber">
-<em class="property">class </em><code class="descclassname">boostNode.extension.native.</code><code class="descname">PhoneNumber</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.PhoneNumber" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.PhoneNumber">
+<em class="property">class </em><code class="descclassname">boostnode.extension.native.</code><code class="descname">PhoneNumber</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.PhoneNumber" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class adds some features for dealing with phone numbers.</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="boostNode.extension.native.String">
-<em class="property">class </em><code class="descclassname">boostNode.extension.native.</code><code class="descname">String</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.String" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.String">
+<em class="property">class </em><code class="descclassname">boostnode.extension.native.</code><code class="descname">String</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.String" title="Permalink to this definition">¶</a></dt>
 <dd><p>The string class inherits besides the interface class all pythons         native string methods. NOTE: This class has to implement inherited         special methods like &#8220;__str__()&#8221; and &#8220;__len__()&#8221; because they have to         use the &#8220;content&#8221; property which could be manipulated by not         inherited methods.</p>
 <p><strong>content</strong> - Content to be saved as string.</p>
 <p>NOTE: A children of python&#8217;s native string doesn&#8217;t need an explicit         &#8220;__bytes__&#8221; implementation.</p>
@@ -1598,8 +1598,8 @@ recursive manner.</p>
 </pre></div>
 </div>
 <dl class="method">
-<dt id="boostNode.extension.native.String.delete_variables_from_regex">
-<code class="descname">delete_variables_from_regex</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.String.delete_variables_from_regex" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.String.delete_variables_from_regex">
+<code class="descname">delete_variables_from_regex</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.String.delete_variables_from_regex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Removes python supported variables in regular expression strings.             This method is useful if a python regular expression should be             given to another regular expression engine which doesn&#8217;t support             variables.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s1">&#39;^--(?P&lt;name&gt;.+)--$&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delete_variables_from_regex</span><span class="p">()</span>
@@ -1615,8 +1615,8 @@ recursive manner.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.native.String.find_python_code_end_bracket">
-<code class="descname">find_python_code_end_bracket</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.String.find_python_code_end_bracket" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.String.find_python_code_end_bracket">
+<code class="descname">find_python_code_end_bracket</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.String.find_python_code_end_bracket" title="Permalink to this definition">¶</a></dt>
 <dd><p>Searches for the next not escaped closing end clamped in current             string interpreted as python code.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">string</span> <span class="o">=</span> <span class="s1">&#39;hans () peter)&#39;</span>
@@ -1633,8 +1633,8 @@ recursive manner.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.native.String.get_camel_case_capitalize">
-<code class="descname">get_camel_case_capitalize</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.String.get_camel_case_capitalize" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.String.get_camel_case_capitalize">
+<code class="descname">get_camel_case_capitalize</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.String.get_camel_case_capitalize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Acts like pythons native &#8220;builtins.str.capitalize()&#8221; method but             preserves camel case characters.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">()</span><span class="o">.</span><span class="n">camel_case_capitalize</span><span class="o">.</span><span class="n">content</span>
@@ -1648,8 +1648,8 @@ recursive manner.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.native.String.get_camel_case_to_delimited">
-<code class="descname">get_camel_case_to_delimited</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.String.get_camel_case_to_delimited" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.String.get_camel_case_to_delimited">
+<code class="descname">get_camel_case_to_delimited</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.String.get_camel_case_to_delimited" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts a camel cased string to its delimited string version.</p>
 <p><strong>delimiter</strong>     - Delimiter string</p>
 <p><strong>abbreviations</strong> - Collection of shortcut words to represent                                 upper cased.</p>
@@ -1688,8 +1688,8 @@ recursive manner.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.native.String.get_delimited">
-<code class="descname">get_delimited</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.String.get_delimited" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.String.get_delimited">
+<code class="descname">get_delimited</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.String.get_delimited" title="Permalink to this definition">¶</a></dt>
 <dd><p>Replaces all typical delimiting chars with given delimiter.</p>
 <p><strong>delimiter</strong>      - Delimiter string</p>
 <p><strong>search_pattern</strong> - Patterns not to delimit</p>
@@ -1738,8 +1738,8 @@ recursive manner.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.native.String.get_delimited_to_camel_case">
-<code class="descname">get_delimited_to_camel_case</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.String.get_delimited_to_camel_case" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.String.get_delimited_to_camel_case">
+<code class="descname">get_delimited_to_camel_case</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.String.get_delimited_to_camel_case" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts a delimited string to its camel case representation.</p>
 <p><strong>delimiter</strong>                              - Delimiter string</p>
 <p><strong>abbreviations</strong>                          - Collection of                                                          shortcut words to                                                          represent upper cased.</p>
@@ -1827,16 +1827,16 @@ recursive manner.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.native.String.get_escape_sequences_to_html">
-<code class="descname">get_escape_sequences_to_html</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.String.get_escape_sequences_to_html" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.String.get_escape_sequences_to_html">
+<code class="descname">get_escape_sequences_to_html</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.String.get_escape_sequences_to_html" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transforms given text input with shell escape sequences to a             valid html snippet.</p>
 <p>Examples:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">boostNode.extension.output</span> <span class="k">import</span> <span class="n">SET_ATTRIBUTE_MODE</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">boostnode.extension.output</span> <span class="k">import</span> <span class="n">SET_ATTRIBUTE_MODE</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">SET_OUTPUT_ATTRIBUTE_MODE</span> <span class="o">=</span> <span class="n">SET_ATTRIBUTE_MODE</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">boostNode.extension.output</span> <span class="k">import</span> <span class="n">RESET_ATTRIBUTE_MODE</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">boostnode.extension.output</span> <span class="k">import</span> <span class="n">RESET_ATTRIBUTE_MODE</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">RESET_OUTPUT_ATTRIBUTE_MODE</span> <span class="o">=</span> <span class="n">RESET_ATTRIBUTE_MODE</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">boostNode.extension.output</span> <span class="k">import</span> <span class="n">COLOR</span> <span class="k">as</span> <span class="n">OUTPUT_COLOR</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">boostNode.extension.output</span> <span class="k">import</span> <span class="n">HIDDEN</span> <span class="k">as</span> <span class="n">OUTPUT_HIDDEN</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">boostnode.extension.output</span> <span class="k">import</span> <span class="n">COLOR</span> <span class="k">as</span> <span class="n">OUTPUT_COLOR</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">boostnode.extension.output</span> <span class="k">import</span> <span class="n">HIDDEN</span> <span class="k">as</span> <span class="n">OUTPUT_HIDDEN</span>
 </pre></div>
 </div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s1">&#39;hans &#39;</span> <span class="o">+</span> <span class="p">(</span>
@@ -1871,8 +1871,8 @@ recursive manner.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.native.String.get_escaping_replace_dictionary">
-<code class="descname">get_escaping_replace_dictionary</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.String.get_escaping_replace_dictionary" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.String.get_escaping_replace_dictionary">
+<code class="descname">get_escaping_replace_dictionary</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.String.get_escaping_replace_dictionary" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a replacement dictionary form a given iterable. Every             element will be associated with its escaped version. This method             is useful for using before give &#8220;self.replace()&#8221; a dictionary.</p>
 <p><strong>sequence</strong>        - is an iterable with elements to be escaped.</p>
 <p><strong>escape_sequence</strong> - is an escape sequence for each element from                                   &#8220;sequence&#8221;.</p>
@@ -1893,8 +1893,8 @@ recursive manner.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.native.String.get_format_validated">
-<code class="descname">get_format_validated</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.String.get_format_validated" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.String.get_format_validated">
+<code class="descname">get_format_validated</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.String.get_format_validated" title="Permalink to this definition">¶</a></dt>
 <dd><p>Validates the current string for using in a string with             placeholder like &#8220;{name}&#8221;. It will be escaped to not interpreted             as placeholder like &#8220;{name}&#8221;.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s2">&quot;that&#39;s no </span><span class="si">{placeholder}</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format_validated</span>
@@ -1908,8 +1908,8 @@ recursive manner.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.native.String.get_html_validated">
-<code class="descname">get_html_validated</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.String.get_html_validated" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.String.get_html_validated">
+<code class="descname">get_html_validated</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.String.get_html_validated" title="Permalink to this definition">¶</a></dt>
 <dd><p>Validates current string for using as snippet in a html document.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s1">&#39;&lt;html&gt;&lt;/html&gt;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">html_validated</span><span class="o">.</span><span class="n">content</span>
@@ -1919,8 +1919,8 @@ recursive manner.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.native.String.get_number">
-<code class="descname">get_number</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.String.get_number" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.String.get_number">
+<code class="descname">get_number</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.String.get_number" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a number representation of current string content if             possible. If no conversion is possible given default value will             be returned. If given default value is &#8220;None&#8221; current string             will be returned.</p>
 <p><strong>default</strong> - Fall-back value</p>
 <p><strong>slice</strong>   - If &#8220;True&#8221; non numbers will be removed</p>
@@ -1968,8 +1968,8 @@ recursive manner.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.native.String.get_regex_validated">
-<code class="descname">get_regex_validated</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.String.get_regex_validated" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.String.get_regex_validated">
+<code class="descname">get_regex_validated</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.String.get_regex_validated" title="Permalink to this definition">¶</a></dt>
 <dd><p>Validates the current string for using in a regular expression             pattern. Special regular expression chars will be escaped.</p>
 <p><strong>exclude_symbols</strong> - Escapes each regular expression special                                   character.</p>
 <p>Examples:</p>
@@ -1998,8 +1998,8 @@ recursive manner.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.native.String.get_shell_validated">
-<code class="descname">get_shell_validated</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.String.get_shell_validated" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.String.get_shell_validated">
+<code class="descname">get_shell_validated</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.String.get_shell_validated" title="Permalink to this definition">¶</a></dt>
 <dd><p>Validates the current string for using as a command in shell.             Special shell command chars will be escaped.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span>
@@ -2025,8 +2025,8 @@ recursive manner.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.native.String.get_url_validated">
-<code class="descname">get_url_validated</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.String.get_url_validated" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.String.get_url_validated">
+<code class="descname">get_url_validated</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.String.get_url_validated" title="Permalink to this definition">¶</a></dt>
 <dd><p>Validates a given url by escaping special chars.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span>
@@ -2060,8 +2060,8 @@ recursive manner.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.native.String.readline">
-<code class="descname">readline</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.String.readline" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.String.readline">
+<code class="descname">readline</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.String.readline" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implements the pythons native &#8220;bz2.BZ2File.readline()&#8221; method in             an object oriented way.</p>
 <p>Return the next line from the string, as a string object,             retaining newline.</p>
 <p>Returns &#8220;False&#8221; on EOF.</p>
@@ -2091,8 +2091,8 @@ recursive manner.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.native.String.readlines">
-<code class="descname">readlines</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.String.readlines" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.String.readlines">
+<code class="descname">readlines</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.String.readlines" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implements the pythons native &#8220;builtins.str.splitlines()&#8221; method             in an object oriented way.</p>
 <p>Additional arguments and keywords are forwarded to python&#8217;s             native &#8220;str.splitlines()&#8221; method.</p>
 <p>Return a list of all lines in a string, breaking at line             boundaries. Line breaks are not included in the resulting list             unless &#8220;keepends&#8221; is given and &#8220;True&#8221;.</p>
@@ -2117,8 +2117,8 @@ recursive manner.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.native.String.replace">
-<code class="descname">replace</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.String.replace" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.String.replace">
+<code class="descname">replace</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.String.replace" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implements the pythons native string method &#8220;str.replace()&#8221; in an             object orientated way. This method serves additionally             dictionaries as &#8220;search&#8221; parameter for multiple replacements. If             you use dictionaries, the second parameter &#8220;replace&#8221; becomes             useless.</p>
 <p><strong>search</strong>  - search sequence</p>
 <p><strong>replace</strong> - string to replace with given search sequence</p>
@@ -2144,8 +2144,8 @@ recursive manner.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.native.String.substitute">
-<code class="descname">substitute</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.String.substitute" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.String.substitute">
+<code class="descname">substitute</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.String.substitute" title="Permalink to this definition">¶</a></dt>
 <dd><blockquote>
 <div><p>Implements the pythons native &#8220;regularExpression.sub()&#8221; method in             an object oriented way. This method serves additionally             dictionaries as &#8220;search&#8221; parameter for multiple replacements. If             you use dictionaries, the second parameter &#8220;replace&#8221; becomes             useless.</p>
 <p><strong>search</strong>  - regular expression search pattern</p>
@@ -2188,8 +2188,8 @@ recursive manner.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.extension.native.String.substitute_n">
-<code class="descname">substitute_n</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.String.substitute_n" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.String.substitute_n">
+<code class="descname">substitute_n</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.String.substitute_n" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implements the pythons native &#8220;regularExpression.subn()&#8221; method             in an object oriented way. This method serves additionally             dictionaries as &#8220;search&#8221; parameter for multiple replacements. If             you use dictionaries, the second parameter &#8220;replace&#8221; becomes             useless.</p>
 <p>Perform the same operation as &#8220;regularExpression.sub()&#8221;, but             returns a tuple: (&#8220;new_string&#8221;, &#8220;number_of_subs_made&#8221;).</p>
 <p><strong>search</strong>  - regular expression search pattern</p>
@@ -2215,26 +2215,26 @@ recursive manner.</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="boostNode.extension.native.Time">
-<em class="property">class </em><code class="descclassname">boostNode.extension.native.</code><code class="descname">Time</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.Time" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.Time">
+<em class="property">class </em><code class="descclassname">boostnode.extension.native.</code><code class="descname">Time</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Time" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class adds some features for dealing with times.</p>
 <dl class="method">
-<dt id="boostNode.extension.native.Time.derive_date_time">
-<code class="descname">derive_date_time</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.Time.derive_date_time" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.Time.derive_date_time">
+<code class="descname">derive_date_time</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Time.derive_date_time" title="Permalink to this definition">¶</a></dt>
 <dd><p>If nothing could be determined try to interpret a date time             representation.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="class">
-<dt id="boostNode.extension.native.TimeDelta">
-<em class="property">class </em><code class="descclassname">boostNode.extension.native.</code><code class="descname">TimeDelta</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.TimeDelta" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.TimeDelta">
+<em class="property">class </em><code class="descclassname">boostnode.extension.native.</code><code class="descname">TimeDelta</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.TimeDelta" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class adds some features for dealing with date times.</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="boostNode.extension.native.ZipCode">
-<em class="property">class </em><code class="descclassname">boostNode.extension.native.</code><code class="descname">ZipCode</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.native.ZipCode" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.extension.native.ZipCode">
+<em class="property">class </em><code class="descclassname">boostnode.extension.native.</code><code class="descname">ZipCode</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.ZipCode" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class adds some features for dealing with zip codes.</p>
 </dd></dl>
 
@@ -2248,10 +2248,10 @@ recursive manner.</p>
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
   <p class="topless"><a href="extension.file.html"
-                        title="previous chapter">boostNode.extension.file</a></p>
+                        title="previous chapter">boostnode.extension.file</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="paradigm.html"
-                        title="next chapter">boostNode.paradigm</a></p>
+                        title="next chapter">boostnode.paradigm</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -2283,12 +2283,12 @@ recursive manner.</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="paradigm.html" title="boostNode.paradigm"
+          <a href="paradigm.html" title="boostnode.paradigm"
              >next</a> |</li>
         <li class="right" >
-          <a href="extension.file.html" title="boostNode.extension.file"
+          <a href="extension.file.html" title="boostnode.extension.file"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">boostNode 1.0 rc documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">boostnode 1.0 rc documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>boostNode.paradigm.aspectOrientation &#8212; boostNode 1.0 rc documentation</title>
+    <title>boostnode.paradigm.aspectOrientation &#8212; boostnode 1.0 rc documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -23,9 +23,9 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="boostNode 1.0 rc documentation" href="index.html" />
-    <link rel="next" title="boostNode.runnable" href="runnable.html" />
-    <link rel="prev" title="boostNode.paradigm.objectOrientation" href="paradigm.objectOrientation.html" /> 
+    <link rel="top" title="boostnode 1.0 rc documentation" href="index.html" />
+    <link rel="next" title="boostnode.runnable" href="runnable.html" />
+    <link rel="prev" title="boostnode.paradigm.objectOrientation" href="paradigm.objectOrientation.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -38,12 +38,12 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="runnable.html" title="boostNode.runnable"
+          <a href="runnable.html" title="boostnode.runnable"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="paradigm.objectOrientation.html" title="boostNode.paradigm.objectOrientation"
+          <a href="paradigm.objectOrientation.html" title="boostnode.paradigm.objectOrientation"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">boostNode 1.0 rc documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">boostnode 1.0 rc documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -52,12 +52,12 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-boostNode.paradigm.aspectOrientation">
-<span id="boostnode-paradigm-aspectorientation"></span><h1>boostNode.paradigm.aspectOrientation<a class="headerlink" href="#module-boostNode.paradigm.aspectOrientation" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-boostnode.paradigm.aspectOrientation">
+<span id="boostnode-paradigm-aspectorientation"></span><h1>boostnode.paradigm.aspectOrientation<a class="headerlink" href="#module-boostnode.paradigm.aspectOrientation" title="Permalink to this headline">¶</a></h1>
 <p>This module implements features like joint points, point cuts and advices     for implementing aspect orientated code.</p>
 <dl class="data">
-<dt id="boostNode.paradigm.aspectOrientation.ASPECTS">
-<code class="descclassname">boostNode.paradigm.aspectOrientation.</code><code class="descname">ASPECTS</code><em class="property"> = []</em><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.ASPECTS" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.paradigm.aspectOrientation.ASPECTS">
+<code class="descclassname">boostnode.paradigm.aspectOrientation.</code><code class="descname">ASPECTS</code><em class="property"> = []</em><a class="headerlink" href="#boostnode.paradigm.aspectOrientation.ASPECTS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Saves all aspects for cross cutting concerns for whole library and program code that uses this feature.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ASPECTS</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
@@ -76,76 +76,76 @@
 </dd></dl>
 
 <dl class="class">
-<dt id="boostNode.paradigm.aspectOrientation.CallJointPoint">
-<em class="property">class </em><code class="descclassname">boostNode.paradigm.aspectOrientation.</code><code class="descname">CallJointPoint</code><span class="sig-paren">(</span><em>class_object</em>, <em>object</em>, <em>function</em>, <em>arguments</em>, <em>keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.CallJointPoint" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.paradigm.aspectOrientation.CallJointPoint">
+<em class="property">class </em><code class="descclassname">boostnode.paradigm.aspectOrientation.</code><code class="descname">CallJointPoint</code><span class="sig-paren">(</span><em>class_object</em>, <em>object</em>, <em>function</em>, <em>arguments</em>, <em>keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.paradigm.aspectOrientation.CallJointPoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Abstract class for joint points dealing with function calls.</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="boostNode.paradigm.aspectOrientation.FunctionDecorator">
-<em class="property">class </em><code class="descclassname">boostNode.paradigm.aspectOrientation.</code><code class="descname">FunctionDecorator</code><span class="sig-paren">(</span><em>method</em>, <em>function=None</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.FunctionDecorator" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.paradigm.aspectOrientation.FunctionDecorator">
+<em class="property">class </em><code class="descclassname">boostnode.paradigm.aspectOrientation.</code><code class="descname">FunctionDecorator</code><span class="sig-paren">(</span><em>method</em>, <em>function=None</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.paradigm.aspectOrientation.FunctionDecorator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Abstract class and interface for function decorator classes.</p>
 <p><strong>method</strong>   - The wrapped function.</p>
 <p><strong>function</strong> - If not &#8220;None&#8221; this contains the real function and                        &#8220;method&#8221; contains a special type of function (like                        &#8220;builtins.classmethod&#8221; or &#8220;builtins.staticmethod&#8221;). In                        this case the method type influences the behavior                        during calling the real function.</p>
 <dl class="attribute">
-<dt id="boostNode.paradigm.aspectOrientation.FunctionDecorator.COMMON_DECORATORS">
-<code class="descname">COMMON_DECORATORS</code><em class="property"> = [&lt;type 'property'&gt;, &lt;type 'super'&gt;, &lt;function register&gt;, &lt;bound method type.pseudo_property of &lt;class 'boostNode.paradigm.objectOrientation.Class'&gt;&gt;]</em><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.FunctionDecorator.COMMON_DECORATORS" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.paradigm.aspectOrientation.FunctionDecorator.COMMON_DECORATORS">
+<code class="descname">COMMON_DECORATORS</code><em class="property"> = [&lt;type 'property'&gt;, &lt;type 'super'&gt;, &lt;function register&gt;, &lt;bound method type.pseudo_property of &lt;class 'boostnode.paradigm.objectOrientation.Class'&gt;&gt;]</em><a class="headerlink" href="#boostnode.paradigm.aspectOrientation.FunctionDecorator.COMMON_DECORATORS" title="Permalink to this definition">¶</a></dt>
 <dd><p>This property hold a list of common python&#8217;s native decorators.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="boostNode.paradigm.aspectOrientation.FunctionDecorator.MANAGEABLE_DECORATORS">
-<code class="descname">MANAGEABLE_DECORATORS</code><em class="property"> = [&lt;type 'classmethod'&gt;, &lt;type 'staticmethod'&gt;]</em><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.FunctionDecorator.MANAGEABLE_DECORATORS" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.paradigm.aspectOrientation.FunctionDecorator.MANAGEABLE_DECORATORS">
+<code class="descname">MANAGEABLE_DECORATORS</code><em class="property"> = [&lt;type 'classmethod'&gt;, &lt;type 'staticmethod'&gt;]</em><a class="headerlink" href="#boostnode.paradigm.aspectOrientation.FunctionDecorator.MANAGEABLE_DECORATORS" title="Permalink to this definition">¶</a></dt>
 <dd><p>This constant holds a list of python decorators which could be emulated by this function wrapper instances.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="boostNode.paradigm.aspectOrientation.FunctionDecorator.arguments_determined">
-<code class="descname">arguments_determined</code><em class="property"> = None</em><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.FunctionDecorator.arguments_determined" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.paradigm.aspectOrientation.FunctionDecorator.arguments_determined">
+<code class="descname">arguments_determined</code><em class="property"> = None</em><a class="headerlink" href="#boostnode.paradigm.aspectOrientation.FunctionDecorator.arguments_determined" title="Permalink to this definition">¶</a></dt>
 <dd><p>Saves the wrapped function.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="boostNode.paradigm.aspectOrientation.FunctionDecorator.class_object">
-<code class="descname">class_object</code><em class="property"> = None</em><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.FunctionDecorator.class_object" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.paradigm.aspectOrientation.FunctionDecorator.class_object">
+<code class="descname">class_object</code><em class="property"> = None</em><a class="headerlink" href="#boostnode.paradigm.aspectOrientation.FunctionDecorator.class_object" title="Permalink to this definition">¶</a></dt>
 <dd><p>Saves method types like static or class bounded.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.paradigm.aspectOrientation.FunctionDecorator.get_wrapper_function">
-<code class="descname">get_wrapper_function</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.FunctionDecorator.get_wrapper_function" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.paradigm.aspectOrientation.FunctionDecorator.get_wrapper_function">
+<code class="descname">get_wrapper_function</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.paradigm.aspectOrientation.FunctionDecorator.get_wrapper_function" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method should usually be overridden. It serves the wrapper             function to manipulate decorated function calls.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="boostNode.paradigm.aspectOrientation.FunctionDecorator.method_type">
-<code class="descname">method_type</code><em class="property"> = None</em><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.FunctionDecorator.method_type" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.paradigm.aspectOrientation.FunctionDecorator.method_type">
+<code class="descname">method_type</code><em class="property"> = None</em><a class="headerlink" href="#boostnode.paradigm.aspectOrientation.FunctionDecorator.method_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines if class or object references for a wrapped method are already determined.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="boostNode.paradigm.aspectOrientation.FunctionDecorator.object">
-<code class="descname">object</code><em class="property"> = None</em><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.FunctionDecorator.object" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.paradigm.aspectOrientation.FunctionDecorator.object">
+<code class="descname">object</code><em class="property"> = None</em><a class="headerlink" href="#boostnode.paradigm.aspectOrientation.FunctionDecorator.object" title="Permalink to this definition">¶</a></dt>
 <dd><p>Saves method types like static or class bounded.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="boostNode.paradigm.aspectOrientation.FunctionDecorator.return_value">
-<code class="descname">return_value</code><em class="property"> = None</em><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.FunctionDecorator.return_value" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.paradigm.aspectOrientation.FunctionDecorator.return_value">
+<code class="descname">return_value</code><em class="property"> = None</em><a class="headerlink" href="#boostnode.paradigm.aspectOrientation.FunctionDecorator.return_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Saves method types like static or class bounded.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="boostNode.paradigm.aspectOrientation.FunctionDecorator.wrapped_decorator">
-<code class="descname">wrapped_decorator</code><em class="property"> = None</em><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.FunctionDecorator.wrapped_decorator" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.paradigm.aspectOrientation.FunctionDecorator.wrapped_decorator">
+<code class="descname">wrapped_decorator</code><em class="property"> = None</em><a class="headerlink" href="#boostnode.paradigm.aspectOrientation.FunctionDecorator.wrapped_decorator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Saves method types like static or class bounded.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="class">
-<dt id="boostNode.paradigm.aspectOrientation.JointPoint">
-<em class="property">class </em><code class="descclassname">boostNode.paradigm.aspectOrientation.</code><code class="descname">JointPoint</code><span class="sig-paren">(</span><em>method</em>, <em>function=None</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.JointPoint" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.paradigm.aspectOrientation.JointPoint">
+<em class="property">class </em><code class="descclassname">boostnode.paradigm.aspectOrientation.</code><code class="descname">JointPoint</code><span class="sig-paren">(</span><em>method</em>, <em>function=None</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.paradigm.aspectOrientation.JointPoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implementation of joint point for the aspect orientated way.             Triggers every function call and look for aspects to wrap around.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">test_globals_backup</span> <span class="o">=</span> <span class="n">__test_globals__</span><span class="p">[</span><span class="s1">&#39;ASPECTS&#39;</span><span class="p">]</span>
@@ -223,16 +223,16 @@
 </pre></div>
 </div>
 <dl class="method">
-<dt id="boostNode.paradigm.aspectOrientation.JointPoint.get_wrapper_function">
-<code class="descname">get_wrapper_function</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.JointPoint.get_wrapper_function" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.paradigm.aspectOrientation.JointPoint.get_wrapper_function">
+<code class="descname">get_wrapper_function</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.paradigm.aspectOrientation.JointPoint.get_wrapper_function" title="Permalink to this definition">¶</a></dt>
 <dd><p>This methods returns the joint point&#8217;s wrapped function.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="class">
-<dt id="boostNode.paradigm.aspectOrientation.JointPointHandler">
-<em class="property">class </em><code class="descclassname">boostNode.paradigm.aspectOrientation.</code><code class="descname">JointPointHandler</code><span class="sig-paren">(</span><em>class_object</em>, <em>object</em>, <em>function</em>, <em>arguments</em>, <em>keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.JointPointHandler" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.paradigm.aspectOrientation.JointPointHandler">
+<em class="property">class </em><code class="descclassname">boostnode.paradigm.aspectOrientation.</code><code class="descname">JointPointHandler</code><span class="sig-paren">(</span><em>class_object</em>, <em>object</em>, <em>function</em>, <em>arguments</em>, <em>keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.paradigm.aspectOrientation.JointPointHandler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Abstract class for joint point implementations.</p>
 <p><strong>class_object</strong> - function bounded class object</p>
 <p><strong>object</strong>       - function bounded instance</p>
@@ -240,8 +240,8 @@
 <p><strong>arguments</strong>    - arguments which should be forwarded to given                            function</p>
 <p><strong>keywords</strong>     - keywords which should be forwarded to given                            function</p>
 <dl class="classmethod">
-<dt id="boostNode.paradigm.aspectOrientation.JointPointHandler.aspect">
-<em class="property">classmethod </em><code class="descname">aspect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.JointPointHandler.aspect" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.paradigm.aspectOrientation.JointPointHandler.aspect">
+<em class="property">classmethod </em><code class="descname">aspect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.paradigm.aspectOrientation.JointPointHandler.aspect" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method should be overwritten to provide the essential aspect             for handled function call.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
@@ -261,18 +261,18 @@
 </dd></dl>
 
 <dl class="class">
-<dt id="boostNode.paradigm.aspectOrientation.PointCut">
-<em class="property">class </em><code class="descclassname">boostNode.paradigm.aspectOrientation.</code><code class="descname">PointCut</code><span class="sig-paren">(</span><em>class_object</em>, <em>object</em>, <em>function</em>, <em>arguments</em>, <em>keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.PointCut" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.paradigm.aspectOrientation.PointCut">
+<em class="property">class </em><code class="descclassname">boostnode.paradigm.aspectOrientation.</code><code class="descname">PointCut</code><span class="sig-paren">(</span><em>class_object</em>, <em>object</em>, <em>function</em>, <em>arguments</em>, <em>keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.paradigm.aspectOrientation.PointCut" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generic way to handle point cuts.</p>
 <dl class="method">
-<dt id="boostNode.paradigm.aspectOrientation.PointCut.handle_call">
-<code class="descname">handle_call</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.PointCut.handle_call" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.paradigm.aspectOrientation.PointCut.handle_call">
+<code class="descname">handle_call</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.paradigm.aspectOrientation.PointCut.handle_call" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implementation of point cut for the aspect orientated way.             Filters all functions calls and run given advice on given event.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.paradigm.aspectOrientation.PointCut.handle_return">
-<code class="descname">handle_return</code><span class="sig-paren">(</span><em>return_value</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.PointCut.handle_return" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.paradigm.aspectOrientation.PointCut.handle_return">
+<code class="descname">handle_return</code><span class="sig-paren">(</span><em>return_value</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.paradigm.aspectOrientation.PointCut.handle_return" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implementation of point cut for the aspect orientated way.             Filters all functions calls and run given advice on given event.</p>
 <p><strong>return_value</strong> - function call return value</p>
 <p>Returns functions return value or the wrapped return value             provided be a return callback handler.</p>
@@ -281,14 +281,14 @@
 </dd></dl>
 
 <dl class="class">
-<dt id="boostNode.paradigm.aspectOrientation.ReturnAspect">
-<em class="property">class </em><code class="descclassname">boostNode.paradigm.aspectOrientation.</code><code class="descname">ReturnAspect</code><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.ReturnAspect" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.paradigm.aspectOrientation.ReturnAspect">
+<em class="property">class </em><code class="descclassname">boostnode.paradigm.aspectOrientation.</code><code class="descname">ReturnAspect</code><a class="headerlink" href="#boostnode.paradigm.aspectOrientation.ReturnAspect" title="Permalink to this definition">¶</a></dt>
 <dd><p>Abstract class for aspects dealing with function&#8217;s return value.</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="boostNode.paradigm.aspectOrientation.ReturnJointPoint">
-<em class="property">class </em><code class="descclassname">boostNode.paradigm.aspectOrientation.</code><code class="descname">ReturnJointPoint</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.ReturnJointPoint" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.paradigm.aspectOrientation.ReturnJointPoint">
+<em class="property">class </em><code class="descclassname">boostnode.paradigm.aspectOrientation.</code><code class="descname">ReturnJointPoint</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.paradigm.aspectOrientation.ReturnJointPoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Abstract class for joint points dealing with function&#8217;s return value.</p>
 </dd></dl>
 
@@ -302,10 +302,10 @@
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
   <p class="topless"><a href="paradigm.objectOrientation.html"
-                        title="previous chapter">boostNode.paradigm.objectOrientation</a></p>
+                        title="previous chapter">boostnode.paradigm.objectOrientation</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="runnable.html"
-                        title="next chapter">boostNode.runnable</a></p>
+                        title="next chapter">boostnode.runnable</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -337,12 +337,12 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="runnable.html" title="boostNode.runnable"
+          <a href="runnable.html" title="boostnode.runnable"
              >next</a> |</li>
         <li class="right" >
-          <a href="paradigm.objectOrientation.html" title="boostNode.paradigm.objectOrientation"
+          <a href="paradigm.objectOrientation.html" title="boostnode.paradigm.objectOrientation"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">boostNode 1.0 rc documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">boostnode 1.0 rc documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

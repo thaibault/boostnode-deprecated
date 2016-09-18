@@ -1,6 +1,6 @@
 ===============================================================================
-boostNode.runnable.macro
+boostnode.runnable.macro
 ===============================================================================
 
-.. automodule:: boostNode.runnable.macro
+.. automodule:: boostnode.runnable.macro
     :members:

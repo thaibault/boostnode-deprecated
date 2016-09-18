@@ -15,14 +15,14 @@ from __future__ import absolute_import, division, print_function, \
 # #
 
 '''
-    For conventions see "boostNode/__init__.py" on \
-    https://github.com/thaibault/boostNode
+    For conventions see "boostnode/__init__.py" on \
+    https://github.com/thaibault/boostnode
 '''
 
 __author__ = 'Torben Sickert'
-__copyright__ = 'see boostNode/__init__.py'
+__copyright__ = 'see boostnode/__init__.py'
 __credits__ = 'Torben Sickert',
-__license__ = 'see boostNode/__init__.py'
+__license__ = 'see boostnode/__init__.py'
 __maintainer__ = 'Torben Sickert'
 __maintainer_email__ = 'info["~at~"]torben.website'
 __status__ = 'stable'
@@ -39,18 +39,18 @@ import logging
 import os
 import sys
 
-'''Make boostNode packages and modules importable via relative paths.'''
+'''Make boostnode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
-from boostNode.extension.file import Handler as FileHandler
-from boostNode.extension.native import Module, InstancePropertyInitializer
-from boostNode.extension.output import Logger, Print
-from boostNode.extension.system import CommandLine, Platform, Runnable
-# # python3.5 from boostNode.extension.type import Self
+from boostnode.extension.file import Handler as FileHandler
+from boostnode.extension.native import Module, InstancePropertyInitializer
+from boostnode.extension.output import Logger, Print
+from boostnode.extension.system import CommandLine, Platform, Runnable
+# # python3.5 from boostnode.extension.type import Self
 pass
-from boostNode.paradigm.aspectOrientation import JointPoint
-from boostNode.paradigm.objectOrientation import Class
-from boostNode.runnable.template import Parser as TemplateParser
+from boostnode.paradigm.aspectOrientation import JointPoint
+from boostnode.paradigm.objectOrientation import Class
+from boostnode.runnable.template import Parser as TemplateParser
 
 # endregion
 
@@ -696,7 +696,7 @@ class Run(Class, Runnable):
 
             >>> log_level_backup = Logger.level
             >>> Logger.change_all(level=('error',))
-            <class 'boostNode.extension.output.Logger'>
+            <class 'boostnode.extension.output.Logger'>
             >>> FileHandler('temp_log_command_run_main.py').content = ''
 
             >>> Run()._log_command_run(
@@ -706,7 +706,7 @@ class Run(Class, Runnable):
             0
 
             >>> Logger.change_all(level=log_level_backup)
-            <class 'boostNode.extension.output.Logger'>
+            <class 'boostnode.extension.output.Logger'>
         '''
         terminator_save = Logger.terminator
         Logger.change_all(terminator=('',))
@@ -846,8 +846,6 @@ Module.default(name=__name__, frame=inspect.currentframe())
 # endregion
 
 # region vim modline
-
 # vim: set tabstop=4 shiftwidth=4 expandtab:
 # vim: foldmethod=marker foldmarker=region,endregion:
-
 # endregion

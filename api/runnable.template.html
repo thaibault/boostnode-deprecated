@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>boostNode.runnable.template &#8212; boostNode 1.0 rc documentation</title>
+    <title>boostnode.runnable.template &#8212; boostnode 1.0 rc documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -23,9 +23,9 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="boostNode 1.0 rc documentation" href="index.html" />
-    <link rel="next" title="boostNode.runnable.webToWindow" href="runnable.webToWindow.html" />
-    <link rel="prev" title="boostNode.runnable.server" href="runnable.server.html" /> 
+    <link rel="top" title="boostnode 1.0 rc documentation" href="index.html" />
+    <link rel="next" title="boostnode.runnable.webToWindow" href="runnable.webToWindow.html" />
+    <link rel="prev" title="boostnode.runnable.server" href="runnable.server.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -38,12 +38,12 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="runnable.webToWindow.html" title="boostNode.runnable.webToWindow"
+          <a href="runnable.webToWindow.html" title="boostnode.runnable.webToWindow"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="runnable.server.html" title="boostNode.runnable.server"
+          <a href="runnable.server.html" title="boostnode.runnable.server"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">boostNode 1.0 rc documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">boostnode 1.0 rc documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -52,12 +52,12 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-boostNode.runnable.template">
-<span id="boostnode-runnable-template"></span><h1>boostNode.runnable.template<a class="headerlink" href="#module-boostNode.runnable.template" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-boostnode.runnable.template">
+<span id="boostnode-runnable-template"></span><h1>boostnode.runnable.template<a class="headerlink" href="#module-boostnode.runnable.template" title="Permalink to this headline">¶</a></h1>
 <p>This module provides classes to handle text-based files and string parsing.</p>
 <dl class="class">
-<dt id="boostNode.runnable.template.Parser">
-<em class="property">class </em><code class="descclassname">boostNode.runnable.template.</code><code class="descname">Parser</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.runnable.template.Parser" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.runnable.template.Parser">
+<em class="property">class </em><code class="descclassname">boostnode.runnable.template.</code><code class="descname">Parser</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.runnable.template.Parser" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class can parse a string or file to interpret it as template for         replacing containing placeholder and rendering embedded python script         snippets.</p>
 <p>NOTE: &#8220;(?s...)&#8221; and &#8220;(?m...)&#8221; is equivalent for regular expression         flag &#8220;regularExpression.DOTALL&#8221; and &#8220;regularExpression.MULTILINE&#8221;.         NOTE: This regular expression patterns assumes that the delimiter has         at least a length of two.</p>
 <p><strong>template</strong>                              - A template string, path                                                     to template file or file                                                     object pointing to a                                                     template file.</p>
@@ -92,12 +92,12 @@
 <span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">()</span> 
 <span class="gt">Traceback (most recent call last):</span>
 <span class="c">...</span>
-<span class="gr">boostNode.extension.native.TemplateError</span>: <span class="n">Error with given template ...</span>
+<span class="gr">boostnode.extension.native.TemplateError</span>: <span class="n">Error with given template ...</span>
 </pre></div>
 </div>
 <dl class="method">
-<dt id="boostNode.runnable.template.Parser.get_builtins">
-<code class="descname">get_builtins</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.runnable.template.Parser.get_builtins" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.runnable.template.Parser.get_builtins">
+<code class="descname">get_builtins</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.runnable.template.Parser.get_builtins" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines minimum needed native python features for each template             scope. It adds user-defined additionally python functions. The             minimum needed functions (e.g. &#8220;print()&#8221;) will never be             overwritten.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">template</span> <span class="o">=</span> <span class="n">Parser</span><span class="p">(</span><span class="n">template</span><span class="o">=</span><span class="s1">&#39;hans&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -108,8 +108,8 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.runnable.template.Parser.get_indent">
-<code class="descname">get_indent</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.runnable.template.Parser.get_indent" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.runnable.template.Parser.get_indent">
+<code class="descname">get_indent</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.runnable.template.Parser.get_indent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a string of white spaces representing current context.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Parser</span><span class="p">(</span><span class="s1">&#39;hans</span><span class="se">\n</span><span class="s1">&lt;%__indent__ = 2</span><span class="se">\n</span><span class="s1">peter&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">indent</span>
@@ -123,8 +123,8 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.runnable.template.Parser.get_output">
-<code class="descname">get_output</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.runnable.template.Parser.get_output" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.runnable.template.Parser.get_output">
+<code class="descname">get_output</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.runnable.template.Parser.get_output" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the current output buffer. It consists everything printed             out in code snippets rendered by the template instance or exists             as plain text in given template.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Parser</span><span class="p">(</span>
@@ -136,8 +136,8 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.runnable.template.Parser.render">
-<code class="descname">render</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.runnable.template.Parser.render" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.runnable.template.Parser.render">
+<code class="descname">render</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.runnable.template.Parser.render" title="Permalink to this definition">¶</a></dt>
 <dd><p>Renders the template. Searches for python code snippets and             handles correct indenting. Wraps plain text with a print function.</p>
 <p><strong>mapping</strong> - A dictionary containing a mapping from placeholder                           name to value.</p>
 <p>Additional keywords are used as additional mapping tuples.</p>
@@ -194,8 +194,8 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.runnable.template.Parser.represent_rendered_python_code">
-<code class="descname">represent_rendered_python_code</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.runnable.template.Parser.represent_rendered_python_code" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.runnable.template.Parser.represent_rendered_python_code">
+<code class="descname">represent_rendered_python_code</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.runnable.template.Parser.represent_rendered_python_code" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method adds line numbers to rendered contend which is             visible if an template exception occurs in debug mode. Code             representation is returned as string.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Parser</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">represent_rendered_python_code</span><span class="p">()</span>
@@ -220,8 +220,8 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.runnable.template.Parser.safe_substitute">
-<code class="descname">safe_substitute</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.runnable.template.Parser.safe_substitute" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.runnable.template.Parser.safe_substitute">
+<code class="descname">safe_substitute</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.runnable.template.Parser.safe_substitute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wrapper method for pythons native             &#8220;string.Template.safe_substitute()&#8221; method.</p>
 <p>Arguments and keywords are forwarded to pythons native             &#8220;string.Template.safe_substitute()&#8221; method.</p>
 <p>Examples:</p>
@@ -245,8 +245,8 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.runnable.template.Parser.substitute">
-<code class="descname">substitute</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.runnable.template.Parser.substitute" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.runnable.template.Parser.substitute">
+<code class="descname">substitute</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.runnable.template.Parser.substitute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wrapper method for pythons native &#8220;string.Template.substitute()&#8221;             method.</p>
 <p>Arguments and keywords are forwarded to pythons native             &#8220;string.Template.substitute()&#8221; method.</p>
 <p>Examples:</p>
@@ -275,8 +275,8 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="boostNode.runnable.template.Parser.substitute_all">
-<code class="descname">substitute_all</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.runnable.template.Parser.substitute_all" title="Permalink to this definition">¶</a></dt>
+<dt id="boostnode.runnable.template.Parser.substitute_all">
+<code class="descname">substitute_all</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.runnable.template.Parser.substitute_all" title="Permalink to this definition">¶</a></dt>
 <dd><p>Substitutes every placeholder in template with a given             replacement string.</p>
 <p><strong>replacement</strong> - String to replace with every placeholder.</p>
 <p>Examples:</p>
@@ -306,10 +306,10 @@
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
   <p class="topless"><a href="runnable.server.html"
-                        title="previous chapter">boostNode.runnable.server</a></p>
+                        title="previous chapter">boostnode.runnable.server</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="runnable.webToWindow.html"
-                        title="next chapter">boostNode.runnable.webToWindow</a></p>
+                        title="next chapter">boostnode.runnable.webToWindow</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -341,12 +341,12 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="runnable.webToWindow.html" title="boostNode.runnable.webToWindow"
+          <a href="runnable.webToWindow.html" title="boostnode.runnable.webToWindow"
              >next</a> |</li>
         <li class="right" >
-          <a href="runnable.server.html" title="boostNode.runnable.server"
+          <a href="runnable.server.html" title="boostnode.runnable.server"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">boostNode 1.0 rc documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">boostnode 1.0 rc documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

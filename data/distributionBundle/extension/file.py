@@ -18,14 +18,14 @@ from __future__ import absolute_import, division, print_function, \
 # #
 
 '''
-    For conventions see "boostNode/__init__.py" on \
-    https://github.com/thaibault/boostNode
+    For conventions see "boostnode/__init__.py" on \
+    https://github.com/thaibault/boostnode
 '''
 
 __author__ = 'Torben Sickert'
-__copyright__ = 'see boostNode/__init__.py'
+__copyright__ = 'see boostnode/__init__.py'
 __credits__ = 'Torben Sickert',
-__license__ = 'see boostNode/__init__.py'
+__license__ = 'see boostnode/__init__.py'
 __maintainer__ = 'Torben Sickert'
 __maintainer_email__ = 'info["~at~"]torben.website'
 __status__ = 'stable'
@@ -54,19 +54,19 @@ pass
 
 from distutils.dir_util import copy_tree as copy_to_existing_directory
 
-'''Make boostNode packages and modules importable via relative paths.'''
+'''Make boostnode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
 # # python3.5
-# # from boostNode import ENCODING
-# # from boostNode.extension.native import Object, Iterable, String
-# # from boostNode.extension.type import Self, SelfClass, SelfClassObject
-from boostNode import ENCODING, convert_to_string, convert_to_unicode
-from boostNode.extension.native import Object, Iterable, String, Dictionary
-from boostNode.extension.type import Self
+# # from boostnode import ENCODING
+# # from boostnode.extension.native import Object, Iterable, String
+# # from boostnode.extension.type import Self, SelfClass, SelfClassObject
+from boostnode import ENCODING, convert_to_string, convert_to_unicode
+from boostnode.extension.native import Object, Iterable, String, Dictionary
+from boostnode.extension.type import Self
 # #
-from boostNode.paradigm.aspectOrientation import JointPoint
-from boostNode.paradigm.objectOrientation import Class
+from boostnode.paradigm.aspectOrientation import JointPoint
+from boostnode.paradigm.objectOrientation import Class
 
 # endregion
 
@@ -496,7 +496,7 @@ class Handler(Class):
             >>> Handler.determine_special_path_values('windows')
             ()
         '''
-        from boostNode.extension.system import Platform
+        from boostnode.extension.system import Platform
         if not operating_system:
             operating_system = Platform().operating_system
         if operating_system == 'windows':
@@ -605,7 +605,7 @@ class Handler(Class):
             ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
-            boostNode.extension.native.FileError: Invalid path...not_existin...
+            boostnode.extension.native.FileError: Invalid path...not_existin...
 
             >>> handler = Handler(
             ...     location=__test_folder__.path + '__init__not_existing',
@@ -627,7 +627,7 @@ class Handler(Class):
             '...not...real'
 
             >>> Handler(location=Handler()).path # doctest: +ELLIPSIS
-            '...boostNode...extension...'
+            '...boostnode...extension...'
 
             >>> Handler.set_root(
             ...     __test_folder__.path + '__init__root_directory',
@@ -655,7 +655,7 @@ class Handler(Class):
             ... ) # doctest: +ELLIPSIS +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
-            boostNode.extension.native.FileError: Invalid path "...__init__a...
+            boostnode.extension.native.FileError: Invalid path "...__init__a...
 
             >>> Handler.set_root(root_backup) # doctest: +ELLIPSIS
             <class '...Handler'>
@@ -942,7 +942,7 @@ class Handler(Class):
 
             Examples:
 
-            >>> from boostNode.extension.system import Platform
+            >>> from boostnode.extension.system import Platform
 
             >>> repr(Handler(location=__file_path__)) # doctest: +ELLIPSIS
             'Object of "Handler" with path "...file.py" ... (type: file).'
@@ -975,7 +975,7 @@ class Handler(Class):
     def get_hash(self, algorithm='md5'):
         '''
             Returns encoding for current file handler. If no encoding was set \
-            "boostNode.ENCODING" is default.
+            "boostnode.ENCODING" is default.
 
             Examples:
 
@@ -996,7 +996,7 @@ class Handler(Class):
     def get_encoding(self):
         '''
             Returns encoding for current file handler. If no encoding was set \
-            "boostNode.ENCODING" is default.
+            "boostnode.ENCODING" is default.
 
             Examples:
 
@@ -1117,7 +1117,7 @@ class Handler(Class):
 
             Examples:
 
-            >>> from boostNode.extension.system import Platform
+            >>> from boostnode.extension.system import Platform
 
             >>> test_size = Handler(__test_folder__.path + 'get_size')
             >>> test_size.content = ' '
@@ -1316,7 +1316,7 @@ class Handler(Class):
 
             Examples:
 
-            >>> from boostNode.extension.system import Platform
+            >>> from boostnode.extension.system import Platform
 
             >>> Handler(location=__file_path__).type
             'file'
@@ -1569,12 +1569,12 @@ class Handler(Class):
             >>> Handler(
             ...     location=__file_path__
             ... ).directory.path # doctest: +ELLIPSIS
-            '...boostNode...extension...'
+            '...boostnode...extension...'
 
             >>> Handler(
             ...     location=__file_path__
             ... ).get_directory().path # doctest: +ELLIPSIS
-            '...boostNode...extension...'
+            '...boostnode...extension...'
 
             >>> same = True
             >>> for handler in Handler():
@@ -1643,7 +1643,7 @@ class Handler(Class):
             ...     force_windows_behavior=True)
             'C:'
         '''
-        from boostNode.extension.system import Platform
+        from boostnode.extension.system import Platform
 # # python3.5
 # #         pass
         keywords_dictionary = Dictionary(content=keywords)
@@ -1826,7 +1826,7 @@ class Handler(Class):
             ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
-            boostNode.extension.native.FileError: ...
+            boostnode.extension.native.FileError: ...
             >>> handler.get_content()
             ''
 
@@ -1966,7 +1966,7 @@ class Handler(Class):
             ... ).portable_link_pattern # doctest: +ELLIPSIS
             '[playlist]\\n\\nFile1=...'
         '''
-        from boostNode.extension.system import Platform
+        from boostnode.extension.system import Platform
         pattern = self.PORTABLE_DEFAULT_LINK_PATTERN
         if Platform().operating_system == 'windows' or force_windows_behavior:
             pattern = self.PORTABLE_WINDOWS_DEFAULT_LINK_PATTERN
@@ -2231,7 +2231,7 @@ class Handler(Class):
             >>> Handler().set_content('AA') # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
-            boostNode.extension.native.FileError: Set content is only ...
+            boostnode.extension.native.FileError: Set content is only ...
 
             >>> # # python2.7
             >>> if sys.version_info.major < 3:
@@ -2522,7 +2522,7 @@ class Handler(Class):
 
             Examples:
 
-            >>> from boostNode.extension.system import Platform
+            >>> from boostnode.extension.system import Platform
 
             >>> Handler().is_same_file(Handler())
             True
@@ -2647,7 +2647,7 @@ class Handler(Class):
 
             Examples:
 
-            >>> from boostNode.extension.system import Platform
+            >>> from boostnode.extension.system import Platform
 
             >>> target = Handler(__test_folder__.path + 'is_symbolic_link')
             >>> if Platform().operating_system == 'windows':
@@ -2772,7 +2772,7 @@ class Handler(Class):
 
             Examples:
 
-            >>> from boostNode.extension.system import Platform
+            >>> from boostnode.extension.system import Platform
 
             >>> Handler(location=__file_path__).is_portable_link()
             False
@@ -2986,7 +2986,7 @@ class Handler(Class):
             >>> Handler(__test_folder__.path + 'backup_b_b_b_b').is_file()
             False
         '''
-        from boostNode.runnable.template import Parser as TemplateParser
+        from boostnode.runnable.template import Parser as TemplateParser
 
         backup = self
         while True:
@@ -3081,7 +3081,7 @@ class Handler(Class):
 
             >>> current_working_directory = os.getcwd()
             >>> current_working_directory # doctest: +ELLIPSIS
-            '...boostNode...extension'
+            '...boostnode...extension'
 
             >>> test_folder = Handler(
             ...     __test_folder__.path + 'change', make_directory=True)
@@ -3160,7 +3160,7 @@ class Handler(Class):
 
             Examples:
 
-            >>> from boostNode.extension.system import Platform
+            >>> from boostnode.extension.system import Platform
 
             >>> Handler().list() # doctest: +ELLIPSIS
             <generator object list at ...>
@@ -3227,7 +3227,7 @@ class Handler(Class):
             ...     True
             True
         '''
-        from boostNode.extension.system import Platform
+        from boostnode.extension.system import Platform
 
         if self:
             if self._path == '\\' and Platform().operating_system == 'windows':
@@ -3284,7 +3284,7 @@ class Handler(Class):
 
             Examples:
 
-            >>> from boostNode.extension.system import Platform
+            >>> from boostnode.extension.system import Platform
 
             >>> handler = Handler(
             ...     __test_folder__.path + 'remove_directory',
@@ -3454,7 +3454,7 @@ class Handler(Class):
 
             Examples:
 
-            >>> from boostNode.extension.system import Platform
+            >>> from boostnode.extension.system import Platform
 
             >>> root = Handler(
             ...     location=__test_folder__.path + 'remove_deep',
@@ -3547,7 +3547,7 @@ class Handler(Class):
 
             Examples:
 
-            >>> from boostNode.extension.system import Platform
+            >>> from boostnode.extension.system import Platform
 
             >>> Handler(location=__file_path__).copy(
             ...     target=__test_folder__.path + 'remove_file')
@@ -3602,7 +3602,7 @@ class Handler(Class):
             >>> nested_file.remove_file()
             False
         '''
-        from boostNode.extension.system import Platform
+        from boostnode.extension.system import Platform
 # # python3.5
 # #         pass
         force_windows_behavior, keywords = Dictionary(
@@ -3948,7 +3948,7 @@ class Handler(Class):
 
             Examples:
 
-            >>> from boostNode.extension.system import Platform
+            >>> from boostnode.extension.system import Platform
 
             >>> target = Handler(
             ...     __test_folder__.path + 'make_symbolic_link_target')
@@ -3998,7 +3998,7 @@ class Handler(Class):
 
             Examples:
 
-            >>> from boostNode.extension.system import Platform
+            >>> from boostnode.extension.system import Platform
 
             >>> target = Handler(
             ...     __test_folder__.path + 'make_hardlink_target')
@@ -4046,7 +4046,7 @@ class Handler(Class):
 
             Examples:
 
-            >>> from boostNode.extension.system import Platform
+            >>> from boostnode.extension.system import Platform
 
             >>> source = Handler(location=__file_path__)
             >>> target = Handler(__test_folder__.path + 'read_symbolic_link')
@@ -4347,7 +4347,7 @@ class Handler(Class):
             ...     ) # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
-            boostNode.extension.native.FileError: ...
+            boostnode.extension.native.FileError: ...
         '''
         if self.is_portable_link():
 # # python3.5
@@ -4446,7 +4446,7 @@ class Handler(Class):
 
             Examples:
 
-            >>> from boostNode.extension.system import Platform
+            >>> from boostnode.extension.system import Platform
 
             >>> Handler().iterate_directory(function=lambda file: file)
             True
@@ -4479,7 +4479,7 @@ class Handler(Class):
             True
 
         '''
-        from boostNode.extension.system import Platform
+        from boostnode.extension.system import Platform
         files = self._sort_directory_to_end(self.list(), recursive_in_link)
         if deep_first:
             files.reverse()
@@ -4772,7 +4772,7 @@ class Handler(Class):
             ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
-            boostNode.extension.native.FileError: Invalid path "..." ...
+            boostnode.extension.native.FileError: Invalid path "..." ...
 
             >>> Handler.set_root(root_backup) # doctest: +ELLIPSIS
             <class '...Handler'>
@@ -4785,7 +4785,7 @@ class Handler(Class):
             >>> handler._prepend_root_path() # doctest: +ELLIPSIS
             '/hans'
         '''
-        from boostNode.extension.system import Platform
+        from boostnode.extension.system import Platform
         '''
             Prepend root path to given path location, if it wasn't given as \
             location in root path.
@@ -4831,7 +4831,7 @@ class Handler(Class):
             ... ), False, True, (), {}) # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
-            boostNode.extension.native.FileError: Invalid path...
+            boostnode.extension.native.FileError: Invalid path...
         '''
         if make_directory and not self:
             self.make_directory(*arguments, **keywords)
@@ -4854,7 +4854,7 @@ class Handler(Class):
             Examples:
 
             >>> Handler()._initialize_path() # doctest: +ELLIPSIS
-            '...boostNode...extension'
+            '...boostnode...extension'
 
             >>> Handler('~')._initialize_path() # doctest: +ELLIPSIS
             '...'
@@ -4944,7 +4944,7 @@ class Handler(Class):
             >>> handler._set_path(path='.')
             True
             >>> handler.path # doctest: +ELLIPSIS
-            '...boostNode...'
+            '...boostnode...'
         '''
 # # python3.5
 # #         self._path = os.path.normpath(path)
@@ -4976,14 +4976,14 @@ class Handler(Class):
 
             Examples:
 
-            >>> from boostNode.extension.system import Platform
+            >>> from boostnode.extension.system import Platform
 
             >>> Handler()._make_forced_link(
             ...     True, Handler(), False
             ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
-            boostNode.extension.native.FileError: ...
+            boostnode.extension.native.FileError: ...
 
             >>> if Platform().operating_system == 'windows':
             ...     True
@@ -5070,7 +5070,7 @@ class Handler(Class):
 
             Examples:
 
-            >>> from boostNode.extension.system import Platform
+            >>> from boostnode.extension.system import Platform
 
             >>> handler = Handler(
             ...     __test_folder__.path + '_make_platform_dependent_link')
@@ -5120,7 +5120,7 @@ class Handler(Class):
             True
             >>> os.symlink = os_symlink_backup
         '''
-        from boostNode.extension.system import Platform
+        from boostnode.extension.system import Platform
 # # python3.5
 # #         pass
         force_windows_behavior, keywords = Dictionary(
@@ -5229,7 +5229,7 @@ class Handler(Class):
 
             Examples:
 
-            >>> from boostNode.extension.system import Platform
+            >>> from boostnode.extension.system import Platform
 
             >>> if Platform().operating_system == 'windows':
             ...     Handler()._determine_get_windows_disk_free_space_function()
@@ -5320,7 +5320,7 @@ class Handler(Class):
             ...     True).__class__ # doctest: +ELLIPSIS
             <...>
         '''
-        from boostNode.extension.system import Platform
+        from boostnode.extension.system import Platform
         os_statvfs = None
 # # python3.5
 # #         if((os.path.isfile(self._path) or os.path.isdir(self._path)) and
@@ -5360,15 +5360,13 @@ __logger__ = __exception__ = __module_name__ = __file_path__ = \
     code preprocessing tools is provided by default.
 '''
 if __name__ == '__main__':
-    from boostNode.extension.native import Module
+    from boostnode.extension.native import Module
     Module.default(
         name=__name__, frame=inspect.currentframe(), default_caller=False)
 
 # endregion
 
 # region vim modline
-
 # vim: set tabstop=4 shiftwidth=4 expandtab:
 # vim: foldmethod=marker foldmarker=region,endregion:
-
 # endregion

@@ -15,14 +15,14 @@ from __future__ import absolute_import, division, print_function, \
 # #
 
 '''
-    For conventions see "boostNode/__init__.py" on \
-    https://github.com/thaibault/boostNode
+    For conventions see "boostnode/__init__.py" on \
+    https://github.com/thaibault/boostnode
 '''
 
 __author__ = 'Torben Sickert'
-__copyright__ = 'see boostNode/__init__.py'
+__copyright__ = 'see boostnode/__init__.py'
 __credits__ = 'Torben Sickert',
-__license__ = 'see boostNode/__init__.py'
+__license__ = 'see boostnode/__init__.py'
 __maintainer__ = 'Torben Sickert'
 __maintainer_email__ = 'info["~at~"]torben.website'
 __status__ = 'stable'
@@ -62,22 +62,22 @@ import traceback
 pass
 # #
 
-'''Make boostNode packages and modules importable via relative paths.'''
+'''Make boostnode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
 # # python3.5
-# # from boostNode import ENCODING
-from boostNode import ENCODING, convert_to_string, convert_to_unicode
+# # from boostnode import ENCODING
+from boostnode import ENCODING, convert_to_string, convert_to_unicode
 # #
-from boostNode.extension.file import Handler as FileHandler
-from boostNode.extension.native import Dictionary, Module, Object
-from boostNode.extension.native import String as String
-from boostNode.extension.output import Buffer, Logger, Print
+from boostnode.extension.file import Handler as FileHandler
+from boostnode.extension.native import Dictionary, Module, Object
+from boostnode.extension.native import String as String
+from boostnode.extension.output import Buffer, Logger, Print
 # # python3.5
-# # from boostNode.extension.type import Null, Self, SelfClass, SelfClassObject
-from boostNode.extension.type import Null
+# # from boostnode.extension.type import Null, Self, SelfClass, SelfClassObject
+from boostnode.extension.type import Null
 # #
-from boostNode.paradigm.aspectOrientation import FunctionDecorator, JointPoint
+from boostnode.paradigm.aspectOrientation import FunctionDecorator, JointPoint
 
 # # python3.5
 # # pass
@@ -1809,7 +1809,7 @@ class CommandLine(builtins.object):
             >>> sys.argv = copy(CommandLine.ORIGINAL_ARGUMENTS)
             >>> sys.modules[__name__].__doc__ = docstring_backup
             >>> Logger.change_all(level=log_level) # doctest: +ELLIPSIS
-            <class ...boostNode.extension.output.Logger...>
+            <class ...boostnode.extension.output.Logger...>
         '''
         version = cls._get_version(version, module_name)
         description = cls._get_description(description, module_name, version)
@@ -1922,12 +1922,12 @@ class CommandLine(builtins.object):
 
             Examples:
 
-            >>> import boostNode.extension.system
+            >>> import boostnode.extension.system
 
             >>> sys.flags.optimize == 1 or (
             ...     'CommandLine.determine_wrapped_objects' in
             ...     CommandLine.determine_wrapped_objects(
-            ...         boostNode.extension.system))
+            ...         boostnode.extension.system))
             True
 
             >>> @JointPoint
@@ -2404,7 +2404,7 @@ class CommandLine(builtins.object):
             ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
-            boostNode.extension.native.SystemError: Argu..."abba" with... "-a".
+            boostnode.extension.native.SystemError: Argu..."abba" with... "-a".
         '''
         for other_argument in builtins.list(
             cls.DEFAULT_CALLER_ARGUMENTS
@@ -2446,7 +2446,7 @@ class CommandLine(builtins.object):
             ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
-            boostNode.extension.native.SystemError: Argument "hans"..."help".
+            boostnode.extension.native.SystemError: Argument "hans"..."help".
         '''
         if(argument['arguments'][0] == '-h' or
            builtins.len(argument['arguments']) > 1 and
@@ -2564,7 +2564,7 @@ class CommandLine(builtins.object):
             ...     (), {}) # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
-            boostNode.extension.native.SystemError: During rendering argume...
+            boostnode.extension.native.SystemError: During rendering argume...
         '''
         for argument in builtins.list(arguments) + builtins.list(
             default_arguments
@@ -2753,7 +2753,7 @@ class CommandLine(builtins.object):
             ['__init__']
 
             >>> __module_name__ in CommandLine._get_modules(
-            ...     'boostNode.extension')
+            ...     'boostnode.extension')
             True
         '''
         module_names = []
@@ -3253,7 +3253,7 @@ class CommandLine(builtins.object):
             ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
-            boostNode.extension.native.SystemError: During rendering argumen...
+            boostnode.extension.native.SystemError: During rendering argumen...
 
             >>> CommandLine._render_command_line_argument('peter', {})
             'peter'
@@ -3300,8 +3300,6 @@ Module.default(
 # endregion
 
 # region vim modline
-
 # vim: set tabstop=4 shiftwidth=4 expandtab:
 # vim: foldmethod=marker foldmarker=region,endregion:
-
 # endregion

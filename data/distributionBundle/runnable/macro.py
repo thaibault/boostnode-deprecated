@@ -17,14 +17,14 @@ from __future__ import absolute_import, division, print_function, \
 # #
 
 '''
-    For conventions see "boostNode/__init__.py" on \
-    https://github.com/thaibault/boostNode
+    For conventions see "boostnode/__init__.py" on \
+    https://github.com/thaibault/boostnode
 '''
 
 __author__ = 'Torben Sickert'
-__copyright__ = 'see boostNode/__init__.py'
+__copyright__ = 'see boostnode/__init__.py'
 __credits__ = 'Torben Sickert',
-__license__ = 'see boostNode/__init__.py'
+__license__ = 'see boostnode/__init__.py'
 __maintainer__ = 'Torben Sickert'
 __maintainer_email__ = 'info["~at~"]torben.website'
 __status__ = 'stable'
@@ -41,21 +41,21 @@ import os
 import re as regularExpression
 import sys
 
-'''Make boostNode packages and modules importable via relative paths.'''
+'''Make boostnode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
 # # python3.5
-# # from boostNode import ENCODING
-from boostNode import ENCODING, convert_to_string, convert_to_unicode
+# # from boostnode import ENCODING
+from boostnode import ENCODING, convert_to_string, convert_to_unicode
 # #
-from boostNode.extension.file import Handler as FileHandler
-from boostNode.extension.native import Module, InstancePropertyInitializer
-from boostNode.extension.native import String as String
-from boostNode.extension.system import CommandLine, Runnable
-# # python3.5 from boostNode.extension.type import Self
+from boostnode.extension.file import Handler as FileHandler
+from boostnode.extension.native import Module, InstancePropertyInitializer
+from boostnode.extension.native import String as String
+from boostnode.extension.system import CommandLine, Runnable
+# # python3.5 from boostnode.extension.type import Self
 pass
-from boostNode.paradigm.aspectOrientation import JointPoint
-from boostNode.paradigm.objectOrientation import Class
+from boostnode.paradigm.aspectOrientation import JointPoint
+from boostnode.paradigm.objectOrientation import Class
 
 # endregion
 
@@ -108,7 +108,7 @@ class Replace(Class, Runnable):
         ... ) # doctest: +IGNORE_EXCEPTION_DETAIL
         Traceback (most recent call last):
         ...
-        boostNode.extension.native.FileError: Invalid path "...non_exist...
+        boostnode.extension.native.FileError: Invalid path "...non_exist...
 
         >>> __test_globals__['__test_mode__'] = False
         >>> file = FileHandler(__test_folder__.path + '_initialize')
@@ -956,8 +956,6 @@ Module.default(name=__name__, frame=inspect.currentframe())
 # endregion
 
 # region vim modline
-
 # vim: set tabstop=4 shiftwidth=4 expandtab:
 # vim: foldmethod=marker foldmarker=region,endregion:
-
 # endregion

@@ -1,6 +1,6 @@
 ===============================================================================
-boostNode.aspect.signature
+boostnode.aspect.signature
 ===============================================================================
 
-.. automodule:: boostNode.aspect.signature
+.. automodule:: boostnode.aspect.signature
     :members:

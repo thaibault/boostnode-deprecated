@@ -18,14 +18,14 @@ from __future__ import absolute_import, division, print_function, \
 # #
 
 '''
-    For conventions see "boostNode/__init__.py" on \
-    https://github.com/thaibault/boostNode
+    For conventions see "boostnode/__init__.py" on \
+    https://github.com/thaibault/boostnode
 '''
 
 __author__ = 'Torben Sickert'
-__copyright__ = 'see boostNode/__init__.py'
+__copyright__ = 'see boostnode/__init__.py'
 __credits__ = 'Torben Sickert',
-__license__ = 'see boostNode/__init__.py'
+__license__ = 'see boostnode/__init__.py'
 __maintainer__ = 'Torben Sickert'
 __maintainer_email__ = 'info["~at~"]torben.website'
 __status__ = 'stable'
@@ -58,18 +58,18 @@ from types import GeneratorType as Generator
 from types import MethodType as Method
 from types import ModuleType
 
-'''Make boostNode packages and modules importable via relative paths.'''
+'''Make boostnode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
-import boostNode
+import boostnode
 # # python3.5
-# # from boostNode import ENCODING
-# # from boostNode.extension.type import Self, SelfClass, SelfClassObject
-from boostNode import ENCODING, convert_to_string, convert_to_unicode
+# # from boostnode import ENCODING
+# # from boostnode.extension.type import Self, SelfClass, SelfClassObject
+from boostnode import ENCODING, convert_to_string, convert_to_unicode
 # #
-from boostNode.extension.type import Null
-from boostNode.paradigm.aspectOrientation import FunctionDecorator, JointPoint
-from boostNode.paradigm.objectOrientation import Class
+from boostnode.extension.type import Null
+from boostnode.paradigm.aspectOrientation import FunctionDecorator, JointPoint
+from boostnode.paradigm.objectOrientation import Class
 
 # endregion
 
@@ -994,7 +994,7 @@ class Object(Class):
             >>> object.content is None
             True
         '''
-        from boostNode.extension.file import Handler as FileHandler
+        from boostnode.extension.file import Handler as FileHandler
 
         # # # region properties
 
@@ -1194,7 +1194,7 @@ class Object(Class):
             >>> Object(('A',)).compatible_type == str(['A'])
             True
 
-            >>> from boostNode.extension.file import Handler as FileHandler
+            >>> from boostnode.extension.file import Handler as FileHandler
             >>> Object(FileHandler()).compatible_type # doctest: +ELLIPSIS
             {...}
 
@@ -1207,7 +1207,7 @@ class Object(Class):
             >>> Object(CGIFieldStorage()).compatible_type
             {}
         '''
-        from boostNode.extension.file import Handler as FileHandler
+        from boostnode.extension.file import Handler as FileHandler
 
         for date_time_type, converter in builtins.filter(
             lambda item: builtins.isinstance(self.content, item[0]),
@@ -1375,7 +1375,7 @@ class Object(Class):
 
             **null_value** - placeholder for equal values in both given values
                              to compare (defaults to
-                             "boostNode.extension.type.Null").
+                             "boostnode.extension.type.Null").
 
             Returns the difference between content and given value.
 
@@ -1385,7 +1385,7 @@ class Object(Class):
             2
 
             >>> Object(None).calculate_patch(value=None) # doctest: +ELLIPSIS
-            <class boostNode.extension.type.Null at ...>
+            <class boostnode.extension.type.Null at ...>
 
             >>> Object(1).calculate_patch(value=1, null_value=2)
             2
@@ -2123,12 +2123,12 @@ class String(Object, builtins.str):
 
             Examples:
 
-            >>> from boostNode.extension.output import SET_ATTRIBUTE_MODE
+            >>> from boostnode.extension.output import SET_ATTRIBUTE_MODE
             >>> SET_OUTPUT_ATTRIBUTE_MODE = SET_ATTRIBUTE_MODE
-            >>> from boostNode.extension.output import RESET_ATTRIBUTE_MODE
+            >>> from boostnode.extension.output import RESET_ATTRIBUTE_MODE
             >>> RESET_OUTPUT_ATTRIBUTE_MODE = RESET_ATTRIBUTE_MODE
-            >>> from boostNode.extension.output import COLOR as OUTPUT_COLOR
-            >>> from boostNode.extension.output import HIDDEN as OUTPUT_HIDDEN
+            >>> from boostnode.extension.output import COLOR as OUTPUT_COLOR
+            >>> from boostnode.extension.output import HIDDEN as OUTPUT_HIDDEN
 
             >>> String('hans ' + (
             ...     SET_OUTPUT_ATTRIBUTE_MODE %
@@ -2155,70 +2155,70 @@ class String(Object, builtins.str):
             >>> String('hans <pre>TEST</pre>').escape_sequences_to_html.content
             'hans &lt;pre&gt;TEST&lt;/pre&gt;'
         '''
-        from boostNode.extension.output import SET_ATTRIBUTE_MODE as \
+        from boostnode.extension.output import SET_ATTRIBUTE_MODE as \
             SET_OUTPUT_ATTRIBUTE_MODE
-        from boostNode.extension.output import RESET_ATTRIBUTE_MODE as \
+        from boostnode.extension.output import RESET_ATTRIBUTE_MODE as \
             RESET_OUTPUT_ATTRIBUTE_MODE
-        from boostNode.extension.output import COLOR as OUTPUT_COLOR
-        from boostNode.extension.output import HIGH_COLOR as \
+        from boostnode.extension.output import COLOR as OUTPUT_COLOR
+        from boostnode.extension.output import HIGH_COLOR as \
             HIGH_OUTPUT_COLOR
-        from boostNode.extension.output import HIDDEN as OUTPUT_HIDDEN
-        from boostNode.extension.output import BOLD as OUTPUT_BOLD
-        from boostNode.extension.output import DIM as OUTPUT_DIM
-        from boostNode.extension.output import ITALIC as OUTPUT_ITALIC
-        from boostNode.extension.output import UNDERLINE as OUTPUT_UNDERLINE
-        from boostNode.extension.output import BLINK as OUTPUT_BLINK
-        from boostNode.extension.output import REVERSE as OUTPUT_REVERSE
-        from boostNode.extension.output import CROSSED_OUT as \
+        from boostnode.extension.output import HIDDEN as OUTPUT_HIDDEN
+        from boostnode.extension.output import BOLD as OUTPUT_BOLD
+        from boostnode.extension.output import DIM as OUTPUT_DIM
+        from boostnode.extension.output import ITALIC as OUTPUT_ITALIC
+        from boostnode.extension.output import UNDERLINE as OUTPUT_UNDERLINE
+        from boostnode.extension.output import BLINK as OUTPUT_BLINK
+        from boostnode.extension.output import REVERSE as OUTPUT_REVERSE
+        from boostnode.extension.output import CROSSED_OUT as \
             OUTPUT_CROSSED_OUT
-        from boostNode.extension.output import DEFAULT_FONT as \
+        from boostnode.extension.output import DEFAULT_FONT as \
             OUTPUT_DEFAULT_FONT
-        from boostNode.extension.output import FONT_1 as OUTPUT_FONT_1
-        from boostNode.extension.output import FONT_2 as OUTPUT_FONT_2
-        from boostNode.extension.output import FONT_3 as OUTPUT_FONT_3
-        from boostNode.extension.output import FONT_4 as OUTPUT_FONT_4
-        from boostNode.extension.output import FONT_5 as OUTPUT_FONT_5
-        from boostNode.extension.output import FONT_6 as OUTPUT_FONT_6
-        from boostNode.extension.output import FONT_7 as OUTPUT_FONT_7
-        from boostNode.extension.output import FRAKTUR_HARDLY as \
+        from boostnode.extension.output import FONT_1 as OUTPUT_FONT_1
+        from boostnode.extension.output import FONT_2 as OUTPUT_FONT_2
+        from boostnode.extension.output import FONT_3 as OUTPUT_FONT_3
+        from boostnode.extension.output import FONT_4 as OUTPUT_FONT_4
+        from boostnode.extension.output import FONT_5 as OUTPUT_FONT_5
+        from boostnode.extension.output import FONT_6 as OUTPUT_FONT_6
+        from boostnode.extension.output import FONT_7 as OUTPUT_FONT_7
+        from boostnode.extension.output import FRAKTUR_HARDLY as \
             OUTPUT_FRAKTUR_HARDLY
-        from boostNode.extension.output import BOLD_OFF as OUTPUT_BOLD_OFF
-        from boostNode.extension.output import BOLD_INTENSITY_OFF as \
+        from boostnode.extension.output import BOLD_OFF as OUTPUT_BOLD_OFF
+        from boostnode.extension.output import BOLD_INTENSITY_OFF as \
             OUTPUT_BOLD_INTENSITY_OFF
-        from boostNode.extension.output import ITALIC_OFF as OUTPUT_ITALIC_OFF
-        from boostNode.extension.output import UNDERLINE_OFF as \
+        from boostnode.extension.output import ITALIC_OFF as OUTPUT_ITALIC_OFF
+        from boostnode.extension.output import UNDERLINE_OFF as \
             OUTPUT_UNDERLINE_OFF
-        from boostNode.extension.output import BLINK_OFF as OUTPUT_BLINK_OFF
-        from boostNode.extension.output import RESERVERD_1 as \
+        from boostnode.extension.output import BLINK_OFF as OUTPUT_BLINK_OFF
+        from boostnode.extension.output import RESERVERD_1 as \
             OUTPUT_RESERVERD_1
-        from boostNode.extension.output import REVERSE_OFF as \
+        from boostnode.extension.output import REVERSE_OFF as \
             OUTPUT_REVERSE_OFF
-        from boostNode.extension.output import REVEAL_OFF as OUTPUT_REVEAL_OFF
-        from boostNode.extension.output import CROSSED_OUT_OFF as \
+        from boostnode.extension.output import REVEAL_OFF as OUTPUT_REVEAL_OFF
+        from boostnode.extension.output import CROSSED_OUT_OFF as \
             OUTPUT_CROSSED_OUT_OFF
-        from boostNode.extension.output import RESERVED_2 as OUTPUT_RESERVED_2
-        from boostNode.extension.output import FRAMED as OUTPUT_FRAMED
-        from boostNode.extension.output import ENCIRCLED as OUTPUT_ENCIRCLED
-        from boostNode.extension.output import OVERLINED as OUTPUT_OVERLINED
-        from boostNode.extension.output import FRAMED_ENCIRCLED_OFF as \
+        from boostnode.extension.output import RESERVED_2 as OUTPUT_RESERVED_2
+        from boostnode.extension.output import FRAMED as OUTPUT_FRAMED
+        from boostnode.extension.output import ENCIRCLED as OUTPUT_ENCIRCLED
+        from boostnode.extension.output import OVERLINED as OUTPUT_OVERLINED
+        from boostnode.extension.output import FRAMED_ENCIRCLED_OFF as \
             OUTPUT_FRAMED_ENCIRCLED_OFF
-        from boostNode.extension.output import OVERLINED_OFF as \
+        from boostnode.extension.output import OVERLINED_OFF as \
             OUTPUT_OVERLINED_OFF
-        from boostNode.extension.output import RESERVED_3 as OUTPUT_RESERVED_3
-        from boostNode.extension.output import RESERVED_4 as OUTPUT_RESERVED_4
-        from boostNode.extension.output import RESERVED_5 as OUTPUT_RESERVED_5
-        from boostNode.extension.output import RESERVED_6 as OUTPUT_RESERVED_6
-        from boostNode.extension.output import IDEOGRAM_UNDERLINE as \
+        from boostnode.extension.output import RESERVED_3 as OUTPUT_RESERVED_3
+        from boostnode.extension.output import RESERVED_4 as OUTPUT_RESERVED_4
+        from boostnode.extension.output import RESERVED_5 as OUTPUT_RESERVED_5
+        from boostnode.extension.output import RESERVED_6 as OUTPUT_RESERVED_6
+        from boostnode.extension.output import IDEOGRAM_UNDERLINE as \
             OUTPUT_IDEOGRAM_UNDERLINE
-        from boostNode.extension.output import IDEOGRAM_DOUBLE_UNDERLINE as \
+        from boostnode.extension.output import IDEOGRAM_DOUBLE_UNDERLINE as \
             OUTPUT_IDEOGRAM_DOUBLE_UNDERLINE
-        from boostNode.extension.output import IDEOGRAM_OVERLINE as \
+        from boostnode.extension.output import IDEOGRAM_OVERLINE as \
             OUTPUT_IDEOGRAM_OVERLINE
-        from boostNode.extension.output import IDEOGRAM_DOUBLE_OVERLINE as \
+        from boostnode.extension.output import IDEOGRAM_DOUBLE_OVERLINE as \
             OUTPUT_IDEOGRAM_DOUBLE_OVERLINE
-        from boostNode.extension.output import IDEOGRAM_STRESS_MARKING as \
+        from boostnode.extension.output import IDEOGRAM_STRESS_MARKING as \
             OUTPUT_IDEOGRAM_STRESS_MARKING
-        from boostNode.extension.output import IDEOGRAM_OFF as \
+        from boostnode.extension.output import IDEOGRAM_OFF as \
             OUTPUT_IDEOGRAM_OFF
 
         def replace_handler(match):
@@ -3721,8 +3721,8 @@ class Iterable(Object):
 
             TODO
         '''
-        from boostNode.runnable.template import DEFAULT_CODE_DELIMITER
-        from boostNode.runnable.template import Parser
+        from boostnode.runnable.template import DEFAULT_CODE_DELIMITER
+        from boostnode.runnable.template import Parser
 
         return Parser(regularExpression.compile(
             '(^|[^\\\\])\\\\([^\\\\]|$)'
@@ -4422,13 +4422,13 @@ class Module(Object):
             >>> Module.get_context_path(
             ...     frame=inspect.currentframe()
             ... ) # doctest: +ELLIPSIS
-            '...boostNode.extension...doctest...Module'
+            '...boostnode.extension...doctest...Module'
 
             >>> Module.get_context_path(path='./native') # doctest: +ELLIPSIS
-            '...boostNode.extension.native'
+            '...boostnode.extension.native'
 
             >>> Module.get_context_path(path='.') # doctest: +ELLIPSIS
-            '...boostNode.extension'
+            '...boostnode.extension'
         '''
         if path is None:
             path = frame.f_code.co_filename
@@ -4476,10 +4476,10 @@ class Module(Object):
             'native.py'
 
             >>> Module.get_name(path=True) # doctest: +ELLIPSIS
-            '...boostNode...extension...native'
+            '...boostnode...extension...native'
 
             >>> Module.get_name(path=True, extension=True) # doctest: +ELLIPSIS
-            '...boostNode...extension...native.py'
+            '...boostnode...extension...native.py'
         '''
         file = cls._get_module_file(frame, module)
         if path and extension:
@@ -4512,14 +4512,14 @@ class Module(Object):
             'extension'
 
             >>> Module.get_package_name(path=True) # doctest: +ELLIPSIS
-            '...boostNode...extension...'
+            '...boostnode...extension...'
 
             >>> Module.get_package_name(
             ...     frame=inspect.currentframe(), path=True
             ... ) # doctest: +ELLIPSIS
-            '...boostNode...extension...'
+            '...boostnode...extension...'
         '''
-        from boostNode.extension.file import Handler as FileHandler
+        from boostnode.extension.file import Handler as FileHandler
 
         file = FileHandler(
             location=frame.f_code.co_filename, respect_root_path=True)
@@ -4568,7 +4568,7 @@ class Module(Object):
             >>> Module.get_file_path('')
             False
         '''
-        from boostNode.extension.file import Handler as FileHandler
+        from boostnode.extension.file import Handler as FileHandler
 
         if context_path:
             for search_path in sys.path:
@@ -4811,31 +4811,31 @@ class Module(Object):
             **log**          - indicates whether logging should be enabled
 
             Additional keywords are forwarded to
-            "boostNode.system.Platform.run()".
+            "boostnode.system.Platform.run()".
 
             Examples:
 
-            >>> import boostNode.extension
+            >>> import boostnode.extension
 
             >>> Module.execute_program_for_modules(
-            ...     'linter', 'pyflakes', boostNode.extension.__all__
+            ...     'linter', 'pyflakes', boostnode.extension.__all__
             ... ) # doctest: +SKIP
             [(..., ...), ...]
 
             >>> Module.execute_program_for_modules(
-            ...     'program', 'not_existing', boostNode.extension.__all__,
+            ...     'program', 'not_existing', boostnode.extension.__all__,
             ...     error=False, shell=True
             ... ) # doctest: +ELLIPSIS
             ('', ...)
 
             >>> Module.execute_program_for_modules(
-            ...     'program', 'ls', boostNode.extension.__all__,
+            ...     'program', 'ls', boostnode.extension.__all__,
             ...     error=False
             ... ) # doctest: +ELLIPSIS
             (..., ...)
         '''
-        from boostNode.extension.file import Handler as FileHandler
-        from boostNode.extension.system import Platform
+        from boostnode.extension.file import Handler as FileHandler
+        from boostnode.extension.system import Platform
 
         results = []
         for module in modules:
@@ -4911,7 +4911,7 @@ class Module(Object):
             ... ) # doctest: +ELLIPSIS
             {...'name': 'doctest'...}
         '''
-        from boostNode.extension.output import Logger
+        from boostnode.extension.output import Logger
         if module is None:
             module = sys.modules[name]
         else:
@@ -4944,7 +4944,7 @@ class Module(Object):
         '''Extend imported modules which couldn't be extended yet.'''
         if post_extend_others:
             for imported_name, imported_module in sys.modules.items():
-                if('%s.' % imported_name.startswith(boostNode.__name__) and
+                if('%s.' % imported_name.startswith(boostnode.__name__) and
                    builtins.hasattr(imported_module, '__module_name__') and
                    imported_module.__module_name__ is None):
                     '''Take this method via introspection.'''
@@ -4994,7 +4994,7 @@ class Module(Object):
             <class '...Module'>
             >>> sys.argv = command_line_arguments_save
         '''
-        from boostNode.extension.system import CommandLine
+        from boostnode.extension.system import CommandLine
         '''
             NOTE: We have to copy caller keywords to avoid changing the \
             mutable default value in this function signature.
@@ -5040,7 +5040,7 @@ class Module(Object):
             >>> Module.default_package('doctest', inspect.currentframe())
             False
         '''
-        from boostNode.extension.system import CommandLine
+        from boostnode.extension.system import CommandLine
         cls.extend(name, frame)
         return CommandLine.generic_package_interface(
             name, frame, *arguments, **keywords)
@@ -5103,7 +5103,7 @@ class Module(Object):
             ... ) # doctest: +ELLIPSIS
             Object of "Handler" with path "..." and initially given path "...
         '''
-        from boostNode.extension.file import Handler as FileHandler
+        from boostnode.extension.file import Handler as FileHandler
 
         file = False
         if module:
@@ -6071,8 +6071,6 @@ if __name__ == '__main__':
 # endregion
 
 # region vim modline
-
 # vim: set tabstop=4 shiftwidth=4 expandtab:
 # vim: foldmethod=marker foldmarker=region,endregion:
-
 # endregion

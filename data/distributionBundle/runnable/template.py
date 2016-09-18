@@ -14,14 +14,14 @@ from __future__ import absolute_import, division, print_function, \
 # #
 
 '''
-    For conventions see "boostNode/__init__.py" on \
-    https://github.com/thaibault/boostNode
+    For conventions see "boostnode/__init__.py" on \
+    https://github.com/thaibault/boostnode
 '''
 
 __author__ = 'Torben Sickert'
-__copyright__ = 'see boostNode/__init__.py'
+__copyright__ = 'see boostnode/__init__.py'
 __credits__ = 'Torben Sickert',
-__license__ = 'see boostNode/__init__.py'
+__license__ = 'see boostnode/__init__.py'
 __maintainer__ = 'Torben Sickert'
 __maintainer_email__ = 'info["~at~"]torben.website'
 __status__ = 'stable'
@@ -48,79 +48,79 @@ import traceback
 # # python3.5 from urllib.request import pathname2url
 from urllib import pathname2url as native_pathname2url
 
-'''Make boostNode packages and modules importable via relative paths.'''
+'''Make boostnode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
 # # python3.5
-# # from boostNode import ENCODING
-from boostNode import ENCODING, convert_to_string, convert_to_unicode
+# # from boostnode import ENCODING
+from boostnode import ENCODING, convert_to_string, convert_to_unicode
 # #
-from boostNode.extension.file import Handler as FileHandler
-from boostNode.extension.native import Dictionary, Module, \
+from boostnode.extension.file import Handler as FileHandler
+from boostnode.extension.native import Dictionary, Module, \
     InstancePropertyInitializer
-from boostNode.extension.native import String
-from boostNode.extension.output import Buffer, Print
-from boostNode.extension.output import SET_ATTRIBUTE_MODE as \
+from boostnode.extension.native import String
+from boostnode.extension.output import Buffer, Print
+from boostnode.extension.output import SET_ATTRIBUTE_MODE as \
     SET_OUTPUT_ATTRIBUTE_MODE
-from boostNode.extension.output import RESET_ATTRIBUTE_MODE as \
+from boostnode.extension.output import RESET_ATTRIBUTE_MODE as \
     RESET_OUTPUT_ATTRIBUTE_MODE
-from boostNode.extension.output import COLOR as OUTPUT_COLOR
-from boostNode.extension.output import HIGH_COLOR as HIGH_OUTPUT_COLOR
-from boostNode.extension.output import HIDDEN as OUTPUT_HIDDEN
-from boostNode.extension.output import BOLD as OUTPUT_BOLD
-from boostNode.extension.output import DIM as OUTPUT_DIM
-from boostNode.extension.output import ITALIC as OUTPUT_ITALIC
-from boostNode.extension.output import UNDERLINE as OUTPUT_UNDERLINE
-from boostNode.extension.output import BLINK as OUTPUT_BLINK
-from boostNode.extension.output import REVERSE as OUTPUT_REVERSE
-from boostNode.extension.output import CROSSED_OUT as OUTPUT_CROSSED_OUT
-from boostNode.extension.output import DEFAULT_FONT as OUTPUT_DEFAULT_FONT
-from boostNode.extension.output import FONT_1 as OUTPUT_FONT_1
-from boostNode.extension.output import FONT_2 as OUTPUT_FONT_2
-from boostNode.extension.output import FONT_3 as OUTPUT_FONT_3
-from boostNode.extension.output import FONT_4 as OUTPUT_FONT_4
-from boostNode.extension.output import FONT_5 as OUTPUT_FONT_5
-from boostNode.extension.output import FONT_6 as OUTPUT_FONT_6
-from boostNode.extension.output import FONT_7 as OUTPUT_FONT_7
-from boostNode.extension.output import FRAKTUR_HARDLY as OUTPUT_FRAKTUR_HARDLY
-from boostNode.extension.output import BOLD_OFF as OUTPUT_BOLD_OFF
-from boostNode.extension.output import BOLD_INTENSITY_OFF as \
+from boostnode.extension.output import COLOR as OUTPUT_COLOR
+from boostnode.extension.output import HIGH_COLOR as HIGH_OUTPUT_COLOR
+from boostnode.extension.output import HIDDEN as OUTPUT_HIDDEN
+from boostnode.extension.output import BOLD as OUTPUT_BOLD
+from boostnode.extension.output import DIM as OUTPUT_DIM
+from boostnode.extension.output import ITALIC as OUTPUT_ITALIC
+from boostnode.extension.output import UNDERLINE as OUTPUT_UNDERLINE
+from boostnode.extension.output import BLINK as OUTPUT_BLINK
+from boostnode.extension.output import REVERSE as OUTPUT_REVERSE
+from boostnode.extension.output import CROSSED_OUT as OUTPUT_CROSSED_OUT
+from boostnode.extension.output import DEFAULT_FONT as OUTPUT_DEFAULT_FONT
+from boostnode.extension.output import FONT_1 as OUTPUT_FONT_1
+from boostnode.extension.output import FONT_2 as OUTPUT_FONT_2
+from boostnode.extension.output import FONT_3 as OUTPUT_FONT_3
+from boostnode.extension.output import FONT_4 as OUTPUT_FONT_4
+from boostnode.extension.output import FONT_5 as OUTPUT_FONT_5
+from boostnode.extension.output import FONT_6 as OUTPUT_FONT_6
+from boostnode.extension.output import FONT_7 as OUTPUT_FONT_7
+from boostnode.extension.output import FRAKTUR_HARDLY as OUTPUT_FRAKTUR_HARDLY
+from boostnode.extension.output import BOLD_OFF as OUTPUT_BOLD_OFF
+from boostnode.extension.output import BOLD_INTENSITY_OFF as \
     OUTPUT_BOLD_INTENSITY_OFF
-from boostNode.extension.output import ITALIC_OFF as OUTPUT_ITALIC_OFF
-from boostNode.extension.output import UNDERLINE_OFF as OUTPUT_UNDERLINE_OFF
-from boostNode.extension.output import BLINK_OFF as OUTPUT_BLINK_OFF
-from boostNode.extension.output import RESERVERD_1 as OUTPUT_RESERVERD_1
-from boostNode.extension.output import REVERSE_OFF as OUTPUT_REVERSE_OFF
-from boostNode.extension.output import REVEAL_OFF as OUTPUT_REVEAL_OFF
-from boostNode.extension.output import CROSSED_OUT_OFF as \
+from boostnode.extension.output import ITALIC_OFF as OUTPUT_ITALIC_OFF
+from boostnode.extension.output import UNDERLINE_OFF as OUTPUT_UNDERLINE_OFF
+from boostnode.extension.output import BLINK_OFF as OUTPUT_BLINK_OFF
+from boostnode.extension.output import RESERVERD_1 as OUTPUT_RESERVERD_1
+from boostnode.extension.output import REVERSE_OFF as OUTPUT_REVERSE_OFF
+from boostnode.extension.output import REVEAL_OFF as OUTPUT_REVEAL_OFF
+from boostnode.extension.output import CROSSED_OUT_OFF as \
     OUTPUT_CROSSED_OUT_OFF
-from boostNode.extension.output import RESERVED_2 as OUTPUT_RESERVED_2
-from boostNode.extension.output import FRAMED as OUTPUT_FRAMED
-from boostNode.extension.output import ENCIRCLED as OUTPUT_ENCIRCLED
-from boostNode.extension.output import OVERLINED as OUTPUT_OVERLINED
-from boostNode.extension.output import FRAMED_ENCIRCLED_OFF as \
+from boostnode.extension.output import RESERVED_2 as OUTPUT_RESERVED_2
+from boostnode.extension.output import FRAMED as OUTPUT_FRAMED
+from boostnode.extension.output import ENCIRCLED as OUTPUT_ENCIRCLED
+from boostnode.extension.output import OVERLINED as OUTPUT_OVERLINED
+from boostnode.extension.output import FRAMED_ENCIRCLED_OFF as \
     OUTPUT_FRAMED_ENCIRCLED_OFF
-from boostNode.extension.output import OVERLINED_OFF as OUTPUT_OVERLINED_OFF
-from boostNode.extension.output import RESERVED_3 as OUTPUT_RESERVED_3
-from boostNode.extension.output import RESERVED_4 as OUTPUT_RESERVED_4
-from boostNode.extension.output import RESERVED_5 as OUTPUT_RESERVED_5
-from boostNode.extension.output import RESERVED_6 as OUTPUT_RESERVED_6
-from boostNode.extension.output import IDEOGRAM_UNDERLINE as \
+from boostnode.extension.output import OVERLINED_OFF as OUTPUT_OVERLINED_OFF
+from boostnode.extension.output import RESERVED_3 as OUTPUT_RESERVED_3
+from boostnode.extension.output import RESERVED_4 as OUTPUT_RESERVED_4
+from boostnode.extension.output import RESERVED_5 as OUTPUT_RESERVED_5
+from boostnode.extension.output import RESERVED_6 as OUTPUT_RESERVED_6
+from boostnode.extension.output import IDEOGRAM_UNDERLINE as \
     OUTPUT_IDEOGRAM_UNDERLINE
-from boostNode.extension.output import IDEOGRAM_DOUBLE_UNDERLINE as \
+from boostnode.extension.output import IDEOGRAM_DOUBLE_UNDERLINE as \
     OUTPUT_IDEOGRAM_DOUBLE_UNDERLINE
-from boostNode.extension.output import IDEOGRAM_OVERLINE as \
+from boostnode.extension.output import IDEOGRAM_OVERLINE as \
     OUTPUT_IDEOGRAM_OVERLINE
-from boostNode.extension.output import IDEOGRAM_DOUBLE_OVERLINE as \
+from boostnode.extension.output import IDEOGRAM_DOUBLE_OVERLINE as \
     OUTPUT_IDEOGRAM_DOUBLE_OVERLINE
-from boostNode.extension.output import IDEOGRAM_STRESS_MARKING as \
+from boostnode.extension.output import IDEOGRAM_STRESS_MARKING as \
     OUTPUT_IDEOGRAM_STRESS_MARKING
-from boostNode.extension.output import IDEOGRAM_OFF as OUTPUT_IDEOGRAM_OFF
-from boostNode.extension.system import CommandLine, Runnable
-# # python3.5 from boostNode.extension.type import Self, SelfClass
+from boostnode.extension.output import IDEOGRAM_OFF as OUTPUT_IDEOGRAM_OFF
+from boostnode.extension.system import CommandLine, Runnable
+# # python3.5 from boostnode.extension.type import Self, SelfClass
 pass
-from boostNode.paradigm.aspectOrientation import JointPoint
-from boostNode.paradigm.objectOrientation import Class
+from boostnode.paradigm.aspectOrientation import JointPoint
+from boostnode.paradigm.objectOrientation import Class
 
 # # python3.5
 # # # NOTE: Should be removed if we drop python2.X support.
@@ -233,7 +233,7 @@ class Parser(Class, Runnable):
         ... ).render() # doctest: +IGNORE_EXCEPTION_DETAIL
         Traceback (most recent call last):
         ...
-        boostNode.extension.native.TemplateError: Error with given template ...
+        boostnode.extension.native.TemplateError: Error with given template ...
     '''
 
     # region properties
@@ -2430,8 +2430,6 @@ Module.default(name=__name__, frame=inspect.currentframe())
 # endregion
 
 # region vim modline
-
 # vim: set tabstop=4 shiftwidth=4 expandtab:
 # vim: foldmethod=marker foldmarker=region,endregion:
-
 # endregion

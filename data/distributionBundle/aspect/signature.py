@@ -15,14 +15,14 @@ from __future__ import absolute_import, division, print_function, \
 # #
 
 '''
-    For conventions see "boostNode/__init__.py" on \
-    https://github.com/thaibault/boostNode
+    For conventions see "boostnode/__init__.py" on \
+    https://github.com/thaibault/boostnode
 '''
 
 __author__ = 'Torben Sickert'
-__copyright__ = 'see boostNode/__init__.py'
+__copyright__ = 'see boostnode/__init__.py'
 __credits__ = 'Torben Sickert',
-__license__ = 'see boostNode/__init__.py'
+__license__ = 'see boostnode/__init__.py'
 __maintainer__ = 'Torben Sickert'
 __maintainer_email__ = 'info["~at~"]torben.website'
 __status__ = 'stable'
@@ -44,17 +44,17 @@ import sys
 pass
 # #
 
-'''Make boostNode packages and modules importable via relative paths.'''
+'''Make boostnode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
 # # python3.5 pass
-from boostNode import convert_to_unicode
-from boostNode.extension.type import Self, SelfClass, SelfClassObject, Null
+from boostnode import convert_to_unicode
+from boostnode.extension.type import Self, SelfClass, SelfClassObject, Null
 # # python3.5
-# # from boostNode.paradigm.aspectOrientation import Argument, CallJointPoint
+# # from boostnode.paradigm.aspectOrientation import Argument, CallJointPoint
 pass
 # #
-from boostNode.paradigm.aspectOrientation import ASPECTS, FunctionDecorator, \
+from boostnode.paradigm.aspectOrientation import ASPECTS, FunctionDecorator, \
     JointPoint, ReturnJointPoint
 
 # endregion
@@ -495,7 +495,7 @@ class CheckObject(builtins.object):
             ... ) # doctest: +ELLIPSIS +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
-            boostNode.extension.native.SignatureError: ...instance so "self"...
+            boostnode.extension.native.SignatureError: ...instance so "self"...
 
             >>> a.object = A()
             >>> a._handle_self(
@@ -503,7 +503,7 @@ class CheckObject(builtins.object):
             ... ) # doctest: +ELLIPSIS +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
-            boostNode.extension.native.SignatureError:... but received "'val...
+            boostnode.extension.native.SignatureError:... but received "'val...
 
             >>> b = A()
             >>> a.object = b
@@ -557,7 +557,7 @@ class CheckObject(builtins.object):
             ... ) # doctest: +ELLIPSIS +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
-            boostNode.extension.native.SignatureError:..." wasn't called fr...
+            boostnode.extension.native.SignatureError:..." wasn't called fr...
 
             >>> a.class_object = A
             >>> a._handle_self_class(
@@ -565,7 +565,7 @@ class CheckObject(builtins.object):
             ... ) # doctest: +ELLIPSIS +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
-            boostNode.extension.native.SignatureError: "A.test()" expects ...
+            boostnode.extension.native.SignatureError: "A.test()" expects ...
 
             >>> a.class_object = A
             >>> a._handle_self_class(
@@ -573,7 +573,7 @@ class CheckObject(builtins.object):
             ... ) # doctest: +ELLIPSIS +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
-            boostNode.extension.native.SignatureError: "A.test()" expects in...
+            boostnode.extension.native.SignatureError: "A.test()" expects in...
 
             >>> a.class_object = A
             >>> a._handle_self_class(
@@ -828,7 +828,7 @@ class Check(FunctionDecorator):
 # #         >>> test('hans', 'hans') # doctest: +ELLIPSIS
 # #         Traceback (most recent call last):
 # #         ...
-# #         boostNode.extension.native.SignatureError: ..."int" for "num" b...
+# #         boostnode.extension.native.SignatureError: ..."int" for "num" b...
 # #
 # #         >>> @Check
 # #         ... def test() -> builtins.int:
@@ -836,7 +836,7 @@ class Check(FunctionDecorator):
 # #         >>> test() # doctest: +ELLIPSIS
 # #         Traceback (most recent call last):
 # #         ...
-# #         boostNode.extension.native.SignatureError: ...int" for "return ...
+# #         boostnode.extension.native.SignatureError: ...int" for "return ...
 # #
 # #         >>> @Check
 # #         ... def test(param: 5) -> None:
@@ -844,7 +844,7 @@ class Check(FunctionDecorator):
 # #         >>> test(4) # doctest: +ELLIPSIS
 # #         Traceback (most recent call last):
 # #         ...
-# #         boostNode.extension.native.SignatureError: ...m" but received "4".
+# #         boostnode.extension.native.SignatureError: ...m" but received "4".
 # #
 # #         >>> @Check
 # #         ... def test(param: (builtins.str, builtins.bool)) -> True:
@@ -856,7 +856,7 @@ class Check(FunctionDecorator):
 # #         >>> test(5) # doctest: +ELLIPSIS
 # #         Traceback (most recent call last):
 # #         ...
-# #         boostNode.extension.native.SignatureError: ...r" or "bool" for ...
+# #         boostnode.extension.native.SignatureError: ...r" or "bool" for ...
 # #
 # #         >>> @Check
 # #         ... def test(param='hans') -> builtins.str:
@@ -870,7 +870,7 @@ class Check(FunctionDecorator):
 # #         >>> test(4) # doctest: +ELLIPSIS
 # #         Traceback (most recent call last):
 # #         ...
-# #         boostNode.extension.native.SignatureError: ...tr" for "param" b...
+# #         boostnode.extension.native.SignatureError: ...tr" for "param" b...
 # #
 # #         >>> @Check
 # #         ... def test(a='hans', b='and peter') -> builtins.str:
@@ -905,12 +905,12 @@ class Check(FunctionDecorator):
 # #         >>> test('hans', 5) # doctest: +ELLIPSIS
 # #         Traceback (most recent call last):
 # #         ...
-# #         boostNode.extension.native.SignatureError: ... for "2. argument"...
+# #         boostnode.extension.native.SignatureError: ... for "2. argument"...
 # #         >>> test('hans', a='peter')
 # #         >>> test(a='peter', b=5) # doctest: +ELLIPSIS
 # #         Traceback (most recent call last):
 # #         ...
-# #         boostNode.extension.native.SignatureError: ..."str" for "b" but...
+# #         boostnode.extension.native.SignatureError: ..."str" for "b" but...
 # #
 # #         >>> @Check
 # #         ... def test(*args: (builtins.str, builtins.int)) -> None:
@@ -919,7 +919,7 @@ class Check(FunctionDecorator):
 # #         >>> test(True) # doctest: +ELLIPSIS
 # #         Traceback (most recent call last):
 # #         ...
-# #         boostNode.extension.native.SignatureError: ...r" or "int" for "...
+# #         boostnode.extension.native.SignatureError: ...r" or "int" for "...
 # #
 # #         >>> @Check
 # #         ... def test(**kw: (builtins.str, builtins.int)) -> None:
@@ -928,7 +928,7 @@ class Check(FunctionDecorator):
 # #         >>> test(a=True) # doctest: +ELLIPSIS
 # #         Traceback (most recent call last):
 # #         ...
-# #         boostNode.extension.native.SignatureError: ...r" or "int" for "...
+# #         boostnode.extension.native.SignatureError: ...r" or "int" for "...
 # #
 # #         >>> @Check
 # #         ... def test(give) -> (builtins.str, builtins.int):
@@ -940,7 +940,7 @@ class Check(FunctionDecorator):
 # #         >>> test(True) # doctest: +ELLIPSIS
 # #         Traceback (most recent call last):
 # #         ...
-# #         boostNode.extension.native.SignatureError: ...r" or "int" for "...
+# #         boostnode.extension.native.SignatureError: ...r" or "int" for "...
 # #
 # #         >>> class Mockup:
 # #         ...     @Check
@@ -948,7 +948,7 @@ class Check(FunctionDecorator):
 # #         >>> Mockup().method() # doctest: +ELLIPSIS
 # #         Traceback (most recent call last):
 # #         ...
-# #         boostNode.extension.native.SignatureError: ...self...turn value...
+# #         boostnode.extension.native.SignatureError: ...self...turn value...
 # #
 # #         >>> class Mockup:
 # #         ...     @Check
@@ -963,7 +963,7 @@ class Check(FunctionDecorator):
 # #         >>> Mockup().method() # doctest: +ELLIPSIS
 # #         Traceback (most recent call last):
 # #         ...
-# #         boostNode.extension.native.SignatureError: ...method()" expects...
+# #         boostnode.extension.native.SignatureError: ...method()" expects...
 # #
 # #         >>> class Mockup:
 # #         ...     @Check
@@ -1005,7 +1005,7 @@ class Check(FunctionDecorator):
 # #             ...     'hans') # doctest: +ELLIPSIS +IGNORE_EXCEPTION_DETAIL
 # #             Traceback (most recent call last):
 # #             ...
-# #             boostNode.extension.native.SignatureError: "a()" expects ins...
+# #             boostnode.extension.native.SignatureError: "a()" expects ins...
 # #         '''
 # #         @functools.wraps(self.__func__)
 # #         def wrapper_function(
@@ -1197,15 +1197,13 @@ __logger__ = __exception__ = __module_name__ = __file_path__ = \
     code preprocessing tools is provided by default.
 '''
 if __name__ == '__main__':
-    from boostNode.extension.native import Module
+    from boostnode.extension.native import Module
     Module.default(
         name=__name__, frame=inspect.currentframe(), default_caller=False)
 
 # endregion
 
 # region vim modline
-
 # vim: set tabstop=4 shiftwidth=4 expandtab:
 # vim: foldmethod=marker foldmarker=region,endregion:
-
 # endregion

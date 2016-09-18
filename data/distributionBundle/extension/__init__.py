@@ -16,14 +16,14 @@ from __future__ import absolute_import, division, print_function, \
 # #
 
 '''
-    For conventions see "boostNode/__init__.py" on \
-    https://github.com/thaibault/boostNode
+    For conventions see "boostnode/__init__.py" on \
+    https://github.com/thaibault/boostnode
 '''
 
 __author__ = 'Torben Sickert'
-__copyright__ = 'see boostNode/__init__.py'
+__copyright__ = 'see boostnode/__init__.py'
 __credits__ = 'Torben Sickert',
-__license__ = 'see boostNode/__init__.py'
+__license__ = 'see boostnode/__init__.py'
 __maintainer__ = 'Torben Sickert'
 __maintainer_email__ = 'infot["~at~"]torben.website'
 __status__ = 'stable'
@@ -33,14 +33,14 @@ import inspect
 import os
 import sys
 
-'''Make boostNode packages and modules importable via relative paths.'''
+'''Make boostnode packages and modules importable via relative paths.'''
 path = os.path.abspath(sys.path[0] + 2 * (os.sep + '..'))
 if path not in sys.path:
     sys.path.append(path)
 if not sys.path[0]:
     sys.path[0] = os.getcwd()
 
-from boostNode import __get_all_modules__
+from boostnode import __get_all_modules__
 
 # endregion
 
@@ -56,7 +56,7 @@ __all__ = __get_all_modules__()
 __logger__ = __exception__ = __module_name__ = __file_path__ = \
     __test_mode__ = __test_buffer__ = __test_folder__ = __test_globals__ = None
 if __name__ == '__main__':
-    from boostNode.extension.system import CommandLine
+    from boostnode.extension.system import CommandLine
     '''
         Extends this module with some magic environment variables to provide \
         better introspection support. A generic command line interface for \
@@ -68,8 +68,6 @@ if __name__ == '__main__':
 # endregion
 
 # region vim modline
-
 # vim: set tabstop=4 shiftwidth=4 expandtab:
 # vim: foldmethod=marker foldmarker=region,endregion:
-
 # endregion

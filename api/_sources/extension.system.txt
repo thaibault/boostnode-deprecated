@@ -1,6 +1,6 @@
 ===============================================================================
-boostNode.extension.system
+boostnode.extension.system
 ===============================================================================
 
-.. automodule:: boostNode.extension.system
+.. automodule:: boostnode.extension.system
     :members:

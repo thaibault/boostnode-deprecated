@@ -1,6 +1,6 @@
 ===============================================================================
-boostNode.runnable.codeRunner
+boostnode.runnable.codeRunner
 ===============================================================================
 
-.. automodule:: boostNode.runnable.codeRunner
+.. automodule:: boostnode.runnable.codeRunner
     :members:

@@ -1,6 +1,6 @@
 ===============================================================================
-boostNode.aspect
+boostnode.aspect
 ===============================================================================
 
-.. automodule:: boostNode.aspect
+.. automodule:: boostnode.aspect
     :members:
