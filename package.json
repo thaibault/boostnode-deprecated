@@ -9,8 +9,9 @@
         "languages": ["deDE", "enUS"]
     },
     "scripts": {
-        "document": "runnable/generateAPIDocumentation.py",
-      "updateDocumentation": "documentationWebsite --log-level info"
+      "document": "runnable/generateAPIDocumentation.py",
+      "updateDocumentation": "documentationWebsite --log-level info",
+      "clear": "rm apiDocumentation --recursive --force && find './' -type f -name '*.pyc' -delete && find './' -type f -name '*.pyo' -delete"
     },
     "devDependencies": {
       "documentation-website": "latest"
