@@ -1,6 +1,6 @@
 {
   "name": "boostnode",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "a high reliable python library",
   "main": "__init__.py",
   "files": [
