@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>boostNode.extension.output &mdash; boostNode 1.0 rc documentation</title>
+    <title>boostNode.extension.output &#8212; boostNode 1.0 rc documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="extension.html" title="boostNode.extension"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">boostNode 1.0 rc documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">boostNode 1.0 rc documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -61,13 +61,13 @@
 <dd><p>This class represents a layer for writing and reading to an output         buffer realized as file, queue or variable.</p>
 <p><strong>file</strong>                    - a file path or file handler to use as                                       buffer</p>
 <p><strong>queue</strong>                   - a queue object to use as buffer</p>
-<p><strong>support_multiprocessing</strong> - indicates weather buffer read and write                                       requests should be multiprocessing save</p>
+<p><strong>support_multiprocessing</strong> - indicates whether buffer read and write                                       requests should be multiprocessing save</p>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span> <span class="o">=</span> <span class="n">Buffer</span><span class="p">(</span><span class="nb">file</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s1">&#39;Buffer&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span> 
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">buffer</span> <span class="o">=</span> <span class="n">Buffer</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s1">&#39;Buffer&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">buffer</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span> 
 <span class="go">&#39;...&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="s1">&#39;hans&#39;</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="nb">buffer</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span><span class="o">.</span><span class="n">content</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;hans&#39;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">buffer</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">buffer</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;hans+&#39;</span>
 </pre></div>
 </div>
@@ -75,46 +75,46 @@
 <dt id="boostNode.extension.output.Buffer.clear">
 <code class="descname">clear</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.output.Buffer.clear" title="Permalink to this definition">¶</a></dt>
 <dd><p>Removes the current output buffer content.</p>
-<p><strong>delete</strong> - indicates weather a file buffer should be deleted or                          truncated</p>
+<p><strong>delete</strong> - indicates whether a file buffer should be deleted or                          truncated</p>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span> <span class="o">=</span> <span class="n">Buffer</span><span class="p">(</span><span class="nb">file</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s1">&#39;clear&#39;</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">buffer</span> <span class="o">=</span> <span class="n">Buffer</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s1">&#39;clear&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span> 
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">buffer</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span> 
 <span class="go">&#39;...&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;hans&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">buffer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;hans&#39;</span><span class="p">)</span> 
 <span class="go">Objec...(file buffered with &quot;...clear...with content &quot;hans&quot;.</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span><span class="o">.</span><span class="n">clear</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">buffer</span><span class="o">.</span><span class="n">clear</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
 <span class="go">&#39;hans&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span><span class="o">.</span><span class="n">content</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">buffer</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span> <span class="o">=</span> <span class="n">Buffer</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;hans&#39;</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">buffer</span> <span class="o">=</span> <span class="n">Buffer</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">buffer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;hans&#39;</span><span class="p">)</span>
 <span class="go">Object of &quot;Buffer&quot; (memory buffered) with content &quot;hans&quot;.</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">buffer</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
 <span class="go">&#39;hans&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span><span class="o">.</span><span class="n">content</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">buffer</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span> <span class="o">=</span> <span class="n">Buffer</span><span class="p">(</span><span class="n">queue</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">buffer</span> <span class="o">=</span> <span class="n">Buffer</span><span class="p">(</span><span class="n">queue</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">buffer</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
 <span class="go">&#39;&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;hans&#39;</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">buffer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;hans&#39;</span><span class="p">)</span>
 <span class="go">Object of &quot;Buffer&quot; (queue buffered) with content &quot;hans&quot;.</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;hans&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">buffer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;hans&#39;</span><span class="p">)</span>
 <span class="go">Object of &quot;Buffer&quot; (queue buffered) with content &quot;hanshans&quot;.</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">buffer</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
 <span class="go">&#39;hanshans&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span><span class="o">.</span><span class="n">content</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">buffer</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;&#39;</span>
 </pre></div>
 </div>
@@ -125,7 +125,7 @@
 <code class="descname">flush</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.output.Buffer.flush" title="Permalink to this definition">¶</a></dt>
 <dd><p>Flush methods usually called to guarantee that all objects putted             to &#8220;write()&#8221; are materialized on their provided media. This             implementation exists only for compatibility reasons.</p>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Buffer</span><span class="p">()</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Buffer</span><span class="p">()</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
 <span class="go">Object of &quot;Buffer&quot; (memory buffered) with content &quot;&quot;.</span>
 </pre></div>
 </div>
@@ -136,11 +136,11 @@
 <code class="descname">get_content</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.output.Buffer.get_content" title="Permalink to this definition">¶</a></dt>
 <dd><p>Getter for the current content.</p>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Buffer</span><span class="p">()</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Buffer</span><span class="p">()</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;test&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Buffer</span><span class="p">(</span><span class="n">queue</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Buffer</span><span class="p">(</span><span class="n">queue</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;test&#39;</span>
 </pre></div>
 </div>
@@ -152,19 +152,19 @@
 <dd><p>Writes content to the current output buffer file. If the current             given file &#8220;Buffer.file&#8221; doesn&#8217;t exists it will be created.</p>
 <p><strong>content</strong> - content to write into current buffer instance</p>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span> <span class="o">=</span> <span class="n">Buffer</span><span class="p">(</span><span class="nb">file</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s1">&#39;write&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span> 
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">buffer</span> <span class="o">=</span> <span class="n">Buffer</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s1">&#39;write&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">buffer</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span> 
 <span class="go">&#39;...&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;hans&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">buffer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;hans&#39;</span><span class="p">)</span> 
 <span class="go">Object of &quot;Buffer&quot; (file buffered with &quot;...write...nt &quot;hans&quot;.</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span><span class="o">.</span><span class="n">content</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">buffer</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;hans&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span> <span class="o">=</span> <span class="n">Buffer</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;hans&#39;</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">buffer</span> <span class="o">=</span> <span class="n">Buffer</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">buffer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;hans&#39;</span><span class="p">)</span>
 <span class="go">Object of &quot;Buffer&quot; (memory buffered) with content &quot;hans&quot;.</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">buffer</span><span class="o">.</span><span class="n">content</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">buffer</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;hans&#39;</span>
 </pre></div>
 </div>
@@ -199,7 +199,7 @@
 <p><strong>colored_format</strong> - sets templates for colored logging messages                                  in returned logger</p>
 <p><strong>format</strong>         - sets templates for logging messages in each                                  logger</p>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Logger</span><span class="o">.</span><span class="n">change_all</span><span class="p">()</span> 
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Logger</span><span class="o">.</span><span class="n">change_all</span><span class="p">()</span> 
 <span class="go">&lt;class ...Logger...&gt;</span>
 </pre></div>
 </div>
@@ -210,7 +210,7 @@
 <code class="descname">flush</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.extension.output.Logger.flush" title="Permalink to this definition">¶</a></dt>
 <dd><p>Flushes all buffers in all logger handlers.</p>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Logger</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span> 
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Logger</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span> 
 <span class="go">&lt;class &#39;...Logger&#39;&gt;</span>
 </pre></div>
 </div>
@@ -227,14 +227,14 @@
 <p><strong>colored_format</strong> - sets templates for colored logging messages                                  in returned logger, if &#8220;None&#8221; is given                                  normal format will be used instead.</p>
 <p><strong>format</strong>         - sets templates for logging messages in each                                  logger</p>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">logger_a</span> <span class="o">=</span> <span class="n">Logger</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="nb">buffer</span><span class="o">=</span><span class="p">(</span><span class="n">__test_buffer__</span><span class="p">,))</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">logger_a</span> <span class="o">=</span> <span class="n">Logger</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="n">buffer</span><span class="o">=</span><span class="p">(</span><span class="n">__test_buffer__</span><span class="p">,))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">logger_b</span> <span class="o">=</span> <span class="n">Logger</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">logger_c</span> <span class="o">=</span> <span class="n">Logger</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="nb">buffer</span><span class="o">=</span><span class="p">(</span><span class="n">__test_buffer__</span><span class="p">,))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">logger_c</span> <span class="o">=</span> <span class="n">Logger</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="n">buffer</span><span class="o">=</span><span class="p">(</span><span class="n">__test_buffer__</span><span class="p">,))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">logger_a</span> <span class="ow">is</span> <span class="n">logger_b</span>
 <span class="go">True</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">__test_buffer__</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span> 
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">__test_buffer__</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span> 
 <span class="go">&#39;...&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">logger_a</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s1">&#39;Log some information.&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">__test_buffer__</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span> 
@@ -285,14 +285,11 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -314,12 +311,12 @@
         <li class="right" >
           <a href="extension.html" title="boostNode.extension"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">boostNode 1.0 rc documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">boostNode 1.0 rc documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 16.12.2012, Torben Sickert.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+        &#169; Copyright 16.12.2012, Torben Sickert.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
     </div>
   </body>
 </html>

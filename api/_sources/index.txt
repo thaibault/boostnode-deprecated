@@ -25,6 +25,7 @@ Contents
     paradigm.aspectOrientation
     runnable
     runnable.codeRunner
+    runnable.generateAPIDocumentation
     runnable.synchronisation
     runnable.macro
     runnable.server

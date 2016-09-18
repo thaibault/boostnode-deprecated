@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>boostNode.aspect.signature &mdash; boostNode 1.0 rc documentation</title>
+    <title>boostNode.aspect.signature &#8212; boostNode 1.0 rc documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="aspect.html" title="boostNode.aspect"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">boostNode 1.0 rc documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">boostNode 1.0 rc documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -64,12 +64,12 @@
 <code class="descname">get_wrapper_function</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.aspect.signature.Check.get_wrapper_function" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dummy method to be compatible to newer features.</p>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">a</span><span class="p">(</span><span class="n">a</span><span class="p">):</span> <span class="k">return</span> <span class="n">a</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">a</span><span class="p">(</span><span class="n">a</span><span class="p">):</span> <span class="k">return</span> <span class="n">a</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Check</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">get_wrapper_function</span><span class="p">()</span> 
 <span class="go">&lt;function a at ...&gt;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Check</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">get_wrapper_function</span><span class="p">()(</span><span class="mi">5</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Check</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">get_wrapper_function</span><span class="p">()(</span><span class="mi">5</span><span class="p">)</span>
 <span class="go">5</span>
 </pre></div>
 </div>
@@ -92,7 +92,7 @@
 <code class="descname">get_function_path</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.aspect.signature.CheckObject.get_function_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns an object depended function description.</p>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">test</span><span class="p">():</span> <span class="k">pass</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">test</span><span class="p">():</span> <span class="k">pass</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">A</span><span class="p">(</span><span class="n">CheckObject</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="gp">... </span>        <span class="n">builtins</span><span class="o">.</span><span class="n">getattr</span><span class="p">(</span>
@@ -105,14 +105,14 @@
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">test</span><span class="p">():</span> <span class="k">pass</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">A</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">A</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">get_function_path</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">get_function_path</span><span class="p">()</span>
 <span class="go">&#39;test&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">__func__</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">test</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">__func__</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">test</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">class_object</span> <span class="o">=</span> <span class="n">A</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">get_function_path</span><span class="p">()</span>
 <span class="go">&#39;A.test&#39;</span>
@@ -138,11 +138,11 @@
 <dd><p>Checks the given return value.</p>
 <p>Returns the original value of the given wrapped function if             everything goes right.</p>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">pass</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">CheckReturnValue</span><span class="p">(</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">CheckReturnValue</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">A</span><span class="p">,</span> <span class="n">A</span><span class="p">(),</span> <span class="n">A</span><span class="o">.</span><span class="n">__init__</span><span class="p">,</span> <span class="p">(</span><span class="n">A</span><span class="p">(),),</span> <span class="p">{},</span> <span class="n">return_value</span><span class="o">=</span><span class="s1">&#39;hans&#39;</span>
 <span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">aspect</span><span class="p">()</span>
 <span class="go">&#39;hans&#39;</span>
@@ -176,14 +176,11 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -205,12 +202,12 @@
         <li class="right" >
           <a href="aspect.html" title="boostNode.aspect"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">boostNode 1.0 rc documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">boostNode 1.0 rc documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 16.12.2012, Torben Sickert.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+        &#169; Copyright 16.12.2012, Torben Sickert.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
     </div>
   </body>
 </html>

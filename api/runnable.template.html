@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>boostNode.runnable.template &mdash; boostNode 1.0 rc documentation</title>
+    <title>boostNode.runnable.template &#8212; boostNode 1.0 rc documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="runnable.server.html" title="boostNode.runnable.server"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">boostNode 1.0 rc documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">boostNode 1.0 rc documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -61,8 +61,8 @@
 <dd><p>This class can parse a string or file to interpret it as template for         replacing containing placeholder and rendering embedded python script         snippets.</p>
 <p>NOTE: &#8220;(?s...)&#8221; and &#8220;(?m...)&#8221; is equivalent for regular expression         flag &#8220;regularExpression.DOTALL&#8221; and &#8220;regularExpression.MULTILINE&#8221;.         NOTE: This regular expression patterns assumes that the delimiter has         at least a length of two.</p>
 <p><strong>template</strong>                              - A template string, path                                                     to template file or file                                                     object pointing to a                                                     template file.</p>
-<p><strong>cache_path</strong>                            - Indicates weather to                                                     cache the compiled                                                     template in given path.</p>
-<p><strong>string</strong>                                - Indicates weather                                                     &#8220;template&#8221; is a template                                                     string or file path.</p>
+<p><strong>cache_path</strong>                            - Indicates whether to                                                     cache the compiled                                                     template in given path.</p>
+<p><strong>string</strong>                                - Indicates whether                                                     &#8220;template&#8221; is a template                                                     string or file path.</p>
 <p><strong>file_encoding</strong>                         - Encoding used for reading                                                     template file and writing                                                     rendered output.</p>
 <p><strong>placeholder_name_pattern</strong>              - Regular expression                                                     pattern to specify a                                                     placeholder name format.</p>
 <p><strong>command_line_placeholder_name_pattern</strong> - Regular expression to                                                     specify a placeholder                                                     name given via command                                                     line interface.</p>
@@ -76,17 +76,19 @@
 <p><strong>builtin_names</strong>                         - A tuple of function and                                                     variables available in                                                     template engine.</p>
 <p><strong>pretty_indent</strong>                         - Indicates if we should                                                     spend time on rendering                                                     pretty indented code in                                                     each case.</p>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">file</span> <span class="o">=</span> <span class="n">FileHandler</span><span class="p">(</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s1">&#39;_run&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">file</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="s1">&#39;hans &lt;%placeholder%&gt;&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">template</span> <span class="o">=</span> <span class="n">Parser</span><span class="p">(</span><span class="n">template</span><span class="o">=</span><span class="nb">file</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">file</span> <span class="o">=</span> <span class="n">FileHandler</span><span class="p">(</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s1">&#39;_run&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">file</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="p">(</span>
+<span class="gp">... </span>    <span class="s1">&#39;hans &#39;</span> <span class="o">+</span> <span class="n">DEFAULT_CODE_DELIMITER</span><span class="p">[</span><span class="s1">&#39;left&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;placeholder&#39;</span> <span class="o">+</span>
+<span class="gp">... </span>    <span class="n">DEFAULT_CODE_DELIMITER</span><span class="p">[</span><span class="s1">&#39;right&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">template</span> <span class="o">=</span> <span class="n">Parser</span><span class="p">(</span><span class="n">template</span><span class="o">=</span><span class="n">file</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">template</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">placeholder</span><span class="o">=</span><span class="s1">&#39;also hans&#39;</span><span class="p">)</span>
 <span class="go">Object of &quot;Parser&quot; with template &quot;hans &lt;%placeholder%&gt;&quot;.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">template</span><span class="o">.</span><span class="n">output</span>
 <span class="go">&#39;hans also hans&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Parser</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="s2">&quot;&lt;</span><span class="si">% i</span><span class="s2">nclude(&#39;&#39;, **{})&quot;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="bp">True</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Parser</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="s2">&quot;&lt;</span><span class="si">% i</span><span class="s2">nclude(&#39;&#39;, **</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="kc">True</span>
 <span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">()</span> 
 <span class="gt">Traceback (most recent call last):</span>
 <span class="c">...</span>
@@ -98,7 +100,7 @@
 <code class="descname">get_builtins</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.runnable.template.Parser.get_builtins" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines minimum needed native python features for each template             scope. It adds user-defined additionally python functions. The             minimum needed functions (e.g. &#8220;print()&#8221;) will never be             overwritten.</p>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">template</span> <span class="o">=</span> <span class="n">Parser</span><span class="p">(</span><span class="n">template</span><span class="o">=</span><span class="s1">&#39;hans&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">template</span> <span class="o">=</span> <span class="n">Parser</span><span class="p">(</span><span class="n">template</span><span class="o">=</span><span class="s1">&#39;hans&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">template</span><span class="o">.</span><span class="n">builtins</span> 
 <span class="go">{...&#39;print&#39;: ..._print...}</span>
 </pre></div>
@@ -110,11 +112,11 @@
 <code class="descname">get_indent</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.runnable.template.Parser.get_indent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a string of white spaces representing current context.</p>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Parser</span><span class="p">(</span><span class="s1">&#39;hans</span><span class="se">\n</span><span class="s1">&lt;%__indent__ = 2</span><span class="se">\n</span><span class="s1">peter&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">indent</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Parser</span><span class="p">(</span><span class="s1">&#39;hans</span><span class="se">\n</span><span class="s1">&lt;%__indent__ = 2</span><span class="se">\n</span><span class="s1">peter&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">indent</span>
 <span class="go">2</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Parser</span><span class="p">(</span><span class="s1">&#39;hans</span><span class="se">\n</span><span class="s1">&lt;% __indent__=8;peter&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">indent</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Parser</span><span class="p">(</span><span class="s1">&#39;hans</span><span class="se">\n</span><span class="s1">&lt;% __indent__=8;peter&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">indent</span>
 <span class="go">8</span>
 </pre></div>
 </div>
@@ -125,8 +127,8 @@
 <code class="descname">get_output</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.runnable.template.Parser.get_output" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the current output buffer. It consists everything printed             out in code snippets rendered by the template instance or exists             as plain text in given template.</p>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Parser</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="s1">&#39;klaus says</span><span class="se">\n</span><span class="s1">&lt;% print(&quot;who is hans?&quot;)&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="bp">True</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Parser</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="s1">&#39;klaus says</span><span class="se">\n</span><span class="s1">&lt;% print(&quot;who is hans?&quot;)&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="kc">True</span>
 <span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">()</span><span class="o">.</span><span class="n">output</span>
 <span class="go">&#39;klaus says\nwho is hans?\n&#39;</span>
 </pre></div>
@@ -140,51 +142,51 @@
 <p><strong>mapping</strong> - A dictionary containing a mapping from placeholder                           name to value.</p>
 <p>Additional keywords are used as additional mapping tuples.</p>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Parser</span><span class="p">(</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Parser</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="s1">&#39;hans says</span><span class="se">\n</span><span class="s1">&lt;% print(&quot;who the fu.. is hans?&quot;)&#39;</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">string</span><span class="o">=</span><span class="bp">True</span>
+<span class="gp">... </span>    <span class="n">string</span><span class="o">=</span><span class="kc">True</span>
 <span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">()</span> 
 <span class="go">Object of &quot;Parser&quot; with template &quot;hans says...who the fu.. is ha...</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Parser</span><span class="p">(</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Parser</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="s1">&#39;hans says</span><span class="se">\n</span><span class="s1">&lt;% print(&quot;who the fu.. is hans?&quot;)&#39;</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">string</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">cache_path</span><span class="o">=</span><span class="n">__test_folder__</span>
+<span class="gp">... </span>    <span class="n">string</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cache_path</span><span class="o">=</span><span class="n">__test_folder__</span>
 <span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">()</span> 
 <span class="go">Object of &quot;Parser&quot; with template &quot;hans says...who the fu.. is ha...</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Parser</span><span class="p">(</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Parser</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="s1">&#39;hans says</span><span class="se">\n</span><span class="s1">&lt;% print(&quot;who the fu.. is hans?&quot;)&#39;</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">string</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">cache_path</span><span class="o">=</span><span class="n">__test_folder__</span>
+<span class="gp">... </span>    <span class="n">string</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cache_path</span><span class="o">=</span><span class="n">__test_folder__</span>
 <span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">()</span> 
 <span class="go">Object of &quot;Parser&quot; with template &quot;hans says...who the fu.. is ha...</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Parser</span><span class="p">(</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Parser</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="s1">&#39;hans says</span><span class="se">\n</span><span class="s1">&lt;% print(&quot;who the fu.. is hans?&quot;)&#39;</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">string</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">cache_path</span><span class="o">=</span><span class="n">__test_folder__</span><span class="p">,</span> <span class="n">full_caching</span><span class="o">=</span><span class="bp">True</span>
+<span class="gp">... </span>    <span class="n">string</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cache_path</span><span class="o">=</span><span class="n">__test_folder__</span><span class="p">,</span> <span class="n">full_caching</span><span class="o">=</span><span class="kc">True</span>
 <span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">()</span> 
 <span class="go">Object of &quot;Parser&quot; with template &quot;hans says...who the fu.. is ha...</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Parser</span><span class="p">(</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Parser</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="s1">&#39;hans says</span><span class="se">\n</span><span class="s1">&lt;% print(&quot;who the fu.. is hans?&quot;)&#39;</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">string</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">cache_path</span><span class="o">=</span><span class="n">__test_folder__</span><span class="p">,</span> <span class="n">full_caching</span><span class="o">=</span><span class="bp">True</span>
+<span class="gp">... </span>    <span class="n">string</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cache_path</span><span class="o">=</span><span class="n">__test_folder__</span><span class="p">,</span> <span class="n">full_caching</span><span class="o">=</span><span class="kc">True</span>
 <span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">()</span> 
 <span class="go">Object of &quot;Parser&quot; with template &quot;hans says...who the fu.. is ha...</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">file</span> <span class="o">=</span> <span class="n">FileHandler</span><span class="p">(</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s1">&#39;render&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">file</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="s1">&#39;hans says</span><span class="se">\n</span><span class="s1">&lt;% print(&quot;who the fu.. is hans?&quot;)&#39;</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">file</span> <span class="o">=</span> <span class="n">FileHandler</span><span class="p">(</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s1">&#39;render&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">file</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="s1">&#39;hans says</span><span class="se">\n</span><span class="s1">&lt;% print(&quot;who the fu.. is hans?&quot;)&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Parser</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="nb">file</span><span class="p">,</span> <span class="n">cache_path</span><span class="o">=</span><span class="n">__test_folder__</span><span class="p">,</span> <span class="n">full_caching</span><span class="o">=</span><span class="bp">True</span>
+<span class="gp">... </span>    <span class="n">file</span><span class="p">,</span> <span class="n">cache_path</span><span class="o">=</span><span class="n">__test_folder__</span><span class="p">,</span> <span class="n">full_caching</span><span class="o">=</span><span class="kc">True</span>
 <span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">()</span> 
 <span class="go">Object of &quot;Parser&quot; with template &quot;hans says...who the fu.. is ha...</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Parser</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="s1">&#39;hans says</span><span class="se">\n</span><span class="s1">&lt;</span><span class="si">% e</span><span class="s1">nd&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="bp">True</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Parser</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="s1">&#39;hans says</span><span class="se">\n</span><span class="s1">&lt;</span><span class="si">% e</span><span class="s1">nd&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="kc">True</span>
 <span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">()</span> 
 <span class="go">Object of &quot;Parser&quot; with template &quot;hans says...&lt;% end...</span>
 </pre></div>
@@ -196,21 +198,21 @@
 <code class="descname">represent_rendered_python_code</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.runnable.template.Parser.represent_rendered_python_code" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method adds line numbers to rendered contend which is             visible if an template exception occurs in debug mode. Code             representation is returned as string.</p>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Parser</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">represent_rendered_python_code</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Parser</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">represent_rendered_python_code</span><span class="p">()</span>
 <span class="go">&#39;&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Parser</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Parser</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
 <span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">represent_rendered_python_code</span><span class="p">()</span>
 <span class="go">&#39;&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Parser</span><span class="p">(</span><span class="s2">&quot;&lt;% &#39;klaus&#39; %&gt;&quot;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Parser</span><span class="p">(</span><span class="s2">&quot;&lt;% &#39;klaus&#39; %&gt;&quot;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
 <span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">represent_rendered_python_code</span><span class="p">()</span> 
 <span class="go">&quot;\nrendered python code...-\n\n1 | print(&#39;klaus&#39;, end=&#39;&#39;)\n&quot;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Parser</span><span class="p">(</span><span class="s2">&quot;klaus&quot;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Parser</span><span class="p">(</span><span class="s2">&quot;klaus&quot;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
 <span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">represent_rendered_python_code</span><span class="p">()</span> 
 <span class="go">&#39;&#39;</span>
 </pre></div>
@@ -223,19 +225,19 @@
 <dd><p>Wrapper method for pythons native             &#8220;string.Template.safe_substitute()&#8221; method.</p>
 <p>Arguments and keywords are forwarded to pythons native             &#8220;string.Template.safe_substitute()&#8221; method.</p>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">template</span> <span class="o">=</span> <span class="n">Parser</span><span class="p">(</span><span class="n">template</span><span class="o">=</span><span class="s1">&#39;hans &lt;%placeholder%&gt;&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">template</span> <span class="o">=</span> <span class="n">Parser</span><span class="p">(</span><span class="n">template</span><span class="o">=</span><span class="s1">&#39;hans &lt;%placeholder%&gt;&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">template</span><span class="o">.</span><span class="n">safe_substitute</span><span class="p">(</span><span class="n">placeholder</span><span class="o">=</span><span class="s1">&#39;also hans&#39;</span><span class="p">)</span>
 <span class="go">Object of &quot;Parser&quot; with template &quot;hans &lt;%placeholder%&gt;&quot;.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">template</span><span class="o">.</span><span class="n">output</span>
 <span class="go">&#39;hans also hans&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">template</span> <span class="o">=</span> <span class="n">Parser</span><span class="p">(</span><span class="n">template</span><span class="o">=</span><span class="s1">&#39;hans&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">template</span> <span class="o">=</span> <span class="n">Parser</span><span class="p">(</span><span class="n">template</span><span class="o">=</span><span class="s1">&#39;hans&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">template</span><span class="o">.</span><span class="n">safe_substitute</span><span class="p">()</span>
 <span class="go">Object of &quot;Parser&quot; with template &quot;hans&quot;.</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">template</span> <span class="o">=</span> <span class="n">Parser</span><span class="p">(</span><span class="n">template</span><span class="o">=</span><span class="s1">&#39;hans &lt;%not_hans%&gt;&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">template</span> <span class="o">=</span> <span class="n">Parser</span><span class="p">(</span><span class="n">template</span><span class="o">=</span><span class="s1">&#39;hans &lt;%not_hans%&gt;&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">template</span><span class="o">.</span><span class="n">safe_substitute</span><span class="p">()</span>
 <span class="go">Object of &quot;Parser&quot; with template &quot;hans &lt;%not_hans%&gt;&quot;.</span>
 </pre></div>
@@ -248,22 +250,22 @@
 <dd><p>Wrapper method for pythons native &#8220;string.Template.substitute()&#8221;             method.</p>
 <p>Arguments and keywords are forwarded to pythons native             &#8220;string.Template.substitute()&#8221; method.</p>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">template</span> <span class="o">=</span> <span class="n">Parser</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">template</span><span class="o">=</span><span class="s1">&#39;hans &lt;%placeholder%&gt;&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">template</span> <span class="o">=</span> <span class="n">Parser</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">template</span><span class="o">=</span><span class="s1">&#39;hans &lt;%placeholder%&gt;&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">template</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">placeholder</span><span class="o">=</span><span class="s1">&#39;also hans&#39;</span><span class="p">)</span>
 <span class="go">Object of &quot;Parser&quot; with template &quot;hans &lt;%placeholder%&gt;&quot;.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">template</span><span class="o">.</span><span class="n">output</span>
 <span class="go">&#39;hans also hans&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">template</span> <span class="o">=</span> <span class="n">Parser</span><span class="p">(</span><span class="n">template</span><span class="o">=</span><span class="s1">&#39;hans&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">template</span> <span class="o">=</span> <span class="n">Parser</span><span class="p">(</span><span class="n">template</span><span class="o">=</span><span class="s1">&#39;hans&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">template</span><span class="o">.</span><span class="n">substitute</span><span class="p">()</span>
 <span class="go">Object of &quot;Parser&quot; with template &quot;hans&quot;.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">template</span><span class="o">.</span><span class="n">output</span>
 <span class="go">&#39;hans&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">template</span> <span class="o">=</span> <span class="n">Parser</span><span class="p">(</span><span class="n">template</span><span class="o">=</span><span class="s1">&#39;hans &lt;%not_hans%&gt;&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">template</span> <span class="o">=</span> <span class="n">Parser</span><span class="p">(</span><span class="n">template</span><span class="o">=</span><span class="s1">&#39;hans &lt;%not_hans%&gt;&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">template</span><span class="o">.</span><span class="n">substitute</span><span class="p">()</span>
 <span class="gt">Traceback (most recent call last):</span>
 <span class="c">...</span>
@@ -278,14 +280,14 @@
 <dd><p>Substitutes every placeholder in template with a given             replacement string.</p>
 <p><strong>replacement</strong> - String to replace with every placeholder.</p>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">template</span> <span class="o">=</span> <span class="n">Parser</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">template</span><span class="o">=</span><span class="s1">&#39;test &lt;%hans%&gt; &lt;%a%&gt; &lt;%b%&gt;&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">template</span> <span class="o">=</span> <span class="n">Parser</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">template</span><span class="o">=</span><span class="s1">&#39;test &lt;%hans%&gt; &lt;%a%&gt; &lt;%b%&gt;&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">template</span><span class="o">.</span><span class="n">substitute_all</span><span class="p">()</span><span class="o">.</span><span class="n">output</span>
 <span class="go">&#39;test   &#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">template</span> <span class="o">=</span> <span class="n">Parser</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">template</span><span class="o">=</span><span class="s1">&#39;test &lt;%hans%&gt; &lt;%a%&gt; &lt;%b%&gt;&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">template</span> <span class="o">=</span> <span class="n">Parser</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">template</span><span class="o">=</span><span class="s1">&#39;test &lt;%hans%&gt; &lt;%a%&gt; &lt;%b%&gt;&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">template</span><span class="o">.</span><span class="n">substitute_all</span><span class="p">(</span><span class="n">replacement</span><span class="o">=</span><span class="s1">&#39;hans&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">output</span>
 <span class="go">&#39;test hans hans hans&#39;</span>
 </pre></div>
@@ -318,14 +320,11 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -347,12 +346,12 @@
         <li class="right" >
           <a href="runnable.server.html" title="boostNode.runnable.server"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">boostNode 1.0 rc documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">boostNode 1.0 rc documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 16.12.2012, Torben Sickert.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+        &#169; Copyright 16.12.2012, Torben Sickert.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
     </div>
   </body>
 </html>

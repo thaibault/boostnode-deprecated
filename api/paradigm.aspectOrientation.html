@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>boostNode.paradigm.aspectOrientation &mdash; boostNode 1.0 rc documentation</title>
+    <title>boostNode.paradigm.aspectOrientation &#8212; boostNode 1.0 rc documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="paradigm.objectOrientation.html" title="boostNode.paradigm.objectOrientation"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">boostNode 1.0 rc documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">boostNode 1.0 rc documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -60,7 +60,7 @@
 <code class="descclassname">boostNode.paradigm.aspectOrientation.</code><code class="descname">ASPECTS</code><em class="property"> = []</em><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.ASPECTS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Saves all aspects for cross cutting concerns for whole library and program code that uses this feature.</p>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ASPECTS</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ASPECTS</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="p">{</span><span class="s1">&#39;advice&#39;</span><span class="p">:</span> <span class="p">({</span><span class="s1">&#39;callback&#39;</span><span class="p">:</span> <span class="n">check_arguments</span><span class="p">,</span>
 <span class="gp">... </span>                 <span class="s1">&#39;event&#39;</span><span class="p">:</span> <span class="s1">&#39;call&#39;</span><span class="p">},</span>
 <span class="gp">... </span>                <span class="p">{</span><span class="s1">&#39;callback&#39;</span><span class="p">:</span> <span class="n">check_return_value</span><span class="p">,</span>
@@ -89,7 +89,7 @@
 <p><strong>function</strong> - If not &#8220;None&#8221; this contains the real function and                        &#8220;method&#8221; contains a special type of function (like                        &#8220;builtins.classmethod&#8221; or &#8220;builtins.staticmethod&#8221;). In                        this case the method type influences the behavior                        during calling the real function.</p>
 <dl class="attribute">
 <dt id="boostNode.paradigm.aspectOrientation.FunctionDecorator.COMMON_DECORATORS">
-<code class="descname">COMMON_DECORATORS</code><em class="property"> = [&lt;type 'property'&gt;, &lt;type 'super'&gt;, &lt;function register at 0x7f4b8ce41668&gt;, &lt;bound method type.pseudo_property of &lt;class 'boostNode.paradigm.objectOrientation.Class'&gt;&gt;]</em><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.FunctionDecorator.COMMON_DECORATORS" title="Permalink to this definition">¶</a></dt>
+<code class="descname">COMMON_DECORATORS</code><em class="property"> = [&lt;type 'property'&gt;, &lt;type 'super'&gt;, &lt;function register&gt;, &lt;bound method type.pseudo_property of &lt;class 'boostNode.paradigm.objectOrientation.Class'&gt;&gt;]</em><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.FunctionDecorator.COMMON_DECORATORS" title="Permalink to this definition">¶</a></dt>
 <dd><p>This property hold a list of common python&#8217;s native decorators.</p>
 </dd></dl>
 
@@ -148,16 +148,16 @@
 <em class="property">class </em><code class="descclassname">boostNode.paradigm.aspectOrientation.</code><code class="descname">JointPoint</code><span class="sig-paren">(</span><em>method</em>, <em>function=None</em><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.JointPoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implementation of joint point for the aspect orientated way.             Triggers every function call and look for aspects to wrap around.</p>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">test_globals_backup</span> <span class="o">=</span> <span class="n">__test_globals__</span><span class="p">[</span><span class="s1">&#39;ASPECTS&#39;</span><span class="p">]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">test_globals_backup</span> <span class="o">=</span> <span class="n">__test_globals__</span><span class="p">[</span><span class="s1">&#39;ASPECTS&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nd">@JointPoint</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nd">@JointPoint</span>
 <span class="gp">... </span><span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="n">a</span><span class="p">):</span> <span class="k">return</span> <span class="n">a</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">call_handler</span><span class="p">(</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">call_handler</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">class_object</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">function</span><span class="p">,</span> <span class="n">arguments</span><span class="p">,</span> <span class="n">keywords</span>
-<span class="gp">... </span><span class="p">):</span> <span class="k">return</span> <span class="bp">True</span>
+<span class="gp">... </span><span class="p">):</span> <span class="k">return</span> <span class="kc">True</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">return_handler</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">class_object</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">function</span><span class="p">,</span> <span class="n">arguments</span><span class="p">,</span> <span class="n">keywords</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="n">return_value</span>
@@ -169,28 +169,28 @@
 <span class="gp">... </span>    <span class="s1">&#39;point_cut&#39;</span><span class="p">:</span> <span class="s1">&#39;.+\.((A\.b)|a)&#39;</span><span class="p">}]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="nd">@JointPoint</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">b</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">pass</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="p">()</span><span class="o">.</span><span class="n">b</span><span class="p">()</span>
 <span class="go">&#39;wrapped_result&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nd">@JointPoint</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nd">@JointPoint</span>
 <span class="gp">... </span><span class="k">def</span> <span class="nf">a</span><span class="p">():</span> <span class="k">pass</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">()</span>
 <span class="go">&#39;wrapped_result&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nd">@JointPoint</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nd">@JointPoint</span>
 <span class="gp">... </span><span class="k">def</span> <span class="nf">b</span><span class="p">():</span> <span class="k">return</span> <span class="s1">&#39;not_wrapped&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="p">()</span>
 <span class="go">&#39;not_wrapped&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">call_handler</span><span class="p">(</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">call_handler</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">class_object</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">function</span><span class="p">,</span> <span class="n">arguments</span><span class="p">,</span> <span class="n">keywords</span>
-<span class="gp">... </span><span class="p">):</span> <span class="k">return</span> <span class="bp">False</span>
+<span class="gp">... </span><span class="p">):</span> <span class="k">return</span> <span class="kc">False</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">__test_globals__</span><span class="p">[</span><span class="s1">&#39;ASPECTS&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;advice&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;callback&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
 <span class="gp">... </span>    <span class="n">call_handler</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nd">@JointPoint</span>
@@ -198,15 +198,15 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">a</span><span class="p">():</span> <span class="k">pass</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">a</span><span class="p">():</span> <span class="k">pass</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">b</span><span class="p">():</span> <span class="k">pass</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">.</span><span class="n">__func__</span> <span class="o">=</span> <span class="n">a</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">JointPoint</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">CallHandler</span><span class="p">(</span><span class="n">CallJointPoint</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="k">def</span> <span class="nf">aspect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="bp">True</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">CallHandler</span><span class="p">(</span><span class="n">CallJointPoint</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">aspect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="kc">True</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">ReturnHandler</span><span class="p">(</span><span class="n">ReturnJointPoint</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">aspect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="s1">&#39;class_wrapped_result&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">__test_globals__</span><span class="p">[</span><span class="s1">&#39;ASPECTS&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;advice&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;callback&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
@@ -215,11 +215,11 @@
 <span class="gp">... </span>    <span class="n">ReturnHandler</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="p">()</span><span class="o">.</span><span class="n">b</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="p">()</span><span class="o">.</span><span class="n">b</span><span class="p">()</span>
 <span class="go">&#39;class_wrapped_result&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">__test_globals__</span><span class="p">[</span><span class="s1">&#39;ASPECTS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">test_globals_backup</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">__test_globals__</span><span class="p">[</span><span class="s1">&#39;ASPECTS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">test_globals_backup</span>
 </pre></div>
 </div>
 <dl class="method">
@@ -244,11 +244,11 @@
 <em class="property">classmethod </em><code class="descname">aspect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#boostNode.paradigm.aspectOrientation.JointPointHandler.aspect" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method should be overwritten to provide the essential aspect             for handled function call.</p>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">a</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">pass</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">JointPointHandler</span><span class="p">(</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">JointPointHandler</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">A</span><span class="p">,</span> <span class="n">A</span><span class="p">(),</span> <span class="n">A</span><span class="p">()</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="p">(),</span> <span class="p">{}</span>
 <span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">aspect</span><span class="p">()</span> 
 <span class="gt">Traceback (most recent call last):</span>
@@ -316,14 +316,11 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -345,12 +342,12 @@
         <li class="right" >
           <a href="paradigm.objectOrientation.html" title="boostNode.paradigm.objectOrientation"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">boostNode 1.0 rc documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">boostNode 1.0 rc documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 16.12.2012, Torben Sickert.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+        &#169; Copyright 16.12.2012, Torben Sickert.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
     </div>
   </body>
 </html>
