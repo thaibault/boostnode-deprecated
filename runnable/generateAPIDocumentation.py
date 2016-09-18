@@ -93,7 +93,7 @@ def main():
         Platform.run(
             command='make html', native_shell=True, error=False, log=True)
         makefile.remove_file()
-        FileHandler('build/html').path = '../tempAPI'
+        FileHandler('build/html').path = '../apiDocumentation'
         FileHandler('build').remove_deep()
 
 # region footer
