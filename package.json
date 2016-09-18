@@ -2,6 +2,8 @@
     "name": "boostnode",
     "version": "1.0.0",
     "description": "a high reliable python library",
+    "main": "__init__,py",
+    "files": ["aspect", "extension", "paradigm", "runnable"],
     "documentationWebsite": {
         "name": "boostNode",
         "tagline": "a high reliable python library<!--deDE:eine Pythonbibliothek für hochzuverlässigkeits Ansprüche-->",
@@ -10,7 +12,7 @@
     },
     "scripts": {
       "document": "runnable/generateAPIDocumentation.py",
-      "update": "npm version patch && npm publish",
+      "update": "npm run clear && npm version patch && npm publish",
       "updateDocumentation": "documentationWebsite --log-level info",
       "clear": "rm apiDocumentation --recursive --force && find './' -type f -name '*.pyc' -delete && find './' -type f -name '*.pyo' -delete"
     },
