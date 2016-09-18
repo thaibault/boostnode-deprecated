@@ -10,7 +10,6 @@
     "runnable"
   ],
   "documentationWebsite": {
-    "name": "boostNode",
     "tagline": "a high reliable python library<!--deDE:eine Pythonbibliothek für hochzuverlässigkeits Ansprüche-->",
     "trackingCode": "UA-40192634-2",
     "languages": [
@@ -29,13 +28,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/thaibault/boostNode"
+    "url": "https://github.com/thaibault/boostnode"
   },
   "keywords": [
     "python",
     "boost",
     "framework"
   ],
-  "homepage": "http://torben.website/boostNode",
+  "homepage": "http://torben.website/boostnode",
   "license": "CC-BY-3.0"
 }

@@ -1,6 +1,6 @@
 ===============================================================================
-boostNode.runnable.synchronisation
+boostnode.runnable.synchronisation
 ===============================================================================
 
-.. automodule:: boostNode.runnable.synchronisation
+.. automodule:: boostnode.runnable.synchronisation
     :members:

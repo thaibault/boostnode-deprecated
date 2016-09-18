@@ -1,6 +1,6 @@
 ===============================================================================
-boostNode.runnable.webToWindow
+boostnode.runnable.webToWindow
 ===============================================================================
 
-.. automodule:: boostNode.runnable.webToWindow
+.. automodule:: boostnode.runnable.webToWindow
     :members:

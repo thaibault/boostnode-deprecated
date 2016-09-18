@@ -1,7 +1,7 @@
 #!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 
-# boostNode documentation build configuration file, created by
+# boostnode documentation build configuration file, created by
 #
 # This file is execfile()d with the current directory set to its
 # containing dir.
@@ -49,7 +49,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'boostNode'
+project = 'boostnode'
 copyright = '16.12.2012, Torben Sickert'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -182,7 +182,7 @@ html_static_path = ['asset']
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'boostNodeDocumentation'
+htmlhelp_basename = 'boostnodeDocumentation'
 
 
 # -- Options for LaTeX output ---------------------------------------------
@@ -202,7 +202,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  ('index', 'boostNode.tex', 'boostNode Documentation',
+  ('index', 'boostnode.tex', 'boostnode Documentation',
    'Torben Sickert', 'manual'),
 ]
 
@@ -232,7 +232,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'boostNode', 'boostNode Documentation',
+    ('index', 'boostnode', 'boostnode Documentation',
      ['Torben Sickert'], 1)
 ]
 
@@ -246,8 +246,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'boostNode', 'boostNode Documentation',
-   'Torben Sickert', 'boostNode', 'a high reliable python library',
+  ('index', 'boostnode', 'boostnode Documentation',
+   'Torben Sickert', 'boostnode', 'a high reliable python library',
    'Miscellaneous'),
 ]
 

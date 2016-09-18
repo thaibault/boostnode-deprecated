@@ -1,6 +1,6 @@
 ===============================================================================
-boostNode.runnable.template
+boostnode.runnable.template
 ===============================================================================
 
-.. automodule:: boostNode.runnable.template
+.. automodule:: boostnode.runnable.template
     :members:

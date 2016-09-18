@@ -1,6 +1,6 @@
 ===============================================================================
-boostNode.runnable.generateAPIDocumentation
+boostnode.runnable.generateAPIDocumentation
 ===============================================================================
 
-.. automodule:: boostNode.runnable.generateAPIDocumentation
+.. automodule:: boostnode.runnable.generateAPIDocumentation
     :members:

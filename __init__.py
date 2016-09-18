@@ -19,7 +19,7 @@
     naming 3.0 unported license. \
     see http://creativecommons.org/licenses/by/3.0/deed.de
 
-    Additional conventions beside pep8 (bcX := boostNode convention number X)
+    Additional conventions beside pep8 (bcX := boostnode convention number X)
     -------------------------------------------------------------------------
 
     - bc1 Only use utf-8 file encoding and unix line feeds (\\n)
@@ -93,7 +93,7 @@
     - bc16 If a module could offer a usable command line interface to provide \
            their functionality directly for other programs (maybe not written \
            in python) implement the "Runnable" interface from \
-           "boostNode.extension.system.Runnable".
+           "boostnode.extension.system.Runnable".
 
     - bc17 Make every script or package standalone runnable. That means you \
            should use relative import references or append your own import \
@@ -262,15 +262,15 @@
     -------------------------
 
     0.  builtins
-    1.  boostNode.extension.type
-    2.  boostNode.aspect.signature
-    3.  boostNode.paradigm.objectOrientation
-    4.  boostNode.paradigm.aspectOrientation
-    5.  boostNode.extension.native
-    6.  boostNode.extension.file
-    7.  boostNode.extension.output
-    8.  boostNode.extension.system
-    9.  boostNode.*
+    1.  boostnode.extension.type
+    2.  boostnode.aspect.signature
+    3.  boostnode.paradigm.objectOrientation
+    4.  boostnode.paradigm.aspectOrientation
+    5.  boostnode.extension.native
+    6.  boostnode.extension.file
+    7.  boostnode.extension.output
+    8.  boostnode.extension.system
+    9.  boostnode.*
     10. yourOwnModulesOrPackages.*
 
     This means that a module in level "i" could only import a full module in \
@@ -292,14 +292,14 @@
     ...     (see Runnable implementation interface).
     ... '''
     ... '''
-    ...     For conventions see "boostNode/__init__.py" on \\
-    ...     https://github.com/thaibault/boostNode
+    ...     For conventions see "boostnode/__init__.py" on \\
+    ...     https://github.com/thaibault/boostnode
     ... '''
     ...
     ... __author__ = 'FULL NAME'
-    ... __copyright__ = 'see boostNode/__init__.py'
+    ... __copyright__ = 'see boostnode/__init__.py'
     ... __credits__ = 'FIRST NAME', 'SECOND NAME', ...
-    ... __license__ = 'see boostNode/__init__.py'
+    ... __license__ = 'see boostnode/__init__.py'
     ... __maintainer__ = 'FULL NAME'
     ... __maintainer_email__ = 'EMAIL ADDRESS'
     ... __status__ = 'e.g. "Beta"'
@@ -312,9 +312,9 @@
     ... sys.path.append(os.path.abspath(sys.path[0] + 2 * ('..' + os.sep)))
     ... '''see bc17'''
     ...
-    ... # # python2.7 from boostNode import convert_to_unicode
+    ... # # python2.7 from boostnode import convert_to_unicode
     ... pass
-    ... from boostNode.extension.file import Handler as FileHandler
+    ... from boostnode.extension.file import Handler as FileHandler
     ...
     ... # endregion
     ...
@@ -385,7 +385,7 @@ import logging
 import os
 import sys
 
-'''Make boostNode packages and modules importable via relative paths.'''
+'''Make boostnode packages and modules importable via relative paths.'''
 if sys.path[0]:
     sys.path.append(os.path.abspath(sys.path[0] + os.sep + '..'))
 else:
@@ -415,11 +415,11 @@ ENCODING = 'utf_8'
     Handling "builtins.str" and "builtins.unicode" in python2.7.X needs \
     some much attention. Because different API's uses different types. \
     The main development goes to "builtins.unicode" so working with \
-    boostNode means you should use them.
+    boostnode means you should use them.
 
     Every content which could contain a "builtins.str" type and may have \
     non ascii-characters should be converted via the \
-    "boostNode.convert_to_unicode()" method.
+    "boostnode.convert_to_unicode()" method.
 '''
 
 
@@ -496,7 +496,7 @@ def __get_all_modules__(path=convert_to_unicode(sys.path[0])):
         >>> __get_all_modules__() # doctest: +ELLIPSIS
         [...]
 
-        >>> from boostNode.extension.file import Handler as FileHandler
+        >>> from boostnode.extension.file import Handler as FileHandler
 
         >>> location = FileHandler(
         ...     __test_folder__.path + '__get_all_modules__',
@@ -572,8 +572,8 @@ __all__ = __get_all_modules__()
     any modules from this package.
 '''
 if __name__ != '__main__':
-    from boostNode.aspect.signature import add_check as add_signature_check
-    from boostNode.extension.native import Module
+    from boostnode.aspect.signature import add_check as add_signature_check
+    from boostnode.extension.native import Module
 
 # # python3.5
 # #     pass
@@ -616,15 +616,13 @@ __logger__ = __exception__ = __module_name__ = __file_path__ = \
     code preprocessing tools is provided by default.
 '''
 if __name__ == '__main__':
-    from boostNode.extension.system import CommandLine
+    from boostnode.extension.system import CommandLine
     CommandLine.generic_package_interface(
         name=__name__, frame=inspect.currentframe())
 
 # endregion
 
 # region vim modline
-
 # vim: set tabstop=4 shiftwidth=4 expandtab:
 # vim: foldmethod=marker foldmarker=region,endregion:
-
 # endregion

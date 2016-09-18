@@ -1,6 +1,6 @@
 ===============================================================================
-boostNode.paradigm.aspectOrientation
+boostnode.paradigm.aspectOrientation
 ===============================================================================
 
-.. automodule:: boostNode.paradigm.aspectOrientation
+.. automodule:: boostnode.paradigm.aspectOrientation
     :members:

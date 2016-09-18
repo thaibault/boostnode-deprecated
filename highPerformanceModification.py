@@ -31,15 +31,15 @@ import inspect
 import os
 import sys
 
-'''Make boostNode packages and modules importable via relative paths.'''
+'''Make boostnode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 1 * (os.sep + '..')))
 
 # # python3.5 pass
-from boostNode import convert_to_string, convert_to_unicode
-from boostNode.extension.file import Handler as FileHandler
-from boostNode.extension.native import Dictionary, Module
-from boostNode.runnable.template import Parser as TemplateParser
-from boostNode.paradigm.objectOrientation import Class
+from boostnode import convert_to_string, convert_to_unicode
+from boostnode.extension.file import Handler as FileHandler
+from boostnode.extension.native import Dictionary, Module
+from boostnode.runnable.template import Parser as TemplateParser
+from boostnode.paradigm.objectOrientation import Class
 
 # endregion
 

@@ -1,9 +1,9 @@
-.. boostNode documentation master file
+.. boostnode documentation master file
 
-boostNode
+boostnode
 =========
 
-`Project Page <http://torben.website/boostNode>`_
+`Project Page <http://torben.website/boostnode>`_
 
 Contents
 --------

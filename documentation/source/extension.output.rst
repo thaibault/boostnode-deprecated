@@ -1,6 +1,6 @@
 ===============================================================================
-boostNode.extension.output
+boostnode.extension.output
 ===============================================================================
 
-.. automodule:: boostNode.extension.output
+.. automodule:: boostnode.extension.output
     :members:

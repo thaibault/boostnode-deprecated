@@ -1,6 +1,6 @@
 ===============================================================================
-boostNode.runnable
+boostnode.runnable
 ===============================================================================
 
-.. automodule:: boostNode.runnable
+.. automodule:: boostnode.runnable
     :members:

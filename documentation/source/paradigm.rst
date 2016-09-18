@@ -1,6 +1,6 @@
 ===============================================================================
-boostNode.paradigm
+boostnode.paradigm
 ===============================================================================
 
-.. automodule:: boostNode.paradigm
+.. automodule:: boostnode.paradigm
     :members:
