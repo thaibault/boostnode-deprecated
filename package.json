@@ -9,6 +9,7 @@
         "languages": ["deDE", "enUS"]
     },
     "scripts": {
+        "document": "runnable/generateAPIDocumentation.py",
       "updateDocumentation": "documentationWebsite --log-level info"
     },
     "devDependencies": {

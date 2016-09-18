@@ -31,13 +31,16 @@ import __builtin__ as builtins
 # #
 import inspect
 import os
+import re as regularExpression
 import sys
 
 '''Make boostNode packages and modules importable via relative paths.'''
 sys.path.append(os.path.abspath(sys.path[0] + 2 * (os.sep + '..')))
 
+from boostNode import __get_all_modules__
 from boostNode.extension.file import Handler as FileHandler
 from boostNode.extension.native import Module
+from boostNode.extension.system import Platform
 from boostNode.paradigm.aspectOrientation import JointPoint
 
 # endregion
