@@ -1,14 +1,9 @@
 {
   "name": "boostnode",
   "version": "1.0.6",
+  "license": "CC-BY-3.0",
   "description": "a high reliable python library",
-  "main": "__init__.py",
-  "files": [
-    "aspect",
-    "extension",
-    "paradigm",
-    "runnable"
-  ],
+  "homepage": "http://torben.website/boostnode",
   "documentationWebsite": {
     "tagline": "a high reliable python library<!--deDE:eine Pythonbibliothek für hochzuverlässigkeits Ansprüche-->",
     "trackingCode": "UA-40192634-2",
@@ -16,6 +11,22 @@
       "deDE",
       "enUS"
     ]
+  },
+  "keywords": [
+    "python",
+    "boost",
+    "framework"
+  ],
+  "files": [
+    "aspect",
+    "extension",
+    "paradigm",
+    "runnable"
+  ],
+  "main": "__init__.py",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thaibault/boostnode"
   },
   "scripts": {
     "document": "runnable/generateAPIDocumentation.py",
@@ -25,16 +36,5 @@
   },
   "devDependencies": {
     "documentation-website": "latest"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/thaibault/boostnode"
-  },
-  "keywords": [
-    "python",
-    "boost",
-    "framework"
-  ],
-  "homepage": "http://torben.website/boostnode",
-  "license": "CC-BY-3.0"
+  }
 }
