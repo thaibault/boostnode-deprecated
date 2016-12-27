@@ -5,12 +5,9 @@
   "description": "a high reliable python library",
   "homepage": "http://torben.website/boostnode",
   "documentationWebsite": {
+    "languages": ["deDE", "enUS"],
     "tagline": "a high reliable python library<!--deDE:eine Pythonbibliothek für hochzuverlässigkeits Ansprüche-->",
-    "trackingCode": "UA-40192634-2",
-    "languages": [
-      "deDE",
-      "enUS"
-    ]
+    "trackingCode": "UA-40192634-2"
   },
   "keywords": [
     "python",

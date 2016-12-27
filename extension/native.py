@@ -3371,7 +3371,7 @@ class Iterable(Object):
 # #
         '''
             Converts iterable where each type will be converted to a cross \
-            system compatible type. The result is serialiseable (e.g. to \
+            system compatible type. The result is serializeable (e.g. to \
             json). This method provides the same interface as "convert()".
 
             Examples:
