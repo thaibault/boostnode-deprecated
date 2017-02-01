@@ -17,13 +17,15 @@
         VERSION:     '1.0 rc',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="boostnode 1.0 rc documentation" href="index.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="boostnode.extension" href="extension.html" />
     <link rel="prev" title="boostnode.aspect" href="aspect.html" /> 
   </head>
@@ -97,10 +99,10 @@
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="gp">... </span>        <span class="n">builtins</span><span class="o">.</span><span class="n">getattr</span><span class="p">(</span>
 <span class="gp">... </span>            <span class="n">builtins</span><span class="o">.</span><span class="n">super</span><span class="p">(</span>
-<span class="gp">... </span>                <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="p">,</span> <span class="bp">self</span>
+<span class="gp">... </span>                <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="bp">self</span>
 <span class="gp">... </span>            <span class="p">),</span> <span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span>
 <span class="gp">... </span>        <span class="p">)()</span>
-<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">__func__</span> <span class="o">=</span> <span class="n">test</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="vm">__func__</span> <span class="o">=</span> <span class="n">test</span>
 <span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">_method_type</span> <span class="o">=</span> <span class="nb">staticmethod</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">test</span><span class="p">():</span> <span class="k">pass</span>
 </pre></div>
@@ -112,7 +114,7 @@
 <span class="go">&#39;test&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">__func__</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">test</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="vm">__func__</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">test</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">class_object</span> <span class="o">=</span> <span class="n">A</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">get_function_path</span><span class="p">()</span>
 <span class="go">&#39;A.test&#39;</span>
@@ -143,7 +145,7 @@
 </pre></div>
 </div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">CheckReturnValue</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">A</span><span class="p">,</span> <span class="n">A</span><span class="p">(),</span> <span class="n">A</span><span class="o">.</span><span class="n">__init__</span><span class="p">,</span> <span class="p">(</span><span class="n">A</span><span class="p">(),),</span> <span class="p">{},</span> <span class="n">return_value</span><span class="o">=</span><span class="s1">&#39;hans&#39;</span>
+<span class="gp">... </span>    <span class="n">A</span><span class="p">,</span> <span class="n">A</span><span class="p">(),</span> <span class="n">A</span><span class="o">.</span><span class="fm">__init__</span><span class="p">,</span> <span class="p">(</span><span class="n">A</span><span class="p">(),),</span> <span class="p">{},</span> <span class="n">return_value</span><span class="o">=</span><span class="s1">&#39;hans&#39;</span>
 <span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">aspect</span><span class="p">()</span>
 <span class="go">&#39;hans&#39;</span>
 </pre></div>
@@ -169,7 +171,7 @@
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/aspect.signature.txt"
+      <li><a href="_sources/aspect.signature.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -207,7 +209,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 16.12.2012, Torben Sickert.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
     </div>
   </body>
 </html>

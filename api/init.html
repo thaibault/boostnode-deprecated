@@ -17,13 +17,15 @@
         VERSION:     '1.0 rc',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="boostnode 1.0 rc documentation" href="index.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="boostnode.aspect" href="aspect.html" />
     <link rel="prev" title="boostnode" href="index.html" /> 
   </head>
@@ -64,26 +66,21 @@
 </div>
 <div class="section" id="additional-conventions-beside-pep8-bcx-boostnode-convention-number-x">
 <h3>Additional conventions beside pep8 (bcX := boostnode convention number X)<a class="headerlink" href="#additional-conventions-beside-pep8-bcx-boostnode-convention-number-x" title="Permalink to this headline">¶</a></h3>
-<ul>
+<ul class="simple">
 <li><dl class="first docutils">
 <dt>bc1 Only use utf-8 file encoding and unix line feeds (n)</dt>
-<dd><ul class="first last simple">
+<dd><ul class="first last">
 <li>bad: text...rn or text...r</li>
 <li>good: text...n</li>
 </ul>
 </dd>
 </dl>
 </li>
-<li><p class="first">bc2 Don&#8217;t use tabulators instead of whitespaces. Always indent with 4           whitespaces.</p>
-</li>
-<li><p class="first">bc3 Capitalized variables are constant and shouldn&#8217;t be mutable.</p>
-</li>
-<li><p class="first">bc4 Properties with preceding underscores shouldn&#8217;t be accessed from           the outer scope. They could accessed in inherited objects           (protected attributes).</p>
-</li>
-<li><p class="first">bc5 Property with two preceding underscore shouldn&#8217;t be accessed from           any location then the object itself (private attributes).</p>
-</li>
-<li><p class="first">bc6 Always use one whitespace between except or return statements and           preceding statements.</p>
-</li>
+<li>bc2 Don&#8217;t use tabulators instead of whitespaces. Always indent with 4           whitespaces.</li>
+<li>bc3 Capitalized variables are constant and shouldn&#8217;t be mutable.</li>
+<li>bc4 Properties with preceding underscores shouldn&#8217;t be accessed from           the outer scope. They could accessed in inherited objects           (protected attributes).</li>
+<li>bc5 Property with two preceding underscore shouldn&#8217;t be accessed from           any location then the object itself (private attributes).</li>
+<li>bc6 Always use one whitespace between except or return statements and           preceding statements.</li>
 </ul>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">try</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="k">pass</span>
@@ -262,7 +259,7 @@
 <span class="gp">...</span>
 <span class="gp">... </span><span class="c1"># region footer</span>
 <span class="gp">...</span>
-<span class="gp">... </span><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="gp">... </span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="k">pass</span>
 <span class="gp">... </span>    <span class="c1"># ...</span>
 <span class="gp">...</span>
@@ -401,7 +398,7 @@
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/init.txt"
+      <li><a href="_sources/init.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -439,7 +436,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 16.12.2012, Torben Sickert.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
     </div>
   </body>
 </html>

@@ -1713,9 +1713,13 @@ class Object(Class):
             class_name = String(
                 type_description
             ).delimited_to_camel_case.camel_case_capitalize.content
-            if description == type_description or description.endswith(
+            if description in [
+                class_name, type_description
+            ] or description.endswith(
                 '_%s' % type_description
-            ) or description.endswith(class_name):
+            ) or description.endswith(class_name) or description == '%s%s' % (
+                class_name[0].lower(), class_name[1:]
+            ):
                 return builtins.globals()[class_name](self.content).content
 
     @JointPoint
