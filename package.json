@@ -26,10 +26,10 @@
     "url": "https://github.com/thaibault/boostnode"
   },
   "scripts": {
+    "clear": "rm apiDocumentation --recursive --force && find './' -type f -name '*.pyc' -delete && find './' -type f -name '*.pyo' -delete",
     "document": "runnable/generateAPIDocumentation.py",
     "update": "npm run clear && npm version patch && npm publish",
-    "updateDocumentation": "documentationWebsite --log-level info",
-    "clear": "rm apiDocumentation --recursive --force && find './' -type f -name '*.pyc' -delete && find './' -type f -name '*.pyo' -delete"
+    "update:documentation": "documentationWebsite --log-level info"
   },
   "devDependencies": {
     "documentation-website": "latest"
