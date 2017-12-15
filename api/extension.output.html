@@ -1,16 +1,13 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>boostnode.extension.output &#8212; boostnode 1.0 rc documentation</title>
-    
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
@@ -29,7 +26,7 @@
     <link rel="next" title="boostnode.extension.type" href="extension.type.html" />
     <link rel="prev" title="boostnode.extension" href="extension.html" /> 
   </head>
-  <body role="document">
+  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -56,7 +53,7 @@
             
   <div class="section" id="module-boostnode.extension.output">
 <span id="boostnode-extension-output"></span><h1>boostnode.extension.output<a class="headerlink" href="#module-boostnode.extension.output" title="Permalink to this headline">¶</a></h1>
-<p>This module provides classes for dealing with python&#8217;s way to transport     strings to any output stream.</p>
+<p>This module provides classes for dealing with python’s way to transport     strings to any output stream.</p>
 <dl class="class">
 <dt id="boostnode.extension.output.Buffer">
 <em class="property">class </em><code class="descclassname">boostnode.extension.output.</code><code class="descname">Buffer</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.output.Buffer" title="Permalink to this definition">¶</a></dt>
@@ -125,7 +122,7 @@
 <dl class="method">
 <dt id="boostnode.extension.output.Buffer.flush">
 <code class="descname">flush</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.output.Buffer.flush" title="Permalink to this definition">¶</a></dt>
-<dd><p>Flush methods usually called to guarantee that all objects putted             to &#8220;write()&#8221; are materialized on their provided media. This             implementation exists only for compatibility reasons.</p>
+<dd><p>Flush methods usually called to guarantee that all objects putted             to “write()” are materialized on their provided media. This             implementation exists only for compatibility reasons.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Buffer</span><span class="p">()</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
 <span class="go">Object of &quot;Buffer&quot; (memory buffered) with content &quot;&quot;.</span>
@@ -151,7 +148,7 @@
 <dl class="method">
 <dt id="boostnode.extension.output.Buffer.write">
 <code class="descname">write</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.output.Buffer.write" title="Permalink to this definition">¶</a></dt>
-<dd><p>Writes content to the current output buffer file. If the current             given file &#8220;Buffer.file&#8221; doesn&#8217;t exists it will be created.</p>
+<dd><p>Writes content to the current output buffer file. If the current             given file “Buffer.file” doesn’t exists it will be created.</p>
 <p><strong>content</strong> - content to write into current buffer instance</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">buffer</span> <span class="o">=</span> <span class="n">Buffer</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s1">&#39;write&#39;</span><span class="p">)</span>
@@ -177,7 +174,7 @@
 <dl class="class">
 <dt id="boostnode.extension.output.ColoredLoggingFormatter">
 <em class="property">class </em><code class="descclassname">boostnode.extension.output.</code><code class="descname">ColoredLoggingFormatter</code><span class="sig-paren">(</span><em>fmt=None</em>, <em>datefmt=None</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.output.ColoredLoggingFormatter" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wraps python&#8217;s native logging formatter to support level specific         colors.</p>
+<dd><p>Wraps python’s native logging formatter to support level specific         colors.</p>
 <dl class="method">
 <dt id="boostnode.extension.output.ColoredLoggingFormatter.format">
 <code class="descname">format</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.output.ColoredLoggingFormatter.format" title="Permalink to this definition">¶</a></dt>
@@ -194,7 +191,7 @@
 <dt id="boostnode.extension.output.Logger.change_all">
 <code class="descname">change_all</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.output.Logger.change_all" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method changes the given properties to all created logger             instances and saves the given properties as default properties             for future created logger instances.</p>
-<p>Note that every argument except buffer setted to &#8220;None&#8221; will not             edit this logger component. If you don&#8217;t want to change buffer             leave it by its default value.</p>
+<p>Note that every argument except buffer setted to “None” will not             edit this logger component. If you don’t want to change buffer             leave it by its default value.</p>
 <p><strong>level</strong>          - sets levels for all logger</p>
 <p><strong>buffer</strong>         - sets buffers for all logger</p>
 <p><strong>terminator</strong>     - sets an ending char for each log message in                                  each logger</p>
@@ -226,7 +223,7 @@
 <p><strong>level</strong>          - sets levels for all logger</p>
 <p><strong>buffer</strong>         - sets buffers for all logger</p>
 <p><strong>terminator</strong>     - sets an ending char for each log message in                                  each logger</p>
-<p><strong>colored_format</strong> - sets templates for colored logging messages                                  in returned logger, if &#8220;None&#8221; is given                                  normal format will be used instead.</p>
+<p><strong>colored_format</strong> - sets templates for colored logging messages                                  in returned logger, if “None” is given                                  normal format will be used instead.</p>
 <p><strong>format</strong>         - sets templates for logging messages in each                                  logger</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">logger_a</span> <span class="o">=</span> <span class="n">Logger</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="n">buffer</span><span class="o">=</span><span class="p">(</span><span class="n">__test_buffer__</span><span class="p">,))</span>
@@ -254,11 +251,11 @@
 <p><strong>output</strong>    - are the strings which should be printed or saved.</p>
 <dl class="docutils">
 <dt><strong>codewords</strong> - represents all possible optional arguments.</dt>
-<dd>&#8220;codeword[&#8216;start&#8217;]&#8221;
-&#8220;codeword[&#8216;separator&#8217;]&#8221;
-&#8220;codeword[&#8216;end&#8217;]&#8221;
-&#8220;codeword[&#8216;flush&#8217;]&#8221;
-&#8220;codeword[&#8216;buffer&#8217;]&#8221; could be any instance as buffer which                                  implements a &#8220;write()&#8221; method.</dd>
+<dd>“codeword[‘start’]”
+“codeword[‘separator’]”
+“codeword[‘end’]”
+“codeword[‘flush’]”
+“codeword[‘buffer’]” could be any instance as buffer which                                  implements a “write()” method.</dd>
 </dl>
 <p>Returns the given string or the last element if an iterable object         was given.</p>
 </dd></dl>
@@ -318,7 +315,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 16.12.2012, Torben Sickert.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
     </div>
   </body>
 </html>

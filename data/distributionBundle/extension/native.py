@@ -5881,6 +5881,9 @@ class PhoneNumber(Object):
 
             >>> PhoneNumber('02 91 / 14 55').content
             '0291-1455'
+
+            >>> PhoneNumber('03677842375').content
+            '03677842375'
         '''
 # # python3.5
 # #         if(builtins.isinstance(content, (builtins.str, builtins.int)) and

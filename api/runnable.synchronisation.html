@@ -1,16 +1,13 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>boostnode.runnable.synchronisation &#8212; boostnode 1.0 rc documentation</title>
-    
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
@@ -29,7 +26,7 @@
     <link rel="next" title="boostnode.runnable.macro" href="runnable.macro.html" />
     <link rel="prev" title="boostnode.runnable.generateAPIDocumentation" href="runnable.generateAPIDocumentation.html" /> 
   </head>
-  <body role="document">
+  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -56,7 +53,7 @@
             
   <div class="section" id="module-boostnode.runnable.synchronisation">
 <span id="boostnode-runnable-synchronisation"></span><h1>boostnode.runnable.synchronisation<a class="headerlink" href="#module-boostnode.runnable.synchronisation" title="Permalink to this headline">¶</a></h1>
-<p>This module is the main element of the &#8220;Reflector&#8221;. The Reflector&#8217;s     public methods implements the general features of the whole application.</p>
+<p>This module is the main element of the “Reflector”. The Reflector’s     public methods implements the general features of the whole application.</p>
 <dl class="class">
 <dt id="boostnode.runnable.synchronisation.Reflector">
 <em class="property">class </em><code class="descclassname">boostnode.runnable.synchronisation.</code><code class="descname">Reflector</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.runnable.synchronisation.Reflector" title="Permalink to this definition">¶</a></dt>
@@ -64,7 +61,7 @@
 <p><strong>source_location</strong>                 - Source location to reflect.</p>
 <p><strong>target_location</strong>                 - Target location where the                                               reflection should be saved.</p>
 <p><strong>limit</strong>                           - Limit of summarized file size.</p>
-<p><strong>priority_locations</strong>              - Location to prefer if limit                                               doesn&#8217;t suffices.</p>
+<p><strong>priority_locations</strong>              - Location to prefer if limit                                               doesn’t suffices.</p>
 <p><strong>exclude_locations</strong>               - Locations to ignore during                                               reflection creation.</p>
 <p><strong>target_rights</strong>                   - Rights used to create                                               reflection files.</p>
 <p><strong>synchronize_back</strong>                - Indicates whether to                                               synchronize a reflection back.</p>
@@ -396,10 +393,10 @@
 <dl class="method">
 <dt id="boostnode.runnable.synchronisation.Reflector.is_location_in_paths">
 <code class="descname">is_location_in_paths</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.runnable.synchronisation.Reflector.is_location_in_paths" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks if a given path exists in a given list of paths or it&#8217;s             substructure.</p>
+<dd><p>Checks if a given path exists in a given list of paths or it’s             substructure.</p>
 <p><strong>search</strong> - A file path or file handler object to search for.</p>
 <p><strong>paths</strong>  - A list if paths or file handlers to search in.</p>
-<p>Returns &#8220;True&#8221; if searched file is presented in given list of             file locations and &#8220;False&#8221; otherwise.</p>
+<p>Returns “True” if searched file is presented in given list of             file locations and “False” otherwise.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">file</span> <span class="o">=</span> <span class="n">FileHandler</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="n">__test_folder__</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s1">&#39;source5&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">file</span><span class="o">.</span><span class="n">make_directories</span><span class="p">()</span>
@@ -421,7 +418,7 @@
 <dl class="method">
 <dt id="boostnode.runnable.synchronisation.Reflector.open">
 <code class="descname">open</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.runnable.synchronisation.Reflector.open" title="Permalink to this definition">¶</a></dt>
-<dd><p>Opens the given files by using the &#8220;Platform.open()&#8221; method. It             can handle symbolic and portable links.</p>
+<dd><p>Opens the given files by using the “Platform.open()” method. It             can handle symbolic and portable links.</p>
 <p><strong>files</strong> - A list if file paths or file objects to open with a                         usable installed application.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Reflector</span><span class="o">.</span><span class="n">open</span><span class="p">(())</span> 
@@ -632,7 +629,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 16.12.2012, Torben Sickert.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
     </div>
   </body>
 </html>

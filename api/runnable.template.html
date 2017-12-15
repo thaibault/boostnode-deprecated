@@ -1,16 +1,13 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>boostnode.runnable.template &#8212; boostnode 1.0 rc documentation</title>
-    
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
@@ -29,7 +26,7 @@
     <link rel="next" title="boostnode.runnable.webToWindow" href="runnable.webToWindow.html" />
     <link rel="prev" title="boostnode.runnable.server" href="runnable.server.html" /> 
   </head>
-  <body role="document">
+  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -61,10 +58,10 @@
 <dt id="boostnode.runnable.template.Parser">
 <em class="property">class </em><code class="descclassname">boostnode.runnable.template.</code><code class="descname">Parser</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.runnable.template.Parser" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class can parse a string or file to interpret it as template for         replacing containing placeholder and rendering embedded python script         snippets.</p>
-<p>NOTE: &#8220;(?s...)&#8221; and &#8220;(?m...)&#8221; is equivalent for regular expression         flag &#8220;regularExpression.DOTALL&#8221; and &#8220;regularExpression.MULTILINE&#8221;.         NOTE: This regular expression patterns assumes that the delimiter has         at least a length of two.</p>
+<p>NOTE: “(?s…)” and “(?m…)” is equivalent for regular expression         flag “regularExpression.DOTALL” and “regularExpression.MULTILINE”.         NOTE: This regular expression patterns assumes that the delimiter has         at least a length of two.</p>
 <p><strong>template</strong>                              - A template string, path                                                     to template file or file                                                     object pointing to a                                                     template file.</p>
 <p><strong>cache_path</strong>                            - Indicates whether to                                                     cache the compiled                                                     template in given path.</p>
-<p><strong>string</strong>                                - Indicates whether                                                     &#8220;template&#8221; is a template                                                     string or file path.</p>
+<p><strong>string</strong>                                - Indicates whether                                                     “template” is a template                                                     string or file path.</p>
 <p><strong>file_encoding</strong>                         - Encoding used for reading                                                     template file and writing                                                     rendered output.</p>
 <p><strong>placeholder_name_pattern</strong>              - Regular expression                                                     pattern to specify a                                                     placeholder name format.</p>
 <p><strong>command_line_placeholder_name_pattern</strong> - Regular expression to                                                     specify a placeholder                                                     name given via command                                                     line interface.</p>
@@ -100,7 +97,7 @@
 <dl class="method">
 <dt id="boostnode.runnable.template.Parser.get_builtins">
 <code class="descname">get_builtins</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.runnable.template.Parser.get_builtins" title="Permalink to this definition">¶</a></dt>
-<dd><p>Defines minimum needed native python features for each template             scope. It adds user-defined additionally python functions. The             minimum needed functions (e.g. &#8220;print()&#8221;) will never be             overwritten.</p>
+<dd><p>Defines minimum needed native python features for each template             scope. It adds user-defined additionally python functions. The             minimum needed functions (e.g. “print()”) will never be             overwritten.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">template</span> <span class="o">=</span> <span class="n">Parser</span><span class="p">(</span><span class="n">template</span><span class="o">=</span><span class="s1">&#39;hans&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">template</span><span class="o">.</span><span class="n">builtins</span> 
@@ -224,8 +221,8 @@
 <dl class="method">
 <dt id="boostnode.runnable.template.Parser.safe_substitute">
 <code class="descname">safe_substitute</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.runnable.template.Parser.safe_substitute" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wrapper method for pythons native             &#8220;string.Template.safe_substitute()&#8221; method.</p>
-<p>Arguments and keywords are forwarded to pythons native             &#8220;string.Template.safe_substitute()&#8221; method.</p>
+<dd><p>Wrapper method for pythons native             “string.Template.safe_substitute()” method.</p>
+<p>Arguments and keywords are forwarded to pythons native             “string.Template.safe_substitute()” method.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">template</span> <span class="o">=</span> <span class="n">Parser</span><span class="p">(</span><span class="n">template</span><span class="o">=</span><span class="s1">&#39;hans &lt;%placeholder%&gt;&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">template</span><span class="o">.</span><span class="n">safe_substitute</span><span class="p">(</span><span class="n">placeholder</span><span class="o">=</span><span class="s1">&#39;also hans&#39;</span><span class="p">)</span>
@@ -249,8 +246,8 @@
 <dl class="method">
 <dt id="boostnode.runnable.template.Parser.substitute">
 <code class="descname">substitute</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.runnable.template.Parser.substitute" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wrapper method for pythons native &#8220;string.Template.substitute()&#8221;             method.</p>
-<p>Arguments and keywords are forwarded to pythons native             &#8220;string.Template.substitute()&#8221; method.</p>
+<dd><p>Wrapper method for pythons native “string.Template.substitute()”             method.</p>
+<p>Arguments and keywords are forwarded to pythons native             “string.Template.substitute()” method.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">template</span> <span class="o">=</span> <span class="n">Parser</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">template</span><span class="o">=</span><span class="s1">&#39;hans &lt;%placeholder%&gt;&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -353,7 +350,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 16.12.2012, Torben Sickert.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
     </div>
   </body>
 </html>

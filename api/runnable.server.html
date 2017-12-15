@@ -1,16 +1,13 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>boostnode.runnable.server &#8212; boostnode 1.0 rc documentation</title>
-    
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
@@ -29,7 +26,7 @@
     <link rel="next" title="boostnode.runnable.template" href="runnable.template.html" />
     <link rel="prev" title="boostnode.runnable.macro" href="runnable.macro.html" /> 
   </head>
-  <body role="document">
+  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -64,13 +61,13 @@
 <dl class="attribute">
 <dt id="boostnode.runnable.server.CGIHTTPRequestHandler.content_length_sent">
 <code class="descname">content_length_sent</code><em class="property"> = None</em><a class="headerlink" href="#boostnode.runnable.server.CGIHTTPRequestHandler.content_length_sent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Saves the error message format. NOTE: Has to be a native string to avoid encoding errors in python&#8217;s native underlying request handler logic.</p>
+<dd><p>Saves the error message format. NOTE: Has to be a native string to avoid encoding errors in python’s native underlying request handler logic.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="boostnode.runnable.server.CGIHTTPRequestHandler.content_type_sent">
 <code class="descname">content_type_sent</code><em class="property"> = None</em><a class="headerlink" href="#boostnode.runnable.server.CGIHTTPRequestHandler.content_type_sent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Saves the error message format. NOTE: Has to be a native string to avoid encoding errors in python&#8217;s native underlying request handler logic.</p>
+<dd><p>Saves the error message format. NOTE: Has to be a native string to avoid encoding errors in python’s native underlying request handler logic.</p>
 </dd></dl>
 
 <dl class="method">
@@ -115,7 +112,7 @@
 <dl class="method">
 <dt id="boostnode.runnable.server.CGIHTTPRequestHandler.do_GET">
 <code class="descname">do_GET</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.runnable.server.CGIHTTPRequestHandler.do_GET" title="Permalink to this definition">¶</a></dt>
-<dd><p>Is triggered if an incoming get request is detected. Decides if             request is valid and static or dynamic. It also through an             exception and sends an http-error if request isn&#8217;t valid.</p>
+<dd><p>Is triggered if an incoming get request is detected. Decides if             request is valid and static or dynamic. It also through an             exception and sends an http-error if request isn’t valid.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">server</span> <span class="o">=</span> <span class="n">MultiProcessingHTTPServer</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">server</span><span class="o">.</span><span class="n">web</span> <span class="o">=</span> <span class="n">Web</span><span class="p">(</span><span class="n">__test_folder__</span><span class="p">)</span>
@@ -494,13 +491,13 @@
 <dl class="attribute">
 <dt id="boostnode.runnable.server.CGIHTTPRequestHandler.headers_ended">
 <code class="descname">headers_ended</code><em class="property"> = None</em><a class="headerlink" href="#boostnode.runnable.server.CGIHTTPRequestHandler.headers_ended" title="Permalink to this definition">¶</a></dt>
-<dd><p>Saves the error message format. NOTE: Has to be a native string to avoid encoding errors in python&#8217;s native underlying request handler logic.</p>
+<dd><p>Saves the error message format. NOTE: Has to be a native string to avoid encoding errors in python’s native underlying request handler logic.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="boostnode.runnable.server.CGIHTTPRequestHandler.last_running_worker">
 <code class="descname">last_running_worker</code><em class="property"> = None</em><a class="headerlink" href="#boostnode.runnable.server.CGIHTTPRequestHandler.last_running_worker" title="Permalink to this definition">¶</a></dt>
-<dd><p>Consists the explicit requested file name (like python&#8217;s native &#8220;self.file&#8221;) coming from client.</p>
+<dd><p>Consists the explicit requested file name (like python’s native “self.file”) coming from client.</p>
 </dd></dl>
 
 <dl class="method">
@@ -533,7 +530,7 @@
 <dt id="boostnode.runnable.server.CGIHTTPRequestHandler.log_message">
 <code class="descname">log_message</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.runnable.server.CGIHTTPRequestHandler.log_message" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wrapper method for all logging output coming through the server             thread.</p>
-<p><strong>format</strong>                   - Logging format. Allowed                                            placeholder are: &#8220;client_ip&#8221;,                                            &#8220;client_port&#8221;,                                            &#8220;request_description&#8221;,                                            &#8220;response_code&#8221;, &#8220;forwarded_ip&#8221;,                                            &#8220;forwarded_host&#8221;,                                            &#8220;forwarded_server&#8221;,                                            &#8220;forwarded_server&#8221; and                                            &#8220;server_port&#8221;.</p>
+<p><strong>format</strong>                   - Logging format. Allowed                                            placeholder are: “client_ip”,                                            “client_port”,                                            “request_description”,                                            “response_code”, “forwarded_ip”,                                            “forwarded_host”,                                            “forwarded_server”,                                            “forwarded_server” and                                            “server_port”.</p>
 <p><strong>message_or_error_code</strong>    - Logging message or resulting HTTP                                            code.</p>
 <p><strong>response_code_or_message</strong> - Resulting HTTP code or response                                            message.</p>
 <p>Examples:</p>
@@ -664,7 +661,7 @@
 <dl class="attribute">
 <dt id="boostnode.runnable.server.CGIHTTPRequestHandler.response_sent">
 <code class="descname">response_sent</code><em class="property"> = None</em><a class="headerlink" href="#boostnode.runnable.server.CGIHTTPRequestHandler.response_sent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Saves the error message format. NOTE: Has to be a native string to avoid encoding errors in python&#8217;s native underlying request handler logic.</p>
+<dd><p>Saves the error message format. NOTE: Has to be a native string to avoid encoding errors in python’s native underlying request handler logic.</p>
 </dd></dl>
 
 <dl class="method">
@@ -683,7 +680,7 @@
 <p><strong>mime_type</strong>     - Mime type to send to client.</p>
 <p><strong>encoding</strong>      - Encoding description to send to client.</p>
 <p><strong>response_code</strong> - HTTP Response code to send.</p>
-<p>Additional arguments and keywords will be forwarded to             &#8220;self.send_header()&#8221; method.</p>
+<p>Additional arguments and keywords will be forwarded to             “self.send_header()” method.</p>
 </dd></dl>
 
 <dl class="method">
@@ -790,7 +787,7 @@
 <dl class="method">
 <dt id="boostnode.runnable.server.CGIHTTPRequestHandler.setup">
 <code class="descname">setup</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.runnable.server.CGIHTTPRequestHandler.setup" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method wraps the python&#8217;s native request handler to provide             our wrapped file socket buffer.</p>
+<dd><p>This method wraps the python’s native request handler to provide             our wrapped file socket buffer.</p>
 </dd></dl>
 
 </dd></dl>
@@ -814,7 +811,7 @@
 <dl class="method">
 <dt id="boostnode.runnable.server.MultiProcessingHTTPServer.process_request_no_termination_wrapper">
 <code class="descname">process_request_no_termination_wrapper</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.runnable.server.MultiProcessingHTTPServer.process_request_no_termination_wrapper" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wraps the normal &#8220;process_request&#8221; method. To manage the process             forking stuff.</p>
+<dd><p>Wraps the normal “process_request” method. To manage the process             forking stuff.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -838,7 +835,7 @@
 <dl class="method">
 <dt id="boostnode.runnable.server.SocketFileObjectWrapper.readline">
 <code class="descname">readline</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.runnable.server.SocketFileObjectWrapper.readline" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wraps the &#8220;readline()&#8221; method to get the first line twice.</p>
+<dd><p>Wraps the “readline()” method to get the first line twice.</p>
 </dd></dl>
 
 </dd></dl>
@@ -849,12 +846,12 @@
 <dd><p>Provides a small platform independent web server designed for easily         serve a client-server structure.</p>
 <p><strong>root</strong>                                - Defines the root directory                                                   to be served via web.</p>
 <p><strong>host_name</strong>                           - Defines the current host                                                   name. Necessary for https                                                   support.</p>
-<p><strong>port</strong>                                - The port to listen for                                                   incoming requests. If &#8220;0&#8221;                                                   given a free port will be                                                   determined automatically.</p>
+<p><strong>port</strong>                                - The port to listen for                                                   incoming requests. If “0”                                                   given a free port will be                                                   determined automatically.</p>
 <p><strong>default</strong>                             - Defines a default static                                                   file, python module or                                                   dynamic executable file.</p>
 <p><strong>key_file</strong>                            - Key file to support a https                                                   connection.</p>
 <p><strong>stop_order</strong>                          - Standard in command to stop                                                   server.</p>
 <p><strong>encoding</strong>                            - Encoding to use for                                                   incoming requests and                                                   outgoing data.</p>
-<p><strong>request_whitelist</strong>                   - A whitelist for requests.                                                   All requests which doesn&#8217;t                                                   match to one of these will                                                   be answered with an 404                                                   error code.</p>
+<p><strong>request_whitelist</strong>                   - A whitelist for requests.                                                   All requests which doesn’t                                                   match to one of these will                                                   be answered with an 404                                                   error code.</p>
 <p><strong>request_blacklist</strong>                   - A blacklist for requests to                                                   answer with a 404 error code.</p>
 <p><strong>same_process_request_whitelist</strong>      - Requests which matches one                                                   one of theses patterns                                                   should be run in same                                                   process as the server                                                   itself. This is usually                                                   necessary if you plan to                                                   write in inter thread                                                   shared data.</p>
 <p><strong>same_process_request_blacklist</strong>      - Requests which matches one                                                   one of theses patterns                                                   could be run in different                                                   processes as the server                                                   itself. This is usually                                                   possible if you not plan to                                                   write in inter thread                                                   shared data.</p>
@@ -868,7 +865,7 @@
 <p><strong>authentication_file_content_pattern</strong> - Defines how to parse                                                   authentication files.</p>
 <p><strong>authentication_handler</strong>              - A boolean function which                                                   decides by given request                                                   string and password if                                                   requested user is                                                   authenticated.</p>
 <p><strong>module_loading</strong>                      - Enables or disables running                                                   python modules which are                                                   requested.</p>
-<p><strong>maximum_number_of_processes</strong>         - Maximum number of used                                                   processor cores to use. if                                                   &#8220;0&#8221; is provided a useful                                                   number will be determined.</p>
+<p><strong>maximum_number_of_processes</strong>         - Maximum number of used                                                   processor cores to use. if                                                   “0” is provided a useful                                                   number will be determined.</p>
 <p><strong>shared_data</strong>                         - Data which will be                                                   available in every request                                                   handler instance and                                                   accessible for every common                                                   gateway interface script.</p>
 <p><strong>request_parameter_delimiter</strong>         - Delimiter to distinguish                                                   requested file from given                                                   parameter.</p>
 <p><strong>file_size_stream_threshold_in_byte</strong>  - Threshold which will force                                                   the server to stream data.</p>
@@ -937,7 +934,7 @@
 <dt id="boostnode.runnable.server.Web.stop">
 <code class="descname">stop</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.runnable.server.Web.stop" title="Permalink to this definition">¶</a></dt>
 <dd><p>Waits for running workers and shuts the server down.</p>
-<p>Arguments and keywords are forwarded to             &#8220;boostnode.extension.system.Run.stop()&#8221;.</p>
+<p>Arguments and keywords are forwarded to             “boostnode.extension.system.Run.stop()”.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">web</span> <span class="o">=</span> <span class="n">Web</span><span class="p">()</span>
 </pre></div>
@@ -1010,7 +1007,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 16.12.2012, Torben Sickert.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
     </div>
   </body>
 </html>

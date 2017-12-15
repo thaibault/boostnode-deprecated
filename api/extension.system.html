@@ -1,16 +1,13 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>boostnode.extension.system &#8212; boostnode 1.0 rc documentation</title>
-    
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
@@ -29,7 +26,7 @@
     <link rel="next" title="boostnode.extension.file" href="extension.file.html" />
     <link rel="prev" title="boostnode.extension.type" href="extension.type.html" /> 
   </head>
-  <body role="document">
+  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -145,7 +142,7 @@ positively.</p>
 <dl class="method">
 <dt id="boostnode.extension.system.CommandLine.argument_parser">
 <code class="descname">argument_parser</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.system.CommandLine.argument_parser" title="Permalink to this definition">¶</a></dt>
-<dd><p>Represents a basic argument parsing for command line interface             inputs. It&#8217;s used as default pattern for many interface concepts.</p>
+<dd><p>Represents a basic argument parsing for command line interface             inputs. It’s used as default pattern for many interface concepts.</p>
 <p><strong>arguments</strong>   - arguments for the command line</p>
 <p><strong>module_name</strong> - module name wich provides the command line</p>
 <p><strong>scope</strong>       - scope for rendering advanced command line                               arguments</p>
@@ -153,7 +150,7 @@ positively.</p>
 <p><strong>description</strong> - command line interface showing description</p>
 <p><strong>version</strong>     - version description</p>
 <p><strong>default</strong>     - indicates whether some default arguments should                               be added</p>
-<p>Additional arguments are forwarded to python&#8217;s native             &#8220;argparse.ArgumentParser()&#8221; initializer.             Additional keywords are forwarded to             &#8220;_determine_argument_parser_keywords()&#8221; method.</p>
+<p>Additional arguments are forwarded to python’s native             “argparse.ArgumentParser()” initializer.             Additional keywords are forwarded to             “_determine_argument_parser_keywords()” method.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">log_level</span> <span class="o">=</span> <span class="n">Logger</span><span class="o">.</span><span class="n">level</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">del</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
@@ -185,7 +182,7 @@ positively.</p>
 <dl class="method">
 <dt id="boostnode.extension.system.CommandLine.boolean_input">
 <code class="descname">boolean_input</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.system.CommandLine.boolean_input" title="Permalink to this definition">¶</a></dt>
-<dd><p>This methods implements a handy way to get &#8220;yes&#8221; or &#8220;no&#8221; answers             from the user via command line.</p>
+<dd><p>This methods implements a handy way to get “yes” or “no” answers             from the user via command line.</p>
 <p><strong>question</strong> - Question to ask via command line interface</p>
 <p><strong>extra</strong>    - Additional states to ask for.</p>
 <p>Examples:</p>
@@ -235,7 +232,7 @@ positively.</p>
 <dl class="method">
 <dt id="boostnode.extension.system.CommandLine.generic_module_interface">
 <code class="descname">generic_module_interface</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.system.CommandLine.generic_module_interface" title="Permalink to this definition">¶</a></dt>
-<dd><p>Provides a generic command line interface for modules. Things             like unit testing or calling objects in module are provided.             Returns &#8220;True&#8221; if module handling was needed and &#8220;False&#8221; if some             action has ran.</p>
+<dd><p>Provides a generic command line interface for modules. Things             like unit testing or calling objects in module are provided.             Returns “True” if module handling was needed and “False” if some             action has ran.</p>
 <p><strong>module</strong>             - module object to provide an interface for</p>
 <p><strong>temp_file_patterns</strong> - temporary file patterns to delete</p>
 <p><strong>test</strong>               - indicates whether this module should be                                      tested or not</p>
@@ -294,8 +291,8 @@ positively.</p>
 <p><strong>given_arguments</strong> - parsed command line arguments provided by                                   the application executer.</p>
 <p><strong>specification</strong>   - argument specification to refer to</p>
 <p><strong>name</strong>            - command argument to check for</p>
-<p>Returns &#8220;True&#8221; if given command line argument was given explicitly
-(not by specified default value) and &#8220;False&#8221; otherwise.</p>
+<p>Returns “True” if given command line argument was given explicitly
+(not by specified default value) and “False” otherwise.</p>
 <p>NOTE: This is not absolutely safe since a boolean argument could             be provided as value to an another optional argument or             arguments could be provided via sub arguments.</p>
 <p>Examples:</p>
 <p>TODO finish.</p>
@@ -352,7 +349,7 @@ positively.</p>
 <dl class="method">
 <dt id="boostnode.extension.system.CommandLine.test_module">
 <code class="descname">test_module</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.system.CommandLine.test_module" title="Permalink to this definition">¶</a></dt>
-<dd><p>Test a given module&#8217;s doctests.</p>
+<dd><p>Test a given module’s doctests.</p>
 <p><strong>module</strong>                  - module object to test</p>
 <p><strong>temp_file_patterns</strong>      - temporary file patterns to delete</p>
 <p><strong>verbose</strong>                 - indicates whether testing output                                           should be verbose.</p>
@@ -384,10 +381,10 @@ positively.</p>
 <p><strong>host</strong>            - host to change</p>
 <p><strong>mac_address</strong>     - mac address of host to change</p>
 <p><strong>broadcast</strong>       - broadcast address</p>
-<p><strong>handler</strong>         - function to execute to change computer&#8217;s                                   status</p>
-<p><strong>down</strong>            - indicates whether we should check again                                   reachability or none reachability after                                   performing &#8220;handler()&#8221;</p>
-<p><strong>number_of_tries</strong> - number of tries to run given &#8220;handler()&#8221;</p>
-<p>Returns a tuple: first value indicates whether it was successful             and second is &#8220;True&#8221; if computer status was needed to be changed             and &#8220;False&#8221; otherwise.</p>
+<p><strong>handler</strong>         - function to execute to change computer’s                                   status</p>
+<p><strong>down</strong>            - indicates whether we should check again                                   reachability or none reachability after                                   performing “handler()”</p>
+<p><strong>number_of_tries</strong> - number of tries to run given “handler()”</p>
+<p>Returns a tuple: first value indicates whether it was successful             and second is “True” if computer status was needed to be changed             and “False” otherwise.</p>
 </dd></dl>
 
 <dl class="method">
@@ -408,7 +405,7 @@ positively.</p>
 <dl class="method">
 <dt id="boostnode.extension.system.Platform.check_process_lock">
 <code class="descname">check_process_lock</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.system.Platform.check_process_lock" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks if a lock file with given description exists. NOTE:             Calling this function doesn&#8217;t prevent you from race conditions.</p>
+<dd><p>Checks if a lock file with given description exists. NOTE:             Calling this function doesn’t prevent you from race conditions.</p>
 <p><strong>description</strong> - the process identification</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Platform</span><span class="o">.</span><span class="n">set_process_lock</span><span class="p">(</span><span class="s1">&#39;check_process&#39;</span><span class="p">)</span>
@@ -426,7 +423,7 @@ positively.</p>
 <code class="descname">check_thread</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.system.Platform.check_thread" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks whether the current thread should be paused or terminated.</p>
 <p><strong>waiting_delay_in_seconds</strong> - time between checking if thread is                                            currently running</p>
-<p>If thread should be terminated &#8220;True&#8221; will be given back. In case             of pausing the current thread stay in the current function call             still a continue event is triggered and &#8220;False&#8221; will be given back.</p>
+<p>If thread should be terminated “True” will be given back. In case             of pausing the current thread stay in the current function call             still a continue event is triggered and “False” will be given back.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Platform</span><span class="o">.</span><span class="n">check_thread</span><span class="p">()</span>
 <span class="go">False</span>
@@ -484,7 +481,7 @@ positively.</p>
 <dt id="boostnode.extension.system.Platform.make_computer_ready">
 <code class="descname">make_computer_ready</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.system.Platform.make_computer_ready" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wakes a remote computer and ensure that it is ready by pinging             till it answers.</p>
-<p>Arguments and keywords are forwarded to &#8220;change_computer_status()&#8221;
+<p>Arguments and keywords are forwarded to “change_computer_status()”
 method.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Platform</span><span class="o">.</span><span class="n">make_computer_ready</span><span class="p">(</span>
@@ -511,7 +508,7 @@ method.</p>
 <dt id="boostnode.extension.system.Platform.open">
 <code class="descname">open</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.system.Platform.open" title="Permalink to this definition">¶</a></dt>
 <dd><p>Opens the current file with its default user preference             application.</p>
-<p>On Unix, the return value is the exit state of the process             encoded in the format specified for wait(). Note that &#8220;POSIX&#8221;             does not specify the meaning of the return value of the C             system() function, so the return value of the Python function is             system-dependent. On Windows, the return value is that returned             by the system shell after running command. The shell is given by             the Windows environment variable &#8220;COMSPEC&#8221;: it is usually             &#8220;cmd.exe&#8221;, which returns the exit status of the command run; on             systems using a non-native shell, consult your shell documentation.</p>
+<p>On Unix, the return value is the exit state of the process             encoded in the format specified for wait(). Note that “POSIX”             does not specify the meaning of the return value of the C             system() function, so the return value of the Python function is             system-dependent. On Windows, the return value is that returned             by the system shell after running command. The shell is given by             the Windows environment variable “COMSPEC”: it is usually             “cmd.exe”, which returns the exit status of the command run; on             systems using a non-native shell, consult your shell documentation.</p>
 <p><strong>location</strong> - location to open</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Platform</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;/path/to/file&#39;</span><span class="p">)</span> 
@@ -531,7 +528,7 @@ method.</p>
 <dl class="attribute">
 <dt id="boostnode.extension.system.Platform.pause_thread">
 <code class="descname">pause_thread</code><em class="property"> = False</em><a class="headerlink" href="#boostnode.extension.system.Platform.pause_thread" title="Permalink to this definition">¶</a></dt>
-<dd><p>Saves an indicating value whether a currently running thread should be paused on next possibility. By setting this value back to &#8220;True&#8221; paused threads will continue their work.</p>
+<dd><p>Saves an indicating value whether a currently running thread should be paused on next possibility. By setting this value back to “True” paused threads will continue their work.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -546,13 +543,13 @@ method.</p>
 <dd><p>Runs a command natively on the current operating system using the             command line. Result will be given back as tuple. First element             is standard and second error output.</p>
 <p><strong>command</strong>           - A command line interface command                                     optionally with arguments.</p>
 <p><strong>command_arguments</strong> - A list of arguments passing through the                                     command line interface.</p>
-<p><strong>error</strong>             - If &#8220;False&#8221; exceptions by running command                                     are kept back.</p>
-<p><strong>shell</strong>             - Simulate a shell if &#8220;True&#8221;.</p>
+<p><strong>error</strong>             - If “False” exceptions by running command                                     are kept back.</p>
+<p><strong>shell</strong>             - Simulate a shell if “True”.</p>
 <p><strong>native_shell</strong>      - Disable output piping by python and run                                     command in systems native process.</p>
-<p><strong>log</strong>               - If &#8220;True&#8221; standard output will be logged                                     with level &#8220;info&#8221; and error output with                                     level &#8220;warning&#8221;.</p>
-<p><strong>no_blocking</strong>       - If &#8220;True&#8221; resulting output won&#8217;t be a                                     string. You will get an python &#8220;IOBuffer&#8221;                                     like object. NOTE: If buffer is empty and                                     you try to read from buffer an exception                                     will occur.</p>
-<p>All following arguments are given through python&#8217;s native
-&#8220;subprocess.Popen()&#8221; class initialisation.</p>
+<p><strong>log</strong>               - If “True” standard output will be logged                                     with level “info” and error output with                                     level “warning”.</p>
+<p><strong>no_blocking</strong>       - If “True” resulting output won’t be a                                     string. You will get an python “IOBuffer”                                     like object. NOTE: If buffer is empty and                                     you try to read from buffer an exception                                     will occur.</p>
+<p>All following arguments are given through python’s native
+“subprocess.Popen()” class initialisation.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Platform</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">command</span><span class="o">=</span><span class="s1">&#39;ls&#39;</span><span class="p">)</span> 
 <span class="go">{...&#39;standard_output&#39;: ...}</span>
@@ -618,7 +615,7 @@ method.</p>
 <dl class="method">
 <dt id="boostnode.extension.system.Platform.set_process_lock">
 <code class="descname">set_process_lock</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.system.Platform.set_process_lock" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets a global lock. Creates a file with given name prefix of             &#8220;description&#8221;.</p>
+<dd><p>Sets a global lock. Creates a file with given name prefix of             “description”.</p>
 <p><strong>description</strong> - an identifying description</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lock_file</span> <span class="o">=</span> <span class="n">FileHandler</span><span class="p">(</span>
@@ -664,7 +661,7 @@ method.</p>
 <dd><p>Wakes up a remote computer using a magic package             (wake-on-lan-package).</p>
 <p><strong>mac_address</strong> - physical address of computer to wake</p>
 <p><strong>broadcast</strong>    - broadcast address</p>
-<p>Returns &#8220;True&#8221; if no socket error occurs and &#8220;False&#8221; otherwise.</p>
+<p>Returns “True” if no socket error occurs and “False” otherwise.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">isinstance</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">Platform</span><span class="o">.</span><span class="n">wake_computer</span><span class="p">(</span><span class="s1">&#39;ffffffffffff&#39;</span><span class="p">,</span> <span class="s1">&#39;192.168.178.255&#39;</span><span class="p">),</span>
@@ -706,11 +703,11 @@ method.</p>
 <dt id="boostnode.extension.system.Runnable">
 <em class="property">class </em><code class="descclassname">boostnode.extension.system.</code><code class="descname">Runnable</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.system.Runnable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Abstract class (interface) for implementing reusable classes which         acts directly as an command line interface to provide their features         platform independent.</p>
-<p>Arguments and keywords are forwarded to the protected &#8220;_initialize()&#8221;         method.</p>
+<p>Arguments and keywords are forwarded to the protected “_initialize()”         method.</p>
 <dl class="attribute">
 <dt id="boostnode.extension.system.Runnable.restart_order">
 <code class="descname">restart_order</code><em class="property"> = None</em><a class="headerlink" href="#boostnode.extension.system.Runnable.restart_order" title="Permalink to this definition">¶</a></dt>
-<dd><p>Currently given inputs via command line during &#8220;wait_for_order()&#8221; is running.</p>
+<dd><p>Currently given inputs via command line during “wait_for_order()” is running.</p>
 </dd></dl>
 
 <dl class="method">
@@ -777,7 +774,7 @@ initializer.</p>
 <dt id="boostnode.extension.system.Runnable.trigger_stop">
 <code class="descname">trigger_stop</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.system.Runnable.trigger_stop" title="Permalink to this definition">¶</a></dt>
 <dd><p>Method for cleaning up running workers.</p>
-<p>Arguments and keywords are forwarded to the &#8220;stop()&#8221; method.</p>
+<p>Arguments and keywords are forwarded to the “stop()” method.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">A</span><span class="p">(</span><span class="n">Runnable</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">_initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">pass</span>
@@ -866,7 +863,7 @@ initializer.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 16.12.2012, Torben Sickert.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
     </div>
   </body>
 </html>

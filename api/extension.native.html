@@ -1,16 +1,13 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>boostnode.extension.native &#8212; boostnode 1.0 rc documentation</title>
-    
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
@@ -29,7 +26,7 @@
     <link rel="next" title="boostnode.paradigm" href="paradigm.html" />
     <link rel="prev" title="boostnode.extension.file" href="extension.file.html" /> 
   </head>
-  <body role="document">
+  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -56,7 +53,7 @@
             
   <div class="section" id="module-boostnode.extension.native">
 <span id="boostnode-extension-native"></span><h1>boostnode.extension.native<a class="headerlink" href="#module-boostnode.extension.native" title="Permalink to this headline">¶</a></h1>
-<p>Extension is a high level interface for interaction with pythons native     builtins. This class provides a full object oriented way to handle string     objects. Besides a number of new supported interactions with strings it     offers all core file system methods by the pythons native &#8220;builtins.str&#8221;     object.</p>
+<p>Extension is a high level interface for interaction with pythons native     builtins. This class provides a full object oriented way to handle string     objects. Besides a number of new supported interactions with strings it     offers all core file system methods by the pythons native “builtins.str”     object.</p>
 <dl class="class">
 <dt id="boostnode.extension.native.AuthenticationModel">
 <em class="property">class </em><code class="descclassname">boostnode.extension.native.</code><code class="descname">AuthenticationModel</code><a class="headerlink" href="#boostnode.extension.native.AuthenticationModel" title="Permalink to this definition">¶</a></dt>
@@ -166,7 +163,7 @@
 <em class="property">class </em><code class="descclassname">boostnode.extension.native.</code><code class="descname">Dictionary</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Dictionary" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class extends the native dictionary object.</p>
 <p><strong>content</strong> - content for dictionary object</p>
-<p>Additional arguments and keywords are forwarded to python&#8217;s native         &#8220;dict()&#8221; method.</p>
+<p>Additional arguments and keywords are forwarded to python’s native         “dict()” method.</p>
 <dl class="method">
 <dt id="boostnode.extension.native.Dictionary.get_topological_sorted">
 <code class="descname">get_topological_sorted</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Dictionary.get_topological_sorted" title="Permalink to this definition">¶</a></dt>
@@ -180,7 +177,7 @@
 <code class="descname">pop_from_keywords</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Dictionary.pop_from_keywords" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a keyword element as it would be set by a default value. If             name is present in current saved dictionary its value will be             returned in a tuple with currently saved dictionary. The             corresponding data will be erased from dictionary.</p>
 <p><strong>name</strong>          - key to get from current dictionary instance</p>
-<p><strong>default_value</strong> - value to return if requested key isn&#8217;t                                 present in current dictionary instance.</p>
+<p><strong>default_value</strong> - value to return if requested key isn’t                                 present in current dictionary instance.</p>
 <p>Returns a tuple with requested value as first item and internal             dictionary as second.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dictionary</span> <span class="o">=</span> <span class="n">Dictionary</span><span class="p">({</span><span class="s1">&#39;hans&#39;</span><span class="p">:</span> <span class="s1">&#39;peter&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">:</span> <span class="mi">3</span><span class="p">})</span>
@@ -519,7 +516,7 @@
 <dl class="method">
 <dt id="boostnode.extension.native.Iterable.get_compatible_types">
 <code class="descname">get_compatible_types</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Iterable.get_compatible_types" title="Permalink to this definition">¶</a></dt>
-<dd><p>Converts iterable where each type will be converted to a cross             system compatible type. The result is serialiseable (e.g. to             json). This method provides the same interface as &#8220;convert()&#8221;.</p>
+<dd><p>Converts iterable where each type will be converted to a cross             system compatible type. The result is serialiseable (e.g. to             json). This method provides the same interface as “convert()”.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Iterable</span><span class="p">({})</span><span class="o">.</span><span class="n">compatible_types</span><span class="o">.</span><span class="n">content</span>
 <span class="go">{}</span>
@@ -560,8 +557,8 @@
 <dl class="method">
 <dt id="boostnode.extension.native.Iterable.get_known_types">
 <code class="descname">get_known_types</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Iterable.get_known_types" title="Permalink to this definition">¶</a></dt>
-<dd><p>Converts iterable where each type will be tried to converted to             a native python type. This method provides the same interface as             &#8220;convert()&#8221;.</p>
-<p><strong>strict</strong> - If set to &#8220;False&#8221; a non convertible value will be                          given back as it is. If set to &#8220;True&#8221; an exception                          will be raised and if set to &#8220;None&#8221; &#8220;None&#8221; will be                          given back for none convertible values.</p>
+<dd><p>Converts iterable where each type will be tried to converted to             a native python type. This method provides the same interface as             “convert()”.</p>
+<p><strong>strict</strong> - If set to “False” a non convertible value will be                          given back as it is. If set to “True” an exception                          will be raised and if set to “None” “None” will be                          given back for none convertible values.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Iterable</span><span class="p">({</span><span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="s1">&#39;12.234&#39;</span><span class="p">})</span><span class="o">.</span><span class="n">known_types</span><span class="o">.</span><span class="n">content</span>
 <span class="go">{&#39;value&#39;: 12.234}</span>
@@ -582,7 +579,7 @@
 <code class="descname">is_in_pattern</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Iterable.is_in_pattern" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if given value matches current list interpreted as regular             expressions.</p>
 <p><strong>value</strong> - String to check if it matches on pattern.</p>
-<p>Returns the matching pattern if matches an &#8220;False&#8221; otherwise.</p>
+<p>Returns the matching pattern if matches an “False” otherwise.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Iterable</span><span class="p">((</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">is_in_pattern</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span>
 <span class="go">&#39;a&#39;</span>
@@ -754,7 +751,7 @@
 <dl class="method">
 <dt id="boostnode.extension.native.Module.default">
 <code class="descname">default</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Module.default" title="Permalink to this definition">¶</a></dt>
-<dd><p>Serves a common way to extend a given module. The given module&#8217;s             scope will be extended and a common meta command line interface             is provided to test or run objects in given module.</p>
+<dd><p>Serves a common way to extend a given module. The given module’s             scope will be extended and a common meta command line interface             is provided to test or run objects in given module.</p>
 <p><strong>name</strong>             - module name to extend</p>
 <p><strong>frame</strong>            - frame of module to extend</p>
 <p><strong>default_caller</strong>   - a default caller to run after extending                                    module</p>
@@ -777,12 +774,12 @@
 <dl class="method">
 <dt id="boostnode.extension.native.Module.default_package">
 <code class="descname">default_package</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Module.default_package" title="Permalink to this definition">¶</a></dt>
-<dd><p>Serves a common way to extend a given package. The given             package&#8217;s scope will be extended and a common meta command line             interface is provided to test, lint or document modules.</p>
+<dd><p>Serves a common way to extend a given package. The given             package’s scope will be extended and a common meta command line             interface is provided to test, lint or document modules.</p>
 <p><strong>name</strong>                   - package name to extend</p>
 <p><strong>frame</strong>                  - frame of package to extend</p>
 <p><strong>command_line_arguments</strong> - additional command line arguments</p>
 <p>Additional arguments and keywords are forwarded to
-&#8221;...extension.system.CommandLine.generic_package_interface()&#8221;.</p>
+“…extension.system.CommandLine.generic_package_interface()”.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Module</span><span class="o">.</span><span class="n">default_package</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="s1">&#39;not_existing&#39;</span><span class="p">,</span> <span class="n">inspect</span><span class="o">.</span><span class="n">currentframe</span><span class="p">())</span>
@@ -800,7 +797,7 @@
 <dl class="method">
 <dt id="boostnode.extension.native.Module.determine_caller">
 <code class="descname">determine_caller</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Module.determine_caller" title="Permalink to this definition">¶</a></dt>
-<dd><p>Searches for a useful caller object in given module objects via             &#8220;module_objects&#8221;.</p>
+<dd><p>Searches for a useful caller object in given module objects via             “module_objects”.</p>
 <p><strong>callable_objects</strong> - available caller objects</p>
 <p><strong>caller</strong>           - if provided this value will be returned</p>
 <p>Examples:</p>
@@ -839,7 +836,7 @@
 <dl class="method">
 <dt id="boostnode.extension.native.Module.execute_program_for_modules">
 <code class="descname">execute_program_for_modules</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Module.execute_program_for_modules" title="Permalink to this definition">¶</a></dt>
-<dd><p>Runs a given program for every given module. Returns &#8220;False&#8221; if             no modules were found or given program isn&#8217;t installed.</p>
+<dd><p>Runs a given program for every given module. Returns “False” if             no modules were found or given program isn’t installed.</p>
 <p><strong>program_type</strong> - program description to show in standard output</p>
 <p><strong>program</strong>      - program name to run</p>
 <p><strong>modules</strong>      - module file to hand over given program</p>
@@ -848,7 +845,7 @@
 <p><strong>delimiter</strong>    - delimiter to show between resulting standard                                outputs</p>
 <p><strong>log</strong>          - indicates whether logging should be enabled</p>
 <p>Additional keywords are forwarded to
-&#8220;boostnode.system.Platform.run()&#8221;.</p>
+“boostnode.system.Platform.run()”.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">boostnode.extension</span>
 </pre></div>
@@ -883,7 +880,7 @@
 <p><strong>frame</strong>              - frame to determine modules name and file                                      path</p>
 <p><strong>module</strong>             - module to extend</p>
 <p><strong>post_extend_others</strong> - indicates whether to check for resolved                                      dependencies of other modules and extend                                      them if possible.</p>
-<p>Returns a dictionary with new module&#8217;s scope and module name.</p>
+<p>Returns a dictionary with new module’s scope and module name.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Module</span><span class="o">.</span><span class="n">extend</span><span class="p">()</span> 
 <span class="go">{...native...}</span>
@@ -936,7 +933,7 @@
 <dl class="method">
 <dt id="boostnode.extension.native.Module.get_defined_callables">
 <code class="descname">get_defined_callables</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Module.get_defined_callables" title="Permalink to this definition">¶</a></dt>
-<dd><p>Takes a module and gives a list of callables explicit defined in             this module. Arguments and keywords are forwarded to the             &#8220;get_defined_objects()&#8221; method.</p>
+<dd><p>Takes a module and gives a list of callables explicit defined in             this module. Arguments and keywords are forwarded to the             “get_defined_objects()” method.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">tuple</span><span class="p">(</span><span class="n">Module</span><span class="o">.</span><span class="n">get_defined_callables</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="s1">&#39;__main__&#39;</span><span class="p">]</span>
@@ -1031,7 +1028,7 @@
 <dl class="method">
 <dt id="boostnode.extension.native.Module.get_name">
 <code class="descname">get_name</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Module.get_name" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns name of the given context &#8220;frame&#8221;. If no frame is defined             this module&#8217;s context will be selected. If &#8220;base&#8221; is set &#8220;True&#8221;             the modules name is given back without any file extension.</p>
+<dd><p>Returns name of the given context “frame”. If no frame is defined             this module’s context will be selected. If “base” is set “True”             the modules name is given back without any file extension.</p>
 <p><strong>frame</strong>     - Frame of module to determine</p>
 <p><strong>module</strong>    - module to determine the name of</p>
 <p><strong>extension</strong> - Indicates whether the modules file name extension                             should be returned as well</p>
@@ -1058,7 +1055,7 @@
 <dl class="method">
 <dt id="boostnode.extension.native.Module.get_package_name">
 <code class="descname">get_package_name</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Module.get_package_name" title="Permalink to this definition">¶</a></dt>
-<dd><p>Determines package context of given frame. If current context             isn&#8217;t in any package context an empty string is given back.</p>
+<dd><p>Determines package context of given frame. If current context             isn’t in any package context an empty string is given back.</p>
 <p><strong>frame</strong> - frame of the package name to inspect</p>
 <p><strong>path</strong>  - path to package</p>
 <p>Examples:</p>
@@ -1106,7 +1103,7 @@ recursive manner.</p>
 <dl class="docutils">
 <dt><strong>null_value</strong> - placeholder for equal values in both given values</dt>
 <dd>to compare (defaults to
-&#8220;boostnode.extension.type.Null&#8221;).</dd>
+“boostnode.extension.type.Null”).</dd>
 </dl>
 <p>Returns the difference between content and given value.</p>
 <p>Examples:</p>
@@ -1216,7 +1213,7 @@ recursive manner.</p>
 <dl class="method">
 <dt id="boostnode.extension.native.Object.copy">
 <code class="descname">copy</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Object.copy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Copies a given object&#8217;s attributes and returns them.</p>
+<dd><p>Copies a given object’s attributes and returns them.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">A</span><span class="p">:</span> <span class="k">pass</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">A</span><span class="p">()</span>
@@ -1357,8 +1354,8 @@ recursive manner.</p>
 <dt id="boostnode.extension.native.Object.get_known_type">
 <code class="descname">get_known_type</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Object.get_known_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts interpretable data to python specific data objects.</p>
-<p><strong>description</strong>        - Additional information how given input                                      should be interpreted. Possible inputs                                      could be: &#8220;date_time&#8221;, &#8220;<em>_date_time&#8221;,                                      &#8220;*DateTime</em>, &#8220;date&#8221;, &#8220;<a href="#id1"><span class="problematic" id="id2">*</span></a>_date&#8221;, &#8220;<a href="#id3"><span class="problematic" id="id4">*</span></a>Date&#8221;,                                      &#8220;time&#8221;, &#8220;<a href="#id5"><span class="problematic" id="id6">*</span></a>_time&#8221;, &#8220;<a href="#id7"><span class="problematic" id="id8">*</span></a>Time&#8221;,                                      &#8220;phone_number&#8221;, &#8220;<a href="#id9"><span class="problematic" id="id10">*</span></a>_phone_number&#8221;,                                      &#8220;<a href="#id11"><span class="problematic" id="id12">*</span></a>PhoneNumber&#8221;, &#8220;zip_code&#8221;,                                      &#8220;<a href="#id13"><span class="problematic" id="id14">*</span></a>_zip_code&#8221;, &#8220;<a href="#id15"><span class="problematic" id="id16">*</span></a>ZipCode&#8221;, &#8220;time_delta&#8221;,                                      &#8220;<a href="#id17"><span class="problematic" id="id18">*</span></a>_time_delta&#8221;, &#8220;<a href="#id19"><span class="problematic" id="id20">*</span></a>TimeDelta&#8221;</p>
-<p><strong>strict</strong>             - If evaluates to true and a description                                      is given and exception will be raised if                                      current value couldn&#8217;t be interpreted.                                      If evaluates to &#8220;None&#8221; current value                                      will be returned if evaluations fails.                                      If strict evaluates to false &#8220;None&#8221; will                                      be given back if current value couldn&#8217;t                                      be interpreted.</p>
+<p><strong>description</strong>        - Additional information how given input                                      should be interpreted. Possible inputs                                      could be: “date_time”, “<em>_date_time”,                                      “*DateTime</em>, “date”, “<a href="#id1"><span class="problematic" id="id2">*</span></a>_date”, “<a href="#id3"><span class="problematic" id="id4">*</span></a>Date”,                                      “time”, “<a href="#id5"><span class="problematic" id="id6">*</span></a>_time”, “<a href="#id7"><span class="problematic" id="id8">*</span></a>Time”,                                      “phone_number”, “<a href="#id9"><span class="problematic" id="id10">*</span></a>_phone_number”,                                      “<a href="#id11"><span class="problematic" id="id12">*</span></a>PhoneNumber”, “zip_code”,                                      “<a href="#id13"><span class="problematic" id="id14">*</span></a>_zip_code”, “<a href="#id15"><span class="problematic" id="id16">*</span></a>ZipCode”, “time_delta”,                                      “<a href="#id17"><span class="problematic" id="id18">*</span></a>_time_delta”, “<a href="#id19"><span class="problematic" id="id20">*</span></a>TimeDelta”</p>
+<p><strong>strict</strong>             - If evaluates to true and a description                                      is given and exception will be raised if                                      current value couldn’t be interpreted.                                      If evaluates to “None” current value                                      will be returned if evaluations fails.                                      If strict evaluates to false “None” will                                      be given back if current value couldn’t                                      be interpreted.</p>
 <p><strong>none_evaluation</strong>    - Tries to evaluate to a none value.</p>
 <p><strong>boolean_evaluation</strong> - Tries to evaluate to a boolean.</p>
 <p><strong>number_evaluation</strong>  - Tries to evaluate to a number.</p>
@@ -1542,7 +1539,7 @@ recursive manner.</p>
 <dl class="method">
 <dt id="boostnode.extension.native.Object.restore">
 <code class="descname">restore</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.Object.restore" title="Permalink to this definition">¶</a></dt>
-<dd><p>Restores a given object&#8217;s attributes by a given copy are last             copied item.</p>
+<dd><p>Restores a given object’s attributes by a given copy are last             copied item.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">A</span><span class="p">:</span> <span class="k">pass</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">string</span> <span class="o">=</span> <span class="s1">&#39;hans&#39;</span>
@@ -1581,9 +1578,9 @@ recursive manner.</p>
 <dl class="class">
 <dt id="boostnode.extension.native.String">
 <em class="property">class </em><code class="descclassname">boostnode.extension.native.</code><code class="descname">String</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.String" title="Permalink to this definition">¶</a></dt>
-<dd><p>The string class inherits besides the interface class all pythons         native string methods. NOTE: This class has to implement inherited         special methods like &#8220;__str__()&#8221; and &#8220;__len__()&#8221; because they have to         use the &#8220;content&#8221; property which could be manipulated by not         inherited methods.</p>
+<dd><p>The string class inherits besides the interface class all pythons         native string methods. NOTE: This class has to implement inherited         special methods like “__str__()” and “__len__()” because they have to         use the “content” property which could be manipulated by not         inherited methods.</p>
 <p><strong>content</strong> - Content to be saved as string.</p>
-<p>NOTE: A children of python&#8217;s native string doesn&#8217;t need an explicit         &#8220;__bytes__&#8221; implementation.</p>
+<p>NOTE: A children of python’s native string doesn’t need an explicit         “__bytes__” implementation.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="nb">bytes</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="s1">&#39;hans&#39;</span><span class="p">))</span> <span class="o">==</span> <span class="sa">b</span><span class="s1">&#39;hans&#39;</span>
@@ -1602,7 +1599,7 @@ recursive manner.</p>
 <dl class="method">
 <dt id="boostnode.extension.native.String.delete_variables_from_regex">
 <code class="descname">delete_variables_from_regex</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.String.delete_variables_from_regex" title="Permalink to this definition">¶</a></dt>
-<dd><p>Removes python supported variables in regular expression strings.             This method is useful if a python regular expression should be             given to another regular expression engine which doesn&#8217;t support             variables.</p>
+<dd><p>Removes python supported variables in regular expression strings.             This method is useful if a python regular expression should be             given to another regular expression engine which doesn’t support             variables.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s1">&#39;^--(?P&lt;name&gt;.+)--$&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">delete_variables_from_regex</span><span class="p">()</span>
 <span class="go">Object of &quot;str&quot; (&#39;^--(.+)--$&#39;).</span>
@@ -1637,7 +1634,7 @@ recursive manner.</p>
 <dl class="method">
 <dt id="boostnode.extension.native.String.get_camel_case_capitalize">
 <code class="descname">get_camel_case_capitalize</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.String.get_camel_case_capitalize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Acts like pythons native &#8220;builtins.str.capitalize()&#8221; method but             preserves camel case characters.</p>
+<dd><p>Acts like pythons native “builtins.str.capitalize()” method but             preserves camel case characters.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">()</span><span class="o">.</span><span class="n">camel_case_capitalize</span><span class="o">.</span><span class="n">content</span>
 <span class="go">&#39;&#39;</span>
@@ -1745,7 +1742,7 @@ recursive manner.</p>
 <dd><p>Converts a delimited string to its camel case representation.</p>
 <p><strong>delimiter</strong>                              - Delimiter string</p>
 <p><strong>abbreviations</strong>                          - Collection of                                                          shortcut words to                                                          represent upper cased.</p>
-<p><strong>preserve_wrong_formatted_abbreviations</strong> - If set to &#8220;True&#8221;                                                          wrong formatted                                                          camel case                                                          abbreviations will                                                          be ignored.</p>
+<p><strong>preserve_wrong_formatted_abbreviations</strong> - If set to “True”                                                          wrong formatted                                                          camel case                                                          abbreviations will                                                          be ignored.</p>
 <p>Returns the modified string instance.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">()</span><span class="o">.</span><span class="n">delimited_to_camel_case</span><span class="o">.</span><span class="n">content</span>
@@ -1875,9 +1872,9 @@ recursive manner.</p>
 <dl class="method">
 <dt id="boostnode.extension.native.String.get_escaping_replace_dictionary">
 <code class="descname">get_escaping_replace_dictionary</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.String.get_escaping_replace_dictionary" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates a replacement dictionary form a given iterable. Every             element will be associated with its escaped version. This method             is useful for using before give &#8220;self.replace()&#8221; a dictionary.</p>
+<dd><p>Creates a replacement dictionary form a given iterable. Every             element will be associated with its escaped version. This method             is useful for using before give “self.replace()” a dictionary.</p>
 <p><strong>sequence</strong>        - is an iterable with elements to be escaped.</p>
-<p><strong>escape_sequence</strong> - is an escape sequence for each element from                                   &#8220;sequence&#8221;.</p>
+<p><strong>escape_sequence</strong> - is an escape sequence for each element from                                   “sequence”.</p>
 <p>Returns the generated dictionary.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="o">.</span><span class="n">get_escaping_replace_dictionary</span><span class="p">(</span>
@@ -1897,7 +1894,7 @@ recursive manner.</p>
 <dl class="method">
 <dt id="boostnode.extension.native.String.get_format_validated">
 <code class="descname">get_format_validated</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.String.get_format_validated" title="Permalink to this definition">¶</a></dt>
-<dd><p>Validates the current string for using in a string with             placeholder like &#8220;{name}&#8221;. It will be escaped to not interpreted             as placeholder like &#8220;{name}&#8221;.</p>
+<dd><p>Validates the current string for using in a string with             placeholder like “{name}”. It will be escaped to not interpreted             as placeholder like “{name}”.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s2">&quot;that&#39;s no </span><span class="si">{placeholder}</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format_validated</span>
 <span class="go">Object of &quot;str&quot; (&quot;that&#39;s no \\{placeholder\\}&quot;).</span>
@@ -1923,9 +1920,9 @@ recursive manner.</p>
 <dl class="method">
 <dt id="boostnode.extension.native.String.get_number">
 <code class="descname">get_number</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.String.get_number" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a number representation of current string content if             possible. If no conversion is possible given default value will             be returned. If given default value is &#8220;None&#8221; current string             will be returned.</p>
+<dd><p>Returns a number representation of current string content if             possible. If no conversion is possible given default value will             be returned. If given default value is “None” current string             will be returned.</p>
 <p><strong>default</strong> - Fall-back value</p>
-<p><strong>slice</strong>   - If &#8220;True&#8221; non numbers will be removed</p>
+<p><strong>slice</strong>   - If “True” non numbers will be removed</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">()</span><span class="o">.</span><span class="n">number</span>
 <span class="go">&#39;&#39;</span>
@@ -2064,9 +2061,9 @@ recursive manner.</p>
 <dl class="method">
 <dt id="boostnode.extension.native.String.readline">
 <code class="descname">readline</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.String.readline" title="Permalink to this definition">¶</a></dt>
-<dd><p>Implements the pythons native &#8220;bz2.BZ2File.readline()&#8221; method in             an object oriented way.</p>
+<dd><p>Implements the pythons native “bz2.BZ2File.readline()” method in             an object oriented way.</p>
 <p>Return the next line from the string, as a string object,             retaining newline.</p>
-<p>Returns &#8220;False&#8221; on EOF.</p>
+<p>Returns “False” on EOF.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">string</span> <span class="o">=</span> <span class="n">String</span><span class="p">(</span><span class="s1">&#39;hans</span><span class="se">\n</span><span class="s1">peter</span><span class="se">\n</span><span class="s1">klaus and sally</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">string</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
@@ -2095,9 +2092,9 @@ recursive manner.</p>
 <dl class="method">
 <dt id="boostnode.extension.native.String.readlines">
 <code class="descname">readlines</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.String.readlines" title="Permalink to this definition">¶</a></dt>
-<dd><p>Implements the pythons native &#8220;builtins.str.splitlines()&#8221; method             in an object oriented way.</p>
-<p>Additional arguments and keywords are forwarded to python&#8217;s             native &#8220;str.splitlines()&#8221; method.</p>
-<p>Return a list of all lines in a string, breaking at line             boundaries. Line breaks are not included in the resulting list             unless &#8220;keepends&#8221; is given and &#8220;True&#8221;.</p>
+<dd><p>Implements the pythons native “builtins.str.splitlines()” method             in an object oriented way.</p>
+<p>Additional arguments and keywords are forwarded to python’s             native “str.splitlines()” method.</p>
+<p>Return a list of all lines in a string, breaking at line             boundaries. Line breaks are not included in the resulting list             unless “keepends” is given and “True”.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lines</span> <span class="o">=</span> <span class="n">String</span><span class="p">(</span><span class="s1">&#39;hans</span><span class="se">\n</span><span class="s1">peter</span><span class="se">\n</span><span class="s1">klaus and sally</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">lines</span><span class="o">.</span><span class="n">readlines</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
@@ -2121,10 +2118,10 @@ recursive manner.</p>
 <dl class="method">
 <dt id="boostnode.extension.native.String.replace">
 <code class="descname">replace</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.String.replace" title="Permalink to this definition">¶</a></dt>
-<dd><p>Implements the pythons native string method &#8220;str.replace()&#8221; in an             object orientated way. This method serves additionally             dictionaries as &#8220;search&#8221; parameter for multiple replacements. If             you use dictionaries, the second parameter &#8220;replace&#8221; becomes             useless.</p>
+<dd><p>Implements the pythons native string method “str.replace()” in an             object orientated way. This method serves additionally             dictionaries as “search” parameter for multiple replacements. If             you use dictionaries, the second parameter “replace” becomes             useless.</p>
 <p><strong>search</strong>  - search sequence</p>
 <p><strong>replace</strong> - string to replace with given search sequence</p>
-<p>Additional arguments and keywords are forwarded to pythons native             &#8220;str.replace()&#8221; method.</p>
+<p>Additional arguments and keywords are forwarded to pythons native             “str.replace()” method.</p>
 <p>Return a copy of the string with all occurrences of substring old             replaced by new. If an optional argument count is given, only the             first count occurrences are replaced.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s1">&#39;hans&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;ans&#39;</span><span class="p">,</span> <span class="s1">&#39;ut&#39;</span><span class="p">)</span>
@@ -2149,22 +2146,22 @@ recursive manner.</p>
 <dt id="boostnode.extension.native.String.substitute">
 <code class="descname">substitute</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.String.substitute" title="Permalink to this definition">¶</a></dt>
 <dd><blockquote>
-<div><p>Implements the pythons native &#8220;regularExpression.sub()&#8221; method in             an object oriented way. This method serves additionally             dictionaries as &#8220;search&#8221; parameter for multiple replacements. If             you use dictionaries, the second parameter &#8220;replace&#8221; becomes             useless.</p>
+<div><p>Implements the pythons native “regularExpression.sub()” method in             an object oriented way. This method serves additionally             dictionaries as “search” parameter for multiple replacements. If             you use dictionaries, the second parameter “replace” becomes             useless.</p>
 <p><strong>search</strong>  - regular expression search pattern</p>
 <dl class="docutils">
 <dt><strong>replace</strong> - string or function to replace with given search</dt>
 <dd>sequence</dd>
 </dl>
-<p>Additional arguments and keywords are forwarded to python&#8217;s             native &#8220;regularExpression.sub()&#8221; method.</p>
-<p>Return the string obtained by replacing the leftmost             non-overlapping occurrences of pattern in string by the             replacement &#8220;replace&#8221;. If the pattern isn&#8217;t found, string is             returned unchanged. &#8220;replace&#8221; can be a string or a function;</p>
-<p>If &#8220;replace&#8221; is a string, any backslash escapes in it are             processed. That means &#8220;</p>
+<p>Additional arguments and keywords are forwarded to python’s             native “regularExpression.sub()” method.</p>
+<p>Return the string obtained by replacing the leftmost             non-overlapping occurrences of pattern in string by the             replacement “replace”. If the pattern isn’t found, string is             returned unchanged. “replace” can be a string or a function;</p>
+<p>If “replace” is a string, any backslash escapes in it are             processed. That means “</p>
 </div></blockquote>
-<p>&#8221; is converted to a single newline             character, &#8221;
-&#8221; is converted to a linefeed, and so forth. Unknown             escapes such as &#8220;j&#8221; are left alone. Backreferences, such as             &#8220;&#8221;, are replaced with the substring matched by group 6 in the             pattern.</p>
+<p>” is converted to a single newline             character, ”
+” is converted to a linefeed, and so forth. Unknown             escapes such as “j” are left alone. Backreferences, such as             “”, are replaced with the substring matched by group 6 in the             pattern.</p>
 <blockquote>
-<div><p>If &#8220;replace&#8221; is a function, it is called for every             non-overlapping occurrence of pattern. The function takes a             single match object argument, and returns the replacement string.</p>
-<p>The pattern may be a string or an RE object. The optional             argument count is the maximum number of pattern occurrences to be             replaced; count must be a non-negative integer. If omitted or             zero, all occurrences will be replaced. Empty matches for the             pattern are replaced only when not adjacent to a previous match,             so sub(&#8216;x*&#8217;, &#8216;-&#8216;, &#8216;abc&#8217;) returns &#8216;-a-b-c-&#8216;.</p>
-<p>In addition to character escapes and back references as described             above, &#8220;g&lt;name&gt;&#8221; will use the substring matched by the group             named name, as defined by the &#8220;(?P&lt;name&gt;...)&#8221; syntax.             &#8220;g&lt;number&gt;&#8221; uses the corresponding group number; &#8220;g&lt;2&gt;&#8221; is             therefore equivalent to &#8220;&#8221;, but isn&#8217;t ambiguous in a             replacement such as &#8220;g&lt;2&gt;0&#8221;. &#8220;&#8221; would be interpreted as a             reference to group 20, not a reference to group 2 followed by the             literal character &#8220;0&#8221;. The backreference &#8220;g&lt;0&gt;&#8221; substitutes in             the entire substring matched by the regularExpression.</p>
+<div><p>If “replace” is a function, it is called for every             non-overlapping occurrence of pattern. The function takes a             single match object argument, and returns the replacement string.</p>
+<p>The pattern may be a string or an RE object. The optional             argument count is the maximum number of pattern occurrences to be             replaced; count must be a non-negative integer. If omitted or             zero, all occurrences will be replaced. Empty matches for the             pattern are replaced only when not adjacent to a previous match,             so sub(‘x*’, ‘-‘, ‘abc’) returns ‘-a-b-c-‘.</p>
+<p>In addition to character escapes and back references as described             above, “g&lt;name&gt;” will use the substring matched by the group             named name, as defined by the “(?P&lt;name&gt;…)” syntax.             “g&lt;number&gt;” uses the corresponding group number; “g&lt;2&gt;” is             therefore equivalent to “”, but isn’t ambiguous in a             replacement such as “g&lt;2&gt;0”. “” would be interpreted as a             reference to group 20, not a reference to group 2 followed by the             literal character “0”. The backreference “g&lt;0&gt;” substitutes in             the entire substring matched by the regularExpression.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="p">(</span><span class="s1">&#39;hans&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="s1">&#39;([^a]+)&#39;</span><span class="p">,</span> <span class="s1">&#39; jau-suffix &#39;</span><span class="p">)</span>
 <span class="go">Object of &quot;str&quot; (&#39; jau-suffix a jau-suffix &#39;).</span>
@@ -2192,11 +2189,11 @@ recursive manner.</p>
 <dl class="method">
 <dt id="boostnode.extension.native.String.substitute_n">
 <code class="descname">substitute_n</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.extension.native.String.substitute_n" title="Permalink to this definition">¶</a></dt>
-<dd><p>Implements the pythons native &#8220;regularExpression.subn()&#8221; method             in an object oriented way. This method serves additionally             dictionaries as &#8220;search&#8221; parameter for multiple replacements. If             you use dictionaries, the second parameter &#8220;replace&#8221; becomes             useless.</p>
-<p>Perform the same operation as &#8220;regularExpression.sub()&#8221;, but             returns a tuple: (&#8220;new_string&#8221;, &#8220;number_of_subs_made&#8221;).</p>
+<dd><p>Implements the pythons native “regularExpression.subn()” method             in an object oriented way. This method serves additionally             dictionaries as “search” parameter for multiple replacements. If             you use dictionaries, the second parameter “replace” becomes             useless.</p>
+<p>Perform the same operation as “regularExpression.sub()”, but             returns a tuple: (“new_string”, “number_of_subs_made”).</p>
 <p><strong>search</strong>  - regular expression search pattern</p>
 <p><strong>replace</strong> - string to replace with given search sequence</p>
-<p>Additional arguments and keywords are forwarded to pythons&#8217;s             native &#8220;regularExpression.subn()&#8221; method.</p>
+<p>Additional arguments and keywords are forwarded to pythons’s             native “regularExpression.subn()” method.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">String</span><span class="p">()</span><span class="o">.</span><span class="n">substitute_n</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">content</span>
@@ -2295,7 +2292,7 @@ recursive manner.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 16.12.2012, Torben Sickert.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
     </div>
   </body>
 </html>

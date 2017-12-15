@@ -1,16 +1,13 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>boostnode.runnable.macro &#8212; boostnode 1.0 rc documentation</title>
-    
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
@@ -29,7 +26,7 @@
     <link rel="next" title="boostnode.runnable.server" href="runnable.server.html" />
     <link rel="prev" title="boostnode.runnable.synchronisation" href="runnable.synchronisation.html" /> 
   </head>
-  <body role="document">
+  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -61,10 +58,10 @@
 <dt id="boostnode.runnable.macro.Replace">
 <em class="property">class </em><code class="descclassname">boostnode.runnable.macro.</code><code class="descname">Replace</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.runnable.macro.Replace" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse source code and replace version depended code snippets with the         correct given version code snippets.</p>
-<p>NOTE: &#8220;(?s...)&#8221; is equivalent to regular expression flag         &#8220;regularExpression.DOTALL&#8221;.
+<p>NOTE: “(?s…)” is equivalent to regular expression flag         “regularExpression.DOTALL”.
 NOTE: That alternate version in one line regular expression pattern         could be empty.</p>
 <p><strong>location</strong>                 - Location to execute macro processing.</p>
-<p><strong>skip_self_file</strong>           - If setted to &#8220;True&#8221; and this script                                        file is part of &#8220;location&#8221; this file                                        will be ignored.</p>
+<p><strong>skip_self_file</strong>           - If setted to “True” and this script                                        file is part of “location” this file                                        will be ignored.</p>
 <p><strong>extension</strong>                - File extensions to handle. Others will                                        be excluded.</p>
 <p><strong>first_line_regex_pattern</strong> - Regular expression pattern to                                        determine current version of given                                        text file.</p>
 <p><strong>one_line_regex_pattern</strong>   - One line regular expression syntax to                                        replace.</p>
@@ -99,7 +96,7 @@ NOTE: That alternate version in one line regular expression pattern         coul
 <dl class="method">
 <dt id="boostnode.runnable.macro.Replace.set_exclude_locations">
 <code class="descname">set_exclude_locations</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.runnable.macro.Replace.set_exclude_locations" title="Permalink to this definition">¶</a></dt>
-<dd><p>Converts all paths setted to &#8220;_exclude_locations&#8221; via string to             high level file objects.</p>
+<dd><p>Converts all paths setted to “_exclude_locations” via string to             high level file objects.</p>
 <p><strong>paths</strong> - A list of paths to exclude from processing the macro.</p>
 <p>Returns a list of file objects to ignore.</p>
 <p>Examples:</p>
@@ -118,7 +115,7 @@ NOTE: That alternate version in one line regular expression pattern         coul
 <dt id="boostnode.runnable.macro.Replace.set_new_version">
 <code class="descname">set_new_version</code><span class="sig-paren">(</span><em>*arguments</em>, <em>**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#boostnode.runnable.macro.Replace.set_new_version" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if an explicit new version was given or a useful should be             determined.</p>
-<p><strong>version</strong> - New version of current text file. Could be                           &#8220;__determine_useful__&#8221; if it should be guessed.</p>
+<p><strong>version</strong> - New version of current text file. Could be                           “__determine_useful__” if it should be guessed.</p>
 <p>Returns new version.</p>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">replace</span> <span class="o">=</span> <span class="n">Replace</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="n">__file_path__</span><span class="p">)</span>
@@ -212,7 +209,7 @@ NOTE: That alternate version in one line regular expression pattern         coul
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 16.12.2012, Torben Sickert.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
     </div>
   </body>
 </html>
