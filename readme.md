@@ -1,18 +1,21 @@
 <!-- #!/usr/bin/env markdown
 -*- coding: utf-8 -*-
-
 region header
-
 Copyright Torben Sickert 16.12.2012
 
 License
    This library written by Torben Sickert stand under a creative commons
    naming 3.0 unported license.
    see http://creativecommons.org/licenses/by/3.0/deed.de
-
 endregion -->
 
-[![Build Status](https://travis-ci.org/thaibault/boostnode.svg?branch=master)](https://travis-ci.org/thaibault/boostnode)
+[![npm version](https://badge.fury.io/js/boostnode.svg)](https://www.npmjs.com/package/boostnode)
+[![downloads](https://img.shields.io/npm/dy/boostnode.svg)](https://www.npmjs.com/package/boostnode)
+[![build status](https://travis-ci.org/thaibault/boostnode.svg?branch=master)](https://travis-ci.org/thaibault/boostnode)
+[![dependencies](https://img.shields.io/david/thaibault/boostnode.svg)](https://david-dm.org/thaibault/boostnode)
+[![devDependencies](https://img.shields.io/david/dev/thaibault/boostnode.svg)](https://david-dm.org/thaibault/boostnode?type=dev)
+[![peerDependencies](https://img.shields.io/david/peer/thaibault/boostnode.svg)](https://david-dm.org/thaibault/boostnode?type=peer)
+[![documentation-website](https://img.shields.io/website-up-down-green-red/http/torben.website/boostnode.svg?label=documentation-website)](http://torben.website/boostnode)
 
 <!--|deDE:Einsatz-->
 Use case
@@ -307,8 +310,6 @@ see header in ./\_\_init\_\_.py
 <!--deDE:Siehe Header in ./\_\_init\_\_.py-->
 
 <!-- region vim modline
-
 vim: set tabstop=4 shiftwidth=4 expandtab:
 vim: foldmethod=marker foldmarker=region,endregion:
-
 endregion -->
