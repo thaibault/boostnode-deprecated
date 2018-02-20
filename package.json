@@ -21,7 +21,8 @@
     "aspect",
     "extension",
     "paradigm",
-    "runnable"
+    "runnable",
+    "highPerformanceModification.py"
   ],
   "main": "__init__.py",
   "repository": {
