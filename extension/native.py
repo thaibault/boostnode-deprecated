@@ -1138,11 +1138,11 @@ class Object(Class):
 # # python3.5
 # #     def get_compatible_type(
 # #         self: Self, none_evaluation=True, boolean_evaluation=True,
-# #         number_evaluation=True
+# #         number_evaluation=False
 # #     ) -> (builtins.object, builtins.type):
     def get_compatible_type(
         self, none_evaluation=True, boolean_evaluation=True,
-        number_evaluation=True
+        number_evaluation=False
     ):
 # #
         '''
