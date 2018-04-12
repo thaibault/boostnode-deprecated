@@ -5269,7 +5269,8 @@ class Time(Object):
             except builtins.ValueError:
                 pass
             else:
-                if timezone_match:
+                # TODO this makes no sense when dealing with utc.
+                if timezone_match and False:
                     content += TimeDelta(
                         timezone_match.group(2)
                     ).content
@@ -5494,7 +5495,8 @@ class DateTime(Object):
                                 except builtins.ValueError:
                                     pass
                                 else:
-                                    if timezone_match:
+                                    # TODO this makes no sense when dealing with utc.
+                                    if timezone_match and False:
                                         self.content += TimeDelta(
                                             timezone_match.group(2)
                                         ).content
