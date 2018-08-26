@@ -33,8 +33,8 @@
     "clear": "rm apiDocumentation --recursive --force && find './' -type f -name '*.pyc' -delete && find './' -type f -name '*.pyo' -delete",
     "document": "runnable/generateAPIDocumentation.py",
     "lint": "hash autopep8 && autopep8 --list-fixes __init__.py || echo Please install \"autopep8\". || true",
-    "test": "npm run lint && ./__init__.py --help",
-    "update": "npm run clear && npm version patch && npm publish",
+    "test": "yarn lint && ./__init__.py --help",
+    "update": "yarn clear && yarn version --patch && yarn publish",
     "update:documentation": "documentationWebsite --log-level info"
   },
   "devDependencies": {
