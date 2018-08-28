@@ -3,7 +3,7 @@
   "version": "1.0.14",
   "license": "CC-BY-3.0",
   "description": "a high reliable python library",
-  "homepage": "http://torben.website/boostnode",
+  "homepage": "https://torben.website/boostnode",
   "documentationWebsite": {
     "languages": [
       "deDE",
@@ -38,6 +38,6 @@
     "update:documentation": "documentationWebsite --log-level info"
   },
   "devDependencies": {
-    "documentation-website": "^1.0.107"
+    "documentation-website": "*"
   }
 }
