@@ -3,7 +3,7 @@
 boostnode
 =========
 
-`Project Page <http://torben.website/boostnode>`_
+`Project Page <https://torben.website/boostnode>`_
 
 Contents
 --------

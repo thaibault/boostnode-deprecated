@@ -105,10 +105,10 @@ class Browser(Class, Runnable):
         Examples:
 
         >>> Browser(
-        ...     _url='http://www.google.com/', width_in_pixel=300,
+        ...     _url='https://www.google.com/', width_in_pixel=300,
         ...     height_in_pixel=100
         ... ) # doctest: +ELLIPSIS
-        Object of "Browser" with url "http://www.google.com/" in 300 pi...
+        Object of "Browser" with url "https://www.google.com/" in 300 pi...
     '''
 
     # region properties
@@ -267,10 +267,10 @@ class Browser(Class, Runnable):
             Examples:
 
             >>> repr(Browser(
-            ...     _url='http://www.google.de/', width_in_pixel=300,
+            ...     _url='https://www.google.de/', width_in_pixel=300,
             ...     height_in_pixel=100
             ... )) # doctest: +ELLIPSIS
-            'Object of "Browser" with url "http://www.google... x 100 pixel...'
+            'Object of "Browser" with url "https://www.google... x 100 pixel...'
         '''
         return (
             'Object of "{class_name}" with url "{url}" in {width} pixel x '
@@ -417,7 +417,7 @@ class Browser(Class, Runnable):
 
             >>> sys.argv[1:] = ['google.de']
             >>> Browser.run() # doctest: +ELLIPSIS
-            Object of "Browser" with url "http://google.de" in 800 pixel...
+            Object of "Browser" with url "https://google.de" in 800 pixel...
 
             >>> sys.argv = sys_argv_backup
         '''

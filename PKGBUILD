@@ -7,18 +7,18 @@
 # -------
 
 # This library written by Torben Sickert stand under a creative commons naming
-# 3.0 unported license. see http://creativecommons.org/licenses/by/3.0/deed.de
+# 3.0 unported license. See https://creativecommons.org/licenses/by/3.0/deed.de
 # endregion
 pkgname=boostnode
 pkgver=1.0.16
 pkgrel=38
 pkgdesc='a high reliable python library'
 arch=('any')
-url="http://torben.website/${pkgname}"
+url="https://torben.website/${pkgname}"
 license=('CC-BY-3.0')
 depends=('python')
 makedepends=('unzip')
-source=("http://torben.website/${pkgname}/data/distributionBundle.zip")
+source=("https://torben.website/${pkgname}/data/distributionBundle.zip")
 md5sums=('SKIP')
 
 package() {

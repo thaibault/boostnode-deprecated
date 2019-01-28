@@ -17,7 +17,7 @@
 
     This library written by Torben Sickert stand under a creative commons \
     naming 3.0 unported license. \
-    see http://creativecommons.org/licenses/by/3.0/deed.de
+    see https://creativecommons.org/licenses/by/3.0/deed.de
 
     Additional conventions beside pep8 (bcX := boostnode convention number X)
     -------------------------------------------------------------------------
